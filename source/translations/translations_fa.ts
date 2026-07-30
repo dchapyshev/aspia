@@ -6,28 +6,28 @@
     <message>
         <location filename="../client/aab_importer.cc" line="111"/>
         <source>%1 (Imported)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (واردشده)</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل "%1" ممکن نیست: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
         <source>Selected file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل انتخاب‌شده خالی است.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="284"/>
         <location filename="../client/aab_importer.cc" line="332"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل دفترچه آدرس خراب است یا قالب ناشناخته‌ای دارد.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل دفترچه آدرس با نوع رمزگذاری پشتیبانی‌نشده‌ای رمزگذاری شده است.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="359"/>
@@ -36,27 +36,31 @@ Groups added: %1
 Hosts added: %2
 Hosts skipped: %3
 Routers added: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن با موفقیت انجام شد.
+گروه‌های افزوده‌شده: %1
+میزبان‌های افزوده‌شده: %2
+میزبان‌های صرف‌نظرشده: %3
+روترهای افزوده‌شده: %4</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="316"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>رمزگشایی دفترچه آدرس با گذرواژه مشخص‌شده ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="299"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="301"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس رمزگذاری شده است. برای باز کردن باید گذرواژه را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="354"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>چیزی وارد نشد.</translation>
     </message>
 </context>
 <context>
@@ -64,142 +68,142 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>کلی</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="90"/>
         <source>Service Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سرویس</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="112"/>
         <source>Donate!</source>
-        <translation type="unfinished"></translation>
+        <translation>حمایت مالی!</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="136"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia نرم‌افزاری آزاد است که تحت مجوز GNU General Public License 3 منتشر شده است.</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>می‌توانید نسخه‌ای از مجوز را از اینجا دریافت کنید:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>همچنین می‌توانید ترجمه مجوز GNU GPL را از اینجا دریافت کنید:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>پیوندها</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه اصلی:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه GitHub:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>توسعه‌دهندگان</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>مترجمان</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>اجزای شخص ثالث</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
-        <translation type="unfinished"></translation>
+        <translation>گرافیک و تصاویر</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
-        <translation type="unfinished"></translation>
+        <translation>آیکون‌ها از %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>برنامه</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه گزارش‌ها: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل گزارش: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات ساخت</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>شاخه Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>کامیت Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
-        <translation type="unfinished"></translation>
+        <translation>کامپایل</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ کامپایل: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان کامپایل: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات نسخه</translation>
     </message>
 </context>
 <context>
@@ -207,47 +211,47 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/about_widget.cc" line="99"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="102"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia نرم‌افزاری آزاد است که تحت مجوز GNU General Public License 3 منتشر شده است.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="103"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>می‌توانید نسخه‌ای از مجوز را از اینجا دریافت کنید:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>پیوندها</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Home page:</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه اصلی:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>GitHub page:</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه GitHub:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="113"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>توسعه‌دهندگان</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="114"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>مترجمان</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="115"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>اجزای شخص ثالث</translation>
     </message>
 </context>
 <context>
@@ -255,7 +259,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر پوشه به‌درستی وارد نشده است.</translation>
     </message>
 </context>
 <context>
@@ -264,97 +268,97 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه خانگی</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>دانلودها</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>اسناد</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>تصاویر</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو نوری</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو جداشدنی</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو ثابت</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو شبکه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو RAM</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه دانلودها</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه اسناد</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه تصاویر</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه ریشه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -364,21 +368,21 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="249"/>
         <location filename="../client/android/main_window.cc" line="329"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>محلی</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="253"/>
         <location filename="../client/android/main_window.cc" line="349"/>
         <source>Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
         <location filename="../client/android/main_window.cc" line="257"/>
         <location filename="../client/android/main_window.cc" line="339"/>
         <source>Routers</source>
-        <translation type="unfinished"></translation>
+        <translation>روترها</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="173"/>
@@ -388,7 +392,7 @@ Routers added: %4</source>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
@@ -397,68 +401,68 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="583"/>
         <location filename="../client/android/main_window.cc" line="630"/>
         <source>Connection by link</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال با پیوند</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
         <source>Invalid link.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیوند نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="554"/>
         <source>Another session is active. Close it and open the link again.</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست دیگری فعال است. آن را ببندید و پیوند را دوباره باز کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="564"/>
         <source>The session type from the link is not supported on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع نشست موجود در پیوند در این دستگاه پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="584"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتری که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="631"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبانی که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="459"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="333"/>
         <location filename="../host/android/main_window.cc" line="368"/>
         <location filename="../host/android/main_window.cc" line="400"/>
         <source>Permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>مجوزهای دسترسی</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="334"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای امکان کنترل صفحه‌کلید و ماوس از راه دور، سرویس دسترس‌پذیری را فعال کنید.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="335"/>
         <location filename="../host/android/main_window.cc" line="370"/>
         <location filename="../host/android/main_window.cc" line="403"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="369"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای نمایش دکمه عملیات روی صفحه در طول نشست، نمایش روی برنامه‌های دیگر را مجاز کنید.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="401"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای اینکه کاربر متصل بتواند فایل‌های این دستگاه را مرور و منتقل کند، دسترسی به همه فایل‌ها را مجاز کنید.</translation>
     </message>
 </context>
 <context>
@@ -466,7 +470,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو</translation>
     </message>
 </context>
 <context>
@@ -475,60 +479,60 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
         <location filename="../client/android/authorization_dialog.cc" line="36"/>
         <source>Authorization</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
         <location filename="../client/android/authorization_dialog.cc" line="45"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="66"/>
         <source>One-time password connection</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال با گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای اتصال به میزبان، اطلاعات ورود را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="43"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="52"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="66"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="106"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="147"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="113"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
 </context>
 <context>
@@ -536,48 +540,48 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="22"/>
         <source>Old password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه قبلی:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="36"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="50"/>
         <source>New password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید (تکرار):</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="94"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="103"/>
         <location filename="../host/ui/change_password_dialog.cc" line="145"/>
         <source>The passwords entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌های واردشده مطابقت ندارند.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>باید گذرواژه قبلی خود را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="128"/>
         <source>You entered an incorrect old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه قبلی را اشتباه وارد کردید.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="137"/>
         <source>New password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید نمی‌تواند خالی باشد.</translation>
     </message>
 </context>
 <context>
@@ -585,7 +589,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان</translation>
     </message>
 </context>
 <context>
@@ -593,7 +597,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان</translation>
     </message>
 </context>
 <context>
@@ -601,7 +605,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/chat_view.cc" line="201"/>
         <source>Message</source>
-        <translation type="unfinished"></translation>
+        <translation>پیام</translation>
     </message>
 </context>
 <context>
@@ -609,91 +613,91 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت Aspia</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
-        <translation type="unfinished"></translation>
+        <translation>ارسال پیام</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>ابزارها</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="210"/>
         <source>···</source>
-        <translation type="unfinished"></translation>
+        <translation>···</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
         <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Save chat...</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره چت...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
         <location filename="../common/desktop/chat_widget.cc" line="307"/>
         <source>Clear chat</source>
-        <translation type="unfinished"></translation>
+        <translation>پاک کردن چت</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 در حال نوشتن است...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 به چت پیوست (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 چت را ترک کرد (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 وارد سیستم شد (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 وارد سیستم نیست (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>There are no connected users (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ کاربر متصلی وجود ندارد (%1)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="428"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/chat_widget.cc" line="444"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>پیام خیلی طولانی است. حداکثر طول پیام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="380"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
 </context>
 <context>
@@ -701,168 +705,168 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="48"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>چاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>چاپ (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="102"/>
         <source>User %1 has joined the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 به چت پیوست</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="105"/>
         <source>User %1 has left the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 چت را ترک کرد</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="108"/>
         <source>User %1 is logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 وارد سیستم شد</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="111"/>
         <source>User %1 is not logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 وارد سیستم نیست</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="114"/>
         <source>There are no connected users</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ کاربر متصلی وجود ندارد</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="141"/>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="201"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به میزبان %1...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="210"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به میزبان قطع شد.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="306"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="219"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میزبان از کلاینت جدیدتر است. لطفاً برنامه را به‌روزرسانی کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="247"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 در حال نوشتن است...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="292"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="317"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="342"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Save Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره چت</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Text files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های متنی (*.txt)</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Could not open the file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن این فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>پاک کردن چت</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear the chat history?</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخچه چت پاک شود؟</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>پاک کردن</translation>
     </message>
 </context>
 <context>
@@ -870,22 +874,22 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="14"/>
         <source>Password Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>محافظت با گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیکربندی با گذرواژه محافظت می‌شود. برای مشاهده و تغییر پیکربندی، گذرواژه را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="36"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.cc" line="69"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه را اشتباه وارد کردید.</translation>
     </message>
 </context>
 <context>
@@ -893,59 +897,59 @@ Routers added: %4</source>
     <message>
         <location filename="../client/main.cc" line="185"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیم گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="187"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی موردنیاز برای باز کردن قفل برنامه را تنظیم کنید.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="195"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="197"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="201"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="211"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیم گذرواژه اصلی ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="159"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="120"/>
         <source>An aspia:// link to connect to a host.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیوند aspia:// برای اتصال به میزبان.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="161"/>
         <source>Enter the master password to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای باز کردن قفل برنامه، گذرواژه اصلی را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="177"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="116"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت Aspia</translation>
     </message>
 </context>
 <context>
@@ -953,92 +957,92 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="254"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست شروع شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="439"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا در درخواست اتصال از طریق روتر: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="385"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="391"/>
         <source>The specified router is offline.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مشخص‌شده آفلاین است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="266"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به میزبان %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به میزبان %1:%2...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به میزبان %1 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به میزبان %1:%2 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="310"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان هنوز در دسترس نیست. در انتظار اتصال مجدد...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="72"/>
         <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
+        <translation>مهلت انتظار برای اتصال مجدد به میزبان به پایان رسید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="330"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میزبان از نسخه کلاینت جدیدتر است (%1 &gt; %2). لطفاً برنامه را به‌روزرسانی کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>Attempting to connect in compatibility mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال تلاش برای اتصال در حالت سازگاری...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="398"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="406"/>
         <source>Connection offer received.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیشنهاد اتصال دریافت شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان با ID مشخص‌شده آنلاین نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="430"/>
         <source>Access is denied</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی رد شده است</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="433"/>
         <source>There are no relays available or the key pool is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ رله‌ای در دسترس نیست یا مخزن کلیدها خالی است</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="436"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -1047,360 +1051,360 @@ Routers added: %4</source>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>کلی</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="455"/>
         <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن کاربر جدید</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش کاربر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف کاربر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
-        <translation type="unfinished"></translation>
+        <translation>سرور به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از سرور به‌روزرسانی سفارشی</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>سرور:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی استفاده از روتر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید عمومی:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>ضبط‌کننده ویدئوی ترجیحی:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>امنیت</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>محافظت از تنظیمات با گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد نویسه‌ها:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
-        <translation type="unfinished"></translation>
+        <translation>نویسه‌ها:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
-        <translation type="unfinished"></translation>
+        <translation>نیاز به تأیید هنگام اتصال به رایانه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید خودکار اتصال از طریق:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
-        <translation type="unfinished"></translation>
+        <translation>اگر کاربر فعالی وجود نداشته باشد:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href="https://aspia.org"&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
         <source>Common</source>
-        <translation type="unfinished"></translation>
+        <translation>عمومی</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="36"/>
         <source>Incoming port:</source>
-        <translation type="unfinished"></translation>
+        <translation>پورت ورودی:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن بستن Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>سایر</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن تنظیمات</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن تنظیمات</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی و نصب خودکار به‌روزرسانی‌ها</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی به‌روزرسانی‌ها:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="114"/>
         <source>Once a day</source>
-        <translation type="unfinished"></translation>
+        <translation>روزی یک بار</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a week</source>
-        <translation type="unfinished"></translation>
+        <translation>هفته‌ای یک بار</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a month</source>
-        <translation type="unfinished"></translation>
+        <translation>ماهی یک بار</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>پیش‌فرض</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>On reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام راه‌اندازی مجدد</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 5 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 5 دقیقه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 30 دقیقه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 1 ساعت</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 6 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 6 ساعت</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 12 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 12 ساعت</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 24 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>هر 24 ساعت</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
-        <translation type="unfinished"></translation>
+        <translation>حروف و ارقام</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation>حروف</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
-        <translation type="unfinished"></translation>
+        <translation>ارقام</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>هرگز</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>15 ثانیه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>30 ثانیه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>45 ثانیه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>60 ثانیه</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
-        <translation type="unfinished"></translation>
+        <translation>پذیرش اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
-        <translation type="unfinished"></translation>
+        <translation>رد اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید کاربر "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
         <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>محل ذخیره تنظیمات در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیکربندی قابل نوشتن نیست. مطمئن شوید که مجوز کافی برای نوشتن دارید.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس روتر به‌درستی وارد نشده است.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید عمومی روتر به‌درستی وارد نشده است.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>نصب</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
 </context>
 <context>
@@ -1408,30 +1412,30 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر %1 (%2) در حال تلاش برای اتصال به رایانه شما با نوع نشست %3 است.</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال مجاز شود؟</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>اتصال پس از %n ثانیه به‌طور خودکار پذیرفته می‌شود.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>اتصال پس از %n ثانیه به‌طور خودکار رد می‌شود.</numerusform>
         </translation>
     </message>
 </context>
@@ -1440,63 +1444,64 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID شما</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="224"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="225"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="226"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="347"/>
         <source>Aspia ID: %1
 Password: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia ID: %1
+گذرواژه: %2</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر غیرفعال است</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="393"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="394"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر %1...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="397"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل به روتر</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="398"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل به روتر %1</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="401"/>
         <source>Failed to connect to router</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به روتر ناموفق بود</translation>
     </message>
 </context>
 <context>
@@ -1504,39 +1509,39 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید گذرواژه:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌ها مطابقت ندارند.</translation>
     </message>
 </context>
 <context>
@@ -1545,231 +1550,231 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل کردن نوار ابزار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
         <source>Auto size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه خودکار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
         <source>Automatic window size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه خودکار پنجره</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
         <source>Full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>تمام‌صفحه</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished"></translation>
+        <translation>رفتن به حالت تمام‌صفحه یا بازگشت از آن</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>پیمایش خودکار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
         <source>Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ارسال Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>منوی پیشرفته</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره اسکرین‌شات...</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>ترمینال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>مقیاس</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
         <source>Power control</source>
-        <translation type="unfinished"></translation>
+        <translation>کنترل برق</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>خاموش کردن</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی مجدد</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج از سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
         <source>Close session</source>
-        <translation type="unfinished"></translation>
+        <translation>بستن نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
         <source>Fit window</source>
-        <translation type="unfinished"></translation>
+        <translation>متناسب با پنجره</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
         <source>Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>کوچک کردن</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Minimize window</source>
-        <translation type="unfinished"></translation>
+        <translation>کوچک کردن پنجره</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>آمار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی مجدد (حالت امن)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی مجدد در حالت امن</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished"></translation>
+        <translation>چسباندن کلیپ‌بورد به‌صورت فشردن کلیدها</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت متنی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع ضبط</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیر وظایف</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
         <source>Switch Session</source>
-        <translation type="unfinished"></translation>
+        <translation>تعویض نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
         <source>Resolution selection</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب وضوح</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>توقف ضبط</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را خاموش کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
         <source>Wait for host</source>
-        <translation type="unfinished"></translation>
+        <translation>انتظار برای میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را در حالت امن راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور پایان دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور قفل کنید؟</translation>
     </message>
 </context>
 <context>
@@ -1777,22 +1782,22 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست توسط کاربر راه دور موقتاً متوقف شد</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست موقتاً در دسترس نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست برای همیشه در دسترس نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا هنگام دریافت جریان ویدئو: %1</translation>
     </message>
 </context>
 <context>
@@ -1800,188 +1805,188 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="79"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="193"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان با ID مشخص‌شده آنلاین نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی رد شده است.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="241"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ رله‌ای در دسترس نیست یا مخزن کلیدها خالی است.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="244"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="358"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به میزبان %1...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="364"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به میزبان قطع شد.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="383"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میزبان از کلاینت جدیدتر است. لطفاً برنامه را به‌روزرسانی کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="387"/>
         <source>Legacy hosts are not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های قدیمی پشتیبانی نمی‌شوند.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="470"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایشگر %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="478"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>برق</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="482"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه‌کلید</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="487"/>
         <source>Ctrl+Alt+Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="494"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="499"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="558"/>
         <location filename="../client/android/desktop_window.cc" line="612"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>بازگشت</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>خاموش کردن</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="560"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی مجدد</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="562"/>
         <source>Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت امن</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج از سیستم</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را خاموش کنید؟</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="584"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="588"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را در حالت امن راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="592"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور پایان دهید؟</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="596"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور قفل کنید؟</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
 </context>
 <context>
@@ -1989,92 +1994,92 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="80"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>اعمال</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>صرف‌نظر</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنما</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>تلاش مجدد</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>چشم‌پوشی</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>بازگردانی پیش‌فرض‌ها</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره همه</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>بله برای همه</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر برای همه</translation>
     </message>
 </context>
 <context>
@@ -2082,17 +2087,17 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="14"/>
         <source>Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال دانلود</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال دانلود به‌روزرسانی...</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.cc" line="65"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام دانلود به‌روزرسانی خطایی رخ داد: %1</translation>
     </message>
 </context>
 <context>
@@ -2100,77 +2105,77 @@ Password: %2</source>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
-        <translation type="unfinished"></translation>
+        <translation>با موفقیت انجام شد</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست نامعتبر</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام پوشه یا فایل نامعتبر است</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="45"/>
         <source>Path not found</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر پیدا نشد</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر از قبل وجود دارد</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="53"/>
         <source>No drives found</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ درایوی پیدا نشد</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="57"/>
         <source>Disk full</source>
-        <translation type="unfinished"></translation>
+        <translation>دیسک پر است</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="61"/>
         <source>Access denied</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی رد شد</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل برای خواندن ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد یا جایگزینی فایل ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن در فایل ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
-        <translation type="unfinished"></translation>
+        <translation>خواندن فایل ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو آماده نیست</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ کاربری وارد سیستم نشده است</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
-        <translation type="unfinished"></translation>
+        <translation>کد خطای ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -2178,27 +2183,27 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="101"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="378"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="381"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="384"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="387"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ تغییر</translation>
     </message>
 </context>
 <context>
@@ -2206,7 +2211,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_item_delegate.cc" line="54"/>
         <source>The name can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمی‌تواند شامل نویسه‌های %1 باشد.</translation>
     </message>
 </context>
 <context>
@@ -2214,109 +2219,109 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>بالا</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation type="unfinished"></translation>
+        <translation>رفتن به پوشه والد (Backspace)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه جدید</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
         <source>Create a new folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پوشه جدید</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف موارد انتخاب‌شده (Delete)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="202"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>ارسال</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="205"/>
         <source>Send selected object(s) (F11)</source>
-        <translation type="unfinished"></translation>
+        <translation>ارسال موارد انتخاب‌شده (F11)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="117"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست درایوها ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="134"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست فایل‌ها ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="159"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پوشه ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="171"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر نام مورد ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="316"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 مورد انتخاب شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="376"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="395"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام پوشه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="382"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="401"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام شامل نویسه‌های نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="344"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ارسال	F11</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;حذف	Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="355"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ایجاد پوشه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید موارد انتخاب‌شده را حذف کنید؟</translation>
     </message>
 </context>
 <context>
@@ -2324,82 +2329,82 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست درایوها ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه خانگی</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه داخلی</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
-        <translation type="unfinished"></translation>
+        <translation>کارت SD</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>دانلودها</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>دوربین</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>تصاویر</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>اسناد</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست فایل‌ها ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پوشه ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پوشه</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام پوشه</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام شامل نویسه‌های نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
@@ -2408,32 +2413,32 @@ Password: %2</source>
         <location filename="../client/android/file_panel_widget.cc" line="528"/>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>موارد انتخاب‌شده حذف شوند؟</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>آپلود</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>دانلود</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>"%1" حذف شود؟</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
 </context>
 <context>
@@ -2441,7 +2446,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_progress_sheet.cc" line="47"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
 </context>
 <context>
@@ -2449,73 +2454,73 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="35"/>
         <source>File Removal</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>وظیفه فعلی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال ایجاد فهرست فایل‌ها برای حذف...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="63"/>
         <source>Deleting:</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال حذف:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="76"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="103"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو حذف فایل‌ها.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال حذف موارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام دریافت فهرست فایل‌ها خطایی رخ داد: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف "%1" ناموفق بود: %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>رد شدن</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>رد شدن از همه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع</translation>
     </message>
 </context>
 <context>
@@ -2523,130 +2528,130 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>وظیفه فعلی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال ایجاد فهرست فایل‌ها برای کپی...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="63"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>از:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="76"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="96"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="116"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="83"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>به:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="103"/>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="129"/>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>مجموع:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="136"/>
         <source>Item:</source>
-        <translation type="unfinished"></translation>
+        <translation>مورد:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="180"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو انتقال فایل‌ها.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال کپی موارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>رد شدن</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>رد شدن از همه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>جایگزینی</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>جایگزینی همه</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام ساخت صف فایل‌ها برای کپی خطایی رخ داد</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پوشه "%1" ناموفق بود: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد فایل "%1" ناموفق بود: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل "%1" ناموفق بود: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل "%1" ناموفق بود: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>خواندن فایل "%1" ناموفق بود: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته هنگام کپی فایل‌ها</translation>
     </message>
 </context>
 <context>
@@ -2654,17 +2659,17 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>رایانه محلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>رایانه راه دور</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
         <source>Session error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای نشست: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="58"/>
@@ -2673,78 +2678,78 @@ Password: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="410"/>
         <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="63"/>
         <location filename="../client/android/file_transfer_window.cc" line="76"/>
         <source>This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>این دستگاه</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="220"/>
         <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای مرور فایل‌های این دستگاه، در صفحه بعد دسترسی به همه فایل‌ها را مجاز کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="221"/>
         <source>Allow</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه دادن</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="142"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به میزبان %1...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="153"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به میزبان قطع شد.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="270"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میزبان از کلاینت جدیدتر است. لطفاً برنامه را به‌روزرسانی کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ کاربری در میزبان وارد سیستم نشده است. نشست در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="256"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="281"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="306"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="411"/>
         <source>Open a destination folder on the other side first.</source>
-        <translation type="unfinished"></translation>
+        <translation>ابتدا پوشه مقصد را در سمت دیگر باز کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="464"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال حذف</translation>
     </message>
 </context>
 <context>
@@ -2752,100 +2757,100 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n ثانیه</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n دقیقه</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n ساعت</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n روز</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>TB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>GB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>MB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>kB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation>B/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gbps</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbps</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kbps</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>bps</translation>
     </message>
 </context>
 <context>
@@ -2853,17 +2858,17 @@ Password: %2</source>
     <message>
         <location filename="../base/gui_application.cc" line="493"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>تیره</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="495"/>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>روشن</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="496"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>خودکار</translation>
     </message>
 </context>
 <context>
@@ -2872,7 +2877,7 @@ Password: %2</source>
         <location filename="../host/main.cc" line="607"/>
         <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>محل ذخیره تنظیمات در دسترس نیست.</translation>
     </message>
 </context>
 <context>
@@ -2880,37 +2885,37 @@ Password: %2</source>
     <message>
         <location filename="../host/main.cc" line="533"/>
         <source>Launch the application hidden.</source>
-        <translation type="unfinished"></translation>
+        <translation>اجرای برنامه به‌صورت پنهان.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="535"/>
         <source>Export parameters to file.</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن پارامترها به فایل.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="537"/>
         <source>Import parameters from file.</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن پارامترها از فایل.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="539"/>
         <source>Do not display any messages during import and export.</source>
-        <translation type="unfinished"></translation>
+        <translation>در طول وارد کردن و صادر کردن هیچ پیامی نمایش داده نشود.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="541"/>
         <source>Calling the update check dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>فراخوانی پنجره بررسی به‌روزرسانی.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="543"/>
         <source>Calling the settings dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>فراخوانی پنجره تنظیمات.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="545"/>
         <source>Calling the security log dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>فراخوانی پنجره گزارش امنیتی.</translation>
     </message>
 </context>
 <context>
@@ -2919,13 +2924,13 @@ Password: %2</source>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>آنلاین</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>آفلاین</translation>
     </message>
 </context>
 <context>
@@ -2936,196 +2941,196 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="818"/>
         <location filename="../host/ui/host_window.cc" line="1087"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID شما</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="98"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
         <location filename="../host/ui/host_window.cc" line="515"/>
         <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر غیرفعال است</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="252"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنما</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="261"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="271"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>نما</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="275"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>زبان</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="280"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>تم</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="293"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="298"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنمای آنلاین...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="306"/>
         <source>About System</source>
-        <translation type="unfinished"></translation>
+        <translation>درباره سیستم</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="311"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="316"/>
         <source>Security Log...</source>
-        <translation type="unfinished"></translation>
+        <translation>گزارش امنیتی...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="321"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="326"/>
         <location filename="../host/ui/host_window.cc" line="781"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>پنهان کردن</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="337"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="348"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>ترمینال</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>نمای دسکتاپ</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="370"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="381"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="392"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت متنی</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="397"/>
         <source>Show chat</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش چت</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="282"/>
         <location filename="../host/ui/host_window.cc" line="776"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="465"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>در دسترس نیست</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="519"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر %1...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="523"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل به روتر %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="527"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به روتر %1 ناموفق بود</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording has started.</source>
-        <translation type="unfinished"></translation>
+        <translation>ضبط صفحه شروع شد.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="574"/>
         <source>Screen recording stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>ضبط صفحه متوقف شد.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="765"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>محل ذخیره تنظیمات در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>اگر از Aspia خارج شوید، تا زمانی که رایانه یا Aspia را دوباره به‌صورت دستی روشن کنید، اتصال به این رایانه ممکن نخواهد بود. آیا واقعاً می‌خواهید از برنامه خارج شوید؟</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1002"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1007"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل به روتر</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1012"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1084"/>
         <source>IP addresses:</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس‌های IP:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ID: %1</translation>
     </message>
 </context>
 <context>
@@ -3133,76 +3138,76 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه والد:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="84"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>محلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>توضیح خیلی طولانی است. حداکثر طول توضیح %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>گروهی با این نام از قبل در گروه والد انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن گروه ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گروه ممکن نیست</translation>
     </message>
 </context>
 <context>
@@ -3210,48 +3215,48 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="50"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="59"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="62"/>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="134"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="149"/>
         <source>Failed to save the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره گروه ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="159"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف گروه</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه "%1" حذف شود؟</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف گروه ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -3259,66 +3264,66 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="50"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="60"/>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ ایجاد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="65"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ تغییر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="70"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="75"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی وضعیت...</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="423"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n زیرگروه</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="425"/>
         <source>%n child host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n میزبان زیرمجموعه</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>آنلاین</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>آفلاین</translation>
     </message>
 </context>
 <context>
@@ -3326,137 +3331,137 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
         <source>Router:</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>بدون روتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;روتر حذف‌شده&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>محلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های "_"، "-"، "." باشد.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>توضیح خیلی طولانی است. حداکثر طول توضیح %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبانی با این نام از قبل در گروه انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن میزبان ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر میزبان ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>نام میزبان یا آدرس IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان</translation>
     </message>
 </context>
 <context>
@@ -3464,94 +3469,94 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="60"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="61"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="62"/>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="74"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="77"/>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="163"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>بدون روتر</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="185"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="197"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های "_"، "-"، "." باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
         <source>Failed to save the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره میزبان ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="245"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان "%1" حذف شود؟</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
         <source>Failed to delete the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -3560,13 +3565,13 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="274"/>
         <location filename="../client/android/local_widget.cc" line="369"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن گروه</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="275"/>
         <location filename="../client/android/local_widget.cc" line="379"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن میزبان</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="276"/>
@@ -3576,110 +3581,110 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="277"/>
         <location filename="../client/android/local_widget.cc" line="352"/>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Address book (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس (*.json)</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Imported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n روتر وارد شد، </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="314"/>
         <location filename="../client/android/local_widget.cc" line="354"/>
         <source>%n group(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n گروه، </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="315"/>
         <location filename="../client/android/local_widget.cc" line="355"/>
         <source>%n host(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n میزبان.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="319"/>
         <source>Invalid password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="324"/>
         <source>The file was created by a newer version and cannot be imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فایل با نسخه جدیدتری ایجاد شده و قابل وارد کردن نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <source>The address book is already up to date.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس هم‌اکنون به‌روز است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن دفترچه آدرس</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="353"/>
         <source>Exported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n روتر صادر شد، </numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="443"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش گروه</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش میزبان</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="545"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="547"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="549"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت</translation>
     </message>
 </context>
 <context>
@@ -3687,134 +3692,134 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/main_window.ui" line="88"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>نما</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="117"/>
         <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>نوار ابزار</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="144"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="187"/>
         <source>Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>نوار وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="76"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنما</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="171"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="141"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنمای آنلاین...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
         <location filename="../client/desktop/main_window.cc" line="357"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت Aspia</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="68"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="83"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="100"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>عملیات</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="153"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="162"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="195"/>
         <source>Search Field</source>
-        <translation type="unfinished"></translation>
+        <translation>فیلد جستجو</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="203"/>
         <source>Large icons</source>
-        <translation type="unfinished"></translation>
+        <translation>آیکون‌های بزرگ</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="211"/>
         <source>Open Sessions in Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن نشست‌ها در زبانه‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="219"/>
         <source>Always on Top</source>
-        <translation type="unfinished"></translation>
+        <translation>همیشه در بالا</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="95"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="169"/>
         <source>Management</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیریت</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیوند "%1" نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتری که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="267"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبانی که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="275"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="455"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال با ID در ویژگی‌های میزبان مشخص شده است، اما روتر پیکربندی نشده است. پارامترهای روتر را در ویژگی‌های دفترچه آدرس بررسی کنید.</translation>
     </message>
 </context>
 <context>
@@ -3822,62 +3827,62 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="56"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="65"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="74"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن روتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش روتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف روتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Clear Events</source>
-        <translation type="unfinished"></translation>
+        <translation>پاک کردن رویدادها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="146"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -3885,131 +3890,131 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.ui" line="215"/>
         <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="182"/>
         <location filename="../client/desktop/management_tab.ui" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="194"/>
         <location filename="../client/desktop/management_tab.ui" line="236"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="206"/>
         <location filename="../client/desktop/management_tab.ui" line="245"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="257"/>
         <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>ترمینال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن کاربر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش کاربر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف کاربر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال همه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="356"/>
         <source>Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
         <source>Approve</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="377"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation>بارگذاری مجدد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="389"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>Import Old Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس قدیمی...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Export Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن دفترچه آدرس...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Import Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی خودکار وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="968"/>
         <source>(copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>(کپی)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="685"/>
@@ -4019,100 +4024,100 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.cc" line="964"/>
         <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت اطلاعات میزبان از پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="973"/>
         <source>Failed to add the host to the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن میزبان به پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید میزبان "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
         <source>Unable to remove host</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1147"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1080"/>
         <location filename="../client/desktop/management_tab.cc" line="1123"/>
         <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید فضای کاری "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید گروه "%1" را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضای کاری منتقل خواهند شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Import Old Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس قدیمی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1422"/>
         <source>Address Book (*.aab);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس (*.aab);;همه فایل‌ها (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1445"/>
         <location filename="../client/desktop/management_tab.cc" line="1462"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن دفترچه آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Address Book (*.json);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس (*.json);;همه فایل‌ها (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Address book database is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>پایگاه داده دفترچه آدرس در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1464"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای رمزگذاری دفترچه آدرس یک گذرواژه وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management_tab.cc" line="1470"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1473"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1495"/>
@@ -4120,42 +4125,45 @@ Password: %2</source>
 Routers exported: %1
 Groups exported: %2
 Hosts exported: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن با موفقیت انجام شد.
+روترهای صادرشده: %1
+گروه‌های صادرشده: %2
+میزبان‌های صادرشده: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن دفترچه آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1527"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1529"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس رمزگذاری شده است. برای باز کردن باید گذرواژه را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1544"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Unsupported file format version.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>چیزی وارد نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>The file is not a valid address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فایل یک دفترچه آدرس معتبر نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1561"/>
@@ -4166,32 +4174,38 @@ Groups added: %3
 Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن با موفقیت انجام شد.
+روترهای افزوده‌شده: %1
+روترهای صرف‌نظرشده: %2
+گروه‌های افزوده‌شده: %3
+گروه‌های صرف‌نظرشده: %4
+میزبان‌های افزوده‌شده: %5
+میزبان‌های صرف‌نظرشده: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1909"/>
         <source>Copy Link</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی پیوند</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1939"/>
         <source>Unable to create a link for this host.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد پیوند برای این میزبان ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1956"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1972"/>
         <source>The host has an incorrect address.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس میزبان نادرست است.</translation>
     </message>
 </context>
 <context>
@@ -4199,109 +4213,109 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیم گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی موردنیاز برای باز کردن قفل برنامه را تنظیم کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
         <location filename="../client/android/master_password_dialog.cc" line="192"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی خود را وارد کرده و گذرواژه جدیدی انتخاب کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="129"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="149"/>
         <source>The entered passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌های واردشده مطابقت ندارند.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="159"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیم گذرواژه اصلی ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی نامعتبر است یا امکان تغییر آن وجود ندارد.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="210"/>
         <location filename="../client/android/master_password_dialog.cc" line="218"/>
         <source>Biometric unlock failed. Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل بیومتریک ناموفق بود. گذرواژه اصلی را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>بیومتریک تغییر کرده است. برای ادامه گذرواژه اصلی را وارد کنید.</translation>
     </message>
 </context>
 <context>
@@ -4309,107 +4323,107 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="49"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="50"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>اعمال</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>صرف‌نظر</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>راهنما</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>تلاش مجدد</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>چشم‌پوشی</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>بازگردانی پیش‌فرض‌ها</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره همه</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>بله برای همه</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر برای همه</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="91"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید</translation>
     </message>
 </context>
 <context>
@@ -4417,7 +4431,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/workers/network_worker.cc" line="370"/>
         <source>Failed to connect to the relay server</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به سرور رله ناموفق بود</translation>
     </message>
 </context>
 <context>
@@ -4426,49 +4440,49 @@ Hosts skipped: %6</source>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>توقف موقت</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="371"/>
         <source>Disconnect all</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال همه</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل کردن ماوس</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل کردن صفحه‌کلید</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل ماوس</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل صفحه‌کلید</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>ازسرگیری</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان Aspia</translation>
     </message>
 </context>
 <context>
@@ -4477,83 +4491,83 @@ Hosts skipped: %6</source>
         <location filename="../client/android/password_dialog.cc" line="37"/>
         <location filename="../host/android/password_dialog.cc" line="89"/>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیم گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="38"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای رمزگذاری دفترچه آدرس یک گذرواژه وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
         <source>Enter the password to decrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای رمزگشایی دفترچه آدرس، گذرواژه را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
         <location filename="../host/android/password_dialog.cc" line="54"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="59"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="64"/>
         <location filename="../host/android/password_dialog.cc" line="62"/>
         <location filename="../host/android/password_dialog.cc" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="65"/>
         <location filename="../host/android/password_dialog.cc" line="63"/>
         <location filename="../host/android/password_dialog.cc" line="106"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="85"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="92"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌ها مطابقت ندارند.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="74"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه را اشتباه وارد کردید.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="92"/>
         <source>New password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه جدید</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="96"/>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation>تکرار گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="115"/>
         <source>The password can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="123"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌هایی که وارد کردید مطابقت ندارند.</translation>
     </message>
 </context>
 <context>
@@ -4561,73 +4575,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی دسترسی سیستم</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان Aspia برای دسترسی به قابلیت‌های سیستم به اجازه شما نیاز دارد.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>مجوزهای زیر را بررسی کنید و موارد ناموجود را اعطا کنید.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>ضبط صفحه</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای اینکه کاربر راه دور بتواند این صفحه را ببیند لازم است.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست دسترسی...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترس‌پذیری</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای اینکه کاربر راه دور بتواند ماوس و صفحه‌کلید را کنترل کند لازم است.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی کامل به دیسک</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای انتقال فایل‌ها از پوشه‌های محافظت‌شده لازم است.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن ترجیحات...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن تنظیمات...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
-        <translation type="unfinished"></translation>
+        <translation>اعطا شده</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>رد شده</translation>
     </message>
 </context>
 <context>
@@ -4635,12 +4649,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="89"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایند بی‌کاری سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایند ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -4648,12 +4662,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -4661,22 +4675,22 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/remote_widget.cc" line="469"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های تأییدنشده</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="635"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="637"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="639"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت</translation>
     </message>
 </context>
 <context>
@@ -4684,88 +4698,88 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="58"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="63"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="68"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="267"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="303"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال کلاینت "%1" را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
         <source>Are you sure you want to disconnect all clients?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال همه کلاینت‌ها را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="436"/>
         <source>Invalid client request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست کلاینت نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="438"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID ورودی نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="497"/>
         <source>%n client(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n کلاینت</numerusform>
         </translation>
     </message>
 </context>
@@ -4774,78 +4788,78 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="14"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="25"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="35"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>نام میزبان یا آدرس IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="42"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="52"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>نامی وارد کنید یا این فیلد را خالی بگذارید</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>سطح دسترسی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="83"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="45"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>سرپرست</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس روتر واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="108"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، . باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="142"/>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره روتر ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -4853,68 +4867,68 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="71"/>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="150"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس روتر واردشده نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های "_"، "-"، "." باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="188"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره روتر ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="198"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف روتر</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر "%1" حذف شود؟</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
         <source>Failed to delete the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف روتر ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -4922,73 +4936,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه والد:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست گروه نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="125"/>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی رد شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام گروه نمی‌تواند خالی باشد.</translation>
     </message>
 </context>
 <context>
@@ -4996,68 +5010,68 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="60"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="70"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="75"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="80"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="85"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="90"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="95"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین تغییر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="100"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n میزبان</numerusform>
         </translation>
     </message>
 </context>
@@ -5066,57 +5080,57 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="106"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی رد شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="108"/>
         <source>Host not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="110"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="112"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="114"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
 </context>
 <context>
@@ -5124,164 +5138,164 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="58"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="63"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="68"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="78"/>
         <source>Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="83"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="93"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="98"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="103"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین تغییر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="108"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="118"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="121"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="135"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="138"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="149"/>
         <source>Items per page:</source>
-        <translation type="unfinished"></translation>
+        <translation>موارد در هر صفحه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>این میزبان به هیچ فضای کاری اختصاص نیافته است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال میزبان "%1" را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال همه میزبان‌ها را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان باعث می‌شود همه پیکربندی آن برای اتصال به روتر حذف شود و برنامه از روی میزبان حذف نصب گردد. این عملیات برگشت‌ناپذیر است. آیا مطمئن هستید که می‌خواهید این کار را انجام دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست میزبان نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID ورودی نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n میزبان</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
 </context>
 <context>
@@ -5289,163 +5303,156 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="63"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="68"/>
         <source>Pool Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه مخزن</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="73"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="78"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="83"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="88"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="113"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
         <source>Host Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="128"/>
         <source>Client Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="133"/>
         <source>Transferred</source>
-        <translation type="unfinished"></translation>
+        <translation>منتقل‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="138"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>مدت زمان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="143"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌کار</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="414"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال رله "%1" را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال همه رله‌ها را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="527"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="529"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="530"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید اتصال همتای "%1" را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
         <source>Invalid relay request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست رله نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="663"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="686"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>ID ورودی نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="688"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="684"/>
         <source>Relay session not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست رله پیدا نشد.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="768"/>
         <source>%n relay(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n رله</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterStatusDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Fechar</translation>
     </message>
 </context>
 <context>
@@ -5453,18 +5460,18 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
         <source>Date and time</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ و زمان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="53"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>رویداد</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_status_widget.cc" line="155"/>
         <source>%n event(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n رویداد</numerusform>
         </translation>
     </message>
 </context>
@@ -5473,32 +5480,32 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="203"/>
         <source>Failed to approve the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>تأیید میزبان ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -5506,203 +5513,203 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های کاربر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>کلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه (تکرار):</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>سطح دسترسی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن حساب کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی احراز هویت دومرحله‌ای</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین فعالیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج از نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج از همه نشست‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست کاربر نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="184"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="240"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربری با نام مشخص‌شده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="190"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی احراز هویت دومرحله‌ای این کاربر را از همه نشست‌ها خارج می‌کند و او را وادار می‌کند در ورود بعدی دوباره ثبت‌نام کند. ادامه می‌دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید این کاربر را از این نشست خارج کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید این کاربر را از همه نشست‌ها خارج کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست خروج نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری واردشده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌هایی که وارد کردید مطابقت ندارند.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه نمی‌تواند خالی باشد و نباید بیش از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته هنگام ایجاد یا تغییر کاربر.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>برای تغییر دوبار کلیک کنید</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>سرپرست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="572"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="590"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>هرگز</translation>
     </message>
 </context>
 <context>
@@ -5710,63 +5717,63 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="61"/>
         <source>Session Types</source>
-        <translation type="unfinished"></translation>
+        <translation>انواع نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>You cannot delete a built-in user.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر داخلی را نمی‌توان حذف کرد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید کاربر "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست کاربر نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="376"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="378"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="380"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربری با نام مشخص‌شده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="382"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n کاربر</numerusform>
         </translation>
     </message>
 </context>
@@ -5775,132 +5782,134 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>کلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>دسترسی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Users with access</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران دارای دسترسی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="87"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="160"/>
         <source>&lt; Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; افزودن</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="90"/>
         <source>Grant access to the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>اعطای دسترسی به کاربر انتخاب‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="97"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="170"/>
         <source>Remove &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف &gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="100"/>
         <source>Revoke access from the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو دسترسی کاربر انتخاب‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="118"/>
         <source>Available users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران موجود</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="131"/>
         <source>Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="139"/>
         <source>Hosts in workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های داخل فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="163"/>
         <source>Move the selected host into the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال میزبان انتخاب‌شده به فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="173"/>
         <source>Remove the selected host from the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان انتخاب‌شده از فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <source>Unassigned hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های اختصاص‌نیافته</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="214"/>
         <source>Workspace name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام فضای کاری نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="224"/>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="298"/>
         <source>A workspace with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>فضای کاری با نام مشخص‌شده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="292"/>
         <source>Invalid workspace request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست فضای کاری نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="294"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="296"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="300"/>
         <source>Workspace not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>فضای کاری پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="302"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="332"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیران را نمی‌توان از فهرست دسترسی فضای کاری حذف کرد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="367"/>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان از فضای کاری فیلدهای رمزگذاری‌شده آن (توضیح، نام کاربری و گذرواژه) را برای همیشه پاک می‌کند. این عملیات قابل بازگشت نیست.
+
+آیا مطمئن هستید که می‌خواهید ادامه دهید؟</translation>
     </message>
 </context>
 <context>
@@ -5908,42 +5917,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/routers_widget.cc" line="123"/>
         <source>No routers added</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ روتری افزوده نشده است</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="198"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن روتر</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="235"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش روتر</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="330"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر %1...</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="335"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به روتر %1 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="340"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال از روتر %1 قطع شد.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="356"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای شبکه: %1</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر به تغییر گذرواژه نیاز دارد که هنوز در اینجا پشتیبانی نمی‌شود.</translation>
     </message>
 </context>
 <context>
@@ -5951,12 +5960,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو...</translation>
     </message>
 </context>
 <context>
@@ -5964,34 +5973,34 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="530"/>
         <source>%n result(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n نتیجه</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/search_widget.cc" line="175"/>
         <source>Nothing found</source>
-        <translation type="unfinished"></translation>
+        <translation>چیزی پیدا نشد</translation>
     </message>
 </context>
 <context>
@@ -5999,47 +6008,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="14"/>
         <source>Security Log</source>
-        <translation type="unfinished"></translation>
+        <translation>گزارش امنیتی</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="34"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="57"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="83"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو...</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="97"/>
         <source>Events:</source>
-        <translation type="unfinished"></translation>
+        <translation>رویدادها:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="238"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن پوشه</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="352"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="353"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>رویداد</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="354"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>جزئیات</translation>
     </message>
 </context>
 <context>
@@ -6047,12 +6056,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایشگر %1 (اصلی)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایشگر %1</translation>
     </message>
 </context>
 <context>
@@ -6060,68 +6069,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال ازسرگیری</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف موقت</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>موقتاً متوقف</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اجرا</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال شروع</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>متوقف‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="205"/>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="225"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="215"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع خودکار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="217"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع دستی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="219"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع هنگام بوت</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="223"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع با سیستم</translation>
     </message>
 </context>
 <context>
@@ -6129,27 +6138,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="39"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>چت</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="45"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>ترمینال</translation>
     </message>
 </context>
 <context>
@@ -6157,225 +6166,225 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="119"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>رابط کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="125"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>زبان:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="135"/>
         <source>Theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>تم:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="145"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی هنگام اتصال:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>نامی وارد کنید یا این فیلد را خالی بگذارید</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال‌های UDP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="171"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به اتصال‌های مستقیم</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل PCP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="192"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="199"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل UPnP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="209"/>
         <source>Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="291"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="297"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی صدا</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="304"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی کلیپ‌بورد</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="311"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش شکل نشانگر راه دور</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="318"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش موقعیت نشانگر راه دور</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="325"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن جلوه‌های دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="332"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن تصویر زمینه دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="339"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل کردن رایانه هنگام قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>مسدود کردن ورودی راه دور</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="353"/>
         <source>Send key combinations</source>
-        <translation type="unfinished"></translation>
+        <translation>ارسال کلیدهای ترکیبی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحه‌نمایش</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="377"/>
         <source>Preferred resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>وضوح ترجیحی:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="405"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>ضبط</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="411"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع خودکار ضبط نشست‌ها هنگام اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Write path:</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر نوشتن:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="514"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی به‌روزرسانی‌ها هنگام راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="521"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده از سرور به‌روزرسانی سفارشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="530"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>سرور:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="126"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>کلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ‌کدام</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>زبان جدید پس از راه‌اندازی مجدد برنامه اعمال خواهد شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="411"/>
         <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب مسیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="431"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="433"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی خود را وارد کرده و گذرواژه جدیدی انتخاب کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="442"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="445"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="454"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه فعلی نامعتبر است یا امکان تغییر آن وجود ندارد.</translation>
     </message>
 </context>
 <context>
@@ -6383,74 +6392,74 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="272"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیکربندی با موفقیت وارد شد.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="321"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>پیکربندی با موفقیت صادر شد.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="331"/>
         <location filename="../host/settings_util.cc" line="335"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="238"/>
         <source>Unable to open the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل مبدأ ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>خواندن فایل مبدأ ممکن نیست: فایل آسیب دیده است یا قالب ناشناخته‌ای دارد.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="267"/>
         <source>Unable to write the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن پایگاه داده امن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="287"/>
         <source>Unable to read the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>خواندن پایگاه داده امن ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="308"/>
         <source>Unable to open the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن فایل مقصد ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="316"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل مقصد ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>ادامه</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="348"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="359"/>
         <source>Aspia</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="229"/>
         <source>Source settings file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل تنظیمات مبدأ وجود ندارد.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <location filename="../host/settings_util.cc" line="336"/>
         <source>The existing settings will be overwritten. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>تنظیمات موجود بازنویسی خواهند شد. ادامه می‌دهید؟</translation>
     </message>
 </context>
 <context>
@@ -6459,217 +6468,217 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/settings_widget.cc" line="107"/>
         <location filename="../host/android/settings_widget.cc" line="144"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>درباره</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="158"/>
         <location filename="../host/android/settings_widget.cc" line="214"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>رابط کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
         <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>تم</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی هنگام اتصال</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="186"/>
         <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>امنیت</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="188"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>Unlock with biometrics</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="225"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای استفاده از این قابلیت، در تنظیمات سیستم اثر انگشت ثبت کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="227"/>
         <source>Biometrics are not available on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>بیومتریک در این دستگاه در دسترس نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="238"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال‌های UDP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="252"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به اتصال‌های مستقیم</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="253"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل PCP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="255"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="256"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>اجازه به پروتکل UPnP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="262"/>
         <source>Remote Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="264"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی صدا</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="269"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی کلیپ‌بورد</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="274"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش شکل نشانگر راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="280"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش موقعیت نشانگر راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="286"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن جلوه‌های دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="292"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن تصویر زمینه دسکتاپ</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قفل کردن رایانه هنگام قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="304"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>مسدود کردن ورودی راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Enable biometric unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="332"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش کاربر</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن کاربر</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Manage users</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیریت کاربران</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="245"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="249"/>
         <source>Disable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن محافظت با گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Enable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی محافظت با گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="278"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی استفاده از روتر</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="289"/>
         <source>Public Key</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید عمومی</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href="https://aspia.org"&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های JSON (*.json)</translation>
     </message>
 </context>
 <context>
@@ -6677,128 +6686,128 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="74"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>محلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اتصال به روتر %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به روتر %1 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال از روتر %1 قطع شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای تکمیل مهاجرت از نسخه قبلی، باید گذرواژه خود را تغییر دهید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="474"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر گذرواژه</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه نمی‌تواند خالی باشد و نباید بیش از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه به‌روزرسانی شد. در انتظار کلیدهای رمزگذاری جدید...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست تغییر گذرواژه نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های نامعتبری ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخچه رویدادها پاک شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید گروه "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف گروه ممکن نیست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا مطمئن هستید که می‌خواهید روتر "%1" را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای شبکه: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>گروهی با این نام از قبل در گروه والد انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1431"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>جابه‌جایی گروه ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبانی با این نام از قبل در گروه انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1502"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال میزبان به گروه انتخاب‌شده ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -6806,7 +6815,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت‌ها</translation>
     </message>
 </context>
 <context>
@@ -6814,7 +6823,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های تأییدشده</translation>
     </message>
 </context>
 <context>
@@ -6822,7 +6831,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
-        <translation type="unfinished"></translation>
+        <translation>رله‌ها</translation>
     </message>
 </context>
 <context>
@@ -6830,7 +6839,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان‌های تأییدنشده</translation>
     </message>
 </context>
 <context>
@@ -6838,7 +6847,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="159"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
 </context>
 <context>
@@ -6847,22 +6856,22 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
         <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>آمار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../client/android/statistics_dialog.cc" line="208"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
 </context>
 <context>
@@ -6870,7 +6879,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت اتصال</translation>
     </message>
 </context>
 <context>
@@ -6878,32 +6887,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="53"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو در Google</translation>
     </message>
 </context>
 <context>
@@ -6911,47 +6920,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="48"/>
         <source>Process Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام فرایند</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="53"/>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>پروتکل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="58"/>
         <source>Local Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس محلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="63"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>پورت محلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="68"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس راه دور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="73"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>پورت راه دور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="78"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -6959,27 +6968,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -6987,32 +6996,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
         <source>Driver Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>فروشنده درایور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID دستگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>جستجو در Google</translation>
     </message>
 </context>
 <context>
@@ -7020,32 +7029,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>جدول</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7053,42 +7062,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="73"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل اجرایی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="81"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7096,27 +7105,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7124,27 +7133,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7152,63 +7161,63 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="135"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>سطح</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="130"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>اولین</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع رویدادها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID رویداد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>منبع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="150"/>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7216,27 +7225,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7244,22 +7253,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7267,27 +7276,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7295,27 +7304,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7323,27 +7332,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7351,27 +7360,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7379,27 +7388,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="53"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="58"/>
         <source>Lock Count</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد قفل‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
         <source>File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر فایل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7407,27 +7416,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="42"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="47"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="55"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="60"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="65"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7435,27 +7444,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7463,47 +7472,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID نشست</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7511,32 +7520,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="48"/>
         <source>Destonation</source>
-        <translation type="unfinished"></translation>
+        <translation>مقصد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="53"/>
         <source>Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>ماسک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="58"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>دروازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="63"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>متریک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="71"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="76"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7544,47 +7553,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="73"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>حساب کاربری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="78"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل اجرایی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7592,32 +7601,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
         <source>Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>درایو</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7625,27 +7634,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7653,27 +7662,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی مقدار</translation>
     </message>
 </context>
 <context>
@@ -7681,202 +7690,202 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>چاپ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>چاپ (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>تازه‌سازی (F5)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل HTML</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل HTML (*.html)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="351"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره فایل ناموفق بود: %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="376"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>خلاصه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>سخت‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
         <source>DMI</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="389"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>پردازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="392"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="395"/>
         <source>Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>درایوها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>S.M.A.R.T.</source>
-        <translation type="unfinished"></translation>
+        <translation>S.M.A.R.T.</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="401"/>
         <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>آداپتورهای ویدئو</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="404"/>
         <source>Monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایشگرها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="407"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>چاپگرها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="410"/>
         <source>Power Options</source>
-        <translation type="unfinished"></translation>
+        <translation>گزینه‌های برق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>نرم‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>برنامه‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Drivers</source>
-        <translation type="unfinished"></translation>
+        <translation>درایورها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="436"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>سرویس‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="439"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایندها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="442"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>مجوزها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="455"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>شبکه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="458"/>
         <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>آداپتورهای شبکه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="461"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیرها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="464"/>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="467"/>
         <source>Network Shares</source>
-        <translation type="unfinished"></translation>
+        <translation>اشتراک‌های شبکه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="470"/>
         <source>Open Files</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل‌های باز</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
         <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>متغیرهای محیطی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
         <source>Event Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>گزارش رویدادها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه‌های کاربری</translation>
     </message>
 </context>
 <context>
@@ -7884,133 +7893,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
         <source>Processor Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های پردازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>کش‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
         <source>Instruction Set</source>
-        <translation type="unfinished"></translation>
+        <translation>مجموعه دستورالعمل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Security Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های امنیتی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Power Management Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های مدیریت انرژی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Virtualization Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های مجازی‌سازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Other Features</source>
-        <translation type="unfinished"></translation>
+        <translation>سایر ویژگی‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>پکیج‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Physical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>هسته‌های فیزیکی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Logical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>هسته‌های منطقی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Data Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>کش داده L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Instruction Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>کش دستورالعمل L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>کش L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>درجه انجمنی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <source>Fully associative</source>
-        <translation type="unfinished"></translation>
+        <translation>کاملاً انجمنی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1-way</source>
-        <translation type="unfinished"></translation>
+        <translation>%1-راهه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Line Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه خط</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 بایت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>مجموعه‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>Shared By</source>
-        <translation type="unfinished"></translation>
+        <translation>مشترک بین</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>%1 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 رشته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
 </context>
 <context>
@@ -8019,144 +8028,144 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>مادربرد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
         <source>Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>شاسی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
         <source>Processors</source>
-        <translation type="unfinished"></translation>
+        <translation>پردازنده‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>کش‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
         <source>Port Connectors</source>
-        <translation type="unfinished"></translation>
+        <translation>کانکتورهای پورت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
         <source>System Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>اسلات‌های سیستم</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
         <source>On-board Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه‌های روی برد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته‌های OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
-        <translation type="unfinished"></translation>
+        <translation>گزینه‌های پیکربندی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
         <source>Memory Arrays</source>
-        <translation type="unfinished"></translation>
+        <translation>آرایه‌های حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
         <source>Memory Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه‌های حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
         <source>Memory Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>خطاهای حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
         <source>Memory Array Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس‌های آرایه حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
         <source>Memory Device Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس‌های دستگاه حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
         <source>Voltage Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>حسگرهای ولتاژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
         <source>Cooling Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه‌های خنک‌کننده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
         <source>Temperature Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>حسگرهای دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
         <source>Current Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>حسگرهای جریان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
-        <translation type="unfinished"></translation>
+        <translation>بوت سیستم</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
         <source>Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات تکمیلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
         <source>TPM Device</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه TPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
         <source>Processor Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات تکمیلی پردازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
         <source>Firmware Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>فهرست میان‌افزارها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>متفرقه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>فروشنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
@@ -8165,45 +8174,45 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ انتشار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه ROM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش میان‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
-        <translation type="unfinished"></translation>
+        <translation>مشخصه‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
-        <translation type="unfinished"></translation>
+        <translation>برد %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
@@ -8212,12 +8221,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>سازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation>محصول</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
@@ -8225,7 +8234,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره سریال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
@@ -8233,12 +8242,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>برچسب دارایی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>مکان در شاسی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
@@ -8251,12 +8260,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
-        <translation type="unfinished"></translation>
+        <translation>برد میزبان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8287,7 +8296,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8320,236 +8329,236 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
-        <translation type="unfinished"></translation>
+        <translation>نیازمند برد فرعی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل جداسازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل تعویض</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل تعویض در حین کار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
-        <translation type="unfinished"></translation>
+        <translation>شاسی %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
-        <translation type="unfinished"></translation>
+        <translation>دارای قفل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره SKU</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت منبع تغذیه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت حرارتی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت امنیتی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>ارتفاع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
-        <translation type="unfinished"></translation>
+        <translation>کابل‌های برق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>پردازنده %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>نصب‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>خانواده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان سوکت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>سوکت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع سوکت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>ولتاژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاک خارجی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر سرعت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت فعلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد هسته‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>هسته‌های فعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد رشته‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته‌های فعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره قطعه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
-        <translation type="unfinished"></translation>
+        <translation>پشتیبانی از 64 بیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
-        <translation type="unfinished"></translation>
+        <translation>چندهسته‌ای</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته سخت‌افزاری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>محافظت از اجرا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
-        <translation type="unfinished"></translation>
+        <translation>مجازی‌سازی پیشرفته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
-        <translation type="unfinished"></translation>
+        <translation>کنترل برق/کارایی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>کش L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>سطح</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه نصب‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر اندازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
@@ -8557,150 +8566,150 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>مکان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت عملیاتی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع SRAM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
-        <translation type="unfinished"></translation>
+        <translation>انواع SRAM پشتیبانی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع تصحیح خطا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>درجه انجمنی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ns</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
-        <translation type="unfinished"></translation>
+        <translation>دارای سوکت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>پورت %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع پورت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان داخلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع کانکتور داخلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان خارجی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع کانکتور خارجی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
-        <translation type="unfinished"></translation>
+        <translation>اسلات %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
-        <translation type="unfinished"></translation>
+        <translation>پهنای گذرگاه داده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربرد فعلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>طول</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس گذرگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>تأمین 5 V</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>تأمین 3.3 V</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>اشتراکی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>سیگنال PME</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال در حین کار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>سیگنال SMBus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
-        <translation type="unfinished"></translation>
+        <translation>انشعاب</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
@@ -8708,7 +8717,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
@@ -8716,440 +8725,440 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
-        <translation type="unfinished"></translation>
+        <translation>نمونه نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
-        <translation type="unfinished"></translation>
+        <translation>گزینه %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
-        <translation type="unfinished"></translation>
+        <translation>حسگر %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
-        <translation type="unfinished"></translation>
+        <translation>mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
-        <translation type="unfinished"></translation>
+        <translation>mA</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار اسمی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>حداقل مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>رواداری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>وضوح</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>دقت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه واحد خنک‌کننده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت اسمی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 rpm</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت بوت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
-        <translation type="unfinished"></translation>
+        <translation>آرایه %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربرد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>تصحیح خطا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر ظرفیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد دستگاه‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>بانک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>جزئیات نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>فرم فاکتور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>فناوری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت پیکربندی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
-        <translation type="unfinished"></translation>
+        <translation>پهنای کل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 بیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
-        <translation type="unfinished"></translation>
+        <translation>پهنای داده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>رتبه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>حداقل ولتاژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر ولتاژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>ولتاژ پیکربندی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میان‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه ماندگار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه ناپایدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه کش</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه منطقی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
-        <translation type="unfinished"></translation>
+        <translation>رکورد %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
-        <translation type="unfinished"></translation>
+        <translation>دانه‌بندی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
-        <translation type="unfinished"></translation>
+        <translation>عملیات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
-        <translation type="unfinished"></translation>
+        <translation>سندرم فروشنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس آرایه حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس دستگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 بایت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
-        <translation type="unfinished"></translation>
+        <translation>محدوده %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
-        <translation type="unfinished"></translation>
+        <translation>آرایه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس شروع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس پایانی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
-        <translation type="unfinished"></translation>
+        <translation>پهنای پارتیشن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
-        <translation type="unfinished"></translation>
+        <translation>موقعیت ردیف پارتیشن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
-        <translation type="unfinished"></translation>
+        <translation>موقعیت اینترلیو</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>عمق داده اینترلیو</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ورودی %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
-        <translation type="unfinished"></translation>
+        <translation>هندل ارجاع‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>آفست ارجاع‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>پردازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID فروشنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه مشخصات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل پیکربندی توسط میان‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل پیکربندی توسط نرم‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل پیکربندی توسط OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
-        <translation type="unfinished"></translation>
+        <translation>میان‌افزار %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
-        <translation type="unfinished"></translation>
+        <translation>قالب نسخه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
-        <translation type="unfinished"></translation>
+        <translation>پایین‌ترین نسخه پشتیبانی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
-        <translation type="unfinished"></translation>
+        <translation>قالب ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه ایمیج</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
-        <translation type="unfinished"></translation>
+        <translation>قابل به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
-        <translation type="unfinished"></translation>
+        <translation>محافظت‌شده در برابر نوشتن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
-        <translation type="unfinished"></translation>
+        <translation>جزء %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
-        <translation type="unfinished"></translation>
+        <translation>اجزای مرتبط</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه SMBIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
-        <translation type="unfinished"></translation>
+        <translation>ساختارها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه ساختارها</translation>
     </message>
 </context>
 <context>
@@ -9157,68 +9166,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال ازسرگیری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف موقت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>موقتاً متوقف</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اجرا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال شروع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>متوقف‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع خودکار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع دستی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع هنگام بوت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع با سیستم</translation>
     </message>
 </context>
 <context>
@@ -9226,77 +9235,77 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>مدل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره سریال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>ویرایش میان‌افزار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع گذرگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع رسانه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت جامد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
-        <translation type="unfinished"></translation>
+        <translation>چرخشی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت چرخش</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 RPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه کش</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>جداشدنی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
 </context>
 <context>
@@ -9304,47 +9313,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>برنامه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>امنیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation type="unfinished"></translation>
+        <translation>ممیزی موفق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>ممیزی ناموفق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -9352,37 +9361,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع مجوز</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه مجوز</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
-        <translation type="unfinished"></translation>
+        <translation>سازمان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>مالک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID محصول</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید محصول</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
-        <translation type="unfinished"></translation>
+        <translation>فیلد ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -9390,56 +9399,56 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کامل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>پوشه خانگی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه منقضی شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه منقضی نمی‌شود</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>هرگز</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>آخرین ورود</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه‌ها</translation>
     </message>
 </context>
 <context>
@@ -9447,103 +9456,103 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نمایشگر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام سازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID نمایشگر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره سریال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه EDID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ ساخت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished"></translation>
+        <translation>هفته %1 / %2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>گاما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه تصویر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1x%2 سانتی‌متر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه قطر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>وضوح</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>فرکانس افقی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 kHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>فرکانس عمودی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاک پیکسل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر کلاک پیکسل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع سیگنال ورودی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9553,7 +9562,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9563,37 +9572,37 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های پشتیبانی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت‌های ویدئویی پشتیبانی‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
-        <translation type="unfinished"></translation>
+        <translation>دیجیتال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
-        <translation type="unfinished"></translation>
+        <translation>آنالوگ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -9601,67 +9610,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام آداپتور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع رابط</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت اتصال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس MAC</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP فعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>سرور DHCP #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>سرور DHCP</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>دروازه #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>دروازه</translation>
     </message>
 </context>
 <context>
@@ -9669,32 +9678,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر محلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>استفاده‌های فعلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation type="unfinished"></translation>
+        <translation>نامحدود</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر استفاده‌ها</translation>
     </message>
 </context>
 <context>
@@ -9702,105 +9711,105 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
-        <translation type="unfinished"></translation>
+        <translation>منبع برق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت باتری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished"></translation>
+        <translation>درصد شارژ باتری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>مدت کارکرد با شارژ کامل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان باقی‌مانده شارژ باتری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام دستگاه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>سازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ ساخت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
-        <translation type="unfinished"></translation>
+        <translation>ID یکتا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>شماره سریال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>ظرفیت طراحی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mWh</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>ظرفیت شارژ کامل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
-        <translation type="unfinished"></translation>
+        <translation>استهلاک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>ظرفیت فعلی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>ولتاژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال شارژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
@@ -9808,64 +9817,64 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>بحرانی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال تخلیه شارژ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
-        <translation type="unfinished"></translation>
+        <translation>برق متصل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>حالت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>باتری #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>باتری DC</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
-        <translation type="unfinished"></translation>
+        <translation>برق شهری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>زیاد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>کم</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>بدون باتری</translation>
     </message>
 </context>
 <context>
@@ -9873,44 +9882,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>پیش‌فرض</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>پورت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>درایور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>اشتراک‌گذاری‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام اشتراک</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد کارهای چاپ</translation>
     </message>
 </context>
 <context>
@@ -9918,12 +9927,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایند بی‌کاری سیستم</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایند ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -9931,68 +9940,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال ازسرگیری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف موقت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>موقتاً متوقف</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال اجرا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال شروع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال توقف</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>متوقف‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع خودکار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع دستی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع هنگام بوت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع با سیستم</translation>
     </message>
 </context>
 <context>
@@ -10000,214 +10009,214 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>مشخصه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>مقدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Worst</source>
-        <translation type="unfinished"></translation>
+        <translation>بدترین</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>آستانه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <source>Raw</source>
-        <translation type="unfinished"></translation>
+        <translation>خام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>پارامتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Health Data</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌های سلامت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>در دسترس نیست</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
         <source>OK. Always passed</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. همیشه قبول شده است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
         <source>OK. Value is normal</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. مقدار عادی است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
         <source>Warning. Value is pre-failure</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار. مقدار در آستانه خرابی است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
         <source>Warning. Value is not normal</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار. مقدار عادی نیست</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
         <source>Unknown Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>مشخصه ناشناخته</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
         <source>Spare capacity is below the threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>ظرفیت یدکی کمتر از آستانه است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
         <source>Temperature is outside of the operating range</source>
-        <translation type="unfinished"></translation>
+        <translation>دما خارج از محدوده کاری است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
         <source>Reliability is degraded</source>
-        <translation type="unfinished"></translation>
+        <translation>قابلیت اطمینان کاهش یافته است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
         <source>Media is in read-only mode</source>
-        <translation type="unfinished"></translation>
+        <translation>رسانه در حالت فقط‌خواندنی است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
         <source>Volatile memory backup device failed</source>
-        <translation type="unfinished"></translation>
+        <translation>دستگاه پشتیبان حافظه ناپایدار از کار افتاد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
         <source>Persistent memory region is unreliable</source>
-        <translation type="unfinished"></translation>
+        <translation>ناحیه حافظه ماندگار غیرقابل اعتماد است</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
         <source>Critical Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار بحرانی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>هیچ‌کدام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
         <source>Temperature Sensor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>حسگر دمای %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <source>Available Spare</source>
-        <translation type="unfinished"></translation>
+        <translation>فضای یدکی موجود</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
         <source>Available Spare Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>آستانه فضای یدکی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>Percentage Used</source>
-        <translation type="unfinished"></translation>
+        <translation>درصد استفاده‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
         <source>Data Read</source>
-        <translation type="unfinished"></translation>
+        <translation>داده خوانده‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
         <source>Data Written</source>
-        <translation type="unfinished"></translation>
+        <translation>داده نوشته‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
         <source>Host Read Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>فرمان‌های خواندن میزبان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
         <source>Host Write Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>فرمان‌های نوشتن میزبان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
         <source>Controller Busy Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان اشغال کنترلر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
         <source>Power Cycles</source>
-        <translation type="unfinished"></translation>
+        <translation>چرخه‌های روشن/خاموش</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
         <source>Power-On Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان روشن بودن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
         <source>Unsafe Shutdowns</source>
-        <translation type="unfinished"></translation>
+        <translation>خاموش شدن‌های ناایمن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
         <source>Media Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>خطاهای رسانه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
         <source>Error Log Entries</source>
-        <translation type="unfinished"></translation>
+        <translation>ورودی‌های گزارش خطا</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
         <source>Warning Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان دمای هشدار</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
         <source>Critical Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>زمان دمای بحرانی</translation>
     </message>
 </context>
 <context>
@@ -10216,168 +10225,168 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>دامنه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>گروه کاری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>مدت روشن بودن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>رایانه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه میزبان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه کلاینت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه روتر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات Aspia</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید مجوز</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ نصب</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>سازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>مدل</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>مادربرد</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>فروشنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>پکیج‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>هسته‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته‌ها</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>پردازنده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>نصب‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 آزاد)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>درایوهای منطقی</translation>
     </message>
 </context>
 <context>
@@ -10385,133 +10394,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته آداپتور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع تراشه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع DAC</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>مکان</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Bus %1, device %2, function %3</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرگاه %1، دستگاه %2، تابع %3</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
         <source>Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه استفاده‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
         <source>Shared Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>اندازه حافظه اشتراکی</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
         <source>Shared Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه اشتراکی استفاده‌شده</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
         <source>Memory Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>فرکانس حافظه</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>Driver Model</source>
-        <translation type="unfinished"></translation>
+        <translation>مدل درایور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>WDDM %1.%2</source>
-        <translation type="unfinished"></translation>
+        <translation>WDDM %1.%2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
         <source>Maximum Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر دما</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <source>Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت فن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 RPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>Maximum Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>حداکثر سرعت فن</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
         <source>Power Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>مصرف برق</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation>تاریخ درایور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه درایور</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
         <source>Driver Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>ارائه‌دهنده درایور</translation>
     </message>
 </context>
 <context>
@@ -10520,7 +10529,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>اطلاعات سیستم</translation>
     </message>
 </context>
 <context>
@@ -10528,198 +10537,198 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایندها</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="65"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="188"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="85"/>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID فرایند</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیر وظایف</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه (مجموعه کاری خصوصی)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه (مجموعه کاری)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه (اوج مجموعه کاری)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه (تغییرات مجموعه کاری)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>رشته‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسیر فایل اجرایی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="153"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation type="unfinished"></translation>
+        <translation>پایان وظیفه</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>سرویس‌ها</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="203"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>توضیحات</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>خروج از سیستم</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>شروع</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="318"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>توقف</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="193"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>زیاد</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>متوسط</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>کم</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="357"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربران</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="242"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="283"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا واقعاً می‌خواهید فرایند "%1" را پایان دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا واقعاً می‌خواهید نشست کاربر "%1" را قطع کنید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا واقعاً می‌خواهید نشست کاربر "%1" را پایان دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
         <source>Processes: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>فرایندها: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="950"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>بار CPU: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="956"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>حافظه فیزیکی: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>سرعت به‌روزرسانی</translation>
     </message>
 </context>
 <context>
@@ -10727,67 +10736,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="67"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>نقض پروتکل ارتباطی.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="71"/>
         <source>Wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری یا گذرواژه اشتباه است.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="75"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای رمزنگاری (رمزگذاری یا رمزگشایی پیام ناموفق بود).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="79"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوع نشست مشخص‌شده برای این کاربر مجاز نیست.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="83"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه برنامه‌ای که به آن متصل می‌شوید از حداقل نسخه پشتیبانی‌شده کمتر است.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="88"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>خطایی در شبکه رخ داد (مثلاً کابل شبکه به‌طور تصادفی جدا شده است).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="92"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال توسط طرف مقابل رد شد (یا مهلت آن به پایان رسید).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="96"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>میزبان راه دور اتصال را بست.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="100"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس میزبان پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>مهلت عملیات سوکت به پایان رسید.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس مشخص‌شده هم‌اکنون در حال استفاده است و به‌صورت انحصاری تنظیم شده بود.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>آدرس مشخص‌شده به این میزبان تعلق ندارد.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای ناشناخته‌ای رخ داد.</translation>
     </message>
 </context>
 <context>
@@ -10795,38 +10804,38 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="243"/>
         <source>Authentication failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1138"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1082"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>کپی</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1085"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>چسباندن</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1088"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب همه</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1136"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای احراز هویت در رایانه راه دور، نام کاربری و گذرواژه خود را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1150"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
 </context>
 <context>
@@ -10834,12 +10843,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت دومرحله‌ای</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد 6 رقمی برنامه احراز هویت خود را وارد کنید.</translation>
     </message>
 </context>
 <context>
@@ -10847,37 +10856,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="64"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت دومرحله‌ای</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="65"/>
         <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید راه‌اندازی زیر را به یک برنامه احراز هویت اضافه کنید، سپس برای تأیید، کد 6 رقمی نمایش‌داده‌شده را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="67"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد 6 رقمی برنامه احراز هویت خود را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="74"/>
         <source>Setup Key</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید راه‌اندازی</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="80"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>کد</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="86"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="87"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -10885,22 +10894,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال‌سازی احراز هویت دومرحله‌ای</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>یک برنامه احراز هویت TOTP (مانند Google Authenticator، Microsoft Authenticator یا هر جایگزین سازگار دیگر) را باز کنید و با اسکن کد QR زیر، حساب جدیدی اضافه کنید. اگر اسکن QR در دسترس نیست، کلید راه‌اندازی را در برنامه وارد کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
-        <translation type="unfinished"></translation>
+        <translation>کلید راه‌اندازی:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
-        <translation type="unfinished"></translation>
+        <translation>برای تأیید، کد 6 رقمی نمایش‌داده‌شده در برنامه را وارد کنید:</translation>
     </message>
 </context>
 <context>
@@ -10908,93 +10917,93 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="59"/>
         <source>Current version:</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه فعلی:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="66"/>
         <source>Available version:</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخه موجود:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="75"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="136"/>
         <source>Update description:</source>
-        <translation type="unfinished"></translation>
+        <translation>شرح به‌روزرسانی:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="181"/>
         <source>Update now!</source>
-        <translation type="unfinished"></translation>
+        <translation>اکنون به‌روزرسانی کنید!</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="188"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>بستن</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="56"/>
         <source>Receiving information...</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال دریافت اطلاعات...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="108"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>در حال لغو بررسی به‌روزرسانی. لطفاً صبر کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished"></translation>
+        <translation>یک به‌روزرسانی دانلود خواهد شد. پس از پایان دانلود، برنامه به‌طور خودکار بسته می‌شود.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="124"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>همه نشست‌های متصل قطع خواهند شد. تا پایان به‌روزرسانی نمی‌توانید اتصالی برقرار کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>همه داده‌های ذخیره‌نشده از بین خواهند رفت.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="127"/>
         <source>Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>ادامه می‌دهید؟</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>هنگام نصب به‌روزرسانی خطایی رخ داد: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="197"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="198"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا در دریافت اطلاعات به‌روزرسانی.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="208"/>
         <location filename="../common/desktop/update_dialog.cc" line="231"/>
         <source>No updates available.</source>
-        <translation type="unfinished"></translation>
+        <translation>به‌روزرسانی جدیدی موجود نیست.</translation>
     </message>
 </context>
 <context>
@@ -11002,98 +11011,98 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>ویژگی‌های کاربر</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="24"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="31"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه (تکرار):</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="62"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال کردن حساب کاربری</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="69"/>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>انواع نشست مجاز:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب همه</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
         <source>Uncheck all</source>
-        <translation type="unfinished"></translation>
+        <translation>لغو انتخاب همه</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="179"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری واردشده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="188"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌هایی که وارد کردید مطابقت ندارند.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="198"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه نمی‌تواند خالی باشد و نباید بیش از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>هشدار</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="236"/>
         <location filename="../host/ui/user_dialog.cc" line="266"/>
         <location filename="../host/ui/user_dialog.cc" line="276"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته هنگام ایجاد یا تغییر کاربر.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="314"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>برای تغییر دوبار کلیک کنید</translation>
     </message>
 </context>
 <context>
@@ -11108,28 +11117,28 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="234"/>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های "_"، "-"، "."، "@" باشد.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری واردشده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه‌هایی که وارد کردید مطابقت ندارند.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>گذرواژه نمی‌تواند خالی باشد و نباید بیش از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
@@ -11137,72 +11146,72 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="224"/>
         <location filename="../host/android/user_editor_widget.cc" line="235"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>خطای داخلی ناشناخته هنگام ایجاد یا تغییر کاربر.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="95"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="96"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="97"/>
         <source>Password (repeat)</source>
-        <translation type="unfinished"></translation>
+        <translation>گذرواژه (تکرار)</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="98"/>
         <source>Leave the password empty to keep the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای حفظ گذرواژه فعلی، این فیلد را خالی بگذارید.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="99"/>
         <source>User enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر فعال</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="100"/>
         <source>Allowed sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست‌های مجاز</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="101"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>دسکتاپ</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="102"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>انتقال فایل</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="103"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف کاربر</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="249"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف کاربر</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>کاربر "%1" حذف شود؟</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Failed to delete the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف کاربر ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -11210,62 +11219,62 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="253"/>
         <source>&lt;no user&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;بدون کاربر&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="288"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="290"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>متصل</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="292"/>
         <source>Connect Query</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="294"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>سایه</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="296"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>قطع‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="298"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌کار</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="300"/>
         <source>Listen</source>
-        <translation type="unfinished"></translation>
+        <translation>شنونده</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="302"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="304"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>از کار افتاده</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="306"/>
         <source>Init</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی اولیه</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="308"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>ناشناخته</translation>
     </message>
 </context>
 <context>
@@ -11273,27 +11282,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="90"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>مدیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="94"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="92"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>سرپرست</translation>
     </message>
 </context>
 <context>
@@ -11301,17 +11310,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/users_widget.cc" line="95"/>
         <source>No users</source>
-        <translation type="unfinished"></translation>
+        <translation>بدون کاربر</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>فعال</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>غیرفعال</translation>
     </message>
 </context>
 </TS>

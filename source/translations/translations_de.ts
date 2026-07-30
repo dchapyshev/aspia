@@ -6,28 +6,28 @@
     <message>
         <location filename="../client/aab_importer.cc" line="111"/>
         <source>%1 (Imported)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Importiert)</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei "%1" kann nicht geöffnet werden: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
         <source>Selected file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die ausgewählte Datei ist leer.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="284"/>
         <location filename="../client/aab_importer.cc" line="332"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished">Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
+        <translation>Die Adressbuchdatei ist beschädigt oder hat ein unbekanntes Format.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished">Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
+        <translation>Die Adressbuchdatei ist mit einem nicht unterstützten Verschlüsselungstyp verschlüsselt.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="359"/>
@@ -36,27 +36,31 @@ Groups added: %1
 Hosts added: %2
 Hosts skipped: %3
 Routers added: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Import erfolgreich abgeschlossen.
+Hinzugefügte Gruppen: %1
+Hinzugefügte Hosts: %2
+Übersprungene Hosts: %3
+Hinzugefügte Router: %4</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="316"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished">Das Adressbuch kann nicht mit dem angegebenen Kennwort entschlüsselt werden.</translation>
+        <translation>Das Adressbuch kann mit dem angegebenen Kennwort nicht entschlüsselt werden.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="299"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Entsperren</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="301"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished">Adressbuch ist verschlüsselt. Um zu öffnen, müssen Sie das Kennwort eingeben.</translation>
+        <translation>Das Adressbuch ist verschlüsselt. Zum Öffnen müssen Sie ein Kennwort eingeben.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="354"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde nichts importiert.</translation>
     </message>
 </context>
 <context>
@@ -69,12 +73,12 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation type="unfinished">Allgemeines</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="90"/>
         <source>Service Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienstinformationen</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="112"/>
@@ -89,117 +93,117 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished">Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
+        <translation>Aspia ist freie Software, die unter der GNU General Public License 3 veröffentlicht wird.</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished">Sie können eine Kopie der Lizenz hier erhalten:</translation>
+        <translation>Eine Kopie der Lizenz erhalten Sie hier:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="unfinished">Sie können auch eine Übersetzung der GNU GPL-Lizenz hier erhalten:</translation>
+        <translation>Eine Übersetzung der GNU-GPL-Lizenz erhalten Sie auch hier:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
-        <translation type="unfinished">Webseite:</translation>
+        <translation>Homepage:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
-        <translation type="unfinished">GitHub-Seite:</translation>
+        <translation>GitHub-Seite:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Entwickler</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenten von Drittanbietern</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafiken und Bilder</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbole von %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwendung</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokollverzeichnis: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokolldatei: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Build-Informationen</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git-Branch: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git-Commit: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompilierung</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompilierungsdatum: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompilierungszeit: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionsinformationen</translation>
     </message>
 </context>
 <context>
@@ -207,47 +211,47 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/about_widget.cc" line="99"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="102"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished">Aspia ist eine freie Software, die unter der GNU General Public License 3 veröffentlicht wurde.</translation>
+        <translation>Aspia ist freie Software, die unter der GNU General Public License 3 veröffentlicht wird.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="103"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished">Sie können eine Kopie der Lizenz hier erhalten:</translation>
+        <translation>Eine Kopie der Lizenz erhalten Sie hier:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Home page:</source>
-        <translation type="unfinished">Webseite:</translation>
+        <translation>Homepage:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>GitHub page:</source>
-        <translation type="unfinished">GitHub-Seite:</translation>
+        <translation>GitHub-Seite:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="113"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Entwickler</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="114"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzer</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="115"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenten von Drittanbietern</translation>
     </message>
 </context>
 <context>
@@ -255,7 +259,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished">Ein falscher Pfad zu dem Ordner wurde eingegeben.</translation>
+        <translation>Es wurde ein ungültiger Ordnerpfad eingegeben.</translation>
     </message>
 </context>
 <context>
@@ -264,97 +268,97 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Home-Ordner</translation>
+        <translation>Persönlicher Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloads</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumente</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
-        <translation type="unfinished">Computer</translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
-        <translation type="unfinished">Optisches Laufwerk</translation>
+        <translation>Optisches Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
-        <translation type="unfinished">Wechsellaufwerk</translation>
+        <translation>Wechseldatenträger</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished">Festes Laufwerk</translation>
+        <translation>Lokaler Datenträger</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
-        <translation type="unfinished">Netzlaufwerk</translation>
+        <translation>Netzlaufwerk</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
-        <translation type="unfinished">RAM-Laufwerk</translation>
+        <translation>RAM-Laufwerk</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished">Desktopordner</translation>
+        <translation>Desktop-Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloads-Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumente-Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder-Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Stammverzeichnis</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished">Unbekanntes Laufwerk</translation>
+        <translation>Unbekanntes Laufwerk</translation>
     </message>
 </context>
 <context>
@@ -364,21 +368,21 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="249"/>
         <location filename="../client/android/main_window.cc" line="329"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="253"/>
         <location filename="../client/android/main_window.cc" line="349"/>
         <source>Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>Remote</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
         <location filename="../client/android/main_window.cc" line="257"/>
         <location filename="../client/android/main_window.cc" line="339"/>
         <source>Routers</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="173"/>
@@ -388,7 +392,7 @@ Routers added: %4</source>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
@@ -397,68 +401,68 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="583"/>
         <location filename="../client/android/main_window.cc" line="630"/>
         <source>Connection by link</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung über Link</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
         <source>Invalid link.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger Link.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="554"/>
         <source>Another session is active. Close it and open the link again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine andere Sitzung ist aktiv. Schließen Sie sie und öffnen Sie den Link erneut.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="564"/>
         <source>The session type from the link is not supported on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzungsart aus dem Link wird auf diesem Gerät nicht unterstützt.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="584"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der im Link angegebene Router wurde nicht im Adressbuch gefunden.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="631"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der im Link angegebene Host wurde nicht im Adressbuch gefunden.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="459"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="333"/>
         <location filename="../host/android/main_window.cc" line="368"/>
         <location filename="../host/android/main_window.cc" line="400"/>
         <source>Permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>Berechtigungen</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="334"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivieren Sie den Bedienungshilfen-Dienst, um die Fernsteuerung von Tastatur und Maus zu ermöglichen.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="335"/>
         <location filename="../host/android/main_window.cc" line="370"/>
         <location filename="../host/android/main_window.cc" line="403"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="369"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlauben Sie die Anzeige über anderen Apps, um während einer Sitzung die Aktionsschaltfläche auf dem Bildschirm anzuzeigen.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="401"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlauben Sie den Zugriff auf alle Dateien, damit der verbundene Benutzer Dateien auf diesem Gerät durchsuchen und übertragen kann.</translation>
     </message>
 </context>
 <context>
@@ -466,7 +470,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen</translation>
     </message>
 </context>
 <context>
@@ -480,55 +484,55 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
         <location filename="../client/android/authorization_dialog.cc" line="45"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="66"/>
         <source>One-time password connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Einmalkennwort</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie die Anmeldedaten ein, um eine Verbindung mit dem Host herzustellen.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="43"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="52"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmalkennwort</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="66"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="106"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="147"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="113"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
 </context>
 <context>
@@ -536,48 +540,48 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="22"/>
         <source>Old password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altes Kennwort:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="36"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kennwort:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="50"/>
         <source>New password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kennwort (wiederholen):</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="94"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="103"/>
         <location filename="../host/ui/change_password_dialog.cc" line="145"/>
         <source>The passwords entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie müssen Ihr altes Kennwort eingeben.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="128"/>
         <source>You entered an incorrect old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben ein falsches altes Kennwort eingegeben.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="137"/>
         <source>New password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das neue Kennwort darf nicht leer sein.</translation>
     </message>
 </context>
 <context>
@@ -585,7 +589,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
 </context>
 <context>
@@ -593,7 +597,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
 </context>
 <context>
@@ -601,7 +605,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/chat_view.cc" line="201"/>
         <source>Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Nachricht</translation>
     </message>
 </context>
 <context>
@@ -609,92 +613,92 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-Chat</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Nachricht senden</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="210"/>
         <source>···</source>
-        <translation type="unfinished"></translation>
+        <translation>···</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
         <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Save chat...</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat speichern...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
         <location filename="../common/desktop/chat_widget.cc" line="307"/>
         <source>Clear chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat leeren</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 schreibt...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist dem Chat beigetreten (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 hat den Chat verlassen (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist angemeldet (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist nicht angemeldet (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>There are no connected users (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine verbundenen Benutzer (%1)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="428"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht geschrieben werden.</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/chat_widget.cc" line="444"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Die Nachricht ist zu lang. Die maximale Nachrichtenlänge beträgt %n Zeichen.</numerusform>
+            <numerusform>Die Nachricht ist zu lang. Die maximale Nachrichtenlänge beträgt %n Zeichen.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>TXT-Dateien (*.txt)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="380"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
 </context>
 <context>
@@ -702,168 +706,168 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="48"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Strg+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucken</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucken (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Aktualisieren (F5)</translation>
+        <translation>Aktualisieren (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="102"/>
         <source>User %1 has joined the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist dem Chat beigetreten</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="105"/>
         <source>User %1 has left the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 hat den Chat verlassen</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="108"/>
         <source>User %1 is logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist angemeldet</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="111"/>
         <source>User %1 is not logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer %1 ist nicht angemeldet</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="114"/>
         <source>There are no connected users</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine verbundenen Benutzer</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="141"/>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="201"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="210"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung zum Host wurde unterbrochen.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="306"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei der Verbindungsanforderung über den Router.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="219"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Host-Version ist neuer als die des Clients. Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="247"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 schreibt...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="292"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="317"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="342"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Save Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat speichern</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Text files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Textdateien (*.txt)</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Could not open the file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat leeren</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear the chat history?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatverlauf löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Leeren</translation>
     </message>
 </context>
 <context>
@@ -871,22 +875,22 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="14"/>
         <source>Password Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwortschutz</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Konfiguration ist kennwortgeschützt. Geben Sie das Kennwort ein, um die Konfiguration anzuzeigen und zu ändern.</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="36"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.cc" line="69"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben ein falsches Kennwort eingegeben.</translation>
     </message>
 </context>
 <context>
@@ -894,60 +898,60 @@ Routers added: %4</source>
     <message>
         <location filename="../client/main.cc" line="185"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort festlegen</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="187"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legen Sie ein Master-Kennwort fest, das zum Entsperren der Anwendung erforderlich ist.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="195"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="197"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="201"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="211"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort kann nicht festgelegt werden.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="159"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Entsperren</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="120"/>
         <source>An aspia:// link to connect to a host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein aspia://-Link zum Verbinden mit einem Host.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="161"/>
         <source>Enter the master password to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie das Master-Kennwort ein, um die Anwendung zu entsperren.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="177"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiges Master-Kennwort.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="116"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
 </context>
 <context>
@@ -955,92 +959,92 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="254"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung gestartet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="439"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei der Verbindungsanforderung über den Router: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="385"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="391"/>
         <source>The specified router is offline.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Router ist offline.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="266"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1:%2 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1 hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1:%2 hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="310"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host ist noch nicht verfügbar. Warten auf erneute Verbindung...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="72"/>
         <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitüberschreitung beim Warten auf die erneute Verbindung zum Host.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="330"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Host-Version ist neuer als die Client-Version (%1 &gt; %2). Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>Attempting to connect in compatibility mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsversuch im Kompatibilitätsmodus...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="398"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="406"/>
         <source>Connection offer received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsangebot erhalten.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host mit der angegebenen ID ist nicht online</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="430"/>
         <source>Access is denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff verweigert</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="433"/>
         <source>There are no relays available or the key pool is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Es sind keine Relays verfügbar oder der Schlüsselpool ist leer</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="436"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehler</translation>
     </message>
 </context>
 <context>
@@ -1049,360 +1053,360 @@ Routers added: %4</source>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished">Allgemein</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheit</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwortschutz der Einstellungen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmalkennwort</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmalkennwort aktivieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwortwechsel:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeichenanzahl:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeichen:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
         <source>Common</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="36"/>
         <source>Incoming port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingehender Port:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonstiges</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Beenden von Aspia deaktivieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen importieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Prüfung und Installation von Updates</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
-        <translation type="unfinished"></translation>
+        <translation>Updateprüfung:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen exportieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsbestätigung</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung bei Verbindung mit einem Computer erforderlich</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Bestätigung der Verbindung durch:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn kein aktiver Benutzer vorhanden ist:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendung eines Routers aktivieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
-        <translation type="unfinished">Adresse:</translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffentlicher Schlüssel:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Router wird benötigt, um eine Verbindung zu einem Computer herzustellen, wenn keine direkte Verbindung möglich ist (NAT-Umgehung). Aspia stellt keinen öffentlichen Router bereit, aber Sie können Ihren eigenen installieren. Sie können den Router auf der &lt;a href="https://aspia.org"&gt;offiziellen Website&lt;/a&gt; herunterladen.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="455"/>
         <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
-        <translation type="unfinished">Neuen Benutzer hinzufügen</translation>
+        <translation>Neuen Benutzer hinzufügen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
-        <translation type="unfinished">Benutzer bearbeiten</translation>
+        <translation>Benutzer bearbeiten</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
-        <translation type="unfinished">Benutzer löschen</translation>
+        <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Update-Server</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierten Update-Server verwenden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevorzugte Videoerfassung:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
-        <translation type="unfinished">Hinzufügen</translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
-        <translation type="unfinished">Ändern</translation>
+        <translation>Ändern</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="114"/>
         <source>Once a day</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmal täglich</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a week</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmal wöchentlich</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a month</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmal monatlich</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>On reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei Neustart</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 5 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle 5 Minuten</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle 30 Minuten</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation>Jede Stunde</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 6 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle 6 Stunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 12 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle 12 Stunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 24 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle 24 Stunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Buchstaben und Ziffern</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Buchstaben</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffern</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>15 Sekunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>30 Sekunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>45 Sekunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>60 Sekunden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung annehmen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung ablehnen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
+        <translation>Möchten Sie den Benutzer "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
         <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei der Verarbeitung des Kennworts ist ein Fehler aufgetreten.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Einstellungsspeicher ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-Dateien (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished">Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
+        <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Router-Adresse eingegeben.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger öffentlicher Schlüssel des Routers eingegeben.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Install</source>
-        <translation type="unfinished">Installieren</translation>
+        <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Remove</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Entfernen</translation>
     </message>
 </context>
 <context>
@@ -1410,32 +1414,32 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätigung der Verbindung</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzer %1 (%2) versucht, eine Verbindung mit Ihrem Computer mit der Sitzungsart %3 herzustellen.</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung erlauben?</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Die Verbindung wird nach %n Sekunde automatisch angenommen.</numerusform>
+            <numerusform>Die Verbindung wird nach %n Sekunden automatisch angenommen.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Die Verbindung wird nach %n Sekunde automatisch abgelehnt.</numerusform>
+            <numerusform>Die Verbindung wird nach %n Sekunden automatisch abgelehnt.</numerusform>
         </translation>
     </message>
 </context>
@@ -1444,63 +1448,64 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ihre ID</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="224"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Einmalkennwort</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="225"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="226"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="347"/>
         <source>Aspia ID: %1
 Password: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-ID: %1
+Kennwort: %2</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Router ist deaktiviert</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="393"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="394"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="397"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit Router verbunden</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="398"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit Router %1 verbunden</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="401"/>
         <source>Failed to connect to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -1508,39 +1513,39 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelles Kennwort:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort bestätigen:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kennwort:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie das aktuelle Kennwort ein.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Kennwörter stimmen nicht überein.</translation>
     </message>
 </context>
 <context>
@@ -1549,231 +1554,231 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished">Symbolleiste sperren</translation>
+        <translation>Symbolleiste fixieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
         <source>Auto size</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Größe</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
         <source>Automatic window size</source>
-        <translation type="unfinished">Automatische Fenstergröße</translation>
+        <translation>Automatische Fenstergröße</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
         <source>Full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollbild</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished">In den Vollbildmodus wechseln (oder zurück)</translation>
+        <translation>In den Vollbildmodus wechseln oder zurück</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisches Scrollen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
         <source>Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished">Strg+Alt+Entf senden</translation>
+        <translation>Ctrl+Alt+Delete senden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweitertes Menü</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Screenshot speichern...</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Skalierung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
         <source>Power control</source>
-        <translation type="unfinished"></translation>
+        <translation>Energiesteuerung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterfahren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu starten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
         <source>Close session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung schließen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
         <source>Fit window</source>
-        <translation type="unfinished"></translation>
+        <translation>An Fenster anpassen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
         <source>Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Minimize window</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenster minimieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiken</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu starten (abgesicherter Modus)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Im abgesicherten Modus neu starten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischenablage als Tastatureingaben einfügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-Chat</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufzeichnung starten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Task-Manager</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
         <source>Switch Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung wechseln</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
         <source>Resolution selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Auflösungsauswahl</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufzeichnung beenden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich herunterfahren?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich neu starten?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
         <source>Wait for host</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf Host warten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich im abgesicherten Modus neu starten?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Benutzersitzung auf dem Remotecomputer wirklich beenden?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Benutzersitzung auf dem Remotecomputer wirklich sperren?</translation>
     </message>
 </context>
 <context>
@@ -1781,22 +1786,22 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzung wurde von einem Remote-Benutzer pausiert</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzung ist vorübergehend nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sitzung ist dauerhaft nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Empfangen des Videostreams: %1</translation>
     </message>
 </context>
 <context>
@@ -1804,188 +1809,188 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG-Bild (*.png);;BMP-Bild (*.bmp)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild konnte nicht gespeichert werden</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="79"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="193"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host mit der angegebenen ID ist nicht online.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff verweigert.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="241"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es sind keine Relays verfügbar oder der Schlüsselpool ist leer.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="244"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei der Verbindungsanforderung über den Router.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="358"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="364"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung zum Host wurde unterbrochen.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="383"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Host-Version ist neuer als die des Clients. Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="387"/>
         <source>Legacy hosts are not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy-Hosts werden nicht unterstützt.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="470"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitor %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="478"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Energie</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="482"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastatur</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="487"/>
         <source>Ctrl+Alt+Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="494"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="499"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation>Trennen</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="558"/>
         <location filename="../client/android/desktop_window.cc" line="612"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurück</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterfahren</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="560"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu starten</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="562"/>
         <source>Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Abgesicherter Modus</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperren</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich herunterfahren?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="584"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich neu starten?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="588"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Remotecomputer wirklich im abgesicherten Modus neu starten?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="592"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Benutzersitzung auf dem Remotecomputer wirklich beenden?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="596"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Benutzersitzung auf dem Remotecomputer wirklich sperren?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
 </context>
 <context>
@@ -1993,92 +1998,92 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="80"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Übernehmen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwerfen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorieren</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardwerte wiederherstellen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle speichern</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja, alle</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein, alle</translation>
     </message>
 </context>
 <context>
@@ -2086,17 +2091,17 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="14"/>
         <source>Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Update wird heruntergeladen...</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.cc" line="65"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Herunterladen des Updates ist ein Fehler aufgetreten: %1</translation>
     </message>
 </context>
 <context>
@@ -2104,77 +2109,77 @@ Password: %2</source>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
-        <translation type="unfinished">Erfolgreich abgeschlossen</translation>
+        <translation>Erfolgreich abgeschlossen</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
-        <translation type="unfinished">Ungültige Anfrage</translation>
+        <translation>Ungültige Anforderung</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished">Ungültiger Verzeichnis- oder Dateiname</translation>
+        <translation>Ungültiger Verzeichnis- oder Dateiname</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="45"/>
         <source>Path not found</source>
-        <translation type="unfinished">Pfad nicht gefunden</translation>
+        <translation>Pfad nicht gefunden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
-        <translation type="unfinished">Pfad existiert bereits</translation>
+        <translation>Pfad existiert bereits</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="53"/>
         <source>No drives found</source>
-        <translation type="unfinished">Keine Laufwerke gefunden</translation>
+        <translation>Keine Laufwerke gefunden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="57"/>
         <source>Disk full</source>
-        <translation type="unfinished">Festplatte voll</translation>
+        <translation>Datenträger voll</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="61"/>
         <source>Access denied</source>
-        <translation type="unfinished">Zugriff verweigert</translation>
+        <translation>Zugriff verweigert</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished">Datei konnte nicht zum Lesen geöffnet werden</translation>
+        <translation>Datei konnte nicht zum Lesen geöffnet werden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished">Datei konnte nicht erstellt oder ersetzt werden</translation>
+        <translation>Datei konnte nicht erstellt oder ersetzt werden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
-        <translation type="unfinished">Konnte nicht in die Datei schreiben</translation>
+        <translation>In die Datei konnte nicht geschrieben werden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
-        <translation type="unfinished">Datei konnte nicht gelesen werden</translation>
+        <translation>Datei konnte nicht gelesen werden</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
-        <translation type="unfinished">Laufwerk nicht bereit</translation>
+        <translation>Laufwerk nicht bereit</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein angemeldeter Benutzer</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlercode</translation>
     </message>
 </context>
 <context>
@@ -2182,27 +2187,27 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="101"/>
         <source>Folder</source>
-        <translation type="unfinished">Ordner</translation>
+        <translation>Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="378"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="381"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="384"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="387"/>
         <source>Modified</source>
-        <translation type="unfinished">Geändert</translation>
+        <translation>Geändert</translation>
     </message>
 </context>
 <context>
@@ -2218,7 +2223,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach oben</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
@@ -2228,7 +2233,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
@@ -2238,7 +2243,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Ordner</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
@@ -2248,7 +2253,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
@@ -2268,59 +2273,59 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="117"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
+        <translation>Laufwerksliste konnte nicht abgerufen werden: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="134"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
+        <translation>Dateiliste konnte nicht abgerufen werden: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="159"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
+        <translation>Verzeichnis konnte nicht erstellt werden: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="171"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished">Fehler beim Umbenennen des Elements: %1</translation>
+        <translation>Element konnte nicht umbenannt werden: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="316"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished">%1 Objekt(e) ausgewählt</translation>
+        <translation>%1 Objekt(e) ausgewählt</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="376"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="395"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished">Ordnername darf nicht leer sein.</translation>
+        <translation>Der Ordnername darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="382"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="401"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
+        <translation>Der Name enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="344"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished">&amp;Senden F11</translation>
+        <translation>&amp;Senden	F11</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished">&amp;Löschen Entf</translation>
+        <translation>&amp;Löschen	Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="355"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished">&amp;Ordner erstellen</translation>
+        <translation>Ordner &amp;erstellen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished">Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
+        <translation>Möchten Sie die ausgewählten Elemente wirklich löschen?</translation>
     </message>
 </context>
 <context>
@@ -2328,82 +2333,82 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Laufwerksliste: %1</translation>
+        <translation>Laufwerksliste konnte nicht abgerufen werden: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Home-Ordner</translation>
+        <translation>Persönlicher Ordner</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Interner Speicher</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
-        <translation type="unfinished"></translation>
+        <translation>SD-Karte</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloads</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamera</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumente</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Fehler beim Abrufen der Dateiliste: %1</translation>
+        <translation>Dateiliste konnte nicht abgerufen werden: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses: %1</translation>
+        <translation>Verzeichnis konnte nicht erstellt werden: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordner erstellen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordnername</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstellen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished">Name beinhaltet ungültige Zeichen.</translation>
+        <translation>Der Name enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
@@ -2412,32 +2417,32 @@ Password: %2</source>
         <location filename="../client/android/file_panel_widget.cc" line="528"/>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte Elemente löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochladen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>"%1" löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
 </context>
 <context>
@@ -2445,7 +2450,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_progress_sheet.cc" line="47"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -2453,73 +2458,73 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="35"/>
         <source>File Removal</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen von Dateien</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Aufgabe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
-        <translation type="unfinished">Liste der zu löschenden Dateien erstellen...</translation>
+        <translation>Liste der zu löschenden Dateien wird erstellt...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="63"/>
         <source>Deleting:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird gelöscht:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="76"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="103"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen der Dateien abbrechen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemente werden gelöscht.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
+        <translation>Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
+        <translation>"%1" konnte nicht gelöscht werden: %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
-        <translation type="unfinished">Überspringen</translation>
+        <translation>Überspringen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle überspringen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -2527,130 +2532,130 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Aufgabe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste der zu kopierenden Dateien wird erstellt...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="63"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>Von:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="76"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="96"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="116"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="83"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="103"/>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschwindigkeit:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="129"/>
         <source>Total:</source>
-        <translation type="unfinished">Gesamt:</translation>
+        <translation>Gesamt:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="136"/>
         <source>Item:</source>
-        <translation type="unfinished">Element:</translation>
+        <translation>Element:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="180"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Übertragung der Dateien abbrechen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemente werden kopiert.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
-        <translation type="unfinished">Überspringen</translation>
+        <translation>Überspringen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle überspringen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
-        <translation type="unfinished">Ersetzen</translation>
+        <translation>Ersetzen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
-        <translation type="unfinished">Alle ersetzen</translation>
+        <translation>Alle ersetzen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Erstellen der Dateiwarteschlange zum Kopieren ist ein Fehler aufgetreten</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
+        <translation>Verzeichnis "%1" konnte nicht erstellt werden: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
+        <translation>Datei "%1" konnte nicht erstellt werden: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
+        <translation>Datei "%1" konnte nicht geöffnet werden: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
+        <translation>Datei "%1" konnte nicht geschrieben werden: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
+        <translation>Datei "%1" konnte nicht gelesen werden: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp beim Kopieren von Dateien</translation>
     </message>
 </context>
 <context>
@@ -2658,17 +2663,17 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Lokaler Computer</translation>
+        <translation>Lokaler Computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Remote Computer</translation>
+        <translation>Remotecomputer</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
         <source>Session error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsfehler: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="58"/>
@@ -2677,78 +2682,78 @@ Password: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="410"/>
         <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="63"/>
         <location filename="../client/android/file_transfer_window.cc" line="76"/>
         <source>This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Gerät</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="220"/>
         <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um Dateien auf diesem Gerät zu durchsuchen, erlauben Sie auf dem nächsten Bildschirm den Zugriff auf alle Dateien.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="221"/>
         <source>Allow</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="142"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="153"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung zum Host wurde unterbrochen.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="270"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei der Verbindungsanforderung über den Router.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Host-Version ist neuer als die des Clients. Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf dem Host ist kein Benutzer angemeldet. Die Sitzung ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="256"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="281"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="306"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="411"/>
         <source>Open a destination folder on the other side first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen Sie zuerst einen Zielordner auf der anderen Seite.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="464"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -2756,104 +2761,104 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
-        <translation type="unfinished">TB</translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
-        <translation type="unfinished">GB</translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
-        <translation type="unfinished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
-        <translation type="unfinished">kB</translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
-        <translation type="unfinished">B</translation>
+        <translation>B</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Sekunde</numerusform>
+            <numerusform>%n Sekunden</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Minute</numerusform>
+            <numerusform>%n Minuten</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Stunde</numerusform>
+            <numerusform>%n Stunden</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Tag</numerusform>
+            <numerusform>%n Tage</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>TB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>GB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>MB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>kB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation>B/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>bit/s</translation>
     </message>
 </context>
 <context>
@@ -2861,17 +2866,17 @@ Password: %2</source>
     <message>
         <location filename="../base/gui_application.cc" line="493"/>
         <source>Dark</source>
-        <translation type="unfinished">Dunkel</translation>
+        <translation>Dunkel</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="495"/>
         <source>Light</source>
-        <translation type="unfinished">Hell</translation>
+        <translation>Hell</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="496"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
 </context>
 <context>
@@ -2880,7 +2885,7 @@ Password: %2</source>
         <location filename="../host/main.cc" line="607"/>
         <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Einstellungsspeicher ist nicht verfügbar.</translation>
     </message>
 </context>
 <context>
@@ -2888,37 +2893,37 @@ Password: %2</source>
     <message>
         <location filename="../host/main.cc" line="533"/>
         <source>Launch the application hidden.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwendung versteckt starten.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="535"/>
         <source>Export parameters to file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter in Datei exportieren.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="537"/>
         <source>Import parameters from file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter aus Datei importieren.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="539"/>
         <source>Do not display any messages during import and export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Während des Imports und Exports keine Meldungen anzeigen.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="541"/>
         <source>Calling the update check dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet den Dialog zur Updateprüfung.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="543"/>
         <source>Calling the settings dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet den Einstellungsdialog.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="545"/>
         <source>Calling the security log dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet den Dialog des Sicherheitsprotokolls.</translation>
     </message>
 </context>
 <context>
@@ -2927,13 +2932,13 @@ Password: %2</source>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -2944,203 +2949,196 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="818"/>
         <location filename="../host/ui/host_window.cc" line="1087"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ihre ID</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="98"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
         <location filename="../host/ui/host_window.cc" line="515"/>
         <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Router ist deaktiviert</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="252"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="261"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="271"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansicht</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="275"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="280"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Design</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="293"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Beenden</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="298"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Online-Hilfe...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
         <source>F1</source>
-        <translation type="unfinished">F1</translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="306"/>
         <source>About System</source>
-        <translation type="unfinished"></translation>
+        <translation>Über das System</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="311"/>
         <source>About</source>
-        <translation type="unfinished">Über das Programm</translation>
+        <translation>Über das Programm</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="316"/>
         <source>Security Log...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheitsprotokoll...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="321"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="326"/>
         <location filename="../host/ui/host_window.cc" line="781"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausblenden</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="337"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="348"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Desktopansicht</translation>
+        <translation>Desktop-Ansicht</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="370"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="381"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="392"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Text-Chat</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="397"/>
         <source>Show chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat anzeigen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="282"/>
         <location filename="../host/ui/host_window.cc" line="776"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="465"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="519"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="523"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit Router %1 verbunden</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="527"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording has started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmaufzeichnung wurde gestartet.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="574"/>
         <source>Screen recording stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmaufzeichnung beendet.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="765"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Einstellungsspeicher ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn Sie Aspia beenden, kann keine Verbindung zu diesem Computer hergestellt werden, bis Sie den Computer oder Aspia wieder manuell starten. Möchten Sie die Anwendung wirklich beenden?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1002"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1007"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit Router verbunden</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1012"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsfehler</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1084"/>
         <source>IP addresses:</source>
-        <translation type="unfinished"></translation>
+        <translation>IP-Adressen:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonBackup</name>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">Adressbuch ist verschlüsselt. Um zu öffnen, müssen Sie das Kennwort eingeben.</translation>
+        <translation>ID: %1</translation>
     </message>
 </context>
 <context>
@@ -3148,78 +3146,78 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished">Elterngruppe:</translation>
+        <translation>Übergeordnete Gruppe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished">Kommentar:</translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="84"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name darf nicht leer sein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Der Name ist zu lang. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+            <numerusform>Der Name ist zu lang. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Der Kommentar ist zu lang. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+            <numerusform>Der Kommentar ist zu lang. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Gruppe mit diesem Namen existiert bereits in der ausgewählten übergeordneten Gruppe.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe kann nicht hinzugefügt werden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe kann nicht geändert werden</translation>
     </message>
 </context>
 <context>
@@ -3227,48 +3225,48 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="50"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="59"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="62"/>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="134"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="149"/>
         <source>Failed to save the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Gruppe konnte nicht gespeichert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="159"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe löschen</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe "%1" löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Gruppe konnte nicht gelöscht werden.</translation>
     </message>
 </context>
 <context>
@@ -3276,68 +3274,68 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="50"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="60"/>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstellt</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="65"/>
         <source>Modified</source>
-        <translation type="unfinished">Geändert</translation>
+        <translation>Geändert</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="70"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Verbindung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="75"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusaktualisierung...</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="423"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n Kindgruppe(n)</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Untergruppe</numerusform>
+            <numerusform>%n Untergruppen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="425"/>
         <source>%n child host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n untergeordneter Host</numerusform>
+            <numerusform>%n untergeordnete Hosts</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3345,139 +3343,139 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
         <source>Router:</source>
-        <translation type="unfinished"></translation>
+        <translation>Router:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
-        <translation type="unfinished">Adresse:</translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
-        <translation type="unfinished">Kommentar:</translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohne Router</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;gelöschter Router&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name darf nicht leer sein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Der Name ist zu lang. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
+            <numerusform>Der Name ist zu lang. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Host-Adresse eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Host-ID eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen "_", "-", "." enthalten.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Der Kommentar ist zu lang. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
+            <numerusform>Der Kommentar ist zu lang. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Host mit diesem Namen existiert bereits in der ausgewählten Gruppe.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host kann nicht hinzugefügt werden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host kann nicht geändert werden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostname oder IP-Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-ID</translation>
     </message>
 </context>
 <context>
@@ -3485,94 +3483,94 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="60"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="61"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="62"/>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="74"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="77"/>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="163"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohne Router</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="185"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="197"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Host-Adresse eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Host-ID eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen "_", "-", "." enthalten.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
         <source>Failed to save the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host konnte nicht gespeichert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="245"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host löschen</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Host "%1" löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
         <source>Failed to delete the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host konnte nicht gelöscht werden.</translation>
     </message>
 </context>
 <context>
@@ -3581,13 +3579,13 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="274"/>
         <location filename="../client/android/local_widget.cc" line="369"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="275"/>
         <location filename="../client/android/local_widget.cc" line="379"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="276"/>
@@ -3597,114 +3595,114 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importieren</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="277"/>
         <location filename="../client/android/local_widget.cc" line="352"/>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch importieren</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Address book (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch (*.json)</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Imported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Router importiert, </numerusform>
+            <numerusform>%n Router importiert, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="314"/>
         <location filename="../client/android/local_widget.cc" line="354"/>
         <source>%n group(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Gruppe, </numerusform>
+            <numerusform>%n Gruppen, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="315"/>
         <location filename="../client/android/local_widget.cc" line="355"/>
         <source>%n host(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Host.</numerusform>
+            <numerusform>%n Hosts.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="319"/>
         <source>Invalid password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiges Kennwort.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="324"/>
         <source>The file was created by a newer version and cannot be imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei wurde von einer neueren Version erstellt und kann nicht importiert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <source>The address book is already up to date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Adressbuch ist bereits auf dem neuesten Stand.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Adressbuch konnte nicht importiert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch exportieren</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="353"/>
         <source>Exported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Router exportiert, </numerusform>
+            <numerusform>%n Router exportiert, </numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Adressbuch konnte nicht exportiert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="443"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="545"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="547"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="549"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
 </context>
 <context>
@@ -3712,134 +3710,134 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/main_window.ui" line="88"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansicht</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="117"/>
         <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Tool Bar</source>
-        <translation type="unfinished">Symbolleiste</translation>
+        <translation>Symbolleiste</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="144"/>
         <source>F1</source>
-        <translation type="unfinished">F1</translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="187"/>
         <source>Status Bar</source>
-        <translation type="unfinished">Statusleiste</translation>
+        <translation>Statusleiste</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="76"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="171"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Beenden</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="141"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Online-Hilfe...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
         <location filename="../client/desktop/main_window.cc" line="357"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="68"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="83"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="100"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsart</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktionen</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="153"/>
         <source>About</source>
-        <translation type="unfinished">Über das Programm</translation>
+        <translation>Über das Programm</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="162"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="195"/>
         <source>Search Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchfeld</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="203"/>
         <source>Large icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Große Symbole</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="211"/>
         <source>Open Sessions in Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungen in Tabs öffnen</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="219"/>
         <source>Always on Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Immer im Vordergrund</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="95"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="169"/>
         <source>Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwaltung</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiger Link "%1".</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der im Link angegebene Router wurde nicht im Adressbuch gefunden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="267"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der im Link angegebene Host wurde nicht im Adressbuch gefunden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="275"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der mit diesem Host verknüpfte Router wurde gelöscht. Bearbeiten Sie den Host, um einen anderen Router auszuwählen, oder wechseln Sie zur direkten Verbindung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="455"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>In den Eigenschaften des Hosts ist eine Verbindung per ID angegeben, aber der Router ist nicht konfiguriert. Überprüfen Sie die Router-Parameter in den Eigenschaften des Adressbuchs.</translation>
     </message>
 </context>
 <context>
@@ -3847,62 +3845,62 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="56"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="65"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="74"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Clear Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignisse löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="146"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -3910,131 +3908,131 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.ui" line="215"/>
         <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="182"/>
         <location filename="../client/desktop/management_tab.ui" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="194"/>
         <location filename="../client/desktop/management_tab.ui" line="236"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="206"/>
         <location filename="../client/desktop/management_tab.ui" line="245"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="257"/>
         <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereich hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereich bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereich löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation>Trennen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle trennen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Remove</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="356"/>
         <source>Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
         <source>Approve</source>
-        <translation type="unfinished"></translation>
+        <translation>Genehmigen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="377"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Strg+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu laden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="389"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>Import Old Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Altes Adressbuch importieren...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Export Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch exportieren...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Import Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch importieren...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status automatisch aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="968"/>
         <source>(copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Kopie)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="685"/>
@@ -4044,101 +4042,101 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.cc" line="964"/>
         <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Informationen konnten nicht aus der lokalen Datenbank abgerufen werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="973"/>
         <source>Failed to add the host to the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host konnte nicht zur lokalen Datenbank hinzugefügt werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Host "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
         <source>Unable to remove host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host kann nicht entfernt werden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1147"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1080"/>
         <location filename="../client/desktop/management_tab.cc" line="1123"/>
         <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Arbeitsbereich "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Gruppe "%1" wirklich löschen? Hosts, die dieser Gruppe oder ihren Untergruppen zugeordnet sind, werden in die Wurzel des Arbeitsbereichs verschoben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Import Old Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Altes Adressbuch importieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1422"/>
         <source>Address Book (*.aab);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch (*.aab);;Alle Dateien (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1445"/>
         <location filename="../client/desktop/management_tab.cc" line="1462"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch exportieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Address Book (*.json);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch (*.json);;Alle Dateien (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Address book database is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Adressbuch-Datenbank ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1464"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie ein Kennwort ein, um das Adressbuch zu verschlüsseln.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management_tab.cc" line="1470"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1473"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Adressbuch konnte nicht exportiert werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1495"/>
@@ -4146,42 +4144,45 @@ Password: %2</source>
 Routers exported: %1
 Groups exported: %2
 Hosts exported: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Export erfolgreich abgeschlossen.
+Exportierte Router: %1
+Exportierte Gruppen: %2
+Exportierte Hosts: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbuch importieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1527"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Entsperren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1529"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished">Adressbuch ist verschlüsselt. Um zu öffnen, müssen Sie das Kennwort eingeben.</translation>
+        <translation>Das Adressbuch ist verschlüsselt. Zum Öffnen müssen Sie ein Kennwort eingeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1544"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei kann mit dem angegebenen Kennwort nicht entschlüsselt werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Unsupported file format version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstützte Dateiformatversion.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde nichts importiert.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>The file is not a valid address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei ist kein gültiges Adressbuch.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1561"/>
@@ -4192,32 +4193,38 @@ Groups added: %3
 Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
-        <translation type="unfinished"></translation>
+        <translation>Import erfolgreich abgeschlossen.
+Hinzugefügte Router: %1
+Übersprungene Router: %2
+Hinzugefügte Gruppen: %3
+Übersprungene Gruppen: %4
+Hinzugefügte Hosts: %5
+Übersprungene Hosts: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1909"/>
         <source>Copy Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Link kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1939"/>
         <source>Unable to create a link for this host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Für diesen Host kann kein Link erstellt werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1956"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der mit diesem Host verknüpfte Router wurde gelöscht. Bearbeiten Sie den Host, um einen anderen Router auszuwählen, oder wechseln Sie zur direkten Verbindung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host hat eine ungültige Host-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1972"/>
         <source>The host has an incorrect address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host hat eine ungültige Adresse.</translation>
     </message>
 </context>
 <context>
@@ -4225,109 +4232,109 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort festlegen</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legen Sie ein Master-Kennwort fest, das zum Entsperren der Anwendung erforderlich ist.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
         <location filename="../client/android/master_password_dialog.cc" line="192"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Entsperren</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie das Master-Kennwort ein.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie Ihr aktuelles Kennwort ein und wählen Sie ein neues.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelles Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort bestätigen</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="129"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültiges Master-Kennwort.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="149"/>
         <source>The entered passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="159"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort kann nicht festgelegt werden.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Kennwort ist ungültig oder kann nicht geändert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort verwenden</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="210"/>
         <location filename="../client/android/master_password_dialog.cc" line="218"/>
         <source>Biometric unlock failed. Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrische Entsperrung fehlgeschlagen. Geben Sie das Master-Kennwort ein.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrische Daten wurden geändert. Geben Sie das Master-Kennwort ein, um fortzufahren.</translation>
     </message>
 </context>
 <context>
@@ -4335,107 +4342,107 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="49"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="50"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Übernehmen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwerfen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorieren</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardwerte wiederherstellen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle speichern</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja, alle</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein, alle</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="91"/>
         <source>Information</source>
-        <translation type="unfinished">Information</translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
 </context>
 <context>
@@ -4443,7 +4450,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/workers/network_worker.cc" line="370"/>
         <source>Failed to connect to the relay server</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit dem Relay-Server fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -4452,49 +4459,49 @@ Hosts skipped: %6</source>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus sperren</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastatur sperren</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausieren</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="371"/>
         <source>Disconnect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle trennen</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation>Trennen</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus entsperren</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastatur entsperren</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsetzen</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
 </context>
 <context>
@@ -4503,83 +4510,83 @@ Hosts skipped: %6</source>
         <location filename="../client/android/password_dialog.cc" line="37"/>
         <location filename="../host/android/password_dialog.cc" line="89"/>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort festlegen</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="38"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie ein Kennwort ein, um das Adressbuch zu verschlüsseln.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort eingeben</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
         <source>Enter the password to decrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie das Kennwort ein, um das Adressbuch zu entschlüsseln.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
         <location filename="../host/android/password_dialog.cc" line="54"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="59"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort bestätigen</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="64"/>
         <location filename="../host/android/password_dialog.cc" line="62"/>
         <location filename="../host/android/password_dialog.cc" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="65"/>
         <location filename="../host/android/password_dialog.cc" line="63"/>
         <location filename="../host/android/password_dialog.cc" line="106"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="85"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="92"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Kennwörter stimmen nicht überein.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="74"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben ein falsches Kennwort eingegeben.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="92"/>
         <source>New password</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Kennwort</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="96"/>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort wiederholen</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="115"/>
         <source>The password can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="123"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
+        <translation>Die von Ihnen eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
 </context>
 <context>
@@ -4587,73 +4594,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemzugriff überprüfen</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host benötigt Ihre Erlaubnis für den Zugriff auf Systemfunktionen.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Überprüfen Sie die folgenden Berechtigungen und gewähren Sie die fehlenden.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmaufnahme</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erforderlich, damit ein Remote-Benutzer diesen Bildschirm sehen kann.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff anfordern...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Bedienungshilfen</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erforderlich, damit ein Remote-Benutzer Maus und Tastatur steuern kann.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Festplatten-Vollzugriff</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erforderlich, um Dateien aus geschützten Ordnern zu übertragen.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemeinstellungen öffnen...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen öffnen...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewährt</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Verweigert</translation>
     </message>
 </context>
 <context>
@@ -4661,12 +4668,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="89"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Leerlaufprozess</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Prozess</translation>
     </message>
 </context>
 <context>
@@ -4674,12 +4681,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -4687,22 +4694,22 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/remote_widget.cc" line="469"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht genehmigte Hosts</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="635"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="637"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="639"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
 </context>
 <context>
@@ -4710,89 +4717,89 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Computername</translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP-Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="58"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungszeit</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="63"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="68"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-Dateien (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="267"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="303"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht geschrieben werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Client "%1" wirklich trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
         <source>Are you sure you want to disconnect all clients?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie wirklich alle Clients trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="436"/>
         <source>Invalid client request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Client-Anforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="438"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Eintrags-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="497"/>
         <source>%n client(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Client</numerusform>
+            <numerusform>%n Clients</numerusform>
         </translation>
     </message>
 </context>
@@ -4801,85 +4808,78 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="14"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="25"/>
         <source>Address:</source>
-        <translation type="unfinished">Adresse:</translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="35"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostname oder IP-Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="42"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="52"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie einen Namen ein oder lassen Sie das Feld leer</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriffsebene:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
         <source>User Name:</source>
-        <translation type="unfinished">Benutzername:</translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="83"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="45"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrator</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Manager</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Router-Adresse eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="108"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen _, -, . enthalten.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="142"/>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterEditDialog</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
+        <translation>Der Router konnte nicht gespeichert werden.</translation>
     </message>
 </context>
 <context>
@@ -4887,68 +4887,68 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="71"/>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="150"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine ungültige Router-Adresse eingegeben.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen "_", "-", "." enthalten.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="188"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Router konnte nicht gespeichert werden.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="198"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router löschen</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Router "%1" löschen?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
         <source>Failed to delete the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Router konnte nicht gelöscht werden.</translation>
     </message>
 </context>
 <context>
@@ -4956,73 +4956,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished">Elterngruppe:</translation>
+        <translation>Übergeordnete Gruppe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished">Kommentar:</translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Gruppenanforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="125"/>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff verweigert.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe nicht gefunden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Gruppenname darf nicht leer sein.</translation>
     </message>
 </context>
 <context>
@@ -5030,69 +5030,69 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Computername</translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="60"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="70"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="75"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="80"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="85"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="90"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Verbindung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="95"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Änderung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="100"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Host</numerusform>
+            <numerusform>%n Hosts</numerusform>
         </translation>
     </message>
 </context>
@@ -5101,57 +5101,57 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Eigenschaften</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
-        <translation type="unfinished">Benutzername:</translation>
+        <translation>Benutzername:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
-        <translation type="unfinished">Kommentar:</translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="106"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff verweigert.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="108"/>
         <source>Host not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nicht gefunden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="110"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="112"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="114"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
 </context>
 <context>
@@ -5159,165 +5159,165 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="58"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Computername</translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="63"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="68"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="78"/>
         <source>Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereich</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="83"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="93"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="98"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Verbindung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="103"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Änderung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="108"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="118"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorherige Seite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="121"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorherige</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="135"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Seite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="138"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="149"/>
         <source>Items per page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemente pro Seite:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host ist keinem Arbeitsbereich zugeordnet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Host "%1" wirklich trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie wirklich alle Hosts trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Löschen eines Hosts wird seine gesamte Konfiguration für die Verbindung mit dem Router gelöscht und die Anwendung auf dem Host deinstalliert. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie wirklich fortfahren?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Host-Anforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Eintrags-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Host</numerusform>
+            <numerusform>%n Hosts</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-Dateien (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht geschrieben werden.</translation>
     </message>
 </context>
 <context>
@@ -5325,164 +5325,157 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="63"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungszeit</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="68"/>
         <source>Pool Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Poolgröße</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="73"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="78"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Computername</translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="83"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="88"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="113"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
         <source>Host Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="128"/>
         <source>Client Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Client-Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="133"/>
         <source>Transferred</source>
-        <translation type="unfinished"></translation>
+        <translation>Übertragen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="138"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Dauer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="143"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Leerlauf</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-Dateien (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="414"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht geschrieben werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie das Relay "%1" wirklich trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie wirklich alle Relays trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="527"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation>Trennen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="529"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="530"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Peer "%1" wirklich trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
         <source>Invalid relay request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Relay-Anforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="663"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="686"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Eintrags-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="688"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="684"/>
         <source>Relay session not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Relay-Sitzung nicht gefunden.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="768"/>
         <source>%n relay(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Relay</numerusform>
+            <numerusform>%n Relays</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterStatusDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Schließen</translation>
     </message>
 </context>
 <context>
@@ -5490,19 +5483,19 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
         <source>Date and time</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum und Uhrzeit</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="53"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_status_widget.cc" line="155"/>
         <source>%n event(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Ereignis</numerusform>
+            <numerusform>%n Ereignisse</numerusform>
         </translation>
     </message>
 </context>
@@ -5511,32 +5504,32 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Computername</translation>
+        <translation>Computername</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="203"/>
         <source>Failed to approve the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host konnte nicht genehmigt werden.</translation>
     </message>
 </context>
 <context>
@@ -5544,216 +5537,205 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished">Benutzereigenschaften</translation>
+        <translation>Benutzereigenschaften</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
+        <translation>Kennwort:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort (wiederholen):</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriffsebene:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
-        <translation type="unfinished">Benutzerkonto deaktivieren</translation>
-    </message>
-    <message>
-        <source>Allowed Session Types:</source>
-        <translation type="obsolete">Erlaubte Sitzungsarten:</translation>
+        <translation>Benutzerkonto deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwei-Faktor-Authentifizierung zurücksetzen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>Angemeldet</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Aktivität</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle abmelden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Benutzeranforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="184"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="240"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Benutzer mit dem angegebenen Namen existiert bereits.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="190"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer nicht gefunden. Die Liste ist möglicherweise veraltet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch das Zurücksetzen der Zwei-Faktor-Authentifizierung wird dieser Benutzer aus allen Sitzungen abgemeldet und muss sich bei der nächsten Anmeldung erneut registrieren. Fortfahren?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie diesen Benutzer wirklich aus dieser Sitzung abmelden?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie diesen Benutzer wirklich aus allen Sitzungen abmelden?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzung nicht gefunden. Die Liste ist möglicherweise veraltet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Abmeldeanforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen _, -, ., @ enthalten.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished">Der eingegebene Benutzername existiert bereits.</translation>
+        <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
+        <translation>Die von Ihnen eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler beim Erstellen oder Ändern eines Benutzers.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Doppelklicken, um zu ändern</translation>
+        <translation>Zum Ändern doppelklicken</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrator</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Manager</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="572"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="590"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterUsersItem</name>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Benutzer</translation>
+        <translation>Nie</translation>
     </message>
 </context>
 <context>
@@ -5761,92 +5743,65 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviert</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="61"/>
         <source>Session Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsarten</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>You cannot delete a built-in user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein integrierter Benutzer kann nicht gelöscht werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
+        <translation>Möchten Sie den Benutzer "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Benutzeranforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="376"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="378"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="380"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Benutzer mit dem angegebenen Namen existiert bereits.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="382"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer nicht gefunden. Die Liste ist möglicherweise veraltet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Benutzer</numerusform>
+            <numerusform>%n Benutzer</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="obsolete">Computername</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Benutzer</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Name</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="obsolete">Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Bestätigung</translation>
-    </message>
-    <message>
-        <source>Disconnect</source>
-        <translation type="obsolete">Trennen</translation>
     </message>
 </context>
 <context>
@@ -5854,132 +5809,134 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereichseigenschaften</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Name:</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
-        <translation type="unfinished">Kommentar:</translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugriff</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Users with access</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer mit Zugriff</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="87"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="160"/>
         <source>&lt; Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; Hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="90"/>
         <source>Grant access to the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Dem ausgewählten Benutzer Zugriff gewähren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="97"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="170"/>
         <source>Remove &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernen &gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="100"/>
         <source>Revoke access from the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Dem ausgewählten Benutzer den Zugriff entziehen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="118"/>
         <source>Available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Verfügbare Benutzer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="131"/>
         <source>Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Hosts</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="139"/>
         <source>Hosts in workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Hosts im Arbeitsbereich</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="163"/>
         <source>Move the selected host into the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Den ausgewählten Host in den Arbeitsbereich verschieben</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="173"/>
         <source>Remove the selected host from the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Den ausgewählten Host aus dem Arbeitsbereich entfernen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <source>Unassigned hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht zugeordnete Hosts</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="214"/>
         <source>Workspace name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name des Arbeitsbereichs darf nicht leer sein.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="224"/>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="298"/>
         <source>A workspace with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Arbeitsbereich mit dem angegebenen Namen existiert bereits.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="292"/>
         <source>Invalid workspace request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Arbeitsbereichsanforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="294"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="296"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="300"/>
         <source>Workspace not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsbereich nicht gefunden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="302"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="332"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratoren können nicht aus der Zugriffsliste des Arbeitsbereichs entfernt werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="367"/>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Entfernen des Hosts aus dem Arbeitsbereich werden seine verschlüsselten Felder (Kommentar, Benutzername und Kennwort) dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.
+
+Möchten Sie wirklich fortfahren?</translation>
     </message>
 </context>
 <context>
@@ -5987,42 +5944,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/routers_widget.cc" line="123"/>
         <source>No routers added</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Router hinzugefügt</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="198"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router hinzufügen</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="235"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router bearbeiten</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="330"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="335"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="340"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 getrennt.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="356"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkfehler: %1</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Router erfordert eine Kennwortänderung, die hier noch nicht unterstützt wird.</translation>
     </message>
 </context>
 <context>
@@ -6030,12 +5987,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen...</translation>
     </message>
 </context>
 <context>
@@ -6043,35 +6000,35 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="530"/>
         <source>%n result(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Ergebnis</numerusform>
+            <numerusform>%n Ergebnisse</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/search_widget.cc" line="175"/>
         <source>Nothing found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichts gefunden</translation>
     </message>
 </context>
 <context>
@@ -6079,64 +6036,60 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="14"/>
         <source>Security Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheitsprotokoll</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="34"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="57"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="83"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen...</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="97"/>
         <source>Events:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignisse:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="238"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis öffnen</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="352"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="353"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="354"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details</translation>
     </message>
 </context>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <source>Full Desktop</source>
-        <translation type="obsolete">Vollen Desktop</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitor %1 (primär)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitor %1</translation>
     </message>
 </context>
 <context>
@@ -6144,68 +6097,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird fortgesetzt</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird angehalten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Angehalten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird ausgeführt</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird gestartet</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird beendet</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Beendet</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="205"/>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="225"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="215"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="217"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="219"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Boot</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="223"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
 </context>
 <context>
@@ -6213,27 +6166,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="39"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformationen</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="45"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
 </context>
 <context>
@@ -6241,230 +6194,226 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="119"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberfläche</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="125"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="135"/>
         <source>Theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Design:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="145"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename bei Verbindung:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Verbindungen</translation>
+        <translation>Geben Sie einen Namen ein oder lassen Sie das Feld leer</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-Verbindungen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="171"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Direkte Verbindungen erlauben</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-Hole-Punching erlauben</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>PCP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="192"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>NAT-PMP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="199"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>UPnP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="209"/>
         <source>Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="291"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funktionen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="297"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio aktivieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="304"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Zwischenablage erlauben</translation>
+        <translation>Zwischenablage aktivieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="311"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Form des Remote-Cursors anzeigen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="318"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Position des Remote-Cursors anzeigen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="325"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Desktop-Effekte deaktivieren</translation>
+        <translation>Desktopeffekte deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="332"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Desktop-Hintergrundbild deaktivieren</translation>
+        <translation>Desktophintergrund deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="339"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer beim Trennen sperren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Remote-Eingabe blockieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="353"/>
         <source>Send key combinations</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombinationen senden</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirm</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="377"/>
         <source>Preferred resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevorzugte Auflösung:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="405"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufzeichnung</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="411"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsaufzeichnung bei Verbindung automatisch starten</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Write path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherpfad:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="514"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Start nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="521"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierten Update-Server verwenden</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="530"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="126"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die neue Sprache wird nach dem Neustart der Anwendung übernommen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="411"/>
         <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad auswählen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="431"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="433"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie Ihr aktuelles Kennwort ein und wählen Sie ein neues.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="442"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="445"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="454"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Kennwort ist ungültig oder kann nicht geändert werden.</translation>
     </message>
 </context>
 <context>
@@ -6472,74 +6421,74 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="272"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Konfiguration wurde erfolgreich importiert.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="321"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Konfiguration wurde erfolgreich exportiert.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="331"/>
         <location filename="../host/settings_util.cc" line="335"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="229"/>
         <source>Source settings file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Quelldatei mit den Einstellungen existiert nicht.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="238"/>
         <source>Unable to open the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Quelldatei kann nicht geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Quelldatei kann nicht gelesen werden: Die Datei ist beschädigt oder hat ein unbekanntes Format.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <location filename="../host/settings_util.cc" line="336"/>
         <source>The existing settings will be overwritten. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Die vorhandenen Einstellungen werden überschrieben. Fortfahren?</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortfahren</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="348"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="359"/>
         <source>Aspia</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="267"/>
         <source>Unable to write the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die sichere Datenbank kann nicht geschrieben werden.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="287"/>
         <source>Unable to read the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die sichere Datenbank kann nicht gelesen werden.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="308"/>
         <source>Unable to open the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zieldatei kann nicht geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="316"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zieldatei kann nicht geschrieben werden.</translation>
     </message>
 </context>
 <context>
@@ -6548,225 +6497,217 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/settings_widget.cc" line="107"/>
         <location filename="../host/android/settings_widget.cc" line="144"/>
         <source>About</source>
-        <translation type="unfinished">Über das Programm</translation>
+        <translation>Über das Programm</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="158"/>
         <location filename="../host/android/settings_widget.cc" line="214"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberfläche</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
         <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Design</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename bei Verbindung</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="186"/>
         <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheit</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="188"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Master-Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>Unlock with biometrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit Biometrie entsperren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="225"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Richten Sie in den Systemeinstellungen einen Fingerabdruck ein, um diese Funktion zu nutzen.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="227"/>
         <source>Biometrics are not available on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrie ist auf diesem Gerät nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="238"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-Verbindungen</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="252"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Direkte Verbindungen erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="253"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-Hole-Punching erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>PCP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="255"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>NAT-PMP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="256"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>UPnP-Protokoll erlauben</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="262"/>
         <source>Remote Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Remotedesktop</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="264"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio aktivieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="269"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Zwischenablage erlauben</translation>
+        <translation>Zwischenablage aktivieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="274"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Form des Remote-Cursors anzeigen</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="280"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Position des Remote-Cursors anzeigen</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="286"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Desktop-Effekte deaktivieren</translation>
+        <translation>Desktopeffekte deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="292"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Desktop-Hintergrundbild deaktivieren</translation>
+        <translation>Desktophintergrund deaktivieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer beim Trennen sperren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="304"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Remote-Eingabe blockieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Enable biometric unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrische Entsperrung aktivieren</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="332"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer bearbeiten</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">Desktop</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Dateiübertragung</translation>
+        <translation>Benutzer hinzufügen</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Manage users</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer verwalten</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="245"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort ändern</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="249"/>
         <source>Disable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwortschutz deaktivieren</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Enable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwortschutz aktivieren</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="278"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendung eines Routers aktivieren</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="289"/>
         <source>Public Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffentlicher Schlüssel</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Router wird benötigt, um eine Verbindung zu einem Computer herzustellen, wenn keine direkte Verbindung möglich ist (NAT-Umgehung). Aspia stellt keinen öffentlichen Router bereit, aber Sie können Ihren eigenen installieren. Sie können den Router auf der &lt;a href="https://aspia.org"&gt;offiziellen Website&lt;/a&gt; herunterladen.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei der Verarbeitung des Kennworts ist ein Fehler aufgetreten.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importieren</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-Dateien (*.json)</translation>
     </message>
 </context>
 <context>
@@ -6774,130 +6715,130 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="74"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 wird hergestellt...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 hergestellt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung mit Router %1 getrennt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Migration von einer früheren Version abzuschließen, müssen Sie Ihr Kennwort ändern.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="474"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort ändern</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort aktualisiert. Warten auf neue Verschlüsselungsschlüssel...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Kennwortänderungsanforderung.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurden ungültige Daten übergeben.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehlertyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignisverlauf gelöscht.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Gruppe "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe kann nicht entfernt werden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Router "%1" wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkfehler: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Gruppe mit diesem Namen existiert bereits in der ausgewählten übergeordneten Gruppe.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1431"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Gruppe konnte nicht verschoben werden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Host mit diesem Namen existiert bereits in der ausgewählten Gruppe.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1502"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Host konnte nicht in die ausgewählte Gruppe verschoben werden.</translation>
     </message>
 </context>
 <context>
@@ -6905,7 +6846,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>Clients</translation>
     </message>
 </context>
 <context>
@@ -6913,7 +6854,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Genehmigte Hosts</translation>
     </message>
 </context>
 <context>
@@ -6921,7 +6862,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
-        <translation type="unfinished"></translation>
+        <translation>Relays</translation>
     </message>
 </context>
 <context>
@@ -6929,7 +6870,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht genehmigte Hosts</translation>
     </message>
 </context>
 <context>
@@ -6937,7 +6878,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="159"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
 </context>
 <context>
@@ -6946,22 +6887,22 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
         <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiken</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../client/android/statistics_dialog.cc" line="208"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
@@ -6969,7 +6910,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsstatus</translation>
     </message>
 </context>
 <context>
@@ -6977,32 +6918,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="53"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Herausgeber</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>In Google suchen</translation>
     </message>
 </context>
 <context>
@@ -7010,47 +6951,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="48"/>
         <source>Process Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessname</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="53"/>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokoll</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="58"/>
         <source>Local Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale Adresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="63"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Port</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="68"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Remoteadresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="73"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Remoteport</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="78"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Zustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7058,27 +6999,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7086,32 +7027,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
         <source>Driver Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiberhersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Geräte-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>In Google suchen</translation>
     </message>
 </context>
 <context>
@@ -7119,32 +7060,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabelle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7152,42 +7093,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="73"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausführbare Datei</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="81"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7195,27 +7136,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7223,27 +7164,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7251,63 +7192,63 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="135"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Ebene</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="130"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>Erste</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorherige</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignistyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Quelle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="150"/>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7315,27 +7256,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7343,22 +7284,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7366,27 +7307,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7394,27 +7335,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7422,27 +7363,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7450,27 +7391,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7478,27 +7419,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="53"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="58"/>
         <source>Lock Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Sperren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
         <source>File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateipfad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7506,27 +7447,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="42"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="47"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="55"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="60"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="65"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7534,27 +7475,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7562,47 +7503,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungs-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7610,32 +7551,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="48"/>
         <source>Destonation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="53"/>
         <source>Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>Maske</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="58"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="63"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrik</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="71"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="76"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7643,47 +7584,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigename</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="73"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Konto</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="78"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausführbare Datei</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7691,32 +7632,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
         <source>Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Laufwerk</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7724,27 +7665,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7752,27 +7693,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namen kopieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert kopieren</translation>
     </message>
 </context>
 <context>
@@ -7780,202 +7721,202 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Strg+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucken</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucken (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Aktualisieren (F5)</translation>
+        <translation>Aktualisieren (F5)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML-Datei</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML-Datei (*.html)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="351"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei konnte nicht gespeichert werden: %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="376"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersicht</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
         <source>DMI</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="389"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="392"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Geräte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="395"/>
         <source>Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Laufwerke</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>S.M.A.R.T.</source>
-        <translation type="unfinished"></translation>
+        <translation>S.M.A.R.T.</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="401"/>
         <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikkarten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="404"/>
         <source>Monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitore</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="407"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucker</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="410"/>
         <source>Power Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Energieoptionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Software</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwendungen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Drivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiber</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="436"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienste</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="439"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozesse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="442"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Lizenzen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="455"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerk</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="458"/>
         <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkadapter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="461"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Routen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="464"/>
         <source>Connections</source>
-        <translation type="unfinished">Verbindungen</translation>
+        <translation>Verbindungen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="467"/>
         <source>Network Shares</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkfreigaben</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="470"/>
         <source>Open Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Geöffnete Dateien</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
         <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>Umgebungsvariablen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
         <source>Event Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignisprotokolle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzergruppen</translation>
     </message>
 </context>
 <context>
@@ -7983,133 +7924,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
         <source>Processor Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessoreigenschaften</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Caches</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
         <source>Instruction Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Befehlssatz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Security Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheitsfunktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Power Management Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Energieverwaltungsfunktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Virtualization Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Virtualisierungsfunktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Other Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Weitere Funktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakete</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Physical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Physische Kerne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Logical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Logische Kerne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Data Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-Datencache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Instruction Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-Befehlscache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-Cache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Assoziativität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <source>Fully associative</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollassoziativ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1-way</source>
-        <translation type="unfinished"></translation>
+        <translation>%1-fach</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Line Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilengröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Bytes</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>Sets</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>Shared By</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemeinsam genutzt von</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>%1 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Threads</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
 </context>
 <context>
@@ -8118,144 +8059,144 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptplatine</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
         <source>Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehäuse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
         <source>Processors</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessoren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Caches</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
         <source>Port Connectors</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschlüsse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
         <source>System Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemsteckplätze</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
         <source>On-board Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Integrierte Geräte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>OEM-Strings</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationsoptionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
         <source>Memory Arrays</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherarrays</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
         <source>Memory Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichergeräte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
         <source>Memory Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherfehler</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
         <source>Memory Array Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherarray-Adressen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
         <source>Memory Device Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichergeräte-Adressen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
         <source>Voltage Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spannungssensoren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
         <source>Cooling Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Kühlgeräte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
         <source>Temperature Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatursensoren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
         <source>Current Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Stromsensoren</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemstart</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
         <source>Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Informationen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
         <source>TPM Device</source>
-        <translation type="unfinished"></translation>
+        <translation>TPM-Gerät</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
         <source>Processor Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Prozessorinformationen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
         <source>Firmware Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware-Inventar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonstiges</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI-Eigenschaften</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
@@ -8264,45 +8205,45 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Veröffentlichungsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
-        <translation type="unfinished"></translation>
+        <translation>ROM-Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Revision</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware-Revision</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkmale</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Platine %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
@@ -8311,12 +8252,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
@@ -8324,7 +8265,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Seriennummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
@@ -8332,12 +8273,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Asset-Tag</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Position im Gehäuse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
@@ -8350,12 +8291,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostplatine</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8386,7 +8327,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8419,236 +8360,236 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Benötigt Tochterplatine</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
-        <translation type="unfinished"></translation>
+        <translation>Austauschbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
-        <translation type="unfinished"></translation>
+        <translation>Hot-Swap-fähig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehäuse %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperre vorhanden</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
-        <translation type="unfinished"></translation>
+        <translation>SKU-Nummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
-        <translation type="unfinished"></translation>
+        <translation>Startzustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzteilzustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
-        <translation type="unfinished"></translation>
+        <translation>Thermischer Zustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheitsstatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 HE</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzkabel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
-        <translation type="unfinished">Installiert</translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockelbezeichnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockeltyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Spannung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Externer Takt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Taktfrequenz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Taktfrequenz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Kerne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivierte Kerne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Threads</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivierte Threads</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilenummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
-        <translation type="unfinished"></translation>
+        <translation>64-Bit-fähig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehrkern</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Thread</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausführungsschutz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweiterte Virtualisierung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Energie-/Leistungssteuerung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-Cache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Ebene</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Installierte Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
@@ -8656,150 +8597,150 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebsmodus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
-        <translation type="unfinished"></translation>
+        <translation>SRAM-Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte SRAM-Typen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlerkorrekturtyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Assoziativität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschwindigkeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ns</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesockelt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschluss %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschlusstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Interne Bezeichnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Interner Anschlusstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Externe Bezeichnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Externer Anschlusstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Steckplatz %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezeichnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbusbreite</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Verwendung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Länge</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Busadresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>5 V bereitgestellt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>3,3 V bereitgestellt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemeinsam genutzt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>PME-Signal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
-        <translation type="unfinished"></translation>
+        <translation>Hot-Plug</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>SMBus-Signal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bifurkation</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
@@ -8807,7 +8748,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
@@ -8815,440 +8756,440 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
-        <translation type="unfinished"></translation>
+        <translation>Typinstanz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
-        <translation type="unfinished"></translation>
+        <translation>String %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Option %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sensor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
-        <translation type="unfinished"></translation>
+        <translation>mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
-        <translation type="unfinished"></translation>
+        <translation>mA</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nennwert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximaler Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimaler Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Toleranz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Auflösung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Genauigkeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Kühleinheitengruppe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenndrehzahl</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U/min</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Startstatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Array %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlerkorrektur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Kapazität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Geräte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>Typdetails</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Formfaktor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Technologie</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurierte Geschwindigkeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtbreite</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Bit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbreite</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Rank</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimale Spannung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Spannung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurierte Spannung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Nichtflüchtige Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Flüchtige Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Cachegröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Logische Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Datensatz %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
-        <translation type="unfinished"></translation>
+        <translation>Granularität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorgang</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstellersyndrom</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicherarray-Adresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Geräteadresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Bytes</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereich %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
-        <translation type="unfinished"></translation>
+        <translation>Array</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Startadresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endadresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitionsbreite</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitionszeilenposition</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Interleave-Position</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Interleave-Datentiefe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eintrag %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
-        <translation type="unfinished"></translation>
+        <translation>String</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
-        <translation type="unfinished"></translation>
+        <translation>Referenziertes Handle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Referenzierter Offset</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Spezifikationsversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch Firmware konfigurierbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch Software konfigurierbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch OEM konfigurierbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionsformat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedrigste unterstützte Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
-        <translation type="unfinished"></translation>
+        <translation>ID-Format</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Zustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagegröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisierbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibgeschützt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponente %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Zugehörige Komponenten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
-        <translation type="unfinished"></translation>
+        <translation>SMBIOS-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
-        <translation type="unfinished"></translation>
+        <translation>Strukturen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe der Strukturen</translation>
     </message>
 </context>
 <context>
@@ -9256,68 +9197,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird fortgesetzt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird angehalten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Angehalten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird ausgeführt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird gestartet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird beendet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Beendet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Boot</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
 </context>
 <context>
@@ -9325,77 +9266,77 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Seriennummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware-Revision</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Bustyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Medientyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
-        <translation type="unfinished"></translation>
+        <translation>Solid State</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotierend</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Drehzahl</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U/min</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Cachegröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
 </context>
 <context>
@@ -9403,47 +9344,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwendung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
-        <translation type="unfinished">Information</translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Erfolgsüberwachung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlerüberwachung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
 </context>
 <context>
@@ -9451,37 +9392,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Lizenztyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Lizenzversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
-        <translation type="unfinished"></translation>
+        <translation>Organisation</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Besitzer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Produkt-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Product Key</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekanntes Feld</translation>
     </message>
 </context>
 <context>
@@ -9489,56 +9430,56 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollständiger Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Basisverzeichnis</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort abgelaufen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort läuft nie ab</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Anmeldung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppen</translation>
     </message>
 </context>
 <context>
@@ -9546,103 +9487,103 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitorname</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstellername</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Monitor-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Seriennummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
-        <translation type="unfinished"></translation>
+        <translation>EDID-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstellungsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Woche %1 / %2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamma</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildgröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1x%2 cm</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmdiagonale</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Auflösung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontalfrequenz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 kHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikalfrequenz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Pixeltakt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximaler Pixeltakt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingangssignaltyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9652,7 +9593,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9662,37 +9603,37 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Funktionen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Videomodi</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
-        <translation type="unfinished"></translation>
+        <translation>Digital</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
-        <translation type="unfinished"></translation>
+        <translation>Analog</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
 </context>
 <context>
@@ -9700,67 +9641,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaptername</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnittstellentyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsgeschwindigkeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>MAC-Adresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP aktiviert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP-Server #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP-Server</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway</translation>
     </message>
 </context>
 <context>
@@ -9768,32 +9709,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Pfad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Verbindungen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbegrenzt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Verbindungen</translation>
     </message>
 </context>
 <context>
@@ -9801,105 +9742,105 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Energiequelle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkustatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkuladung in Prozent</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamte Akkulaufzeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbleibende Akkulaufzeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerätename</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstellungsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Eindeutige ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Seriennummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Nennkapazität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mWh</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapazität bei voller Ladung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschleiß</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Kapazität</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Spannung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird geladen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
@@ -9907,64 +9848,64 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>Kritisch</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird entladen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzstrom angeschlossen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Zustand</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Akku #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkubetrieb</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzbetrieb</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedrig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Akku</translation>
     </message>
 </context>
 <context>
@@ -9972,44 +9913,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Anschluss</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiber</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Freigegeben</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Freigabename</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl der Druckaufträge</translation>
     </message>
 </context>
 <context>
@@ -10017,12 +9958,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Leerlaufprozess</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Prozess</translation>
     </message>
 </context>
 <context>
@@ -10030,68 +9971,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird fortgesetzt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird angehalten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Angehalten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird ausgeführt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird gestartet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird beendet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Beendet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Boot</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
 </context>
 <context>
@@ -10099,214 +10040,214 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Attribut</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Worst</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlechtester</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Schwellenwert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <source>Raw</source>
-        <translation type="unfinished"></translation>
+        <translation>Rohwert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Health Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Zustandsdaten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
         <source>OK. Always passed</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Immer bestanden</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
         <source>OK. Value is normal</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Wert ist normal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
         <source>Warning. Value is pre-failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung. Wert deutet auf bevorstehenden Ausfall hin</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
         <source>Warning. Value is not normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung. Wert ist nicht normal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
         <source>Unknown Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekanntes Attribut</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
         <source>Spare capacity is below the threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Reservekapazität liegt unter dem Schwellenwert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
         <source>Temperature is outside of the operating range</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur liegt außerhalb des Betriebsbereichs</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
         <source>Reliability is degraded</source>
-        <translation type="unfinished"></translation>
+        <translation>Zuverlässigkeit ist beeinträchtigt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
         <source>Media is in read-only mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Medium befindet sich im Schreibschutzmodus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
         <source>Volatile memory backup device failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherungsgerät des flüchtigen Speichers ist ausgefallen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
         <source>Persistent memory region is unreliable</source>
-        <translation type="unfinished"></translation>
+        <translation>Persistenter Speicherbereich ist unzuverlässig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
         <source>Critical Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Kritische Warnung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
         <source>Temperature Sensor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatursensor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <source>Available Spare</source>
-        <translation type="unfinished"></translation>
+        <translation>Verfügbare Reserve</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
         <source>Available Spare Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Schwellenwert der verfügbaren Reserve</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>Percentage Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbrauch in Prozent</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
         <source>Data Read</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelesene Daten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
         <source>Data Written</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschriebene Daten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
         <source>Host Read Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Lesebefehle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
         <source>Host Write Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Schreibbefehle</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
         <source>Controller Busy Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Controller-Auslastungszeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
         <source>Power Cycles</source>
-        <translation type="unfinished"></translation>
+        <translation>Einschaltzyklen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
         <source>Power-On Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Einschaltdauer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
         <source>Unsafe Shutdowns</source>
-        <translation type="unfinished"></translation>
+        <translation>Unsichere Abschaltungen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
         <source>Media Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Medienfehler</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
         <source>Error Log Entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlerprotokolleinträge</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
         <source>Warning Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit bei Warntemperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
         <source>Critical Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit bei kritischer Temperatur</translation>
     </message>
 </context>
 <context>
@@ -10315,168 +10256,168 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Domäne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsgruppe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebszeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
-        <translation type="unfinished">Computer</translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Client-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Router-Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-Informationen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Architektur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Lizenzschlüssel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Installationsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Betriebssystem</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptplatine</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Hersteller</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakete</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Kerne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Threads</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozessor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
         <source>Size</source>
-        <translation type="unfinished">Größe</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschwindigkeit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Installed</source>
-        <translation type="unfinished">Installiert</translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 frei)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Logische Laufwerke</translation>
     </message>
 </context>
 <context>
@@ -10484,133 +10425,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapter-String</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS-String</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiptyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
-        <translation type="unfinished"></translation>
+        <translation>DAC-Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Bus %1, device %2, function %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Bus %1, Gerät %2, Funktion %3</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichergröße</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
         <source>Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendeter Speicher</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
         <source>Shared Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe des gemeinsamen Speichers</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
         <source>Shared Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwendeter gemeinsamer Speicher</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
         <source>Memory Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichertakt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>Driver Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Treibermodell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>WDDM %1.%2</source>
-        <translation type="unfinished"></translation>
+        <translation>WDDM %1.%2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
         <source>Maximum Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <source>Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Lüfterdrehzahl</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U/min</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>Maximum Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Lüfterdrehzahl</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
         <source>Power Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Leistungsaufnahme</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiberdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiberversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
         <source>Driver Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Treiberanbieter</translation>
     </message>
 </context>
 <context>
@@ -10619,27 +10560,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Strg+S</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Aktualisieren (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Verbindungen</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Benutzer</translation>
+        <translation>Systeminformationen</translation>
     </message>
 </context>
 <context>
@@ -10647,198 +10568,198 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozesse</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="65"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="188"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="85"/>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozess-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Task-Manager</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungs-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher (privater Arbeitssatz)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher (Arbeitssatz)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher (Spitzenarbeitssatz)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeitsspeicher (Arbeitssatzdelta)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Threads</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbildpfad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="153"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Task beenden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienste</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="203"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
-        <translation type="unfinished">Starten</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="318"/>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
+        <translation>Beenden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="193"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittel</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedrig</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="357"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
-        <translation type="unfinished">Benutzer</translation>
+        <translation>Benutzer</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="242"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation type="unfinished"></translation>
+        <translation>Clientname</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation type="unfinished"></translation>
+        <translation>Sitzungsname</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="283"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Trennen</translation>
+        <translation>Trennen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie den Prozess "%1" wirklich beenden?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Sitzung des Benutzers "%1" wirklich trennen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die Sitzung des Benutzers "%1" wirklich beenden?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
         <source>Processes: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Prozesse: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="950"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU-Auslastung: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="956"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Physischer Speicher: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisierungsgeschwindigkeit</translation>
     </message>
 </context>
 <context>
@@ -10846,67 +10767,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="67"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verletzung des Kommunikationsprotokolls.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="71"/>
         <source>Wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falscher Benutzername oder falsches Kennwort.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="75"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Kryptografiefehler (Ver- oder Entschlüsselung der Nachricht fehlgeschlagen).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="79"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die angegebene Sitzungsart ist für den Benutzer nicht zulässig.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="83"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Version der Anwendung, mit der Sie sich verbinden, ist niedriger als die minimal unterstützte Version.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="88"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Es ist ein Netzwerkfehler aufgetreten (z. B. wurde das Netzwerkkabel versehentlich getrennt).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="92"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung wurde von der Gegenstelle abgelehnt (oder es kam zu einer Zeitüberschreitung).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="96"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Remote-Host hat die Verbindung geschlossen.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="100"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host-Adresse wurde nicht gefunden.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitüberschreitung bei der Socketoperation.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die angegebene Adresse wird bereits verwendet und wurde als exklusiv festgelegt.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die angegebene Adresse gehört nicht zum Host.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein unbekannter Fehler ist aufgetreten.</translation>
     </message>
 </context>
 <context>
@@ -10914,38 +10835,38 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="243"/>
         <source>Authentication failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Authentifizierung fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1138"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1082"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1085"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1088"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles auswählen</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1136"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie Ihren Benutzernamen und Ihr Kennwort ein, um sich am Remotecomputer zu authentifizieren.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1150"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
 </context>
 <context>
@@ -10953,12 +10874,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwei-Faktor-Authentifizierung</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.</translation>
     </message>
 </context>
 <context>
@@ -10966,37 +10887,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="64"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwei-Faktor-Authentifizierung</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="65"/>
         <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fügen Sie den unten stehenden Einrichtungsschlüssel einer Authenticator-App hinzu und geben Sie dann zur Bestätigung den angezeigten 6-stelligen Code ein.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="67"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="74"/>
         <source>Setup Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Einrichtungsschlüssel</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="80"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Code</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="86"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="87"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -11004,22 +10925,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwei-Faktor-Authentifizierung aktivieren</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen Sie eine TOTP-Authenticator-App (Google Authenticator, Microsoft Authenticator oder eine kompatible Alternative) und fügen Sie ein neues Konto hinzu, indem Sie den unten stehenden QR-Code scannen. Falls das Scannen von QR-Codes nicht möglich ist, geben Sie stattdessen den Einrichtungsschlüssel in die App ein.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Einrichtungsschlüssel:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Geben Sie zur Bestätigung den in der App angezeigten 6-stelligen Code ein:</translation>
     </message>
 </context>
 <context>
@@ -11027,93 +10948,93 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach Updates</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="59"/>
         <source>Current version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Version:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="66"/>
         <source>Available version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verfügbare Version:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="75"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="136"/>
         <source>Update description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Update-Beschreibung:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="181"/>
         <source>Update now!</source>
-        <translation type="unfinished"></translation>
+        <translation>Jetzt aktualisieren!</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="188"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="56"/>
         <source>Receiving information...</source>
-        <translation type="unfinished"></translation>
+        <translation>Informationen werden empfangen...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="108"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>Updateprüfung wird abgebrochen. Bitte warten.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Update wird heruntergeladen. Nach Abschluss des Downloads wird die Anwendung automatisch geschlossen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="124"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle verbundenen Sitzungen werden beendet. Bis zum Abschluss des Updates können Sie keine Verbindung herstellen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle nicht gespeicherten Daten gehen verloren.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="127"/>
         <source>Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortfahren?</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Installieren des Updates ist ein Fehler aufgetreten: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="197"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="198"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Abrufen der Update-Informationen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="208"/>
         <location filename="../common/desktop/update_dialog.cc" line="231"/>
         <source>No updates available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Updates verfügbar.</translation>
     </message>
 </context>
 <context>
@@ -11151,70 +11072,70 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle auswählen</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
         <source>Uncheck all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle abwählen</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen _, -, ., @ enthalten.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="179"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished">Der eingegebene Benutzername existiert bereits.</translation>
+        <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="188"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
+        <translation>Die von Ihnen eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="198"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="236"/>
         <location filename="../host/ui/user_dialog.cc" line="266"/>
         <location filename="../host/ui/user_dialog.cc" line="276"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler beim Erstellen oder Ändern eines Benutzers.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="314"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Doppelklicken, um zu ändern</translation>
+        <translation>Zum Ändern doppelklicken</translation>
     </message>
 </context>
 <context>
@@ -11229,29 +11150,29 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="234"/>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzername darf nicht leer sein und darf nur Buchstaben, Ziffern sowie die Zeichen "_", "-", ".", "@" enthalten.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished">Der eingegebene Benutzername existiert bereits.</translation>
+        <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
+        <translation>Die von Ihnen eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
+            <numerusform>Das Kennwort darf nicht leer sein und darf nicht länger als %n Zeichen sein.</numerusform>
         </translation>
     </message>
     <message>
@@ -11259,72 +11180,72 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="224"/>
         <location filename="../host/android/user_editor_widget.cc" line="235"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter interner Fehler beim Erstellen oder Ändern eines Benutzers.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="95"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="96"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="97"/>
         <source>Password (repeat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kennwort (wiederholen)</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="98"/>
         <source>Leave the password empty to keep the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lassen Sie das Kennwort leer, um das aktuelle beizubehalten.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="99"/>
         <source>User enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer aktiviert</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="100"/>
         <source>Allowed sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlaubte Sitzungen</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="101"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="102"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Dateiübertragung</translation>
+        <translation>Dateiübertragung</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="103"/>
         <source>Delete user</source>
-        <translation type="unfinished">Benutzer löschen</translation>
+        <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="249"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer "%1" löschen?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Failed to delete the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Benutzer konnte nicht gelöscht werden.</translation>
     </message>
 </context>
 <context>
@@ -11332,62 +11253,62 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="253"/>
         <source>&lt;no user&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;kein Benutzer&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="288"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiv</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="290"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbunden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="292"/>
         <source>Connect Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsabfrage</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="294"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>Spiegelung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="296"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Getrennt</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="298"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Leerlauf</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="300"/>
         <source>Listen</source>
-        <translation type="unfinished"></translation>
+        <translation>Abhören</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="302"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="304"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgefallen</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="306"/>
         <source>Init</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisierung</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="308"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
 </context>
 <context>
@@ -11395,27 +11316,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="90"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrator</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="94"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="92"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Manager</translation>
     </message>
 </context>
 <context>
@@ -11423,17 +11344,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/users_widget.cc" line="95"/>
         <source>No users</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Benutzer</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviert</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
 </context>
 </TS>

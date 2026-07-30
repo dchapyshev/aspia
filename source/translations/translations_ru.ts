@@ -364,14 +364,6 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <source>Local Hosts</source>
-        <translation type="vanished">Локальные хосты</translation>
-    </message>
-    <message>
-        <source>Workspaces</source>
-        <translation type="vanished">Рабочие пространства</translation>
-    </message>
-    <message>
         <location filename="../client/android/main_window.cc" line="170"/>
         <location filename="../client/android/main_window.cc" line="249"/>
         <location filename="../client/android/main_window.cc" line="329"/>
@@ -435,10 +427,6 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="631"/>
         <source>The host referenced by the link was not found in the address book.</source>
         <translation>Хост, указанный в ссылке, не найден в адресной книге.</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="vanished">Домой</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
@@ -823,10 +811,6 @@ Routers added: %4</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <source>The specified router is offline.</source>
-        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
-    </message>
-    <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
@@ -970,10 +954,6 @@ Routers added: %4</source>
         <location filename="../client/main.cc" line="116"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
-    </message>
-    <message>
-        <source>Failed to connect to the relay server</source>
-        <translation type="vanished">не удалось подключиться к ретранслятору</translation>
     </message>
 </context>
 <context>
@@ -1856,10 +1836,6 @@ Password: %2</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <source>The specified router is offline.</source>
-        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
         <translation>Запрашивается подключение к хосту...</translation>
@@ -1913,10 +1889,6 @@ Password: %2</source>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
         <translation>Соединение с хостом потеряно.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="383"/>
@@ -2748,10 +2720,6 @@ Password: %2</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <source>The specified router is offline.</source>
-        <translation type="vanished">Указанный маршрутизатор не в сети.</translation>
-    </message>
-    <message>
         <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор.</translation>
@@ -2920,50 +2888,7 @@ Password: %2</source>
     </message>
 </context>
 <context>
-    <name>HomeWidget</name>
-    <message>
-        <source>Your ID</source>
-        <translation type="vanished">Ваш ID</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">Одноразовый пароль</translation>
-    </message>
-    <message>
-        <source>Router is disabled</source>
-        <translation type="vanished">Маршрутизатор отключен</translation>
-    </message>
-    <message>
-        <source>Connecting to router...</source>
-        <translation type="vanished">Подключение к маршрутизатору...</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Подключение к маршрутизатору %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router</source>
-        <translation type="vanished">Подключено к маршрутизатору</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Подключено к маршрутизатору %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router</source>
-        <translation type="vanished">Не удалось подключиться к маршрутизатору</translation>
-    </message>
-</context>
-<context>
     <name>Host</name>
-    <message>
-        <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="vanished">Проверка целостности приложения провалена. Компоненты отстутствуют или повреждены.</translation>
-    </message>
-    <message>
-        <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Параметры экспорта и импорта не могут быть указаны одновременно.</translation>
-    </message>
     <message>
         <location filename="../host/main.cc" line="607"/>
         <location filename="../host/main.cc" line="642"/>
@@ -3128,10 +3053,6 @@ Password: %2</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <source>Desktop Management</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
-    <message>
         <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
         <translation>Просмотр рабочего стола</translation>
@@ -3226,118 +3147,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>JsonBackup</name>
-    <message>
-        <source>Address book database is not available.</source>
-        <translation type="vanished">База данных адресной книги недоступна.</translation>
-    </message>
-    <message>
-        <source>Export Address Book</source>
-        <translation type="vanished">Экспорт адресной книги</translation>
-    </message>
-    <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Введите пароль для шифрования адресной книги.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Введенный пароль не отвечает требованиям безопасности!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Вы хотите ввести другой пароль?</translation>
-    </message>
-    <message>
-        <source>Failed to generate verifier.</source>
-        <translation type="vanished">Не удалось сгенерировать верификатор.</translation>
-    </message>
-    <message>
-        <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не удалось открыть файл &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Unable to write file &quot;%1&quot;: %2</source>
-        <translation type="vanished">Не удалось записать файл &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Разблокировка</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Адресная книга зашифрована. Для открытия вы должны ввести пароль.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Экспорт успешно завершен.
-Роутеров экспортировано: %1
-Групп экспортировано: %2
-Хостов экспортировано: %3</translation>
-    </message>
-    <message>
-        <source>Selected file is empty.</source>
-        <translation type="vanished">Выбранный файл пуст.</translation>
-    </message>
-    <message>
-        <source>The file is not a valid JSON document: %1</source>
-        <translation type="vanished">Файл не является допустимым документом в формате JSON: %1</translation>
-    </message>
-    <message>
-        <source>Unsupported file format version: %1</source>
-        <translation type="vanished">Неподдерживаемая версия формата файла: %1</translation>
-    </message>
-    <message>
-        <source>The file is corrupted or not encrypted.</source>
-        <translation type="vanished">Файл поврежден или не зашифрован.</translation>
-    </message>
-    <message>
-        <source>Unable to decrypt the file with the specified password.</source>
-        <translation type="vanished">Не удается расшифровать файл с помощью указанного пароля.</translation>
-    </message>
-    <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Ничего не было импортировано.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Импорт успешно завершен.
-Роутеров добавлено: %1
-Роутеров пропущено: %2
-Групп добавлено: %3
-Групп пропущено: %4
-Хостов добавлено: %5
-Хостов пропущено: %6</translation>
-    </message>
-</context>
-<context>
-    <name>KeyBar</name>
-    <message>
-        <source>Up</source>
-        <translation type="obsolete">Вверх</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation type="obsolete">Неактивен</translation>
     </message>
 </context>
 <context>
@@ -4039,10 +3848,6 @@ Hosts skipped: %6</source>
         <translation>Роутер, связанный с этим хостом, был удален. Измените хост, чтобы выбрать другой роутер, или переключитесь на прямое подключение.</translation>
     </message>
     <message>
-        <source>Workspaces</source>
-        <translation type="obsolete">Рабочие пространства</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
         <translation>Параметры</translation>
@@ -4086,10 +3891,6 @@ Hosts skipped: %6</source>
         <translation>Удалить маршрутизатор</translation>
     </message>
     <message>
-        <source>Router Status</source>
-        <translation type="vanished">Состояние маршрутизатора</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
         <translation>Изменить пароль</translation>
@@ -4118,10 +3919,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
         <translation>Копировать хост</translation>
-    </message>
-    <message>
-        <source>Desktop Management</source>
-        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -4249,10 +4046,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
         <translation>Автообновление состояния</translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="vanished">Хосты</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="685"/>
@@ -4939,13 +4732,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterClientsItem</name>
-    <message>
-        <source>Clients</source>
-        <translation type="vanished">Клиенты</translation>
-    </message>
-</context>
-<context>
     <name>RouterClientsWidget</name>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
@@ -5070,10 +4856,6 @@ Hosts skipped: %6</source>
         <translation>Уровень доступа:</translation>
     </message>
     <message>
-        <source>Session Type:</source>
-        <translation type="vanished">Тип сессии:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
         <source>User Name:</source>
         <translation>Имя пользователя:</translation>
@@ -5118,57 +4900,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
         <source>Failed to save the router.</source>
         <translation>Не удалось сохранить настройки маршрутизатора.</translation>
-    </message>
-</context>
-<context>
-    <name>RouterEditDialog</name>
-    <message>
-        <source>Add Router</source>
-        <translation type="vanished">Добавить маршрутизатор</translation>
-    </message>
-    <message>
-        <source>Edit Router</source>
-        <translation type="vanished">Изменить маршрутизатор</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Имя</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Адрес</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Имя пользователя</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="vanished">Пароль</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Отмена</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Сохранить</translation>
-    </message>
-    <message>
-        <source>An invalid router address was entered.</source>
-        <translation type="vanished">Был введен неверный адрес маршрутизатора.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="vanished">Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot; .</translation>
-    </message>
-    <message>
-        <source>Password cannot be empty.</source>
-        <translation type="vanished">Пароль не может быть пустым.</translation>
-    </message>
-    <message>
-        <source>Failed to save the router.</source>
-        <translation type="vanished">Не удалось сохранить настройки маршрутизатора.</translation>
     </message>
 </context>
 <context>
@@ -5445,13 +5176,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterHostsItem</name>
-    <message>
-        <source>Hosts</source>
-        <translation type="vanished">Хосты</translation>
-    </message>
-</context>
-<context>
     <name>RouterHostsWidget</name>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
@@ -5619,13 +5343,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterRelaysItem</name>
-    <message>
-        <source>Relays</source>
-        <translation type="vanished">Ретрансляторы</translation>
-    </message>
-</context>
-<context>
     <name>RouterRelaysWidget</name>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
@@ -5785,17 +5502,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterStatusDialog</name>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Очистить</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Закрыть</translation>
-    </message>
-</context>
-<context>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
@@ -5886,10 +5592,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
         <translation>Отключить пользователя</translation>
-    </message>
-    <message>
-        <source>Allowed Session Types:</source>
-        <translation type="vanished">Разрешенные типы сессий:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
@@ -6063,13 +5765,6 @@ Hosts skipped: %6</source>
     </message>
 </context>
 <context>
-    <name>RouterUsersItem</name>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Пользователи</translation>
-    </message>
-</context>
-<context>
     <name>RouterUsersWidget</name>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
@@ -6134,373 +5829,6 @@ Hosts skipped: %6</source>
             <numerusform>%n пользователья</numerusform>
             <numerusform>%n пользователей</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterWidget</name>
-    <message>
-        <source>Relays</source>
-        <translation type="vanished">Ретрансляторы</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Адрес</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Время подключения</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Размер пула</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Версия</translation>
-    </message>
-    <message>
-        <source>Workspaces</source>
-        <translation type="vanished">Рабочие пространства</translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="vanished">Хосты</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Имя компьютера</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP адрес</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Архитектура</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Операционная система</translation>
-    </message>
-    <message>
-        <source>Clients</source>
-        <translation type="vanished">Клиенты</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Имя пользователя</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID хоста</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Комментарий</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Последнее подключение</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Рабочее пространство</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Отображаемое имя</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Последнее изменение</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Состояние</translation>
-    </message>
-    <message>
-        <source>Previous page</source>
-        <translation type="vanished">Предыдущая страница</translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="vanished">Назад</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="vanished">Следующая страница</translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="vanished">Вперед</translation>
-    </message>
-    <message>
-        <source>Items per page:</source>
-        <translation type="vanished">Элементов на страницу:</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Адрес хоста</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Адрес клиента</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Передано</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Продолжительность</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Простой</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Пользователи</translation>
-    </message>
-    <message>
-        <source>This content is only available with administrator rights.</source>
-        <translation type="vanished">Это содержимое доступно только с правами администратора.</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Имя</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Включен</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Типы сессий</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s)</source>
-        <translation type="vanished">
-            <numerusform>%n хост</numerusform>
-            <numerusform>%n хоста</numerusform>
-            <numerusform>%n хостов</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n relay(s)</source>
-        <translation type="vanished">
-            <numerusform>%n ретранслятор</numerusform>
-            <numerusform>%n ретранслятора</numerusform>
-            <numerusform>%n ретрансляторов</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n user(s)</source>
-        <translation type="vanished">
-            <numerusform>%n пользователь</numerusform>
-            <numerusform>%n пользователья</numerusform>
-            <numerusform>%n пользователей</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>You cannot delete a built-in user.</source>
-        <translation type="vanished">Вы не можете удалить встроенного пользователя.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="vanished">Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation type="vanished">Вы уверены, что хотите отключить хост &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="vanished">Вы действительно хотите отключить все хосты?</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="vanished">Подтверждение</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation type="vanished">Вы уверены, что хотите отключить ретранслятор &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="vanished">Вы действительно хотите отключить все маршрутизаторы?</translation>
-    </message>
-    <message>
-        <source>Disconnect</source>
-        <translation type="vanished">Отключить</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="vanished">Копировать строку</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="vanished">Копировать значение</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation type="vanished">Вы уверены, что хотите отключить узел &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Подключение к маршрутизатору %1...</translation>
-    </message>
-    <message>
-        <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="vanished">Удаление хоста приведет к удалению всей его конфигурации для подключения к роутеру, а приложение на хосте будет удалено. Это действие необратимо. Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation type="vanished">Вы уверены, что хотите отключить клиента &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect all clients?</source>
-        <translation type="vanished">Вы уверены, что хотите отключить всех клиентов?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation type="vanished">Вы уверены, что хотите удалить рабочее пространство &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Соединение с маршрутизатором %1 установлено.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Отключено от маршрутизатора %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1.</source>
-        <translation type="vanished">Сетевая ошибка: %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Для завершения миграции с предыдущей версии необходимо изменить ваш пароль.</translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Пароль обновлен. Ожидание новых ключей шифрования...</translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Неверный запрос пользователя.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Неизвестная внутренняя ошибка.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Переданы некорректные данные.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Пользователь с указанным именем уже существует.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Неизвестный тип ошибки.</translation>
-    </message>
-    <message>
-        <source>Change Password</source>
-        <translation type="vanished">Изменение пароля</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символ.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символа.</numerusform>
-            <numerusform>Пароль не может быть пустой и не должен превышать %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Введенный пароль не отвечает требованиям безопасности!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Вы хотите ввести другой пароль?</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Недопустимый запрос на изменение пароля.</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Неверный запрос к хосту.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Неверный идентификатор записи.</translation>
-    </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Неверный запрос ретранслятора.</translation>
-    </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Некорректный запрос клиента.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Сеанс ретранслятора не найден.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Недопустимый запрос рабочего пространства.</translation>
-    </message>
-    <message>
-        <source>A workspace with the specified name already exists.</source>
-        <translation type="vanished">Рабочее пространство с указанным именем уже существует.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Рабочее пространство не найдено.</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n workspace(s)</source>
-        <translation type="vanished">
-            <numerusform>%n рабочее пространство</numerusform>
-            <numerusform>%n рабочих пространства</numerusform>
-            <numerusform>%n рабочих пространств</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n client(s)</source>
-        <translation type="vanished">
-            <numerusform>%n клиент</numerusform>
-            <numerusform>%n клиента</numerusform>
-            <numerusform>%n клиентов</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="vanished">Сохранить файл</translation>
-    </message>
-    <message>
-        <source>JSON files (*.json)</source>
-        <translation type="vanished">JSON-файлы (*.json)</translation>
-    </message>
-    <message>
-        <source>Could not open file for writing.</source>
-        <translation type="vanished">Не удалось открыть файл для записи.</translation>
-    </message>
-    <message>
-        <source>Unable to write file.</source>
-        <translation type="vanished">Не удалось записать файл.</translation>
     </message>
 </context>
 <context>
@@ -6676,10 +6004,6 @@ Are you sure you want to continue?</source>
         <translation>Сетевая ошибка: %1</translation>
     </message>
     <message>
-        <source>Network error: %1.</source>
-        <translation type="vanished">Сетевая ошибка: %1.</translation>
-    </message>
-    <message>
         <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
         <translation>Маршрутизатор требует смены пароля, что пока не поддерживается здесь.</translation>
@@ -6786,10 +6110,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <source>Full Desktop</source>
-        <translation type="vanished">Весь рабочий стол</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
         <translation>Монитор %1 (основной)</translation>
@@ -6815,7 +6135,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
         <source>Paused</source>
-        <translation>Простановлено</translation>
+        <translation>Приостановлено</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
@@ -6870,34 +6190,7 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>ServiceMain</name>
-    <message>
-        <source>Install service.</source>
-        <translation type="vanished">Установить службу.</translation>
-    </message>
-    <message>
-        <source>Remove service.</source>
-        <translation type="vanished">Удалить службу.</translation>
-    </message>
-    <message>
-        <source>Start service.</source>
-        <translation type="vanished">Запустить службу.</translation>
-    </message>
-    <message>
-        <source>Stop service.</source>
-        <translation type="vanished">Остановить службу.</translation>
-    </message>
-    <message>
-        <source>Get current host id.</source>
-        <translation type="vanished">Получить текущий ИД хоста.</translation>
-    </message>
-</context>
-<context>
     <name>SessionType</name>
-    <message>
-        <source>Desktop Management</source>
-        <translation type="vanished">Управление рабочим столом</translation>
-    </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
@@ -6950,14 +6243,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
         <translation>Введите имя или оставьте поле пустым</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="vanished">Подключения</translation>
-    </message>
-    <message>
-        <source>Allow UDP connections</source>
-        <translation type="vanished">Разрешить UDP подключения</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
@@ -7111,17 +6396,9 @@ Are you sure you want to continue?</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <source>Auto</source>
-        <translation type="vanished">Автоматически</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>None</source>
         <translation>Нет</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Параметры</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
@@ -7258,10 +6535,6 @@ Are you sure you want to continue?</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <source>Language</source>
-        <translation type="vanished">Язык</translation>
-    </message>
-    <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
         <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
@@ -7384,18 +6657,6 @@ Are you sure you want to continue?</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <source>Send key combinations</source>
-        <translation type="vanished">Отправлять комбинации клавиш</translation>
-    </message>
-    <message>
-        <source>Preferred resolution</source>
-        <translation type="vanished">Предпочитаемое разрешение</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
         <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
         <translation>Пользователи</translation>
@@ -7409,18 +6670,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
         <translation>Добавить пользователя</translation>
-    </message>
-    <message>
-        <source>Access</source>
-        <translation type="vanished">Доступ</translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="vanished">Рабочий стол</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="vanished">Передача файлов</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="237"/>
@@ -7511,10 +6760,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1.</source>
-        <translation type="vanished">Сетевая ошибка: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="972"/>
@@ -7630,10 +6875,6 @@ Are you sure you want to continue?</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <source>Active Clients</source>
-        <translation type="vanished">Активные клиенты</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
         <translation>Клиенты</translation>
@@ -7641,10 +6882,6 @@ Are you sure you want to continue?</source>
 </context>
 <context>
     <name>SidebarRouterHosts</name>
-    <message>
-        <source>All Hosts</source>
-        <translation type="vanished">Все хосты</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
@@ -7657,10 +6894,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
         <translation>Ретрансляторы</translation>
-    </message>
-    <message>
-        <source>Active Relays</source>
-        <translation type="vanished">Активные ретрансляторы</translation>
     </message>
 </context>
 <context>
@@ -7727,14 +6960,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
         <translation>Издатель</translation>
-    </message>
-    <message>
-        <source>Install Date</source>
-        <translation type="vanished">Дата установки</translation>
-    </message>
-    <message>
-        <source>Install Location</source>
-        <translation type="vanished">Место установки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
@@ -7834,14 +7059,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
         <translation>Имя</translation>
-    </message>
-    <message>
-        <source>Driver Version</source>
-        <translation type="vanished">Версия драйвера</translation>
-    </message>
-    <message>
-        <source>Driver Date</source>
-        <translation type="vanished">Дата драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
@@ -8029,10 +7246,6 @@ Are you sure you want to continue?</source>
         <translation>Время</translation>
     </message>
     <message>
-        <source>Category</source>
-        <translation type="vanished">Категория</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
         <translation>В начало</translation>
@@ -8103,10 +7316,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
         <translation>Имя</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="vanished">Описание</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
@@ -8331,10 +7540,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
         <translation>ID</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="vanished">ЦП</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
@@ -10164,158 +9369,6 @@ Are you sure you want to continue?</source>
         <source>No</source>
         <translation>Нет</translation>
     </message>
-    <message>
-        <source>Parameter</source>
-        <translation type="vanished">Параметр</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="vanished">Значение</translation>
-    </message>
-    <message>
-        <source>Health Data</source>
-        <translation type="vanished">Данные о состоянии</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Недоступен</translation>
-    </message>
-    <message>
-        <source>Attribute</source>
-        <translation type="vanished">Атрибут</translation>
-    </message>
-    <message>
-        <source>Worst</source>
-        <translation type="vanished">Худшее</translation>
-    </message>
-    <message>
-        <source>Threshold</source>
-        <translation type="vanished">Порог</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Состояние</translation>
-    </message>
-    <message>
-        <source>OK. Always passed</source>
-        <translation type="vanished">ОК. Всегда успешно</translation>
-    </message>
-    <message>
-        <source>OK. Value is normal</source>
-        <translation type="vanished">ОК. Значение в норме</translation>
-    </message>
-    <message>
-        <source>Warning. Value is pre-failure</source>
-        <translation type="vanished">Предупреждение. Предаварийное состояние</translation>
-    </message>
-    <message>
-        <source>Warning. Value is not normal</source>
-        <translation type="vanished">Предупреждение. Значение не в норме</translation>
-    </message>
-    <message>
-        <source>Unknown Attribute</source>
-        <translation type="vanished">Неизвестный атрибут</translation>
-    </message>
-    <message>
-        <source>Spare capacity is below the threshold</source>
-        <translation type="vanished">Резервная емкость ниже порога</translation>
-    </message>
-    <message>
-        <source>Temperature is outside of the operating range</source>
-        <translation type="vanished">Температура вне рабочего диапазона</translation>
-    </message>
-    <message>
-        <source>Reliability is degraded</source>
-        <translation type="vanished">Надежность снижена</translation>
-    </message>
-    <message>
-        <source>Media is in read-only mode</source>
-        <translation type="vanished">Носитель работает в режиме только чтения</translation>
-    </message>
-    <message>
-        <source>Volatile memory backup device failed</source>
-        <translation type="vanished">Отказ устройства резервного питания энергозависимой памяти</translation>
-    </message>
-    <message>
-        <source>Persistent memory region is unreliable</source>
-        <translation type="vanished">Область постоянной памяти ненадежна</translation>
-    </message>
-    <message>
-        <source>Critical Warning</source>
-        <translation type="vanished">Критическое предупреждение</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Temperature</source>
-        <translation type="vanished">Температура</translation>
-    </message>
-    <message>
-        <source>Temperature Sensor %1</source>
-        <translation type="vanished">Датчик температуры %1</translation>
-    </message>
-    <message>
-        <source>Available Spare</source>
-        <translation type="vanished">Доступный резерв</translation>
-    </message>
-    <message>
-        <source>Available Spare Threshold</source>
-        <translation type="vanished">Порог доступного резерва</translation>
-    </message>
-    <message>
-        <source>Percentage Used</source>
-        <translation type="vanished">Использованный ресурс</translation>
-    </message>
-    <message>
-        <source>Data Read</source>
-        <translation type="vanished">Прочитано данных</translation>
-    </message>
-    <message>
-        <source>Data Written</source>
-        <translation type="vanished">Записанно данных</translation>
-    </message>
-    <message>
-        <source>Host Read Commands</source>
-        <translation type="vanished">Команд чтения хоста</translation>
-    </message>
-    <message>
-        <source>Host Write Commands</source>
-        <translation type="vanished">Команд записи хоста</translation>
-    </message>
-    <message>
-        <source>Controller Busy Time</source>
-        <translation type="vanished">Время занятости контроллера</translation>
-    </message>
-    <message>
-        <source>Power Cycles</source>
-        <translation type="vanished">Количество циклов включения</translation>
-    </message>
-    <message>
-        <source>Power-On Time</source>
-        <translation type="vanished">Время работы</translation>
-    </message>
-    <message>
-        <source>Unsafe Shutdowns</source>
-        <translation type="vanished">Небезопасные отключения</translation>
-    </message>
-    <message>
-        <source>Media Errors</source>
-        <translation type="vanished">Ошибки носителя</translation>
-    </message>
-    <message>
-        <source>Error Log Entries</source>
-        <translation type="vanished">Записи в журнале ошибок</translation>
-    </message>
-    <message>
-        <source>Warning Temperature Time</source>
-        <translation type="vanished">Время при перегреве</translation>
-    </message>
-    <message>
-        <source>Critical Temperature Time</source>
-        <translation type="vanished">Критический перегрев</translation>
-    </message>
 </context>
 <context>
     <name>SysInfoWidgetEventLogs</name>
@@ -10333,10 +9386,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
         <translation>Система</translation>
-    </message>
-    <message>
-        <source>Page %1/%2</source>
-        <translation type="vanished">Страница %1/%2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
@@ -10415,10 +9464,6 @@ Are you sure you want to continue?</source>
         <translation>Полное имя</translation>
     </message>
     <message>
-        <source>Description</source>
-        <translation type="vanished">Описание</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
         <translation>Домашняя директория</translation>
@@ -10443,10 +9488,6 @@ Are you sure you want to continue?</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <source>Password Can&apos;t Change</source>
-        <translation type="vanished">Пароль не может быть изменен</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
         <translation>Пароль просрочен</translation>
@@ -10457,10 +9498,6 @@ Are you sure you want to continue?</source>
         <translation>Срок действия пароля не ограничен</translation>
     </message>
     <message>
-        <source>Lockout</source>
-        <translation type="vanished">Заблокирован</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
         <translation>Никогда</translation>
@@ -10469,14 +9506,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
         <translation>Последний вход</translation>
-    </message>
-    <message>
-        <source>Number Logons</source>
-        <translation type="vanished">Количество входов</translation>
-    </message>
-    <message>
-        <source>Bad Password Count</source>
-        <translation type="vanished">Неправильных вводов пароля</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
@@ -10790,10 +9819,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
         <translation>Серийный номер</translation>
-    </message>
-    <message>
-        <source>Tempareture</source>
-        <translation type="vanished">Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
@@ -11390,21 +10415,9 @@ Are you sure you want to continue?</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <source>%1 MHz</source>
-        <translation type="vanished">%1 МГц</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
         <translation>Тип</translation>
-    </message>
-    <message>
-        <source>Form Factor</source>
-        <translation type="vanished">Форм-фактор</translation>
-    </message>
-    <message>
-        <source>Part Number</source>
-        <translation type="vanished">Номер партии</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
@@ -11557,10 +10570,6 @@ Are you sure you want to continue?</source>
         <translation>%1%</translation>
     </message>
     <message>
-        <source>%1 bytes</source>
-        <translation type="vanished">%1 байт</translation>
-    </message>
-    <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
         <translation>Дата драйвера</translation>
@@ -11583,150 +10592,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Информация о системе</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Сохранить</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="vanished">Сохранить (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="vanished">Печать</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="vanished">Печать (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="vanished">Копировать строку</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="vanished">Копировать имя</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="vanished">Копировать значение</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="vanished">Обновить</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="vanished">Обновить (F5)</translation>
-    </message>
-    <message>
-        <source>Summary</source>
-        <translation type="vanished">Сводка</translation>
-    </message>
-    <message>
-        <source>Hardware</source>
-        <translation type="vanished">Оборудование</translation>
-    </message>
-    <message>
-        <source>Devices</source>
-        <translation type="vanished">Устройства</translation>
-    </message>
-    <message>
-        <source>Video Adapters</source>
-        <translation type="vanished">Видеоадаптеры</translation>
-    </message>
-    <message>
-        <source>Monitors</source>
-        <translation type="vanished">Мониторы</translation>
-    </message>
-    <message>
-        <source>Printers</source>
-        <translation type="vanished">Принтеры</translation>
-    </message>
-    <message>
-        <source>Power Options</source>
-        <translation type="vanished">Параметры питания</translation>
-    </message>
-    <message>
-        <source>Software</source>
-        <translation type="vanished">Программное обеспечение</translation>
-    </message>
-    <message>
-        <source>Applications</source>
-        <translation type="vanished">Приложения</translation>
-    </message>
-    <message>
-        <source>Drivers</source>
-        <translation type="vanished">Драйверы</translation>
-    </message>
-    <message>
-        <source>Services</source>
-        <translation type="vanished">Службы</translation>
-    </message>
-    <message>
-        <source>Processes</source>
-        <translation type="vanished">Процессы</translation>
-    </message>
-    <message>
-        <source>Licenses</source>
-        <translation type="vanished">Лицензии</translation>
-    </message>
-    <message>
-        <source>Network</source>
-        <translation type="vanished">Сеть</translation>
-    </message>
-    <message>
-        <source>Network Adapters</source>
-        <translation type="vanished">Сетевые адаптеры</translation>
-    </message>
-    <message>
-        <source>Routes</source>
-        <translation type="vanished">Маршруты</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="vanished">Подключения</translation>
-    </message>
-    <message>
-        <source>Network Shares</source>
-        <translation type="vanished">Сетевые ресурсы</translation>
-    </message>
-    <message>
-        <source>Open Files</source>
-        <translation type="vanished">Открытые файлы</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Операционная система</translation>
-    </message>
-    <message>
-        <source>Environment Variables</source>
-        <translation type="vanished">Переменные окружения</translation>
-    </message>
-    <message>
-        <source>Event Logs</source>
-        <translation type="vanished">Журнал событий</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="vanished">Пользователи</translation>
-    </message>
-    <message>
-        <source>User Groups</source>
-        <translation type="vanished">Группы пользователей</translation>
-    </message>
-    <message>
-        <source>HTML File</source>
-        <translation type="vanished">HTML-файл</translation>
-    </message>
-    <message>
-        <source>HTML File (*.html)</source>
-        <translation type="vanished">HTML-файл (*.html)</translation>
-    </message>
-    <message>
-        <source>Failed to save file: %1</source>
-        <translation type="vanished">Не удалось сохранить файл: %1</translation>
     </message>
 </context>
 <context>

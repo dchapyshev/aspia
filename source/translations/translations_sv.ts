@@ -6,28 +6,28 @@
     <message>
         <location filename="../client/aab_importer.cc" line="111"/>
         <source>%1 (Imported)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Importerad)</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att öppna filen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
         <source>Selected file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den valda filen är tom.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="284"/>
         <location filename="../client/aab_importer.cc" line="332"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboksfilen är skadad eller har ett okänt format.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboksfilen är krypterad med en krypteringstyp som inte stöds.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="359"/>
@@ -36,27 +36,31 @@ Groups added: %1
 Hosts added: %2
 Hosts skipped: %3
 Routers added: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Importen slutfördes.
+Tillagda grupper: %1
+Tillagda värdar: %2
+Överhoppade värdar: %3
+Tillagda routrar: %4</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="316"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att dekryptera adressboken med det angivna lösenordet.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="299"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="301"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken är krypterad. För att öppna den måste du ange ett lösenord.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="354"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget importerades.</translation>
     </message>
 </context>
 <context>
@@ -64,142 +68,142 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="14"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="60"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="90"/>
         <source>Service Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Serviceinformation</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="112"/>
         <source>Donate!</source>
-        <translation type="unfinished"></translation>
+        <translation>Donera!</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.ui" line="136"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia är fri programvara som ges ut under GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan få en kopia av licensen här:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan också få en översättning av GNU GPL-licensen här:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Länkar</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemsida:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub-sida:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Utvecklare</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Tredjepartskomponenter</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafik och bilder</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikoner av %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökväg: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Loggkatalog: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Loggfil: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Bygginformation</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git-gren: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Git-commit: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompilering</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompileringsdatum: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompileringstid: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionsinformation</translation>
     </message>
 </context>
 <context>
@@ -207,47 +211,47 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/about_widget.cc" line="99"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Version: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="102"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia är fri programvara som ges ut under GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="103"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan få en kopia av licensen här:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Länkar</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Home page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemsida:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>GitHub page:</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub-sida:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="113"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Utvecklare</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="114"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Översättare</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="115"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Tredjepartskomponenter</translation>
     </message>
 </context>
 <context>
@@ -255,7 +259,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>En felaktig sökväg till mappen angavs.</translation>
     </message>
 </context>
 <context>
@@ -264,97 +268,97 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemmapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedladdningar</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dator</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Optisk enhet</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyttbar enhet</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Fast enhet</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverksenhet</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM-enhet</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbordsmapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedladdningsmapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumentmapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildmapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotkatalog</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd enhet</translation>
     </message>
 </context>
 <context>
@@ -364,21 +368,21 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="249"/>
         <location filename="../client/android/main_window.cc" line="329"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="253"/>
         <location filename="../client/android/main_window.cc" line="349"/>
         <source>Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärr</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
         <location filename="../client/android/main_window.cc" line="257"/>
         <location filename="../client/android/main_window.cc" line="339"/>
         <source>Routers</source>
-        <translation type="unfinished"></translation>
+        <translation>Routrar</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="173"/>
@@ -388,7 +392,7 @@ Routers added: %4</source>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
@@ -397,68 +401,68 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="583"/>
         <location filename="../client/android/main_window.cc" line="630"/>
         <source>Connection by link</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning via länk</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
         <source>Invalid link.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig länk.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="554"/>
         <source>Another session is active. Close it and open the link again.</source>
-        <translation type="unfinished"></translation>
+        <translation>En annan session är aktiv. Stäng den och öppna länken igen.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="564"/>
         <source>The session type from the link is not supported on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionstypen från länken stöds inte på den här enheten.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="584"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern som länken hänvisar till hittades inte i adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="631"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden som länken hänvisar till hittades inte i adressboken.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="459"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="333"/>
         <location filename="../host/android/main_window.cc" line="368"/>
         <location filename="../host/android/main_window.cc" line="400"/>
         <source>Permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>Behörigheter</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="334"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera tillgänglighetstjänsten för att tillåta fjärrstyrning av tangentbord och mus.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="335"/>
         <location filename="../host/android/main_window.cc" line="370"/>
         <location filename="../host/android/main_window.cc" line="403"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="369"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt visning över andra appar för att visa åtgärdsknappen på skärmen under en session.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="401"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt åtkomst till alla filer så att den anslutna användaren kan bläddra bland och överföra filer på den här enheten.</translation>
     </message>
 </context>
 <context>
@@ -466,7 +470,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök</translation>
     </message>
 </context>
 <context>
@@ -475,60 +479,60 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
         <location filename="../client/android/authorization_dialog.cc" line="36"/>
         <source>Authorization</source>
-        <translation type="unfinished"></translation>
+        <translation>Auktorisering</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="26"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
         <location filename="../client/android/authorization_dialog.cc" line="45"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="66"/>
         <source>One-time password connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning med engångslösenord</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange inloggningsuppgifterna för att ansluta till värden.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="43"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="52"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Engångslösenord</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="66"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslut</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="106"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="147"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="113"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
 </context>
 <context>
@@ -536,48 +540,48 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="22"/>
         <source>Old password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gammalt lösenord:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="36"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt lösenord:</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="14"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.ui" line="50"/>
         <source>New password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt lösenord (upprepa):</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="94"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="103"/>
         <location filename="../host/ui/change_password_dialog.cc" line="145"/>
         <source>The passwords entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>De angivna lösenorden stämmer inte överens.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du måste ange ditt gamla lösenord.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="128"/>
         <source>You entered an incorrect old password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du angav ett felaktigt gammalt lösenord.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="137"/>
         <source>New password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det nya lösenordet får inte vara tomt.</translation>
     </message>
 </context>
 <context>
@@ -585,7 +589,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid</translation>
     </message>
 </context>
 <context>
@@ -593,7 +597,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid</translation>
     </message>
 </context>
 <context>
@@ -601,7 +605,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/chat_view.cc" line="201"/>
         <source>Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Meddelande</translation>
     </message>
 </context>
 <context>
@@ -609,92 +613,92 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Chat</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka meddelande</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Verktyg</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="210"/>
         <source>···</source>
-        <translation type="unfinished"></translation>
+        <translation>···</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
         <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Save chat...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara chatt...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
         <location filename="../common/desktop/chat_widget.cc" line="307"/>
         <source>Clear chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa chatt</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 skriver...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 har anslutit till chatten (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 har lämnat chatten (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 är inloggad (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 är inte inloggad (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>There are no connected users (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns inga anslutna användare (%1)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="428"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/chat_widget.cc" line="444"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Meddelandet är för långt. Den maximala meddelandelängden är %n tecken.</numerusform>
+            <numerusform>Meddelandet är för långt. Den maximala meddelandelängden är %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara fil</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>TXT-filer (*.txt)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="380"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för skrivning.</translation>
     </message>
 </context>
 <context>
@@ -702,168 +706,168 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="48"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="102"/>
         <source>User %1 has joined the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 har anslutit till chatten</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="105"/>
         <source>User %1 has left the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 har lämnat chatten</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="108"/>
         <source>User %1 is logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 är inloggad</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="111"/>
         <source>User %1 is not logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 är inte inloggad</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="114"/>
         <source>There are no connected users</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns inga anslutna användare</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="141"/>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatt</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="201"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till värden %1...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="210"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen till värden har brutits.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="306"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna routern är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid begäran om anslutning via routern.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="219"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdversionen är nyare än klientens. Uppdatera programmet.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="247"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 skriver...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="292"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="317"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="342"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Begär anslutning till värden...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Save Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara chatt</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Text files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Textfiler (*.txt)</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Could not open the file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för skrivning.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa chatt</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear the chat history?</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa chatthistoriken?</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa</translation>
     </message>
 </context>
 <context>
@@ -871,22 +875,22 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="14"/>
         <source>Password Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordsskydd</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationen är lösenordsskyddad. Ange lösenordet för att visa och ändra konfigurationen.</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="36"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.cc" line="69"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du angav ett felaktigt lösenord.</translation>
     </message>
 </context>
 <context>
@@ -894,60 +898,60 @@ Routers added: %4</source>
     <message>
         <location filename="../client/main.cc" line="185"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="187"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett huvudlösenord som krävs för att låsa upp programmet.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="195"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="197"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="201"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="211"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ange huvudlösenordet.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="159"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="120"/>
         <source>An aspia:// link to connect to a host.</source>
-        <translation type="unfinished"></translation>
+        <translation>En aspia://-länk för att ansluta till en värd.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="161"/>
         <source>Enter the master password to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange huvudlösenordet för att låsa upp programmet.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="177"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt huvudlösenord.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="116"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
 </context>
 <context>
@@ -955,92 +959,92 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="254"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen har startat.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="439"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid begäran om anslutning via routern: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="385"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna routern är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="391"/>
         <source>The specified router is offline.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna routern är offline.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="266"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till värden %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till värden %1:%2...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning till värden %1 upprättad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning till värden %1:%2 upprättad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="310"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden är inte tillgänglig ännu. Väntar på återanslutning...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="72"/>
         <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidsgränsen för återanslutning till värden överskreds.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="330"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdversionen är nyare än klientversionen (%1 &gt; %2). Uppdatera programmet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>Attempting to connect in compatibility mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Försöker ansluta i kompatibilitetsläge...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="398"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Begär anslutning till värden...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="406"/>
         <source>Connection offer received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningserbjudande mottaget.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden med det angivna ID:t är inte online</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="430"/>
         <source>Access is denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst nekad</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="433"/>
         <source>There are no relays available or the key pool is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns inga tillgängliga reläer eller så är nyckelpoolen tom</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="436"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt fel</translation>
     </message>
 </context>
 <context>
@@ -1049,360 +1053,360 @@ Routers added: %4</source>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="455"/>
         <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till ny användare</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera användare</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort användare</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdateringsserver</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd anpassad uppdateringsserver</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdateringar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera användning av router</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Offentlig nyckel:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Önskad metod för videofångst:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhet</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordsskydd för inställningar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Engångslösenord</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera engångslösenord</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal tecken:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tecken:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningsbekräftelse</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Kräv bekräftelse vid anslutning till datorn</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk bekräftelse av anslutning via:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
-        <translation type="unfinished"></translation>
+        <translation>Om det inte finns någon aktiv användare:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href="https://aspia.org"&gt;officiella webbplatsen&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
         <source>Common</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="36"/>
         <source>Incoming port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inkommande port:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera avstängning av Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Övrigt</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera inställningar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera inställningar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk kontroll och installation av uppdateringar</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdateringar:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="114"/>
         <source>Once a day</source>
-        <translation type="unfinished"></translation>
+        <translation>En gång om dagen</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a week</source>
-        <translation type="unfinished"></translation>
+        <translation>En gång i veckan</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a month</source>
-        <translation type="unfinished"></translation>
+        <translation>En gång i månaden</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>On reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid omstart</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 5 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Var 5:e minut</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Var 30:e minut</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation>Varje timme</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 6 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Var 6:e timme</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 12 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Var 12:e timme</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 24 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Var 24:e timme</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Bokstäver och siffror</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Bokstäver</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
-        <translation type="unfinished"></translation>
+        <translation>Siffror</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldrig</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>15 sekunder</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>30 sekunder</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>45 sekunder</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>60 sekunder</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceptera anslutning</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvisa anslutning</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort användaren "%1"?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
         <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid bearbetning av lösenordet.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningslagringen är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationen kan inte skrivas. Kontrollera att du har tillräckliga skrivrättigheter.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Felaktig routeradress angavs.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Felaktig offentlig nyckel för routern angavs.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installera</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
 </context>
 <context>
@@ -1410,32 +1414,32 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.ui" line="14"/>
         <source>Confirmation of connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräftelse av anslutning</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren %1 (%2) försöker ansluta till din dator med sessionstypen %3.</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåta anslutningen?</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Anslutningen accepteras automatiskt efter %n sekund.</numerusform>
+            <numerusform>Anslutningen accepteras automatiskt efter %n sekunder.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Anslutningen avvisas automatiskt efter %n sekund.</numerusform>
+            <numerusform>Anslutningen avvisas automatiskt efter %n sekunder.</numerusform>
         </translation>
     </message>
 </context>
@@ -1444,63 +1448,64 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ditt ID</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="224"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Engångslösenord</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="225"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="226"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="347"/>
         <source>Aspia ID: %1
 Password: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-ID: %1
+Lösenord: %2</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern är inaktiverad</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="393"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="394"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern %1...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="397"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten till router</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="398"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten till routern %1</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="401"/>
         <source>Failed to connect to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ansluta till routern</translation>
     </message>
 </context>
 <context>
@@ -1508,39 +1513,39 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuellt lösenord:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräfta lösenord:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt lösenord:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange det aktuella lösenordet.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden stämmer inte överens.</translation>
     </message>
 </context>
 <context>
@@ -1549,231 +1554,231 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås verktygsfält</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
         <source>Auto size</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk storlek</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
         <source>Automatic window size</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk fönsterstorlek</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
         <source>Full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Helskärm</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished"></translation>
+        <translation>Växla till helskärmsläge eller tillbaka</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk rullning</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
         <source>Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
         <source>Advanced menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Avancerad meny</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara skärmbild...</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Skala</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
         <source>Power control</source>
-        <translation type="unfinished"></translation>
+        <translation>Strömhantering</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng av</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Logga ut</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
         <source>Close session</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng session</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
         <source>Fit window</source>
-        <translation type="unfinished"></translation>
+        <translation>Anpassa till fönstret</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
         <source>Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimera</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Minimize window</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimera fönster</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om (felsäkert läge)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om i felsäkert läge</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished"></translation>
+        <translation>Klistra in urklipp som tangenttryckningar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Textchatt</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
         <source>Start recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta inspelning</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivitetshanteraren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
         <source>Switch Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Växla session</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
         <source>Resolution selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Val av upplösning</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Session %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Session %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa inspelning</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill stänga av fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräftelse</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill starta om fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
         <source>Wait for host</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänta på värden</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill starta om fjärrdatorn i felsäkert läge?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill avsluta användarsessionen på fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill låsa användarsessionen på fjärrdatorn?</translation>
     </message>
 </context>
 <context>
@@ -1781,22 +1786,22 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen pausades av en fjärranvändare</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen är tillfälligt otillgänglig</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen är permanent otillgänglig</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid mottagning av videoström: %1</translation>
     </message>
 </context>
 <context>
@@ -1804,188 +1809,188 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara fil</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG-bild (*.png);;BMP-bild (*.bmp)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
         <source>Could not save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte spara bilden</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna routern är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Begär anslutning till värden...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="79"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Session %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Session %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="193"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden med det angivna ID:t är inte online.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst nekad.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="241"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns inga tillgängliga reläer eller så är nyckelpoolen tom.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="244"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid begäran om anslutning via routern.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="358"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till värden %1...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="364"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning upprättad.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen till värden har brutits.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="383"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdversionen är nyare än klientens. Uppdatera programmet.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="387"/>
         <source>Legacy hosts are not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Äldre värdar stöds inte.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="470"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärm %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="478"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Ström</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="482"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangentbord</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="487"/>
         <source>Ctrl+Alt+Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="494"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="499"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="558"/>
         <location filename="../client/android/desktop_window.cc" line="612"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillbaka</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Shutdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng av</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="560"/>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="562"/>
         <source>Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Felsäkert läge</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Logga ut</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill stänga av fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="584"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill starta om fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="588"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill starta om fjärrdatorn i felsäkert läge?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="592"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill avsluta användarsessionen på fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="596"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill låsa användarsessionen på fjärrdatorn?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräftelse</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
 </context>
 <context>
@@ -1993,92 +1998,92 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="80"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkställ</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Förkasta</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök igen</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorera</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ standardvärden</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara alla</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja till alla</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej till alla</translation>
     </message>
 </context>
 <context>
@@ -2086,17 +2091,17 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="14"/>
         <source>Downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>Laddar ner</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.ui" line="26"/>
         <source>Downloading update in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedladdning av uppdatering pågår...</translation>
     </message>
     <message>
         <location filename="../common/desktop/download_dialog.cc" line="65"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid nedladdning av uppdateringen: %1</translation>
     </message>
 </context>
 <context>
@@ -2104,77 +2109,77 @@ Password: %2</source>
     <message>
         <location filename="../client/file_error_code.cc" line="33"/>
         <source>Successfully completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutfört</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="37"/>
         <source>Invalid request</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig begäran</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="41"/>
         <source>Invalid directory or file name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt katalog- eller filnamn</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="45"/>
         <source>Path not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökvägen hittades inte</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="49"/>
         <source>Path already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökvägen finns redan</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="53"/>
         <source>No drives found</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga enheter hittades</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="57"/>
         <source>Disk full</source>
-        <translation type="unfinished"></translation>
+        <translation>Disken är full</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="61"/>
         <source>Access denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst nekad</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="65"/>
         <source>Could not open file for reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för läsning</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skapa eller ersätta filen</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="73"/>
         <source>Could not write to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skriva till filen</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="77"/>
         <source>Could not read file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte läsa filen</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="81"/>
         <source>Drive not ready</source>
-        <translation type="unfinished"></translation>
+        <translation>Enheten är inte redo</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="85"/>
         <source>No logged in user</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen inloggad användare</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="89"/>
         <source>Unknown error code</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd felkod</translation>
     </message>
 </context>
 <context>
@@ -2182,27 +2187,27 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="101"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="378"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="381"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="384"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="387"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändrad</translation>
     </message>
 </context>
 <context>
@@ -2210,7 +2215,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_item_delegate.cc" line="54"/>
         <source>The name can not contain characters %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet får inte innehålla tecknen %1.</translation>
     </message>
 </context>
 <context>
@@ -2218,109 +2223,109 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
         <source>Browse to parent folder (Backspace)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå till överordnad mapp (Backspace)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny mapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
         <source>Create a new folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa en ny mapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
         <source>Delete selected object(s) (Delete)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort markerade objekt (Delete)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="202"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.ui" line="205"/>
         <source>Send selected object(s) (F11)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka markerade objekt (F11)</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="117"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över enheter: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="134"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över filer: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="159"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att skapa katalogen: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="171"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att byta namn på objektet: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="316"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 objekt markerade</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="376"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="395"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappnamnet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="382"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="401"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet innehåller ogiltiga tecken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="344"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skicka	F11</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ta bort	Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="355"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skapa mapp</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort de markerade objekten?</translation>
     </message>
 </context>
 <context>
@@ -2328,82 +2333,82 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över enheter: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemmapp</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Intern lagring</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
-        <translation type="unfinished"></translation>
+        <translation>SD-kort</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedladdningar</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamera</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över filer: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att skapa katalogen: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa mapp</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappnamn</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet innehåller ogiltiga tecken.</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
@@ -2412,32 +2417,32 @@ Password: %2</source>
         <location filename="../client/android/file_panel_widget.cc" line="528"/>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort de markerade objekten?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda upp</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda ner</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
 </context>
 <context>
@@ -2445,7 +2450,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_progress_sheet.cc" line="47"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -2453,73 +2458,73 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="35"/>
         <source>File Removal</source>
-        <translation type="unfinished"></translation>
+        <translation>Filborttagning</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell uppgift:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapar en lista över filer att ta bort...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="63"/>
         <source>Deleting:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="76"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="103"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt borttagning av filer.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort objekt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid hämtning av fillistan: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort "%1": %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -2527,130 +2532,130 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell uppgift:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapar en lista över filer att kopiera...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="63"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>Från:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="76"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="96"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="116"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="83"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>Till:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="103"/>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hastighet:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="129"/>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Totalt:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="136"/>
         <source>Item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Objekt:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="180"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt överföring av filer.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopierar objekt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoppa över alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod när filkön för kopiering skapades</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att skapa katalogen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att skapa filen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att öppna filen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att skriva filen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att läsa filen "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp vid kopiering av filer</translation>
     </message>
 </context>
 <context>
@@ -2658,17 +2663,17 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal dator</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärrdator</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
         <source>Session error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionsfel: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="58"/>
@@ -2677,78 +2682,78 @@ Password: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="410"/>
         <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="63"/>
         <location filename="../client/android/file_transfer_window.cc" line="76"/>
         <source>This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Den här enheten</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="220"/>
         <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>För att bläddra bland filer på den här enheten, tillåt åtkomst till alla filer på nästa skärm.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="221"/>
         <source>Allow</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="142"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till värden %1...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="153"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen till värden har brutits.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="270"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna routern är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid begäran om anslutning via routern.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdversionen är nyare än klientens. Uppdatera programmet.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns ingen inloggad användare på värden. Sessionen är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="256"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="281"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="306"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Begär anslutning till värden...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="411"/>
         <source>Open a destination folder on the other side first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna först en målmapp på den andra sidan.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="464"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar bort</translation>
     </message>
 </context>
 <context>
@@ -2756,104 +2761,104 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
-        <translation type="unfinished"></translation>
+        <translation>kB</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n sekund</numerusform>
+            <numerusform>%n sekunder</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n minut</numerusform>
+            <numerusform>%n minuter</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n timme</numerusform>
+            <numerusform>%n timmar</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n dag</numerusform>
+            <numerusform>%n dagar</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>TB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>GB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>MB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>kB/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation>B/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbit/s</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation type="unfinished"></translation>
+        <translation>bit/s</translation>
     </message>
 </context>
 <context>
@@ -2861,17 +2866,17 @@ Password: %2</source>
     <message>
         <location filename="../base/gui_application.cc" line="493"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Mörkt</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="495"/>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljust</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="496"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
 </context>
 <context>
@@ -2880,7 +2885,7 @@ Password: %2</source>
         <location filename="../host/main.cc" line="607"/>
         <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningslagringen är inte tillgänglig.</translation>
     </message>
 </context>
 <context>
@@ -2888,37 +2893,37 @@ Password: %2</source>
     <message>
         <location filename="../host/main.cc" line="533"/>
         <source>Launch the application hidden.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta programmet dolt.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="535"/>
         <source>Export parameters to file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera parametrar till fil.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="537"/>
         <source>Import parameters from file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera parametrar från fil.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="539"/>
         <source>Do not display any messages during import and export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa inga meddelanden under import och export.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="541"/>
         <source>Calling the update check dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnar dialogrutan för uppdateringskontroll.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="543"/>
         <source>Calling the settings dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnar inställningsdialogen.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="545"/>
         <source>Calling the security log dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnar dialogrutan för säkerhetsloggen.</translation>
     </message>
 </context>
 <context>
@@ -2927,13 +2932,13 @@ Password: %2</source>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -2944,196 +2949,196 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="818"/>
         <location filename="../host/ui/host_window.cc" line="1087"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Ditt ID</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="98"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
         <location filename="../host/ui/host_window.cc" line="515"/>
         <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Router is disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern är inaktiverad</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="252"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="261"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="271"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="275"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="280"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="293"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Avsluta</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="298"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Onlinehjälp...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="306"/>
         <source>About System</source>
-        <translation type="unfinished"></translation>
+        <translation>Om systemet</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="311"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="316"/>
         <source>Security Log...</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetslogg...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="321"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="326"/>
         <location filename="../host/ui/host_window.cc" line="781"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Dölj</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="337"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="348"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbordsvy</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="370"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="381"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="392"/>
         <source>Text Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Textchatt</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="397"/>
         <source>Show chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa chatt</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="282"/>
         <location filename="../host/ui/host_window.cc" line="776"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="465"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Inte tillgänglig</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="519"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern %1...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="523"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten till routern %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="527"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ansluta till routern %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording has started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skärminspelningen har startat.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="574"/>
         <source>Screen recording stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skärminspelningen har stoppats.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="765"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningslagringen är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om du avslutar Aspia går det inte att ansluta till den här datorn förrän du startar datorn eller Aspia manuellt igen. Vill du verkligen avsluta programmet?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1002"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1007"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten till router</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1012"/>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningsfel</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1084"/>
         <source>IP addresses:</source>
-        <translation type="unfinished"></translation>
+        <translation>IP-adresser:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ID: %1</translation>
     </message>
 </context>
 <context>
@@ -3141,78 +3146,78 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Överordnad grupp:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="84"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet får inte vara tomt.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
+            <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
+            <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>En grupp med detta namn finns redan i den valda överordnade gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att lägga till gruppen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ändra gruppen</translation>
     </message>
 </context>
 <context>
@@ -3220,48 +3225,48 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="50"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="59"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="62"/>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="134"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="149"/>
         <source>Failed to save the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara gruppen.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="159"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort grupp</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort gruppen "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort gruppen.</translation>
     </message>
 </context>
 <context>
@@ -3269,68 +3274,68 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="50"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="60"/>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="65"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändrad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="70"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="75"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusuppdatering...</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="423"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n underordnad grupp</numerusform>
+            <numerusform>%n underordnade grupper</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="425"/>
         <source>%n child host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n underordnad värd</numerusform>
+            <numerusform>%n underordnade värdar</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3338,139 +3343,139 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupp:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
         <source>Router:</source>
-        <translation type="unfinished"></translation>
+        <translation>Router:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Utan router</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;borttagen router&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet får inte vara tomt.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
+            <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>En ogiltig värdadress angavs.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett ogiltigt värd-ID angavs.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
+            <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>En värd med detta namn finns redan i den valda gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att lägga till värden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ändra värden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdnamn eller IP-adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Värd-ID</translation>
     </message>
 </context>
 <context>
@@ -3478,94 +3483,94 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="60"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="61"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="62"/>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="74"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="77"/>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="163"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Utan router</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="185"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="197"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>En ogiltig värdadress angavs.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett ogiltigt värd-ID angavs.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
         <source>Failed to save the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara värden.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="245"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort värd</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort värden "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
         <source>Failed to delete the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort värden.</translation>
     </message>
 </context>
 <context>
@@ -3574,13 +3579,13 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="274"/>
         <location filename="../client/android/local_widget.cc" line="369"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till grupp</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="275"/>
         <location filename="../client/android/local_widget.cc" line="379"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till värd</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="276"/>
@@ -3590,114 +3595,114 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="277"/>
         <location filename="../client/android/local_widget.cc" line="352"/>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera adressbok</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Address book (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbok (*.json)</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Imported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Importerade %n router, </numerusform>
+            <numerusform>Importerade %n routrar, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="314"/>
         <location filename="../client/android/local_widget.cc" line="354"/>
         <source>%n group(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n grupp, </numerusform>
+            <numerusform>%n grupper, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="315"/>
         <location filename="../client/android/local_widget.cc" line="355"/>
         <source>%n host(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n värd.</numerusform>
+            <numerusform>%n värdar.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="319"/>
         <source>Invalid password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt lösenord.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="324"/>
         <source>The file was created by a newer version and cannot be imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen skapades av en nyare version och kan inte importeras.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <source>The address book is already up to date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken är redan uppdaterad.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att importera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera adressbok</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="353"/>
         <source>Exported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Exporterade %n router, </numerusform>
+            <numerusform>Exporterade %n routrar, </numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att exportera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="443"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera grupp</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera värd</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="545"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="547"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="549"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatt</translation>
     </message>
 </context>
 <context>
@@ -3705,134 +3710,134 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/main_window.ui" line="88"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="117"/>
         <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Tool Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Verktygsfält</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="144"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="187"/>
         <source>Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusfält</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="76"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="171"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Avsluta</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="141"/>
         <source>Online Help...</source>
-        <translation type="unfinished"></translation>
+        <translation>Onlinehjälp...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
         <location filename="../client/desktop/main_window.cc" line="357"/>
         <source>Aspia Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Client</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="68"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkiv</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="83"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="100"/>
         <source>Session Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionstyp</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtgärder</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="153"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="162"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="195"/>
         <source>Search Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökfält</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="203"/>
         <source>Large icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Stora ikoner</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="211"/>
         <source>Open Sessions in Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna sessioner i flikar</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="219"/>
         <source>Always on Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Alltid överst</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="95"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="169"/>
         <source>Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Hantering</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig länk "%1".</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern som länken hänvisar till hittades inte i adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="267"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden som länken hänvisar till hittades inte i adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="275"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern som är kopplad till den här värden har tagits bort. Redigera värden för att välja en annan router eller växla till direktanslutning.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="455"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning via ID är angiven i värdens egenskaper, men routern är inte konfigurerad. Kontrollera routerns parametrar i adressbokens egenskaper.</translation>
     </message>
 </context>
 <context>
@@ -3840,62 +3845,62 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="56"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="65"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="74"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till router</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera router</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort router</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Clear Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Rensa händelser</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="146"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värd</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -3903,131 +3908,131 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.ui" line="215"/>
         <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="182"/>
         <location filename="../client/desktop/management_tab.ui" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="194"/>
         <location filename="../client/desktop/management_tab.ui" line="236"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatt</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="206"/>
         <location filename="../client/desktop/management_tab.ui" line="245"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="257"/>
         <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till arbetsyta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera arbetsyta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort arbetsyta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till användare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera användare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort användare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Disconnect All</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="356"/>
         <source>Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdateringar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
         <source>Approve</source>
-        <translation type="unfinished"></translation>
+        <translation>Godkänn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="377"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation>Läs in igen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="389"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>Import Old Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera gammal adressbok...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Export Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera adressbok...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Import Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera adressbok...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera status automatiskt</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="968"/>
         <source>(copy)</source>
-        <translation type="unfinished"></translation>
+        <translation>(kopia)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="685"/>
@@ -4037,101 +4042,101 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.cc" line="964"/>
         <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta värdinformation från den lokala databasen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="973"/>
         <source>Failed to add the host to the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att lägga till värden i den lokala databasen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort värden "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
         <source>Unable to remove host</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ta bort värden</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1147"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1080"/>
         <location filename="../client/desktop/management_tab.cc" line="1123"/>
         <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort arbetsytan "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort gruppen "%1"? Värdar som tillhör denna grupp eller dess undergrupper flyttas till arbetsytans rot.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Import Old Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera gammal adressbok</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1422"/>
         <source>Address Book (*.aab);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbok (*.aab);;Alla filer (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1445"/>
         <location filename="../client/desktop/management_tab.cc" line="1462"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera adressbok</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Address Book (*.json);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbok (*.json);;Alla filer (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Address book database is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressbokens databas är inte tillgänglig.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1464"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett lösenord för att kryptera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management_tab.cc" line="1470"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1473"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att exportera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1495"/>
@@ -4139,42 +4144,45 @@ Password: %2</source>
 Routers exported: %1
 Groups exported: %2
 Hosts exported: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporten slutfördes.
+Exporterade routrar: %1
+Exporterade grupper: %2
+Exporterade värdar: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera adressbok</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1527"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1529"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken är krypterad. För att öppna den måste du ange ett lösenord.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1544"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att dekryptera filen med det angivna lösenordet.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Unsupported file format version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filformatversionen stöds inte.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget importerades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>The file is not a valid address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen är inte en giltig adressbok.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1561"/>
@@ -4185,32 +4193,38 @@ Groups added: %3
 Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
-        <translation type="unfinished"></translation>
+        <translation>Importen slutfördes.
+Tillagda routrar: %1
+Överhoppade routrar: %2
+Tillagda grupper: %3
+Överhoppade grupper: %4
+Tillagda värdar: %5
+Överhoppade värdar: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1909"/>
         <source>Copy Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera länk</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1939"/>
         <source>Unable to create a link for this host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skapa en länk för den här värden.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1956"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern som är kopplad till den här värden har tagits bort. Redigera värden för att välja en annan router eller växla till direktanslutning.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden har ett ogiltigt värd-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1972"/>
         <source>The host has an incorrect address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden har en felaktig adress.</translation>
     </message>
 </context>
 <context>
@@ -4218,109 +4232,109 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett huvudlösenord som krävs för att låsa upp programmet.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
         <location filename="../client/android/master_password_dialog.cc" line="192"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange huvudlösenordet.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ditt aktuella lösenord och välj ett nytt.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuellt lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräfta lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="129"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt huvudlösenord.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="149"/>
         <source>The entered passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>De angivna lösenorden stämmer inte överens.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="159"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ange huvudlösenordet.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt aktuellt lösenord eller så kan det inte ändras.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="210"/>
         <location filename="../client/android/master_password_dialog.cc" line="218"/>
         <source>Biometric unlock failed. Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrisk upplåsning misslyckades. Ange huvudlösenordet.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometrin har ändrats. Ange huvudlösenordet för att fortsätta.</translation>
     </message>
 </context>
 <context>
@@ -4328,107 +4342,107 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="49"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="50"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkställ</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Förkasta</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjälp</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Försök igen</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorera</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ standardvärden</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara alla</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja till alla</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej till alla</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="91"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräftelse</translation>
     </message>
 </context>
 <context>
@@ -4436,7 +4450,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/workers/network_worker.cc" line="370"/>
         <source>Failed to connect to the relay server</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ansluta till reläservern</translation>
     </message>
 </context>
 <context>
@@ -4445,49 +4459,49 @@ Hosts skipped: %6</source>
         <location filename="../host/ui/notifier_window.ui" line="345"/>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="371"/>
         <source>Disconnect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från alla</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="293"/>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Lock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås mus</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.ui" line="319"/>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Lock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås tangentbord</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp mus</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp tangentbord</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Återuppta</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host</translation>
     </message>
 </context>
 <context>
@@ -4496,83 +4510,83 @@ Hosts skipped: %6</source>
         <location filename="../client/android/password_dialog.cc" line="37"/>
         <location filename="../host/android/password_dialog.cc" line="89"/>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="38"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett lösenord för att kryptera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
         <source>Enter the password to decrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange lösenordet för att dekryptera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
         <location filename="../host/android/password_dialog.cc" line="54"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="59"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräfta lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="64"/>
         <location filename="../host/android/password_dialog.cc" line="62"/>
         <location filename="../host/android/password_dialog.cc" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="65"/>
         <location filename="../host/android/password_dialog.cc" line="63"/>
         <location filename="../host/android/password_dialog.cc" line="106"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="85"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="92"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden stämmer inte överens.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="74"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du angav ett felaktigt lösenord.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="92"/>
         <source>New password</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt lösenord</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="96"/>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation>Upprepa lösenord</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="115"/>
         <source>The password can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="123"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden du angav stämmer inte överens.</translation>
     </message>
 </context>
 <context>
@@ -4580,73 +4594,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Granska systemåtkomst</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Host behöver din behörighet för att komma åt systemfunktioner.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Granska behörigheterna nedan och bevilja dem som saknas.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Skärminspelning</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Krävs för att en fjärranvändare ska kunna se den här skärmen.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
-        <translation type="unfinished"></translation>
+        <translation>Begär åtkomst...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgänglighet</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Krävs för att en fjärranvändare ska kunna styra mus och tangentbord.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullständig diskåtkomst</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation type="unfinished"></translation>
+        <translation>Krävs för att överföra filer från skyddade mappar.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna inställningar...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna inställningar...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
-        <translation type="unfinished"></translation>
+        <translation>Beviljad</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Nekad</translation>
     </message>
 </context>
 <context>
@@ -4654,12 +4668,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="89"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminaktiva processer</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd process</translation>
     </message>
 </context>
 <context>
@@ -4667,12 +4681,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -4680,22 +4694,22 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/remote_widget.cc" line="469"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ej godkända värdar</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="635"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="637"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="639"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatt</translation>
     </message>
 </context>
 <context>
@@ -4703,89 +4717,89 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP-adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="58"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningstid</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="63"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="68"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara fil</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="267"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för skrivning.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="303"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från klienten "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
         <source>Are you sure you want to disconnect all clients?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från alla klienter?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="436"/>
         <source>Invalid client request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig klientbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="438"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt post-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="497"/>
         <source>%n client(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n klient</numerusform>
+            <numerusform>%n klienter</numerusform>
         </translation>
     </message>
 </context>
@@ -4794,78 +4808,78 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="14"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="25"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="35"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdnamn eller IP-adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="42"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="52"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett namn eller lämna fältet tomt</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomstnivå:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="83"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="45"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratör</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Förvaltare</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Klient</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>En ogiltig routeradress angavs.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="108"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, .</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="142"/>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara routern.</translation>
     </message>
 </context>
 <context>
@@ -4873,68 +4887,68 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="71"/>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="150"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>En ogiltig routeradress angavs.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="188"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara routern.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="198"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort router</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort routern "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
         <source>Failed to delete the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort routern.</translation>
     </message>
 </context>
 <context>
@@ -4942,73 +4956,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Överordnad grupp:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig gruppbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="125"/>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst nekad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppen hittades inte.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppnamnet får inte vara tomt.</translation>
     </message>
 </context>
 <context>
@@ -5016,69 +5030,69 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Värd-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="60"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="70"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="75"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="80"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="85"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="90"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="95"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Senast ändrad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="100"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n värd</numerusform>
+            <numerusform>%n värdar</numerusform>
         </translation>
     </message>
 </context>
@@ -5087,57 +5101,57 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdegenskaper</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupp:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="106"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst nekad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="108"/>
         <source>Host not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden hittades inte.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="110"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="112"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="114"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
 </context>
 <context>
@@ -5145,165 +5159,165 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Värd-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="58"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="63"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="68"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="78"/>
         <source>Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsyta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="83"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="93"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="98"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="103"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Senast ändrad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="108"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="118"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="121"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="135"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="138"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="149"/>
         <source>Items per page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Objekt per sida:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden är inte tilldelad någon arbetsyta.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från värden "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från alla värdar?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekräftelse</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om värden tas bort raderas hela dess konfiguration för anslutning till routern, och programmet avinstalleras på värden. Åtgärden kan inte ångras. Är du säker på att du vill göra detta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig värdbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt post-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n värd</numerusform>
+            <numerusform>%n värdar</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara fil</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för skrivning.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
 </context>
 <context>
@@ -5311,164 +5325,157 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="63"/>
         <source>Connect Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningstid</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="68"/>
         <source>Pool Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Poolstorlek</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="73"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="78"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="83"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="88"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="113"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Värd-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
         <source>Host Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdadress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="128"/>
         <source>Client Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientadress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="133"/>
         <source>Transferred</source>
-        <translation type="unfinished"></translation>
+        <translation>Överfört</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="138"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Varaktighet</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="143"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiv</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara fil</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-filer (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte öppna filen för skrivning.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="414"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från reläet "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från alla reläer?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="527"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="529"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="530"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill koppla från peer "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
         <source>Invalid relay request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig reläbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="663"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="686"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt post-ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="688"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="684"/>
         <source>Relay session not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reläsessionen hittades inte.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="768"/>
         <source>%n relay(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n relä</numerusform>
+            <numerusform>%n reläer</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterStatusDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Fechar</translation>
     </message>
 </context>
 <context>
@@ -5476,19 +5483,19 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
         <source>Date and time</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum och tid</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="53"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelse</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_status_widget.cc" line="155"/>
         <source>%n event(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n händelse</numerusform>
+            <numerusform>%n händelser</numerusform>
         </translation>
     </message>
 </context>
@@ -5497,32 +5504,32 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="203"/>
         <source>Failed to approve the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att godkänna värden.</translation>
     </message>
 </context>
 <context>
@@ -5530,205 +5537,205 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaregenskaper</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="44"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="51"/>
         <source>Password (retry):</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord (upprepa):</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomstnivå:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera användarkonto</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ tvåfaktorsautentisering</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessioner</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>Inloggad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste aktivitet</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Logga ut</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
-        <translation type="unfinished"></translation>
+        <translation>Logga ut alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig användarbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="184"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="240"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>En användare med det angivna namnet finns redan.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="190"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren hittades inte. Listan kan vara inaktuell.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om tvåfaktorsautentiseringen återställs loggas användaren ut från alla sessioner och måste registrera sig igen vid nästa inloggning. Fortsätta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill logga ut den här användaren från den här sessionen?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill logga ut den här användaren från alla sessioner?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionen hittades inte. Listan kan vara inaktuell.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig utloggningsbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet du angav finns redan.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden du angav stämmer inte överens.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel när en användare skapades eller ändrades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbelklicka för att ändra</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratör</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Förvaltare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="572"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Klient</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="590"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldrig</translation>
     </message>
 </context>
 <context>
@@ -5736,64 +5743,64 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiverad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="61"/>
         <source>Session Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionstyper</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>You cannot delete a built-in user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan inte ta bort en inbyggd användare.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort användaren "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig användarbegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="376"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="378"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="380"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>En användare med det angivna namnet finns redan.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="382"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren hittades inte. Listan kan vara inaktuell.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n användare</numerusform>
+            <numerusform>%n användare</numerusform>
         </translation>
     </message>
 </context>
@@ -5802,132 +5809,134 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsytans egenskaper</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtkomst</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Users with access</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare med åtkomst</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="87"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="160"/>
         <source>&lt; Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; Lägg till</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="90"/>
         <source>Grant access to the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Ge den valda användaren åtkomst</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="97"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="170"/>
         <source>Remove &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort &gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="100"/>
         <source>Revoke access from the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Återkalla åtkomst för den valda användaren</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="118"/>
         <source>Available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgängliga användare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="131"/>
         <source>Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="139"/>
         <source>Hosts in workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdar i arbetsytan</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="163"/>
         <source>Move the selected host into the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytta den valda värden till arbetsytan</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="173"/>
         <source>Remove the selected host from the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort den valda värden från arbetsytan</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <source>Unassigned hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Otilldelade värdar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="214"/>
         <source>Workspace name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsytans namn får inte vara tomt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="224"/>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="298"/>
         <source>A workspace with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>En arbetsyta med det angivna namnet finns redan.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="292"/>
         <source>Invalid workspace request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig arbetsytebegäran.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="294"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="296"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="300"/>
         <source>Workspace not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsytan hittades inte.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="302"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="332"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratörer kan inte tas bort från arbetsytans åtkomstlista.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="367"/>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om värden tas bort från arbetsytan rensas dess krypterade fält (kommentar, användarnamn och lösenord) permanent. Åtgärden kan inte ångras.
+
+Är du säker på att du vill fortsätta?</translation>
     </message>
 </context>
 <context>
@@ -5935,42 +5944,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/routers_widget.cc" line="123"/>
         <source>No routers added</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga routrar har lagts till</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="198"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till router</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="235"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera router</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="330"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern %1...</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="335"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning till routern %1 upprättad.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="340"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frånkopplad från routern %1.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="356"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverksfel: %1</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern kräver ett lösenordsbyte, vilket inte stöds här ännu.</translation>
     </message>
 </context>
 <context>
@@ -5978,12 +5987,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök...</translation>
     </message>
 </context>
 <context>
@@ -5991,35 +6000,35 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Address / ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupp</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="530"/>
         <source>%n result(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n resultat</numerusform>
+            <numerusform>%n resultat</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/search_widget.cc" line="175"/>
         <source>Nothing found</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget hittades</translation>
     </message>
 </context>
 <context>
@@ -6027,47 +6036,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="14"/>
         <source>Security Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetslogg</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="34"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="57"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="83"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök...</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="97"/>
         <source>Events:</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelser:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="238"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna katalog</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="352"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="353"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelse</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="354"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaljer</translation>
     </message>
 </context>
 <context>
@@ -6075,12 +6084,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärm %1 (primär)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärm %1</translation>
     </message>
 </context>
 <context>
@@ -6088,68 +6097,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Återupptas</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausas</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="197"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Körs</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppas</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="205"/>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="225"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="215"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk start</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="217"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell start</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="219"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="221"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Start vid uppstart</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="223"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemstart</translation>
     </message>
 </context>
 <context>
@@ -6157,27 +6166,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="39"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatt</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="45"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminal</translation>
     </message>
 </context>
 <context>
@@ -6185,226 +6194,226 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="119"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Gränssnitt</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="125"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="135"/>
         <source>Theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="145"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn vid anslutning:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ett namn eller lämna fältet tomt</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-anslutningar</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="171"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt direktanslutningar</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt UDP hole punching</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt PCP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="192"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt NAT-PMP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="199"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt UPnP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="209"/>
         <source>Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="291"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funktioner</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="297"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera ljud</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="304"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera urklipp</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="311"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa fjärrmarkörens form</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="318"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa fjärrmarkörens position</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="325"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera skrivbordseffekter</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="332"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera skrivbordsbakgrund</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="339"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås datorn vid frånkoppling</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Blockera fjärrinmatning</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="353"/>
         <source>Send key combinations</source>
-        <translation type="unfinished"></translation>
+        <translation>Skicka tangentkombinationer</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Skärm</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="377"/>
         <source>Preferred resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Önskad upplösning:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="405"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspelning</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="411"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta inspelning av sessioner automatiskt vid anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Write path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivsökväg:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="514"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdateringar vid start</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="521"/>
         <source>Use custom update server</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd anpassad uppdateringsserver</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="530"/>
         <source>Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdateringar</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="126"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmänt</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det nya språket tillämpas när programmet har startats om.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="411"/>
         <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj sökväg</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="431"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="433"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ditt aktuella lösenord och välj ett nytt.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="442"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="445"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="454"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltigt aktuellt lösenord eller så kan det inte ändras.</translation>
     </message>
 </context>
 <context>
@@ -6412,74 +6421,74 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="272"/>
         <source>The configuration was successfully imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationen har importerats.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="321"/>
         <source>The configuration was successfully exported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationen har exporterats.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="331"/>
         <location filename="../host/settings_util.cc" line="335"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="238"/>
         <source>Unable to open the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att öppna källfilen.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="250"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att läsa källfilen: filen är skadad eller har ett okänt format.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="267"/>
         <source>Unable to write the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva den säkra databasen.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="287"/>
         <source>Unable to read the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att läsa den säkra databasen.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="308"/>
         <source>Unable to open the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att öppna målfilen.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="316"/>
         <source>Unable to write the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva målfilen.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsätt</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="348"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="359"/>
         <source>Aspia</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="229"/>
         <source>Source settings file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Källinställningsfilen finns inte.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <location filename="../host/settings_util.cc" line="336"/>
         <source>The existing settings will be overwritten. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>De befintliga inställningarna kommer att skrivas över. Fortsätta?</translation>
     </message>
 </context>
 <context>
@@ -6488,217 +6497,217 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/settings_widget.cc" line="107"/>
         <location filename="../host/android/settings_widget.cc" line="144"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="158"/>
         <location filename="../host/android/settings_widget.cc" line="214"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Gränssnitt</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
         <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn vid anslutning</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="186"/>
         <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhet</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="188"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt huvudlösenord</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>Unlock with biometrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås upp med biometri</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="225"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurera ett fingeravtryck i systeminställningarna för att använda detta.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="227"/>
         <source>Biometrics are not available on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biometri är inte tillgängligt på den här enheten.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="238"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP-anslutningar</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="252"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt direktanslutningar</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="253"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt UDP hole punching</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt PCP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="255"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt NAT-PMP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="256"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåt UPnP-protokoll</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="262"/>
         <source>Remote Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärrskrivbord</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="264"/>
         <source>Enable audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera ljud</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="269"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera urklipp</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="274"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa fjärrmarkörens form</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="280"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa fjärrmarkörens position</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="286"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera skrivbordseffekter</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="292"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera skrivbordsbakgrund</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås datorn vid frånkoppling</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="304"/>
         <source>Block remote input</source>
-        <translation type="unfinished"></translation>
+        <translation>Blockera fjärrinmatning</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Enable biometric unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera biometrisk upplåsning</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="332"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera användare</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till användare</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Manage users</source>
-        <translation type="unfinished"></translation>
+        <translation>Hantera användare</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="245"/>
         <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="249"/>
         <source>Disable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera lösenordsskydd</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Enable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera lösenordsskydd</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Router</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="278"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera användning av router</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="289"/>
         <source>Public Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Offentlig nyckel</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href="https://aspia.org"&gt;officiella webbplatsen&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid bearbetning av lösenordet.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importera</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-filer (*.json)</translation>
     </message>
 </context>
 <context>
@@ -6706,130 +6715,130 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="74"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluter till routern %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutning till routern %1 upprättad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frånkopplad från routern %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="unfinished"></translation>
+        <translation>För att slutföra migreringen från en tidigare version måste du byta lösenord.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="474"/>
         <source>Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt lösenord</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet har uppdaterats. Väntar på nya krypteringsnycklar...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig begäran om lösenordsbyte.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelsehistoriken har rensats.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort gruppen "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att ta bort gruppen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Är du säker på att du vill ta bort routern "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverksfel: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>En grupp med detta namn finns redan i den valda överordnade gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1431"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att flytta gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>En värd med detta namn finns redan i den valda gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1502"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att flytta värden till den valda gruppen.</translation>
     </message>
 </context>
 <context>
@@ -6837,7 +6846,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>Klienter</translation>
     </message>
 </context>
 <context>
@@ -6845,7 +6854,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Godkända värdar</translation>
     </message>
 </context>
 <context>
@@ -6853,7 +6862,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
-        <translation type="unfinished"></translation>
+        <translation>Reläer</translation>
     </message>
 </context>
 <context>
@@ -6861,7 +6870,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ej godkända värdar</translation>
     </message>
 </context>
 <context>
@@ -6869,7 +6878,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="159"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
 </context>
 <context>
@@ -6878,22 +6887,22 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
         <location filename="../client/android/statistics_dialog.cc" line="175"/>
         <source>Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistik</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../client/android/statistics_dialog.cc" line="208"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -6901,7 +6910,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/status_dialog.ui" line="14"/>
         <source>Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningsstatus</translation>
     </message>
 </context>
 <context>
@@ -6909,32 +6918,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="53"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgivare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök på Google</translation>
     </message>
 </context>
 <context>
@@ -6942,47 +6951,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="48"/>
         <source>Process Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Processnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="53"/>
         <source>Protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokoll</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="58"/>
         <source>Local Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal adress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="63"/>
         <source>Local Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal port</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="68"/>
         <source>Remote Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärradress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="73"/>
         <source>Remote Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärrport</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="78"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_connections.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -6990,27 +6999,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7018,32 +7027,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
         <source>Driver Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutinstillverkare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhets-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök på Google</translation>
     </message>
 </context>
 <context>
@@ -7051,32 +7060,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7084,42 +7093,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="73"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Körbar fil</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="81"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7127,27 +7136,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7155,27 +7164,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="50"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="58"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="63"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_env_vars.ui" line="68"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7183,63 +7192,63 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="135"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nivå</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="130"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>Första</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>Sista</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelsetyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelse-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Källa</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="150"/>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="177"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="195"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="200"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7247,27 +7256,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7275,22 +7284,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7298,27 +7307,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7326,27 +7335,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7354,27 +7363,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7382,27 +7391,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7410,27 +7419,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="53"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="58"/>
         <source>Lock Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal lås</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="48"/>
         <source>File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Filsökväg</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="66"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_open_files.ui" line="71"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7438,27 +7447,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="42"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="47"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="55"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="60"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.ui" line="65"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7466,27 +7475,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7494,47 +7503,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessions-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökväg</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7542,32 +7551,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="48"/>
         <source>Destonation</source>
-        <translation type="unfinished"></translation>
+        <translation>Mål</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="53"/>
         <source>Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>Mask</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="58"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="63"/>
         <source>Metric</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrik</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="71"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_routes.ui" line="76"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7575,47 +7584,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="48"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="53"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="58"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="63"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="68"/>
         <source>Startup Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="73"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Konto</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="78"/>
         <source>Executable File</source>
-        <translation type="unfinished"></translation>
+        <translation>Körbar fil</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="86"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.ui" line="91"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7623,32 +7632,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
         <source>Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Disk</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7656,27 +7665,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7684,27 +7693,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera rad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera värde</translation>
     </message>
 </context>
 <context>
@@ -7712,202 +7721,202 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv ut (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera (F5)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML-fil</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML-fil (*.html)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="351"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara filen: %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="376"/>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Översikt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
         <source>Hardware</source>
-        <translation type="unfinished"></translation>
+        <translation>Maskinvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
         <source>DMI</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="389"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="392"/>
         <source>Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Enheter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="395"/>
         <source>Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Diskar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>S.M.A.R.T.</source>
-        <translation type="unfinished"></translation>
+        <translation>S.M.A.R.T.</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="401"/>
         <source>Video Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafikkort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="404"/>
         <source>Monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärmar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="407"/>
         <source>Printers</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="410"/>
         <source>Power Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Energialternativ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Drivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutiner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="436"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjänster</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="439"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Processer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="442"/>
         <source>Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Licenser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="455"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverk</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="458"/>
         <source>Network Adapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverkskort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="461"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rutter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="464"/>
         <source>Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="467"/>
         <source>Network Shares</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätverksresurser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="470"/>
         <source>Open Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna filer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
         <source>Environment Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>Miljövariabler</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
         <source>Event Logs</source>
-        <translation type="unfinished"></translation>
+        <translation>Händelseloggar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Användargrupper</translation>
     </message>
 </context>
 <context>
@@ -7915,133 +7924,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
         <source>Processor Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Processoregenskaper</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacheminnen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
         <source>Instruction Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Instruktionsuppsättning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Security Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetsfunktioner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Power Management Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Energisparfunktioner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Virtualization Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Virtualiseringsfunktioner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Other Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Övriga funktioner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Physical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Fysiska kärnor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Logical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Logiska kärnor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Data Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-datacache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Instruction Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-instruktionscache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-cache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Associativitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <source>Fully associative</source>
-        <translation type="unfinished"></translation>
+        <translation>Helt associativ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1-way</source>
-        <translation type="unfinished"></translation>
+        <translation>%1-vägs</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Line Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Radstorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 byte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppsättningar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>Shared By</source>
-        <translation type="unfinished"></translation>
+        <translation>Delas av</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>%1 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 trådar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
 </context>
 <context>
@@ -8050,144 +8059,144 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Moderkort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
         <source>Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Chassi</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
         <source>Processors</source>
-        <translation type="unfinished"></translation>
+        <translation>Processorer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacheminnen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
         <source>Port Connectors</source>
-        <translation type="unfinished"></translation>
+        <translation>Portkontakter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
         <source>System Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemkortplatser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
         <source>On-board Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Inbyggda enheter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>OEM-strängar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurationsalternativ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
         <source>Memory Arrays</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesmatriser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
         <source>Memory Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesenheter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
         <source>Memory Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesfel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
         <source>Memory Array Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesmatrisadresser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
         <source>Memory Device Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesenhetsadresser</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
         <source>Voltage Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spänningssensorer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
         <source>Cooling Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Kylenheter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
         <source>Temperature Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatursensorer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
         <source>Current Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Strömsensorer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemstart</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
         <source>Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Ytterligare information</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
         <source>TPM Device</source>
-        <translation type="unfinished"></translation>
+        <translation>TPM-enhet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
         <source>Processor Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Ytterligare processorinformation</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
         <source>Firmware Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventering av inbyggd programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Övrigt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI-egenskaper</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Leverantör</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
@@ -8196,45 +8205,45 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgivningsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
-        <translation type="unfinished"></translation>
+        <translation>ROM-storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Revision</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Revision av inbyggd programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
-        <translation type="unfinished"></translation>
+        <translation>Egenskaper</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kort %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
@@ -8243,12 +8252,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
@@ -8256,7 +8265,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Serienummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
@@ -8264,12 +8273,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventarienummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Plats i chassit</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
@@ -8282,12 +8291,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdkort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8318,7 +8327,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8351,236 +8360,236 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Kräver dotterkort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Löstagbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
-        <translation type="unfinished"></translation>
+        <translation>Utbytbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
-        <translation type="unfinished"></translation>
+        <translation>Utbytbar under drift</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funktioner</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Chassi %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
-        <translation type="unfinished"></translation>
+        <translation>Lås finns</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
-        <translation type="unfinished"></translation>
+        <translation>SKU-nummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppstartstillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
-        <translation type="unfinished"></translation>
+        <translation>Strömförsörjningens tillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
-        <translation type="unfinished"></translation>
+        <translation>Termiskt tillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetsstatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Höjd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätsladdar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Installerat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Familj</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockelbeteckning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockeltyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Spänning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Extern klocka</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Maxhastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell hastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal kärnor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiverade kärnor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal trådar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiverade trådar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Artikelnummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
-        <translation type="unfinished"></translation>
+        <translation>64-bitarsstöd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
-        <translation type="unfinished"></translation>
+        <translation>Flerkärnig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
-        <translation type="unfinished"></translation>
+        <translation>Maskinvarutråd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Körningsskydd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
-        <translation type="unfinished"></translation>
+        <translation>Utökad virtualisering</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ström-/prestandakontroll</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>L%1-cache</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nivå</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Installerad storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
@@ -8588,150 +8597,150 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Plats</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Driftläge</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
-        <translation type="unfinished"></translation>
+        <translation>SRAM-typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
-        <translation type="unfinished"></translation>
+        <translation>SRAM-typer som stöds</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Felkorrigeringstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Associativitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ns</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiverad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
-        <translation type="unfinished"></translation>
+        <translation>Sockelmonterad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Port %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Porttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Intern beteckning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Intern kontakttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Extern beteckning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Extern kontakttyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kortplats %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Beteckning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Databussbredd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell användning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Längd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Bussadress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>5 V tillhandahålls</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>3,3 V tillhandahålls</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Delad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>PME-signal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningsbar under drift</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>SMBus-signal</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bifurkation</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
@@ -8739,7 +8748,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhet %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
@@ -8747,440 +8756,440 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
-        <translation type="unfinished"></translation>
+        <translation>Typinstans</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sträng %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternativ %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sensor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
-        <translation type="unfinished"></translation>
+        <translation>mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
-        <translation type="unfinished"></translation>
+        <translation>mA</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nominellt värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximalt värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolerans</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Upplösning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Noggrannhet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Kylenhetsgrupp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Nominell hastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 rpm</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Startstatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Matris %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Användning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Felkorrigering</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal kapacitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal enheter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>Typdetaljer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Formfaktor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Teknik</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurerad hastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Total bredd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bitar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Databredd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Rank</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta spänning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal spänning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurerad spänning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version av inbyggd programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Icke-flyktig storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyktig storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Cachestorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Logisk storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Post %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
-        <translation type="unfinished"></translation>
+        <translation>Granularitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
-        <translation type="unfinished"></translation>
+        <translation>Åtgärd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
-        <translation type="unfinished"></translation>
+        <translation>Leverantörssyndrom</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesmatrisadress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhetsadress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 byte</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervall %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
-        <translation type="unfinished"></translation>
+        <translation>Matris</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Startadress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutadress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitionsbredd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitionsradposition</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Interleave-position</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Interleave-datadjup</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Post %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
-        <translation type="unfinished"></translation>
+        <translation>Sträng</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
-        <translation type="unfinished"></translation>
+        <translation>Refererat handtag</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Refererad offset</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Leverantörs-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Specifikationsversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurerbar via inbyggd programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurerbar via programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurerbar via OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Inbyggd programvara %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionsformat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägsta version som stöds</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
-        <translation type="unfinished"></translation>
+        <translation>ID-format</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbildningsstorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdaterbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivskyddad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponent %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Associerade komponenter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
-        <translation type="unfinished"></translation>
+        <translation>SMBIOS-version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
-        <translation type="unfinished"></translation>
+        <translation>Strukturer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Strukturstorlek</translation>
     </message>
 </context>
 <context>
@@ -9188,68 +9197,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Återupptas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Körs</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk start</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell start</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Start vid uppstart</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemstart</translation>
     </message>
 </context>
 <context>
@@ -9257,77 +9266,77 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sökväg</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Serienummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Revision av inbyggd programvara</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Busstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Medietyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
-        <translation type="unfinished"></translation>
+        <translation>Solid state</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
-        <translation type="unfinished"></translation>
+        <translation>Roterande</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotationshastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 RPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Cachestorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyttbar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
 </context>
 <context>
@@ -9335,47 +9344,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyckad granskning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Misslyckad granskning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
 </context>
 <context>
@@ -9383,37 +9392,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Licenstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Licensversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
-        <translation type="unfinished"></translation>
+        <translation>Organisation</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Ägare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Produkt-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Produktnyckel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt fält</translation>
     </message>
 </context>
 <context>
@@ -9421,56 +9430,56 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullständigt namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hemkatalog</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet har upphört att gälla</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet upphör aldrig att gälla</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldrig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste inloggning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupper</translation>
     </message>
 </context>
 <context>
@@ -9478,103 +9487,103 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärmsnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkarens namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildskärms-ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Serienummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
-        <translation type="unfinished"></translation>
+        <translation>EDID-version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkningsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Vecka %1 / %2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamma</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildstorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1x%2 cm</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Diagonal storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Upplösning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Horisontell frekvens</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 kHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikal frekvens</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Pixelklocka</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal pixelklocka</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Insignalstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9584,7 +9593,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9594,37 +9603,37 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funktioner som stöds</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Videolägen som stöds</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
-        <translation type="unfinished"></translation>
+        <translation>Digital</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
-        <translation type="unfinished"></translation>
+        <translation>Analog</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
 </context>
 <context>
@@ -9632,67 +9641,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapternamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Gränssnittstyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningshastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation type="unfinished"></translation>
+        <translation>MAC-adress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP aktiverat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP-server #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
-        <translation type="unfinished"></translation>
+        <translation>DHCP-server</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway</translation>
     </message>
 </context>
 <context>
@@ -9700,32 +9709,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal sökväg</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuellt antal användningar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Obegränsat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximalt antal användningar</translation>
     </message>
 </context>
 <context>
@@ -9733,105 +9742,105 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Strömkälla</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Batteristatus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Batterinivå i procent</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Total batteritid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Återstående batteritid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhetsnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkningsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Unikt ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Serienummer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Designkapacitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mWh</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullt laddad kapacitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
-        <translation type="unfinished"></translation>
+        <translation>Försämring</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell kapacitet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Spänning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mV</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
-        <translation type="unfinished"></translation>
+        <translation>Laddar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
@@ -9839,64 +9848,64 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>Kritisk</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
-        <translation type="unfinished"></translation>
+        <translation>Laddar ur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätansluten</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillstånd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Batteri #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Batteri (DC)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nätström (AC)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Hög</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Låg</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>Inget batteri</translation>
     </message>
 </context>
 <context>
@@ -9904,44 +9913,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutin</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Delad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Resursnamn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal jobb</translation>
     </message>
 </context>
 <context>
@@ -9949,12 +9958,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminaktiva processer</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd process</translation>
     </message>
 </context>
 <context>
@@ -9962,68 +9971,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Återupptas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>Körs</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Startar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppas</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk start</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuell start</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Start vid uppstart</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemstart</translation>
     </message>
 </context>
 <context>
@@ -10031,214 +10040,214 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Attribut</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Värde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Worst</source>
-        <translation type="unfinished"></translation>
+        <translation>Sämsta</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Tröskelvärde</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <source>Raw</source>
-        <translation type="unfinished"></translation>
+        <translation>Rådata</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Health Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Hälsodata</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Inte tillgänglig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
         <source>OK. Always passed</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Alltid godkänd</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
         <source>OK. Value is normal</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Värdet är normalt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
         <source>Warning. Value is pre-failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning. Värdet indikerar begynnande fel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
         <source>Warning. Value is not normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning. Värdet är inte normalt</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
         <source>Unknown Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt attribut</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
         <source>Spare capacity is below the threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Reservkapaciteten är under tröskelvärdet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
         <source>Temperature is outside of the operating range</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperaturen är utanför driftintervallet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
         <source>Reliability is degraded</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillförlitligheten är försämrad</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
         <source>Media is in read-only mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mediet är i skrivskyddat läge</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
         <source>Volatile memory backup device failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Reservenheten för flyktigt minne har slutat fungera</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
         <source>Persistent memory region is unreliable</source>
-        <translation type="unfinished"></translation>
+        <translation>Beständig minnesregion är opålitlig</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
         <source>Critical Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Kritisk varning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
         <source>Temperature Sensor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatursensor %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <source>Available Spare</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgänglig reserv</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
         <source>Available Spare Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Tröskel för tillgänglig reserv</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>Percentage Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Använt i procent</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
         <source>Data Read</source>
-        <translation type="unfinished"></translation>
+        <translation>Lästa data</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
         <source>Data Written</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivna data</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
         <source>Host Read Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdens läskommandon</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
         <source>Host Write Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdens skrivkommandon</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
         <source>Controller Busy Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Styrenhetens upptagna tid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
         <source>Power Cycles</source>
-        <translation type="unfinished"></translation>
+        <translation>Strömcykler</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
         <source>Power-On Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Påslagen tid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
         <source>Unsafe Shutdowns</source>
-        <translation type="unfinished"></translation>
+        <translation>Osäkra avstängningar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
         <source>Media Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Mediefel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
         <source>Error Log Entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Felloggposter</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
         <source>Warning Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid med varningstemperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
         <source>Critical Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid med kritisk temperatur</translation>
     </message>
 </context>
 <context>
@@ -10247,168 +10256,168 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Domän</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsgrupp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
-        <translation type="unfinished"></translation>
+        <translation>Drifttid</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dator</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Routerversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-information</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
         <source>Architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
         <source>License Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Licensnyckel</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
         <source>Install Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Installationsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
         <source>Operating System</source>
-        <translation type="unfinished"></translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
         <source>Manufacturer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillverkare</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Motherboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Moderkort</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Leverantör</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
         <source>Packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Kärnor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Trådar</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
         <source>Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Installerat</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 ledigt)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Logiska enheter</translation>
     </message>
 </context>
 <context>
@@ -10416,133 +10425,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
-        <translation type="unfinished"></translation>
+        <translation>Adaptersträng</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS-sträng</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiptyp</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
-        <translation type="unfinished"></translation>
+        <translation>DAC-typ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Plats</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Bus %1, device %2, function %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Buss %1, enhet %2, funktion %3</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesstorlek</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
         <source>Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Använt minne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
         <source>Shared Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Storlek på delat minne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
         <source>Shared Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Använt delat minne</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
         <source>Memory Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Minnesfrekvens</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>%1 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MHz</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>Driver Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutinsmodell</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>WDDM %1.%2</source>
-        <translation type="unfinished"></translation>
+        <translation>WDDM %1.%2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
         <source>Maximum Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal temperatur</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <source>Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fläkthastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 RPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>Maximum Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal fläkthastighet</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
         <source>Power Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Energiförbrukning</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutinsdatum</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
         <source>Driver Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutinsversion</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
         <source>Driver Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Drivrutinsleverantör</translation>
     </message>
 </context>
 <context>
@@ -10551,7 +10560,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Systeminformation</translation>
     </message>
 </context>
 <context>
@@ -10559,198 +10568,198 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="37"/>
         <source>Processes</source>
-        <translation type="unfinished"></translation>
+        <translation>Processer</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="65"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="188"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
         <source>User Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="85"/>
         <source>CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Process-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivitetshanteraren</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessions-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="90"/>
         <source>Memory (private working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne (privat arbetsminne)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="98"/>
         <source>Memory (working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne (arbetsminne)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="106"/>
         <source>Memory (peak working set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne (högsta arbetsminne)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="114"/>
         <source>Memory (working set delta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minne (arbetsminnesdelta)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="122"/>
         <source>Threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Trådar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbildningssökväg</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="153"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="308"/>
         <source>End Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Avsluta aktivitet</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjänster</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
         <source>Startup type</source>
-        <translation type="unfinished"></translation>
+        <translation>Starttyp</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="203"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskrivning</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation type="unfinished"></translation>
+        <translation>Logga ut</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="318"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="365"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="193"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="247"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="336"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Hög</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="344"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Medel</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="352"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Låg</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="357"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="212"/>
         <source>Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="242"/>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="252"/>
         <source>Client name</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="257"/>
         <source>Session name</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessionsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="283"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="323"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koppla från</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du verkligen avsluta processen "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du verkligen koppla från sessionen för användaren "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du verkligen avsluta sessionen för användaren "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
         <source>Processes: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Processer: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="950"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU-belastning: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="956"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Fysiskt minne: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdateringshastighet</translation>
     </message>
 </context>
 <context>
@@ -10758,67 +10767,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="67"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brott mot kommunikationsprotokollet.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="71"/>
         <source>Wrong user name or password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel användarnamn eller lösenord.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="75"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Krypteringsfel (kryptering eller dekryptering av meddelande misslyckades).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="79"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna sessionstypen är inte tillåten för användaren.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="83"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionen av programmet du ansluter till är lägre än den lägsta version som stöds.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="88"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett nätverksfel uppstod (t.ex. att nätverkskabeln drogs ut av misstag).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="92"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen nekades av motparten (eller överskred tidsgränsen).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="96"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjärrvärden stängde anslutningen.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="100"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdadressen hittades inte.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidsgränsen för socketåtgärden överskreds.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna adressen används redan och har angetts som exklusiv.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den angivna adressen tillhör inte värden.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett okänt fel uppstod.</translation>
     </message>
 </context>
 <context>
@@ -10826,38 +10835,38 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="243"/>
         <source>Authentication failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Autentiseringen misslyckades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1138"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1082"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1085"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Klistra in</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1088"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera alla</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1136"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange ditt användarnamn och lösenord för att autentisera dig på fjärrdatorn.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1150"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
 </context>
 <context>
@@ -10865,12 +10874,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Tvåfaktorsautentisering</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange den 6-siffriga koden från din autentiseringsapp.</translation>
     </message>
 </context>
 <context>
@@ -10878,37 +10887,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="64"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Tvåfaktorsautentisering</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="65"/>
         <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till installationsnyckeln nedan i en autentiseringsapp och ange sedan den 6-siffriga koden som visas för att bekräfta.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="67"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange den 6-siffriga koden från din autentiseringsapp.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="74"/>
         <source>Setup Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Installationsnyckel</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="80"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="86"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="87"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -10916,22 +10925,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivera tvåfaktorsautentisering</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna en TOTP-autentiseringsapp (Google Authenticator, Microsoft Authenticator eller ett kompatibelt alternativ) och lägg till ett nytt konto genom att skanna QR-koden nedan. Om QR-skanning inte är tillgänglig anger du i stället installationsnyckeln i appen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Installationsnyckel:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange den 6-siffriga koden som visas i appen för att bekräfta:</translation>
     </message>
 </context>
 <context>
@@ -10939,93 +10948,93 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="14"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="44"/>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Söker efter uppdateringar</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="59"/>
         <source>Current version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell version:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="66"/>
         <source>Available version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillgänglig version:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="75"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="136"/>
         <source>Update description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdateringsbeskrivning:</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="181"/>
         <source>Update now!</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdatera nu!</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.ui" line="188"/>
         <source>Close</source>
-        <translation type="unfinished">Fechar</translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="56"/>
         <source>Receiving information...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tar emot information...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="108"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryter uppdateringskontrollen. Vänligen vänta.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished"></translation>
+        <translation>En uppdatering kommer att laddas ner. När nedladdningen är klar stängs programmet automatiskt.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="124"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla anslutna sessioner kommer att avslutas. Du kan inte upprätta en anslutning förrän uppdateringen är klar.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla osparade data kommer att gå förlorade.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="127"/>
         <source>Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsätta?</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid installation av uppdateringen: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="197"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="198"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid hämtning av uppdateringsinformation.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="208"/>
         <location filename="../common/desktop/update_dialog.cc" line="231"/>
         <source>No updates available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga uppdateringar tillgängliga.</translation>
     </message>
 </context>
 <context>
@@ -11033,100 +11042,100 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="14"/>
         <source>User Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaregenskaper</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="24"/>
         <source>User Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="31"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="38"/>
         <source>Password (repeat):</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord (upprepa):</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="62"/>
         <source>Disable User Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera användarkonto</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="69"/>
         <source>Allowed Session Types:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåtna sessionstyper:</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera alla</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
         <source>Uncheck all</source>
-        <translation type="unfinished"></translation>
+        <translation>Avmarkera alla</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="179"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet du angav finns redan.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="188"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden du angav stämmer inte överens.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="198"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
+            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du ange ett annat lösenord?</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="236"/>
         <location filename="../host/ui/user_dialog.cc" line="266"/>
         <location filename="../host/ui/user_dialog.cc" line="276"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel när en användare skapades eller ändrades.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="314"/>
         <source>Double-click to change</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbelklicka för att ändra</translation>
     </message>
 </context>
 <context>
@@ -11141,29 +11150,29 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="234"/>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".", "@".</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet du angav finns redan.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden du angav stämmer inte överens.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
+            <numerusform>Lösenordet får inte vara tomt och får inte överstiga %n tecken.</numerusform>
         </translation>
     </message>
     <message>
@@ -11171,72 +11180,72 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="224"/>
         <location filename="../host/android/user_editor_widget.cc" line="235"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänt internt fel när en användare skapades eller ändrades.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="95"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="96"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="97"/>
         <source>Password (repeat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord (upprepa)</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="98"/>
         <source>Leave the password empty to keep the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lämna lösenordet tomt för att behålla det nuvarande.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="99"/>
         <source>User enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare aktiverad</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="100"/>
         <source>Allowed sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillåtna sessioner</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="101"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivbord</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="102"/>
         <source>File Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filöverföring</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="103"/>
         <source>Delete user</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort användare</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="249"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort användare</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort användaren "%1"?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Failed to delete the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort användaren.</translation>
     </message>
 </context>
 <context>
@@ -11244,62 +11253,62 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="253"/>
         <source>&lt;no user&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;ingen användare&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="288"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiv</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="290"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansluten</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="292"/>
         <source>Connect Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningsförfrågan</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="294"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>Skugga</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="296"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Frånkopplad</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="298"/>
         <source>Idle</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiv</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="300"/>
         <source>Listen</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyssnar</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="302"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställs</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="304"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Nere</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="306"/>
         <source>Init</source>
-        <translation type="unfinished"></translation>
+        <translation>Initieras</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="308"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Okänd</translation>
     </message>
 </context>
 <context>
@@ -11307,27 +11316,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="90"/>
         <source>Administrator</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratör</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="94"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Klient</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="92"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Förvaltare</translation>
     </message>
 </context>
 <context>
@@ -11335,17 +11344,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/users_widget.cc" line="95"/>
         <source>No users</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga användare</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiverad</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktiverad</translation>
     </message>
 </context>
 </TS>

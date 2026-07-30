@@ -6,28 +6,28 @@
     <message>
         <location filename="../client/aab_importer.cc" line="111"/>
         <source>%1 (Imported)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (імпортовано)</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відкрити файл "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
         <source>Selected file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибраний файл порожній.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="284"/>
         <location filename="../client/aab_importer.cc" line="332"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation type="unfinished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
+        <translation>Файл адресної книги пошкоджено або він має невідомий формат.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="324"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation type="unfinished">Тип шифрування адресної книги не підтримується.</translation>
+        <translation>Файл адресної книги зашифровано непідтримуваним методом шифрування.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="359"/>
@@ -36,27 +36,31 @@ Groups added: %1
 Hosts added: %2
 Hosts skipped: %3
 Routers added: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт завершено успішно.
+Додано груп: %1
+Додано хостів: %2
+Пропущено хостів: %3
+Додано маршрутизаторів: %4</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="316"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation type="unfinished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
+        <translation>Не вдалося розшифрувати адресну книгу з указаним паролем.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="299"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокування</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="301"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
+        <translation>Адресна книга зашифрована. Для відкриття необхідно ввести пароль.</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="354"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нічого не було імпортовано.</translation>
     </message>
 </context>
 <context>
@@ -89,117 +93,117 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="104"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="109"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished">Aspia — вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
+        <translation>Aspia - вільне програмне забезпечення, що розповсюджується за ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="110"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished">Ви можете отримати копію ліцензії тут:</translation>
+        <translation>Ви можете отримати копію ліцензії за адресою:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="115"/>
         <source>You can also get a translation of GNU GPL license here:</source>
-        <translation type="unfinished">Ознайомитися з перекладом ліцензії GNU GPL на вашу мову можна тут:</translation>
+        <translation>Ознайомитися з перекладом ліцензії вашою мовою можна за адресою:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="119"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Посилання</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="120"/>
         <source>Home page:</source>
-        <translation type="unfinished">Домашня сторінка:</translation>
+        <translation>Домашня сторінка:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="121"/>
         <source>GitHub page:</source>
-        <translation type="unfinished">Сторінка GitHub:</translation>
+        <translation>Сторінка GitHub:</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="124"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Розробники</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="126"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Перекладачі</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="128"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Сторонні компоненти</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="130"/>
         <source>Graphics and images</source>
-        <translation type="unfinished"></translation>
+        <translation>Графіка і зображення</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="131"/>
         <source>Icons by %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Іконки від %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="158"/>
         <source>Application</source>
-        <translation type="unfinished">Додаток</translation>
+        <translation>Програма</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="159"/>
         <source>Path: %1</source>
-        <translation type="unfinished">Шлях: %1</translation>
+        <translation>Шлях: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="160"/>
         <source>Logging directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог логів: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="162"/>
         <source>Logging file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл лога: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="167"/>
         <source>Build Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про збірку</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="168"/>
         <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Гілка Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="170"/>
         <source>Git commit: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Коміт Git: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="175"/>
         <source>Compilation</source>
-        <translation type="unfinished"></translation>
+        <translation>Компіляція</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="176"/>
         <source>Compilation date: %1</source>
-        <translation type="unfinished">Дата компіляції: %1</translation>
+        <translation>Дата компіляції: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="177"/>
         <source>Compilation time: %1</source>
-        <translation type="unfinished">Час компіляції: %1</translation>
+        <translation>Час компіляції: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/about_dialog.cc" line="206"/>
         <source>Version Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про версії</translation>
     </message>
 </context>
 <context>
@@ -207,47 +211,47 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/about_widget.cc" line="99"/>
         <source>Version: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія: %1 (%2)</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="102"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation type="unfinished">Aspia — вільне програмне забезпечення, випущене під ліцензією GNU General Public License 3.</translation>
+        <translation>Aspia - вільне програмне забезпечення, що розповсюджується за ліцензією GNU General Public License 3.</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="103"/>
         <source>You can get a copy of license here:</source>
-        <translation type="unfinished">Ви можете отримати копію ліцензії тут:</translation>
+        <translation>Ви можете отримати копію ліцензії за адресою:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Посилання</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>Home page:</source>
-        <translation type="unfinished">Домашня сторінка:</translation>
+        <translation>Домашня сторінка:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="106"/>
         <source>GitHub page:</source>
-        <translation type="unfinished">Сторінка GitHub:</translation>
+        <translation>Сторінка GitHub:</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="113"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Розробники</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="114"/>
         <source>Translators</source>
-        <translation type="unfinished"></translation>
+        <translation>Перекладачі</translation>
     </message>
     <message>
         <location filename="../common/android/about_widget.cc" line="115"/>
         <source>Third-party components</source>
-        <translation type="unfinished"></translation>
+        <translation>Сторонні компоненти</translation>
     </message>
 </context>
 <context>
@@ -255,7 +259,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar.cc" line="55"/>
         <source>An incorrect path to the folder was entered.</source>
-        <translation type="unfinished">Введено невірний шлях до папки.</translation>
+        <translation>Введено некоректний шлях до каталогу.</translation>
     </message>
 </context>
 <context>
@@ -264,97 +268,97 @@ Routers added: %4</source>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="82"/>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="469"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Домашній каталог</translation>
+        <translation>Домашній каталог</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="86"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="90"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантаження</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="94"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Документи</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="98"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Зображення</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="302"/>
         <source>Computer</source>
-        <translation type="unfinished">Комп&apos;ютер</translation>
+        <translation>Комп'ютер</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="417"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="420"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="454"/>
         <source>Optical Drive</source>
-        <translation type="unfinished">Оптичний диск</translation>
+        <translation>Оптичний привід</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="457"/>
         <source>Removable Drive</source>
-        <translation type="unfinished">Знімний диск</translation>
+        <translation>Знімний диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="460"/>
         <source>Fixed Drive</source>
-        <translation type="unfinished">Фіксований диск</translation>
+        <translation>Локальний диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="463"/>
         <source>Network Drive</source>
-        <translation type="unfinished">Мережевий диск</translation>
+        <translation>Мережевий диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="466"/>
         <source>RAM Drive</source>
-        <translation type="unfinished">RAM диск</translation>
+        <translation>RAM-диск</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="472"/>
         <source>Desktop Folder</source>
-        <translation type="unfinished">Каталог робочого стола</translation>
+        <translation>Каталог робочого столу</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="475"/>
         <source>Downloads Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог завантажень</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="478"/>
         <source>Documents Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог документів</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="481"/>
         <source>Pictures Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог зображень</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="484"/>
         <source>Root Directory</source>
-        <translation type="unfinished">Корінний каталог</translation>
+        <translation>Кореневий каталог</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/address_bar_model.cc" line="487"/>
         <source>Unknown Drive</source>
-        <translation type="unfinished">Невідомий диск</translation>
+        <translation>Невідомий диск</translation>
     </message>
 </context>
 <context>
@@ -364,21 +368,21 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="249"/>
         <location filename="../client/android/main_window.cc" line="329"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальні</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="253"/>
         <location filename="../client/android/main_window.cc" line="349"/>
         <source>Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалені</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
         <location filename="../client/android/main_window.cc" line="257"/>
         <location filename="../client/android/main_window.cc" line="339"/>
         <source>Routers</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатори</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="173"/>
@@ -388,7 +392,7 @@ Routers added: %4</source>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="461"/>
         <source>Settings</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
@@ -397,68 +401,68 @@ Routers added: %4</source>
         <location filename="../client/android/main_window.cc" line="583"/>
         <location filename="../client/android/main_window.cc" line="630"/>
         <source>Connection by link</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення за посиланням</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="546"/>
         <source>Invalid link.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недійсне посилання.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="554"/>
         <source>Another session is active. Close it and open the link again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Інша сесія вже активна. Закрийте її і відкрийте посилання ще раз.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="564"/>
         <source>The session type from the link is not supported on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип сесії з посилання не підтримується на цьому пристрої.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="584"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор, вказаний у посиланні, не знайдено в адресній книзі.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="631"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост, вказаний у посиланні, не знайдено в адресній книзі.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="459"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="333"/>
         <location filename="../host/android/main_window.cc" line="368"/>
         <location filename="../host/android/main_window.cc" line="400"/>
         <source>Permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволи</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="334"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкніть службу спеціальних можливостей, щоб дозволити віддалене керування клавіатурою і мишею.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="335"/>
         <location filename="../host/android/main_window.cc" line="370"/>
         <location filename="../host/android/main_window.cc" line="403"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="369"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозвольте відображення поверх інших застосунків, щоб показувати екранну кнопку дій під час сеансу.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="401"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозвольте доступ до всіх файлів, щоб підключений користувач міг переглядати і передавати файли на цьому пристрої.</translation>
     </message>
 </context>
 <context>
@@ -466,7 +470,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/android/app_bar.cc" line="55"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук</translation>
     </message>
 </context>
 <context>
@@ -491,44 +495,44 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="66"/>
         <source>One-time password connection</source>
-        <translation>Не запам&apos;ятовувати</translation>
+        <translation>Підключення за одноразовим паролем</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть облікові дані для підключення до хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="43"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="52"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Одноразовий пароль</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="66"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключитися</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="106"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="147"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">Ім&apos;я користувача не може бути порожнім.</translation>
+        <translation>Ім'я користувача не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="113"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
 </context>
 <context>
@@ -556,28 +560,28 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="94"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="103"/>
         <location filename="../host/ui/change_password_dialog.cc" line="145"/>
         <source>The passwords entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="120"/>
         <source>You must enter your old password.</source>
-        <translation type="unfinished">Ви повинні ввести старий пароль.</translation>
+        <translation>Ви повинні ввести старий пароль.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="128"/>
         <source>You entered an incorrect old password.</source>
-        <translation type="unfinished">Ви ввели невірний старий пароль.</translation>
+        <translation>Ви ввели некоректний старий пароль.</translation>
     </message>
     <message>
         <location filename="../host/ui/change_password_dialog.cc" line="137"/>
         <source>New password cannot be empty.</source>
-        <translation type="unfinished">Новий пароль не може бути порожнім.</translation>
+        <translation>Новий пароль не може бути порожнім.</translation>
     </message>
 </context>
 <context>
@@ -585,7 +589,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_incoming_message.ui" line="187"/>
         <source>Time</source>
-        <translation type="unfinished">Час</translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -593,7 +597,7 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_outgoing_message.ui" line="48"/>
         <source>Time</source>
-        <translation type="unfinished">Час</translation>
+        <translation>Час</translation>
     </message>
 </context>
 <context>
@@ -601,7 +605,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/chat_view.cc" line="201"/>
         <source>Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Повідомлення</translation>
     </message>
 </context>
 <context>
@@ -609,74 +613,74 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="20"/>
         <source>Aspia Chat</source>
-        <translation type="unfinished">Чат Aspia</translation>
+        <translation>Чат Aspia</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="175"/>
         <source>Send message</source>
-        <translation type="unfinished">Відправити повідомлення</translation>
+        <translation>Надіслати повідомлення</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="204"/>
         <source>Tools</source>
-        <translation type="unfinished">Інструменти</translation>
+        <translation>Інструменти</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.ui" line="210"/>
         <source>···</source>
-        <translation type="unfinished">...</translation>
+        <translation>···</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
         <location filename="../common/desktop/chat_widget.cc" line="306"/>
         <source>Save chat...</source>
-        <translation type="unfinished">Зберегти чат...</translation>
+        <translation>Зберегти чат...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
         <location filename="../common/desktop/chat_widget.cc" line="307"/>
         <source>Clear chat</source>
-        <translation type="unfinished">Очистити чат</translation>
+        <translation>Очистити чат</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="204"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished">%1 набирає текст...</translation>
+        <translation>%1 друкує...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="207"/>
         <source>User %1 has joined the chat (%2)</source>
-        <translation type="unfinished">Користувач %1 долучається до чату (%2)</translation>
+        <translation>Користувач %1 приєднався до чату (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="210"/>
         <source>User %1 has left the chat (%2)</source>
-        <translation type="unfinished">Користувач %1 залишає чат (%2)</translation>
+        <translation>Користувач %1 покинув чат (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="213"/>
         <source>User %1 is logged in (%2)</source>
-        <translation type="unfinished">Користувач %1 в системі (%2)</translation>
+        <translation>Користувач %1 увійшов у систему (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="216"/>
         <source>User %1 is not logged in (%2)</source>
-        <translation type="unfinished">Користувач %1 не в системі (%2)</translation>
+        <translation>Користувач %1 не увійшов у систему (%2)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="219"/>
         <source>There are no connected users (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає підключених користувачів (%1)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="428"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося записати файл.</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/chat_widget.cc" line="444"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символ.</numerusform>
             <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символи.</numerusform>
             <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символів.</numerusform>
@@ -685,17 +689,17 @@ Routers added: %4</source>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="367"/>
         <source>TXT files (*.txt)</source>
-        <translation type="unfinished">TXT файли (*.txt)</translation>
+        <translation>Файли TXT (*.txt)</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="380"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
+        <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
 </context>
 <context>
@@ -703,168 +707,168 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="14"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="42"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="45"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished">Зберегти (Ctrl+S)</translation>
+        <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="48"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Ctrl+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="57"/>
         <source>Print</source>
-        <translation type="unfinished">Друкувати</translation>
+        <translation>Друк</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="60"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished">Друкувати (Ctrl+P)</translation>
+        <translation>Друк (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="68"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="73"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="78"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="87"/>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="90"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Оновити (F5)</translation>
+        <translation>Оновити (F5)</translation>
     </message>
     <message>
         <location filename="../client/desktop/chat/chat_window.ui" line="93"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="102"/>
         <source>User %1 has joined the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 приєднався до чату</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="105"/>
         <source>User %1 has left the chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 покинув чат</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="108"/>
         <source>User %1 is logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 увійшов у систему</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="111"/>
         <source>User %1 is not logged in</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач %1 не увійшов у систему</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="114"/>
         <source>There are no connected users</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає підключених користувачів</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="141"/>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="201"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="210"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання з хостом втрачено.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="306"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка при запиті з'єднання через маршрутизатор.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="219"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія хоста новіша за клієнта. Оновіть застосунок.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="247"/>
         <source>%1 is typing...</source>
-        <translation type="unfinished">%1 набирає текст...</translation>
+        <translation>%1 друкує...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="292"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="317"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="342"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Save Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти чат</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="545"/>
         <source>Text files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>Текстові файли (*.txt)</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="552"/>
         <source>Could not open the file for writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити чат</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear the chat history?</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити історію чату?</translation>
     </message>
     <message>
         <location filename="../client/android/chat_window.cc" line="575"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити</translation>
     </message>
 </context>
 <context>
@@ -877,7 +881,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="20"/>
         <source>The configuration is password protected. Enter the password to view and change the configuration.</source>
-        <translation>Налаштування захищено паролем.Введіть пароль для перегляду і зміни налаштувань.</translation>
+        <translation>Налаштування захищено паролем. Введіть пароль для перегляду і зміни налаштувань.</translation>
     </message>
     <message>
         <location filename="../host/ui/check_password_dialog.ui" line="36"/>
@@ -887,7 +891,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/check_password_dialog.cc" line="69"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished">Ви ввели невірний пароль.</translation>
+        <translation>Ви ввели некоректний пароль.</translation>
     </message>
 </context>
 <context>
@@ -895,56 +899,56 @@ Routers added: %4</source>
     <message>
         <location filename="../client/main.cc" line="185"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлення майстер-пароля</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="187"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановіть майстер-пароль, необхідний для розблокування застосунку.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="195"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/main.cc" line="197"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="201"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="211"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося встановити майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="159"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокування</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="120"/>
         <source>An aspia:// link to connect to a host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Посилання aspia:// для підключення до хоста.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="161"/>
         <source>Enter the master password to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть майстер-пароль, щоб розблокувати застосунок.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="177"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="116"/>
@@ -957,92 +961,92 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="254"/>
         <source>Session started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесію розпочато.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="439"/>
         <source>Error requesting connection via router: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка при запиті з'єднання через маршрутизатор: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="385"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="391"/>
         <source>The specified router is offline.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказаний маршрутизатор не в мережі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="266"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Connecting to host %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1:%2...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="281"/>
         <source>Connection to host %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1 встановлено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="285"/>
         <source>Connection to host %1:%2 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1:%2 встановлено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="310"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост недоступний. Очікування повторного підключення...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="72"/>
         <source>Timeout waiting for reconnection to host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевищено час очікування при спробі повторного підключення до хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="330"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія хоста новіша за версію клієнта (%1 &gt; %2). Будь ласка, оновіть застосунок.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>Attempting to connect in compatibility mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Спроба підключення в режимі сумісності...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="398"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="406"/>
         <source>Connection offer received.</source>
-        <translation type="unfinished"></translation>
+        <translation>Отримано пропозицію підключення.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
-        <translation type="unfinished"></translation>
+        <translation>хост із указаним ID не в мережі</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="430"/>
         <source>Access is denied</source>
-        <translation type="unfinished"></translation>
+        <translation>доступ заборонено</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="433"/>
         <source>There are no relays available or the key pool is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>немає доступних ретрансляторів або пул ключів порожній</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="436"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>невідома помилка</translation>
     </message>
 </context>
 <context>
@@ -1066,164 +1070,164 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="114"/>
         <source>Once a day</source>
-        <translation type="unfinished">Щодня</translation>
+        <translation>Раз на день</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a week</source>
-        <translation type="unfinished">Щотижня</translation>
+        <translation>Раз на тиждень</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a month</source>
-        <translation type="unfinished">Щомісяця</translation>
+        <translation>Раз на місяць</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Default</source>
-        <translation type="unfinished">За замовчанням</translation>
+        <translation>За замовчуванням</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>On reboot</source>
-        <translation type="unfinished">При перезавантаженні</translation>
+        <translation>При перезавантаженні</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 5 minutes</source>
-        <translation type="unfinished">Кожні 5 хвилин</translation>
+        <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 30 minutes</source>
-        <translation type="unfinished">Кожні 30 хвилин</translation>
+        <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 1 hour</source>
-        <translation type="unfinished">Кожну годину</translation>
+        <translation>Кожну годину</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 6 hours</source>
-        <translation type="unfinished">Кожні 6 годин</translation>
+        <translation>Кожні 6 годин</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 12 hours</source>
-        <translation type="unfinished">Кожні 12 годин</translation>
+        <translation>Кожні 12 годин</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 24 hours</source>
-        <translation type="unfinished">Кожні 24 години</translation>
+        <translation>Кожні 24 години</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Letters and digits</source>
-        <translation type="unfinished">Букви і цифри</translation>
+        <translation>Літери і цифри</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters</source>
-        <translation type="unfinished">Букви</translation>
+        <translation>Літери</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Digits</source>
-        <translation type="unfinished">Цифри</translation>
+        <translation>Цифри</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>Never</source>
-        <translation type="unfinished">Ніколи</translation>
+        <translation>Ніколи</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="230"/>
         <source>15 seconds</source>
-        <translation type="unfinished">15 секунд</translation>
+        <translation>15 секунд</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>30 seconds</source>
-        <translation type="unfinished">30 секунд</translation>
+        <translation>30 секунд</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>45 seconds</source>
-        <translation type="unfinished">45 секунд</translation>
+        <translation>45 секунд</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>60 seconds</source>
-        <translation type="unfinished">60 секунд</translation>
+        <translation>60 секунд</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>Accept connection</source>
-        <translation type="unfinished">Прийняти підключення</translation>
+        <translation>Приймати підключення</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Reject connection</source>
-        <translation type="unfinished">Відхилити підключення</translation>
+        <translation>Відхиляти підключення</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+        <translation>Ви дійсно хочете видалити користувача "%1"?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
         <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished">Сталася помилка під час обробки пароля.</translation>
+        <translation>Сталася помилка при обробці пароля.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="485"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховище налаштувань недоступне.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <source>Import</source>
-        <translation type="unfinished">Імпорт</translation>
+        <translation>Імпорт</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="515"/>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>JSON-files (*.json)</source>
-        <translation type="unfinished">JSON файли (*.json)</translation>
+        <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="532"/>
         <source>Export</source>
-        <translation type="unfinished">Експорт</translation>
+        <translation>Експорт</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="557"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
-        <translation type="unfinished">Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
+        <translation>Конфігурація не може бути записана. Переконайтеся, що у вас достатньо прав для запису.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="570"/>
         <source>Incorrect router address entered.</source>
-        <translation type="unfinished">Введено неправильну адресу маршрутизатора.</translation>
+        <translation>Введено некоректну адресу маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router public key entered.</source>
-        <translation type="unfinished">Введено неправильний відкритий ключ маршрутизатора.</translation>
+        <translation>Введено некоректний публічний ключ маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Install</source>
-        <translation type="unfinished">Встановити</translation>
+        <translation>Встановити</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="742"/>
         <source>Remove</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="218"/>
@@ -1248,7 +1252,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
-        <translation>Змінити пароль:</translation>
+        <translation>Змінювати пароль:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="295"/>
@@ -1288,12 +1292,12 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
-        <translation>Автоматична первірка і встановлення оновлень</translation>
+        <translation>Автоматична перевірка і встановлення оновлень</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
-        <translation>Перевірити оновлення:</translation>
+        <translation>Перевіряти оновлення:</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="194"/>
@@ -1354,12 +1358,12 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
-        <translation>Додати нового окристувача</translation>
+        <translation>Додати нового користувача</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
-        <translation>Редагувати окристувача</translation>
+        <translation>Редагувати користувача</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="521"/>
@@ -1417,29 +1421,29 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
-        <translation type="unfinished">Користувач %1 (%2) намагається підключитися до вашого комп&apos;ютера з типом сесії %3.</translation>
+        <translation>Користувач %1 (%2) намагається підключитися до вашого комп'ютера з типом сесії %3.</translation>
     </message>
     <message>
         <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
         <source>Allow the connection?</source>
-        <translation type="unfinished">Дозволити підключення?</translation>
+        <translation>Дозволити підключення?</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform>Підключення буде прийнято автоматично через %n секунду.</numerusform>
-            <numerusform>Підключення буде прийнято автоматично через %n секунди.</numerusform>
-            <numerusform>Підключення буде прийнято автоматично через %n секунд.</numerusform>
+        <translation>
+            <numerusform>Підключення буде автоматично прийнято через %n секунду.</numerusform>
+            <numerusform>Підключення буде автоматично прийнято через %n секунди.</numerusform>
+            <numerusform>Підключення буде автоматично прийнято через %n секунд.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
-        <translation type="unfinished">
-            <numerusform>Підключення буде відхилено автоматично через %n секунду.</numerusform>
-            <numerusform>Підключення буде відхилено автоматично через %n секунди.</numerusform>
-            <numerusform>Підключення буде відхилено автоматично через %n секунд.</numerusform>
+        <translation>
+            <numerusform>Підключення буде автоматично відхилено через %n секунду.</numerusform>
+            <numerusform>Підключення буде автоматично відхилено через %n секунди.</numerusform>
+            <numerusform>Підключення буде автоматично відхилено через %n секунд.</numerusform>
         </translation>
     </message>
 </context>
@@ -1448,63 +1452,64 @@ Routers added: %4</source>
     <message>
         <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
-        <translation type="unfinished">Ваш ID</translation>
+        <translation>Ваш ID</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="224"/>
         <source>One-time password</source>
-        <translation type="unfinished"></translation>
+        <translation>Одноразовий пароль</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="225"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="226"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="347"/>
         <source>Aspia ID: %1
 Password: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ID Aspia: %1
+Пароль: %2</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="390"/>
         <source>Router is disabled</source>
-        <translation type="unfinished">Маршрутизатор відключено</translation>
+        <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="393"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="394"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="397"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="398"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="401"/>
         <source>Failed to connect to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося підключитися до маршрутизатора</translation>
     </message>
 </context>
 <context>
@@ -1512,39 +1517,39 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="79"/>
         <source>Current password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний пароль:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="89"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="51"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.ui" line="99"/>
         <source>Confirm password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="57"/>
         <location filename="../common/desktop/credentials_dialog.cc" line="61"/>
         <source>New password:</source>
-        <translation type="unfinished">Новий пароль:</translation>
+        <translation>Новий пароль:</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="195"/>
         <source>Enter the current password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть поточний пароль.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="202"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../common/desktop/credentials_dialog.cc" line="209"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Паролі не збігаються.</translation>
     </message>
 </context>
 <context>
@@ -1553,231 +1558,231 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
         <source>Lock toolbar</source>
-        <translation type="unfinished">Закріпити панель інструментів</translation>
+        <translation>Закріпити панель інструментів</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
         <source>Auto size</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматичний розмір</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
         <source>Automatic window size</source>
-        <translation type="unfinished">Автоматичний розмір вікна</translation>
+        <translation>Автоматичний розмір вікна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
         <source>Full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Повний екран</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
         <source>Switch to full screen mode or back</source>
-        <translation type="unfinished">Повноекранний режим</translation>
+        <translation>Перемкнутися на повний екран (або назад)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
         <source>Automatic scrolling</source>
-        <translation type="unfinished">Автоматична прокрутка</translation>
+        <translation>Автоматична прокрутка</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
         <source>Ctrl+Alt+Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
         <source>Send Ctrl+Alt+Delete</source>
-        <translation type="unfinished">Передати Ctrl+Alt+Del</translation>
+        <translation>Надіслати Ctrl+Alt+Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
         <source>Advanced menu</source>
-        <translation type="unfinished">Розширене меню</translation>
+        <translation>Розширене меню</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
         <source>Save screenshot...</source>
-        <translation type="unfinished">Зберегти знімок екрану...</translation>
+        <translation>Зберегти знімок екрана...</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Термінал</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
         <source>File transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
         <source>Scale</source>
-        <translation type="unfinished">Масштаб</translation>
+        <translation>Масштаб</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
         <source>Power control</source>
-        <translation type="unfinished">Котроль живлення</translation>
+        <translation>Керування живленням</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Вимкнення</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
         <source>Reboot</source>
-        <translation type="unfinished">Перезавантажити</translation>
+        <translation>Перезавантаження</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
         <source>Logoff</source>
-        <translation type="unfinished">Вийти</translation>
+        <translation>Завершити сеанс</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
         <source>Lock</source>
-        <translation type="unfinished">Заблокувати</translation>
+        <translation>Блокування</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
         <source>System Information</source>
-        <translation type="unfinished">Системна інформація</translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
         <source>Close session</source>
-        <translation type="unfinished">Закрити сесію</translation>
+        <translation>Закрити сесію</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
         <source>Fit window</source>
-        <translation type="unfinished">Підігнати вікно</translation>
+        <translation>За розміром вікна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
         <source>Minimize</source>
-        <translation type="unfinished">Згорнути</translation>
+        <translation>Згорнути</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
         <source>Minimize window</source>
-        <translation type="unfinished">Згорнути вікно</translation>
+        <translation>Згорнути вікно</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
         <source>Statistics</source>
-        <translation type="unfinished">Статистика</translation>
+        <translation>Статистика</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
         <source>Reboot (Safe mode)</source>
-        <translation type="unfinished">Перезавантажити (Безпечний режим)</translation>
+        <translation>Перезавантаження (безпечний режим)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
         <source>Reboot in safe mode</source>
-        <translation type="unfinished">Перезавантажити в безпечний режим</translation>
+        <translation>Перезавантаження в безпечному режимі</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
         <source>Paste clipboard as keystrokes</source>
-        <translation type="unfinished">Вставити із буферу у вигляді натиснутих клавіш</translation>
+        <translation>Вставити буфер обміну як натискання клавіш</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
         <source>Text Chat</source>
-        <translation type="unfinished">Текстовий чат</translation>
+        <translation>Текстовий чат</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
         <source>Start recording</source>
-        <translation type="unfinished">Почати запис</translation>
+        <translation>Почати запис</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
         <source>Task Manager</source>
-        <translation type="unfinished">Дипетчер завдань</translation>
+        <translation>Диспетчер завдань</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
         <source>Switch Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемикання сесії</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
         <source>Resolution selection</source>
-        <translation type="unfinished">Вибір роздільної здатності</translation>
+        <translation>Вибір роздільної здатності</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
         <source>Stop recording</source>
-        <translation type="unfinished">Зупинити запис</translation>
+        <translation>Зупинити запис</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
+        <translation>Ви дійсно хочете вимкнути віддалений комп'ютер?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
+        <translation>Ви дійсно хочете перезавантажити віддалений комп'ютер?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
         <source>Wait for host</source>
-        <translation type="unfinished"></translation>
+        <translation>Очікування хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished">Ви певні, що бажаєте перезавантажити віддалений комп&apos;ютер в Безпечний Режим?</translation>
+        <translation>Ви дійсно хочете перезавантажити віддалений комп'ютер у безпечному режимі?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
+        <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп'ютері?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
+        <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп'ютері?</translation>
     </message>
 </context>
 <context>
@@ -1785,22 +1790,22 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="596"/>
         <source>The session was paused by a remote user</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесію призупинено віддаленим користувачем</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="599"/>
         <source>The session is temporarily unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія тимчасово недоступна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="602"/>
         <source>The session is permanently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія недоступна</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_widget.cc" line="605"/>
         <source>Error while receiving video stream: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка при отриманні відеопотоку: %1</translation>
     </message>
 </context>
 <context>
@@ -1808,188 +1813,188 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
-        <translation type="unfinished">Зображення PNG (*.png);;Зображення BMP (*.bmp)</translation>
+        <translation>PNG зображення (*.png);;BMP зображення (*.bmp)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
         <source>Could not save image</source>
-        <translation type="unfinished">Неможливо зберегти зображення</translation>
+        <translation>Не вдалося зберегти зображення</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="182"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="219"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="79"/>
         <source>Session %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="80"/>
         <source>Session %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="193"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост із указаним ID не в мережі.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="238"/>
         <source>Access is denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ заборонено.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="241"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає доступних ретрансляторів або пул ключів порожній.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="244"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка при запиті з'єднання через маршрутизатор.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="358"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="364"/>
         <source>Connection established.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання встановлено.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="369"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання з хостом втрачено.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="383"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія хоста новіша за клієнта. Оновіть застосунок.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="387"/>
         <source>Legacy hosts are not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Застарілі хости не підтримуються.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="470"/>
         <source>Monitor %1</source>
-        <translation type="unfinished">Монітор %1</translation>
+        <translation>Монітор %1</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="478"/>
         <source>Power</source>
-        <translation type="unfinished"></translation>
+        <translation>Живлення</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="482"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Клавіатура</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="487"/>
         <source>Ctrl+Alt+Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="494"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="499"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="558"/>
         <location filename="../client/android/desktop_window.cc" line="612"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="559"/>
         <source>Shutdown</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Вимкнення</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="560"/>
         <source>Reboot</source>
-        <translation type="unfinished">Перезавантажити</translation>
+        <translation>Перезавантаження</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="562"/>
         <source>Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Безпечний режим</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="563"/>
         <source>Logoff</source>
-        <translation type="unfinished">Вийти</translation>
+        <translation>Завершити сеанс</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Lock</source>
-        <translation type="unfinished">Заблокувати</translation>
+        <translation>Блокування</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="580"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете відключити віддалений комп&apos;ютер?</translation>
+        <translation>Ви дійсно хочете вимкнути віддалений комп'ютер?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="584"/>
         <source>Are you sure you want to reboot the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете перезавантажити віддалений комп&apos;ютер?</translation>
+        <translation>Ви дійсно хочете перезавантажити віддалений комп'ютер?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="588"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
-        <translation type="unfinished">Ви певні, що бажаєте перезавантажити віддалений комп&apos;ютер в Безпечний Режим?</translation>
+        <translation>Ви дійсно хочете перезавантажити віддалений комп'ютер у безпечному режимі?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="592"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете завершити сесію користувача на віддаленому комп&apos;ютері?</translation>
+        <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп'ютері?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="596"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
-        <translation type="unfinished">Ви впевнені, що хочете заблокувати сесію користувача на віддаленому комп&apos;ютері?</translation>
+        <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп'ютері?</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="651"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
 </context>
 <context>
@@ -1997,92 +2002,92 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="80"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="81"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="82"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="83"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="84"/>
         <source>Apply</source>
-        <translation type="unfinished">Примінити</translation>
+        <translation>Застосувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="85"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="86"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="87"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Відхилити</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="88"/>
         <source>Reset</source>
-        <translation type="unfinished">Скинути</translation>
+        <translation>Скинути</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="89"/>
         <source>Help</source>
-        <translation type="unfinished">Допомога</translation>
+        <translation>Допомога</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="90"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Перервати</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="91"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторити</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="92"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ігнорувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="93"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Відновити за замовчуванням</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="94"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти все</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="95"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="96"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Так для всіх</translation>
     </message>
     <message>
         <location filename="../common/desktop/dialog_button_box.cc" line="97"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ні для всіх</translation>
     </message>
 </context>
 <context>
@@ -2100,7 +2105,7 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/download_dialog.cc" line="65"/>
         <source>An error occurred while downloading the update: %1</source>
-        <translation type="unfinished">Виникла помилка під час завантаження оновлення: %1</translation>
+        <translation>Сталася помилка при завантаженні оновлення: %1</translation>
     </message>
 </context>
 <context>
@@ -2153,7 +2158,7 @@ Password: %2</source>
     <message>
         <location filename="../client/file_error_code.cc" line="69"/>
         <source>Could not create or replace file</source>
-        <translation>Неможливо відкрити або замінити файл</translation>
+        <translation>Неможливо створити або замінити файл</translation>
     </message>
     <message>
         <location filename="../client/file_error_code.cc" line="73"/>
@@ -2186,27 +2191,27 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="101"/>
         <source>Folder</source>
-        <translation type="unfinished">Каталог</translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="378"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="381"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="384"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_list_model.cc" line="387"/>
         <source>Modified</source>
-        <translation type="unfinished">Змінено</translation>
+        <translation>Змінено</translation>
     </message>
 </context>
 <context>
@@ -2272,59 +2277,59 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="117"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Не вдалося отримати список дисків: %1</translation>
+        <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="134"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Не вдалося отримати список файлів: %1</translation>
+        <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="159"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Не вдалося створити каталог: %1</translation>
+        <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="171"/>
         <source>Failed to rename item: %1</source>
-        <translation type="unfinished">Не давлося переіменувати об&apos;єкт: %1</translation>
+        <translation>Не вдалося перейменувати елемент: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="316"/>
         <source>%1 object(s) selected</source>
-        <translation type="unfinished">%1 об&apos;єктів обрано</translation>
+        <translation>Вибрано об'єктів: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="376"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="395"/>
         <source>Folder name can not be empty.</source>
-        <translation type="unfinished">Ім&apos;я каталогу не може бути порожнім.</translation>
+        <translation>Ім'я каталогу не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="382"/>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="401"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished">Ім&apos;я містить недійсні символи.</translation>
+        <translation>Ім'я містить некоректні символи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="344"/>
         <source>&amp;Send	F11</source>
-        <translation type="unfinished">&amp;Надіслати F11</translation>
+        <translation>&amp;Надіслати	F11</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="345"/>
         <source>&amp;Delete	Delete</source>
-        <translation type="unfinished">&amp;Видалити Delete</translation>
+        <translation>&amp;Видалити	Delete</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="355"/>
         <source>&amp;Create Folder</source>
-        <translation type="unfinished">&amp;Створити каталог</translation>
+        <translation>&amp;Створити каталог</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
         <source>Are you sure you want to delete the selected items?</source>
-        <translation type="unfinished">Ви впевнені, що хочете видалити обрані об&apos;єкти?</translation>
+        <translation>Ви дійсно хочете видалити вибрані елементи?</translation>
     </message>
 </context>
 <context>
@@ -2332,82 +2337,82 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="155"/>
         <source>Failed to get list of drives: %1</source>
-        <translation type="unfinished">Не вдалося отримати список дисків: %1</translation>
+        <translation>Не вдалося отримати список дисків: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="174"/>
         <source>Home Folder</source>
-        <translation type="unfinished">Домашній каталог</translation>
+        <translation>Домашній каталог</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="178"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="182"/>
         <source>Internal Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутрішнє сховище</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="186"/>
         <source>SD Card</source>
-        <translation type="unfinished"></translation>
+        <translation>SD-карта</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="190"/>
         <source>Downloads</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантаження</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="194"/>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Камера</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="198"/>
         <source>Pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Зображення</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="202"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Документи</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="231"/>
         <source>Failed to get list of files: %1</source>
-        <translation type="unfinished">Не вдалося отримати список файлів: %1</translation>
+        <translation>Не вдалося отримати список файлів: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="274"/>
         <source>Failed to create directory: %1</source>
-        <translation type="unfinished">Не вдалося створити каталог: %1</translation>
+        <translation>Не вдалося створити каталог: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="343"/>
         <source>Create Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Створити каталог</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="346"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я каталогу</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="349"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="350"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Створити</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="363"/>
         <source>Name contains invalid characters.</source>
-        <translation type="unfinished">Ім&apos;я містить недійсні символи.</translation>
+        <translation>Ім'я містить некоректні символи.</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
@@ -2416,32 +2421,32 @@ Password: %2</source>
         <location filename="../client/android/file_panel_widget.cc" line="528"/>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="389"/>
         <source>Delete the selected items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити вибрані елементи?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Вивантажити</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="514"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
 </context>
 <context>
@@ -2449,7 +2454,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_progress_sheet.cc" line="47"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>
@@ -2457,73 +2462,73 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="35"/>
         <source>File Removal</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення файлів</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточне завдання:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="72"/>
         <source>Creating a list of files to delete...</source>
-        <translation type="unfinished">Створення списку об&apos;єктів для видалення...</translation>
+        <translation>Створення списку файлів для видалення...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="63"/>
         <source>Deleting:</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="76"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.ui" line="103"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="95"/>
         <source>Cancel removal of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасування видалення файлів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="134"/>
         <source>Deleting items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення елементів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="161"/>
         <source>An error occurred while retrieving the list of files: %1</source>
-        <translation type="unfinished">Трапилася помилка під час отримання списку файлів: %1</translation>
+        <translation>Сталася помилка при отриманні списку файлів: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation type="unfinished">Не вдалося видалити &quot;%1&quot;:%2.</translation>
+        <translation>Не вдалося видалити "%1": %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="182"/>
         <source>Skip</source>
-        <translation type="unfinished">Пропустити</translation>
+        <translation>Пропустити</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="185"/>
         <source>Skip All</source>
-        <translation type="unfinished">Пропустити всі</translation>
+        <translation>Пропустити все</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="188"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Перервати</translation>
     </message>
 </context>
 <context>
@@ -2531,130 +2536,130 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="35"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="43"/>
         <source>Current Task:</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточне завдання:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="56"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="78"/>
         <source>Creating a list of files to copy...</source>
-        <translation type="unfinished"></translation>
+        <translation>Створення списку файлів для копіювання...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="63"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>З:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="76"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="96"/>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="116"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="83"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>До:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="103"/>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидкість:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="129"/>
         <source>Total:</source>
-        <translation type="unfinished">Всього:</translation>
+        <translation>Всього:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="136"/>
         <source>Item:</source>
-        <translation type="unfinished">Поточний об&apos;єкт:</translation>
+        <translation>Елемент:</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.ui" line="180"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="108"/>
         <source>Cancel transfer of files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасування передачі файлів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="144"/>
         <source>Copying items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювання елементів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="204"/>
         <source>Skip</source>
-        <translation type="unfinished">Пропустити</translation>
+        <translation>Пропустити</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="207"/>
         <source>Skip All</source>
-        <translation type="unfinished">Пропустити всі</translation>
+        <translation>Пропустити все</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="210"/>
         <source>Replace</source>
-        <translation type="unfinished">Замінити</translation>
+        <translation>Замінити</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="213"/>
         <source>Replace All</source>
-        <translation type="unfinished">Замінити всі</translation>
+        <translation>Замінити все</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="216"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Перервати</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="272"/>
         <source>An error occurred while building the file queue for copying</source>
-        <translation type="unfinished">Виникла помилка під час створення файлової черги для копіювання</translation>
+        <translation>Сталася помилка при побудові черги файлів для копіювання</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося створити каталог &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося створити каталог "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося створити файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося створити файл "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося відкрити файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося відкрити файл "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося записати файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося записати файл "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Не вдалося прочитати файл &quot;%1&quot;:%2</translation>
+        <translation>Не вдалося прочитати файл "%1": %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
         <source>Unknown error type while copying files</source>
-        <translation type="unfinished">Невідомий тип помилки під час копіювання файлів</translation>
+        <translation>Невідомий тип помилки при копіюванні файлів</translation>
     </message>
 </context>
 <context>
@@ -2662,17 +2667,17 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
-        <translation type="unfinished">Локальний комп&apos;ютер</translation>
+        <translation>Локальний комп'ютер</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
-        <translation type="unfinished">Віддалений комп&apos;ютер</translation>
+        <translation>Віддалений комп'ютер</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="183"/>
         <source>Session error: %1</source>
-        <translation type="unfinished">Помилка сесії: %1</translation>
+        <translation>Помилка сесії: %1</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="58"/>
@@ -2681,78 +2686,78 @@ Password: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="410"/>
         <location filename="../client/android/file_transfer_window.cc" line="421"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="63"/>
         <location filename="../client/android/file_transfer_window.cc" line="76"/>
         <source>This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Цей пристрій</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="220"/>
         <source>To browse files on this device, allow access to all files on the next screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Щоб переглядати файли на цьому пристрої, дозвольте доступ до всіх файлів на наступному екрані.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="221"/>
         <source>Allow</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="142"/>
         <source>Connecting to host %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="153"/>
         <source>The connection to the host has been lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання з хостом втрачено.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="270"/>
         <source>The specified router is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="318"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка при запиті з'єднання через маршрутизатор.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The host version is newer than the client. Please update the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія хоста новіша за клієнта. Оновіть застосунок.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="173"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>На хості немає активного користувача. Сеанс недоступний.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="256"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="281"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="306"/>
         <source>Requesting connection to the host...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="411"/>
         <source>Open a destination folder on the other side first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Спочатку відкрийте каталог призначення на іншій стороні.</translation>
     </message>
     <message>
         <location filename="../client/android/file_transfer_window.cc" line="464"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення</translation>
     </message>
 </context>
 <context>
@@ -2760,32 +2765,32 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="45"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="47"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="49"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="51"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation>кБ</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="53"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation>Б</translation>
     </message>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="70"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n секунда</numerusform>
             <numerusform>%n секунди</numerusform>
             <numerusform>%n секунд</numerusform>
@@ -2794,7 +2799,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="71"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n хвилина</numerusform>
             <numerusform>%n хвилини</numerusform>
             <numerusform>%n хвилин</numerusform>
@@ -2803,7 +2808,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="72"/>
         <source>%n hours</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n година</numerusform>
             <numerusform>%n години</numerusform>
             <numerusform>%n годин</numerusform>
@@ -2812,7 +2817,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../common/desktop/formatter.cc" line="76"/>
         <source>%n days</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n день</numerusform>
             <numerusform>%n дні</numerusform>
             <numerusform>%n днів</numerusform>
@@ -2821,47 +2826,47 @@ Password: %2</source>
     <message>
         <location filename="../common/desktop/formatter.cc" line="108"/>
         <source>TB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>ТБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="110"/>
         <source>GB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>ГБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="112"/>
         <source>MB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>МБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="114"/>
         <source>kB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>кБ/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="116"/>
         <source>B/s</source>
-        <translation type="unfinished"></translation>
+        <translation>Б/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="131"/>
         <source>Gbps</source>
-        <translation type="unfinished">Гб/с</translation>
+        <translation>Гбіт/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="133"/>
         <source>Mbps</source>
-        <translation type="unfinished">Мб/с</translation>
+        <translation>Мбіт/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="135"/>
         <source>Kbps</source>
-        <translation type="unfinished">Кб/с</translation>
+        <translation>Кбіт/с</translation>
     </message>
     <message>
         <location filename="../common/desktop/formatter.cc" line="137"/>
         <source>bps</source>
-        <translation type="unfinished">б/с</translation>
+        <translation>біт/с</translation>
     </message>
 </context>
 <context>
@@ -2869,45 +2874,26 @@ Password: %2</source>
     <message>
         <location filename="../base/gui_application.cc" line="493"/>
         <source>Dark</source>
-        <translation type="unfinished">Темна</translation>
+        <translation>Темна</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="495"/>
         <source>Light</source>
-        <translation type="unfinished">Світла</translation>
+        <translation>Світла</translation>
     </message>
     <message>
         <location filename="../base/gui_application.cc" line="496"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>HomeWidget</name>
-    <message>
-        <source>Your ID</source>
-        <translation type="obsolete">Ваш ID</translation>
-    </message>
-    <message>
-        <source>Router is disabled</source>
-        <translation type="obsolete">Маршрутизатор відключено</translation>
+        <translation>Автоматично</translation>
     </message>
 </context>
 <context>
     <name>Host</name>
     <message>
-        <source>Application integrity check failed. Components are missing or damaged.</source>
-        <translation type="vanished">Перевірку цілістності програми не пройдено. Певні компоненти відсутні або пошкоджені.</translation>
-    </message>
-    <message>
-        <source>Export and import parameters can not be specified together.</source>
-        <translation type="vanished">Параметри імпорту і експорту не можуть бути задані одночасно.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="607"/>
         <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховище налаштувань недоступне.</translation>
     </message>
 </context>
 <context>
@@ -2915,37 +2901,37 @@ Password: %2</source>
     <message>
         <location filename="../host/main.cc" line="533"/>
         <source>Launch the application hidden.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустити застосунок прихованим.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="535"/>
         <source>Export parameters to file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт параметрів у файл.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="537"/>
         <source>Import parameters from file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт параметрів із файлу.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="539"/>
         <source>Do not display any messages during import and export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не показувати жодних повідомлень під час імпорту та експорту.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="541"/>
         <source>Calling the update check dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виклик діалогу перевірки оновлень.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="543"/>
         <source>Calling the settings dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виклик діалогу налаштувань.</translation>
     </message>
     <message>
         <location filename="../host/main.cc" line="545"/>
         <source>Calling the security log dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виклик діалогу журналу безпеки.</translation>
     </message>
 </context>
 <context>
@@ -2954,13 +2940,13 @@ Password: %2</source>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>В мережі</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.cc" line="95"/>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="114"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Не в мережі</translation>
     </message>
 </context>
 <context>
@@ -2971,230 +2957,196 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="818"/>
         <location filename="../host/ui/host_window.cc" line="1087"/>
         <source>Aspia Host</source>
-        <translation type="unfinished">Хост Aspia</translation>
+        <translation>Хост Aspia</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation type="unfinished">Ваш ID</translation>
+        <translation>Ваш ID</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="98"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="204"/>
         <location filename="../host/ui/host_window.cc" line="515"/>
         <location filename="../host/ui/host_window.cc" line="997"/>
         <source>Router is disabled</source>
-        <translation type="unfinished">Маршрутизатор відключено</translation>
+        <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="252"/>
         <source>Help</source>
-        <translation type="unfinished">Допомога</translation>
+        <translation>Допомога</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="261"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="271"/>
         <source>View</source>
-        <translation type="unfinished">Вигляд</translation>
+        <translation>Вигляд</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="275"/>
         <source>Language</source>
-        <translation type="unfinished">Мова</translation>
+        <translation>Мова</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="280"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="293"/>
         <source>Exit</source>
-        <translation type="unfinished">Вихід</translation>
+        <translation>Вихід</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="298"/>
         <source>Online Help...</source>
-        <translation type="unfinished">Онлайн допомога...</translation>
+        <translation>Онлайн допомога...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="301"/>
         <source>F1</source>
-        <translation type="unfinished">F1</translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="306"/>
         <source>About System</source>
-        <translation type="unfinished"></translation>
+        <translation>Про систему</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="311"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Про програму</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="316"/>
         <source>Security Log...</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал безпеки...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="321"/>
         <source>Settings...</source>
-        <translation type="unfinished">Налаштування...</translation>
+        <translation>Налаштування...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="326"/>
         <location filename="../host/ui/host_window.cc" line="781"/>
         <source>Hide</source>
-        <translation type="unfinished">Сховати</translation>
+        <translation>Сховати</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="337"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="348"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Термінал</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="359"/>
         <source>Desktop View</source>
-        <translation type="unfinished">Перегляд робочого столу</translation>
+        <translation>Перегляд робочого столу</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="370"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="381"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="392"/>
         <source>Text Chat</source>
-        <translation type="unfinished">Текстовий чат</translation>
+        <translation>Текстовий чат</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="397"/>
         <source>Show chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати чат</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="282"/>
         <location filename="../host/ui/host_window.cc" line="776"/>
         <source>Show</source>
-        <translation type="unfinished">Показати</translation>
+        <translation>Показати</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="465"/>
         <source>Not available</source>
-        <translation type="unfinished">Не доступно</translation>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="519"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="523"/>
         <source>Connected to router %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="527"/>
         <source>Failed to connect to router %1</source>
-        <translation type="unfinished">Не вдалося підключитися до маршрутизатора %1</translation>
+        <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="572"/>
         <source>Screen recording has started.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис екрана розпочато.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="574"/>
         <source>Screen recording stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис екрана зупинено.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="765"/>
         <source>Settings storage is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сховище налаштувань недоступне.</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation type="unfinished">Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
+        <translation>Якщо ви вийдете з Aspia, ви не зможете підключитися до цього комп'ютера, доки знову не увімкнете комп'ютер або Aspia вручну. Ви дійсно хочете вийти із застосунку?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1002"/>
         <source>Connecting to router...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1007"/>
         <source>Connected to router</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1012"/>
         <source>Connection error</source>
-        <translation type="unfinished">Помилка підключення</translation>
+        <translation>Помилка підключення</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1084"/>
         <source>IP addresses:</source>
-        <translation type="unfinished"></translation>
+        <translation>IP адреси:</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1088"/>
         <source>ID: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>JsonBackup</name>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Введений пароль не задовільняє вимог безпеки!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Бажаєте ввести інший пароль?</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="obsolete">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
-    </message>
-</context>
-<context>
-    <name>KeyBar</name>
-    <message>
-        <source>Up</source>
-        <translation type="obsolete">Вгору</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation type="obsolete">Припинено</translation>
+        <translation>ID: %1</translation>
     </message>
 </context>
 <context>
@@ -3202,80 +3154,80 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished">Батьківська група:</translation>
+        <translation>Батьківська група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Ім&apos;я:</translation>
+        <translation>Ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished">Коментар:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="84"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="117"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символ.</numerusform>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символи.</numerusform>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символів.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_dialog.cc" line="128"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символ.</numerusform>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символи.</numerusform>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="143"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Група з таким ім'ям вже існує у вибраній батьківській групі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="161"/>
         <source>Unable to add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося додати групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
         <source>Unable to modify group</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося змінити групу</translation>
     </message>
 </context>
 <context>
@@ -3283,48 +3235,48 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="50"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="59"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="62"/>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="134"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="149"/>
         <source>Failed to save the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося зберегти групу.</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="159"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити групу</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити групу "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити групу.</translation>
     </message>
 </context>
 <context>
@@ -3332,47 +3284,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="50"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Адреса / ID</translation>
+        <translation>Адреса / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="60"/>
         <source>Created</source>
-        <translation type="unfinished">Стоврено</translation>
+        <translation>Створено</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="65"/>
         <source>Modified</source>
-        <translation type="unfinished">Змінено</translation>
+        <translation>Змінено</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="70"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Останнє підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="75"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="70"/>
         <source>Status update...</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновлення стану...</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="423"/>
         <source>%n child group(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n дочірня група</numerusform>
             <numerusform>%n дочірні групи</numerusform>
             <numerusform>%n дочірніх груп</numerusform>
@@ -3381,21 +3333,21 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_group_widget.cc" line="425"/>
         <source>%n child host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n дочірній хост</numerusform>
+            <numerusform>%n дочірні хости</numerusform>
+            <numerusform>%n дочірніх хостів</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>В мережі</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="496"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Не в мережі</translation>
     </message>
 </context>
 <context>
@@ -3403,141 +3355,141 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="14"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Ім&apos;я:</translation>
+        <translation>Ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="49"/>
         <source>Router:</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="270"/>
         <source>Address:</source>
-        <translation type="unfinished">Адреса:</translation>
+        <translation>Адреса:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="79"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="93"/>
         <source>Comment:</source>
-        <translation type="unfinished">Коментар:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="55"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Без маршрутизатора</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="67"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="87"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="97"/>
         <source>&lt;deleted router&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;маршрутизатор видалено&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символ.</numerusform>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символи.</numerusform>
+            <numerusform>Занадто довге ім'я. Максимальна довжина імені - %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустиму адресу хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустимий ID хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи "_", "-", ".".</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символ.</numerusform>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символи.</numerusform>
+            <numerusform>Занадто довгий коментар. Максимальна довжина коментаря - %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост з таким ім'ям вже існує у вибраній групі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося додати хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося змінити хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="271"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я хоста або IP-адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="275"/>
         <source>ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID хоста</translation>
     </message>
 </context>
 <context>
@@ -3545,94 +3497,94 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="60"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="61"/>
         <source>Router</source>
-        <translation type="unfinished">Маршрутизатор</translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="62"/>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="64"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="74"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="77"/>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="163"/>
         <source>Without Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Без маршрутизатора</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="176"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="185"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="197"/>
         <source>An invalid host address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустиму адресу хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустимий ID хоста.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи "_", "-", ".".</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
         <source>Failed to save the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося зберегти хост.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="245"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити хост "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
         <source>Failed to delete the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити хост.</translation>
     </message>
 </context>
 <context>
@@ -3641,13 +3593,13 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="274"/>
         <location filename="../client/android/local_widget.cc" line="369"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати групу</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="275"/>
         <location filename="../client/android/local_widget.cc" line="379"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="276"/>
@@ -3657,118 +3609,118 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Import</source>
-        <translation type="unfinished">Імпорт</translation>
+        <translation>Імпорт</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="277"/>
         <location filename="../client/android/local_widget.cc" line="352"/>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Export</source>
-        <translation type="unfinished">Експорт</translation>
+        <translation>Експорт</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт адресної книги</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="299"/>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Address book (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресна книга (*.json)</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="313"/>
         <source>Imported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Імпортовано %n маршрутизатор, </numerusform>
+            <numerusform>Імпортовано %n маршрутизатори, </numerusform>
+            <numerusform>Імпортовано %n маршрутизаторів, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="314"/>
         <location filename="../client/android/local_widget.cc" line="354"/>
         <source>%n group(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n група, </numerusform>
+            <numerusform>%n групи, </numerusform>
+            <numerusform>%n груп, </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="315"/>
         <location filename="../client/android/local_widget.cc" line="355"/>
         <source>%n host(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n хост.</numerusform>
+            <numerusform>%n хости.</numerusform>
+            <numerusform>%n хостів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="319"/>
         <source>Invalid password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="324"/>
         <source>The file was created by a newer version and cannot be imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл створено новішою версією програми і його неможливо імпортувати.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="328"/>
         <source>The address book is already up to date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресна книга вже актуальна.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="332"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося імпортувати адресну книгу.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="341"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт адресної книги</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_widget.cc" line="353"/>
         <source>Exported %n router(s), </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Експортовано %n маршрутизатор, </numerusform>
+            <numerusform>Експортовано %n маршрутизатори, </numerusform>
+            <numerusform>Експортовано %n маршрутизаторів, </numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="359"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося експортувати адресну книгу.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="443"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити групу</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="454"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити хост</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="545"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="547"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="549"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation>Чат</translation>
     </message>
 </context>
 <context>
@@ -3777,12 +3729,12 @@ Password: %2</source>
         <location filename="../client/desktop/main_window.ui" line="117"/>
         <location filename="../client/desktop/main_window.ui" line="179"/>
         <source>Tool Bar</source>
-        <translation type="unfinished">Панель інструментів</translation>
+        <translation>Панель інструментів</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="144"/>
         <source>F1</source>
-        <translation type="unfinished">F1</translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="76"/>
@@ -3808,57 +3760,57 @@ Password: %2</source>
         <location filename="../client/desktop/main_window.ui" line="20"/>
         <location filename="../client/desktop/main_window.cc" line="357"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Клієнт Aspia</translation>
+        <translation>Клієнт Aspia</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="68"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="83"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Правка</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="100"/>
         <source>Session Type</source>
-        <translation type="unfinished">Тип сесії</translation>
+        <translation>Тип сесії</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="187"/>
         <source>Status Bar</source>
-        <translation type="unfinished">Рядок стану</translation>
+        <translation>Рядок стану</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="195"/>
         <source>Search Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле пошуку</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="203"/>
         <source>Large icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Великі іконки</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="211"/>
         <source>Open Sessions in Tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкривати сесії у вкладках</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="219"/>
         <source>Always on Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Поверх усіх вікон</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="153"/>
         <source>About</source>
-        <translation>Про</translation>
+        <translation>Про програму</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="105"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Дії</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="162"/>
@@ -3868,46 +3820,42 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/main_window.cc" line="95"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="obsolete">Хости</translation>
+        <translation>Пошук...</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="169"/>
         <source>Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Керування</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустиме посилання "%1".</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
         <source>The router referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор, вказаний у посиланні, не знайдено в адресній книзі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="267"/>
         <source>The host referenced by the link was not found in the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост, вказаний у посиланні, не знайдено в адресній книзі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="275"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор, пов'язаний із цим хостом, було видалено. Змініть хост, щоб вибрати інший маршрутизатор, або перейдіть на пряме підключення.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="343"/>
         <source>Settings</source>
-        <translation type="unfinished">Налаштування</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="455"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>У властивостях хоста вказано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора у властивостях адресної книги.</translation>
     </message>
 </context>
 <context>
@@ -3915,62 +3863,62 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="56"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="65"/>
         <source>Delete Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="74"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="83"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="92"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="101"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
         <source>Change Password</source>
-        <translation type="unfinished">Змінити пароль</translation>
+        <translation>Змінити пароль</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="119"/>
         <source>Clear Events</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити події</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="128"/>
         <source>Add Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="137"/>
         <source>Delete Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="146"/>
         <source>Edit Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="155"/>
         <source>Copy Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="167"/>
@@ -3978,135 +3926,131 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.ui" line="215"/>
         <location filename="../client/desktop/management_tab.ui" line="218"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="182"/>
         <location filename="../client/desktop/management_tab.ui" line="227"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="194"/>
         <location filename="../client/desktop/management_tab.ui" line="236"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="206"/>
         <location filename="../client/desktop/management_tab.ui" line="245"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про систему</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="257"/>
         <location filename="../client/desktop/management_tab.ui" line="266"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Термінал</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="275"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати робочий простір</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="284"/>
         <source>Edit Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити робочий простір</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="293"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити робочий простір</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="302"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="311"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="320"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="329"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="338"/>
         <source>Disconnect All</source>
-        <translation type="unfinished">Відключити всі</translation>
+        <translation>Відключити всіх</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="347"/>
         <source>Remove</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="356"/>
         <source>Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірка оновлень</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="365"/>
         <source>Approve</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердити</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="374"/>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="377"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Ctrl+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="386"/>
         <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="389"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="398"/>
         <source>Import Old Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт старої адресної книги...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
         <source>Export Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт адресної книги...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
         <source>Import Address Book...</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт адресної книги...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
         <source>Auto-refresh Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="obsolete">Хости</translation>
+        <translation>Автооновлення стану</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="968"/>
         <source>(copy)</source>
-        <translation type="unfinished">(копіювати)</translation>
+        <translation>(копія)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="685"/>
@@ -4116,102 +4060,102 @@ Password: %2</source>
         <location filename="../client/desktop/management_tab.cc" line="964"/>
         <location filename="../client/desktop/management_tab.cc" line="1008"/>
         <source>Failed to retrieve host information from the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося отримати інформацію про хост із локальної бази даних.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="973"/>
         <source>Failed to add the host to the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося додати хост до локальної бази даних.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете видалити хост "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
         <source>Unable to remove host</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити хост</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1079"/>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1147"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1080"/>
         <location filename="../client/desktop/management_tab.cc" line="1123"/>
         <location filename="../client/desktop/management_tab.cc" line="1148"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете видалити робочий простір "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете видалити групу "%1"? Хости, призначені цій групі або її підгрупам, будуть переміщені в корінь робочого простору.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Import Old Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт старої адресної книги</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1422"/>
         <source>Address Book (*.aab);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресна книга (*.aab);;Всі файли (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1445"/>
         <location filename="../client/desktop/management_tab.cc" line="1462"/>
         <source>Export Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт адресної книги</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1447"/>
         <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Address Book (*.json);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Адресна книга (*.json);;Всі файли (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1457"/>
         <source>Address book database is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>База даних адресної книги недоступна.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1464"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть пароль для шифрування адресної книги.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1469"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management_tab.cc" line="1470"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1473"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1490"/>
         <source>Failed to export the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося експортувати адресну книгу.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1495"/>
@@ -4219,42 +4163,45 @@ Password: %2</source>
 Routers exported: %1
 Groups exported: %2
 Hosts exported: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Експорт завершено успішно.
+Експортовано маршрутизаторів: %1
+Експортовано груп: %2
+Експортовано хостів: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Import Address Book</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт адресної книги</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1527"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокування</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1529"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="unfinished">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
+        <translation>Адресна книга зашифрована. Для відкриття необхідно ввести пароль.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1544"/>
         <source>Unable to decrypt the file with the specified password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдається розшифрувати файл за допомогою вказаного пароля.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Unsupported file format version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Непідтримувана версія формату файлу.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нічого не було імпортовано.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1556"/>
         <source>The file is not a valid address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл не є допустимою адресною книгою.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1561"/>
@@ -4265,32 +4212,38 @@ Groups added: %3
 Groups skipped: %4
 Hosts added: %5
 Hosts skipped: %6</source>
-        <translation type="unfinished"></translation>
+        <translation>Імпорт завершено успішно.
+Додано маршрутизаторів: %1
+Пропущено маршрутизаторів: %2
+Додано груп: %3
+Пропущено груп: %4
+Додано хостів: %5
+Пропущено хостів: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1909"/>
         <source>Copy Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати посилання</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1939"/>
         <source>Unable to create a link for this host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося створити посилання для цього хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1956"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор, пов'язаний із цим хостом, було видалено. Змініть хост, щоб вибрати інший маршрутизатор, або перейдіть на пряме підключення.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост має недопустимий ID.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1972"/>
         <source>The host has an incorrect address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост має недопустиму адресу.</translation>
     </message>
 </context>
 <context>
@@ -4298,109 +4251,109 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="51"/>
         <source>Set Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлення майстер-пароля</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="52"/>
         <source>Set a master password required to unlock the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановіть майстер-пароль, необхідний для розблокування застосунку.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
         <location filename="../client/android/master_password_dialog.cc" line="192"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокування</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="57"/>
         <source>Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="61"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="62"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть свій поточний пароль і виберіть новий.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>New Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий пароль</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="81"/>
         <source>Current Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточний пароль</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="91"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердження пароля</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="96"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="97"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="129"/>
         <source>Invalid master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="149"/>
         <source>The entered passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="159"/>
         <source>Unable to set master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося встановити майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний поточний пароль або неможливо його змінити.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати пароль</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="210"/>
         <location filename="../client/android/master_password_dialog.cc" line="218"/>
         <source>Biometric unlock failed. Enter the master password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося розблокувати за допомогою біометрії. Введіть майстер-пароль.</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Біометричні дані змінилися. Введіть майстер-пароль, щоб продовжити.</translation>
     </message>
 </context>
 <context>
@@ -4408,107 +4361,107 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="49"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="50"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Apply</source>
-        <translation type="unfinished">Примінити</translation>
+        <translation>Застосувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Відхилити</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Reset</source>
-        <translation type="unfinished">Скинути</translation>
+        <translation>Скинути</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Help</source>
-        <translation type="unfinished">Допомога</translation>
+        <translation>Допомога</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Abort</source>
-        <translation type="unfinished">Відмінити</translation>
+        <translation>Перервати</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторити</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ігнорувати</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Відновити за замовчуванням</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Save All</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти все</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Yes to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Так для всіх</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>No to All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ні для всіх</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="83"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="91"/>
         <source>Information</source>
-        <translation type="unfinished">Інформація</translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../common/desktop/msg_box.cc" line="99"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
 </context>
 <context>
@@ -4516,7 +4469,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/workers/network_worker.cc" line="370"/>
         <source>Failed to connect to the relay server</source>
-        <translation type="unfinished"></translation>
+        <translation>не вдалося підключитися до ретранслятора</translation>
     </message>
 </context>
 <context>
@@ -4543,32 +4496,32 @@ Hosts skipped: %6</source>
         <location filename="../host/ui/notifier_window.ui" line="371"/>
         <source>Disconnect all</source>
         <translatorcomment>отключить все?</translatorcomment>
-        <translation>Відключити все</translation>
+        <translation>Відключити всіх</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="269"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="302"/>
         <source>Unlock mouse</source>
-        <translation type="unfinished">Розблокувати мишу</translation>
+        <translation>Розблокувати мишу</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="310"/>
         <source>Unlock keyboard</source>
-        <translation type="unfinished">Розблокувати клавіатуру</translation>
+        <translation>Розблокувати клавіатуру</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="318"/>
         <source>Resume</source>
-        <translation type="unfinished">Продовжити</translation>
+        <translation>Відновити</translation>
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="543"/>
         <source>Aspia Host</source>
-        <translation type="unfinished">Хост Aspia</translation>
+        <translation>Хост Aspia</translation>
     </message>
 </context>
 <context>
@@ -4577,83 +4530,83 @@ Hosts skipped: %6</source>
         <location filename="../client/android/password_dialog.cc" line="37"/>
         <location filename="../host/android/password_dialog.cc" line="89"/>
         <source>Set Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлення пароля</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="38"/>
         <source>Enter a password to encrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть пароль для шифрування адресної книги.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Введення пароля</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
         <source>Enter the password to decrypt the address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть пароль для розшифрування адресної книги.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
         <location filename="../host/android/password_dialog.cc" line="54"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="59"/>
         <source>Confirm Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтвердження пароля</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="64"/>
         <location filename="../host/android/password_dialog.cc" line="62"/>
         <location filename="../host/android/password_dialog.cc" line="105"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="65"/>
         <location filename="../host/android/password_dialog.cc" line="63"/>
         <location filename="../host/android/password_dialog.cc" line="106"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="85"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="92"/>
         <source>Passwords do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Паролі не збігаються.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="74"/>
         <source>You entered an incorrect password.</source>
-        <translation type="unfinished">Ви ввели невірний пароль.</translation>
+        <translation>Ви ввели некоректний пароль.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="92"/>
         <source>New password</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий пароль</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="96"/>
         <source>Repeat password</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторіть пароль</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="115"/>
         <source>The password can not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../host/android/password_dialog.cc" line="123"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
 </context>
 <context>
@@ -4661,73 +4614,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="40"/>
         <source>Review System Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірка доступу до системи</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост Aspia потребує вашого дозволу на доступ до системних можливостей.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
         <source>Review the permissions below and grant the ones that are missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Перегляньте наведені нижче дозволи і надайте ті, яких не вистачає.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="64"/>
         <source>Screen Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис екрана</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <source>Required so a remote user can see this screen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібно, щоб віддалений користувач міг бачити цей екран.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="65"/>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Request Access...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запросити доступ...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="66"/>
         <source>Accessibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Універсальний доступ</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="67"/>
         <source>Required so a remote user can control the mouse and keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібно, щоб віддалений користувач міг керувати мишею і клавіатурою.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="68"/>
         <source>Full Disk Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Повний доступ до диска</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Required to transfer files from protected folders.</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібно для передачі файлів із захищених каталогів.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="69"/>
         <source>Open Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити налаштування...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="122"/>
         <source>Open Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити налаштування...</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Granted</source>
-        <translation type="unfinished"></translation>
+        <translation>Надано</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="142"/>
         <source>Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Не надано</translation>
     </message>
 </context>
 <context>
@@ -4748,12 +4701,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/android/message_dialog.cc" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../common/android/message_dialog.cc" line="51"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -4761,22 +4714,22 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/remote_widget.cc" line="469"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Непідтверджені хости</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="635"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="637"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="639"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation>Чат</translation>
     </message>
 </context>
 <context>
@@ -4784,90 +4737,90 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="48"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Ім&apos;я комп&apos;ютера</translation>
+        <translation>Ім'я комп'ютера</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP адреса</translation>
+        <translation>IP адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="58"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Час підключення</translation>
+        <translation>Час підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="63"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="68"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="256"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="267"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
+        <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="303"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити клієнта "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
         <source>Are you sure you want to disconnect all clients?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити всіх клієнтів?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="436"/>
         <source>Invalid client request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоректний запит клієнта.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="438"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний ідентифікатор запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="497"/>
         <source>%n client(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n клієнт</numerusform>
+            <numerusform>%n клієнти</numerusform>
+            <numerusform>%n клієнтів</numerusform>
         </translation>
     </message>
 </context>
@@ -4876,101 +4829,78 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="14"/>
         <source>Router</source>
-        <translation type="unfinished">Маршрутизатор</translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="25"/>
         <source>Address:</source>
-        <translation type="unfinished">Адреса:</translation>
+        <translation>Адреса:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="35"/>
         <source>Host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я хоста або IP-адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="42"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="52"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть ім'я або залиште поле порожнім</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="59"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Рівень доступу:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="69"/>
         <source>User Name:</source>
-        <translation type="unfinished">Ім&apos;я користувача:</translation>
+        <translation>Ім'я користувача:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.ui" line="83"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="45"/>
         <source>Administrator</source>
-        <translation type="unfinished">Адміністратор</translation>
+        <translation>Адміністратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Менеджер</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Client</source>
-        <translation type="unfinished">Клієнт</translation>
+        <translation>Клієнт</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустиму адресу маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="108"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, .</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="119"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/desktop/router_dialog.cc" line="142"/>
         <location filename="../client/desktop/router_dialog.cc" line="151"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RouterEditDialog</name>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Адреса</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="obsolete">Ім&apos;я користувача</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Пароль</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Зберегти</translation>
-    </message>
-    <message>
-        <source>Password cannot be empty.</source>
-        <translation type="obsolete">Пароль не може бути порожнім.</translation>
+        <translation>Не вдалося зберегти налаштування маршрутизатора.</translation>
     </message>
 </context>
 <context>
@@ -4978,68 +4908,68 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="56"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="58"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="59"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="68"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="71"/>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="150"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введено недопустиму адресу маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи "_", "-", ".".</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не може бути порожнім.</translation>
+        <translation>Пароль не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="188"/>
         <source>Failed to save the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося зберегти налаштування маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="198"/>
         <source>Delete Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити маршрутизатор "%1"?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
         <source>Failed to delete the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити маршрутизатор.</translation>
     </message>
 </context>
 <context>
@@ -5047,73 +4977,73 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Група</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="25"/>
         <source>Parent Group:</source>
-        <translation type="unfinished">Батьківська група:</translation>
+        <translation>Батьківська група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Ім&apos;я:</translation>
+        <translation>Ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="42"/>
         <source>Display name</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.ui" line="53"/>
         <source>Comment:</source>
-        <translation type="unfinished">Коментар:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="50"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="123"/>
         <source>Invalid group request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустимий запит групи.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="125"/>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="171"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="127"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="129"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ заборонено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="131"/>
         <source>Group not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Групу не знайдено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="133"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
         <source>Group name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я групи не може бути порожнім.</translation>
     </message>
 </context>
 <context>
@@ -5121,70 +5051,70 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="45"/>
         <source>Display Name</source>
-        <translation type="unfinished">Ім&apos;я на екрані</translation>
+        <translation>Відображуване ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Ім&apos;я комп&apos;ютера</translation>
+        <translation>Ім'я комп'ютера</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="60"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="70"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="75"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="80"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="85"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="90"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Останнє підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="95"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Остання зміна</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="100"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="441"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n хост</numerusform>
+            <numerusform>%n хости</numerusform>
+            <numerusform>%n хостів</numerusform>
         </translation>
     </message>
 </context>
@@ -5193,64 +5123,57 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="14"/>
         <source>Host Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Властивості хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="25"/>
         <source>Group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Група:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="35"/>
         <source>Display Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>User Name:</source>
-        <translation type="unfinished">Ім&apos;я користувача:</translation>
+        <translation>Ім'я користувача:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>Comment:</source>
-        <translation type="unfinished">Коментар:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="106"/>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ заборонено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="108"/>
         <source>Host not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост не знайдено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="110"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="112"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="114"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
-    </message>
-</context>
-<context>
-    <name>RouterHostsItem</name>
-    <message>
-        <source>Hosts</source>
-        <translation type="obsolete">Хости</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
 </context>
 <context>
@@ -5258,166 +5181,166 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Display Name</source>
-        <translation type="unfinished">Ім&apos;я на екрані</translation>
+        <translation>Відображуване ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="58"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Ім&apos;я комп&apos;ютера</translation>
+        <translation>Ім'я комп'ютера</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="63"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="68"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="73"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="78"/>
         <source>Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Робочий простір</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="83"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="88"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="93"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="98"/>
         <source>Last Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Останнє підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="103"/>
         <source>Last Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Остання зміна</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="108"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="118"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередня сторінка</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="121"/>
         <source>Previous</source>
-        <translation type="unfinished">Попередня</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="135"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступна сторінка</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="138"/>
         <source>Next</source>
-        <translation type="unfinished">Наступна</translation>
+        <translation>Вперед</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="149"/>
         <source>Items per page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Елементів на сторінку:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="399"/>
         <source>The host is not assigned to any workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост не призначено жодному робочому простору.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити хост "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="unfinished">Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
+        <translation>Ви дійсно хочете відключити всі хости?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="469"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Підтвердження</translation>
+        <translation>Підтвердження</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="470"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення хоста призведе до видалення всієї його конфігурації для підключення до маршрутизатора, а застосунок на хості буде видалено. Ця дія незворотна. Ви впевнені, що хочете продовжити?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="593"/>
         <source>Invalid host request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний запит до хоста.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="595"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний ідентифікатор запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="752"/>
         <source>%n host(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n хост</numerusform>
+            <numerusform>%n хости</numerusform>
+            <numerusform>%n хостів</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="781"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="792"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
+        <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="841"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося записати файл.</translation>
     </message>
 </context>
 <context>
@@ -5425,165 +5348,158 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="58"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="63"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Час підключення</translation>
+        <translation>Час підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="68"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Розмір пула</translation>
+        <translation>Розмір пулу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="73"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="78"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Ім&apos;я комп&apos;ютера</translation>
+        <translation>Ім'я комп'ютера</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="83"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="88"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="113"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
         <source>Host Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса хоста</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="128"/>
         <source>Client Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса клієнта</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="133"/>
         <source>Transferred</source>
-        <translation type="unfinished"></translation>
+        <translation>Передано</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="138"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Тривалість</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="143"/>
         <source>Idle</source>
-        <translation type="unfinished">Не активний</translation>
+        <translation>Простій</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation>Зберегти файл</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="340"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-файли (*.json)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="351"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
+        <translation>Не вдалося відкрити файл для запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="414"/>
         <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося записати файл.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити ретранслятор "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
         <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви дійсно хочете відключити всі ретранслятори?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="527"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation>Відключити</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="529"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="530"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете відключити вузол "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
         <source>Invalid relay request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний запит ретранслятора.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="663"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="686"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний ідентифікатор запису.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="688"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="684"/>
         <source>Relay session not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеанс ретранслятора не знайдено.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="768"/>
         <source>%n relay(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n ретранслятор</numerusform>
+            <numerusform>%n ретранслятори</numerusform>
+            <numerusform>%n ретрансляторів</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterStatusDialog</name>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Закрити</translation>
     </message>
 </context>
 <context>
@@ -5591,20 +5507,20 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="48"/>
         <source>Date and time</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата і час</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="53"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Подія</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_status_widget.cc" line="155"/>
         <source>%n event(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n подія</numerusform>
+            <numerusform>%n події</numerusform>
+            <numerusform>%n подій</numerusform>
         </translation>
     </message>
 </context>
@@ -5613,32 +5529,32 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Ім&apos;я комп&apos;ютера</translation>
+        <translation>Ім'я комп'ютера</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="81"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="82"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="203"/>
         <source>Failed to approve the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося підтвердити хост.</translation>
     </message>
 </context>
 <context>
@@ -5651,7 +5567,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="37"/>
@@ -5671,7 +5587,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="58"/>
         <source>Access Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Рівень доступу:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="85"/>
@@ -5679,185 +5595,174 @@ Hosts skipped: %6</source>
         <translation>Відключити обліковий запис користувача</translation>
     </message>
     <message>
-        <source>Allowed Session Types:</source>
-        <translation type="vanished">Дозволені типи підключень:</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="95"/>
         <source>Reset two-factor authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинути двофакторну автентифікацію</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="103"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Сесії</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="119"/>
         <source>Signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>Виконано вхід</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="124"/>
         <source>Last activity</source>
-        <translation type="unfinished"></translation>
+        <translation>Остання активність</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="129"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="152"/>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершити сеанс</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.ui" line="159"/>
         <source>Sign out all</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершити всі сеанси</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="182"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний запит користувача.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="184"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="240"/>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="339"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="186"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="188"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished">Користувач із вказаним ім&apos;ям вже існує.</translation>
+        <translation>Користувач з указаним ім'ям вже існує.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="190"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувача не знайдено. Можливо, список застарів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="192"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="205"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Скидання двофакторної автентифікації призведе до виходу користувача з усіх сеансів і вимагатиме повторного налаштування при наступному вході. Продовжити?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="254"/>
         <source>Are you sure you want to sign this user out of this session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете завершити цей сеанс користувача?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="281"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете завершити всі сеанси цього користувача?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="335"/>
         <source>Session not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеанс не знайдено. Можливо, список застарів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="337"/>
         <source>Invalid sign-out request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустимий запит на завершення сеансу.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="370"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, ., @</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введене вами ім'я користувача вже існує.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="394"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="403"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символ.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символи.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="413"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="414"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="421"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="441"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома внутрішня помилка при створенні або зміні користувача.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="493"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Подвійний клік для зміни</translation>
+        <translation>Подвійне клацання для зміни</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Administrator</source>
-        <translation type="unfinished">Адміністратор</translation>
+        <translation>Адміністратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="568"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Менеджер</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="572"/>
         <source>Client</source>
-        <translation type="unfinished">Клієнт</translation>
+        <translation>Клієнт</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="590"/>
         <source>Never</source>
-        <translation type="unfinished">Ніколи</translation>
-    </message>
-</context>
-<context>
-    <name>RouterUsersItem</name>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Користувачі</translation>
+        <translation>Ніколи</translation>
     </message>
 </context>
 <context>
@@ -5865,217 +5770,66 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="51"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнено</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="61"/>
         <source>Session Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Типи сесій</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
         <source>You cannot delete a built-in user.</source>
-        <translation type="unfinished">Неможливо видалити вбудованого користувача.</translation>
+        <translation>Ви не можете видалити вбудованого користувача.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+        <translation>Ви дійсно хочете видалити користувача "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
         <source>Invalid user request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний запит користувача.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="376"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="378"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="380"/>
         <source>A user with the specified name already exists.</source>
-        <translation type="unfinished">Користувач із вказаним ім&apos;ям вже існує.</translation>
+        <translation>Користувач з указаним ім'ям вже існує.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="382"/>
         <source>User not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувача не знайдено. Можливо, список застарів.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="384"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="442"/>
         <source>%n user(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n користувач</numerusform>
+            <numerusform>%n користувачі</numerusform>
+            <numerusform>%n користувачів</numerusform>
         </translation>
-    </message>
-</context>
-<context>
-    <name>RouterWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">Адреса</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="obsolete">Час підключення</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="obsolete">Розмір пула</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Версія</translation>
-    </message>
-    <message>
-        <source>Hosts</source>
-        <translation type="obsolete">Хости</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="obsolete">Ім&apos;я комп&apos;ютера</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="obsolete">IP адреса</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="obsolete">Архітектура</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="obsolete">Операційна система</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="obsolete">Ім&apos;я користувача</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="obsolete">Порт</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="obsolete">Ім&apos;я на екрані</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="obsolete">Статус</translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="obsolete">Попередня</translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="obsolete">Наступна</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="obsolete">Не активний</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Користувачі</translation>
-    </message>
-    <message>
-        <source>You cannot delete a built-in user.</source>
-        <translation type="obsolete">Неможливо видалити вбудованого користувача.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation type="obsolete">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to disconnect all hosts?</source>
-        <translation type="obsolete">Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
-    </message>
-    <message>
-        <source>Confirmation</source>
-        <translation type="obsolete">Підтвердження</translation>
-    </message>
-    <message>
-        <source>Disconnect</source>
-        <translation type="obsolete">Відключити</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Копіювати рядок</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Копіювати значення</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="obsolete">Невідома внутрішня помилка.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="obsolete">Передано невірні дані.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="obsolete">Користувач із вказаним ім&apos;ям вже існує.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="obsolete">Невідомий тип помилки.</translation>
-    </message>
-    <message>
-        <source>Change Password</source>
-        <translation type="obsolete">Змінити пароль</translation>
-    </message>
-    <message numerus="yes">
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="obsolete">Введений пароль не задовільняє вимог безпеки!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="obsolete">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="obsolete">Бажаєте ввести інший пароль?</translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">Зберегти файл</translation>
-    </message>
-    <message>
-        <source>Could not open file for writing.</source>
-        <translation type="obsolete">Неможливо відкрити файл для запису.</translation>
     </message>
 </context>
 <context>
@@ -6083,132 +5837,134 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="14"/>
         <source>Workspace Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Властивості робочого простору</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Ім&apos;я:</translation>
+        <translation>Ім'я:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="47"/>
         <source>Comment:</source>
-        <translation type="unfinished">Коментар:</translation>
+        <translation>Коментар:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="58"/>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="66"/>
         <source>Users with access</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувачі з доступом</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="87"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="160"/>
         <source>&lt; Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; Додати</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="90"/>
         <source>Grant access to the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Надати доступ вибраному користувачу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="97"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="170"/>
         <source>Remove &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити &gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="100"/>
         <source>Revoke access from the selected user</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкликати доступ у вибраного користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="118"/>
         <source>Available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступні користувачі</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="131"/>
         <source>Hosts</source>
-        <translation type="unfinished">Хости</translation>
+        <translation>Хости</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="139"/>
         <source>Hosts in workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Хости в робочому просторі</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="163"/>
         <source>Move the selected host into the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемістити вибраний хост у робочий простір</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="173"/>
         <source>Remove the selected host from the workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити вибраний хост із робочого простору</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <source>Unassigned hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Непризначені хости</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="214"/>
         <source>Workspace name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я робочого простору не може бути порожнім.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="224"/>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="298"/>
         <source>A workspace with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Робочий простір з указаним ім'ям вже існує.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="292"/>
         <source>Invalid workspace request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустимий запит робочого простору.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="294"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="296"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="300"/>
         <source>Workspace not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Робочий простір не знайдено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="302"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="332"/>
         <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Адміністраторів не можна видалити зі списку доступу до робочого простору.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="367"/>
         <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалення хоста з робочого простору назавжди очистить його зашифровані поля (коментар, ім'я користувача і пароль). Цю дію неможливо скасувати.
+
+Ви впевнені, що хочете продовжити?</translation>
     </message>
 </context>
 <context>
@@ -6216,42 +5972,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/routers_widget.cc" line="123"/>
         <source>No routers added</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає доданих маршрутизаторів</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="198"/>
         <source>Add Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="235"/>
         <source>Edit Router</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="330"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="335"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання з маршрутизатором %1 встановлено.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="340"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено від маршрутизатора %1.</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="356"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережева помилка: %1</translation>
     </message>
     <message>
         <location filename="../client/android/routers_widget.cc" line="373"/>
         <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Маршрутизатор вимагає зміни пароля, що тут поки не підтримується.</translation>
     </message>
 </context>
 <context>
@@ -6259,12 +6015,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="14"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_dialog.ui" line="20"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук...</translation>
     </message>
 </context>
 <context>
@@ -6272,36 +6028,36 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Адреса / ID</translation>
+        <translation>Адреса / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Comment</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Коментар</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="248"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Група</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="530"/>
         <source>%n result(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n результат</numerusform>
+            <numerusform>%n результати</numerusform>
+            <numerusform>%n результатів</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/android/search_widget.cc" line="175"/>
         <source>Nothing found</source>
-        <translation type="unfinished"></translation>
+        <translation>Нічого не знайдено</translation>
     </message>
 </context>
 <context>
@@ -6309,64 +6065,60 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="14"/>
         <source>Security Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал безпеки</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="34"/>
         <source>File:</source>
-        <translation type="unfinished">Файл:</translation>
+        <translation>Файл:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="57"/>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="83"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук...</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="97"/>
         <source>Events:</source>
-        <translation type="unfinished"></translation>
+        <translation>Події:</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.ui" line="238"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити каталог</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="352"/>
         <source>Time</source>
-        <translation type="unfinished">Час</translation>
+        <translation>Час</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="353"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Подія</translation>
     </message>
     <message>
         <location filename="../host/ui/security_log_dialog.cc" line="354"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Подробиці</translation>
     </message>
 </context>
 <context>
     <name>SelectScreenAction</name>
     <message>
-        <source>Full Desktop</source>
-        <translation type="obsolete">Повний робочий стіл</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="38"/>
         <source>Monitor %1 (primary)</source>
-        <translation type="unfinished">Монітор %1 (основний)</translation>
+        <translation>Монітор %1 (основний)</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/select_screen_action.h" line="40"/>
         <source>Monitor %1</source>
-        <translation type="unfinished">Монітор %1</translation>
+        <translation>Монітор %1</translation>
     </message>
 </context>
 <context>
@@ -6374,12 +6126,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="191"/>
         <source>Continue Pending</source>
-        <translation>Продовжити очікування</translation>
+        <translation>Відновлення</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="193"/>
         <source>Pause Pending</source>
-        <translation>Призупинити очікування</translation>
+        <translation>Призупинення</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="195"/>
@@ -6394,12 +6146,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="199"/>
         <source>Start Pending</source>
-        <translation>Почати очікування</translation>
+        <translation>Запуск</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="201"/>
         <source>Stop Pending</source>
-        <translation>Припинити очікування</translation>
+        <translation>Зупинка</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="203"/>
@@ -6443,7 +6195,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/session_type.cc" line="33"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="36"/>
@@ -6458,12 +6210,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/session_type.cc" line="42"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation>Чат</translation>
     </message>
     <message>
         <location filename="../common/desktop/session_type.cc" line="45"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Термінал</translation>
     </message>
 </context>
 <context>
@@ -6471,235 +6223,227 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="119"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Інтерфейс</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="125"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="135"/>
         <source>Theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Тема:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="145"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я, відображуване при підключенні:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="155"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Підключення</translation>
+        <translation>Введіть ім'я або залиште поле порожнім</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="165"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="171"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити прямі підключення</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="185"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол PCP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="192"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="199"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол UPnP</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="209"/>
         <source>Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Майстер-пароль</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="228"/>
         <source>Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити...</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="291"/>
         <source>Features</source>
-        <translation type="unfinished">Додатково</translation>
+        <translation>Можливості</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="297"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Увімкнути аудіо</translation>
+        <translation>Увімкнути звук</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="304"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Буфер обміну</translation>
+        <translation>Увімкнути буфер обміну</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="311"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">Показувати форму віддаленого курсора</translation>
+        <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="318"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">Показувати позицію віддаленого курсора</translation>
+        <translation>Показувати положення віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="325"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Відключити ефекти робочого стола</translation>
+        <translation>Вимкнути ефекти робочого столу</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="332"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Відключити шпалери робочого стола</translation>
+        <translation>Вимкнути шпалери робочого столу</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="339"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Заблокувати комп&apos;ютер після від&apos;єдннання</translation>
+        <translation>Блокувати комп'ютер при відключенні</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="346"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Блокувати віддалений ввід</translation>
+        <translation>Блокувати віддалене введення</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="353"/>
         <source>Send key combinations</source>
-        <translation type="unfinished">Комбінації клавіш відправки</translation>
+        <translation>Надсилати комбінації клавіш</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="369"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Екран</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="377"/>
         <source>Preferred resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажана роздільна здатність:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="405"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="411"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished">Автоматично починати запис сесій при підключенні</translation>
+        <translation>Автоматично починати запис сесії при підключенні</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="420"/>
         <source>Write path:</source>
-        <translation type="unfinished">Шлях для записів:</translation>
+        <translation>Шлях для запису:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
         <location filename="../client/desktop/settings_tab.cc" line="129"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновлення</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="514"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished">Перевіряти оновлення при запуску</translation>
+        <translation>Перевіряти оновлення при запуску</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="521"/>
         <source>Use custom update server</source>
-        <translation type="unfinished">Використовувати інший сервер оновлень</translation>
+        <translation>Використовувати інший сервер оновлень</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="530"/>
         <source>Server:</source>
-        <translation type="unfinished">Сервер:</translation>
+        <translation>Сервер:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="557"/>
         <source>Check for updates</source>
-        <translation type="unfinished">Перевірити наявність оновлень</translation>
+        <translation>Перевірити оновлення</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="126"/>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="127"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="191"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="obsolete">Налаштування</translation>
+        <translation>Немає</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="342"/>
         <source>The new language will be applied after the application is restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нова мова буде застосована після перезапуску застосунку.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="411"/>
         <source>Choose path</source>
-        <translation type="unfinished">Обрати шлях</translation>
+        <translation>Вибір шляху</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="431"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="433"/>
         <source>Enter your current password and choose a new one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть свій поточний пароль і виберіть новий.</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="442"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="445"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.cc" line="454"/>
         <source>Invalid current password or unable to change it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірний поточний пароль або неможливо його змінити.</translation>
     </message>
 </context>
 <context>
@@ -6712,7 +6456,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="321"/>
         <source>The configuration was successfully exported.</source>
-        <translation>Кофігурацію експортовано успішно.</translation>
+        <translation>Конфігурацію експортовано успішно.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="331"/>
@@ -6728,7 +6472,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="238"/>
         <source>Unable to open the source file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відкрити вихідний файл.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="250"/>
@@ -6744,32 +6488,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/settings_util.cc" line="332"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="348"/>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="359"/>
         <source>Aspia</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="267"/>
         <source>Unable to write the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося записати захищену базу даних.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="287"/>
         <source>Unable to read the secure database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося прочитати захищену базу даних.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="308"/>
         <source>Unable to open the target file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося відкрити цільовий файл.</translation>
     </message>
     <message>
         <location filename="../host/settings_util.cc" line="316"/>
@@ -6783,233 +6527,217 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/settings_widget.cc" line="107"/>
         <location filename="../host/android/settings_widget.cc" line="144"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Про програму</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="158"/>
         <location filename="../host/android/settings_widget.cc" line="214"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="obsolete">Мова</translation>
+        <translation>Інтерфейс</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="161"/>
         <location filename="../host/android/settings_widget.cc" line="219"/>
         <source>Theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="174"/>
         <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Відображуване ім'я при підключенні</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="186"/>
         <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Security</source>
-        <translation type="unfinished">Безпека</translation>
+        <translation>Безпека</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="188"/>
         <source>Change Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Зміна майстер-пароля</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="200"/>
         <source>Unlock with biometrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокувати за допомогою біометрії</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="225"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштуйте відбиток пальця в параметрах системи, щоб використовувати цю функцію.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="227"/>
         <source>Biometrics are not available on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Біометрична автентифікація недоступна на цьому пристрої.</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="238"/>
         <source>UDP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP підключення</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="252"/>
         <source>Allow direct connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити прямі підключення</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="253"/>
         <source>Allow UDP Hole Punching</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити UDP Hole Punching</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="254"/>
         <source>Allow PCP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол PCP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="255"/>
         <source>Allow NAT-PMP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол NAT-PMP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="256"/>
         <source>Allow UPnP protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити протокол UPnP</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="262"/>
         <source>Remote Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Віддалений робочий стіл</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="264"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Увімкнути аудіо</translation>
+        <translation>Увімкнути звук</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="269"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Буфер обміну</translation>
+        <translation>Увімкнути буфер обміну</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="274"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">Показувати форму віддаленого курсора</translation>
+        <translation>Показувати форму віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="280"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">Показувати позицію віддаленого курсора</translation>
+        <translation>Показувати положення віддаленого курсора</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="286"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Відключити ефекти робочого стола</translation>
+        <translation>Вимкнути ефекти робочого столу</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="292"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Відключити шпалери робочого стола</translation>
+        <translation>Вимкнути шпалери робочого столу</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Заблокувати комп&apos;ютер після від&apos;єдннання</translation>
+        <translation>Блокувати комп'ютер при відключенні</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="304"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Блокувати віддалений ввід</translation>
+        <translation>Блокувати віддалене введення</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Enable biometric unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути розблокування за допомогою біометрії</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="332"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Send key combinations</source>
-        <translation type="obsolete">Комбінації клавіш відправки</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="153"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Edit User</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити користувача</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="162"/>
         <source>Add User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desktop</source>
-        <translation type="obsolete">Робочий стіл</translation>
-    </message>
-    <message>
-        <source>File Transfer</source>
-        <translation type="obsolete">Передача файлів</translation>
+        <translation>Додати користувача</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Manage users</source>
-        <translation type="unfinished"></translation>
+        <translation>Керування користувачами</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="245"/>
         <source>Change password</source>
-        <translation type="unfinished">Змінити пароль</translation>
+        <translation>Змінити пароль</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="249"/>
         <source>Disable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимкнути захист паролем</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Enable password protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути захист паролем</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="273"/>
         <source>Router</source>
-        <translation type="unfinished">Маршрутизатор</translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="278"/>
         <source>Enable the use of a router</source>
-        <translation type="unfinished">Використовувати маршрутизатор</translation>
+        <translation>Використовувати маршрутизатор</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="283"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="289"/>
         <source>Public Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Публічний ключ</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished">Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
+        <translation>Потрібен маршрутизатор для підключення до комп'ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете встановити власний. Завантажити маршрутизатор можна на &lt;a href="https://aspia.org"&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
         <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>An error occurred while processing the password.</source>
-        <translation type="unfinished">Сталася помилка під час обробки пароля.</translation>
+        <translation>Сталася помилка при обробці пароля.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>Import</source>
-        <translation type="unfinished">Імпорт</translation>
+        <translation>Імпорт</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="401"/>
         <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON-файли (*.json)</translation>
     </message>
 </context>
 <context>
@@ -7017,132 +6745,132 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="74"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="920"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="924"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished"></translation>
+        <translation>З'єднання з маршрутизатором %1 встановлено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="928"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Відключено від маршрутизатора %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="972"/>
         <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для завершення міграції з попередньої версії необхідно змінити ваш пароль.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="474"/>
         <source>Change Password</source>
-        <translation type="unfinished">Змінити пароль</translation>
+        <translation>Змінити пароль</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="481"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символ.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символи.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="488"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/sidebar.cc" line="489"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="492"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="514"/>
         <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль оновлено. Очікування нових ключів шифрування...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="520"/>
         <source>Invalid password change request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустимий запит на зміну пароля.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Невідома внутрішня помилка.</translation>
+        <translation>Невідома внутрішня помилка.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Передано невірні дані.</translation>
+        <translation>Передано некоректні дані.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Невідомий тип помилки.</translation>
+        <translation>Невідомий тип помилки.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Історію подій очищено.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете видалити групу "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
         <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити групу</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви впевнені, що хочете видалити маршрутизатор "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
         <source>Network error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережева помилка: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1422"/>
         <source>A group with this name already exists in the selected parent group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Група з таким ім'ям вже існує у вибраній батьківській групі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1431"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1593"/>
         <source>Failed to move the group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося перемістити групу.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1484"/>
         <source>A host with this name already exists in the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хост з таким ім'ям вже існує у вибраній групі.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1502"/>
         <location filename="../client/desktop/management/sidebar.cc" line="1670"/>
         <source>Failed to move the host to the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося перемістити хост у вибрану групу.</translation>
     </message>
 </context>
 <context>
@@ -7150,7 +6878,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="168"/>
         <source>Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>Клієнти</translation>
     </message>
 </context>
 <context>
@@ -7158,7 +6886,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="150"/>
         <source>Approved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтверджені хости</translation>
     </message>
 </context>
 <context>
@@ -7166,7 +6894,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Relays</source>
-        <translation type="unfinished"></translation>
+        <translation>Ретранслятори</translation>
     </message>
 </context>
 <context>
@@ -7174,7 +6902,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="186"/>
         <source>Unapproved Hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Непідтверджені хости</translation>
     </message>
 </context>
 <context>
@@ -7182,7 +6910,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar_items.cc" line="159"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
 </context>
 <context>
@@ -7206,7 +6934,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/statistics_dialog.cc" line="208"/>
         <source>Close</source>
-        <translation type="unfinished">Закрити</translation>
+        <translation>Закрити</translation>
     </message>
 </context>
 <context>
@@ -7233,14 +6961,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="58"/>
         <source>Publisher</source>
         <translation>Видавець</translation>
-    </message>
-    <message>
-        <source>Install Date</source>
-        <translation type="vanished">Дата встановлення</translation>
-    </message>
-    <message>
-        <source>Install Location</source>
-        <translation type="vanished">Місце встановлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="66"/>
@@ -7311,27 +7031,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7340,14 +7060,6 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="48"/>
         <source>Name</source>
         <translation>Ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Driver Version</source>
-        <translation type="vanished">Версія драйвера</translation>
-    </message>
-    <message>
-        <source>Driver Date</source>
-        <translation type="vanished">Дата драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="53"/>
@@ -7380,32 +7092,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="43"/>
         <source>Table</source>
-        <translation type="unfinished"></translation>
+        <translation>Таблиця</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="56"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="61"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="70"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="75"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.ui" line="80"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7456,27 +7168,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7522,7 +7234,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="53"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>На початок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="60"/>
@@ -7537,16 +7249,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="74"/>
         <source>Last</source>
-        <translation type="unfinished"></translation>
+        <translation>В кінець</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="94"/>
         <source>Events type</source>
-        <translation>Тип події</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation type="vanished">Категорія</translation>
+        <translation>Тип подій</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
@@ -7608,26 +7316,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="42"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Опис</translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="50"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="55"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_user_groups.ui" line="60"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7635,27 +7339,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="39"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="44"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="52"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="57"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.ui" line="62"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7831,51 +7535,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="50"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
-    </message>
-    <message>
-        <source>CPU</source>
-        <translation type="obsolete">ЦП</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="55"/>
         <source>Memory</source>
-        <translation type="unfinished">Пам&apos;ять</translation>
+        <translation>Пам'ять</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation type="unfinished">ID сесії</translation>
+        <translation>ID сесії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
         <source>User Name</source>
-        <translation type="unfinished">Ім&apos;я користувача</translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="70"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="78"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="83"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="88"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -7964,32 +7664,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="46"/>
         <source>Drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Диск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="62"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="67"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="76"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation>Копіювати рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="81"/>
         <source>Copy Name</source>
-        <translation type="unfinished">Копіювати ім&apos;я</translation>
+        <translation>Копіювати ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.ui" line="86"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation>Копіювати значення</translation>
     </message>
 </context>
 <context>
@@ -8053,202 +7753,202 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="102"/>
         <source>Save</source>
-        <translation type="unfinished">Зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="105"/>
         <source>Save (Ctrl+S)</source>
-        <translation type="unfinished">Зберегти (Ctrl+S)</translation>
+        <translation>Зберегти (Ctrl+S)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="108"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished">Ctrl+S</translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="117"/>
         <source>Print</source>
-        <translation type="unfinished">Друкувати</translation>
+        <translation>Друк</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="120"/>
         <source>Print (Ctrl+P)</source>
-        <translation type="unfinished">Друкувати (Ctrl+P)</translation>
+        <translation>Друк (Ctrl+P)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="123"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="132"/>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="135"/>
         <source>Refresh (F5)</source>
-        <translation type="unfinished">Оновити (F5)</translation>
+        <translation>Оновити (F5)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.ui" line="138"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File</source>
-        <translation type="unfinished">Файл HTML</translation>
+        <translation>HTML-файл</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="341"/>
         <source>HTML File (*.html)</source>
-        <translation type="unfinished">Файл HTML (*.html)</translation>
+        <translation>HTML-файл (*.html)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="351"/>
         <source>Failed to save file: %1</source>
-        <translation type="unfinished">Не вдалося зберегти файл: %1</translation>
+        <translation>Не вдалося зберегти файл: %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="376"/>
         <source>Summary</source>
-        <translation type="unfinished">Загальне</translation>
+        <translation>Зведення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="383"/>
         <source>Hardware</source>
-        <translation type="unfinished">Обладнання</translation>
+        <translation>Обладнання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="386"/>
         <source>DMI</source>
-        <translation type="unfinished"></translation>
+        <translation>DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="389"/>
         <source>Processor</source>
-        <translation type="unfinished">Процесор</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="392"/>
         <source>Devices</source>
-        <translation type="unfinished">Пристрої</translation>
+        <translation>Пристрої</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="395"/>
         <source>Drives</source>
-        <translation type="unfinished"></translation>
+        <translation>Диски</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>S.M.A.R.T.</source>
-        <translation type="unfinished"></translation>
+        <translation>S.M.A.R.T.</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="401"/>
         <source>Video Adapters</source>
-        <translation type="unfinished">Відео адаптери</translation>
+        <translation>Відеоадаптери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="404"/>
         <source>Monitors</source>
-        <translation type="unfinished">Монітори</translation>
+        <translation>Монітори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="407"/>
         <source>Printers</source>
-        <translation type="unfinished">Принтери</translation>
+        <translation>Принтери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="410"/>
         <source>Power Options</source>
-        <translation type="unfinished">Параметри живлення</translation>
+        <translation>Параметри живлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Software</source>
-        <translation type="unfinished">Програмне забезпечення</translation>
+        <translation>Програмне забезпечення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Applications</source>
-        <translation type="unfinished">Програми</translation>
+        <translation>Програми</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Drivers</source>
-        <translation type="unfinished">Драйвери</translation>
+        <translation>Драйвери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="436"/>
         <source>Services</source>
-        <translation type="unfinished">Сервіси</translation>
+        <translation>Служби</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="439"/>
         <source>Processes</source>
-        <translation type="unfinished">Процеси</translation>
+        <translation>Процеси</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="442"/>
         <source>Licenses</source>
-        <translation type="unfinished">Ліцензії</translation>
+        <translation>Ліцензії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="455"/>
         <source>Network</source>
-        <translation type="unfinished">Мережа</translation>
+        <translation>Мережа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="458"/>
         <source>Network Adapters</source>
-        <translation type="unfinished">Мережеві адаптери</translation>
+        <translation>Мережеві адаптери</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="461"/>
         <source>Routes</source>
-        <translation type="unfinished">Маршрути</translation>
+        <translation>Маршрути</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="464"/>
         <source>Connections</source>
-        <translation type="unfinished">Підключення</translation>
+        <translation>Підключення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="467"/>
         <source>Network Shares</source>
-        <translation type="unfinished">Мережеві ресурси</translation>
+        <translation>Мережеві ресурси</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="470"/>
         <source>Open Files</source>
-        <translation type="unfinished">Відкриті файли</translation>
+        <translation>Відкриті файли</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
         <source>Environment Variables</source>
-        <translation type="unfinished">Змінні середовища</translation>
+        <translation>Змінні середовища</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
         <source>Event Logs</source>
-        <translation type="unfinished">Журнали подій</translation>
+        <translation>Журнал подій</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
         <source>Users</source>
-        <translation type="unfinished">Користувачі</translation>
+        <translation>Користувачі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
         <source>User Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Групи користувачів</translation>
     </message>
 </context>
 <context>
@@ -8256,133 +7956,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="162"/>
         <source>Processor Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Властивості процесора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="166"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеші</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="170"/>
         <source>Instruction Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Набір інструкцій</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="171"/>
         <source>Security Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Функції безпеки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="172"/>
         <source>Power Management Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Функції керування живленням</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="173"/>
         <source>Virtualization Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Функції віртуалізації</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="174"/>
         <source>Other Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Інші функції</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="249"/>
         <source>Packages</source>
-        <translation type="unfinished">Пакети</translation>
+        <translation>Сокетів</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="252"/>
         <source>Physical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Фізичних ядер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="255"/>
         <source>Logical Cores</source>
-        <translation type="unfinished"></translation>
+        <translation>Логічних ядер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="259"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="260"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="282"/>
         <source>L%1 Data Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеш даних L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="286"/>
         <source>L%1 Instruction Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеш інструкцій L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="290"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеш L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="297"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Асоціативність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="301"/>
         <source>Fully associative</source>
-        <translation type="unfinished"></translation>
+        <translation>Повністю асоціативний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="303"/>
         <source>%1-way</source>
-        <translation type="unfinished"></translation>
+        <translation>%1-канальна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>Line Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір рядка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="306"/>
         <source>%1 bytes</source>
-        <translation type="unfinished">%1 байт</translation>
+        <translation>%1 байт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="309"/>
         <source>Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>Наборів</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>Shared By</source>
-        <translation type="unfinished"></translation>
+        <translation>Спільний для</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="312"/>
         <source>%1 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 потоків</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_cpu.cc" line="336"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
 </context>
 <context>
@@ -8391,144 +8091,144 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="832"/>
         <source>BIOS</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="225"/>
         <source>Motherboard</source>
-        <translation type="unfinished">Материнська плата</translation>
+        <translation>Материнська плата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="232"/>
         <source>Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Корпус</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="239"/>
         <source>Processors</source>
-        <translation type="unfinished"></translation>
+        <translation>Процесори</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="246"/>
         <source>Caches</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеші</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="254"/>
         <source>Port Connectors</source>
-        <translation type="unfinished"></translation>
+        <translation>Роз'єми портів</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="263"/>
         <source>System Slots</source>
-        <translation type="unfinished"></translation>
+        <translation>Системні слоти</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="271"/>
         <source>On-board Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Вбудовані пристрої</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="631"/>
         <source>OEM Strings</source>
-        <translation type="unfinished"></translation>
+        <translation>Рядки OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="281"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="636"/>
         <source>Configuration Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметри конфігурації</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="289"/>
         <source>Memory Arrays</source>
-        <translation type="unfinished"></translation>
+        <translation>Масиви пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="297"/>
         <source>Memory Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрої пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="306"/>
         <source>Memory Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилки пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="315"/>
         <source>Memory Array Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреси масивів пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="325"/>
         <source>Memory Device Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреси пристроїв пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="333"/>
         <source>Voltage Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Датчики напруги</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="341"/>
         <source>Cooling Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрої охолодження</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="351"/>
         <source>Temperature Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Датчики температури</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="360"/>
         <source>Current Probes</source>
-        <translation type="unfinished"></translation>
+        <translation>Датчики струму</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="363"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="730"/>
         <source>System Boot</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантаження системи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="371"/>
         <source>Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Додаткова інформація</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="380"/>
         <source>TPM Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрій TPM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="389"/>
         <source>Processor Additional Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Додаткова інформація про процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="398"/>
         <source>Firmware Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Інвентаризація прошивок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Різне</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="403"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="747"/>
         <source>DMI Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Властивості DMI</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="842"/>
         <source>Vendor</source>
-        <translation type="unfinished">Вендор</translation>
+        <translation>Постачальник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="845"/>
@@ -8537,45 +8237,45 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1029"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1904"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="848"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1916"/>
         <source>Release Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата випуску</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="852"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="857"/>
         <source>ROM Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір ROM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="860"/>
         <source>Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Ревізія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="864"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія прошивки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="874"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1276"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1875"/>
         <source>Characteristics</source>
-        <translation type="unfinished"></translation>
+        <translation>Характеристики</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="890"/>
         <source>Board %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Плата %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="900"/>
@@ -8584,12 +8284,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1553"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1901"/>
         <source>Manufacturer</source>
-        <translation type="unfinished">Виробник</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="903"/>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation>Продукт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="909"/>
@@ -8597,7 +8297,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1086"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1604"/>
         <source>Serial Number</source>
-        <translation type="unfinished">Серійний номер</translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="912"/>
@@ -8605,12 +8305,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1089"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1607"/>
         <source>Asset Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Інвентарний номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="915"/>
         <source>Location in Chassis</source>
-        <translation type="unfinished"></translation>
+        <translation>Розташування в корпусі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="918"/>
@@ -8623,12 +8323,12 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1559"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1651"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
         <source>Hosting Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Несуча плата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8659,7 +8359,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="922"/>
@@ -8692,236 +8392,236 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="923"/>
         <source>Requires Daughter Board</source>
-        <translation type="unfinished"></translation>
+        <translation>Потрібна дочірня плата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="925"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Знімний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="926"/>
         <source>Replaceable</source>
-        <translation type="unfinished"></translation>
+        <translation>Замінна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="927"/>
         <source>Hot Swappable</source>
-        <translation type="unfinished"></translation>
+        <translation>Гаряча заміна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="929"/>
         <source>Features</source>
-        <translation type="unfinished">Додатково</translation>
+        <translation>Можливості</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="945"/>
         <source>Chassis %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Корпус %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="960"/>
         <source>Lock Present</source>
-        <translation type="unfinished"></translation>
+        <translation>Наявність замка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="972"/>
         <source>SKU Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Номер SKU</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="975"/>
         <source>Boot-up State</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан при завантаженні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="979"/>
         <source>Power Supply State</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан блока живлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="984"/>
         <source>Thermal State</source>
-        <translation type="unfinished"></translation>
+        <translation>Тепловий стан</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="987"/>
         <source>Security Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан безпеки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Висота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="991"/>
         <source>%1 U</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 U</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="994"/>
         <source>Power Cords</source>
-        <translation type="unfinished"></translation>
+        <translation>Шнури живлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1010"/>
         <source>Processor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Процесор %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1021"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1548"/>
         <source>Installed</source>
-        <translation type="unfinished">Встановлено</translation>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1032"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Сімейство</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1038"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1402"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1454"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1042"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1126"/>
         <source>Socket Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Позначення сокета</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1047"/>
         <source>Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>Сокет</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1050"/>
         <source>Socket Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип сокета</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1053"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1264"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1919"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>Voltage</source>
-        <translation type="unfinished">Вольтаж</translation>
+        <translation>Напруга</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1056"/>
         <source>%1 V</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <source>External Clock</source>
-        <translation type="unfinished"></translation>
+        <translation>Зовнішня частота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1060"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 МГц</translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1065"/>
         <source>Max Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна частота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1069"/>
         <source>Current Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточна частота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1074"/>
         <source>Core Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість ядер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1077"/>
         <source>Cores Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ядер увімкнено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1080"/>
         <source>Thread Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість потоків</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1083"/>
         <source>Threads Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Потоків увімкнено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1092"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1601"/>
         <source>Part Number</source>
-        <translation type="unfinished">Партномер</translation>
+        <translation>Номер партії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1094"/>
         <source>64-bit Capable</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримка 64 біт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1095"/>
         <source>Multi-Core</source>
-        <translation type="unfinished"></translation>
+        <translation>Багатоядерність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1096"/>
         <source>Hardware Thread</source>
-        <translation type="unfinished"></translation>
+        <translation>Апаратні потоки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1098"/>
         <source>Execute Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Захист виконання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1100"/>
         <source>Enhanced Virtualization</source>
-        <translation type="unfinished"></translation>
+        <translation>Розширена віртуалізація</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1102"/>
         <source>Power/Performance Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Керування живленням/продуктивністю</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1116"/>
         <source>L%1 Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Кеш L%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1128"/>
         <source>Level</source>
-        <translation type="unfinished">Рівень</translation>
+        <translation>Рівень</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1134"/>
         <source>Installed Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлений розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1137"/>
         <source>Maximum Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальний розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1140"/>
@@ -8929,150 +8629,150 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1497"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1540"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Розташування</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1143"/>
         <source>Operational Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим роботи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1146"/>
         <source>SRAM Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип SRAM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1150"/>
         <source>Supported SRAM Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримувані типи SRAM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1156"/>
         <source>Error Correction Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип корекції помилок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1161"/>
         <source>Associativity</source>
-        <translation type="unfinished"></translation>
+        <translation>Асоціативність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <source>Speed</source>
-        <translation type="unfinished">Швидкість</translation>
+        <translation>Швидкість</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1165"/>
         <source>%1 ns</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 нс</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1167"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1314"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1168"/>
         <source>Socketed</source>
-        <translation type="unfinished"></translation>
+        <translation>В сокеті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1187"/>
         <source>Port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1197"/>
         <source>Port Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип порту</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1201"/>
         <source>Internal Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутрішнє позначення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1207"/>
         <source>Internal Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип внутрішнього роз'єму</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1213"/>
         <source>External Designator</source>
-        <translation type="unfinished"></translation>
+        <translation>Зовнішнє позначення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1219"/>
         <source>External Connector Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип зовнішнього роз'єму</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1237"/>
         <source>Slot %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Слот %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1247"/>
         <source>Designation</source>
-        <translation type="unfinished"></translation>
+        <translation>Позначення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1253"/>
         <source>Data Bus Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина шини даних</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1256"/>
         <source>Current Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Поточне використання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1259"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Довжина</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1262"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1312"/>
         <source>Bus Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса шини</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1268"/>
         <source>5 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>Живлення 5 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1269"/>
         <source>3.3 V Provided</source>
-        <translation type="unfinished"></translation>
+        <translation>Живлення 3.3 В</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1270"/>
         <source>Shared</source>
-        <translation type="unfinished">Спільне користування</translation>
+        <translation>Спільний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1271"/>
         <source>PME Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Сигнал PME</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1272"/>
         <source>Hot Plug</source>
-        <translation type="unfinished"></translation>
+        <translation>Гаряче підключення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1273"/>
         <source>SMBus Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Сигнал SMBus</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1274"/>
         <source>Bifurcation</source>
-        <translation type="unfinished"></translation>
+        <translation>Біфуркація</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1292"/>
@@ -9080,7 +8780,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1530"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1845"/>
         <source>Device %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрій %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1302"/>
@@ -9088,440 +8788,440 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1448"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1855"/>
         <source>Description</source>
-        <translation type="unfinished">Опис</translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1309"/>
         <source>Type Instance</source>
-        <translation type="unfinished"></translation>
+        <translation>Екземпляр типу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1326"/>
         <source>String %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Рядок %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1340"/>
         <source>Option %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметр %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1358"/>
         <source>Probe %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Датчик %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1369"/>
         <source>mV</source>
-        <translation type="unfinished"></translation>
+        <translation>мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1371"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1373"/>
         <source>mA</source>
-        <translation type="unfinished"></translation>
+        <translation>мА</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1405"/>
         <source>Nominal Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Номінальне значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1408"/>
         <source>Maximum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальне значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1411"/>
         <source>Minimum Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Мінімальне значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1414"/>
         <source>Tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Допуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1417"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <source>Resolution</source>
-        <translation type="unfinished">Роздільна здатність</translation>
+        <translation>Роздільна здатність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1421"/>
         <source>Accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Точність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1458"/>
         <source>Cooling Unit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Група охолодження</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>Nominal Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Номінальна швидкість</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1461"/>
         <source>%1 rpm</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 об/хв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1471"/>
         <source>Boot Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан завантаження</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1487"/>
         <source>Array %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Масив %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1500"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Призначення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1504"/>
         <source>Error Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Корекція помилок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1510"/>
         <source>Maximum Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна ємність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1514"/>
         <source>Number of Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість пристроїв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1543"/>
         <source>Bank</source>
-        <translation type="unfinished"></translation>
+        <translation>Банк</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1556"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1711"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1750"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1562"/>
         <source>Type Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>Деталі типу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1565"/>
         <source>Form Factor</source>
-        <translation type="unfinished">Форм фактор</translation>
+        <translation>Форм-фактор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1568"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Технологія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1571"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1576"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1575"/>
         <source>Configured Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштована швидкість</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <source>Total Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Повна ширина</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1580"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>%1 bit</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 біт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1583"/>
         <source>Data Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина даних</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1586"/>
         <source>Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Ранг</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <source>Minimum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Мінімальна напруга</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1589"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1597"/>
         <source>%1 mV</source>
-        <translation type="unfinished">%1 мВ</translation>
+        <translation>%1 мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1592"/>
         <source>Maximum Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна напруга</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1596"/>
         <source>Configured Voltage</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштована напруга</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1611"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1864"/>
         <source>Firmware Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія прошивки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1617"/>
         <source>Non-volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір енергонезалежної пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1623"/>
         <source>Volatile Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір енергозалежної пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1628"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір кешу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1631"/>
         <source>Logical Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Логічний розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1641"/>
         <source>Record %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1654"/>
         <source>Granularity</source>
-        <translation type="unfinished"></translation>
+        <translation>Гранулярність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1657"/>
         <source>Operation</source>
-        <translation type="unfinished"></translation>
+        <translation>Операція</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1662"/>
         <source>Vendor Syndrome</source>
-        <translation type="unfinished"></translation>
+        <translation>Синдром виробника</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1668"/>
         <source>Memory Array Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса масиву пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1674"/>
         <source>Device Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса пристрою</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1679"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>%1 bytes</source>
-        <translation type="unfinished">%1 байт</translation>
+        <translation>%1 байт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1692"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1730"/>
         <source>Range %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Діапазон %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1702"/>
         <source>Array</source>
-        <translation type="unfinished"></translation>
+        <translation>Масив</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1707"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1746"/>
         <source>Starting Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Початкова адреса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1709"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1748"/>
         <source>Ending Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Кінцева адреса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1716"/>
         <source>Partition Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина розділу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1741"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрій</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1754"/>
         <source>Partition Row Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Позиція ряду розділу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1758"/>
         <source>Interleave Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Позиція чергування</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1764"/>
         <source>Interleaved Data Depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Глибина чергування даних</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1779"/>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1814"/>
         <source>Entry %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Елемент %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1789"/>
         <source>String</source>
-        <translation type="unfinished"></translation>
+        <translation>Рядок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1792"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1795"/>
         <source>Referenced Handle</source>
-        <translation type="unfinished"></translation>
+        <translation>Посилання на дескриптор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1797"/>
         <source>Referenced Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Зміщення посилання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1826"/>
         <source>Processor</source>
-        <translation type="unfinished">Процесор</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1829"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID постачальника</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
         <source>Specification Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія специфікації</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1868"/>
         <source>Configurable by Firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштовується прошивкою</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1870"/>
         <source>Configurable by Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштовується ПЗ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1872"/>
         <source>Configurable by OEM</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштовується OEM</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1888"/>
         <source>Firmware %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Прошивка %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1898"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1907"/>
         <source>Version Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат версії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1911"/>
         <source>Lowest Supported Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Мінімальна підтримувана версія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1922"/>
         <source>ID Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат ID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1925"/>
         <source>State</source>
-        <translation type="unfinished">Стан</translation>
+        <translation>Стан</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1928"/>
         <source>Image Size</source>
-        <translation type="unfinished">Розмір зображення</translation>
+        <translation>Розмір образу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1930"/>
         <source>Updatable</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновлювана</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1931"/>
         <source>Write-protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Захищена від запису</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1937"/>
         <source>Component %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Компонент %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1942"/>
         <source>Associated Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Пов'язані компоненти</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1954"/>
         <source>SMBIOS Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія SMBIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1957"/>
         <source>Structures</source>
-        <translation type="unfinished"></translation>
+        <translation>Структури</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1960"/>
         <source>Structures Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір структур</translation>
     </message>
 </context>
 <context>
@@ -9529,68 +9229,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="132"/>
         <source>Continue Pending</source>
-        <translation type="unfinished">Продовжити очікування</translation>
+        <translation>Відновлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="134"/>
         <source>Pause Pending</source>
-        <translation type="unfinished">Призупинити очікування</translation>
+        <translation>Призупинення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="136"/>
         <source>Paused</source>
-        <translation type="unfinished">Призупинено</translation>
+        <translation>Призупинено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="138"/>
         <source>Running</source>
-        <translation type="unfinished">Виконується</translation>
+        <translation>Виконується</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="140"/>
         <source>Start Pending</source>
-        <translation type="unfinished">Почати очікування</translation>
+        <translation>Запуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="142"/>
         <source>Stop Pending</source>
-        <translation type="unfinished">Припинити очікування</translation>
+        <translation>Зупинка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="144"/>
         <source>Stopped</source>
-        <translation type="unfinished">Зупинено</translation>
+        <translation>Зупинено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="146"/>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="168"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="158"/>
         <source>Auto Start</source>
-        <translation type="unfinished">Автозапуск</translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="160"/>
         <source>Demand Start</source>
-        <translation type="unfinished">Запуск вручну</translation>
+        <translation>Запуск вручну</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="162"/>
         <source>Disabled</source>
-        <translation type="unfinished">Відключено</translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="164"/>
         <source>Boot Start</source>
-        <translation type="unfinished">Запускати при увімкненні</translation>
+        <translation>Запускати при увімкненні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drivers.cc" line="166"/>
         <source>System Start</source>
-        <translation type="unfinished">Запускати разом із системою</translation>
+        <translation>Запускати разом із системою</translation>
     </message>
 </context>
 <context>
@@ -9598,93 +9298,77 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="159"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="162"/>
         <source>Model</source>
-        <translation type="unfinished">Модель</translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="165"/>
         <source>Serial Number</source>
-        <translation type="unfinished">Серійний номер</translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="168"/>
         <source>Firmware Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія прошивки</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="172"/>
         <source>Bus Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип шини</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="175"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="180"/>
         <source>Media Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип накопичувача</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Solid State</source>
-        <translation type="unfinished"></translation>
+        <translation>Твердотільний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="182"/>
         <source>Rotating</source>
-        <translation type="unfinished"></translation>
+        <translation>Механічний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>Rotation Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидкість обертання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="186"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 об/хв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="190"/>
         <source>Cache Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір кешу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Removable</source>
-        <translation type="unfinished"></translation>
+        <translation>Знімний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_drives.cc" line="194"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
-    </message>
-    <message>
-        <source>Parameter</source>
-        <translation type="obsolete">Параметр</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="obsolete">Значення</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="obsolete">Не доступно</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="obsolete">Статус</translation>
+        <translation>Ні</translation>
     </message>
 </context>
 <context>
@@ -9692,51 +9376,47 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="68"/>
         <source>Application</source>
-        <translation type="unfinished">Додаток</translation>
+        <translation>Програма</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="70"/>
         <source>Security</source>
-        <translation type="unfinished">Безпека</translation>
+        <translation>Безпека</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="72"/>
         <source>System</source>
-        <translation type="unfinished">Система</translation>
-    </message>
-    <message>
-        <source>Page %1/%2</source>
-        <translation type="obsolete">Сторінка %1/%2</translation>
+        <translation>Система</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="308"/>
         <source>Information</source>
-        <translation type="unfinished">Інформація</translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="310"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="312"/>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="314"/>
         <source>Audit Success</source>
-        <translation type="unfinished">Аудит успіху</translation>
+        <translation>Успіх аудиту</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="316"/>
         <source>Audit Failure</source>
-        <translation type="unfinished">Аудит відмов</translation>
+        <translation>Невдача аудиту</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.cc" line="318"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
 </context>
 <context>
@@ -9744,37 +9424,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="138"/>
         <source>License Type</source>
-        <translation type="unfinished">Тип ліцензії</translation>
+        <translation>Тип ліцензії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="141"/>
         <source>License Version</source>
-        <translation type="unfinished">Версія ліцензії</translation>
+        <translation>Версія ліцензії</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="144"/>
         <source>Organization</source>
-        <translation type="unfinished">Організація</translation>
+        <translation>Організація</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="147"/>
         <source>Owner</source>
-        <translation type="unfinished">Власник</translation>
+        <translation>Власник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation type="unfinished">ID продукту</translation>
+        <translation>ID продукту</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
         <source>Product Key</source>
-        <translation type="unfinished">Ключ продукту</translation>
+        <translation>Ключ продукту</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="156"/>
         <source>Unknown Field</source>
-        <translation type="unfinished">Невідоме поле</translation>
+        <translation>Невідоме поле</translation>
     </message>
 </context>
 <context>
@@ -9782,60 +9462,56 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="147"/>
         <source>Full Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Опис</translation>
+        <translation>Повне ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="150"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Домашня директорія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <source>Disabled</source>
-        <translation type="unfinished">Відключено</translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="153"/>
         <source>Password Expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль прострочено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="154"/>
         <source>Don&apos;t Expire Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Термін дії пароля не обмежений</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="158"/>
         <source>Never</source>
-        <translation type="unfinished">Ніколи</translation>
+        <translation>Ніколи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="162"/>
         <source>Last Logon</source>
-        <translation type="unfinished"></translation>
+        <translation>Останній вхід</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_local_users.cc" line="174"/>
         <source>Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Групи</translation>
     </message>
 </context>
 <context>
@@ -9843,103 +9519,103 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="154"/>
         <source>Monitor Name</source>
-        <translation type="unfinished">Ім&apos;я монітора</translation>
+        <translation>Ім'я монітора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="157"/>
         <source>Manufacturer Name</source>
-        <translation type="unfinished">Ім&apos;я виробника</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation type="unfinished">ID монітора</translation>
+        <translation>ID монітора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
         <source>Serial Number</source>
-        <translation type="unfinished">Серійний номер</translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="167"/>
         <source>EDID Version</source>
-        <translation type="unfinished">Версія EDID</translation>
+        <translation>Версія EDID</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="173"/>
         <source>Date Of Manufacture</source>
-        <translation type="unfinished">Дата виробництва</translation>
+        <translation>Дата виробництва</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="174"/>
         <source>Week %1 / %2</source>
-        <translation type="unfinished">Тиждень %1/%2</translation>
+        <translation>Тиждень %1 / %2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="179"/>
         <source>Gamma</source>
-        <translation type="unfinished">Гамма</translation>
+        <translation>Гамма</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="183"/>
         <source>Image Size</source>
-        <translation type="unfinished">Розмір зображення</translation>
+        <translation>Розмір зображення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="184"/>
         <source>%1x%2 cm</source>
-        <translation type="unfinished">%1х%2 см</translation>
+        <translation>%1x%2 cm</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="193"/>
         <source>Diagonal Size</source>
-        <translation type="unfinished">Діагональ</translation>
+        <translation>Розмір діагоналі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="198"/>
         <source>Resolution</source>
-        <translation type="unfinished">Роздільна здатність</translation>
+        <translation>Роздільна здатність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="205"/>
         <source>Horizontal Frequency</source>
-        <translation type="unfinished">Горизонтальна частота</translation>
+        <translation>Частота рядків</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="206"/>
         <source>%1 - %2 kHz</source>
-        <translation type="unfinished">%1 - %2 кГц</translation>
+        <translation>%1 - %2 кГц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="212"/>
         <source>Vertical Frequency</source>
-        <translation type="unfinished">Вертикальна частота</translation>
+        <translation>Частота кадрів</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="213"/>
         <source>%1 - %2 Hz</source>
-        <translation type="unfinished">%1 - %2 Гц</translation>
+        <translation>%1 - %2 Гц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <source>Pixel Clock</source>
-        <translation type="unfinished">Частота пікселів</translation>
+        <translation>Піксельна частота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="218"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 МГц</translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="221"/>
         <source>Maximum Pixel Clock</source>
-        <translation type="unfinished">Максимальна частота пікселів</translation>
+        <translation>Максимальна піксельна частота</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="223"/>
         <source>Input Signal Type</source>
-        <translation type="unfinished">Тип вхідного сигналу</translation>
+        <translation>Тип вхідного сигналу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9949,7 +9625,7 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="226"/>
@@ -9959,37 +9635,37 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="230"/>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="231"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="234"/>
         <source>Supported Features</source>
-        <translation type="unfinished">Підтримувані функції</translation>
+        <translation>Підтримувані можливості</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="243"/>
         <source>%1 Hz</source>
-        <translation type="unfinished">%1 Гц</translation>
+        <translation>%1 Гц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="247"/>
         <source>Supported Video Modes</source>
-        <translation type="unfinished">Підтримувані відео режими</translation>
+        <translation>Підтримувані відеорежими</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="294"/>
         <source>Digital</source>
-        <translation type="unfinished">Цифровий</translation>
+        <translation>Цифровий</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="296"/>
         <source>Analog</source>
-        <translation type="unfinished">Аналоговий</translation>
+        <translation>Аналоговий</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
 </context>
 <context>
@@ -9997,67 +9673,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="140"/>
         <source>Adapter Name</source>
-        <translation type="unfinished">Ім&apos;я адаптера</translation>
+        <translation>Ім'я адаптера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="143"/>
         <source>Interface Type</source>
-        <translation type="unfinished">Тип інтерфейса</translation>
+        <translation>Тип інтерфейсу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="146"/>
         <source>Connection Speed</source>
-        <translation type="unfinished">Швидкість з&apos;єднання</translation>
+        <translation>Швидкість з'єднання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="149"/>
         <source>MAC Address</source>
-        <translation type="unfinished">MAC адреса</translation>
+        <translation>MAC адреса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>DHCP Enabled</source>
-        <translation type="unfinished">DHCP включено</translation>
+        <translation>DHCP увімкнено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="151"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server #%1</source>
-        <translation type="unfinished">DHCP сервер #%1</translation>
+        <translation>DHCP сервер #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="156"/>
         <source>DHCP Server</source>
-        <translation type="unfinished">DHCP сервер</translation>
+        <translation>DHCP сервер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address #%1</source>
-        <translation type="unfinished">Адреса #%1</translation>
+        <translation>Адреса #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="168"/>
         <source>Address</source>
-        <translation type="unfinished">Адреса</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway #%1</source>
-        <translation type="unfinished">Шлюз #%1</translation>
+        <translation>Шлюз #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_adapters.cc" line="176"/>
         <source>Gateway</source>
-        <translation type="unfinished">Шлюз</translation>
+        <translation>Шлюз</translation>
     </message>
 </context>
 <context>
@@ -10065,32 +9741,32 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="133"/>
         <source>Description</source>
-        <translation type="unfinished">Опис</translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="136"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="139"/>
         <source>Local Path</source>
-        <translation type="unfinished">Локальний шлях</translation>
+        <translation>Локальний шлях</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="141"/>
         <source>Current Uses</source>
-        <translation type="unfinished">Поточні використання</translation>
+        <translation>Кількість використань</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="144"/>
         <source>Not limited</source>
-        <translation type="unfinished">Необмежено</translation>
+        <translation>Не обмежено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_net_shares.cc" line="145"/>
         <source>Maximum Uses</source>
-        <translation type="unfinished">Максимум користувачів</translation>
+        <translation>Максимум використань</translation>
     </message>
 </context>
 <context>
@@ -10098,109 +9774,105 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="156"/>
         <source>Power Source</source>
-        <translation type="unfinished">Джерело живлення</translation>
+        <translation>Джерело живлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="158"/>
         <source>Battery Status</source>
-        <translation type="unfinished">Статус акумулятора</translation>
+        <translation>Стан батареї</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="164"/>
         <source>Battery Life Percent</source>
-        <translation type="unfinished">Відсоток живлення акумулятора</translation>
+        <translation>Рівень заряду</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="170"/>
         <source>Full Battery Life Time</source>
-        <translation type="unfinished">Повний заряд акумулятора</translation>
+        <translation>Повний час роботи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="177"/>
         <source>Remaining Battery Life Time</source>
-        <translation type="unfinished">Залишилося заряду акумулятора</translation>
+        <translation>Залишковий час роботи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="193"/>
         <source>Device Name</source>
-        <translation type="unfinished">Ім&apos;я пристрою</translation>
+        <translation>Ім'я пристрою</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="196"/>
         <source>Manufacturer</source>
-        <translation type="unfinished">Виробник</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="199"/>
         <source>Manufacture Date</source>
-        <translation type="unfinished">Дата виробництва</translation>
+        <translation>Дата виробництва</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="202"/>
         <source>Unique Id</source>
-        <translation type="unfinished">Унікальний ID</translation>
+        <translation>Унікальний ідентифікатор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="205"/>
         <source>Serial Number</source>
-        <translation type="unfinished">Серійний номер</translation>
-    </message>
-    <message>
-        <source>Tempareture</source>
-        <translation type="obsolete">Температура</translation>
+        <translation>Серійний номер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="208"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <source>Design Capacity</source>
-        <translation type="unfinished">Проектна ємність</translation>
+        <translation>Початкова ємність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="211"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>%1 mWh</source>
-        <translation type="unfinished">%1 мВт-г</translation>
+        <translation>%1 мВт/год</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="214"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="217"/>
         <source>Full Charged Capacity</source>
-        <translation type="unfinished">Ємність повного заряду</translation>
+        <translation>Повна ємність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="220"/>
         <source>Depreciation</source>
-        <translation type="unfinished">Амортизація</translation>
+        <translation>Ступінь зносу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="223"/>
         <source>Current Capacity</source>
-        <translation type="unfinished">Поточна ємність</translation>
+        <translation>Поточна ємність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>Voltage</source>
-        <translation type="unfinished">Вольтаж</translation>
+        <translation>Напруга</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="226"/>
         <source>%1 mV</source>
-        <translation type="unfinished">%1 мВ</translation>
+        <translation>%1 мВ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="316"/>
         <source>Charging</source>
-        <translation type="unfinished">Заряджається</translation>
+        <translation>Заряджається</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="232"/>
@@ -10208,64 +9880,64 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="235"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="314"/>
         <source>Critical</source>
-        <translation type="unfinished">Критичний</translation>
+        <translation>Критичний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="238"/>
         <source>Discharging</source>
-        <translation type="unfinished">Розряджається</translation>
+        <translation>Розряджається</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="241"/>
         <source>Power OnLine</source>
-        <translation type="unfinished">Живлення під&apos;єданно</translation>
+        <translation>Живлення від мережі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="245"/>
         <source>State</source>
-        <translation type="unfinished">Стан</translation>
+        <translation>Стан</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="250"/>
         <source>Battery #%1</source>
-        <translation type="unfinished">Акумулятор #%1</translation>
+        <translation>Батарея #%1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="292"/>
         <source>DC Battery</source>
-        <translation type="unfinished">акумулятор постійного струму</translation>
+        <translation>Батарея постійного струму</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="295"/>
         <source>AC Line</source>
-        <translation type="unfinished">Лінія змінного струму</translation>
+        <translation>Лінія змінного струму</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="298"/>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="320"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="310"/>
         <source>High</source>
-        <translation type="unfinished">Високий</translation>
+        <translation>Високий</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="312"/>
         <source>Low</source>
-        <translation type="unfinished">Низький</translation>
+        <translation>Низький</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_power_options.cc" line="318"/>
         <source>No Battery</source>
-        <translation type="unfinished">Акумулятор відсутній</translation>
+        <translation>Немає батареї</translation>
     </message>
 </context>
 <context>
@@ -10273,44 +9945,44 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <source>Default</source>
-        <translation type="unfinished">За замовчанням</translation>
+        <translation>За замовчуванням</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="138"/>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="141"/>
         <source>Port</source>
-        <translation type="unfinished">Порт</translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="144"/>
         <source>Driver</source>
-        <translation type="unfinished">Драйвер</translation>
+        <translation>Драйвер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="146"/>
         <source>Shared</source>
-        <translation type="unfinished">Спільне користування</translation>
+        <translation>Спільний</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="149"/>
         <source>Share Name</source>
-        <translation type="unfinished">Спільне ім&apos;я</translation>
+        <translation>Ім'я спільного ресурсу</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_printers.cc" line="151"/>
         <source>Jobs Count</source>
-        <translation type="unfinished">Лічильник завдань</translation>
+        <translation>Кількість завдань</translation>
     </message>
 </context>
 <context>
@@ -10318,12 +9990,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="144"/>
         <source>System Idle Process</source>
-        <translation type="unfinished">Процес простою системи</translation>
+        <translation>Процес простою системи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.cc" line="146"/>
         <source>Unknown Process</source>
-        <translation type="unfinished">Невідомий процес</translation>
+        <translation>Невідомий процес</translation>
     </message>
 </context>
 <context>
@@ -10331,68 +10003,68 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="138"/>
         <source>Continue Pending</source>
-        <translation type="unfinished">Продовжити очікування</translation>
+        <translation>Відновлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="140"/>
         <source>Pause Pending</source>
-        <translation type="unfinished">Призупинити очікування</translation>
+        <translation>Призупинення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="142"/>
         <source>Paused</source>
-        <translation type="unfinished">Призупинено</translation>
+        <translation>Призупинено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="144"/>
         <source>Running</source>
-        <translation type="unfinished">Виконується</translation>
+        <translation>Виконується</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="146"/>
         <source>Start Pending</source>
-        <translation type="unfinished">Почати очікування</translation>
+        <translation>Запуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="148"/>
         <source>Stop Pending</source>
-        <translation type="unfinished">Припинити очікування</translation>
+        <translation>Зупинка</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="150"/>
         <source>Stopped</source>
-        <translation type="unfinished">Зупинено</translation>
+        <translation>Зупинено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="152"/>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="174"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="164"/>
         <source>Auto Start</source>
-        <translation type="unfinished">Автозапуск</translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="166"/>
         <source>Demand Start</source>
-        <translation type="unfinished">Запуск вручну</translation>
+        <translation>Запуск вручну</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="168"/>
         <source>Disabled</source>
-        <translation type="unfinished">Відключено</translation>
+        <translation>Відключено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="170"/>
         <source>Boot Start</source>
-        <translation type="unfinished">Запускати при увімкненні</translation>
+        <translation>Запускати при увімкненні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_services.cc" line="172"/>
         <source>System Start</source>
-        <translation type="unfinished">Запускати разом із системою</translation>
+        <translation>Запускати разом із системою</translation>
     </message>
 </context>
 <context>
@@ -10400,214 +10072,214 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Атрибут</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Value</source>
-        <translation type="unfinished">Значення</translation>
+        <translation>Значення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Worst</source>
-        <translation type="unfinished"></translation>
+        <translation>Найгірше</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <source>Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Поріг</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="387"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <source>Raw</source>
-        <translation type="unfinished"></translation>
+        <translation>Raw</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="388"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="392"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="394"/>
         <source>Parameter</source>
-        <translation type="unfinished">Параметр</translation>
+        <translation>Параметр</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Health Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Дані про стан</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="408"/>
         <source>Not available</source>
-        <translation type="unfinished">Не доступно</translation>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="425"/>
         <source>OK. Always passed</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Завжди успішно</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="427"/>
         <source>OK. Value is normal</source>
-        <translation type="unfinished"></translation>
+        <translation>OK. Значення в нормі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="429"/>
         <source>Warning. Value is pre-failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередження. Передаварійний стан</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="431"/>
         <source>Warning. Value is not normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередження. Значення не в нормі</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="438"/>
         <source>Unknown Attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий атрибут</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="461"/>
         <source>Spare capacity is below the threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Резервна ємність нижче порога</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="463"/>
         <source>Temperature is outside of the operating range</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура поза робочим діапазоном</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="465"/>
         <source>Reliability is degraded</source>
-        <translation type="unfinished"></translation>
+        <translation>Надійність знижена</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="467"/>
         <source>Media is in read-only mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Носій працює в режимі тільки для читання</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="469"/>
         <source>Volatile memory backup device failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Відмова пристрою резервного живлення енергозалежної пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="471"/>
         <source>Persistent memory region is unreliable</source>
-        <translation type="unfinished"></translation>
+        <translation>Область постійної пам'яті ненадійна</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="475"/>
         <source>Critical Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Критичне попередження</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="476"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="481"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="482"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="498"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="497"/>
         <source>Temperature Sensor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Датчик температури %1</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <source>Available Spare</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступний резерв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="502"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="505"/>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="504"/>
         <source>Available Spare Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Поріг доступного резерву</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="507"/>
         <source>Percentage Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Використаний ресурс</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="510"/>
         <source>Data Read</source>
-        <translation type="unfinished"></translation>
+        <translation>Прочитано даних</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="513"/>
         <source>Data Written</source>
-        <translation type="unfinished"></translation>
+        <translation>Записано даних</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="517"/>
         <source>Host Read Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Команд читання хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="519"/>
         <source>Host Write Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Команд запису хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="521"/>
         <source>Controller Busy Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час зайнятості контролера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="524"/>
         <source>Power Cycles</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість циклів увімкнення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="526"/>
         <source>Power-On Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час роботи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="529"/>
         <source>Unsafe Shutdowns</source>
-        <translation type="unfinished"></translation>
+        <translation>Небезпечні вимкнення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="531"/>
         <source>Media Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилки носія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="533"/>
         <source>Error Log Entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Записи в журналі помилок</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="536"/>
         <source>Warning Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час при перегріві</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_smart.cc" line="539"/>
         <source>Critical Temperature Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Час при критичному перегріві</translation>
     </message>
 </context>
 <context>
@@ -10616,180 +10288,168 @@ Are you sure you want to continue?</source>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="200"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="241"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="203"/>
         <source>Domain</source>
-        <translation type="unfinished">Домен</translation>
+        <translation>Домен</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="206"/>
         <source>Workgroup</source>
-        <translation type="unfinished">Робоча група</translation>
+        <translation>Робоча група</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="209"/>
         <source>Uptime</source>
-        <translation type="unfinished">Час роботи</translation>
+        <translation>Час роботи</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="212"/>
         <source>Computer</source>
-        <translation type="unfinished">Комп&apos;ютер</translation>
+        <translation>Комп'ютер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="219"/>
         <source>Host Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія хоста</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="222"/>
         <source>Client Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія клієнта</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="227"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <source>Router Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія маршрутизатора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="232"/>
         <source>Aspia Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про Aspia</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="244"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="316"/>
         <source>Version</source>
-        <translation type="unfinished">Версія</translation>
+        <translation>Версія</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="247"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation>Архітектура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="250"/>
         <source>License Key</source>
-        <translation type="unfinished">Ліцензійний ключ</translation>
+        <translation>Ліцензійний ключ</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="253"/>
         <source>Install Date</source>
-        <translation type="unfinished">Дата встановлення</translation>
+        <translation>Дата встановлення</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="258"/>
         <source>Operating System</source>
-        <translation type="unfinished">Операційна система</translation>
+        <translation>Операційна система</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="268"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="340"/>
         <source>Manufacturer</source>
-        <translation type="unfinished">Виробник</translation>
+        <translation>Виробник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="271"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="286"/>
         <source>Model</source>
-        <translation type="unfinished">Модель</translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="276"/>
         <source>Motherboard</source>
-        <translation type="unfinished">Материнська плата</translation>
+        <translation>Материнська плата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="289"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="313"/>
         <source>Vendor</source>
-        <translation type="unfinished">Вендор</translation>
+        <translation>Постачальник</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="292"/>
         <source>Packages</source>
-        <translation type="unfinished">Пакети</translation>
+        <translation>Сокетів</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="295"/>
         <source>Cores</source>
-        <translation type="unfinished">Ядра</translation>
+        <translation>Ядер</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="298"/>
         <source>Threads</source>
-        <translation type="unfinished">Потоки</translation>
+        <translation>Потоків</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="303"/>
         <source>Processor</source>
-        <translation type="unfinished">Процесор</translation>
+        <translation>Процесор</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="319"/>
         <source>Date</source>
-        <translation type="unfinished">Дата</translation>
+        <translation>Дата</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="343"/>
         <source>Size</source>
-        <translation type="unfinished">Розмір</translation>
+        <translation>Розмір</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>Speed</source>
-        <translation type="unfinished">Швидкість</translation>
-    </message>
-    <message>
-        <source>%1 MHz</source>
-        <translation type="obsolete">%1 МГц</translation>
+        <translation>Швидкість</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="346"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
-    </message>
-    <message>
-        <source>Form Factor</source>
-        <translation type="obsolete">Форм фактор</translation>
-    </message>
-    <message>
-        <source>Part Number</source>
-        <translation type="obsolete">Партномер</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>Installed</source>
-        <translation type="unfinished">Встановлено</translation>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="229"/>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="353"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="349"/>
         <source>%1 MT/s</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MT/s</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="363"/>
         <source>Memory</source>
-        <translation type="unfinished">Пам&apos;ять</translation>
+        <translation>Пам'ять</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="392"/>
         <source>%1 (%2 free)</source>
-        <translation type="unfinished">%1 (%2 вільно)</translation>
+        <translation>%1 (%2 вільно)</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_summary.cc" line="402"/>
         <source>Logical Drives</source>
-        <translation type="unfinished">Логічні диски</translation>
+        <translation>Логічні диски</translation>
     </message>
 </context>
 <context>
@@ -10797,137 +10457,133 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="84"/>
         <source>%1 C</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 C</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="150"/>
         <source>Description</source>
-        <translation type="unfinished">Опис</translation>
+        <translation>Опис</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="153"/>
         <source>Adapter String</source>
-        <translation type="unfinished">Строка адаптера</translation>
+        <translation>Рядок адаптера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="156"/>
         <source>BIOS String</source>
-        <translation type="unfinished">Строка BIOS</translation>
+        <translation>Рядок BIOS</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="159"/>
         <source>Chip Type</source>
-        <translation type="unfinished">Тип чіпу</translation>
+        <translation>Тип чипа</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="162"/>
         <source>DAC Type</source>
-        <translation type="unfinished">Тип ЦАП</translation>
+        <translation>Тип ЦАП</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Розташування</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="167"/>
         <source>Bus %1, device %2, function %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Шина %1, пристрій %2, функція %3</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="175"/>
         <source>Memory Size</source>
-        <translation type="unfinished">Розмір пам&apos;яті</translation>
+        <translation>Розмір пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="181"/>
         <source>Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Використано пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="187"/>
         <source>Shared Memory Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="193"/>
         <source>Shared Memory Used</source>
-        <translation type="unfinished"></translation>
+        <translation>Використано спільної пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="199"/>
         <source>Memory Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота пам'яті</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="200"/>
         <source>%1 MHz</source>
-        <translation type="unfinished">%1 МГц</translation>
+        <translation>%1 МГц</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>Driver Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="214"/>
         <source>WDDM %1.%2</source>
-        <translation type="unfinished"></translation>
+        <translation>WDDM %1.%2</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="221"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="227"/>
         <source>Maximum Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна температура</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <source>Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Швидкість вентилятора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="232"/>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>%1 RPM</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 об/хв</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="236"/>
         <source>Maximum Fan Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна швидкість вентилятора</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="242"/>
         <source>Power Usage</source>
-        <translation type="unfinished"></translation>
+        <translation>Споживана потужність</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="243"/>
         <source>%1%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 bytes</source>
-        <translation type="obsolete">%1 байт</translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="204"/>
         <source>Driver Date</source>
-        <translation type="unfinished">Дата драйвера</translation>
+        <translation>Дата драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="207"/>
         <source>Driver Version</source>
-        <translation type="unfinished">Версія драйвера</translation>
+        <translation>Версія драйвера</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_video_adapters.cc" line="210"/>
         <source>Driver Provider</source>
-        <translation type="unfinished">Постачальник драйвера</translation>
+        <translation>Постачальник драйвера</translation>
     </message>
 </context>
 <context>
@@ -10936,155 +10592,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/sys_info/system_info_window.cc" line="40"/>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Зберегти</translation>
-    </message>
-    <message>
-        <source>Save (Ctrl+S)</source>
-        <translation type="obsolete">Зберегти (Ctrl+S)</translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Друкувати</translation>
-    </message>
-    <message>
-        <source>Print (Ctrl+P)</source>
-        <translation type="obsolete">Друкувати (Ctrl+P)</translation>
-    </message>
-    <message>
-        <source>Copy Row</source>
-        <translation type="obsolete">Копіювати рядок</translation>
-    </message>
-    <message>
-        <source>Copy Name</source>
-        <translation type="obsolete">Копіювати ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Copy Value</source>
-        <translation type="obsolete">Копіювати значення</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Оновити</translation>
-    </message>
-    <message>
-        <source>Refresh (F5)</source>
-        <translation type="obsolete">Оновити (F5)</translation>
-    </message>
-    <message>
-        <source>F5</source>
-        <translation type="obsolete">F5</translation>
-    </message>
-    <message>
-        <source>Summary</source>
-        <translation type="obsolete">Загальне</translation>
-    </message>
-    <message>
-        <source>Hardware</source>
-        <translation type="obsolete">Обладнання</translation>
-    </message>
-    <message>
-        <source>Devices</source>
-        <translation type="obsolete">Пристрої</translation>
-    </message>
-    <message>
-        <source>Video Adapters</source>
-        <translation type="obsolete">Відео адаптери</translation>
-    </message>
-    <message>
-        <source>Monitors</source>
-        <translation type="obsolete">Монітори</translation>
-    </message>
-    <message>
-        <source>Printers</source>
-        <translation type="obsolete">Принтери</translation>
-    </message>
-    <message>
-        <source>Power Options</source>
-        <translation type="obsolete">Параметри живлення</translation>
-    </message>
-    <message>
-        <source>Software</source>
-        <translation type="obsolete">Програмне забезпечення</translation>
-    </message>
-    <message>
-        <source>Applications</source>
-        <translation type="obsolete">Програми</translation>
-    </message>
-    <message>
-        <source>Drivers</source>
-        <translation type="obsolete">Драйвери</translation>
-    </message>
-    <message>
-        <source>Services</source>
-        <translation type="obsolete">Сервіси</translation>
-    </message>
-    <message>
-        <source>Processes</source>
-        <translation type="obsolete">Процеси</translation>
-    </message>
-    <message>
-        <source>Licenses</source>
-        <translation type="obsolete">Ліцензії</translation>
-    </message>
-    <message>
-        <source>Network</source>
-        <translation type="obsolete">Мережа</translation>
-    </message>
-    <message>
-        <source>Network Adapters</source>
-        <translation type="obsolete">Мережеві адаптери</translation>
-    </message>
-    <message>
-        <source>Routes</source>
-        <translation type="obsolete">Маршрути</translation>
-    </message>
-    <message>
-        <source>Connections</source>
-        <translation type="obsolete">Підключення</translation>
-    </message>
-    <message>
-        <source>Network Shares</source>
-        <translation type="obsolete">Мережеві ресурси</translation>
-    </message>
-    <message>
-        <source>Open Files</source>
-        <translation type="obsolete">Відкриті файли</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="obsolete">Операційна система</translation>
-    </message>
-    <message>
-        <source>Environment Variables</source>
-        <translation type="obsolete">Змінні середовища</translation>
-    </message>
-    <message>
-        <source>Event Logs</source>
-        <translation type="obsolete">Журнали подій</translation>
-    </message>
-    <message>
-        <source>Users</source>
-        <translation type="obsolete">Користувачі</translation>
-    </message>
-    <message>
-        <source>HTML File</source>
-        <translation type="obsolete">Файл HTML</translation>
-    </message>
-    <message>
-        <source>HTML File (*.html)</source>
-        <translation type="obsolete">Файл HTML (*.html)</translation>
-    </message>
-    <message>
-        <source>Failed to save file: %1</source>
-        <translation type="obsolete">Не вдалося зберегти файл: %1</translation>
+        <translation>Інформація про систему</translation>
     </message>
 </context>
 <context>
@@ -11099,7 +10607,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="188"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="237"/>
         <source>Name</source>
-        <translation>Ім&apos;яІм&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="80"/>
@@ -11119,7 +10627,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
         <source>Task Manager</source>
-        <translation>Дипетчер завдань</translation>
+        <translation>Диспетчер завдань</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
@@ -11155,7 +10663,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="127"/>
         <source>Image Path</source>
         <translatorcomment>путь к картинке или образу?</translatorcomment>
-        <translation>Шлях</translation>
+        <translation>Шлях до образу</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="153"/>
@@ -11166,7 +10674,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="163"/>
         <source>Services</source>
-        <translation>Сервіси</translation>
+        <translation>Служби</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="198"/>
@@ -11182,7 +10690,7 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="293"/>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="328"/>
         <source>Logoff</source>
-        <translation>Вийти</translation>
+        <translation>Завершити сеанс</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="313"/>
@@ -11254,37 +10762,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви дійсно хочете завершити процес "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви дійсно хочете відключити сесію користувача "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви дійсно хочете завершити сесію користувача "%1"?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
         <source>Processes: %1</source>
-        <translation type="unfinished">Процеси: %1</translation>
+        <translation>Процесів: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="950"/>
         <source>CPU loading: %1%</source>
-        <translation type="unfinished">Завантаженість ЦП: %1%</translation>
+        <translation>Завантаження ЦП: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="956"/>
         <source>Physical memory: %1%</source>
-        <translation type="unfinished">Фізична пам&apos;ять: %1%</translation>
+        <translation>Фізична пам'ять: %1%</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
-        <translation type="unfinished">Швидкість оновлення</translation>
+        <translation>Швидкість оновлення</translation>
     </message>
 </context>
 <context>
@@ -11292,67 +10800,67 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="67"/>
         <source>Violation of the communication protocol.</source>
-        <translation type="unfinished">Порушення протоколу зв&apos;язку.</translation>
+        <translation>Порушення протоколу обміну даними.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="71"/>
         <source>Wrong user name or password.</source>
-        <translation type="unfinished">Неправильне ім&apos;я користувача або пароль.</translation>
+        <translation>Неправильне ім'я користувача або пароль.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="75"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished">Помилка шифрування (не вдалося зашифрувати або розшифрувати повідомлення).</translation>
+        <translation>Помилка криптографії (не вдалося зашифрувати або розшифрувати повідомлення).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="79"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation type="unfinished">Обраний тип сесії не дозволений для користувача.</translation>
+        <translation>Вказаний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="83"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія застосунку, до якого ви підключаєтеся, нижча за мінімально підтримувану версію.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="88"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
+        <translation>Сталася помилка в мережі (наприклад, мережевий кабель було випадково від'єднано).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="92"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished">З&apos;єднання відхилено піром (або час вийшов).</translation>
+        <translation>Підключення було відхилено іншою стороною (або перевищено час очікування).</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="96"/>
         <source>Remote host closed the connection.</source>
-        <translation type="unfinished">Віддалений хост закрив з&apos;єднання.</translation>
+        <translation>Віддалений вузол закрив підключення.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="100"/>
         <source>Host address was not found.</source>
-        <translation type="unfinished">Адресу хоста не знайдено.</translation>
+        <translation>Адресу віддаленого вузла не знайдено.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="104"/>
         <source>Socket operation timed out.</source>
-        <translation type="unfinished">Вийшов час операції сокета.</translation>
+        <translation>Перевищено час очікування.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="108"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished">Введена адреса вже використовується і встановлена як унікальна.</translation>
+        <translation>Вказана адреса вже використовується і була встановлена монопольно.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="112"/>
         <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished">Введена адреса не належить хосту.</translation>
+        <translation>Вказана адреса не належить вузлу.</translation>
     </message>
     <message>
         <location filename="../base/net/tcp_channel.cc" line="122"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished">Виникла невідома помилка.</translation>
+        <translation>Сталася невідома помилка.</translation>
     </message>
 </context>
 <context>
@@ -11360,38 +10868,38 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="243"/>
         <source>Authentication failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка автентифікації.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="244"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1138"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1082"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1085"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставити</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1088"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Виділити все</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1136"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть ім'я користувача і пароль для автентифікації на віддаленому комп'ютері.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="1150"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
 </context>
 <context>
@@ -11399,12 +10907,12 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="14"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Двофакторна автентифікація</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.ui" line="50"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть 6-значний код із застосунку-автентифікатора.</translation>
     </message>
 </context>
 <context>
@@ -11412,37 +10920,37 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="64"/>
         <source>Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Двофакторна автентифікація</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="65"/>
         <source>Add the setup key below to an authenticator app, then enter the 6-digit code it shows to confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>Додайте вказаний нижче ключ налаштування у застосунок-автентифікатор, потім введіть 6-значний код, який він показує, для підтвердження.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="67"/>
         <source>Enter the 6-digit code from your authenticator app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть 6-значний код із застосунку-автентифікатора.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="74"/>
         <source>Setup Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ налаштування</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="80"/>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Код</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="86"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="87"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -11450,22 +10958,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="14"/>
         <source>Enable Two-Factor Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнення двофакторної автентифікації</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="20"/>
         <source>Open a TOTP authenticator app (Google Authenticator, Microsoft Authenticator or any compatible alternative) and add a new account by scanning the QR code below. If QR scanning is unavailable, type the setup key into the app instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрийте застосунок для TOTP-автентифікації (Google Authenticator, Microsoft Authenticator або будь-який сумісний) і додайте новий обліковий запис, відсканувавши QR-код нижче. Якщо сканування QR-коду недоступне, введіть у застосунок ключ налаштування вручну.</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="43"/>
         <source>Setup key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ налаштування:</translation>
     </message>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.ui" line="62"/>
         <source>Enter the 6-digit code shown by the app to confirm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть 6-значний код, який показує застосунок, для підтвердження:</translation>
     </message>
 </context>
 <context>
@@ -11513,53 +11021,53 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="56"/>
         <source>Receiving information...</source>
-        <translation type="unfinished">Отримання інформації...</translation>
+        <translation>Отримання інформації...</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="108"/>
         <source>Cancel checking for updates. Please wait.</source>
-        <translation type="unfinished">Скасування пошуку оновлень. Будь ласка, зачекайте.</translation>
+        <translation>Скасування перевірки оновлень. Будь ласка, зачекайте.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
-        <translation type="unfinished">Оновлення буде завантажено. Після завершення завантаження програму буде закрито автоматично.</translation>
+        <translation>Оновлення буде завантажено. Після завершення завантаження застосунок буде автоматично закрито.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="124"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
-        <translation type="unfinished">Всі підключені сесії буде завершено. Ви не зможете встановити з&apos;єднання до завершення оновлення.</translation>
+        <translation>Всі підключені сесії будуть завершені. Ви не зможете встановити підключення до завершення оновлення.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>All unsaved data will be lost.</source>
-        <translation type="unfinished">Всі не збережені дані буде втрачено.</translation>
+        <translation>Всі незбережені дані будуть втрачені.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="127"/>
         <source>Continue?</source>
-        <translation type="unfinished">Продовжити?</translation>
+        <translation>Продовжити?</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>An error occurred while installing the update: %1</source>
-        <translation type="unfinished">Виникла помилка під час встановлення оновлення: %1</translation>
+        <translation>Сталася помилка при встановленні оновлення: %1</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="197"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="198"/>
         <source>Error retrieving update information.</source>
-        <translation type="unfinished">Виникла помилка під час отримання інформації про оновлення.</translation>
+        <translation>Помилка при отриманні інформації про оновлення.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="208"/>
         <location filename="../common/desktop/update_dialog.cc" line="231"/>
         <source>No updates available.</source>
-        <translation type="unfinished">Немає доступних оновлень.</translation>
+        <translation>Немає доступних оновлень.</translation>
     </message>
 </context>
 <context>
@@ -11587,7 +11095,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="62"/>
         <source>Disable User Account</source>
-        <translation>Заблокувати користувача</translation>
+        <translation>Відключити обліковий запис користувача</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="69"/>
@@ -11597,72 +11105,72 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="86"/>
         <source>Check all</source>
-        <translation type="unfinished"></translation>
+        <translation>Вибрати всі</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.ui" line="112"/>
         <source>Uncheck all</source>
-        <translation type="unfinished"></translation>
+        <translation>Зняти всі відмітки</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="162"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, ., @</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="179"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введене вами ім'я користувача вже існує.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="188"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="198"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символ.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символи.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation type="unfinished">Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
-            <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символи.</numerusform>
+            <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Do you want to enter a different password?</source>
-        <translation type="unfinished">Бажаєте ввести інший пароль?</translation>
+        <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="218"/>
         <source>Warning</source>
-        <translation type="unfinished">Попередження</translation>
+        <translation>Попередження</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="236"/>
         <location filename="../host/ui/user_dialog.cc" line="266"/>
         <location filename="../host/ui/user_dialog.cc" line="276"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома внутрішня помилка при створенні або зміні користувача.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="314"/>
         <source>Double-click to change</source>
-        <translation type="unfinished">Подвійний клік для зміни</translation>
+        <translation>Подвійне клацання для зміни</translation>
     </message>
 </context>
 <context>
@@ -11677,30 +11185,30 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="234"/>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача не може бути порожнім і може містити тільки літери, цифри та символи "_", "-", ".", "@".</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
         <source>The username you entered already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введене вами ім'я користувача вже існує.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The passwords you entered do not match.</source>
-        <translation type="unfinished">Введені паролі не співпадають.</translation>
+        <translation>Введені паролі не збігаються.</translation>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="191"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation type="unfinished">
-            <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
-            <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
+        <translation>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символ.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символи.</numerusform>
+            <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символів.</numerusform>
         </translation>
     </message>
     <message>
@@ -11708,72 +11216,72 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="224"/>
         <location filename="../host/android/user_editor_widget.cc" line="235"/>
         <source>Unknown internal error when creating or modifying a user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома внутрішня помилка при створенні або зміні користувача.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="95"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ім'я користувача</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="96"/>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="97"/>
         <source>Password (repeat)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль (повторно)</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="98"/>
         <source>Leave the password empty to keep the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Залиште поле пароля порожнім, щоб зберегти поточний пароль.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="99"/>
         <source>User enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Користувач увімкнений</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="100"/>
         <source>Allowed sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволені сесії</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="101"/>
         <source>Desktop</source>
-        <translation type="unfinished">Робочий стіл</translation>
+        <translation>Робочий стіл</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="102"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлів</translation>
+        <translation>Передача файлів</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="103"/>
         <source>Delete user</source>
-        <translation type="unfinished">Видалити користувача</translation>
+        <translation>Видалити користувача</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="249"/>
         <source>Delete User</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити користувача</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити користувача "%1"?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="257"/>
         <source>Failed to delete the user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити користувача.</translation>
     </message>
 </context>
 <context>
@@ -11845,27 +11353,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>Yes</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="58"/>
         <source>No</source>
-        <translation type="unfinished">Ні</translation>
+        <translation>Ні</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="90"/>
         <source>Administrator</source>
-        <translation type="unfinished">Адміністратор</translation>
+        <translation>Адміністратор</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="94"/>
         <source>Client</source>
-        <translation type="unfinished">Клієнт</translation>
+        <translation>Клієнт</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="92"/>
         <source>Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Менеджер</translation>
     </message>
 </context>
 <context>
@@ -11873,17 +11381,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/users_widget.cc" line="95"/>
         <source>No users</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає користувачів</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнено</translation>
     </message>
     <message>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
-        <translation type="unfinished">Відключено</translation>
+        <translation>Відключено</translation>
     </message>
 </context>
 </TS>
