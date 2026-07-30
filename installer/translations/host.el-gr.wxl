@@ -2,7 +2,7 @@
 <WixLocalization Culture="el-gr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">el</String>
     <String Id="ProductName" Overridable="yes">Aspia Host</String>
-    <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-    <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
-    <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>
+    <String Id="DowngradeErrorMessage" Overridable="yes">Μια νεότερη έκδοση της εφαρμογής είναι ήδη εγκατεστημένη.</String>
+    <String Id="CreateDesktopShortcut" Overridable="yes">Δημιουργία συντόμευσης στην επιφάνεια εργασίας</String>
+    <String Id="CreateProgramMenuShortcut" Overridable="yes">Δημιουργία συντόμευσης στο μενού Έναρξη</String>
 </WixLocalization>

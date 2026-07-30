@@ -3,7 +3,7 @@
     <String Id="Locale" Overridable="yes">no</String>
     <String Id="ProductName" Overridable="yes">Aspia Client</String>
     <String Id="ShortcutName" Overridable="yes">Aspia Client</String>
-    <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-    <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
-    <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>
+    <String Id="DowngradeErrorMessage" Overridable="yes">En nyere versjon av programmet er allerede installert.</String>
+    <String Id="CreateDesktopShortcut" Overridable="yes">Opprett snarvei på skrivebordet</String>
+    <String Id="CreateProgramMenuShortcut" Overridable="yes">Opprett snarvei i Start-menyen</String>
 </WixLocalization>

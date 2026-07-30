@@ -2,7 +2,7 @@
 <WixLocalization Culture="ko-kr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">ko</String>
     <String Id="ProductName" Overridable="yes">Aspia Host</String>
-    <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-    <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
-    <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>
+    <String Id="DowngradeErrorMessage" Overridable="yes">애플리케이션의 최신 버전이 이미 설치되어 있습니다.</String>
+    <String Id="CreateDesktopShortcut" Overridable="yes">바탕 화면에 바로 가기 만들기</String>
+    <String Id="CreateProgramMenuShortcut" Overridable="yes">시작 메뉴에 바로 가기 만들기</String>
 </WixLocalization>
