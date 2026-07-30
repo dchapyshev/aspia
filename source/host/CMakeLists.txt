@@ -315,7 +315,7 @@ if (APPLE)
     target_sources(aspia_host PRIVATE ${HOST_ICON})
 
     # Localized bundle display name.
-    foreach(host_lproj cs da de el es fa fi fr he hu it nb nl pl pt-BR pt-PT ru sv tr uk zh-Hans zh-Hant)
+    foreach(host_lproj cs da de el es fa fi fr he hu it ja ko nb nl pl pt-BR pt-PT ru sv tr uk zh-Hans zh-Hant)
         set(HOST_LPROJ_FILE ${CMAKE_CURRENT_SOURCE_DIR}/lproj/${host_lproj}.lproj/InfoPlist.strings)
         set_source_files_properties(${HOST_LPROJ_FILE} PROPERTIES
             MACOSX_PACKAGE_LOCATION Resources/${host_lproj}.lproj)

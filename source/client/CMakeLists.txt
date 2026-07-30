@@ -188,7 +188,7 @@ if (APPLE)
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
 
     # Localized bundle display name.
-    foreach(client_lproj cs da de el es fa fi fr he hu it nb nl pl pt-BR pt-PT ru sv tr uk zh-Hans zh-Hant)
+    foreach(client_lproj cs da de el es fa fi fr he hu it ja ko nb nl pl pt-BR pt-PT ru sv tr uk zh-Hans zh-Hant)
         set(CLIENT_LPROJ_FILE ${CMAKE_CURRENT_SOURCE_DIR}/lproj/${client_lproj}.lproj/InfoPlist.strings)
         set_source_files_properties(${CLIENT_LPROJ_FILE} PROPERTIES
             MACOSX_PACKAGE_LOCATION Resources/${client_lproj}.lproj)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia ホスト</string>
+    <string name="accessibility_service_description">セッション中に Aspia ホストがリモートのタップ、スワイプ、キー操作を実行できるようにします。</string>
+    <string name="menu_sync_clipboard">クリップボードを同期</string>
+    <string name="menu_back">戻る</string>
+    <string name="menu_home">ホーム</string>
+    <string name="menu_recents">最近のアプリ</string>
+</resources>

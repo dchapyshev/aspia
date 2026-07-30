@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia 호스트</string>
+    <string name="accessibility_service_description">세션 중에 Aspia 호스트가 원격 탭, 스와이프 및 키 동작을 수행할 수 있도록 허용합니다.</string>
+    <string name="menu_sync_clipboard">클립보드 동기화</string>
+    <string name="menu_back">뒤로</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_recents">최근 앱</string>
+</resources>
