@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">میزبان Aspia</string>
+    <string name="accessibility_service_description">به میزبان Aspia اجازه می‌دهد در طول نشست، ضربه‌ها، کشیدن‌ها و کنش‌های کلید از راه دور را اعمال کند.</string>
+    <string name="menu_sync_clipboard">همگام‌سازی کلیپ‌بورد</string>
+    <string name="menu_back">بازگشت</string>
+    <string name="menu_home">صفحه اصلی</string>
+    <string name="menu_recents">برنامه‌های اخیر</string>
+</resources>

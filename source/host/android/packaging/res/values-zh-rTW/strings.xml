@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">允許 Aspia Host 在工作階段期間注入遠端點按、滑動和按鍵操作。</string>
+    <string name="menu_sync_clipboard">同步剪貼簿</string>
+    <string name="menu_back">返回</string>
+    <string name="menu_home">主畫面</string>
+    <string name="menu_recents">最近使用</string>
+</resources>

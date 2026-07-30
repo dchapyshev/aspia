@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Consente ad Aspia Host di inviare tocchi, scorrimenti e azioni dei tasti remoti durante una sessione.</string>
+    <string name="menu_sync_clipboard">Sincronizza appunti</string>
+    <string name="menu_back">Indietro</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_recents">Recenti</string>
+</resources>

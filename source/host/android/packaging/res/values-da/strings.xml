@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Tillader Aspia Host at udføre fjerntryk, strygebevægelser og tastehandlinger under en session.</string>
+    <string name="menu_sync_clipboard">Synkroniser udklipsholder</string>
+    <string name="menu_back">Tilbage</string>
+    <string name="menu_home">Hjem</string>
+    <string name="menu_recents">Seneste</string>
+</resources>

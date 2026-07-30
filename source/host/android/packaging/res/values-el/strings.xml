@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Επιτρέπει στο Aspia Host να εκτελεί απομακρυσμένα αγγίγματα, κινήσεις σάρωσης και ενέργειες πλήκτρων κατά τη διάρκεια μιας περιόδου λειτουργίας.</string>
+    <string name="menu_sync_clipboard">Συγχρονισμός προχείρου</string>
+    <string name="menu_back">Πίσω</string>
+    <string name="menu_home">Αρχική οθόνη</string>
+    <string name="menu_recents">Πρόσφατα</string>
+</resources>

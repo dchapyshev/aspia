@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">מאפשר ל-Aspia Host להזרים הקשות, החלקות ופעולות מקשים מרוחקות במהלך הפעלה.</string>
+    <string name="menu_sync_clipboard">סנכרן לוח</string>
+    <string name="menu_back">חזרה</string>
+    <string name="menu_home">מסך הבית</string>
+    <string name="menu_recents">אחרונים</string>
+</resources>

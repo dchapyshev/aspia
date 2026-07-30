@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Erlaubt Aspia Host, während einer Sitzung ferngesteuerte Tipp-, Wisch- und Tastenaktionen auszuführen.</string>
+    <string name="menu_sync_clipboard">Zwischenablage synchronisieren</string>
+    <string name="menu_back">Zurück</string>
+    <string name="menu_home">Startbildschirm</string>
+    <string name="menu_recents">Letzte Apps</string>
+</resources>

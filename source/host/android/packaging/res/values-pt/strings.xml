@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Permite que o Aspia Host injete toques, deslizes e ações de teclas remotos durante uma sessão.</string>
+    <string name="menu_sync_clipboard">Sincronizar área de transferência</string>
+    <string name="menu_back">Voltar</string>
+    <string name="menu_home">Ecrã principal</string>
+    <string name="menu_recents">Recentes</string>
+</resources>

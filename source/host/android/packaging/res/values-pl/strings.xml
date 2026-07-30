@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Host Aspia</string>
+    <string name="accessibility_service_description">Pozwala aplikacji Host Aspia wykonywać zdalne dotknięcia, przesunięcia i akcje klawiszy podczas sesji.</string>
+    <string name="menu_sync_clipboard">Synchronizuj schowek</string>
+    <string name="menu_back">Wstecz</string>
+    <string name="menu_home">Ekran główny</string>
+    <string name="menu_recents">Ostatnie</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Lehetővé teszi az Aspia Host számára távoli koppintások, csúsztatások és billentyűműveletek végrehajtását a munkamenet során.</string>
+    <string name="menu_sync_clipboard">Vágólap szinkronizálása</string>
+    <string name="menu_back">Vissza</string>
+    <string name="menu_home">Kezdőképernyő</string>
+    <string name="menu_recents">Legutóbbiak</string>
+</resources>

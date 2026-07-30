@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Sallii Aspia Hostin välittää etänapautuksia, pyyhkäisyjä ja näppäintoimintoja istunnon aikana.</string>
+    <string name="menu_sync_clipboard">Synkronoi leikepöytä</string>
+    <string name="menu_back">Takaisin</string>
+    <string name="menu_home">Aloitusnäyttö</string>
+    <string name="menu_recents">Viimeisimmät</string>
+</resources>

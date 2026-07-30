@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Lar Aspia Host utføre eksterne trykk, sveip og tastehandlinger under en økt.</string>
+    <string name="menu_sync_clipboard">Synkroniser utklippstavle</string>
+    <string name="menu_back">Tilbake</string>
+    <string name="menu_home">Startskjerm</string>
+    <string name="menu_recents">Nylige</string>
+</resources>

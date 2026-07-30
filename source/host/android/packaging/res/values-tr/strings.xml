@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">"Aspia Host'un oturum sırasında uzaktan dokunma, kaydırma ve tuş eylemleri gerçekleştirmesine izin verir."</string>
+    <string name="menu_sync_clipboard">Panoyu eşitle</string>
+    <string name="menu_back">Geri</string>
+    <string name="menu_home">Ana ekran</string>
+    <string name="menu_recents">Son uygulamalar</string>
+</resources>

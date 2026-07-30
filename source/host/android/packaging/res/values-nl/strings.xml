@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Hiermee kan Aspia Host tijdens een sessie externe tikken, veegbewegingen en toetsacties uitvoeren.</string>
+    <string name="menu_sync_clipboard">Klembord synchroniseren</string>
+    <string name="menu_back">Terug</string>
+    <string name="menu_home">Startscherm</string>
+    <string name="menu_recents">Recent</string>
+</resources>

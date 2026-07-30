@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Umožňuje aplikaci Aspia Host vkládat vzdálená klepnutí, přejetí a akce kláves během relace.</string>
+    <string name="menu_sync_clipboard">Synchronizovat schránku</string>
+    <string name="menu_back">Zpět</string>
+    <string name="menu_home">Domů</string>
+    <string name="menu_recents">Nedávné</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aspia Host</string>
+    <string name="accessibility_service_description">Låter Aspia Host utföra fjärrtryck, svep och tangentåtgärder under en session.</string>
+    <string name="menu_sync_clipboard">Synkronisera urklipp</string>
+    <string name="menu_back">Tillbaka</string>
+    <string name="menu_home">Startskärm</string>
+    <string name="menu_recents">Senaste</string>
+</resources>
