@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/scripts">
+        <file>win/show_event_log_errors.ps1</file>
+        <file>win/show_unexpected_shutdowns.ps1</file>
+        <file>win/show_stopped_automatic_services.ps1</file>
+        <file>win/flush_dns_arp_and_netbios_caches.ps1</file>
+        <file>win/synchronize_system_time.ps1</file>
+        <file>win/restart_print_spooler.ps1</file>
+        <file>win/restart_windows_explorer.ps1</file>
+        <file>win/create_restore_point.ps1</file>
+        <file>win/update_defender_and_run_quick_scan.ps1</file>
+        <file>win/free_up_disk_space.ps1</file>
+    </qresource>
+</RCC>

@@ -25,6 +25,7 @@
 #include <QStringList>
 
 #include <functional>
+#include <span>
 
 #include "base/session_id.h"
 #include "base/threading/worker.h"
@@ -77,17 +78,17 @@ private:
 
     // One maintenance script. Its window is shown on the desktop of the user, so the client is told
     // only what to put in the menu; the script itself never leaves the host. The identifier the
-    // client sends back is the position of the script in |scripts_|.
+    // client sends back is the position of the script in scriptTable().
     struct Script
     {
-        QString name;
-        QString description;
+        const char* name;
+        const char* description;
 
-        // The body of the script in the language of the shell of the system.
-        QString command;
+        // Name of the file the body of the script is kept in, under ":/scripts".
+        const char* file;
 
         // The client asks the operator to confirm before starting it.
-        bool confirm = false;
+        bool confirm;
 
         // The script is started with the token of the logged on user instead of the token of the
         // service. Needed by the few scripts that act on behalf of that user.
@@ -104,8 +105,16 @@ private:
     // once.
     void buildToolList();
 
-    // Fills |scripts_| with the scripts this operating system is able to run.
-    void buildScriptList();
+    // Returns the scripts written for this operating system. The table is a constant of the program,
+    // unlike the tools, which are whatever the machine happens to have installed.
+    static std::span<const Script> scriptTable();
+
+    // Returns true if this machine has what the scripts of the table need to run: the shell they are
+    // written for, and something to show their window in.
+    bool scriptsSupported() const;
+
+    // Returns the body of |script|, read from the resources of the host. Empty on failure.
+    static QString scriptText(const Script& script);
 
     // Returns true if |session_id| is an interactive session with a logged on user. Tools are
     // offered to the client only in that case: there is no desktop to show them on otherwise.
@@ -121,7 +130,9 @@ private:
     bool launchScript(SessionId session_id, const Script& script) const;
 
     QList<Tool> tools_;
-    QList<Script> scripts_;
+
+    // Whether the scripts of the table can run on this machine, asked once at the start.
+    bool scripts_supported_ = false;
 
     // Time of the last launch. Without it a client is able to fill the user session with processes
     // as fast as it can send messages.

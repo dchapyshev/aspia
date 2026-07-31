@@ -653,7 +653,63 @@ void ToolsWorker::buildToolList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::buildScriptList()
+// static
+std::span<const ToolsWorker::Script> ToolsWorker::scriptTable()
+{
+    static const Script kScripts[] =
+    {
+        // The reports come first: they are what tells the operator where to look before touching
+        // anything.
+        { "Show Event Log Errors",
+          "Lists what the system and the applications reported as a failure in the last 24 hours",
+          "win/show_event_log_errors.ps1", false },
+
+        { "Show Unexpected Shutdowns",
+          "Lists the crashes and unexpected restarts of the last 30 days, and who asked for the "
+          "planned ones",
+          "win/show_unexpected_shutdowns.ps1", false },
+
+        { "Show Stopped Automatic Services",
+          "Lists the services set to start with the system that are not running",
+          "win/show_stopped_automatic_services.ps1", false },
+
+        { "Flush DNS, ARP and NetBIOS Caches",
+          "Clears the name and address caches of the network stack",
+          "win/flush_dns_arp_and_netbios_caches.ps1", false },
+
+        { "Synchronize System Time",
+          "Resynchronizes the clock of this computer with its time source",
+          "win/synchronize_system_time.ps1", false },
+
+        { "Restart Print Spooler",
+          "Restarts the printing service and removes everything queued for printing",
+          "win/restart_print_spooler.ps1", true },
+
+        // The shell belongs to the user, so this one runs as the user: a shell started with the
+        // token of the service would own the desktop of the session as the system account.
+        { "Restart Windows Explorer",
+          "Restarts the desktop shell of the logged on user",
+          "win/restart_windows_explorer.ps1", true, true },
+
+        { "Create Restore Point",
+          "Creates a system restore point of this computer",
+          "win/create_restore_point.ps1", false },
+
+        { "Update Defender and Run Quick Scan",
+          "Updates the antivirus signatures and checks the places malicious software starts from",
+          "win/update_defender_and_run_quick_scan.ps1", false },
+
+        { "Free Up Disk Space",
+          "Removes the temporary files of the logged on user and of the system and empties the "
+          "recycle bin of that user",
+          "win/free_up_disk_space.ps1", true },
+    };
+
+    return kScripts;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ToolsWorker::scriptsSupported() const
 {
     // Everything is written for the shell of the system; it is a part of Windows, but a machine
     // without it is offered nothing rather than items that fail on the first line.
@@ -661,276 +717,10 @@ void ToolsWorker::buildScriptList()
     if (system_dir.isEmpty() || !QFileInfo::exists(scriptInterpreter(system_dir)))
     {
         LOG(ERROR) << "Windows PowerShell is not available; no scripts are offered";
-        return;
+        return false;
     }
 
-    auto add = [this](const QString& name, const QString& description, const QString& command,
-                      bool confirm, bool as_user = false)
-    {
-        Script script;
-        script.name = name;
-        script.description = description;
-        script.command = command;
-        script.confirm = confirm;
-        script.as_user = as_user;
-
-        scripts_.append(script);
-    };
-
-    // A report, so it comes first: it is what tells the operator where to look before touching
-    // anything.
-    add("Show Event Log Errors",
-        "Lists what the system and the applications reported as a failure in the last 24 hours",
-        "$since = (Get-Date).AddHours(-24)\n"
-        "$total = 0\n"
-        "\n"
-        "foreach ($log in 'System', 'Application')\n"
-        "{\n"
-        "    # Level 1 is critical and level 2 is an error: what the system itself calls a failure.\n"
-        "    # An empty result is reported as an error by the cmdlet, hence the silent action.\n"
-        "    $records = @(Get-WinEvent -ErrorAction SilentlyContinue -FilterHashtable @{\n"
-        "        LogName = $log; Level = 1, 2; StartTime = $since })\n"
-        "    $total += $records.Count\n"
-        "\n"
-        "    Write-Host ''\n"
-        "    Write-Host ('{0}: {1} record(s)' -f $log, $records.Count)\n"
-        "\n"
-        "    # Grouped by the source: twenty records of one failing service are one problem, not\n"
-        "    # twenty, and the source with the most records is the one worth reading first.\n"
-        "    foreach ($group in ($records | Group-Object ProviderName | Sort-Object Count -Descending))\n"
-        "    {\n"
-        "        Write-Host ''\n"
-        "        Write-Host ('  {0} ({1})' -f $group.Name, $group.Count)\n"
-        "\n"
-        "        foreach ($record in ($group.Group | Select-Object -First 3))\n"
-        "        {\n"
-        "            $text = ($record.Message -split '\\r?\\n')[0]\n"
-        "            if ($text.Length -gt 100) { $text = $text.Substring(0, 100) + '...' }\n"
-        "            Write-Host ('    {0} id {1}: {2}' -f\n"
-        "                        $record.TimeCreated.ToString('MM-dd HH:mm'), $record.Id, $text)\n"
-        "        }\n"
-        "    }\n"
-        "}\n"
-        "\n"
-        "Write-Host ''\n"
-        "Write-Host ('Total: {0} record(s) since {1}' -f $total, $since)\n",
-        false);
-
-    add("Show Unexpected Shutdowns",
-        "Lists the crashes and unexpected restarts of the last 30 days, and who asked for the "
-        "planned ones",
-        "$since = (Get-Date).AddDays(-30)\n"
-        "$boot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime\n"
-        "$uptime = (Get-Date) - $boot\n"
-        "Write-Host ('Last boot: {0} ({1} days {2} hours ago)' -f $boot, $uptime.Days, $uptime.Hours)\n"
-        "\n"
-        "# 41 - the machine rebooted without shutting down cleanly, 1001 - it rebooted from a stop\n"
-        "# error, 6008 - the previous shutdown was unexpected. One event of the three is enough to\n"
-        "# call a restart unexpected; all three of them together usually describe the same one.\n"
-        "$records = @(Get-WinEvent -ErrorAction SilentlyContinue -FilterHashtable @{\n"
-        "    LogName = 'System'; Id = 41, 1001, 6008; StartTime = $since })\n"
-        "\n"
-        "Write-Host ''\n"
-        "if ($records.Count -eq 0)\n"
-        "{\n"
-        "    Write-Host ('No unexpected shutdowns since {0:yyyy-MM-dd}' -f $since)\n"
-        "}\n"
-        "else\n"
-        "{\n"
-        "    Write-Host ('{0} unexpected shutdown record(s):' -f $records.Count)\n"
-        "    foreach ($record in ($records | Select-Object -First 20))\n"
-        "    {\n"
-        "        $text = ($record.Message -split '\\r?\\n')[0]\n"
-        "        if ($text.Length -gt 120) { $text = $text.Substring(0, 120) + '...' }\n"
-        "        Write-Host ('  {0} id {1}: {2}' -f\n"
-        "                    $record.TimeCreated.ToString('yyyy-MM-dd HH:mm'), $record.Id, $text)\n"
-        "    }\n"
-        "}\n"
-        "\n"
-        "# 1074 names the process and the person behind a planned shutdown, which is what tells an\n"
-        "# ordinary restart from one nobody asked for.\n"
-        "$planned = @(Get-WinEvent -ErrorAction SilentlyContinue -FilterHashtable @{\n"
-        "    LogName = 'System'; Id = 1074; StartTime = $since })\n"
-        "\n"
-        "Write-Host ''\n"
-        "Write-Host 'Last planned shutdowns:'\n"
-        "if ($planned.Count -eq 0)\n"
-        "{\n"
-        "    Write-Host '  none'\n"
-        "}\n"
-        "else\n"
-        "{\n"
-        "    foreach ($record in ($planned | Select-Object -First 5))\n"
-        "    {\n"
-        "        $text = ($record.Message -split '\\r?\\n')[0]\n"
-        "        if ($text.Length -gt 120) { $text = $text.Substring(0, 120) + '...' }\n"
-        "        Write-Host ('  {0}: {1}' -f\n"
-        "                    $record.TimeCreated.ToString('yyyy-MM-dd HH:mm'), $text)\n"
-        "    }\n"
-        "}\n",
-        false);
-
-    add("Show Stopped Automatic Services",
-        "Lists the services set to start with the system that are not running",
-        "$filter = \"StartMode = 'Auto' AND State <> 'Running'\"\n"
-        "$services = @(Get-CimInstance Win32_Service -Filter $filter)\n"
-        "\n"
-        "if ($services.Count -eq 0)\n"
-        "{\n"
-        "    Write-Host 'Every service set to start with the system is running'\n"
-        "}\n"
-        "else\n"
-        "{\n"
-        "    Write-Host ('{0} service(s) set to start with the system are not running:' -f\n"
-        "                $services.Count)\n"
-        "\n"
-        "    # Written out by hand rather than as a table: the names of some services are longer\n"
-        "    # than a console window is wide, and a table of them ends up unreadable.\n"
-        "    foreach ($service in ($services | Sort-Object DisplayName))\n"
-        "    {\n"
-        "        $name = $service.DisplayName\n"
-        "        if ($name.Length -gt 45) { $name = $name.Substring(0, 45) + '...' }\n"
-        "        if ($service.DelayedAutoStart) { $name = $name + ' (delayed)' }\n"
-        "        Write-Host ('  {0,-58} {1}' -f $name, $service.Name)\n"
-        "    }\n"
-        "\n"
-        "    # A service that stops itself is not a broken one, and there are enough of them on a\n"
-        "    # healthy machine to make the list confusing without saying so.\n"
-        "    Write-Host 'Some of these stop on their own once their work is done (licensing,'\n"
-        "    Write-Host 'updaters), and a delayed one may still be starting after a boot.'\n"
-        "}\n",
-        false);
-
-    add("Flush DNS, ARP and NetBIOS Caches",
-        "Clears the name and address caches of the network stack",
-        "ipconfig /flushdns\n"
-        "arp -d *\n"
-        "nbtstat -R\n",
-        false);
-
-    add("Synchronize System Time",
-        "Resynchronizes the clock of this computer with its time source",
-        "Start-Service W32Time -ErrorAction SilentlyContinue\n"
-        "w32tm /resync /rediscover\n"
-        "w32tm /query /status\n"
-        "Write-Host ('Current time: ' + (Get-Date))\n",
-        false);
-
-    add("Restart Print Spooler",
-        "Restarts the printing service and removes everything queued for printing",
-        "$queue = Join-Path $env:SystemRoot 'System32\\spool\\PRINTERS'\n"
-        "Stop-Service Spooler -Force\n"
-        "$files = @(Get-ChildItem $queue -File -ErrorAction SilentlyContinue)\n"
-        "Write-Host ('Removing ' + $files.Count + ' file(s) from the print queue')\n"
-        "$files | Remove-Item -Force -ErrorAction SilentlyContinue\n"
-        "Start-Service Spooler\n"
-        "Get-Service Spooler | Format-Table Name, Status -AutoSize\n",
-        true);
-
-    // The shell belongs to the user, so this one runs as the user: a shell started with the token of
-    // the service would own the desktop of the session as the system account.
-    add("Restart Windows Explorer",
-        "Restarts the desktop shell of the logged on user",
-        "Get-Process explorer -ErrorAction SilentlyContinue |\n"
-        "    Where-Object { $_.SessionId -eq $SessionId } | Stop-Process -Force\n"
-        "Start-Sleep -Seconds 2\n"
-        "if (-not (Get-Process explorer -ErrorAction SilentlyContinue |\n"
-        "    Where-Object { $_.SessionId -eq $SessionId }))\n"
-        "{\n"
-        "    Start-Process explorer.exe\n"
-        "}\n"
-        "Write-Host 'Windows Explorer restarted'\n",
-        true, true);
-
-    // Windows keeps one restore point per 24 hours and creates nothing at all when system protection
-    // is disabled, so the number of points before and after tells what really happened.
-    add("Create Restore Point",
-        "Creates a system restore point of this computer",
-        "Write-Host 'Creating a restore point, this can take a minute...'\n"
-        "$before = @(Get-ComputerRestorePoint).Count\n"
-        "Checkpoint-Computer -Description 'Aspia' -RestorePointType MODIFY_SETTINGS\n"
-        "if (@(Get-ComputerRestorePoint).Count -gt $before)\n"
-        "{\n"
-        "    Write-Host 'Restore point created'\n"
-        "}\n"
-        "else\n"
-        "{\n"
-        "    Write-Host 'No restore point was created: Windows keeps one per 24 hours'\n"
-        "}\n",
-        false);
-
-    // The scan itself decides how long it runs, so it prints where it is: an operator watching a
-    // window that says nothing for ten minutes has no way to tell it apart from a hung one.
-    add("Update Defender and Run Quick Scan",
-        "Updates the antivirus signatures and checks the places malicious software starts from",
-        "if (-not (Get-Command Get-MpComputerStatus -ErrorAction SilentlyContinue))\n"
-        "{\n"
-        "    throw 'Microsoft Defender is not installed on this computer'\n"
-        "}\n"
-        "\n"
-        "$status = Get-MpComputerStatus\n"
-        "Write-Host ('Running mode: ' + $status.AMRunningMode)\n"
-        "Write-Host ('Signatures: ' + $status.AntivirusSignatureVersion +\n"
-        "            ' of ' + $status.AntivirusSignatureLastUpdated)\n"
-        "\n"
-        "Write-Host 'Updating signatures...'\n"
-        "Update-MpSignature\n"
-        "Write-Host ('Signatures: ' + (Get-MpComputerStatus).AntivirusSignatureVersion)\n"
-        "\n"
-        "# Everything Defender knew about before the scan started is history of its own, so only what\n"
-        "# it finds from now on says anything about the state of this computer.\n"
-        "$started = Get-Date\n"
-        "Write-Host ''\n"
-        "Write-Host 'Running a quick scan, this takes a few minutes...'\n"
-        "Start-MpScan -ScanType QuickScan\n"
-        "\n"
-        "$found = @(Get-MpThreatDetection -ErrorAction SilentlyContinue |\n"
-        "    Where-Object { $_.InitialDetectionTime -ge $started })\n"
-        "if ($found.Count -eq 0)\n"
-        "{\n"
-        "    Write-Host 'Quick scan finished, nothing found'\n"
-        "}\n"
-        "else\n"
-        "{\n"
-        "    Write-Host ('Quick scan finished, ' + $found.Count + ' detection(s):')\n"
-        "    $found | Format-Table InitialDetectionTime, ThreatID, Resources -AutoSize\n"
-        "}\n",
-        false);
-
-    add("Free Up Disk Space",
-        "Removes the temporary files of the logged on user and of the system and empties the "
-        "recycle bin of that user",
-        "$total = 0\n"
-        "$paths = @((Join-Path $UserProfile 'AppData\\Local\\Temp'),\n"
-        "           (Join-Path $env:SystemRoot 'Temp'))\n"
-        "\n"
-        "# The recycle bin of a user is a folder named after their identifier on every drive. The\n"
-        "# identifier is the one the system keeps the profile of this user under.\n"
-        "$profiles = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList'\n"
-        "$sid = (Get-ChildItem $profiles | Where-Object {\n"
-        "    (Get-ItemProperty $_.PSPath).ProfileImagePath -eq $UserProfile }).PSChildName\n"
-        "if ($sid)\n"
-        "{\n"
-        "    foreach ($disk in Get-CimInstance Win32_LogicalDisk -Filter 'DriveType = 3')\n"
-        "    {\n"
-        "        $paths += (Join-Path $disk.DeviceID ('$Recycle.Bin\\' + $sid))\n"
-        "    }\n"
-        "}\n"
-        "\n"
-        "foreach ($path in $paths)\n"
-        "{\n"
-        "    if (-not (Test-Path $path)) { continue }\n"
-        "    $before = (Get-ChildItem $path -Force -Recurse -File -ErrorAction SilentlyContinue |\n"
-        "        Measure-Object -Property Length -Sum).Sum\n"
-        "    Get-ChildItem $path -Force -ErrorAction SilentlyContinue |\n"
-        "        Remove-Item -Recurse -Force -ErrorAction SilentlyContinue\n"
-        "    $after = (Get-ChildItem $path -Force -Recurse -File -ErrorAction SilentlyContinue |\n"
-        "        Measure-Object -Property Length -Sum).Sum\n"
-        "    Write-Host ($path + ': freed ' + [math]::Round(($before - $after) / 1MB, 1) + ' MB')\n"
-        "    $total += $before - $after\n"
-        "}\n"
-        "Write-Host ('Total freed: ' + [math]::Round($total / 1MB, 1) + ' MB')\n",
-        true);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -991,6 +781,10 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
     QString user_profile = userProfileDirectory(session_id);
     user_profile.replace('\'', "''");
 
+    const QString body = scriptText(script);
+    if (body.isEmpty())
+        return false;
+
     // The body is given what it can not find out on its own: started with the token of the service,
     // it sees the environment of the service and not the one of the user it acts for. It is wrapped
     // so that the window survives what happens inside it - an error is printed instead of closing
@@ -1014,7 +808,7 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
         "Write-Host ''\n"
         "Write-Host 'Press any key to close this window...'\n"
         "$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')\n")
-        .arg(title).arg(session_id).arg(user_profile, script.command);
+        .arg(title).arg(session_id).arg(user_profile, body);
 
     // The script is handed over as base64 of its text: a script of several lines does not have to
     // survive the quoting rules of a command line, and the execution policy has nothing to say about

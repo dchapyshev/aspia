@@ -217,9 +217,18 @@ if (LINUX)
     include(linux/sources.cmake)
 endif()
 
+if (WIN32)
+    list(APPEND SOURCE_HOST_RESOURCES resources/scripts/win.qrc)
+endif()
+
+if (LINUX)
+    list(APPEND SOURCE_HOST_RESOURCES resources/scripts/linux.qrc)
+endif()
+
 source_group("" FILES ${SOURCE_HOST})
 source_group(ui FILES ${SOURCE_HOST_UI})
 source_group(workers FILES ${SOURCE_HOST_WORKERS})
+source_group(resources FILES ${SOURCE_HOST_RESOURCES})
 
 if (LINUX)
     source_group(linux FILES ${SOURCE_HOST_LINUX})
@@ -244,6 +253,7 @@ add_executable(aspia_host
     ${SOURCE_HOST_WORKERS}
     ${SOURCE_HOST_WIN}
     ${SOURCE_HOST_LINUX}
+    ${SOURCE_HOST_RESOURCES}
     host.rc)
 if (WIN32)
     set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)

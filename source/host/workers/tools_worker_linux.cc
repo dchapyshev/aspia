@@ -391,7 +391,43 @@ void ToolsWorker::buildToolList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::buildScriptList()
+// static
+std::span<const ToolsWorker::Script> ToolsWorker::scriptTable()
+{
+    static const Script kScripts[] =
+    {
+        { "Show Failed Services",
+          "Lists the services that failed to start or died, and why",
+          "linux/show_failed_services.sh", false },
+
+        { "Show Unexpected Shutdowns",
+          "Lists the boots and shutdowns of this machine: a boot with no shutdown before it was a "
+          "crash",
+          "linux/show_unexpected_shutdowns.sh", false },
+
+        { "Flush DNS Cache",
+          "Clears the name cache of whichever resolver this machine runs",
+          "linux/flush_dns_cache.sh", false },
+
+        { "Synchronize System Time",
+          "Resynchronizes the clock of this machine with its time source",
+          "linux/synchronize_system_time.sh", false },
+
+        { "Restart Print Spooler",
+          "Restarts the printing service and removes everything queued for printing",
+          "linux/restart_print_spooler.sh", true },
+
+        { "Free Up Disk Space",
+          "Removes old journals, package caches, temporary files and the cache and trash of the "
+          "logged on user",
+          "linux/free_up_disk_space.sh", true },
+    };
+
+    return kScripts;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ToolsWorker::scriptsSupported() const
 {
     // A script is shown running in a terminal window on the desktop of the user; a machine with no
     // terminal emulator at all is offered nothing rather than items that open nothing.
@@ -399,169 +435,10 @@ void ToolsWorker::buildScriptList()
     if (scriptTerminal(&arguments).isEmpty())
     {
         LOG(ERROR) << "No terminal emulator is installed; no scripts are offered";
-        return;
+        return false;
     }
 
-    auto add = [this](const QString& name, const QString& description, const QString& command,
-                      bool confirm, bool as_user = false)
-    {
-        Script script;
-        script.name = name;
-        script.description = description;
-        script.command = command;
-        script.confirm = confirm;
-        script.as_user = as_user;
-
-        scripts_.append(script);
-    };
-
-    add("Show Log Errors",
-        "Lists what the system logged as an error in the last 24 hours",
-        "since='24 hours ago'\n"
-        "echo \"Errors in the journal since $(date -d \"$since\" '+%Y-%m-%d %H:%M')\"\n"
-        "echo\n"
-        "\n"
-        "# Priority 'err' takes everything from an emergency down to an ordinary error.\n"
-        "journalctl -p err --since \"$since\" --no-pager -q > /tmp/aspia-journal.$$\n"
-        "echo \"$(wc -l < /tmp/aspia-journal.$$) line(s)\"\n"
-        "echo\n"
-        "\n"
-        "# Grouped by the process that wrote them: a hundred lines of one broken unit are one\n"
-        "# problem, and the count says which of them to read first. The number in brackets is the\n"
-        "# process id, so it is cut off to keep the records of one program together.\n"
-        "echo 'By source:'\n"
-        "awk '{ sub(/(\\[[0-9]+\\])?[]:]*$/, \"\", $5); print \"  \" $5 }' /tmp/aspia-journal.$$ |\n"
-        "    sort | uniq -c | sort -rn | head -10\n"
-        "echo\n"
-        "\n"
-        "echo 'Last 20 lines:'\n"
-        "tail -20 /tmp/aspia-journal.$$\n"
-        "rm -f /tmp/aspia-journal.$$\n",
-        false);
-
-    add("Show Failed Services",
-        "Lists the services that failed to start or died, and why",
-        "systemctl --failed --no-pager\n"
-        "\n"
-        "# The list itself says nothing about the reason; it is in the log of the unit.\n"
-        "for unit in $(systemctl --failed --no-legend --plain | awk '{ print $1 }'); do\n"
-        "    echo\n"
-        "    echo \"=== $unit\"\n"
-        "    journalctl -u \"$unit\" -n 10 --no-pager -q\n"
-        "done\n",
-        false);
-
-    add("Show Unexpected Shutdowns",
-        "Lists the boots and shutdowns of this machine: a boot with no shutdown before it was a "
-        "crash",
-        "echo 'Boots known to the journal:'\n"
-        "journalctl --list-boots --no-pager | tail -10\n"
-        "if [ \"$(journalctl --list-boots --no-pager | wc -l)\" -le 1 ]; then\n"
-        "    echo\n"
-        "    echo 'The journal of this machine is not kept between boots, so only the current one'\n"
-        "    echo 'is listed. The records below come from the login database instead.'\n"
-        "fi\n"
-        "echo\n"
-        "\n"
-        "echo 'Reboots and shutdowns:'\n"
-        "last -x reboot shutdown 2>/dev/null | head -20 || echo '  the login database is empty'\n"
-        "echo\n"
-        "echo 'A reboot with no shutdown recorded before it is an unexpected one.'\n",
-        false);
-
-    add("Flush DNS Cache",
-        "Clears the name cache of whichever resolver this machine runs",
-        "flushed=no\n"
-        "\n"
-        "if systemctl is-active --quiet systemd-resolved; then\n"
-        "    resolvectl flush-caches\n"
-        "    echo 'systemd-resolved: cache flushed'\n"
-        "    flushed=yes\n"
-        "fi\n"
-        "\n"
-        "# The others keep no interface of their own for this, so they are restarted instead.\n"
-        "for service in nscd dnsmasq unbound; do\n"
-        "    if systemctl is-active --quiet $service; then\n"
-        "        systemctl restart $service\n"
-        "        echo \"$service: restarted\"\n"
-        "        flushed=yes\n"
-        "    fi\n"
-        "done\n"
-        "\n"
-        "if [ $flushed = no ]; then\n"
-        "    echo 'No name cache is running on this machine: nothing to flush'\n"
-        "fi\n",
-        false);
-
-    add("Synchronize System Time",
-        "Resynchronizes the clock of this machine with its time source",
-        "if systemctl is-active --quiet chronyd; then\n"
-        "    chronyc makestep\n"
-        "    chronyc tracking\n"
-        "elif systemctl is-active --quiet systemd-timesyncd; then\n"
-        "    timedatectl set-ntp true\n"
-        "    systemctl restart systemd-timesyncd\n"
-        "    sleep 2\n"
-        "    timedatectl timesync-status\n"
-        "else\n"
-        "    echo 'Neither chrony nor systemd-timesyncd is running on this machine'\n"
-        "fi\n"
-        "\n"
-        "echo\n"
-        "timedatectl\n",
-        false);
-
-    add("Restart Print Spooler",
-        "Restarts the printing service and removes everything queued for printing",
-        "if ! systemctl cat cups.service > /dev/null 2>&1; then\n"
-        "    echo 'The printing service is not installed on this machine'\n"
-        "else\n"
-        "    cancel -a 2> /dev/null\n"
-        "    echo 'Print queue cleared'\n"
-        "    systemctl restart cups\n"
-        "    echo \"Printing service: $(systemctl is-active cups)\"\n"
-        "    lpstat -o 2> /dev/null\n"
-        "fi\n",
-        true);
-
-    add("Free Up Disk Space",
-        "Removes old journals, package caches, temporary files and the cache and trash of the "
-        "logged on user",
-        "before=$(df -k --output=avail / | tail -1)\n"
-        "\n"
-        "echo '=== Journal'\n"
-        "journalctl --disk-usage\n"
-        "journalctl --vacuum-time=7d 2>&1 | tail -2\n"
-        "\n"
-        "echo\n"
-        "echo '=== Package cache'\n"
-        "if command -v dnf > /dev/null; then\n"
-        "    dnf clean all\n"
-        "elif command -v apt-get > /dev/null; then\n"
-        "    apt-get clean\n"
-        "    echo 'apt: cache cleared'\n"
-        "else\n"
-        "    echo 'no known package manager'\n"
-        "fi\n"
-        "\n"
-        "echo\n"
-        "echo '=== Temporary files'\n"
-        "systemd-tmpfiles --clean 2>&1 | tail -2\n"
-        "echo 'done'\n"
-        "\n"
-        "# The paths of the user come from the service: this shell belongs to the system account and\n"
-        "# knows nothing about the person the machine is being cleaned for.\n"
-        "echo\n"
-        "echo \"=== Cache and trash of $SESSION_USER\"\n"
-        "du -sh \"$SESSION_HOME/.cache\" 2> /dev/null\n"
-        "rm -rf \"$SESSION_HOME/.cache/\"* 2> /dev/null\n"
-        "rm -rf \"$SESSION_HOME/.local/share/Trash/\"* 2> /dev/null\n"
-        "echo 'cleared'\n"
-        "\n"
-        "after=$(df -k --output=avail / | tail -1)\n"
-        "echo\n"
-        "echo \"Freed on /: $(( (after - before) / 1024 )) MB\"\n",
-        true);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -722,6 +599,10 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
     environment.insert("SESSION_USER", user_name);
     environment.insert("SESSION_HOME", home_dir);
 
+    const QString body = scriptText(script);
+    if (body.isEmpty())
+        return false;
+
     // The name of the window is set by the script itself: every terminal has its own way of taking
     // it on the command line, but all of them understand the escape sequence for it. The window is
     // kept open until a key is pressed, so that what the script printed can be read; a key and not a
@@ -731,7 +612,7 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
         "%2"
         "echo\n"
         "read -n 1 -s -r -p 'Press any key to close this window...'\n"
-        "echo\n").arg(script.name, script.command);
+        "echo\n").arg(script.name, body);
 
     QProcess process;
     process.setProgram(terminal);

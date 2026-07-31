@@ -193,9 +193,17 @@ void ToolsWorker::buildToolList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::buildScriptList()
+// static
+std::span<const ToolsWorker::Script> ToolsWorker::scriptTable()
 {
-    // Nothing: the scripts are written for the shell of Windows.
+    // Nothing: the scripts are written for the shells of the other systems.
+    return {};
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ToolsWorker::scriptsSupported() const
+{
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

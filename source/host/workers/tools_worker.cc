@@ -18,6 +18,8 @@
 
 #include "host/workers/tools_worker.h"
 
+#include <QFile>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/desktop_tools.h"
@@ -77,9 +79,10 @@ void ToolsWorker::onStart()
     LOG(INFO) << "Tools worker started";
 
     buildToolList();
-    buildScriptList();
+    scripts_supported_ = scriptsSupported();
 
-    LOG(INFO) << "Lists built (tools:" << tools_.size() << "scripts:" << scripts_.size() << ")";
+    LOG(INFO) << "Tool list built (tools:" << tools_.size()
+              << "scripts:" << (scripts_supported_ ? scriptTable().size() : 0) << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,7 +91,6 @@ void ToolsWorker::onStop()
     LOG(INFO) << "Tools worker stopped";
 
     tools_.clear();
-    scripts_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -129,21 +131,40 @@ QByteArray ToolsWorker::toolList(SessionId session_id)
                 item->set_icon(tool.icon.data(), tool.icon.size());
         }
 
-        for (int i = 0; i < scripts_.size(); ++i)
+        if (scripts_supported_)
         {
-            const Script& script = scripts_.at(i);
+            const std::span<const Script> scripts = scriptTable();
 
-            proto::tools::Script* item = tool_list->add_script();
-            item->set_id(i);
-            item->set_name(script.name.toStdString());
-            item->set_description(script.description.toStdString());
-            item->set_confirm(script.confirm);
+            for (size_t i = 0; i < scripts.size(); ++i)
+            {
+                proto::tools::Script* item = tool_list->add_script();
+                item->set_id(static_cast<int>(i));
+                item->set_name(scripts[i].name);
+                item->set_description(scripts[i].description);
+                item->set_confirm(scripts[i].confirm);
+            }
         }
     }
 
     LOG(INFO) << "Sending tool list (tools:" << tool_list->tool_size()
               << "scripts:" << tool_list->script_size() << "sid" << session_id << ")";
     return serialize(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString ToolsWorker::scriptText(const Script& script)
+{
+    QFile file(QString(":/scripts/") + script.file);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG(ERROR) << "Unable to open script" << script.file << ":" << file.errorString();
+        return QString();
+    }
+
+    // The file is stored with the line endings of the repository, and a shell reading it wants its
+    // own.
+    return QString::fromUtf8(file.readAll()).replace("\r\n", "\n");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,13 +202,15 @@ void ToolsWorker::executeTool(SessionId session_id, qint32 id)
 //--------------------------------------------------------------------------------------------------
 void ToolsWorker::executeScript(SessionId session_id, qint32 id)
 {
-    if (id < 0 || id >= scripts_.size())
+    const std::span<const Script> scripts = scriptTable();
+
+    if (!scripts_supported_ || id < 0 || static_cast<size_t>(id) >= scripts.size())
     {
         LOG(ERROR) << "Request to start an unknown script:" << id;
         return;
     }
 
-    const Script& script = scripts_.at(id);
+    const Script& script = scripts[id];
 
     const TimePoint now = Clock::now();
     if (now - last_launch_time_ < kMinLaunchInterval)

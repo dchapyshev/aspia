@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/scripts">
+        <file>linux/show_failed_services.sh</file>
+        <file>linux/show_unexpected_shutdowns.sh</file>
+        <file>linux/flush_dns_cache.sh</file>
+        <file>linux/synchronize_system_time.sh</file>
+        <file>linux/restart_print_spooler.sh</file>
+        <file>linux/free_up_disk_space.sh</file>
+    </qresource>
+</RCC>
