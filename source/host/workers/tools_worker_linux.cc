@@ -31,7 +31,6 @@
 
 #include <pwd.h>
 #include <sys/types.h>
-#include <cstdlib>
 
 #include "base/logging.h"
 #include "base/linux/session_util.h"
@@ -615,28 +614,53 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
     // finds the authentication agent of the session. Started outside it, the request would find no
     // agent and fail. "runuser" drops root to the user, whose manager is reached through their
     // runtime directory.
+    // Every value goes as an argument of its own instead of a shell command line. The display and
+    // its cookie are read out of the processes of the logged on user, so they are whatever that user
+    // decided to put there: given to a shell running as the service, a semicolon in them would be a
+    // command of theirs executed as root.
     const QString runtime_dir = QString("/run/user/%1").arg(uid);
-    QString command =
-        QString("runuser -u %1 -- env XDG_RUNTIME_DIR=%2 DBUS_SESSION_BUS_ADDRESS=unix:path=%2/bus "
-                "systemd-run --user --collect").arg(user_name, runtime_dir);
+    QStringList arguments;
+
+    arguments << "-u" << user_name << "--"
+              << "env" << ("XDG_RUNTIME_DIR=" + runtime_dir)
+              << ("DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime_dir + "/bus")
+              << "systemd-run" << "--user" << "--collect";
+
     if (!display.isEmpty())
-        command += " --setenv=DISPLAY=" + display;
+        arguments << ("--setenv=DISPLAY=" + display);
     if (!xauthority.isEmpty())
-        command += " --setenv=XAUTHORITY=" + xauthority;
+        arguments << ("--setenv=XAUTHORITY=" + xauthority);
 
-    command += " \"" + tool.program + '"';
-    for (const QString& argument : tool.arguments)
-        command += " \"" + argument + '"';
-
-    const QByteArray command_line = command.toLocal8Bit();
+    arguments << tool.program << tool.arguments;
 
     LOG(INFO) << "Starting tool" << tool.name << "in session" << session
-              << "(user:" << user_name << "cmd:" << command_line << ")";
+              << "(user:" << user_name << "args:" << arguments << ")";
 
-    const int ret = system(command_line.constData());
-    LOG(INFO) << "system result:" << ret;
+    QProcess process;
+    process.setProgram("runuser");
+    process.setArguments(arguments);
+    process.start();
 
-    return ret == 0;
+    // The command only asks the manager of the session to start a unit and returns as soon as it
+    // has, so it is a short wait; without an end to it a session whose manager is gone would hold
+    // the worker forever.
+    if (!process.waitForFinished(15000))
+    {
+        LOG(ERROR) << "Tool launch did not finish in time";
+        process.kill();
+        process.waitForFinished(1000);
+        return false;
+    }
+
+    const int exit_code = process.exitCode();
+    if (exit_code != 0)
+    {
+        LOG(ERROR) << "Tool launch failed (code:" << exit_code
+                   << "output:" << process.readAllStandardError().trimmed() << ")";
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

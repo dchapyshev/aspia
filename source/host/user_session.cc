@@ -44,9 +44,9 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-#include "base/linux/session_util.h"
+#include <QProcess>
 
-#include <cstdlib>
+#include "base/linux/session_util.h"
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
@@ -874,22 +874,46 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     // supported on non-local systems"), so instead drop to the user with runuser and talk to the local
     // user manager directly - that works on RHEL 8 too. The unit inherits the session bus and runtime dir
     // from the user manager; only DISPLAY/XAUTHORITY are not always imported, so pass them explicitly.
+    //
+    // Every value goes as an argument of its own instead of a shell command line: the display and
+    // its cookie are read out of the processes of the logged on user, so they are whatever that user
+    // decided to put there, and a shell running as the service would take a semicolon in them as a
+    // command of theirs to run as root.
     const QString runtime_dir = QString("/run/user/%1").arg(uid);
-    QString command =
-        QString("runuser -u %1 -- env XDG_RUNTIME_DIR=%2 DBUS_SESSION_BUS_ADDRESS=unix:path=%2/bus "
-                "systemd-run --user --collect").arg(user_name, runtime_dir);
+    QStringList arguments;
+
+    arguments << "-u" << user_name << "--"
+              << "env" << ("XDG_RUNTIME_DIR=" + runtime_dir)
+              << ("DBUS_SESSION_BUS_ADDRESS=unix:path=" + runtime_dir + "/bus")
+              << "systemd-run" << "--user" << "--collect";
+
     if (!display.isEmpty())
-        command += " --setenv=DISPLAY=" + display;
+        arguments << ("--setenv=DISPLAY=" + display);
     if (!xauthority.isEmpty())
-        command += " --setenv=XAUTHORITY=" + xauthority;
-    command += ' ' + file_path + " --hidden";
+        arguments << ("--setenv=XAUTHORITY=" + xauthority);
 
-    const QByteArray command_line = command.toLocal8Bit();
+    arguments << file_path << "--hidden";
 
-    LOG(INFO) << "Start user session GUI:" << command_line;
+    LOG(INFO) << "Start user session GUI:" << arguments;
 
-    int ret = system(command_line.data());
-    LOG(INFO) << "system result:" << ret;
+    QProcess process;
+    process.setProgram("runuser");
+    process.setArguments(arguments);
+    process.start();
+
+    // The command returns as soon as the manager of the session has started the unit; a session
+    // whose manager is gone would otherwise hold this thread forever.
+    if (!process.waitForFinished(15000))
+    {
+        LOG(ERROR) << "GUI launch did not finish in time";
+        process.kill();
+        process.waitForFinished(1000);
+    }
+    else
+    {
+        LOG(INFO) << "GUI launch finished (code:" << process.exitCode()
+                  << "output:" << process.readAllStandardError().trimmed() << ")";
+    }
 #elif defined(Q_OS_MACOS)
     // On macOS the active console session is identified by the console user's uid (see
     // activeConsoleSessionId()). Only a logged-in user has one; at the login window there is none.
