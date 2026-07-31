@@ -568,6 +568,19 @@ void ScreenWorker::onCaptureScreen()
         selectCapturer(ScreenCapturer::Error::TEMPORARY);
 #endif // defined(Q_OS_LINUX)
 
+        if (!screen_capturer_)
+        {
+            // No capture backend could be created at all (e.g. a headless Linux host where DRM/KMS
+            // cannot read the scan-out). Report it to the clients instead of leaving them with an
+            // empty window: the client only shows the message when the state lasts, and drops it on
+            // the first frame.
+            proto::video::Packet* video_packet =
+                serializer_.newMessage<proto::video::HostToClient>().mutable_packet();
+            video_packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
+
+            emit sig_videoData(serializer_.serialize<proto::video::HostToClient>(), false);
+        }
+
         // The capturer is created asynchronously (on Wayland only after the desktop portal session is
         // granted). Until then poll at a low rate instead of busy-looping on the zero-delay timer and
         // flooding the log - the flood blocks the event loop and starves the portal's reply.
