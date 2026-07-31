@@ -367,6 +367,7 @@ bool waitForValidInputDesktop()
     // wlroots-based) never produces an owner, and a GUI still waiting when the timeout hits is killed
     // and relaunched in an endless loop, never reaching the give-up branch below.
     int xsettings_attempt_count = 80;
+    bool display_reported = false;
 #endif
 
     do
@@ -408,6 +409,12 @@ bool waitForValidInputDesktop()
                 LOG(WARNING) << "XSETTINGS manager did not appear; the GUI may not pick up display scaling";
                 break;
             }
+        }
+        else if (!display_reported)
+        {
+            display_reported = true;
+            LOG(WARNING) << "Unable to open display" << qgetenv("DISPLAY")
+                         << "(XAUTHORITY:" << qgetenv("XAUTHORITY") << "); waiting for it";
         }
 #else
         break;
