@@ -19,8 +19,10 @@
 #include "client/desktop/desktop/desktop_toolbar.h"
 
 #include <QActionGroup>
+#include <QBuffer>
 #include <QCheckBox>
 #include <QDataStream>
+#include <QImageReader>
 #include <QIODevice>
 #include <QMenu>
 #include <QTimer>
@@ -40,6 +42,32 @@
 
 namespace {
 
+const int kMaxToolCount = 64;
+const int kMaxToolNameLength = 128;
+const int kMaxIconSize = 256;
+
+//--------------------------------------------------------------------------------------------------
+QIcon toolIcon(const std::string& data)
+{
+    if (data.empty())
+        return GuiApplication::svgIcon(":/img/application-window.svg");
+
+    QByteArray bytes = QByteArray::fromRawData(data.data(), static_cast<qsizetype>(data.size()));
+    QBuffer buffer(&bytes);
+
+    QImageReader reader(&buffer);
+    const QSize size = reader.size();
+    if (!size.isValid() || size.width() > kMaxIconSize || size.height() > kMaxIconSize)
+        return GuiApplication::svgIcon(":/img/application-window.svg");
+
+    const QImage image = reader.read();
+    if (image.isNull())
+        return GuiApplication::svgIcon(":/img/application-window.svg");
+
+    return QIcon(QPixmap::fromImage(image));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool isValidScale(qint64 scale)
 {
     switch (scale)
@@ -435,13 +463,17 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
                 GuiApplication::svgIcon(":/img/terminal.svg"), tr("Scripts"));
             scripts_menu->setToolTipsVisible(true);
 
-            for (int i = 0; i < tool_list.script_size(); ++i)
+            const int script_count = std::min(tool_list.script_size(), kMaxToolCount);
+
+            for (int i = 0; i < script_count; ++i)
             {
                 const proto::tools::Script& script = tool_list.script(i);
 
-                QAction* action = scripts_menu->addAction(QString::fromStdString(script.name()));
+                QAction* action = scripts_menu->addAction(
+                    QString::fromStdString(script.name()).left(kMaxToolNameLength));
                 action->setData(script.id());
-                action->setToolTip(QString::fromStdString(script.description()));
+                action->setToolTip(
+                    QString::fromStdString(script.description()).left(kMaxToolNameLength));
                 action->setProperty("is_script", true);
                 action->setProperty("confirm", script.confirm());
             }
@@ -450,26 +482,16 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
                 tools_menu_->addSeparator();
         }
 
-        for (int i = 0; i < tool_list.tool_size(); ++i)
+        const int tool_count = std::min(tool_list.tool_size(), kMaxToolCount);
+
+        for (int i = 0; i < tool_count; ++i)
         {
             const proto::tools::Tool& tool = tool_list.tool(i);
 
-            QAction* action = tools_menu_->addAction(QString::fromStdString(tool.name()));
+            QAction* action = tools_menu_->addAction(
+                QString::fromStdString(tool.name()).left(kMaxToolNameLength));
             action->setData(tool.id());
-
-            QPixmap pixmap;
-
-            const std::string& icon = tool.icon();
-            if (!icon.empty())
-            {
-                pixmap.loadFromData(reinterpret_cast<const uchar*>(icon.data()),
-                                    static_cast<uint>(icon.size()));
-            }
-
-            if (pixmap.isNull())
-                action->setIcon(GuiApplication::svgIcon(":/img/application-window.svg"));
-            else
-                action->setIcon(QIcon(pixmap));
+            action->setIcon(toolIcon(tool.icon()));
         }
 
         ui->action_tools->setMenu(tools_menu_.get());
