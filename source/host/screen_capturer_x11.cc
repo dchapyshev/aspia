@@ -45,13 +45,16 @@ ScreenCapturerX11::~ScreenCapturerX11()
 {
     LOG(INFO) << "Dtor";
 
-    display_->removeEventHandler(ConfigureNotify, this);
+    if (display_)
+    {
+        display_->removeEventHandler(ConfigureNotify, this);
 
-    if (use_damage_)
-        display_->removeEventHandler(damage_event_base_ + XDamageNotify, this);
+        if (use_damage_)
+            display_->removeEventHandler(damage_event_base_ + XDamageNotify, this);
 
-    if (use_randr_)
-        display_->removeEventHandler(randr_event_base_ + RRScreenChangeNotify, this);
+        if (use_randr_)
+            display_->removeEventHandler(randr_event_base_ + RRScreenChangeNotify, this);
+    }
 
     deinitXlib();
 }
@@ -621,7 +624,7 @@ void ScreenCapturerX11::deinitXlib()
 
     x_server_pixel_buffer_.release();
 
-    if (display())
+    if (display_)
     {
         if (damage_handle_)
         {
