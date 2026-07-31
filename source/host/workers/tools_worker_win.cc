@@ -610,7 +610,11 @@ void ToolsWorker::buildToolList()
             return;
         }
 
-        add(name, mmc, QStringList() << QDir::toNativeSeparators(snap_in), true);
+        // The console reads the path itself, and "Sysnative" is an alias that exists only inside the
+        // 32-bit process looking through it, so what is passed on is the directory as everyone else
+        // on the machine knows it.
+        add(name, mmc, QStringList() << QDir::toNativeSeparators(
+            windows_dir + "\\System32\\" + snap_in_name), true);
     };
 
     add("Task Manager", system_dir + "\\taskmgr.exe", QStringList(), true);
