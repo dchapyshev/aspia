@@ -138,6 +138,9 @@ private:
     // as fast as it can send messages.
     TimePoint last_launch_time_;
 
+    // Time of the last list sent at the request of the client.
+    TimePoint last_list_time_;
+
     Q_DISABLE_COPY_MOVE(ToolsWorker)
 };
 

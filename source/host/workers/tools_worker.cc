@@ -29,6 +29,9 @@ namespace {
 // Minimal interval between two launches.
 const MilliSeconds kMinLaunchInterval { 500 };
 
+// Minimal interval between two lists sent at the request of the client.
+const MilliSeconds kMinListInterval { 1000 };
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +100,17 @@ void ToolsWorker::onStop()
 QByteArray ToolsWorker::readMessage(SessionId session_id, const proto::tools::ClientToHost& message)
 {
     if (message.has_tool_list_request())
+    {
+        const TimePoint now = Clock::now();
+        if (now - last_list_time_ < kMinListInterval)
+        {
+            LOG(WARNING) << "Too many tool list requests";
+            return QByteArray();
+        }
+
+        last_list_time_ = now;
         return toolList(session_id);
+    }
 
     if (message.has_execute_tool())
         executeTool(session_id, message.execute_tool().id());
