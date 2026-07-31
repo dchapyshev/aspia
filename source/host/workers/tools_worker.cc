@@ -92,19 +92,18 @@ void ToolsWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ToolsWorker::readMessage(
-    SessionId session_id, const proto::tools::ClientToHost& message)
+QByteArray ToolsWorker::readMessage(SessionId session_id, const proto::tools::ClientToHost& message)
 {
     if (message.has_tool_list_request())
         return toolList(session_id);
 
     if (message.has_execute_tool())
-        return executeTool(session_id, message.execute_tool().id());
+        executeTool(session_id, message.execute_tool().id());
+    else if (message.has_execute_script())
+        executeScript(session_id, message.execute_script().id());
+    else
+        LOG(WARNING) << "Unhandled tools message";
 
-    if (message.has_execute_script())
-        return executeScript(session_id, message.execute_script().id());
-
-    LOG(WARNING) << "Unhandled tools message";
     return QByteArray();
 }
 
@@ -148,19 +147,14 @@ QByteArray ToolsWorker::toolList(SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ToolsWorker::executeTool(SessionId session_id, qint32 id)
+void ToolsWorker::executeTool(SessionId session_id, qint32 id)
 {
-    proto::tools::HostToClient message;
-    proto::tools::ExecuteResult* result = message.mutable_result();
-    result->set_id(id);
-
     // The client selects a tool by its position in the list we sent it: anything outside the list is
     // never started, whatever the client asks for.
     if (id < 0 || id >= tools_.size())
     {
         LOG(ERROR) << "Request to start an unknown tool:" << id;
-        result->set_error_code(proto::tools::ExecuteResult::UNKNOWN);
-        return serialize(message);
+        return;
     }
 
     const Tool& tool = tools_.at(id);
@@ -169,8 +163,7 @@ QByteArray ToolsWorker::executeTool(SessionId session_id, qint32 id)
     if (now - last_launch_time_ < kMinLaunchInterval)
     {
         LOG(WARNING) << "Too many launch requests (tool:" << tool.name << ")";
-        result->set_error_code(proto::tools::ExecuteResult::BUSY);
-        return serialize(message);
+        return;
     }
 
     last_launch_time_ = now;
@@ -178,33 +171,20 @@ QByteArray ToolsWorker::executeTool(SessionId session_id, qint32 id)
     if (!hasInteractiveUser(session_id))
     {
         LOG(ERROR) << "No interactive user in session" << session_id;
-        result->set_error_code(proto::tools::ExecuteResult::NOT_AVAILABLE);
-        return serialize(message);
+        return;
     }
 
     if (!launchTool(session_id, tool))
-    {
         LOG(ERROR) << "Unable to start tool" << tool.name << "in session" << session_id;
-        result->set_error_code(proto::tools::ExecuteResult::LAUNCH_FAILED);
-        return serialize(message);
-    }
-
-    result->set_error_code(proto::tools::ExecuteResult::SUCCESS);
-    return serialize(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ToolsWorker::executeScript(SessionId session_id, qint32 id)
+void ToolsWorker::executeScript(SessionId session_id, qint32 id)
 {
-    proto::tools::HostToClient message;
-    proto::tools::ExecuteResult* result = message.mutable_result();
-    result->set_id(id);
-
     if (id < 0 || id >= scripts_.size())
     {
         LOG(ERROR) << "Request to start an unknown script:" << id;
-        result->set_error_code(proto::tools::ExecuteResult::UNKNOWN);
-        return serialize(message);
+        return;
     }
 
     const Script& script = scripts_.at(id);
@@ -213,8 +193,7 @@ QByteArray ToolsWorker::executeScript(SessionId session_id, qint32 id)
     if (now - last_launch_time_ < kMinLaunchInterval)
     {
         LOG(WARNING) << "Too many launch requests (script:" << script.name << ")";
-        result->set_error_code(proto::tools::ExecuteResult::BUSY);
-        return serialize(message);
+        return;
     }
 
     last_launch_time_ = now;
@@ -222,17 +201,9 @@ QByteArray ToolsWorker::executeScript(SessionId session_id, qint32 id)
     if (!hasInteractiveUser(session_id))
     {
         LOG(ERROR) << "No interactive user in session" << session_id;
-        result->set_error_code(proto::tools::ExecuteResult::NOT_AVAILABLE);
-        return serialize(message);
+        return;
     }
 
     if (!launchScript(session_id, script))
-    {
         LOG(ERROR) << "Unable to start script" << script.name << "in session" << session_id;
-        result->set_error_code(proto::tools::ExecuteResult::LAUNCH_FAILED);
-        return serialize(message);
-    }
-
-    result->set_error_code(proto::tools::ExecuteResult::SUCCESS);
-    return serialize(message);
 }

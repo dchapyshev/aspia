@@ -1218,20 +1218,7 @@ void DesktopWindow::onToolsMessage(const QByteArray& buffer)
     }
 
     if (message.has_tool_list())
-    {
         toolbar_->setToolList(message.tool_list());
-    }
-    else if (message.has_result())
-    {
-        const proto::tools::ExecuteResult& result = message.result();
-        if (result.error_code() == proto::tools::ExecuteResult::SUCCESS)
-            return;
-
-        // The result is the same for a tool and for a script, and their identifiers are counted
-        // separately, so there is nothing to name here.
-        LOG(ERROR) << "Failed to start (id:" << result.id() << "error:" << result.error_code() << ")";
-        MsgBox::warning(this, tr("Failed to start on the remote computer."));
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

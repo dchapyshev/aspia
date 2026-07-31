@@ -96,8 +96,8 @@ private:
 
     QByteArray readMessage(SessionId session_id, const proto::tools::ClientToHost& message);
     QByteArray toolList(SessionId session_id);
-    QByteArray executeTool(SessionId session_id, qint32 id);
-    QByteArray executeScript(SessionId session_id, qint32 id);
+    void executeTool(SessionId session_id, qint32 id);
+    void executeScript(SessionId session_id, qint32 id);
 
     // Fills |tools_| with the tools found on this machine. The result is defined by the composition
     // of the operating system, which does not change while the service is running, so it is built

@@ -58,21 +58,6 @@ message ExecuteScript
     int32 id = 1;
 }
 
-message ExecuteResult
-{
-    enum ErrorCode
-    {
-        SUCCESS       = 0;
-        UNKNOWN       = 1; // The host has nothing with this identifier.
-        NOT_AVAILABLE = 2; // Nothing to start it in (no interactive user session).
-        LAUNCH_FAILED = 3;
-        BUSY          = 4; // Too many requests.
-    }
-
-    int32 id             = 1;
-    ErrorCode error_code = 2;
-}
-
 // Client -> Host (channel 12).
 message ClientToHost
 {
@@ -84,6 +69,5 @@ message ClientToHost
 // Client <- Host (channel 12).
 message HostToClient
 {
-    ToolList tool_list   = 1;
-    ExecuteResult result = 2;
+    ToolList tool_list = 1;
 }
