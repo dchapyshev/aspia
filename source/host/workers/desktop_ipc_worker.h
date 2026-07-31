@@ -29,10 +29,6 @@
 #include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
 
-namespace proto::clipboard {
-class Event;
-} // namespace proto::clipboard
-
 namespace proto::screen {
 class Screen;
 } // namespace proto::screen
@@ -60,7 +56,6 @@ public slots:
     void onCursorPositionData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
-    void onClipboardData(const QByteArray& buffer);
     void onAudioData(const QByteArray& buffer);
 
 signals:
@@ -72,7 +67,6 @@ signals:
 
     // Forwarded from the clients to the screen worker.
     void sig_selectScreen(const proto::screen::Screen& screen);
-    void sig_clipboardEvent(const proto::clipboard::Event& event);
     void sig_keyFrameRequested();
     void sig_preferredSizeChanged(const QSize& size);
 

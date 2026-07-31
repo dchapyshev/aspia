@@ -41,9 +41,9 @@ class ScreenWorker;
 // Injects the input received from clients into the user session. All input enters here (gating and
 // coordinate scaling), so a busy video pipeline never delays keystrokes and pointer motion. The
 // worker owns the platform injector on Windows and macOS, and on Linux for the X11 and kernel-level
-// (KMS/KWin/wlroots) captures. For the VT and Wayland captures the injector is tied to
-// capturer-owned resources and lives in ScreenWorker, so those events are delegated to it. Which
-// case applies is decided from the capture type reported through ScreenWorker::sig_screenInfoChanged.
+// (KMS/KWin/wlroots) captures. For the Wayland capture the injector is tied to capturer-owned
+// resources and lives in ScreenWorker, so those events are delegated to it. Which case applies is
+// decided from the capture type reported through ScreenWorker::sig_screenInfoChanged.
 class InputWorker final : public Worker
 {
     Q_OBJECT
@@ -74,13 +74,13 @@ private slots:
 
 private:
     // Creates the injector matching the capture backend |type|, or releases it when injection is
-    // delegated to ScreenWorker (Linux VT/Wayland). Several capture types map to the same injector
+    // delegated to ScreenWorker (Linux Wayland). Several capture types map to the same injector
     // (WIN_GDI and WIN_DXGI both use InputInjectorWin), so it is recreated only when the injector's
     // type() would actually change.
     void updateInjectorForCaptureType(ScreenCapturer::Type type);
 
     // Owned on Windows/macOS, and on Linux for the X11/uinput captures. Null before the first
-    // captured frame and when injection is delegated to ScreenWorker (Linux VT/Wayland).
+    // captured frame and when injection is delegated to ScreenWorker (Linux Wayland).
     ScopedQPointer<InputInjector> input_injector_;
 
     // Delegation target for platforms where the injector belongs to the capture path. Resolved

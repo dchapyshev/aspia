@@ -32,7 +32,6 @@
 #include "base/threading/worker.h"
 #include "host/capture_scheduler.h"
 #include "host/screen_capturer.h"
-#include "proto/desktop_clipboard.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_internal.h"
@@ -89,7 +88,6 @@ public slots:
     void onSetPaused(bool paused);
     void onSetPreferredSize(const QSize& size);
     void onSelectScreen(const proto::screen::Screen& screen);
-    void onClipboardEvent(const proto::clipboard::Event& event);
     void onKeyFrameRequested();
     void onOverflowStateChanged(proto::desktop::Overflow::State state);
     void onBandwidthChanged(qint64 bandwidth);
@@ -101,14 +99,13 @@ signals:
     void sig_cursorPositionData(const QByteArray& buffer);
     void sig_screenListData(const QByteArray& buffer);
     void sig_screenTypeData(const QByteArray& buffer);
-    void sig_clipboardData(const QByteArray& buffer);
 
     // Video pipeline state InputWorker needs for scaling client coordinates and clamping them into
     // the real screen. Emitted only when the values actually change.
     void sig_scaleFactorChanged(double scale_x, double scale_y);
 
     // Screen geometry plus the active capture backend. On Linux the backend decides which input
-    // injector InputWorker creates (X11/uinput), or whether it delegates to this worker (VT/Wayland,
+    // injector InputWorker creates (X11/uinput), or whether it delegates to this worker (Wayland,
     // where the injector is tied to capturer-owned resources). Emitted only when a value changes.
     void sig_screenInfoChanged(ScreenCapturer::Type type, const QSize& screen_size, const QPoint& offset);
 
@@ -143,8 +140,6 @@ private:
     void registerCaptureFailure();
     // Switches to DRM/KMS + uinput after the compositor capture path failed to start.
     void fallbackToKms();
-    // Sends |text| (UTF-8) to the connected clients as a clipboard event (a finished terminal selection).
-    void sendClipboardText(const std::string& text);
 #endif // defined(Q_OS_LINUX)
     ScreenCapturer::ScreenId defaultScreen();
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
@@ -164,7 +159,7 @@ private:
     // screen, or no usable compositor screen-cast). COMPOSITOR: a PipeWire stream from a compositor
     // source (Mutter ScreenCast or the xdg-desktop-portal session, picked inside the capturer) with its
     // own input. KWIN: KDE KWin ScreenShot2 polling + uinput. WLR: wlroots zwlr_screencopy + uinput.
-    enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR, VT };
+    enum class CaptureMode { X11, KMS, COMPOSITOR, KWIN, WLR };
     CaptureMode capture_mode_ = CaptureMode::KMS;
 
     // Active session user's uid (for COMPOSITOR/KWIN/WLR: reaching the session bus as that user).
@@ -207,8 +202,7 @@ private:
 
     Serializer<proto::screen::HostToClient,
                proto::cursor::HostToClient,
-               proto::video::HostToClient,
-               proto::clipboard::HostToClient> serializer_;
+               proto::video::HostToClient> serializer_;
 
     bool is_paused_ = false;
     bool is_cursor_position_ = false;

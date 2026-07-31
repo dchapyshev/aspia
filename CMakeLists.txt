@@ -120,7 +120,6 @@ if (LINUX)
     find_package(Qt6XcbQpaPrivate CONFIG REQUIRED)
     find_package(Qt6DBus CONFIG REQUIRED)
     find_package(ICU REQUIRED COMPONENTS uc)
-    find_package(freetype CONFIG REQUIRED)
 endif()
 
 if (APPLE)

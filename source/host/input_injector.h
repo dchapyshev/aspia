@@ -42,9 +42,8 @@ public:
         MAC        = 2,
         X11        = 3,
         UINPUT     = 4,
-        VT         = 5,
-        WAYLAND    = 6,
-        ANDROID_OS = 7
+        WAYLAND    = 5,
+        ANDROID_OS = 6
     };
     Q_ENUM(Type)
 

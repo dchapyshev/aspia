@@ -305,7 +305,6 @@ void InputWorker::updateInjectorForCaptureType(ScreenCapturer::Type type)
             desired = InputInjector::Type::UINPUT;
             break;
 
-        case ScreenCapturer::Type::LINUX_VT:
         case ScreenCapturer::Type::LINUX_WAYLAND:
             // Injection delegated to ScreenWorker; desired stays UNKNOWN.
             break;
@@ -322,7 +321,7 @@ void InputWorker::updateInjectorForCaptureType(ScreenCapturer::Type type)
 
     if (desired == InputInjector::Type::UNKNOWN)
     {
-        // No injector owned here: either injection is delegated to ScreenWorker (VT/Wayland) or the
+        // No injector owned here: either injection is delegated to ScreenWorker (Wayland) or the
         // capturer is being reselected. Drop any injector this worker held.
         input_injector_.reset();
         return;
@@ -367,7 +366,7 @@ void InputWorker::updateInjectorForCaptureType(ScreenCapturer::Type type)
 #endif // defined(Q_OS_LINUX)
 
         default:
-            // Injector types not owned by this worker (VT/Wayland) never reach here.
+            // Injector types not owned by this worker (Wayland) never reach here.
             break;
     }
 }

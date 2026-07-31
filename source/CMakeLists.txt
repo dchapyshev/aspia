@@ -104,10 +104,6 @@ if (LINUX OR APPLE)
     list(APPEND THIRD_PARTY_LIBS ICU::uc)
 endif()
 
-if (LINUX)
-    list(APPEND THIRD_PARTY_LIBS freetype)
-endif()
-
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
 
 # C++ compliller flags.

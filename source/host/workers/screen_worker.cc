@@ -30,7 +30,6 @@
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/threading/worker.h"
-#include "common/clipboard.h"
 #include "host/desktop_environment.h"
 #include "host/desktop_resizer.h"
 #include "host/input_injector.h"
@@ -45,14 +44,11 @@
 #include <unistd.h>
 
 #include "base/linux/session_util.h"
-#include "host/desktop_resizer_vt.h"
 #include "host/input_injector_uinput.h"
-#include "host/input_injector_vt.h"
 #include "host/input_injector_wayland.h"
 #include "host/screen_capturer_kms.h"
 #include "host/screen_capturer_kwin.h"
 #include "host/screen_capturer_pipewire.h"
-#include "host/screen_capturer_vt.h"
 #include "host/screen_capturer_wlr.h"
 #include "host/screen_capturer_x11.h"
 #include "host/linux/wayland_compositor_source.h"
@@ -73,8 +69,8 @@ constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 
 #if defined(Q_OS_LINUX)
 // Right after login the compositor needs a moment to register its screen-cast interface, so every
-// Wayland probe can fail transiently. Retry the probe chain within this window before committing to
-// the VT console fallback; bounded well under the client's start timeout.
+// Wayland probe can fail transiently. Retry the probe chain within this window before falling back to
+// DRM/KMS; bounded well under the client's start timeout.
 constexpr MilliSeconds kWaylandProbeTimeout { 5000 };
 constexpr MilliSeconds kWaylandProbeRetryDelay { 250 };
 
@@ -337,25 +333,6 @@ void ScreenWorker::onSelectScreen(const proto::screen::Screen& screen)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onClipboardEvent(const proto::clipboard::Event& event)
-{
-#if defined(Q_OS_LINUX)
-    // Forward the client's clipboard text to the VT injector (pasted into the terminal on demand). Other
-    // capture modes route the clipboard through the host GUI, not here.
-    if (capture_mode_ != CaptureMode::VT || !input_injector_)
-        return;
-
-    const proto::clipboard::Event::Format* format =
-        Clipboard::findFormat(event, Clipboard::kMimeTypeTextUtf8);
-    if (format)
-    {
-        if (auto* vt_injector = qobject_cast<InputInjectorVt*>(input_injector_))
-            vt_injector->setClipboard(QString::fromStdString(format->data()));
-    }
-#endif // defined(Q_OS_LINUX)
-}
-
-//--------------------------------------------------------------------------------------------------
 void ScreenWorker::onKeyFrameRequested()
 {
     if (video_encoder_)
@@ -491,8 +468,6 @@ void ScreenWorker::onStart()
     {
         connect(ipc_worker_, &DesktopIpcWorker::sig_selectScreen, this, &ScreenWorker::onSelectScreen,
                 Qt::QueuedConnection);
-        connect(ipc_worker_, &DesktopIpcWorker::sig_clipboardEvent, this, &ScreenWorker::onClipboardEvent,
-                Qt::QueuedConnection);
         connect(ipc_worker_, &DesktopIpcWorker::sig_keyFrameRequested, this, &ScreenWorker::onKeyFrameRequested,
                 Qt::QueuedConnection);
         connect(ipc_worker_, &DesktopIpcWorker::sig_preferredSizeChanged, this, &ScreenWorker::onSetPreferredSize,
@@ -517,8 +492,6 @@ void ScreenWorker::onStart()
         connect(this, &ScreenWorker::sig_screenListData, ipc_worker_, &DesktopIpcWorker::onScreenListData,
                 Qt::QueuedConnection);
         connect(this, &ScreenWorker::sig_screenTypeData, ipc_worker_, &DesktopIpcWorker::onScreenTypeData,
-                Qt::QueuedConnection);
-        connect(this, &ScreenWorker::sig_clipboardData, ipc_worker_, &DesktopIpcWorker::onClipboardData,
                 Qt::QueuedConnection);
     }
     else
@@ -561,7 +534,7 @@ void ScreenWorker::onStop()
     }
 
     // Everything created in onStart() lives in the worker thread and must be destroyed here.
-    // Destroy the injector before the capturer: on Linux (VT/Wayland) it references capturer-owned
+    // Destroy the injector before the capturer: on Linux (Wayland) it references capturer-owned
     // resources.
     input_injector_.reset();
     screen_capturer_.reset();
@@ -624,18 +597,7 @@ void ScreenWorker::onCaptureScreen()
         LOG(INFO) << "Screen count changed from" << screen_count_ << "to" << count;
 
         screen_resizer_.reset();
-#if defined(Q_OS_LINUX)
-        if (capture_mode_ == CaptureMode::VT && screen_capturer_)
-        {
-            // The VT console resizes via its own grid (the terminals are owned by the capturer).
-            screen_resizer_ = std::make_unique<DesktopResizerVt>(
-                static_cast<ScreenCapturerVt*>(screen_capturer_.get()));
-        }
-        else
-#endif
-        {
-            screen_resizer_ = DesktopResizer::create();
-        }
+        screen_resizer_ = DesktopResizer::create();
 
         screen_count_ = count;
 
@@ -917,7 +879,7 @@ void ScreenWorker::setupLinuxCapture()
     {
         // Right after login every probe below can fail transiently (the compositor registers its
         // screen-cast interface a moment after the display environment appears), so retry the chain
-        // briefly instead of committing to the VT console fallback right away.
+        // briefly instead of falling back right away.
         const TimePoint probe_start = Clock::now();
 
         for (;;)
@@ -968,10 +930,11 @@ void ScreenWorker::setupLinuxCapture()
         }
     }
 
-    // Nothing graphical is available (headless / text mode): capture a dedicated VT login terminal,
-    // created and owned by ScreenCapturerVt (see selectCapturer()).
-    capture_mode_ = CaptureMode::VT;
-    LOG(INFO) << "Capture mode: VT console";
+    // No capture path could be confirmed (nothing graphical is up yet, or DRM/KMS cannot export the
+    // scan-out buffer): stay on DRM/KMS. Creating its capturer keeps failing until a usable scan-out
+    // appears, and the capture path selection is re-run meanwhile (see registerCaptureFailure()).
+    capture_mode_ = CaptureMode::KMS;
+    LOG(INFO) << "Capture mode: KMS (no capture path confirmed)";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1019,8 +982,8 @@ void ScreenWorker::reselectLinuxCapture()
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::registerCaptureFailure()
 {
-    // Only the probed Wayland backends can be committed on a transient buffer; X11/VT do not have
-    // this failure mode, and COMPOSITOR reports its startup outcome via onCompositorSourceStarted().
+    // Only the probed Wayland backends can be committed on a transient buffer; X11 does not have this
+    // failure mode, and COMPOSITOR reports its startup outcome via onCompositorSourceStarted().
     if (capture_mode_ != CaptureMode::KMS && capture_mode_ != CaptureMode::KWIN &&
         capture_mode_ != CaptureMode::WLR)
         return;
@@ -1049,19 +1012,6 @@ void ScreenWorker::fallbackToKms()
     if (capture_timer_ && capture_timer_->isActive())
         capture_timer_->start(MilliSeconds(0));
 }
-
-//--------------------------------------------------------------------------------------------------
-void ScreenWorker::sendClipboardText(const std::string& text)
-{
-    if (text.empty())
-        return;
-
-    Clipboard::addFormat(
-        serializer_.newMessage<proto::clipboard::HostToClient>().mutable_event(),
-        Clipboard::kMimeTypeTextUtf8, text);
-
-    emit sig_clipboardData(serializer_.serialize<proto::clipboard::HostToClient>());
-}
 #endif // defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
@@ -1069,10 +1019,10 @@ void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
 {
     LOG(INFO) << "Selecting screen capturer. Preferred capturer:" << preferred_capturer_;
 
-    // Release the injector before the capturer: on Linux it may be a VT/Wayland injector that
-    // references capturer-owned resources. A VT/Wayland capture recreates it below (VT in this
-    // function, Wayland in onCompositorSourceStarted); for X11/uinput it stays null - InputWorker
-    // owns those, keyed off the capture type in sig_screenInfoChanged.
+    // Release the injector before the capturer: on Linux it may be a Wayland injector that references
+    // capturer-owned resources. A Wayland capture recreates it in onCompositorSourceStarted(); for
+    // X11/uinput it stays null - InputWorker owns those, keyed off the capture type in
+    // sig_screenInfoChanged.
     input_injector_.reset();
 
     if (screen_capturer_)
@@ -1120,25 +1070,6 @@ void ScreenWorker::selectCapturer(ScreenCapturer::Error last_error)
             screen_capturer_ = ScreenCapturerKms::create(this);
             if (!screen_capturer_)
                 LOG(ERROR) << "Unable to create KMS screen capturer";
-        }
-        break;
-
-        case CaptureMode::VT:
-        {
-            ScreenCapturerVt* capturer = ScreenCapturerVt::create(this);
-            screen_capturer_ = capturer;
-            if (!capturer)
-            {
-                LOG(ERROR) << "Unable to create VT screen capturer";
-                return;
-            }
-
-            // The input injector is built on the capturer's terminals (the capturer owns them). A finished
-            // terminal text selection is published to the client clipboard (only the agent reaches it).
-            InputInjectorVt* injector = InputInjectorVt::create(capturer, this);
-            connect(injector, &InputInjectorVt::sig_terminalClipboard, this,
-                    [this](const QString& text) { sendClipboardText(text.toStdString()); });
-            input_injector_ = injector;
         }
         break;
 
@@ -1484,7 +1415,7 @@ void ScreenWorker::updateInjectorScreenInfo(const Frame* frame)
     const QSize screen_size = screen_capturer_->desktopRect().size();
     const QPoint offset = frame->topLeft();
 
-    // The local injector (Linux VT/Wayland: it shares the capture path) gets the update directly.
+    // The local injector (Linux Wayland: it shares the capture path) gets the update directly.
     if (input_injector_)
         input_injector_->setScreenInfo(screen_size, offset);
 

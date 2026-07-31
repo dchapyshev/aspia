@@ -29,7 +29,6 @@ const QString kApplication = "host";
 
 const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
-const QString kVtResolution = "vt_resolution";
 const QString kWaylandRestoreToken = "wayland_restore_token";
 
 const QString kUpdateServer = "update/server";
@@ -96,18 +95,6 @@ quint32 SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue(kPreferredVideoCapturer, type);
-}
-
-//--------------------------------------------------------------------------------------------------
-QSize SystemSettings::vtResolution() const
-{
-    return settings_.value(kVtResolution).toSize();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setVtResolution(const QSize& resolution)
-{
-    settings_.setValue(kVtResolution, resolution);
 }
 
 //--------------------------------------------------------------------------------------------------

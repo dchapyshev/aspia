@@ -78,13 +78,6 @@ void DesktopIpcWorker::onScreenTypeData(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopIpcWorker::onClipboardData(const QByteArray& buffer)
-{
-    for (auto* client : std::as_const(clients_))
-        client->onClipboardData(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopIpcWorker::onAudioData(const QByteArray& buffer)
 {
     for (auto* client : std::as_const(clients_))
@@ -373,7 +366,6 @@ void DesktopIpcWorker::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopIpcWorker::sig_injectTextEvent);
     connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopIpcWorker::sig_injectTouchEvent);
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopIpcWorker::sig_selectScreen);
-    connect(client, &DesktopAgentClient::sig_clipboardEvent, this, &DesktopIpcWorker::sig_clipboardEvent);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopIpcWorker::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopIpcWorker::sig_keyFrameRequested);
     connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &DesktopIpcWorker::onClientBandwidthChanged);

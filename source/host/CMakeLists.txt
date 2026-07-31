@@ -166,14 +166,10 @@ if (LINUX)
         audio_capturer_linux.h
         desktop_environment_linux.cc
         desktop_environment_linux.h
-        desktop_resizer_vt.cc
-        desktop_resizer_vt.h
         desktop_resizer_x11.cc
         desktop_resizer_x11.h
         input_injector_uinput.cc
         input_injector_uinput.h
-        input_injector_vt.cc
-        input_injector_vt.h
         input_injector_wayland.cc
         input_injector_wayland.h
         input_injector_x11.cc
@@ -186,8 +182,6 @@ if (LINUX)
         screen_capturer_kwin.h
         screen_capturer_pipewire.cc
         screen_capturer_pipewire.h
-        screen_capturer_vt.cc
-        screen_capturer_vt.h
         screen_capturer_wlr.cc
         screen_capturer_wlr.h
         screen_capturer_x11.cc
