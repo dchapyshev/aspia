@@ -11,7 +11,7 @@
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation>Det går inte att öppna filen "%1": %2</translation>
+        <translation>Det går inte att öppna filen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
@@ -1204,7 +1204,7 @@ Tillagda routrar: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href="https://aspia.org"&gt;officiella webbplatsen&lt;/a&gt;.</translation>
+        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href=&quot;https://aspia.org&quot;&gt;officiella webbplatsen&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
@@ -1354,7 +1354,7 @@ Tillagda routrar: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort användaren "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort användaren &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
@@ -1551,232 +1551,248 @@ Lösenord: %2</translation>
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="119"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="122"/>
         <source>Lock toolbar</source>
         <translation>Lås verktygsfält</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="131"/>
         <source>Auto size</source>
         <translation>Automatisk storlek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="134"/>
         <source>Automatic window size</source>
         <translation>Automatisk fönsterstorlek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="146"/>
         <source>Full screen</source>
         <translation>Helskärm</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="149"/>
         <source>Switch to full screen mode or back</source>
         <translation>Växla till helskärmsläge eller tillbaka</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="160"/>
         <source>Automatic scrolling</source>
         <translation>Automatisk rullning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="172"/>
         <source>Ctrl+Alt+Delete</source>
         <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="175"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Skicka Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="187"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="190"/>
         <source>Advanced menu</source>
         <translation>Avancerad meny</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="195"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="198"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="201"/>
         <source>Save screenshot...</source>
         <translation>Spara skärmbild...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="210"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="213"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="222"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="225"/>
         <source>File transfer</source>
         <translation>Filöverföring</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="930"/>
         <source>Scale</source>
         <translation>Skala</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="242"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="245"/>
         <source>Power control</source>
         <translation>Strömhantering</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
         <source>Shutdown</source>
         <translation>Stäng av</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="266"/>
         <source>Reboot</source>
         <translation>Starta om</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="275"/>
         <source>Logoff</source>
         <translation>Logga ut</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="284"/>
         <source>Lock</source>
         <translation>Lås</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="293"/>
         <source>System Information</source>
         <translation>Systeminformation</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="302"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="305"/>
         <source>Close session</source>
         <translation>Stäng session</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
         <source>Fit window</source>
         <translation>Anpassa till fönstret</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="373"/>
         <source>Minimize</source>
         <translation>Minimera</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="376"/>
         <source>Minimize window</source>
         <translation>Minimera fönster</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="384"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="396"/>
         <source>Reboot (Safe mode)</source>
         <translation>Starta om (felsäkert läge)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <source>Reboot in safe mode</source>
         <translation>Starta om i felsäkert läge</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="411"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>Klistra in urklipp som tangenttryckningar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
         <source>Text Chat</source>
         <translation>Textchatt</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="532"/>
         <source>Start recording</source>
         <translation>Starta inspelning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
         <translation>Aktivitetshanteraren</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="462"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="465"/>
+        <source>Tools</source>
+        <translation>Verktyg</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="477"/>
         <source>Switch Session</source>
         <translation>Växla session</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="323"/>
         <source>Resolution selection</source>
         <translation>Val av upplösning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1</source>
         <translation>Session %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1 (%2)</source>
         <translation>Session %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Stop recording</source>
         <translation>Stoppa inspelning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="435"/>
+        <source>Scripts</source>
+        <translation>Skript</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="499"/>
+        <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
+        <translation>Är du säker på att du vill köra skriptet &quot;%1&quot; på fjärrdatorn?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="759"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Är du säker på att du vill stänga av fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="774"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Confirmation</source>
         <translation>Bekräftelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="775"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Är du säker på att du vill starta om fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="780"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="806"/>
         <source>Wait for host</source>
         <translation>Vänta på värden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="801"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Är du säker på att du vill starta om fjärrdatorn i felsäkert läge?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="826"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Är du säker på att du vill avsluta användarsessionen på fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Är du säker på att du vill låsa användarsessionen på fjärrdatorn?</translation>
     </message>
@@ -1807,19 +1823,24 @@ Lösenord: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
         <source>Save File</source>
         <translation>Spara fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-bild (*.png);;BMP-bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>Kunde inte spara bilden</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1233"/>
+        <source>Failed to start on the remote computer.</source>
+        <translation>Det gick inte att starta på fjärrdatorn.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
@@ -2437,7 +2458,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation>Ta bort "%1"?</translation>
+        <translation>Ta bort &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
@@ -2504,7 +2525,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>Det gick inte att ta bort "%1": %2.</translation>
+        <translation>Det gick inte att ta bort &quot;%1&quot;: %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
@@ -2630,27 +2651,27 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>Det gick inte att skapa katalogen "%1": %2</translation>
+        <translation>Det gick inte att skapa katalogen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>Det gick inte att skapa filen "%1": %2</translation>
+        <translation>Det gick inte att skapa filen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>Det gick inte att öppna filen "%1": %2</translation>
+        <translation>Det gick inte att öppna filen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>Det gick inte att skriva filen "%1": %2</translation>
+        <translation>Det gick inte att skriva filen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>Det gick inte att läsa filen "%1": %2</translation>
+        <translation>Det gick inte att läsa filen &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
@@ -2882,8 +2903,8 @@ Lösenord: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="609"/>
+        <location filename="../host/main.cc" line="644"/>
         <source>Settings storage is unavailable.</source>
         <translation>Inställningslagringen är inte tillgänglig.</translation>
     </message>
@@ -2891,37 +2912,37 @@ Lösenord: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="533"/>
+        <location filename="../host/main.cc" line="535"/>
         <source>Launch the application hidden.</source>
         <translation>Starta programmet dolt.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="535"/>
+        <location filename="../host/main.cc" line="537"/>
         <source>Export parameters to file.</source>
         <translation>Exportera parametrar till fil.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="537"/>
+        <location filename="../host/main.cc" line="539"/>
         <source>Import parameters from file.</source>
         <translation>Importera parametrar från fil.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="539"/>
+        <location filename="../host/main.cc" line="541"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Visa inga meddelanden under import och export.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="541"/>
+        <location filename="../host/main.cc" line="543"/>
         <source>Calling the update check dialog.</source>
         <translation>Öppnar dialogrutan för uppdateringskontroll.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="543"/>
+        <location filename="../host/main.cc" line="545"/>
         <source>Calling the settings dialog.</source>
         <translation>Öppnar inställningsdialogen.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="545"/>
+        <location filename="../host/main.cc" line="547"/>
         <source>Calling the security log dialog.</source>
         <translation>Öppnar dialogrutan för säkerhetsloggen.</translation>
     </message>
@@ -3261,7 +3282,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation>Ta bort gruppen "%1"?</translation>
+        <translation>Ta bort gruppen &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
@@ -3437,7 +3458,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
@@ -3550,7 +3571,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
@@ -3565,7 +3586,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation>Ta bort värden "%1"?</translation>
+        <translation>Ta bort värden &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
@@ -3812,7 +3833,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation>Ogiltig länk "%1".</translation>
+        <translation>Ogiltig länk &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
@@ -4052,7 +4073,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort värden "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort värden &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
@@ -4076,12 +4097,12 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort arbetsytan "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort arbetsytan &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>Är du säker på att du vill ta bort gruppen "%1"? Värdar som tillhör denna grupp eller dess undergrupper flyttas till arbetsytans rot.</translation>
+        <translation>Är du säker på att du vill ta bort gruppen &quot;%1&quot;? Värdar som tillhör denna grupp eller dess undergrupper flyttas till arbetsytans rot.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
@@ -4767,7 +4788,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill koppla från klienten "%1"?</translation>
+        <translation>Är du säker på att du vill koppla från klienten &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
@@ -4923,7 +4944,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".".</translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
@@ -4943,7 +4964,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation>Ta bort routern "%1"?</translation>
+        <translation>Ta bort routern &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
@@ -5254,7 +5275,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill koppla från värden "%1"?</translation>
+        <translation>Är du säker på att du vill koppla från värden &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
@@ -5415,7 +5436,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill koppla från reläet "%1"?</translation>
+        <translation>Är du säker på att du vill koppla från reläet &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
@@ -5440,7 +5461,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill koppla från peer "%1"?</translation>
+        <translation>Är du säker på att du vill koppla från peer &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
@@ -5763,7 +5784,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort användaren "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort användaren &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
@@ -6685,7 +6706,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href="https://aspia.org"&gt;officiella webbplatsen&lt;/a&gt;.</translation>
+        <translation>En router krävs för att ansluta till en dator om det inte finns någon direktanslutning (kringgå NAT). Aspia tillhandahåller ingen offentlig router, men du kan installera din egen. Du kan ladda ner routern på den &lt;a href=&quot;https://aspia.org&quot;&gt;officiella webbplatsen&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
@@ -6801,7 +6822,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort gruppen "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort gruppen &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
@@ -6811,7 +6832,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>Är du säker på att du vill ta bort routern "%1"?</translation>
+        <translation>Är du säker på att du vill ta bort routern &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
@@ -6885,7 +6906,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="175"/>
+        <location filename="../client/android/statistics_dialog.cc" line="174"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
@@ -6900,7 +6921,7 @@ Are you sure you want to continue?</source>
         <translation>Värde</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="208"/>
+        <location filename="../client/android/statistics_dialog.cc" line="207"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -10729,17 +10750,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation>Vill du verkligen avsluta processen "%1"?</translation>
+        <translation>Vill du verkligen avsluta processen &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation>Vill du verkligen koppla från sessionen för användaren "%1"?</translation>
+        <translation>Vill du verkligen koppla från sessionen för användaren &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation>Vill du verkligen avsluta sessionen för användaren "%1"?</translation>
+        <translation>Vill du verkligen avsluta sessionen för användaren &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
@@ -11155,7 +11176,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen "_", "-", ".", "@".</translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
@@ -11235,7 +11256,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation>Ta bort användaren "%1"?</translation>
+        <translation>Ta bort användaren &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>

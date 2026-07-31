@@ -11,7 +11,7 @@
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation>ファイル "%1" を開けません: %2</translation>
+        <translation>ファイル &quot;%1&quot; を開けません: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
@@ -1206,7 +1206,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href="https://aspia.org"&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
+        <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href=&quot;https://aspia.org&quot;&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="455"/>
@@ -1352,7 +1352,7 @@ Routers added: %4</source>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>ユーザー "%1" を削除してもよろしいですか？</translation>
+        <translation>ユーザー &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
@@ -1547,232 +1547,248 @@ Password: %2</source>
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="119"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="122"/>
         <source>Lock toolbar</source>
         <translation>ツール バーを固定</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="131"/>
         <source>Auto size</source>
         <translation>自動サイズ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="134"/>
         <source>Automatic window size</source>
         <translation>自動ウィンドウ サイズ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="146"/>
         <source>Full screen</source>
         <translation>全画面表示</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="149"/>
         <source>Switch to full screen mode or back</source>
         <translation>全画面モードの切り替え</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="160"/>
         <source>Automatic scrolling</source>
         <translation>自動スクロール</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="172"/>
         <source>Ctrl+Alt+Delete</source>
         <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="175"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Ctrl+Alt+Delete を送信</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="187"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="190"/>
         <source>Advanced menu</source>
         <translation>詳細メニュー</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="195"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="198"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="201"/>
         <source>Save screenshot...</source>
         <translation>スクリーンショットを保存...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="210"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="213"/>
         <source>Terminal</source>
         <translation>ターミナル</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="222"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="225"/>
         <source>File transfer</source>
         <translation>ファイル転送</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="930"/>
         <source>Scale</source>
         <translation>拡大縮小</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="242"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="245"/>
         <source>Power control</source>
         <translation>電源操作</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
         <source>Shutdown</source>
         <translation>シャットダウン</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="266"/>
         <source>Reboot</source>
         <translation>再起動</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="275"/>
         <source>Logoff</source>
         <translation>ログオフ</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="284"/>
         <source>Lock</source>
         <translation>ロック</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="293"/>
         <source>System Information</source>
         <translation>システム情報</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="302"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="305"/>
         <source>Close session</source>
         <translation>セッションを閉じる</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
         <source>Fit window</source>
         <translation>ウィンドウに合わせる</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="373"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="376"/>
         <source>Minimize window</source>
         <translation>ウィンドウを最小化</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="384"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="396"/>
         <source>Reboot (Safe mode)</source>
         <translation>再起動 (セーフ モード)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <source>Reboot in safe mode</source>
         <translation>セーフ モードで再起動</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="411"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>クリップボードをキー入力として貼り付け</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
         <source>Text Chat</source>
         <translation>テキスト チャット</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="532"/>
         <source>Start recording</source>
         <translation>録画を開始</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
         <translation>タスク マネージャー</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="462"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="465"/>
+        <source>Tools</source>
+        <translation>ツール</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="477"/>
         <source>Switch Session</source>
         <translation>セッションの切り替え</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="323"/>
         <source>Resolution selection</source>
         <translation>解像度の選択</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="435"/>
+        <source>Scripts</source>
+        <translation>スクリプト</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="499"/>
+        <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
+        <translation>リモート コンピューターでスクリプト &quot;%1&quot; を実行してもよろしいですか？</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Stop recording</source>
         <translation>録画を停止</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="759"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>リモート コンピューターをシャットダウンしてもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="774"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Confirmation</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="775"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>リモート コンピューターを再起動してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="780"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="806"/>
         <source>Wait for host</source>
         <translation>ホストを待機</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="801"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>リモート コンピューターをセーフ モードで再起動してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="826"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>リモート コンピューター上のユーザー セッションを終了してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>リモート コンピューター上のユーザー セッションをロックしてもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1</source>
         <translation>セッション %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1 (%2)</source>
         <translation>セッション %1 (%2)</translation>
     </message>
@@ -1974,19 +1990,24 @@ Password: %2</source>
         <translation>はい</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
         <source>Save File</source>
         <translation>ファイルの保存</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 画像 (*.png);;BMP 画像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>画像を保存できませんでした</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1233"/>
+        <source>Failed to start on the remote computer.</source>
+        <translation>リモート コンピューターで起動できませんでした。</translation>
     </message>
 </context>
 <context>
@@ -2433,7 +2454,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation>"%1" を削除しますか？</translation>
+        <translation>&quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
@@ -2500,7 +2521,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>"%1" を削除できませんでした: %2。</translation>
+        <translation>&quot;%1&quot; を削除できませんでした: %2。</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
@@ -2626,27 +2647,27 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>ディレクトリ "%1" を作成できませんでした: %2</translation>
+        <translation>ディレクトリ &quot;%1&quot; を作成できませんでした: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>ファイル "%1" を作成できませんでした: %2</translation>
+        <translation>ファイル &quot;%1&quot; を作成できませんでした: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>ファイル "%1" を開けませんでした: %2</translation>
+        <translation>ファイル &quot;%1&quot; を開けませんでした: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>ファイル "%1" に書き込めませんでした: %2</translation>
+        <translation>ファイル &quot;%1&quot; に書き込めませんでした: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>ファイル "%1" を読み取れませんでした: %2</translation>
+        <translation>ファイル &quot;%1&quot; を読み取れませんでした: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
@@ -2874,8 +2895,8 @@ Password: %2</source>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="609"/>
+        <location filename="../host/main.cc" line="644"/>
         <source>Settings storage is unavailable.</source>
         <translation>設定ストレージを利用できません。</translation>
     </message>
@@ -2883,37 +2904,37 @@ Password: %2</source>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="533"/>
+        <location filename="../host/main.cc" line="535"/>
         <source>Launch the application hidden.</source>
         <translation>アプリケーションを非表示で起動します。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="535"/>
+        <location filename="../host/main.cc" line="537"/>
         <source>Export parameters to file.</source>
         <translation>パラメーターをファイルにエクスポートします。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="537"/>
+        <location filename="../host/main.cc" line="539"/>
         <source>Import parameters from file.</source>
         <translation>パラメーターをファイルからインポートします。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="539"/>
+        <location filename="../host/main.cc" line="541"/>
         <source>Do not display any messages during import and export.</source>
         <translation>インポートおよびエクスポート中にメッセージを表示しません。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="541"/>
+        <location filename="../host/main.cc" line="543"/>
         <source>Calling the update check dialog.</source>
         <translation>更新確認ダイアログを呼び出します。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="543"/>
+        <location filename="../host/main.cc" line="545"/>
         <source>Calling the settings dialog.</source>
         <translation>設定ダイアログを呼び出します。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="545"/>
+        <location filename="../host/main.cc" line="547"/>
         <source>Calling the security log dialog.</source>
         <translation>セキュリティ ログ ダイアログを呼び出します。</translation>
     </message>
@@ -3251,7 +3272,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation>グループ "%1" を削除しますか？</translation>
+        <translation>グループ &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
@@ -3424,7 +3445,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>ユーザー名は空にできず、英字、数字、および "_"、"-"、"." の文字のみ使用できます。</translation>
+        <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot; の文字のみ使用できます。</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
@@ -3536,7 +3557,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>ユーザー名は空にできず、英字、数字、および "_"、"-"、"." の文字のみ使用できます。</translation>
+        <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot; の文字のみ使用できます。</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
@@ -3551,7 +3572,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation>ホスト "%1" を削除しますか？</translation>
+        <translation>ホスト &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
@@ -3794,7 +3815,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation>無効なリンク "%1" です。</translation>
+        <translation>無効なリンク &quot;%1&quot; です。</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
@@ -4034,7 +4055,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation>ホスト "%1" を削除してもよろしいですか？</translation>
+        <translation>ホスト &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
@@ -4058,12 +4079,12 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>ワークスペース "%1" を削除してもよろしいですか？</translation>
+        <translation>ワークスペース &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>グループ "%1" を削除してもよろしいですか？このグループまたはそのサブグループに割り当てられているホストはワークスペースのルートに移動されます。</translation>
+        <translation>グループ &quot;%1&quot; を削除してもよろしいですか？このグループまたはそのサブグループに割り当てられているホストはワークスペースのルートに移動されます。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
@@ -4748,7 +4769,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation>クライアント "%1" を切断してもよろしいですか？</translation>
+        <translation>クライアント &quot;%1&quot; を切断してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
@@ -4903,7 +4924,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>ユーザー名は空にできず、英字、数字、および "_"、"-"、"." の文字のみ使用できます。</translation>
+        <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot; の文字のみ使用できます。</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
@@ -4923,7 +4944,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation>ルーター "%1" を削除しますか？</translation>
+        <translation>ルーター &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
@@ -5233,7 +5254,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation>ホスト "%1" を切断してもよろしいですか？</translation>
+        <translation>ホスト &quot;%1&quot; を切断してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
@@ -5393,7 +5414,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation>リレー "%1" を切断してもよろしいですか？</translation>
+        <translation>リレー &quot;%1&quot; を切断してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
@@ -5418,7 +5439,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation>ピア "%1" を切断してもよろしいですか？</translation>
+        <translation>ピア &quot;%1&quot; を切断してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
@@ -5737,7 +5758,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>ユーザー "%1" を削除してもよろしいですか？</translation>
+        <translation>ユーザー &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
@@ -6656,7 +6677,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href="https://aspia.org"&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
+        <translation>直接接続ができない場合 (NAT 越え)、コンピューターへの接続にはルーターが必要です。Aspia は公開ルーターを提供していませんが、独自のルーターをインストールできます。ルーターは&lt;a href=&quot;https://aspia.org&quot;&gt;公式サイト&lt;/a&gt;からダウンロードできます。</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
@@ -6750,7 +6771,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation>グループ "%1" を削除してもよろしいですか？</translation>
+        <translation>グループ &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
@@ -6760,7 +6781,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>ルーター "%1" を削除してもよろしいですか？</translation>
+        <translation>ルーター &quot;%1&quot; を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="920"/>
@@ -6854,7 +6875,7 @@ Are you sure you want to continue?</source>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="175"/>
+        <location filename="../client/android/statistics_dialog.cc" line="174"/>
         <source>Statistics</source>
         <translation>統計</translation>
     </message>
@@ -6869,7 +6890,7 @@ Are you sure you want to continue?</source>
         <translation>値</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="208"/>
+        <location filename="../client/android/statistics_dialog.cc" line="207"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -10698,17 +10719,17 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation>プロセス "%1" を終了してもよろしいですか？</translation>
+        <translation>プロセス &quot;%1&quot; を終了してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation>ユーザー "%1" のセッションを切断してもよろしいですか？</translation>
+        <translation>ユーザー &quot;%1&quot; のセッションを切断してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation>ユーザー "%1" のセッションを終了してもよろしいですか？</translation>
+        <translation>ユーザー &quot;%1&quot; のセッションを終了してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
@@ -11167,7 +11188,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation>ユーザー名は空にできず、英字、数字、および "_"、"-"、"."、"@" の文字のみ使用できます。</translation>
+        <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot;、&quot;@&quot; の文字のみ使用できます。</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
@@ -11201,7 +11222,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation>ユーザー "%1" を削除しますか？</translation>
+        <translation>ユーザー &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>

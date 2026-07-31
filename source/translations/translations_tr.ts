@@ -11,7 +11,7 @@
     <message>
         <location filename="../client/aab_importer.cc" line="268"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
-        <translation>"%1" dosyası açılamıyor: %2</translation>
+        <translation>&quot;%1&quot; dosyası açılamıyor: %2</translation>
     </message>
     <message>
         <location filename="../client/aab_importer.cc" line="277"/>
@@ -1027,7 +1027,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="427"/>
         <source>The host with the specified ID is not online</source>
-        <translation>Belirtilen ID'ye sahip ana bilgisayar çevrimiçi değil</translation>
+        <translation>Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="430"/>
@@ -1202,7 +1202,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href="https://aspia.org"&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
+        <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="30"/>
@@ -1217,7 +1217,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
-        <translation>Aspia'nın kapatılmasını devre dışı bırak</translation>
+        <translation>Aspia&apos;nın kapatılmasını devre dışı bırak</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="357"/>
@@ -1352,7 +1352,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="441"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>"%1" kullanıcısını silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; kullanıcısını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.cc" line="468"/>
@@ -1444,7 +1444,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../host/android/connection_widget.cc" line="223"/>
         <source>Your ID</source>
-        <translation>ID'niz</translation>
+        <translation>ID&apos;niz</translation>
     </message>
     <message>
         <location filename="../host/android/connection_widget.cc" line="224"/>
@@ -1547,232 +1547,248 @@ Parola: %2</translation>
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="118"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="121"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="119"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="122"/>
         <source>Lock toolbar</source>
         <translation>Araç çubuğunu kilitle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="130"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="131"/>
         <source>Auto size</source>
         <translation>Otomatik boyut</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="134"/>
         <source>Automatic window size</source>
         <translation>Otomatik pencere boyutu</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="145"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="146"/>
         <source>Full screen</source>
         <translation>Tam ekran</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="148"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="149"/>
         <source>Switch to full screen mode or back</source>
         <translation>Tam ekran moduna geç veya geri dön</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="159"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="160"/>
         <source>Automatic scrolling</source>
         <translation>Otomatik kaydırma</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="171"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="172"/>
         <source>Ctrl+Alt+Delete</source>
         <translation>Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="174"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="175"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Ctrl+Alt+Delete gönder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="186"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="189"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="187"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="190"/>
         <source>Advanced menu</source>
         <translation>Gelişmiş menü</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="194"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="197"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="200"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="195"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="198"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="201"/>
         <source>Save screenshot...</source>
         <translation>Ekran görüntüsünü kaydet...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="209"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="212"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="210"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="213"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="221"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="224"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="222"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="225"/>
         <source>File transfer</source>
         <translation>Dosya aktarımı</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="232"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="930"/>
         <source>Scale</source>
         <translation>Ölçek</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="241"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="244"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="242"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="245"/>
         <source>Power control</source>
         <translation>Güç denetimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="256"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="257"/>
         <source>Shutdown</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="265"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="266"/>
         <source>Reboot</source>
         <translation>Yeniden Başlat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="274"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="275"/>
         <source>Logoff</source>
         <translation>Oturumu Kapat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="283"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="284"/>
         <source>Lock</source>
         <translation>Kilitle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="292"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="293"/>
         <source>System Information</source>
         <translation>Sistem Bilgileri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="301"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="302"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="304"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="305"/>
         <source>Close session</source>
         <translation>Bağlantıyı kapat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="363"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="364"/>
         <source>Fit window</source>
         <translation>Pencereye sığdır</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="372"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="373"/>
         <source>Minimize</source>
         <translation>Küçült</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="375"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="376"/>
         <source>Minimize window</source>
         <translation>Pencereyi küçült</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="380"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="383"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="381"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="384"/>
         <source>Statistics</source>
         <translation>İstatistikler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="395"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="396"/>
         <source>Reboot (Safe mode)</source>
         <translation>Yeniden Başlat (Güvenli mod)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="398"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="399"/>
         <source>Reboot in safe mode</source>
         <translation>Güvenli modda yeniden başlat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="410"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="411"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>Panoyu tuş vuruşları olarak yapıştır</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="419"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="422"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="420"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="423"/>
         <source>Text Chat</source>
         <translation>Metin Sohbeti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="434"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="437"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="423"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="532"/>
         <source>Start recording</source>
         <translation>Kaydı başlat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="446"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="449"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="450"/>
         <source>Task Manager</source>
         <translation>Görev Yöneticisi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="461"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="462"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="465"/>
+        <source>Tools</source>
+        <translation>Araçlar</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="477"/>
         <source>Switch Session</source>
         <translation>Oturum Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="321"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="323"/>
         <source>Resolution selection</source>
         <translation>Çözünürlük seçimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1</source>
         <translation>Oturum %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="995"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1105"/>
         <source>Session %1 (%2)</source>
         <translation>Oturum %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="418"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Stop recording</source>
         <translation>Kaydı durdur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="649"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="435"/>
+        <source>Scripts</source>
+        <translation>Betikler</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="499"/>
+        <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
+        <translation>Uzak bilgisayarda &quot;%1&quot; betiğini çalıştırmak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="759"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Uzak bilgisayarı kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="664"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="690"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="774"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="800"/>
         <source>Confirmation</source>
         <translation>Onay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="665"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="775"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Uzak bilgisayarı yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="670"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="696"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="780"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="806"/>
         <source>Wait for host</source>
         <translation>Ana bilgisayarı bekle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="691"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="801"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Uzak bilgisayarı Güvenli Modda yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="716"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="826"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="731"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="841"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu kilitlemek istediğinizden emin misiniz?</translation>
     </message>
@@ -1803,19 +1819,24 @@ Parola: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="927"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="929"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Görüntüsü (*.png);;BMP Görüntüsü (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="960"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>Görüntü kaydedilemedi</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1233"/>
+        <source>Failed to start on the remote computer.</source>
+        <translation>Uzak bilgisayarda başlatılamadı.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="168"/>
@@ -1850,7 +1871,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/desktop_window.cc" line="235"/>
         <source>The host with the specified ID is not online.</source>
-        <translation>Belirtilen ID'ye sahip ana bilgisayar çevrimiçi değil.</translation>
+        <translation>Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="238"/>
@@ -2433,7 +2454,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="529"/>
         <source>Delete &quot;%1&quot;?</source>
-        <translation>"%1" silinsin mi?</translation>
+        <translation>&quot;%1&quot; silinsin mi?</translation>
     </message>
     <message>
         <location filename="../client/android/file_panel_widget.cc" line="544"/>
@@ -2500,7 +2521,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="166"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
-        <translation>"%1" silinemedi: %2.</translation>
+        <translation>&quot;%1&quot; silinemedi: %2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_remove_widget.cc" line="173"/>
@@ -2626,27 +2647,27 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="277"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
-        <translation>"%1" dizini oluşturulamadı: %2</translation>
+        <translation>&quot;%1&quot; dizini oluşturulamadı: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="284"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
-        <translation>"%1" dosyası oluşturulamadı: %2</translation>
+        <translation>&quot;%1&quot; dosyası oluşturulamadı: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="290"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
-        <translation>"%1" dosyası açılamadı: %2</translation>
+        <translation>&quot;%1&quot; dosyası açılamadı: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="296"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
-        <translation>"%1" dosyasına yazılamadı: %2</translation>
+        <translation>&quot;%1&quot; dosyasına yazılamadı: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="302"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
-        <translation>"%1" dosyası okunamadı: %2</translation>
+        <translation>&quot;%1&quot; dosyası okunamadı: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/file_transfer/file_transfer_widget.cc" line="308"/>
@@ -2874,8 +2895,8 @@ Parola: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="607"/>
-        <location filename="../host/main.cc" line="642"/>
+        <location filename="../host/main.cc" line="609"/>
+        <location filename="../host/main.cc" line="644"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ayar depolama alanı kullanılamıyor.</translation>
     </message>
@@ -2883,37 +2904,37 @@ Parola: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="533"/>
+        <location filename="../host/main.cc" line="535"/>
         <source>Launch the application hidden.</source>
         <translation>Uygulamayı gizli başlatır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="535"/>
+        <location filename="../host/main.cc" line="537"/>
         <source>Export parameters to file.</source>
         <translation>Parametreleri dosyaya dışa aktarır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="537"/>
+        <location filename="../host/main.cc" line="539"/>
         <source>Import parameters from file.</source>
         <translation>Parametreleri dosyadan içe aktarır.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="539"/>
+        <location filename="../host/main.cc" line="541"/>
         <source>Do not display any messages during import and export.</source>
         <translation>İçe ve dışa aktarma sırasında hiçbir mesaj göstermez.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="541"/>
+        <location filename="../host/main.cc" line="543"/>
         <source>Calling the update check dialog.</source>
         <translation>Güncelleme denetimi iletişim kutusunu açar.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="543"/>
+        <location filename="../host/main.cc" line="545"/>
         <source>Calling the settings dialog.</source>
         <translation>Ayarlar iletişim kutusunu açar.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="545"/>
+        <location filename="../host/main.cc" line="547"/>
         <source>Calling the security log dialog.</source>
         <translation>Güvenlik günlüğü iletişim kutusunu açar.</translation>
     </message>
@@ -2946,7 +2967,7 @@ Parola: %2</translation>
     <message>
         <location filename="../host/ui/host_window.ui" line="72"/>
         <source>Your ID</source>
-        <translation>ID'niz</translation>
+        <translation>ID&apos;niz</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="98"/>
@@ -3105,7 +3126,7 @@ Parola: %2</translation>
     <message>
         <location filename="../host/ui/host_window.cc" line="835"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation>Aspia'dan çıkarsanız, bilgisayarı veya Aspia'yı yeniden elle açana kadar bu bilgisayara bağlanmak mümkün olmayacak. Uygulamadan çıkmak istediğinizden gerçekten emin misiniz?</translation>
+        <translation>Aspia&apos;dan çıkarsanız, bilgisayarı veya Aspia&apos;yı yeniden elle açana kadar bu bilgisayara bağlanmak mümkün olmayacak. Uygulamadan çıkmak istediğinizden gerçekten emin misiniz?</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="1002"/>
@@ -3251,7 +3272,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="160"/>
         <source>Delete the group &quot;%1&quot;?</source>
-        <translation>"%1" grubu silinsin mi?</translation>
+        <translation>&quot;%1&quot; grubu silinsin mi?</translation>
     </message>
     <message>
         <location filename="../client/android/local_group_editor.cc" line="167"/>
@@ -3419,12 +3440,12 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="187"/>
         <source>An invalid host ID was entered.</source>
-        <translation>Geçersiz bir ana bilgisayar ID'si girildi.</translation>
+        <translation>Geçersiz bir ana bilgisayar ID&apos;si girildi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="198"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile "_", "-", "." karakterlerini içerebilir.</translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karakterlerini içerebilir.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="209"/>
@@ -3461,7 +3482,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Host ID</source>
-        <translation>Ana Bilgisayar ID'si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
 </context>
 <context>
@@ -3531,12 +3552,12 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="205"/>
         <source>An invalid host ID was entered.</source>
-        <translation>Geçersiz bir ana bilgisayar ID'si girildi.</translation>
+        <translation>Geçersiz bir ana bilgisayar ID&apos;si girildi.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="214"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile "_", "-", "." karakterlerini içerebilir.</translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karakterlerini içerebilir.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="235"/>
@@ -3551,7 +3572,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="246"/>
         <source>Delete the host &quot;%1&quot;?</source>
-        <translation>"%1" ana bilgisayarı silinsin mi?</translation>
+        <translation>&quot;%1&quot; ana bilgisayarı silinsin mi?</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="253"/>
@@ -3794,7 +3815,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/main_window.cc" line="198"/>
         <source>Invalid link &quot;%1&quot;.</source>
-        <translation>Geçersiz link "%1".</translation>
+        <translation>Geçersiz link &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="221"/>
@@ -4034,7 +4055,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1012"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
-        <translation>"%1" ana bilgisayarını silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; ana bilgisayarını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1022"/>
@@ -4058,12 +4079,12 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1248"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
-        <translation>"%1" çalışma alanını silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; çalışma alanını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1358"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
-        <translation>"%1" grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar çalışma alanı köküne taşınacak.</translation>
+        <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz? Bu gruba veya alt gruplarına atanmış ana bilgisayarlar çalışma alanı köküne taşınacak.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
@@ -4200,7 +4221,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1963"/>
         <source>The host has an invalid host ID.</source>
-        <translation>Ana bilgisayarın ID'si geçersiz.</translation>
+        <translation>Ana bilgisayarın ID&apos;si geçersiz.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1972"/>
@@ -4580,7 +4601,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="45"/>
         <source>Aspia Host requires your permission to access system capabilities.</source>
-        <translation>Aspia Host'un sistem özelliklerine erişebilmesi için izniniz gerekiyor.</translation>
+        <translation>Aspia Host&apos;un sistem özelliklerine erişebilmesi için izniniz gerekiyor.</translation>
     </message>
     <message>
         <location filename="../host/ui/permission_dialog.cc" line="51"/>
@@ -4748,7 +4769,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="340"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
-        <translation>"%1" istemcisinin bağlantısını kesmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; istemcisinin bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="365"/>
@@ -4768,7 +4789,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="440"/>
         <source>Invalid entry id.</source>
-        <translation>Geçersiz girdi ID'si.</translation>
+        <translation>Geçersiz girdi ID&apos;si.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="442"/>
@@ -4903,7 +4924,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/android/router_editor.cc" line="159"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
-        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile "_", "-", "." karakterlerini içerebilir.</translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karakterlerini içerebilir.</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="169"/>
@@ -4923,7 +4944,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/android/router_editor.cc" line="199"/>
         <source>Delete the router &quot;%1&quot;?</source>
-        <translation>"%1" yönlendiricisi silinsin mi?</translation>
+        <translation>&quot;%1&quot; yönlendiricisi silinsin mi?</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="206"/>
@@ -5015,7 +5036,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Host ID</source>
-        <translation>Ana Bilgisayar ID'si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="55"/>
@@ -5138,7 +5159,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="48"/>
         <source>Host ID</source>
-        <translation>Ana Bilgisayar ID'si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
@@ -5233,7 +5254,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="419"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
-        <translation>"%1" ana bilgisayarının bağlantısını kesmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; ana bilgisayarının bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="444"/>
@@ -5263,7 +5284,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="597"/>
         <source>Invalid entry id.</source>
-        <translation>Geçersiz girdi ID'si.</translation>
+        <translation>Geçersiz girdi ID&apos;si.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="599"/>
@@ -5343,7 +5364,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="118"/>
         <source>Host ID</source>
-        <translation>Ana Bilgisayar ID'si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.ui" line="123"/>
@@ -5393,7 +5414,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="451"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
-        <translation>"%1" aktarıcısının bağlantısını kesmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; aktarıcısının bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="476"/>
@@ -5418,7 +5439,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="539"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
-        <translation>"%1" eşinin bağlantısını kesmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; eşinin bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="661"/>
@@ -5434,7 +5455,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="665"/>
         <source>Invalid entry id.</source>
-        <translation>Geçersiz girdi ID'si.</translation>
+        <translation>Geçersiz girdi ID&apos;si.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="667"/>
@@ -5737,7 +5758,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="275"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>"%1" kullanıcısını silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; kullanıcısını silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="374"/>
@@ -6201,7 +6222,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="178"/>
         <source>Allow UDP Hole Punching</source>
-        <translation>UDP Hole Punching'e izin ver</translation>
+        <translation>UDP Hole Punching&apos;e izin ver</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="185"/>
@@ -6526,7 +6547,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/android/settings_widget.cc" line="253"/>
         <source>Allow UDP Hole Punching</source>
-        <translation>UDP Hole Punching'e izin ver</translation>
+        <translation>UDP Hole Punching&apos;e izin ver</translation>
     </message>
     <message>
         <location filename="../client/android/settings_widget.cc" line="254"/>
@@ -6656,7 +6677,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href="https://aspia.org"&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
+        <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../host/android/settings_widget.cc" line="360"/>
@@ -6770,7 +6791,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="663"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation>"%1" grubunu silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="676"/>
@@ -6780,7 +6801,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="740"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
-        <translation>"%1" yönlendiricisini silmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="964"/>
@@ -6854,7 +6875,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <name>StatisticsDialog</name>
     <message>
         <location filename="../client/desktop/desktop/statistics_dialog.ui" line="14"/>
-        <location filename="../client/android/statistics_dialog.cc" line="175"/>
+        <location filename="../client/android/statistics_dialog.cc" line="174"/>
         <source>Statistics</source>
         <translation>İstatistikler</translation>
     </message>
@@ -6869,7 +6890,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <translation>Değer</translation>
     </message>
     <message>
-        <location filename="../client/android/statistics_dialog.cc" line="208"/>
+        <location filename="../client/android/statistics_dialog.cc" line="207"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
@@ -6912,7 +6933,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_applications.ui" line="76"/>
         <source>Search in Google</source>
-        <translation>Google'da Ara</translation>
+        <translation>Google&apos;da Ara</translation>
     </message>
 </context>
 <context>
@@ -7006,7 +7027,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="58"/>
         <source>Device ID</source>
-        <translation>Aygıt ID'si</translation>
+        <translation>Aygıt ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="66"/>
@@ -7021,7 +7042,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_devices.ui" line="76"/>
         <source>Search in Google</source>
-        <translation>Google'da Ara</translation>
+        <translation>Google&apos;da Ara</translation>
     </message>
 </context>
 <context>
@@ -7196,7 +7217,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="140"/>
         <source>Event ID</source>
-        <translation>Olay ID'si</translation>
+        <translation>Olay ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_event_logs.ui" line="145"/>
@@ -7487,7 +7508,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="60"/>
         <source>Session ID</source>
-        <translation>Oturum ID'si</translation>
+        <translation>Oturum ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_processes.ui" line="65"/>
@@ -9068,7 +9089,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1858"/>
         <source>Vendor ID</source>
-        <translation>Satıcı ID'si</translation>
+        <translation>Satıcı ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_dmi.cc" line="1861"/>
@@ -9381,7 +9402,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="150"/>
         <source>Product ID</source>
-        <translation>Ürün ID'si</translation>
+        <translation>Ürün ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_licenses.cc" line="153"/>
@@ -9466,7 +9487,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="160"/>
         <source>Monitor ID</source>
-        <translation>Monitör ID'si</translation>
+        <translation>Monitör ID&apos;si</translation>
     </message>
     <message>
         <location filename="../common/sys_info/sys_info_widget_monitors.cc" line="163"/>
@@ -10559,7 +10580,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="70"/>
         <source>Process ID</source>
-        <translation>İşlem ID'si</translation>
+        <translation>İşlem ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="14"/>
@@ -10569,7 +10590,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="75"/>
         <source>Session ID</source>
-        <translation>Oturum ID'si</translation>
+        <translation>Oturum ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.ui" line="90"/>
@@ -10698,17 +10719,17 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="652"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
-        <translation>"%1" işlemini sonlandırmak istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; işlemini sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="702"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation>"%1" kullanıcısının oturum bağlantısını kesmek istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; kullanıcısının oturum bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="725"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
-        <translation>"%1" kullanıcısının oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
+        <translation>&quot;%1&quot; kullanıcısının oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="944"/>
@@ -11122,7 +11143,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile "_", "-", ".", "@" karakterlerini içerebilir.</translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; karakterlerini içerebilir.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="163"/>
@@ -11201,7 +11222,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
         <source>Delete the user &quot;%1&quot;?</source>
-        <translation>"%1" kullanıcısı silinsin mi?</translation>
+        <translation>&quot;%1&quot; kullanıcısı silinsin mi?</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="250"/>
