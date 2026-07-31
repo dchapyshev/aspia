@@ -31,7 +31,24 @@ collect_sources(SOURCE_HOST_WORKERS
     sys_info_worker.h
     task_mgr_worker.cc
     task_mgr_worker.h
+    tools_worker.cc
+    tools_worker.h
     update_worker.cc
     update_worker.h
     user_ipc_worker.cc
     user_ipc_worker.h)
+
+if (WIN32)
+    collect_sources(SOURCE_HOST_WORKERS
+        tools_worker_win.cc)
+endif()
+
+if (LINUX)
+    collect_sources(SOURCE_HOST_WORKERS
+        tools_worker_linux.cc)
+endif()
+
+if (APPLE)
+    collect_sources(SOURCE_HOST_WORKERS
+        tools_worker_mac.mm)
+endif()

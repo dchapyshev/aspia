@@ -65,6 +65,7 @@
      <addaction name="separator"/>
      <addaction name="action_switch_session"/>
      <addaction name="action_power_control"/>
+     <addaction name="action_tools"/>
      <addaction name="action_cad"/>
      <addaction name="action_paste_clipboard_as_keystrokes"/>
      <addaction name="separator"/>
@@ -447,6 +448,21 @@
    </property>
    <property name="toolTip">
     <string>Task Manager</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_tools">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/tools.svg</normaloff>:/img/tools.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Tools</string>
+   </property>
+   <property name="toolTip">
+    <string>Tools</string>
    </property>
    <property name="visible">
     <bool>false</bool>

@@ -35,6 +35,7 @@ void* g_handle = nullptr;
 bool g_load_failed = false;
 
 decltype(&sd_seat_get_active) g_seat_get_active = nullptr;
+decltype(&sd_pid_get_session) g_pid_get_session = nullptr;
 decltype(&sd_session_get_vt) g_session_get_vt = nullptr;
 decltype(&sd_session_get_class) g_session_get_class = nullptr;
 decltype(&sd_session_get_type) g_session_get_type = nullptr;
@@ -79,6 +80,8 @@ bool LibSystemd::ensureLoaded()
 
     g_seat_get_active =
         reinterpret_cast<decltype(g_seat_get_active)>(dlsym(g_handle, "sd_seat_get_active"));
+    g_pid_get_session =
+        reinterpret_cast<decltype(g_pid_get_session)>(dlsym(g_handle, "sd_pid_get_session"));
     g_session_get_vt =
         reinterpret_cast<decltype(g_session_get_vt)>(dlsym(g_handle, "sd_session_get_vt"));
     g_session_get_class =
@@ -119,8 +122,8 @@ bool LibSystemd::ensureLoaded()
     g_journal_test_cursor =
         reinterpret_cast<decltype(g_journal_test_cursor)>(dlsym(g_handle, "sd_journal_test_cursor"));
 
-    if (!g_seat_get_active || !g_session_get_vt || !g_session_get_class || !g_session_get_type ||
-        !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
+    if (!g_seat_get_active || !g_pid_get_session || !g_session_get_vt || !g_session_get_class ||
+        !g_session_get_type || !g_login_monitor_new || !g_login_monitor_unref || !g_login_monitor_get_fd ||
         !g_login_monitor_flush || !g_journal_open || !g_journal_close || !g_journal_add_match ||
         !g_journal_seek_head || !g_journal_seek_tail || !g_journal_next || !g_journal_previous ||
         !g_journal_get_data || !g_journal_get_realtime_usec || !g_journal_seek_cursor ||
@@ -143,6 +146,15 @@ int LibSystemd::seatGetActive(const char* seat, char** session, uid_t* uid)
     if (!ensureLoaded())
         return -1;
     return g_seat_get_active(seat, session, uid);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int LibSystemd::pidGetSession(pid_t pid, char** session)
+{
+    if (!ensureLoaded())
+        return -1;
+    return g_pid_get_session(pid, session);
 }
 
 //--------------------------------------------------------------------------------------------------

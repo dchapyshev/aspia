@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QToolButton>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "client/desktop/desktop/select_screen_action.h"
@@ -33,6 +34,7 @@
 #include "proto/desktop_control.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
+#include "proto/desktop_tools.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
@@ -408,6 +410,113 @@ void DesktopToolBar::setSessionList(const proto::control::SessionList& session_l
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
+{
+    LOG(INFO) << "Setting up a new list of tools (tools:" << tool_list.tool_size()
+              << "scripts:" << tool_list.script_size() << ")";
+
+    ui->action_tools->setMenu(nullptr);
+    tools_menu_.reset();
+
+    const bool enable = tool_list.tool_size() > 0 || tool_list.script_size() > 0;
+
+    ui->action_tools->setVisible(enable);
+    ui->action_tools->setEnabled(enable);
+
+    if (enable)
+    {
+        tools_menu_.reset(new QMenu());
+
+        if (tool_list.script_size() > 0)
+        {
+            // The scripts are kept apart from the tools: a tool opens a window of the operating
+            // system for the operator to work in, a script changes something on the machine itself.
+            QMenu* scripts_menu = tools_menu_->addMenu(
+                GuiApplication::svgIcon(":/img/terminal.svg"), tr("Scripts"));
+            scripts_menu->setToolTipsVisible(true);
+
+            for (int i = 0; i < tool_list.script_size(); ++i)
+            {
+                const proto::tools::Script& script = tool_list.script(i);
+
+                QAction* action = scripts_menu->addAction(QString::fromStdString(script.name()));
+                action->setData(script.id());
+                action->setToolTip(QString::fromStdString(script.description()));
+                action->setProperty("is_script", true);
+                action->setProperty("confirm", script.confirm());
+            }
+
+            if (tool_list.tool_size() > 0)
+                tools_menu_->addSeparator();
+        }
+
+        for (int i = 0; i < tool_list.tool_size(); ++i)
+        {
+            const proto::tools::Tool& tool = tool_list.tool(i);
+
+            QAction* action = tools_menu_->addAction(QString::fromStdString(tool.name()));
+            action->setData(tool.id());
+
+            QPixmap pixmap;
+
+            const std::string& icon = tool.icon();
+            if (!icon.empty())
+            {
+                pixmap.loadFromData(reinterpret_cast<const uchar*>(icon.data()),
+                                    static_cast<uint>(icon.size()));
+            }
+
+            if (pixmap.isNull())
+                action->setIcon(GuiApplication::svgIcon(":/img/application-window.svg"));
+            else
+                action->setIcon(QIcon(pixmap));
+        }
+
+        ui->action_tools->setMenu(tools_menu_.get());
+
+        QToolButton* button = qobject_cast<QToolButton*>(
+            ui->toolbar->widgetForAction(ui->action_tools));
+        if (button)
+            button->setPopupMode(QToolButton::InstantPopup);
+
+        // A submenu passes what was chosen in it to the menu holding it, so the scripts arrive here
+        // as well.
+        connect(tools_menu_.get(), &QMenu::triggered, this, [this](QAction* action)
+        {
+            const qint32 id = action->data().toInt();
+
+            if (!action->property("is_script").toBool())
+            {
+                LOG(INFO) << "[ACTION] Tool requested:" << action->text() << "(id:" << id << ")";
+                emit sig_executeTool(id);
+                return;
+            }
+
+            LOG(INFO) << "[ACTION] Script requested:" << action->text() << "(id:" << id << ")";
+
+            if (action->property("confirm").toBool())
+            {
+                if (MsgBox::question(this, tr("Are you sure you want to run \"%1\" on the remote "
+                                              "computer?").arg(action->text())) != MsgBox::Yes)
+                {
+                    LOG(INFO) << "[ACTION] Script rejected by user";
+                    return;
+                }
+            }
+
+            emit sig_executeScript(id);
+        });
+
+        connect(tools_menu_.get(), &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
+        connect(tools_menu_.get(), &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
+    }
+
+    updateSize();
+
+    emit sig_actionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::startRecording(bool enable)
 {
     LOG(INFO) << "[ACTION] Start recording:" << enable;
@@ -472,6 +581,7 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups()
     QList<QAction*> actions = QList<QAction*>(screen_actions_.cbegin(), screen_actions_.cend());
     actions.append(ui->action_switch_session);
     actions.append(ui->action_power_control);
+    actions.append(ui->action_tools);
     actions.append(ui->action_cad);
     actions.append(ui->action_paste_clipboard_as_keystrokes);
 

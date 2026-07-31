@@ -101,6 +101,7 @@ signals:
     void sig_channel_9(const QByteArray& buffer);
     void sig_channel_10(const QByteArray& buffer);
     void sig_channel_11(const QByteArray& buffer);
+    void sig_channel_12(const QByteArray& buffer);
     void sig_metrics(const NetworkWorker::Metrics& metrics);
 
 protected:

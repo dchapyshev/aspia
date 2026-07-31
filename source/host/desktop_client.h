@@ -37,6 +37,7 @@ class Control;
 class IpcChannel;
 class IpcServer;
 class TaskMgrWorker;
+class ToolsWorker;
 
 class DesktopClient final : public Client
 {
@@ -73,6 +74,7 @@ private:
     void sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
+    void sendToolList();
     void readFeedback(const proto::control::Feedback& feedback);
     void readPowerControl(const proto::power::Control& control);
 
@@ -88,6 +90,7 @@ private:
     bool force_reliable_ = false;
 
     QPointer<TaskMgrWorker> task_mgr_worker_;
+    QPointer<ToolsWorker> tools_worker_;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

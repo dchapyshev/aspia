@@ -101,6 +101,7 @@ private slots:
     void onControlMessage(const QByteArray& buffer);
     void onClipboardMessage(const QByteArray& buffer);
     void onFileMessage(const QByteArray& buffer);
+    void onToolsMessage(const QByteArray& buffer);
     void onLegacyMessage(const QByteArray& buffer);
 
     // Video worker feedback.

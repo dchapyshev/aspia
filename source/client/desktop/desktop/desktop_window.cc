@@ -54,6 +54,7 @@
 #include "proto/desktop_input.h"
 #include "proto/desktop_legacy.h"
 #include "proto/desktop_screen.h"
+#include "proto/desktop_tools.h"
 #include "proto/desktop_user.h"
 #include "proto/desktop_video.h"
 #include "proto/peer.h"
@@ -177,6 +178,20 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
         task_manager_->activateWindow();
     });
 
+    connect(toolbar_, &DesktopToolBar::sig_executeTool, this, [this](qint32 tool_id)
+    {
+        proto::tools::ClientToHost message;
+        message.mutable_execute_tool()->set_id(tool_id);
+        sendMessage(proto::desktop::CHANNEL_ID_TOOLS, serialize(message));
+    });
+
+    connect(toolbar_, &DesktopToolBar::sig_executeScript, this, [this](qint32 script_id)
+    {
+        proto::tools::ClientToHost message;
+        message.mutable_execute_script()->set_id(script_id);
+        sendMessage(proto::desktop::CHANNEL_ID_TOOLS, serialize(message));
+    });
+
     connect(toolbar_, &DesktopToolBar::sig_startStatistics, this, &DesktopWindow::onMetricsRequest);
     connect(toolbar_, &DesktopToolBar::sig_pasteAsKeystrokes, this, &DesktopWindow::onPasteKeystrokes);
     connect(toolbar_, &DesktopToolBar::sig_switchToFullscreen, this, &DesktopWindow::sig_fullscreenRequested);
@@ -237,6 +252,8 @@ void DesktopWindow::onRegisterWorkers()
     connect(network_worker, &NetworkWorker::sig_channel_6, this, &DesktopWindow::onClipboardMessage,
             Qt::QueuedConnection);
     connect(network_worker, &NetworkWorker::sig_channel_10, this, &DesktopWindow::onFileMessage,
+            Qt::QueuedConnection);
+    connect(network_worker, &NetworkWorker::sig_channel_12, this, &DesktopWindow::onToolsMessage,
             Qt::QueuedConnection);
     connect(network_worker, &NetworkWorker::sig_channel_0, this, &DesktopWindow::onLegacyMessage,
             Qt::QueuedConnection);
@@ -506,6 +523,8 @@ void DesktopWindow::onSessionListChanged(const proto::control::SessionList& sess
 void DesktopWindow::onInternalReset()
 {
     LOG(INFO) << "Internal reset";
+
+    toolbar_->setToolList(proto::tools::ToolList());
 
     if (task_manager_)
     {
@@ -1186,6 +1205,33 @@ void DesktopWindow::onFileMessage(const QByteArray& buffer)
 {
     if (clipboard_file_transfer_)
         clipboard_file_transfer_->onIncomingMessage(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::onToolsMessage(const QByteArray& buffer)
+{
+    proto::tools::HostToClient message;
+    if (!parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse tools message";
+        return;
+    }
+
+    if (message.has_tool_list())
+    {
+        toolbar_->setToolList(message.tool_list());
+    }
+    else if (message.has_result())
+    {
+        const proto::tools::ExecuteResult& result = message.result();
+        if (result.error_code() == proto::tools::ExecuteResult::SUCCESS)
+            return;
+
+        // The result is the same for a tool and for a script, and their identifiers are counted
+        // separately, so there is nothing to name here.
+        LOG(ERROR) << "Failed to start (id:" << result.id() << "error:" << result.error_code() << ")";
+        MsgBox::warning(this, tr("Failed to start on the remote computer."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

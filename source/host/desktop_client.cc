@@ -32,6 +32,7 @@
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_manager.h"
 #include "host/workers/task_mgr_worker.h"
+#include "host/workers/tools_worker.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_video.h"
@@ -46,14 +47,20 @@
 DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, parent),
       attach_deadline_(Clock::now() + Seconds(15)),
-      task_mgr_worker_(CoreApplication::findWorker<TaskMgrWorker>())
+      task_mgr_worker_(CoreApplication::findWorker<TaskMgrWorker>()),
+      tools_worker_(CoreApplication::findWorker<ToolsWorker>())
 {
     CLOG(INFO) << "Ctor";
     CCHECK(task_mgr_worker_);
+    CCHECK(tools_worker_);
 
 #if defined(Q_OS_WINDOWS)
-    connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent,
-            this, &DesktopClient::sendSessionList, Qt::QueuedConnection);
+    connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent, this, [this]()
+    {
+        sendSessionList();
+        sendToolList();
+    },
+    Qt::QueuedConnection);
 #endif // defined(Q_OS_WINDOWS)
 
     overflow_detection_enabled_ = !qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION");
@@ -161,6 +168,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         {
             config_ = message.config();
             sendIpcSessionMessage(net_channel_id, buffer);
+            sendToolList();
         }
         else if (message.has_capabilities())
         {
@@ -233,6 +241,22 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         {
             if (!result.isEmpty())
                 send(proto::desktop::CHANNEL_ID_TASK_MANAGER, result, true);
+        });
+    }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_TOOLS)
+    {
+        if (!tools_worker_)
+        {
+            CLOG(ERROR) << "Tools worker is not available";
+            return;
+        }
+
+        const SessionId session_id = ipc_channel_ ? ipc_channel_->sessionId() : kInvalidSessionId;
+
+        tools_worker_->query(this, session_id, buffer, [this](QByteArray result)
+        {
+            if (!result.isEmpty())
+                send(proto::desktop::CHANNEL_ID_TOOLS, result, true);
         });
     }
     else
@@ -381,6 +405,7 @@ void DesktopClient::onIpcNewConnection()
     }
 
     ipc_channel_->setPaused(false);
+    sendToolList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -459,6 +484,23 @@ void DesktopClient::sendSessionList()
     CLOG(INFO) << "Send:" << *session_list;
     send(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::sendToolList()
+{
+    if (!tools_worker_)
+        return;
+
+    // Without an attached agent there is no session the client sees: the worker replies with an
+    // empty list and the client hides the tools.
+    const SessionId session_id = ipc_channel_ ? ipc_channel_->sessionId() : kInvalidSessionId;
+
+    tools_worker_->requestToolList(this, session_id, [this](QByteArray result)
+    {
+        if (!result.isEmpty())
+            send(proto::desktop::CHANNEL_ID_TOOLS, result, true);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1,0 +1,89 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.tools;
+
+message Tool
+{
+    int32 id    = 1;
+    string name = 2;
+    bytes icon  = 3;
+}
+
+message Script
+{
+    int32 id           = 1;
+    string name        = 2;
+    string description = 3;
+    bool confirm       = 4;
+}
+
+message ToolList
+{
+    repeated Tool tool     = 1;
+    repeated Script script = 2;
+}
+
+message ToolListRequest
+{
+    uint32 dummy = 1; // Always set to 1.
+}
+
+message ExecuteTool
+{
+    int32 id = 1;
+}
+
+message ExecuteScript
+{
+    int32 id = 1;
+}
+
+message ExecuteResult
+{
+    enum ErrorCode
+    {
+        SUCCESS       = 0;
+        UNKNOWN       = 1; // The host has nothing with this identifier.
+        NOT_AVAILABLE = 2; // Nothing to start it in (no interactive user session).
+        LAUNCH_FAILED = 3;
+        BUSY          = 4; // Too many requests.
+    }
+
+    int32 id             = 1;
+    ErrorCode error_code = 2;
+}
+
+// Client -> Host (channel 12).
+message ClientToHost
+{
+    ToolListRequest tool_list_request = 1;
+    ExecuteTool execute_tool          = 2;
+    ExecuteScript execute_script      = 3;
+}
+
+// Client <- Host (channel 12).
+message HostToClient
+{
+    ToolList tool_list   = 1;
+    ExecuteResult result = 2;
+}

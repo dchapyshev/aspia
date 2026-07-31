@@ -43,6 +43,10 @@ class Screen;
 class ScreenList;
 } // namespace proto::screen
 
+namespace proto::tools {
+class ToolList;
+} // namespace proto::tools
+
 class DesktopToolBar final : public QFrame
 {
     Q_OBJECT
@@ -61,6 +65,7 @@ public:
 
     void setScreenList(const proto::screen::ScreenList& screen_list);
     void setSessionList(const proto::control::SessionList& session_list);
+    void setToolList(const proto::tools::ToolList& tool_list);
     void startRecording(bool enable);
 
     // Switches the toolbar between floating mode (used in a top-level desktop window) and tabbed
@@ -96,6 +101,8 @@ signals:
     void sig_startSession(proto::peer::SessionType session_type);
     void sig_powerControl(proto::power::Control_Action action, bool wait);
     void sig_startTaskManager();
+    void sig_executeTool(qint32 tool_id);
+    void sig_executeScript(qint32 script_id);
     void sig_startStatistics();
     void sig_minimizeSession();
     void sig_closeSession();
@@ -140,6 +147,7 @@ private:
     int screen_count_ = 0;
 
     std::unique_ptr<QMenu> power_menu_;
+    std::unique_ptr<QMenu> tools_menu_;
     QMenu* additional_menu_ = nullptr;
 
     QList<QAction*> screen_actions_;

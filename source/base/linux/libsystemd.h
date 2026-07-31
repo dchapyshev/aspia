@@ -41,6 +41,7 @@ public:
     static bool ensureLoaded();
 
     static int seatGetActive(const char* seat, char** session, uid_t* uid);
+    static int pidGetSession(pid_t pid, char** session);
     static int sessionGetVt(const char* session, unsigned* vtnr);
     static int sessionGetClass(const char* session, char** clazz);
     static int sessionGetType(const char* session, char** type);

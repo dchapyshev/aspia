@@ -406,6 +406,7 @@ void NetworkWorker::routeMessage(quint8 channel_id, const QByteArray& buffer)
         case 9:  emit sig_channel_9(buffer);  break;
         case 10: emit sig_channel_10(buffer); break;
         case 11: emit sig_channel_11(buffer); break;
+        case 12: emit sig_channel_12(buffer); break;
         default:
             LOG(WARNING) << "Message for unhandled channel" << channel_id;
             break;

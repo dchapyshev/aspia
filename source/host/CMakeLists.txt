@@ -235,8 +235,8 @@ if (WIN32)
     source_group(win FILES ${SOURCE_HOST_WIN})
 
     set(HOST_PLATFORM_LIBS
-        advapi32 avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi userenv uxtheme
-        version winmm wtsapi32
+        advapi32 avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi shlwapi userenv
+        uxtheme version winmm wtsapi32
         Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
 endif()
 

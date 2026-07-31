@@ -55,6 +55,7 @@
 #include "host/workers/service_worker.h"
 #include "host/workers/sys_info_worker.h"
 #include "host/workers/task_mgr_worker.h"
+#include "host/workers/tools_worker.h"
 #include "host/workers/update_worker.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -336,6 +337,7 @@ int runService(int& argc, char* argv[])
     application.addWorker(std::make_unique<ServiceWorker>());
     application.addWorker(std::make_unique<SysInfoWorker>());
     application.addWorker(std::make_unique<TaskMgrWorker>());
+    application.addWorker(std::make_unique<ToolsWorker>());
     application.addWorker(std::make_unique<UpdateWorker>());
 
     return Service().exec(application);

@@ -36,4 +36,5 @@ enum ChannelId
     CHANNEL_ID_USER         = 9;
     CHANNEL_ID_FILE         = 10;
     CHANNEL_ID_TASK_MANAGER = 11;
+    CHANNEL_ID_TOOLS        = 12;
 }

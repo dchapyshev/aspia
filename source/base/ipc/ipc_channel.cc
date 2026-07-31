@@ -34,6 +34,11 @@
 #include <sys/socket.h>
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <cstdlib>
+#include "base/linux/libsystemd.h"
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
 #if defined(Q_OS_MACOS)
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -65,41 +70,6 @@ quint32 makeInstanceId()
     static thread_local quint32 instance_id = 0;
     ++instance_id;
     return instance_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-SessionId clientSessionId(PipeHandle pipe_handle)
-{
-#if defined(Q_OS_WINDOWS)
-    ULONG session_id = kInvalidSessionId;
-    if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
-    {
-        PLOG(ERROR) << "GetNamedPipeClientSessionId failed";
-        return kInvalidSessionId;
-    }
-
-    return session_id;
-#else
-    Q_UNUSED(pipe_handle)
-    return kInvalidSessionId;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-SessionId serverSessionId(PipeHandle pipe_handle)
-{
-#if defined(Q_OS_WINDOWS)
-    ULONG session_id = kInvalidSessionId;
-    if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
-    {
-        PLOG(ERROR) << "GetNamedPipeServerSessionId failed";
-        return kInvalidSessionId;
-    }
-
-    return session_id;
-#else
-    return kInvalidSessionId;
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -149,6 +119,63 @@ quint32 peerProcessId(PipeHandle pipe_handle, bool is_server_side)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
+// Returns the id of the session the peer process belongs to.
+SessionId peerSessionId(PipeHandle pipe_handle, bool is_server_side)
+{
+#if defined(Q_OS_WINDOWS)
+    ULONG session_id = kInvalidSessionId;
+    const BOOL ok = is_server_side ?
+        GetNamedPipeClientSessionId(pipe_handle, &session_id) :
+        GetNamedPipeServerSessionId(pipe_handle, &session_id);
+    if (!ok)
+    {
+        PLOG(ERROR) << "GetNamedPipe" << (is_server_side ? "Client" : "Server") << "SessionId failed";
+        return kInvalidSessionId;
+    }
+
+    return session_id;
+#elif defined(Q_OS_MACOS)
+    // A session is identified by the uid of the user owning it (see activeConsoleSessionId), so the
+    // session of the peer is the uid it runs as.
+    Q_UNUSED(is_server_side)
+    uid_t uid = 0;
+    gid_t gid = 0;
+
+    if (getpeereid(pipe_handle, &uid, &gid) != 0)
+    {
+        PLOG(ERROR) << "getpeereid failed";
+        return kInvalidSessionId;
+    }
+
+    return static_cast<SessionId>(uid);
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // A session is identified by the VT number of its logind session (see activeConsoleSessionId).
+    // A peer that belongs to no seat session (a system service, a unit of the user manager) has no
+    // session id.
+    const quint32 process_id = peerProcessId(pipe_handle, is_server_side);
+    if (!process_id)
+        return kInvalidSessionId;
+
+    char* session = nullptr;
+    if (LibSystemd::pidGetSession(static_cast<pid_t>(process_id), &session) < 0 || !session)
+        return kInvalidSessionId;
+
+    unsigned vtnr = 0;
+    int ret = LibSystemd::sessionGetVt(session, &vtnr);
+    free(session);
+
+    if (ret < 0 || vtnr == 0)
+        return kInvalidSessionId;
+
+    return static_cast<SessionId>(vtnr);
+#else
+    Q_UNUSED(pipe_handle)
+    Q_UNUSED(is_server_side)
+    return kInvalidSessionId;
+#endif
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -164,7 +191,7 @@ IpcChannel::IpcChannel(QObject* parent)
 IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
-      session_id_(clientSessionId(stream.native_handle())),
+      session_id_(peerSessionId(stream.native_handle(), /* is_server_side */ true)),
       process_id_(peerProcessId(stream.native_handle(), /* is_server_side */ true)),
       channel_name_(channel_name),
       stream_(std::move(stream)),
@@ -310,7 +337,7 @@ bool IpcChannel::connectAttempt()
     }
 #endif
 
-    session_id_ = serverSessionId(stream_.native_handle());
+    session_id_ = peerSessionId(stream_.native_handle(), /* is_server_side */ false);
     process_id_ = peerProcessId(stream_.native_handle(), /* is_server_side */ false);
     return true;
 }
