@@ -20,6 +20,8 @@
 
 #include <wayland-client.h>
 
+#include <QByteArray>
+
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -31,6 +33,7 @@
 #include "base/logging.h"
 #include "base/desktop/differ.h"
 #include "base/desktop/frame_aligned.h"
+#include "base/linux/session_util.h"
 
 #include "wlr-screencopy-unstable-v1-client-protocol.h"
 
@@ -42,35 +45,31 @@ const int kAlignment = 32;
 // Connects to |uid|'s Wayland socket directly (no per-uid auth on the socket, unlike D-Bus).
 wl_display* connectDisplay(uid_t uid)
 {
-    for (const char* name : { "wayland-0", "wayland-1" })
+    const QByteArray path = SessionUtil::waylandSocket(uid).toLocal8Bit();
+    if (path.isEmpty())
+        return nullptr;
+
+    int fd = ::socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
+    if (fd < 0)
     {
-        char path[128];
-        std::snprintf(path, sizeof(path), "/run/user/%u/%s", static_cast<unsigned>(uid), name);
-        if (access(path, F_OK) != 0)
-            continue;
-
-        int fd = ::socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
-        if (fd < 0)
-            continue;
-
-        sockaddr_un addr;
-        memset(&addr, 0, sizeof(addr));
-        addr.sun_family = AF_UNIX;
-        std::strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
-
-        if (::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0)
-        {
-            ::close(fd);
-            continue;
-        }
-
-        // wl_display_connect_to_fd() takes ownership of the descriptor.
-        wl_display* display = wl_display_connect_to_fd(fd);
-        if (display)
-            return display;
+        PLOG(ERROR) << "socket failed";
+        return nullptr;
     }
 
-    return nullptr;
+    sockaddr_un addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    std::strncpy(addr.sun_path, path.constData(), sizeof(addr.sun_path) - 1);
+
+    if (::connect(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0)
+    {
+        PLOG(ERROR) << "connect failed" << path;
+        ::close(fd);
+        return nullptr;
+    }
+
+    // wl_display_connect_to_fd() takes ownership of the descriptor.
+    return wl_display_connect_to_fd(fd);
 }
 
 //--------------------------------------------------------------------------------------------------

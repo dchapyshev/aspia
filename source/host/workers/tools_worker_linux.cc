@@ -704,13 +704,11 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
             environment.insert("XAUTHORITY", xauthority);
     }
 
-    const QString runtime_dir = QString("/run/user/%1").arg(uid);
-    const QStringList sockets = QDir(runtime_dir).entryList(
-        QStringList() << "wayland-[0-9]", QDir::System | QDir::NoDotAndDotDot, QDir::Name);
-    if (!sockets.isEmpty())
+    const QString socket_path = SessionUtil::waylandSocket(uid);
+    if (!socket_path.isEmpty())
     {
-        environment.insert("XDG_RUNTIME_DIR", runtime_dir);
-        environment.insert("WAYLAND_DISPLAY", sockets.first());
+        environment.insert("XDG_RUNTIME_DIR", QString("/run/user/%1").arg(uid));
+        environment.insert("WAYLAND_DISPLAY", QFileInfo(socket_path).fileName());
     }
 
     if (!environment.contains("DISPLAY") && !environment.contains("WAYLAND_DISPLAY"))

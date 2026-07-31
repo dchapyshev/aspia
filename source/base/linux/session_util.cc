@@ -27,12 +27,15 @@
 #include <fcntl.h>
 #include <pwd.h>
 #include <signal.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/un.h>
 #include <unistd.h>
 
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <utility>
 
 namespace {
@@ -105,6 +108,31 @@ bool readXServerDisplay(uid_t uid, QString* display, QString* xauthority)
             else if (arg == "-auth" && (i + 1) < args.size())
             {
                 found_xauthority = QString::fromLocal8Bit(args[i + 1]);
+            }
+        }
+
+        // Not every server is told its number that way: one started with "-displayfd" takes a free
+        // number itself (that is how GDM starts Xorg on Ubuntu), leaving the name of the socket it
+        // listens on as the only place to read the number from. That directory, unlike the runtime
+        // directory of a user, is shared by the whole machine, so whose server a socket belongs to is
+        // told by its owner.
+        if (found_display.isEmpty())
+        {
+            const QString socket_dir("/tmp/.X11-unix");
+            const QStringList sockets = QDir(socket_dir).entryList(
+                QStringList() << "X[0-9]*", QDir::System | QDir::NoDotAndDotDot, QDir::Name);
+
+            for (const QString& socket : sockets)
+            {
+                struct stat socket_st;
+                if (stat((socket_dir + '/' + socket).toLocal8Bit().constData(), &socket_st) != 0 ||
+                    socket_st.st_uid != uid)
+                {
+                    continue;
+                }
+
+                found_display = ':' + socket.mid(1);
+                break;
             }
         }
 
@@ -306,6 +334,44 @@ bool SessionUtil::readX11Env(uid_t uid, const QString& session_id, QString* disp
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString SessionUtil::waylandSocket(uid_t uid)
+{
+    const QString socket_dir = QString("/run/user/%1").arg(uid);
+
+    // Listing only the sockets of the directory leaves out the lock file a compositor keeps next to
+    // its own (wayland-N.lock).
+    const QStringList sockets = QDir(socket_dir).entryList(
+        QStringList() << "wayland-*", QDir::System | QDir::NoDotAndDotDot, QDir::Name);
+
+    for (const QString& name : sockets)
+    {
+        const QString path = socket_dir + '/' + name;
+
+        const int fd = ::socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
+        if (fd < 0)
+        {
+            PLOG(ERROR) << "socket failed";
+            return QString();
+        }
+
+        sockaddr_un address;
+        memset(&address, 0, sizeof(address));
+        address.sun_family = AF_UNIX;
+        strncpy(address.sun_path, path.toLocal8Bit().constData(), sizeof(address.sun_path) - 1);
+
+        // A live compositor accepts the connection and a socket left behind by a dead one refuses it.
+        const int result = ::connect(fd, reinterpret_cast<sockaddr*>(&address), sizeof(address));
+        ::close(fd);
+
+        if (result == 0)
+            return path;
+    }
+
+    return QString();
 }
 
 //--------------------------------------------------------------------------------------------------

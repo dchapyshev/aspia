@@ -41,6 +41,7 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/linux/libsystemd.h"
+#include "base/linux/session_util.h"
 #include "host/linux/egl_dmabuf.h"
 #include "host/linux/libdrm.h"
 #include "host/linux/wayland_output_layout.h"
@@ -199,16 +200,7 @@ QList<WaylandOutputLayout::Output> queryCompositorOutputs()
         return {};
     free(session);
 
-    QString socket_path;
-    for (const char* name : { "wayland-0", "wayland-1" })
-    {
-        const QString candidate = QString("/run/user/%1/").arg(uid) + name;
-        if (access(candidate.toLocal8Bit().constData(), F_OK) == 0)
-        {
-            socket_path = candidate;
-            break;
-        }
-    }
+    const QString socket_path = SessionUtil::waylandSocket(uid);
     if (socket_path.isEmpty())
         return {};
 

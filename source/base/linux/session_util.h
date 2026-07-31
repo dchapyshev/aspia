@@ -74,6 +74,13 @@ public:
     // empty and false is returned if no display is found.
     static bool readX11Env(uid_t uid, const QString& session_id, QString* display, QString* xauthority);
 
+    // Returns the path of the Wayland socket |uid|'s compositor listens on, or an empty string if it
+    // has none. The number in the name is taken by the compositor at startup (the first free one of
+    // wayland-0 ... wayland-32), so it is not always 0 or 1: a compositor that died without cleaning up
+    // leaves its socket behind and the next one moves on to the following number. Liveness is what
+    // separates the two, so the socket is connected to rather than merely looked for.
+    static QString waylandSocket(uid_t uid);
+
     // Returns the D-Bus session bus address advertised by |uid|'s graphical session, or an empty string
     // if none is found. A normal login uses the systemd user bus at /run/user/UID/bus, but a greeter
     // (e.g. gdm) runs its compositor on a private bus (unix:abstract=...); reading the address from the
