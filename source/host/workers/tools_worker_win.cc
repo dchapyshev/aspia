@@ -358,12 +358,14 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 // that user, so for an administrator (whose token UAC splits in two) the elevated token linked to
 // the filtered one is taken; a user without administrative rights simply gets their own token.
 //
-// With |ui_access| the token is marked as having UI access: a process created by the service can not
-// take the foreground away from the windows already open in the session (the foreground lock), and
-// the service can not reach those windows itself - sessions are isolated. A process with UI access is
-// exempt from the lock, so the tool appears in front instead of behind everything. Every process
-// started from it inherits the flag, so it is not for something that outlives the window it opens.
-bool createToken(SessionId session_id, bool elevated, bool ui_access, ScopedHandle* token_out)
+// An elevated token is additionally marked as having UI access: a process created by the service can
+// not take the foreground away from the windows already open in the session (the foreground lock), and
+// a process with UI access is exempt from that lock, so the tool appears in front instead of behind
+// everything. The mark goes on an elevated token only. Every process started from the token inherits
+// it, and on the token of an ordinary user it would leave that user with medium-integrity processes
+// exempt from the isolation of the user interface - a way around that isolation rather than a way to
+// the front.
+bool createToken(SessionId session_id, bool elevated, ScopedHandle* token_out)
 {
     ScopedHandle user_token;
     if (!WTSQueryUserToken(session_id, user_token.recieve()))
@@ -408,12 +410,14 @@ bool createToken(SessionId session_id, bool elevated, bool ui_access, ScopedHand
         }
     }
 
+    const bool is_elevated = token.isValid();
+
     // The user is not an administrator, UAC is disabled or the linked token is unavailable: their
     // own token already carries everything they have.
     if (!token.isValid())
         token.reset(user_token.release());
 
-    if (ui_access)
+    if (is_elevated)
     {
         ScopedHandle privileged_token;
         if (!createPrivilegedToken(&privileged_token))
@@ -949,7 +953,7 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
     // The administrative tools are started with the elevated token of the logged on user, so they
     // work without asking them for elevation.
     ScopedHandle token;
-    if (!createToken(session_id, tool.elevated, /* ui_access */ true, &token))
+    if (!createToken(session_id, tool.elevated, &token))
     {
         LOG(ERROR) << "createToken failed (sid" << session_id << ")";
         return false;
@@ -1021,9 +1025,7 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
 
     if (script.as_user)
     {
-        // Everything the shell of the user starts afterwards inherits its token, so this one is
-        // taken without the UI access flag.
-        if (!createToken(session_id, /* elevated */ false, /* ui_access */ false, &token))
+        if (!createToken(session_id, /* elevated */ false, &token))
         {
             LOG(ERROR) << "createToken failed (sid" << session_id << ")";
             return false;
