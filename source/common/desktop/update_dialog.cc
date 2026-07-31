@@ -126,9 +126,8 @@ void UpdateDialog::onUpdateNow()
     QString message3 = tr("All unsaved data will be lost.");
     QString question = tr("Continue?");
 
-    if (MsgBox::question(this,
-            QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                .arg(message1, message2, message3, question)) == MsgBox::Yes)
+    if (MsgBox::question(this, QString("%1\n%2\n%3\n%4")
+        .arg(message1, message2, message3, question)) == MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Update confirmed by user";
 

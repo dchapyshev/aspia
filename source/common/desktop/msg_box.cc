@@ -97,5 +97,6 @@ int MsgBox::information(QWidget* parent, const QString& text, StandardButtons bu
 int MsgBox::question(QWidget* parent, const QString& text, StandardButtons buttons)
 {
     MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
+    message_box.setTextFormat(Qt::PlainText);
     return message_box.exec();
 }

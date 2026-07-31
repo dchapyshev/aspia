@@ -650,7 +650,7 @@ void TaskManagerWindow::onEndProcess()
     {
         if (MsgBox::question(this,
                 tr("Do you really want to end \"%1\" process?")
-                    .arg(current_item->text(PROC_COL_NAME).toHtmlEscaped())) == MsgBox::Yes)
+                    .arg(current_item->text(PROC_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendEndProcessRequest(current_item->processId());
@@ -700,7 +700,7 @@ void TaskManagerWindow::onDisconnectUser()
     {
         if (MsgBox::question(this,
                 tr("Do you really want to disconnect user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME).toHtmlEscaped())) == MsgBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
@@ -723,7 +723,7 @@ void TaskManagerWindow::onLogoffUser()
     {
         if (MsgBox::question(this,
                 tr("Do you really want to end user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME).toHtmlEscaped())) == MsgBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
