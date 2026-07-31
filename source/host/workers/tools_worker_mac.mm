@@ -18,12 +18,12 @@
 #include "host/workers/tools_worker.h"
 
 #include <QFileInfo>
+#include <QProcess>
 #include <QSettings>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <ImageIO/ImageIO.h>
 #include <pwd.h>
-#include <cstdlib>
 
 #include "base/logging.h"
 #include "base/session_id.h"
@@ -221,17 +221,39 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
 
     // The service runs as root outside any GUI session: "launchctl asuser <uid>" puts the tool into
     // the per-user launchd domain (the one with access to WindowServer) and "sudo -u" drops root to
-    // that user. It is started through LaunchServices ("open"), just like the user would do it.
-    const QByteArray command_line = QString("launchctl asuser %1 sudo -u %2 open \"%3\"")
-        .arg(session_id).arg(user_name, tool.program).toLocal8Bit();
+    // that user. It is started through LaunchServices ("open"), just like the user would do it. Every
+    // value goes as an argument of its own, so no shell has to be trusted with the path of the tool.
+    QStringList arguments;
+    arguments << "asuser" << QString::number(session_id) << "sudo" << "-u" << user_name
+              << "open" << tool.program;
 
     LOG(INFO) << "Starting tool" << tool.name << "in session" << session_id
-              << "(cmd:" << command_line << ")";
+              << "(args:" << arguments << ")";
 
-    const int ret = system(command_line.constData());
-    LOG(INFO) << "system result:" << ret;
+    QProcess process;
+    process.setProgram("launchctl");
+    process.setArguments(arguments);
+    process.start();
 
-    return ret == 0;
+    // "open" hands the bundle over to LaunchServices and returns; waiting for it without an end
+    // would hold the worker forever if that answer never comes.
+    if (!process.waitForFinished(15000))
+    {
+        LOG(ERROR) << "Tool launch did not finish in time";
+        process.kill();
+        process.waitForFinished(1000);
+        return false;
+    }
+
+    const int exit_code = process.exitCode();
+    if (exit_code != 0)
+    {
+        LOG(ERROR) << "Tool launch failed (code:" << exit_code
+                   << "output:" << process.readAllStandardError().trimmed() << ")";
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

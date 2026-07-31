@@ -50,7 +50,8 @@
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
-#include <cstdlib>
+#include <QProcess>
+
 #include <pwd.h>
 #endif // defined(Q_OS_MACOS)
 
@@ -947,17 +948,35 @@ void UserSession::attach(const Location& location, AttachReason reason, SessionI
     // otherwise the instance a bare "open" would reuse, so the GUI would never appear. Kill any stale
     // "--hidden" GUI first so the forced-new launch does not pile up duplicates on attach retries (the
     // desktop agent runs with "--agent", so it is not matched).
-    QString command = QString(
-        "launchctl asuser %1 sudo -u %2 sh -c "
-        "'pkill -f \"aspia_host --hidden\"; open -n \"%3\" --args --hidden'")
-        .arg(session_id).arg(user_name, app_bundle);
+    //
+    // The two commands need a shell of their own, but it is handed over as a single argument, so
+    // nothing here is parsed twice.
+    QStringList arguments;
+    arguments << "asuser" << QString::number(session_id) << "sudo" << "-u" << user_name
+              << "sh" << "-c"
+              << QString("pkill -f \"aspia_host --hidden\"; open -n \"%1\" --args --hidden")
+                     .arg(app_bundle);
 
-    const QByteArray command_line = command.toLocal8Bit();
+    LOG(INFO) << "Start user session GUI:" << arguments;
 
-    LOG(INFO) << "Start user session GUI:" << command_line;
+    QProcess process;
+    process.setProgram("launchctl");
+    process.setArguments(arguments);
+    process.start();
 
-    int ret = system(command_line.data());
-    LOG(INFO) << "system result:" << ret;
+    // "open" returns once LaunchServices has taken the request; without an end to the wait this
+    // thread would hang if that never happens.
+    if (!process.waitForFinished(15000))
+    {
+        LOG(ERROR) << "GUI launch did not finish in time";
+        process.kill();
+        process.waitForFinished(1000);
+    }
+    else
+    {
+        LOG(INFO) << "GUI launch finished (code:" << process.exitCode()
+                  << "output:" << process.readAllStandardError().trimmed() << ")";
+    }
 #else
     NOTIMPLEMENTED();
 #endif

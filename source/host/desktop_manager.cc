@@ -41,9 +41,10 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include <QProcess>
+
 #include "base/linux/session_util.h"
 #include <signal.h>
-#include <cstdlib>
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
@@ -678,9 +679,6 @@ bool DesktopManager::startProcess()
     }
 
     const QString log_level = QString::fromLocal8Bit(qgetenv("ASPIA_LOG_LEVEL"));
-    QString log_setenv;
-    if (!log_level.isEmpty())
-        log_setenv = QString(" --setenv=ASPIA_LOG_LEVEL=%1").arg(log_level);
 
     // The agent ALWAYS runs as root via a system transient unit and derives the capture type itself
     // from logind (and, for X11, reads the display and X authority cookie from the session's own
@@ -713,16 +711,34 @@ bool DesktopManager::startProcess()
         }
     }
 
-    const QByteArray command_line =
-        QString("systemd-run --collect%1 %2 --agent desktop")
-            .arg(log_setenv, QCoreApplication::applicationFilePath())
-            .toLocal8Bit();
+    QStringList arguments;
+    arguments << "--collect";
 
-    LOG(INFO) << "Start desktop session agent:" << command_line;
+    if (!log_level.isEmpty())
+        arguments << ("--setenv=ASPIA_LOG_LEVEL=" + log_level);
 
-    int ret = system(command_line.data());
-    LOG(INFO) << "system result:" << ret;
-    return ret == 0;
+    arguments << QCoreApplication::applicationFilePath() << "--agent" << "desktop";
+
+    LOG(INFO) << "Start desktop session agent:" << arguments;
+
+    QProcess process;
+    process.setProgram("systemd-run");
+    process.setArguments(arguments);
+    process.start();
+
+    if (!process.waitForFinished(15000))
+    {
+        LOG(ERROR) << "Desktop agent launch did not finish in time";
+        process.kill();
+        process.waitForFinished(1000);
+        return false;
+    }
+
+    const int exit_code = process.exitCode();
+    LOG(INFO) << "Desktop agent launch finished (code:" << exit_code
+              << "output:" << process.readAllStandardError().trimmed() << ")";
+
+    return exit_code == 0;
 #elif defined(Q_OS_MACOS)
     // The macOS desktop agent is a launchd agent, not a process the service spawns: attach() returns
     // before reaching startProcess(), so this is never called.
