@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include "base/scoped_qpointer.h"
 #include "client/desktop/tab.h"
 #include "proto/desktop_power.h"
 
@@ -146,8 +147,8 @@ private:
     qint64 current_screen_id_ = -1;
     int screen_count_ = 0;
 
-    std::unique_ptr<QMenu> power_menu_;
-    std::unique_ptr<QMenu> tools_menu_;
+    ScopedQPointer<QMenu> power_menu_;
+    ScopedQPointer<QMenu> tools_menu_;
     QMenu* additional_menu_ = nullptr;
 
     QList<QAction*> screen_actions_;
