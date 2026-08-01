@@ -54,11 +54,14 @@ private:
 
     // Shared between the mapper and its detached worker thread. The worker posts the result while
     // holding |mutex|; the destructor nulls |owner| under the same mutex, so the worker never
-    // touches a destroyed mapper.
+    // touches a destroyed mapper. |result| is the copy left for the destructor: the posted call is
+    // dropped by Qt if the mapper dies before delivery, and then this is the only place that knows
+    // about the mapping added by the worker.
     struct WorkerContext
     {
         std::mutex mutex;
         UpnpPortMapper* owner = nullptr;
+        Result result;
     };
 
     static Result doMapping(quint16 internal_port);

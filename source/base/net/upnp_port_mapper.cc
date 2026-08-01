@@ -71,6 +71,8 @@ UpnpPortMapper::UpnpPortMapper(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UpnpPortMapper::~UpnpPortMapper()
 {
+    Result pending;
+
     if (worker_context_)
     {
         // The worker posts its result only while |owner| is non-null under this mutex, so after
@@ -78,6 +80,10 @@ UpnpPortMapper::~UpnpPortMapper()
         // finishes on its own.
         std::scoped_lock lock(worker_context_->mutex);
         worker_context_->owner = nullptr;
+
+        // The worker may have already added the mapping and posted the result, which is never
+        // delivered to the dying mapper. Then onMappingFinished did not run and |mapped_| is false.
+        pending = worker_context_->result;
     }
 
     if (mapped_)
@@ -85,6 +91,11 @@ UpnpPortMapper::~UpnpPortMapper()
         // Remove the mapping without blocking the destruction. The thread owns copies of the data it
         // needs, so it stays valid after this object is gone.
         std::thread(&UpnpPortMapper::doRemoveMapping, control_url_, service_type_, external_port_).detach();
+    }
+    else if (pending.success)
+    {
+        std::thread(&UpnpPortMapper::doRemoveMapping, pending.control_url, pending.service_type,
+                    pending.external_port).detach();
     }
 }
 
@@ -108,17 +119,30 @@ void UpnpPortMapper::addUdpMapping(quint16 internal_port)
     std::thread([context = worker_context_, internal_port]()
     {
         Result result = doMapping(internal_port);
+        bool orphaned;
 
-        std::scoped_lock lock(context->mutex);
-
-        UpnpPortMapper* owner = context->owner;
-        if (!owner)
-            return;
-
-        QMetaObject::invokeMethod(owner, [owner, result]()
         {
-            owner->onMappingFinished(result);
-        }, Qt::QueuedConnection);
+            std::scoped_lock lock(context->mutex);
+
+            // Leave the result to the destructor: it is the only one who can remove the mapping if
+            // the mapper dies before the posted call is delivered.
+            context->result = result;
+
+            UpnpPortMapper* owner = context->owner;
+            orphaned = (owner == nullptr);
+
+            if (owner)
+            {
+                QMetaObject::invokeMethod(owner, [owner, result]()
+                {
+                    owner->onMappingFinished(result);
+                }, Qt::QueuedConnection);
+            }
+        }
+
+        // The mapper is already destroyed, so nobody else knows about the mapping just added.
+        if (orphaned && result.success)
+            doRemoveMapping(result.control_url, result.service_type, result.external_port);
     }).detach();
 }
 
