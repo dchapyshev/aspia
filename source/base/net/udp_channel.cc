@@ -243,9 +243,10 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     ENetAddress enet_address;
     enet_address.port = port;
 
-    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    // A numeric address only. All the callers pass an IP anyway.
+    if (enet_address_set_host_ip(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        CLOG(ERROR) << "Failed to resolve address:" << address;
+        CLOG(ERROR) << "Invalid address:" << address;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -304,9 +305,10 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     ENetAddress enet_address;
     enet_address.port = port;
 
-    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    // A numeric address only, see the comment in connectTo() above.
+    if (enet_address_set_host_ip(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        CLOG(ERROR) << "enet_address_set_host failed";
+        CLOG(ERROR) << "Invalid address:" << address;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -344,9 +346,10 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
     ENetAddress enet_address;
     enet_address.port = port;
 
-    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    // A numeric address only, see the comment in connectTo().
+    if (enet_address_set_host_ip(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        CLOG(ERROR) << "enet_address_set_host failed";
+        CLOG(ERROR) << "Invalid peer address:" << address;
         return;
     }
 
