@@ -68,19 +68,19 @@ void AudioDecoder::destroyDecoder()
 //--------------------------------------------------------------------------------------------------
 bool AudioDecoder::resetForPacket(const proto::audio::Packet& packet)
 {
+    if (packet.channels() <= 0 || packet.channels() > 2 || packet.sampling_rate() != kSamplingRate)
+    {
+        LOG(ERROR) << "Unsupported OPUS parameters:" << packet.channels() << "channels with"
+                   << packet.sampling_rate() << "samples per second";
+        return false;
+    }
+
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
         destroyDecoder();
 
         channels_ = packet.channels();
         sampling_rate_ = packet.sampling_rate();
-
-        if (channels_ <= 0 || channels_ > 2 || sampling_rate_ != kSamplingRate)
-        {
-            LOG(ERROR) << "Unsupported OPUS parameters:" << channels_ << "channels with"
-                       << sampling_rate_ << "samples per second";
-            return false;
-        }
     }
 
     if (!decoder_)
