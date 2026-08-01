@@ -40,6 +40,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
+#include <cerrno>
 #endif // defined(Q_OS_UNIX)
 
 namespace {
@@ -259,8 +260,16 @@ bool IpcServer::Listener::listen(asio::io_context& io_context,
         std::string channel_file = channel_path.toLocal8Bit().toStdString();
 
         // A stale socket file (e.g. a fixed-name channel left over from a previous run) makes bind()
-        // fail with EADDRINUSE; remove it first.
-        ::unlink(channel_file.c_str());
+        // fail with EADDRINUSE; remove it first. The result matters: the fixed-name channels sit in
+        // a world-writable directory, so any local user can occupy the path with a directory before
+        // the service starts for the first time. unlink() answers EISDIR for that one and cannot
+        // clear it even for root, and with the result dropped the only thing left in the log was a
+        // misleading EADDRINUSE from bind().
+        if (::unlink(channel_file.c_str()) != 0 && errno != ENOENT)
+        {
+            PLOG(ERROR) << "Unable to free the channel path (path:" << channel_file << ")";
+            return false;
+        }
 
         asio::local::stream_protocol::endpoint endpoint(channel_file);
         acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
