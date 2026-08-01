@@ -572,8 +572,8 @@ void VideoEncoderVpx::addRectToActiveMap(const QRect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
     int top = rect.top() / kMacroBlockSize;
-    int right = (rect.right() - 1) / kMacroBlockSize;
-    int bottom = (rect.bottom() - 1) / kMacroBlockSize;
+    int right = rect.right() / kMacroBlockSize;
+    int bottom = rect.bottom() / kMacroBlockSize;
 
     quint8* map = active_map_.active_map + static_cast<quint32>(top) * active_map_.cols;
 
