@@ -138,7 +138,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, Seconds timeo
     auto io = io_;
     watchdog->async_wait([this, io, watchdog](const std::error_code& error_code)
     {
-        if (io->alive && !error_code)
+        if (io->alive && !error_code && !isConnected())
             onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     });
 
