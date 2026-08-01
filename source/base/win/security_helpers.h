@@ -74,6 +74,10 @@ ScopedSd convertSddlToSd(const QString& sddl);
 // LocalSystem and the local Administrators group. The user identified by
 // |user_token| keeps read/query/synchronize access. |process| must have
 // WRITE_DAC access (handles returned by CreateProcessAsUser do by default).
+// This stops the ordinary ways of killing the process, Task Manager included,
+// and is not meant to hold against a user willing to write code for it: the
+// owner of the process object stays the user (implicit WRITE_DAC), and the
+// thread objects take their security from the default DACL of the token.
 bool setProtectiveProcessDacl(HANDLE process, HANDLE user_token);
 
 #endif // BASE_WIN_SECURITY_HELPERS_H
