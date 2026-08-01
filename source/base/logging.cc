@@ -428,7 +428,7 @@ LogMessage::LogMessage(std::string_view file, int line, std::string_view functio
 {
     std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
-    stream_ << "Check failed: " << result->data();
+    stream_ << "Check failed: " << qUtf8Printable(*result);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ LogMessage::LogMessage(std::string_view file, int line, std::string_view functio
 {
     std::unique_ptr<QString> result_deleter(result);
     init(file, line, function);
-    stream_ << "Check failed: " << result->data();
+    stream_ << "Check failed: " << qUtf8Printable(*result);
 }
 
 //--------------------------------------------------------------------------------------------------
