@@ -418,15 +418,15 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     QByteArray seed_key;
     User user;
 
-    if (user_list_)
-    {
-        user = user_list_->find(user_name);
-        seed_key = user_list_->seedKey();
-    }
-    else
+    if (!user_list_)
     {
         CLOG(INFO) << "UserList is nullptr";
+        finish(FROM_HERE, ErrorCode::ACCESS_DENIED);
+        return;
     }
+
+    user = user_list_->find(user_name);
+    seed_key = user_list_->seedKey();
 
     if (seed_key.isEmpty())
     {
