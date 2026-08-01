@@ -316,7 +316,7 @@ CoreApplication::CoreApplication(int& argc, char* argv[])
         last_active_session_ = activeConsoleSessionId();
 
         session_notifier_ = new QSocketNotifier(
-            LibSystemd::loginMonitorGetFd(login_monitor_), QSocketNotifier::Read);
+            LibSystemd::loginMonitorGetFd(login_monitor_), QSocketNotifier::Read, this);
 
         connect(session_notifier_, &QSocketNotifier::activated, this, [this]()
         {
@@ -353,6 +353,9 @@ CoreApplication::~CoreApplication()
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    if (session_notifier_)
+        session_notifier_->setEnabled(false);
+
     if (login_monitor_)
         login_monitor_ = LibSystemd::loginMonitorUnref(login_monitor_);
 #endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
