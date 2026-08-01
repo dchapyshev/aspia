@@ -57,7 +57,7 @@ public:
     Listener(IpcServer* server, size_t index);
     ~Listener();
 
-    void dettach() { server_ = nullptr; }
+    void dettach();
 
     bool listen(asio::io_context& io_context,
                 const QString& channel_name,
@@ -96,6 +96,21 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
 
 //--------------------------------------------------------------------------------------------------
 IpcServer::Listener::~Listener() = default;
+
+//--------------------------------------------------------------------------------------------------
+void IpcServer::Listener::dettach()
+{
+    server_ = nullptr;
+
+    std::error_code ignored_error;
+#if defined(Q_OS_WINDOWS)
+    if (handle_)
+        handle_->close(ignored_error);
+#elif defined(Q_OS_UNIX)
+    if (acceptor_)
+        acceptor_->close(ignored_error);
+#endif
+}
 
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::Listener::listen(asio::io_context& io_context,
