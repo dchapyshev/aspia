@@ -257,31 +257,44 @@ void StunPeer::onReadyRead()
     enet_buffer.data = recv_buffer;
     enet_buffer.dataLength = static_cast<size_t>(kMaxRecvSize);
 
-    int received = enet_socket_receive(socket_, nullptr, &enet_buffer, 1);
+    // Nothing below is fatal on purpose. The socket is bound to a wildcard address and accepts
+    // datagrams from anyone, and a failed receive is how an ICMP port unreachable from a previous
+    // send surfaces here. A stray packet must not cancel the discovery: the attempt timer repeats
+    // the request, and the error is reported only when the attempts run out.
+    ENetAddress from;
+
+    int received = enet_socket_receive(socket_, &from, &enet_buffer, 1);
     if (received <= 0)
     {
         CLOG(ERROR) << "Failed to receive STUN response";
-        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    const QHostAddress from_address(ENET_NET_TO_HOST_32(from.host));
+
+    if (from.port != stun_port_ || from_address != stun_address_)
+    {
+        CLOG(ERROR) << "Datagram from an unexpected source:" << from_address << ":" << from.port;
         return;
     }
 
     proto::stun::StunToPeer message;
     if (!parse(QByteArray(recv_buffer, received), &message))
     {
-        onErrorOccurred(FROM_HERE);
+        CLOG(ERROR) << "Unable to parse the STUN response";
         return;
     }
 
     if (!message.has_endpoint())
     {
-        onErrorOccurred(FROM_HERE);
+        CLOG(ERROR) << "No endpoint in the STUN response";
         return;
     }
 
     const proto::stun::Endpoint& endpoint = message.endpoint();
     if (endpoint.transaction_id() != transaction_id_)
     {
-        onErrorOccurred(FROM_HERE);
+        CLOG(ERROR) << "Unexpected transaction id in the STUN response";
         return;
     }
 
@@ -292,13 +305,13 @@ void StunPeer::onReadyRead()
 
     if (!NetUtils::isValidIpAddress(ip_address))
     {
-        onErrorOccurred(FROM_HERE);
+        CLOG(ERROR) << "Invalid IP address in the STUN response:" << ip_address;
         return;
     }
 
     if (!NetUtils::isValidPort(port))
     {
-        onErrorOccurred(FROM_HERE);
+        CLOG(ERROR) << "Invalid port in the STUN response:" << port;
         return;
     }
 
