@@ -320,16 +320,14 @@ QVersionNumber OSInfo::kernel32BaseVersion() const
     {
         std::unique_ptr<FileVersionInfo> file_version_info =
             FileVersionInfo::createFileVersionInfo("kernel32.dll");
-        if (!file_version_info)
-        {
-            // crbug.com/912061: on some systems it seems kernel32.dll might be corrupted or not in
-            // a state to get version info. In this case try kernelbase.dll as a fallback.
+
+        if (!file_version_info || !file_version_info->fixed_file_info())
             file_version_info = FileVersionInfo::createFileVersionInfo("kernelbase.dll");
-        }
 
         CHECK(file_version_info);
 
         const VS_FIXEDFILEINFO* file_info = file_version_info->fixed_file_info();
+        CHECK(file_info);
 
         const int major = static_cast<int>(HIWORD(file_info->dwFileVersionMS));
         const int minor = static_cast<int>(LOWORD(file_info->dwFileVersionMS));
