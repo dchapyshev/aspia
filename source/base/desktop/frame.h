@@ -54,11 +54,6 @@ public:
     void setCapturerType(quint32 capturer_type) { capturer_type_ = capturer_type; }
     quint32 capturerType() const { return capturer_type_; }
 
-    // Copies various information from |other|. Anything initialized in constructor are not copied.
-    // This function is usually used when sharing a source Frame with several clients: the original
-    // Frame should be kept unchanged.
-    void copyFrameInfoFrom(const Frame& other);
-
 protected:
     Frame(const QSize& size, int stride, quint8* data);
 

@@ -49,7 +49,11 @@ bool Frame::contains(int x, int y) const
 //--------------------------------------------------------------------------------------------------
 void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect& dest_rect)
 {
-    DCHECK(QRect(QPoint(0, 0), size()).contains(dest_rect));
+    if (!QRect(QPoint(0, 0), size()).contains(dest_rect))
+    {
+        LOG(ERROR) << "Destination rectangle" << dest_rect << "is outside the frame" << size();
+        return;
+    }
 
     quint8* dest = frameDataAtPos(dest_rect.topLeft());
     size_t bytes_per_row = static_cast<size_t>(kBytesPerPixel * dest_rect.width());
@@ -65,6 +69,15 @@ void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect
 //--------------------------------------------------------------------------------------------------
 void Frame::copyPixelsFrom(const Frame& src_frame, const QPoint& src_pos, const QRect& dest_rect)
 {
+    const QRect src_rect(src_pos, dest_rect.size());
+
+    if (!QRect(QPoint(0, 0), src_frame.size()).contains(src_rect))
+    {
+        LOG(ERROR) << "Source rectangle" << src_rect << "is outside the source frame"
+                   << src_frame.size();
+        return;
+    }
+
     copyPixelsFrom(src_frame.frameDataAtPos(src_pos), src_frame.stride(), dest_rect);
 }
 
@@ -107,13 +120,4 @@ quint8* Frame::frameDataAtPos(const QPoint& pos) const
 quint8* Frame::frameDataAtPos(int x, int y) const
 {
     return frameData() + stride() * y + kBytesPerPixel * x;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Frame::copyFrameInfoFrom(const Frame& other)
-{
-    updated_region_ = other.updated_region_;
-    top_left_ = other.top_left_;
-    dpi_ = other.dpi_;
-    capturer_type_ = other.capturer_type_;
 }
