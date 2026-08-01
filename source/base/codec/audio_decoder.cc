@@ -26,9 +26,6 @@
 
 namespace {
 
-// Maximum size of an Opus frame in milliseconds.
-const MilliSeconds kMaxFrameSizeMs { 120 };
-
 // Hosts will never generate more than 100 frames in a single packet.
 const int kMaxFramesPerPacket = 100;
 
@@ -118,23 +115,48 @@ std::unique_ptr<proto::audio::Packet> AudioDecoder::decode(const proto::audio::P
     decoded_packet->set_bytes_per_sample(proto::audio::Packet::BYTES_PER_SAMPLE_2);
     decoded_packet->set_channels(packet.channels());
 
-    int max_frame_samples = static_cast<int>(
-        kMaxFrameSizeMs * kSamplingRate / MilliSeconds(1000));
-    int max_frame_bytes = max_frame_samples * channels_ * decoded_packet->bytes_per_sample();
+    const int bytes_per_sample = channels_ * decoded_packet->bytes_per_sample();
+
+    // Every frame declares in its TOC byte how many samples it decodes into, so the buffer is
+    // sized by the content of the packet instead of the 120 ms worst case per frame.
+    int total_samples = 0;
+
+    for (int i = 0; i < packet.data_size(); ++i)
+    {
+        const std::string& frame = packet.data(i);
+        if (frame.empty())
+        {
+            LOG(ERROR) << "Received an empty OPUS frame";
+            return nullptr;
+        }
+
+        int frame_samples = opus_packet_get_nb_samples(
+            reinterpret_cast<const unsigned char*>(frame.data()),
+            static_cast<opus_int32>(frame.size()), kSamplingRate);
+        if (frame_samples <= 0)
+        {
+            LOG(ERROR) << "Invalid OPUS frame. Error code:" << frame_samples;
+            return nullptr;
+        }
+
+        total_samples += frame_samples;
+    }
 
     std::string* decoded_data = decoded_packet->add_data();
-    decoded_data->resize(
-        static_cast<size_t>(packet.data_size()) * static_cast<size_t>(max_frame_bytes));
+    decoded_data->resize(static_cast<size_t>(total_samples) * static_cast<size_t>(bytes_per_sample));
     int buffer_pos = 0;
 
     for (int i = 0; i < packet.data_size(); ++i)
     {
         qint16* pcm_buffer = reinterpret_cast<qint16*>(std::data(*decoded_data) + buffer_pos);
-        CHECK_LE(buffer_pos + max_frame_bytes, static_cast<int>(decoded_data->size()));
         const std::string& frame = packet.data(i);
         const unsigned char* frame_data = reinterpret_cast<const unsigned char*>(frame.data());
+
+        // What is left in the buffer, which is never less than what this frame decodes into.
+        int free_samples = static_cast<int>(decoded_data->size() - buffer_pos) / bytes_per_sample;
+
         int result = opus_decode(decoder_, frame_data, static_cast<opus_int32>(frame.size()),
-                                 pcm_buffer, max_frame_samples, 0);
+                                 pcm_buffer, free_samples, 0);
         if (result < 0)
         {
             LOG(ERROR) << "Failed decoding Opus frame. Error code:" << result;
@@ -142,7 +164,7 @@ std::unique_ptr<proto::audio::Packet> AudioDecoder::decode(const proto::audio::P
             return nullptr;
         }
 
-        buffer_pos += result * packet.channels() * decoded_packet->bytes_per_sample();
+        buffer_pos += result * bytes_per_sample;
     }
 
     if (!buffer_pos)
