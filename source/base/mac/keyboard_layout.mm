@@ -23,6 +23,9 @@
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
 #include <Carbon/Carbon.h>
 
+#include "base/logging.h"
+#include "base/mac/scoped_cftyperef.h"
+
 //--------------------------------------------------------------------------------------------------
 static QString inputSourceId(TISInputSourceRef source)
 {
@@ -39,19 +42,23 @@ QList<KeyboardLayout> enabledKeyboardLayouts()
     // Keyboard layouts only (not input methods or palettes), enabled and selectable.
     const void* keys[] = { kTISPropertyInputSourceType, kTISPropertyInputSourceIsSelectCapable };
     const void* values[] = { kTISTypeKeyboardLayout, kCFBooleanTrue };
-    CFDictionaryRef filter = CFDictionaryCreate(nullptr, keys, values, 2,
-        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    ScopedCFTypeRef<CFDictionaryRef> filter(CFDictionaryCreate(nullptr, keys, values, 2,
+        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks));
+    if (!filter)
+    {
+        LOG(ERROR) << "Unable to create the input source filter";
+        return result;
+    }
 
-    CFArrayRef sources = TISCreateInputSourceList(filter, false);
-    CFRelease(filter);
+    ScopedCFTypeRef<CFArrayRef> sources(TISCreateInputSourceList(filter.get(), false));
     if (!sources)
         return result;
 
-    CFIndex count = CFArrayGetCount(sources);
+    CFIndex count = CFArrayGetCount(sources.get());
     for (CFIndex i = 0; i < count; ++i)
     {
         TISInputSourceRef source = static_cast<TISInputSourceRef>(
-            const_cast<void*>(CFArrayGetValueAtIndex(sources, i)));
+            const_cast<void*>(CFArrayGetValueAtIndex(sources.get(), i)));
 
         KeyboardLayout layout;
         layout.id = inputSourceId(source);
@@ -65,44 +72,42 @@ QList<KeyboardLayout> enabledKeyboardLayouts()
             result.append(layout);
     }
 
-    CFRelease(sources);
     return result;
 }
 
 //--------------------------------------------------------------------------------------------------
 QString currentKeyboardLayout()
 {
-    TISInputSourceRef source = TISCopyCurrentKeyboardInputSource();
+    ScopedCFTypeRef<TISInputSourceRef> source(TISCopyCurrentKeyboardInputSource());
     if (!source)
         return QString();
 
-    QString id = inputSourceId(source);
-    CFRelease(source);
-    return id;
+    return inputSourceId(source.get());
 }
 
 //--------------------------------------------------------------------------------------------------
 void selectKeyboardLayout(const QString& id)
 {
-    CFStringRef wanted = id.toCFString();
+    ScopedCFTypeRef<CFStringRef> wanted(id.toCFString());
 
     const void* keys[] = { kTISPropertyInputSourceID };
-    const void* values[] = { wanted };
-    CFDictionaryRef filter = CFDictionaryCreate(nullptr, keys, values, 1,
-        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    CFRelease(wanted);
+    const void* values[] = { wanted.get() };
+    ScopedCFTypeRef<CFDictionaryRef> filter(CFDictionaryCreate(nullptr, keys, values, 1,
+        &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks));
+    if (!filter)
+    {
+        LOG(ERROR) << "Unable to create the input source filter";
+        return;
+    }
 
-    CFArrayRef sources = TISCreateInputSourceList(filter, false);
-    CFRelease(filter);
+    ScopedCFTypeRef<CFArrayRef> sources(TISCreateInputSourceList(filter.get(), false));
     if (!sources)
         return;
 
-    if (CFArrayGetCount(sources) > 0)
+    if (CFArrayGetCount(sources.get()) > 0)
     {
         TISInputSourceRef source = static_cast<TISInputSourceRef>(
-            const_cast<void*>(CFArrayGetValueAtIndex(sources, 0)));
+            const_cast<void*>(CFArrayGetValueAtIndex(sources.get(), 0)));
         TISSelectInputSource(source);
     }
-
-    CFRelease(sources);
 }
