@@ -343,9 +343,12 @@ QString deviceProperty(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_data, 
 {
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    // SetupDiGetDeviceRegistryPropertyW takes the buffer size in BYTES, not in elements.
+    // SetupDiGetDeviceRegistryPropertyW takes the buffer size in BYTES, not in elements. The last
+    // element is deliberately left out of that size: a registry string is not required to end with
+    // a terminator, and a value filling the whole buffer would send fromWCharArray past it. The
+    // element stays zero and terminates such a value, at the price of one character.
     if (!SetupDiGetDeviceRegistryPropertyW(device_info, device_info_data, property, nullptr,
-        reinterpret_cast<PBYTE>(buffer), sizeof(buffer), nullptr))
+        reinterpret_cast<PBYTE>(buffer), sizeof(buffer) - sizeof(buffer[0]), nullptr))
     {
         return QString();
     }
