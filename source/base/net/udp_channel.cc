@@ -357,9 +357,10 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable
     }
 
     qint64 target_data_size = encryptor_->encryptedDataSize(buffer.size());
-    if (target_data_size > kMaxMessageSize)
+    qint64 target_packet_size = static_cast<qint64>(sizeof(Header)) + target_data_size;
+    if (target_packet_size > kMaxMessageSize)
     {
-        CLOG(ERROR) << "Too big outgoing message:" << target_data_size;
+        CLOG(ERROR) << "Too big outgoing message:" << target_packet_size;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -368,7 +369,7 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable
     if (reliable)
         flags |= ENET_PACKET_FLAG_RELIABLE;
 
-    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, flags);
+    ScopedENetPacket packet = acquirePacket(target_packet_size, flags);
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
