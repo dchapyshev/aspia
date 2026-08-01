@@ -28,49 +28,19 @@
 #include <vpx/vp8dx.h>
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderVpx::VideoDecoderVpx(proto::video::Encoding encoding)
-{
-    const int cpu_count = std::max(1, QThread::idealThreadCount());
-    quint32 thread_count;
-    vpx_codec_iface_t* algo;
-
-    switch (encoding)
-    {
-        case proto::video::ENCODING_VP8:
-            // VP8 does not support tile-based decoding, multithreading is only used for loop
-            // filter, so more than 2 threads provide no benefit.
-            thread_count = (cpu_count >= 4) ? 2 : 1;
-            algo = vpx_codec_vp8_dx();
-            break;
-
-        case proto::video::ENCODING_VP9:
-            // VP9 supports tile-based parallel decoding. Use half of the available cores,
-            // clamped to [2, 8] range to balance performance and CPU usage.
-            thread_count = std::clamp(cpu_count / 2, 2, 8);
-            algo = vpx_codec_vp9_dx();
-            break;
-
-        default:
-            LOG(FATAL) << "Unsupported video encoding:" << encoding;
-            return;
-    }
-
-    LOG(INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
-    codec_.reset(new vpx_codec_ctx_t());
-
-    vpx_codec_dec_cfg_t config;
-    config.w = 0;
-    config.h = 0;
-    config.threads = thread_count;
-
-    int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
-    CHECK_EQ(ret, VPX_CODEC_OK);
-}
-
-//--------------------------------------------------------------------------------------------------
 VideoDecoderVpx::~VideoDecoderVpx()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+std::unique_ptr<VideoDecoderVpx> VideoDecoderVpx::create(proto::video::Encoding encoding)
+{
+    std::unique_ptr<VideoDecoderVpx> instance(new VideoDecoderVpx());
+    if (!instance->initialize(encoding))
+        return nullptr;
+    return instance;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -131,4 +101,50 @@ VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet)
     frame_.setPlane(2, image->planes[2], image->stride[2]);
 
     return Result::SUCCESS;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VideoDecoderVpx::initialize(proto::video::Encoding encoding)
+{
+    const int cpu_count = std::max(1, QThread::idealThreadCount());
+    quint32 thread_count;
+    vpx_codec_iface_t* algo;
+
+    switch (encoding)
+    {
+        case proto::video::ENCODING_VP8:
+            // VP8 does not support tile-based decoding, multithreading is only used for loop
+            // filter, so more than 2 threads provide no benefit.
+            thread_count = (cpu_count >= 4) ? 2 : 1;
+            algo = vpx_codec_vp8_dx();
+            break;
+
+        case proto::video::ENCODING_VP9:
+            // VP9 supports tile-based parallel decoding. Use half of the available cores,
+            // clamped to [2, 8] range to balance performance and CPU usage.
+            thread_count = std::clamp(cpu_count / 2, 2, 8);
+            algo = vpx_codec_vp9_dx();
+            break;
+
+        default:
+            LOG(ERROR) << "Unsupported video encoding:" << encoding;
+            return false;
+    }
+
+    LOG(INFO) << "VPX(" << encoding << ") Init (thread_count=" << thread_count << ")";
+    codec_.reset(new vpx_codec_ctx_t());
+
+    vpx_codec_dec_cfg_t config;
+    config.w = 0;
+    config.h = 0;
+    config.threads = thread_count;
+
+    int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_dec_init failed:" << ret;
+        return false;
+    }
+
+    return true;
 }

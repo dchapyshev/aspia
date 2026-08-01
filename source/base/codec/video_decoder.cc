@@ -39,7 +39,7 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
     {
         case proto::video::ENCODING_VP8:
         case proto::video::ENCODING_VP9:
-            return std::make_unique<VideoDecoderVpx>(encoding);
+            return VideoDecoderVpx::create(encoding);
 
         case proto::video::ENCODING_H264:
         {

@@ -22,16 +22,23 @@
 #include "base/codec/scoped_vpx_codec.h"
 #include "base/codec/video_decoder.h"
 
+#include <memory>
+
 class VideoDecoderVpx final : public VideoDecoder
 {
 public:
-    explicit VideoDecoderVpx(proto::video::Encoding encoding);
     ~VideoDecoderVpx() final;
+
+    // Returns nullptr when the libvpx decoder cannot be initialized.
+    static std::unique_ptr<VideoDecoderVpx> create(proto::video::Encoding encoding);
 
     // VideoDecoder implementation.
     Result decode(const proto::video::Packet& packet) final;
 
 private:
+    VideoDecoderVpx() = default;
+    bool initialize(proto::video::Encoding encoding);
+
     ScopedVpxCodec codec_;
 
     Q_DISABLE_COPY_MOVE(VideoDecoderVpx)
