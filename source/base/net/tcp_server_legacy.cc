@@ -28,6 +28,13 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/peer/server_authenticator_legacy.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/worker.h"
+
+namespace {
+
+const Seconds kHandshakeTimeout{ 10 };
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 TcpServerLegacy::TcpServerLegacy(QObject* parent)
@@ -37,6 +44,7 @@ TcpServerLegacy::TcpServerLegacy(QObject* parent)
 {
     // FloodGuard defaults (60/min per address, pending cap 32) suit a single-host listener.
     // Roles serving many peers (router) call setRateLimit / setMaxPendingConnections directly.
+    connect(Worker::current(), &Worker::sig_tick, this, &TcpServerLegacy::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,6 +215,29 @@ bool TcpServerLegacy::isValidListenInterface(const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TcpServerLegacy::onTimer(TimePoint now)
+{
+    QList<TcpChannel*> expired;
+
+    for (const PendingConnection& connection : std::as_const(pending_))
+    {
+        if (now - connection.accept_time >= kHandshakeTimeout)
+            expired.append(connection.channel);
+    }
+
+    if (expired.isEmpty())
+        return;
+
+    LOG(WARNING) << "Dropped stale pending connections:" << expired.size();
+
+    for (TcpChannel* channel : std::as_const(expired))
+    {
+        removePendingChannel(channel);
+        channel->deleteLater();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void TcpServerLegacy::doAccept()
 {
     auto guard = alive_guard_;
@@ -299,7 +330,7 @@ void TcpServerLegacy::doAccept()
             });
 
             // Connection accepted.
-            pending_.emplace_back(channel);
+            pending_.emplace_back(PendingConnection{ channel, Clock::now() });
 
             // Start authentication.
             channel->doAuthentication();
@@ -319,7 +350,7 @@ void TcpServerLegacy::removePendingChannel(TcpChannel* channel)
     // Remove channel from pending queue.
     for (auto it = pending_.begin(); it != pending_.end(); ++it)
     {
-        if (*it != channel)
+        if (it->channel != channel)
             continue;
 
         pending_.erase(it);

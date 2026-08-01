@@ -29,6 +29,7 @@
 
 #include "base/crypto/secure_byte_array.h"
 #include "base/shared_pointer.h"
+#include "base/time_types.h"
 #include "base/peer/user_list.h"
 #include "base/peer/server_authenticator.h"
 
@@ -78,9 +79,18 @@ signals:
     void sig_newConnection();
     void sig_errorOccurred(const QString& address, const QString& username);
 
+private slots:
+    void onTimer(TimePoint now);
+
 private:
     void doAccept();
     void removePendingChannel(TcpChannel* channel);
+
+    struct PendingConnection
+    {
+        TcpChannel* channel;
+        TimePoint accept_time;
+    };
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
@@ -100,7 +110,7 @@ private:
     // rate-limited rejection logging.
     std::unique_ptr<FloodGuard> flood_guard_;
 
-    QQueue<TcpChannel*> pending_;
+    QQueue<PendingConnection> pending_;
     QQueue<TcpChannel*> ready_;
 
     Q_DISABLE_COPY_MOVE(TcpServer)

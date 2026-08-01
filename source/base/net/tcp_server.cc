@@ -29,6 +29,13 @@
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/server_authenticator.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/threading/worker.h"
+
+namespace {
+
+const Seconds kHandshakeTimeout{ 10 };
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer(QObject* parent)
@@ -38,6 +45,7 @@ TcpServer::TcpServer(QObject* parent)
 {
     // FloodGuard defaults (60/min per address, pending cap 32) suit a single-host listener.
     // Roles serving many peers (router) call setRateLimit / setMaxPendingConnections directly.
+    connect(Worker::current(), &Worker::sig_tick, this, &TcpServer::onTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,6 +216,29 @@ bool TcpServer::isValidListenInterface(const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TcpServer::onTimer(TimePoint now)
+{
+    QList<TcpChannel*> expired;
+
+    for (const PendingConnection& connection : std::as_const(pending_))
+    {
+        if (now - connection.accept_time >= kHandshakeTimeout)
+            expired.append(connection.channel);
+    }
+
+    if (expired.isEmpty())
+        return;
+
+    LOG(WARNING) << "Dropped stale pending connections:" << expired.size();
+
+    for (TcpChannel* channel : std::as_const(expired))
+    {
+        removePendingChannel(channel);
+        channel->deleteLater();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void TcpServer::doAccept()
 {
     auto guard = alive_guard_;
@@ -318,7 +349,7 @@ void TcpServer::doAccept()
             });
 
             // Connection accepted.
-            pending_.emplace_back(channel);
+            pending_.emplace_back(PendingConnection{ channel, Clock::now() });
 
             // Start authentication.
             channel->doAuthentication();
@@ -338,7 +369,7 @@ void TcpServer::removePendingChannel(TcpChannel* channel)
     // Remove channel from pending queue.
     for (auto it = pending_.begin(); it != pending_.end(); ++it)
     {
-        if (*it != channel)
+        if (it->channel != channel)
             continue;
 
         pending_.erase(it);
