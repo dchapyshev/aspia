@@ -106,8 +106,9 @@ public:
     // determined.
     static QString defaultGatewayAddress();
 
-    // Returns true if |address| is a private/non-routable IPv4 address (RFC1918, CGNAT 100.64/10,
-    // link-local).
+    // Returns true if |address| cannot be used as a public IPv4 address: RFC1918, CGNAT 100.64/10,
+    // link-local, loopback, "this host", multicast and the reserved 240/4 range (broadcast
+    // included). Anything that is not a valid IPv4 address is reported as such too.
     static bool isPrivateIpAddress(const QString& address);
 
     // Returns true if |ip_address| is a valid IPv4 or IPv6 literal.

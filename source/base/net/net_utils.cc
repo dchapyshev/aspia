@@ -112,6 +112,14 @@ bool NetUtils::isPrivateIpAddress(const QString& address)
 
     const quint32 ip = host_address.toIPv4Address();
 
+    if ((ip & 0xFF000000) == 0x00000000) // 0.0.0.0/8 ("this host")
+        return true;
+    if ((ip & 0xFF000000) == 0x7F000000) // 127.0.0.0/8 (loopback)
+        return true;
+    if ((ip & 0xF0000000) == 0xE0000000) // 224.0.0.0/4 (multicast)
+        return true;
+    if ((ip & 0xF0000000) == 0xF0000000) // 240.0.0.0/4 (reserved, broadcast included)
+        return true;
     if ((ip & 0xFF000000) == 0x0A000000) // 10.0.0.0/8
         return true;
     if ((ip & 0xFFF00000) == 0xAC100000) // 172.16.0.0/12
