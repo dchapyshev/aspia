@@ -101,10 +101,9 @@ private:
     QStyle* createBaseStyle(bool is_dark);
     static QPalette createDarkPalette();
 
-    QString lock_file_name_;
     QString server_name_;
 
-    QLockFile* lock_file_ = nullptr;
+    std::unique_ptr<QLockFile> lock_file_;
     QLocalServer* server_ = nullptr;
 
     std::unique_ptr<WorkerManager> worker_manager_;

@@ -120,8 +120,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
 
     server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
-    lock_file_name_ = temp_path + '/' + server_name_ + ".lock";
-    lock_file_ = new QLockFile(lock_file_name_);
+    lock_file_ = std::make_unique<QLockFile>(temp_path + '/' + server_name_ + ".lock");
 
     worker_manager_ = std::make_unique<WorkerManager>();
 
@@ -230,17 +229,7 @@ GuiApplication::~GuiApplication()
 #endif // defined(Q_OS_WINDOWS)
 
     worker_manager_.reset();
-
-    bool is_locked = lock_file_->isLocked();
-
-    if (is_locked)
-        lock_file_->unlock();
-
-    delete lock_file_;
-
-    if (is_locked)
-        QFile::remove(lock_file_name_);
-
+    lock_file_.reset();
     removeTranslators();
 }
 
