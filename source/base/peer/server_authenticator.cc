@@ -405,14 +405,14 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    user_name_ = identify.username();
-    if (user_name_.empty())
+    QString user_name = QString::fromStdString(identify.username());
+    if (!User::isValidUserName(user_name))
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
-    QString user_name = QString::fromStdString(user_name_);
+    user_name_ = identify.username();
     CLOG(TRACE) << "Username:" << user_name;
 
     QByteArray seed_key;
