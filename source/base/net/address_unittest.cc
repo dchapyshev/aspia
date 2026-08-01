@@ -73,6 +73,8 @@ TEST(AddressTest, InvalidAddress)
     EXPECT_FALSE(Address::fromString("^", 8050).isValid());
     EXPECT_FALSE(Address::fromString("#", 8050).isValid());
     EXPECT_FALSE(Address::fromString("2001:db8:1f70::999:de8:7648:6e8", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("[2001:db8:1f70::999:de8:7648:6e8", 8050).isValid());
+    EXPECT_FALSE(Address::fromString("[::ffff:192.0.2.1", 8050).isValid());
 }
 
 TEST(AddressTest, ValidAddress)

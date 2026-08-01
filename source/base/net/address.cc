@@ -72,6 +72,7 @@ bool parse(QString::const_iterator& it, QString::const_iterator last, AddressPar
     auto state = ParseState::HOST;
     auto first = it;
     auto last_colon = first;
+    bool ipv6_closed = false;
 
     while (it != last)
     {
@@ -103,6 +104,7 @@ bool parse(QString::const_iterator& it, QString::const_iterator last, AddressPar
 
             if (*it == ']')
             {
+                ipv6_closed = true;
                 ++it;
 
                 if (it == last)
@@ -142,6 +144,11 @@ bool parse(QString::const_iterator& it, QString::const_iterator last, AddressPar
     }
     else if (state == ParseState::HOST_IPV6)
     {
+        // The loop may have ended without ever finding the closing bracket. The call below drops the
+        // last character as if it were that bracket, silently turning the input into another address.
+        if (!ipv6_closed)
+            return false;
+
         if (!setHostAndPort(first + 1, last - 1, last_colon, parts))
             return false;
     }
