@@ -35,6 +35,44 @@ std::unique_ptr<Frame> createTestFrame(const QRect& rect, int pixels_value)
 
 } // namespace
 
+TEST(FrameTest, InvalidSize)
+{
+    EXPECT_EQ(FrameAligned::create(QSize(0, 100), 32), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(100, 0), 32), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(-1, 100), 32), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(100, -1), 32), nullptr);
+
+    // The row does not fit into the int stride.
+    EXPECT_EQ(FrameAligned::create(QSize(600 * 1000 * 1000, 1), 32), nullptr);
+}
+
+TEST(FrameTest, InvalidAlignment)
+{
+    // Rounding the stride up is a power-of-two mask: any other value gives a stride that does not
+    // fit the row.
+    EXPECT_EQ(FrameAligned::create(QSize(100, 100), 0), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(100, 100), 3), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(100, 100), 24), nullptr);
+    EXPECT_EQ(FrameAligned::create(QSize(100, 100), 48), nullptr);
+}
+
+TEST(FrameTest, NewFrameIsZeroed)
+{
+    const QSize size(100, 8);
+    std::unique_ptr<FrameAligned> frame = FrameAligned::create(size, 32);
+    ASSERT_NE(frame, nullptr);
+
+    EXPECT_EQ(frame->stride() % 32, 0);
+    EXPECT_GE(frame->stride(), size.width() * Frame::kBytesPerPixel);
+
+    const size_t buffer_size = static_cast<size_t>(frame->stride()) *
+                               static_cast<size_t>(size.height());
+    const quint8* data = frame->frameData();
+
+    for (size_t i = 0; i < buffer_size; ++i)
+        ASSERT_EQ(data[i], 0) << "Byte " << i << " is not zeroed";
+}
+
 TEST(FrameTest, Performance)
 {
     QRect frame_rect(QPoint(0, 0), QSize(1024, 768));
