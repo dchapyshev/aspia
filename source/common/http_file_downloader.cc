@@ -172,7 +172,8 @@ size_t HttpFileDownloader::writeDataCallback(
 //--------------------------------------------------------------------------------------------------
 // static
 int HttpFileDownloader::progressCallback(
-    HttpFileDownloader* self, double dltotal, double dlnow, double /* ultotal */, double /* ulnow */)
+    HttpFileDownloader* self, curl_off_t dltotal, curl_off_t dlnow, curl_off_t /* ultotal */,
+    curl_off_t /* ulnow */)
 {
     if (self && !self->interrupted_.load(std::memory_order_relaxed))
     {

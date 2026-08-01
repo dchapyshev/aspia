@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QThread>
 
+#include <curl/curl.h>
+
 class HttpFileDownloader final : public QThread
 {
     Q_OBJECT
@@ -43,8 +45,8 @@ protected:
 
 private:
     static size_t writeDataCallback(void* ptr, size_t size, size_t nmemb, HttpFileDownloader* self);
-    static int progressCallback(
-        HttpFileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
+    static int progressCallback(HttpFileDownloader* self, curl_off_t dltotal, curl_off_t dlnow,
+                                curl_off_t ultotal, curl_off_t ulnow);
 
     std::atomic_bool interrupted_ { false };
     const QString url_;
