@@ -31,6 +31,7 @@
 namespace {
 
 const quint32 kMaxMessageSize = 5 * 1024 * 1024; // 5 MB
+const quint32 kMaxWaitingData = 4 * kMaxMessageSize; // 20 MB
 const MilliSeconds kUpdateInterval{ 10 };
 const int kMaxPeers = 1;
 const int kChannelCount = 255;
@@ -91,7 +92,18 @@ ENetHost* createHost(const ENetAddress* address)
 {
     ENetHost* host = enet_host_create(address, kMaxPeers, kChannelCount, 0, 0);
     if (host)
+    {
         host->mtu = kMtu;
+
+        // Both limits default to 32 MB in ENet, way above the application one. The size announced by
+        // a peer is checked against maximumPacketSize before the reassembly buffer is allocated, so
+        // without this the peer could make the process hold 32 MB with a single fragment.
+        host->maximumPacketSize = kMaxMessageSize;
+
+        // ENet compares the counter before adding the incoming data, so the real peak is one more
+        // message on top. What is left is the slack for bursts between calls to enet_host_service.
+        host->maximumWaitingData = kMaxWaitingData;
+    }
     return host;
 }
 
