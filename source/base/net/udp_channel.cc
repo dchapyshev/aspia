@@ -414,9 +414,16 @@ void UdpChannel::setPaused(bool enable)
     if (paused_)
         return;
 
-    for (auto& task : read_pending_)
+    while (!paused_ && !read_pending_.empty())
+    {
+        auto task = std::move(read_pending_.front());
+        read_pending_.pop_front();
+
         onMessageReceived(task.first, std::move(task.second));
-    read_pending_.clear();
+
+        if (!host_)
+            return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -501,6 +508,7 @@ void UdpChannel::close()
     peer_.reset();
     host_.reset();
     packet_pool_.clear();
+    read_pending_.clear();
     connected_ = false;
 }
 
