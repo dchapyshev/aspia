@@ -23,6 +23,7 @@
 #include <asio/connect.hpp>
 #include <asio/ip/address.hpp>
 #include <asio/read.hpp>
+#include <asio/steady_timer.hpp>
 #include <asio/write.hpp>
 
 #include "base/location.h"
@@ -127,7 +128,7 @@ void TcpChannelLegacy::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /* timeout */)
+void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds timeout)
 {
     if (isConnected() || !resolver_)
         return;
@@ -135,7 +136,18 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
+    // Watchdog for the entire connect phase (resolve + TCP handshake). Without it the channel
+    // would wait for the OS-level SYN-retransmit timeout (~2 minutes on Linux) before reporting
+    // an unreachable peer.
+    SharedPointer<asio::steady_timer> watchdog(new asio::steady_timer(io_context_));
+    watchdog->expires_after(timeout);
+
     auto io = io_;
+    watchdog->async_wait([this, io, watchdog](const std::error_code& error_code)
+    {
+        if (io->alive && !error_code)
+            onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
+    });
 
     // Fast path for IP addresses. The ASIO resolver serializes all lookups for the io_context through
     // a single background thread, so a literal address could otherwise wait behind slow or failing
@@ -148,7 +160,8 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
         CLOG(INFO) << "Address is an IP, skipping resolve for" << host << ":" << service;
 
         asio::ip::tcp::endpoint endpoint(ip_address, port);
-        socket_.async_connect(endpoint, [this, io, endpoint](const std::error_code& error_code)
+        socket_.async_connect(endpoint, [this, io, watchdog, endpoint](
+            const std::error_code& error_code)
         {
             if (!io->alive)
                 return;
@@ -158,12 +171,14 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
                 if (error_code == asio::error::operation_aborted)
                     return;
 
+                watchdog->cancel();
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
             CLOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
                        << endpoint.port();
+            watchdog->cancel();
 
             setConnected(true);
             emit sig_connected();
@@ -175,8 +190,8 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
 
     CLOG(INFO) << "Start resolving for" << host << ":" << service;
 
-    resolver_->async_resolve(host, service,
-        [this, io](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+    resolver_->async_resolve(host, service, [this, io, watchdog](
+        const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
         if (!io->alive)
             return;
@@ -185,6 +200,8 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
         {
             if (error_code == asio::error::operation_aborted)
                 return;
+
+            watchdog->cancel();
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -203,7 +220,7 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
 
             return true;
         },
-            [this, io](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+            [this, io, watchdog](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
             if (!io->alive)
                 return;
@@ -213,12 +230,14 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port, Seconds /
                 if (error_code == asio::error::operation_aborted)
                     return;
 
+                watchdog->cancel();
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
             CLOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
                        << endpoint.port();
+            watchdog->cancel();
 
             setConnected(true);
             emit sig_connected();
