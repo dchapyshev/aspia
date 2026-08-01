@@ -28,20 +28,6 @@ namespace {
 // Row alignment of the ARGB output buffer, matching the value used elsewhere in the pipeline.
 const size_t kArgbAlignment = 32;
 
-//--------------------------------------------------------------------------------------------------
-// A dirty rectangle arrives from the network peer with signed, unnormalized fields. QRect::contains
-// would normalize an inverted rect, but width()/height()/topLeft() are consumed raw below and a
-// negative extent (interpreted by libyuv as a flip) would walk off the frame buffer. Validate the
-// raw components explicitly. Using subtraction instead of addition avoids int overflow on a huge
-// declared width/height.
-bool rectWithinFrame(const QRect& rect, const QSize& frame_size)
-{
-    return rect.x() >= 0 && rect.y() >= 0 &&
-           rect.width() > 0 && rect.height() > 0 &&
-           rect.width() <= frame_size.width() - rect.x() &&
-           rect.height() <= frame_size.height() - rect.y();
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -71,6 +57,7 @@ YuvConverter::Result YuvConverter::convert(
     Frame& dst = access.get();
 
     const int y_stride = src.planeStride(0);
+    const QRect frame_rect(QPoint(0, 0), src.size());
 
     if (src.format() == VideoDecoder::YuvFormat::NV12)
     {
@@ -78,16 +65,17 @@ YuvConverter::Result YuvConverter::convert(
 
         for (const QRect& rect : dirty_rects)
         {
-            if (!rectWithinFrame(rect, src.size()))
-                return Result::FAILED;
+            const QRect clipped = rect.intersected(frame_rect);
+            if (clipped.isEmpty())
+                continue;
 
-            const int y_offset = rect.y() * y_stride + rect.x();
-            const int uv_offset = (rect.y() / 2) * uv_stride + (rect.x() & ~1);
+            const int y_offset = clipped.y() * y_stride + clipped.x();
+            const int uv_offset = (clipped.y() / 2) * uv_stride + (clipped.x() & ~1);
 
             libyuv::NV12ToARGB(src.planeData(0) + y_offset, y_stride,
                                src.planeData(1) + uv_offset, uv_stride,
-                               dst.frameDataAtPos(rect.topLeft()), dst.stride(),
-                               rect.width(), rect.height());
+                               dst.frameDataAtPos(clipped.topLeft()), dst.stride(),
+                               clipped.width(), clipped.height());
         }
     }
     else
@@ -97,18 +85,19 @@ YuvConverter::Result YuvConverter::convert(
 
         for (const QRect& rect : dirty_rects)
         {
-            if (!rectWithinFrame(rect, src.size()))
-                return Result::FAILED;
+            const QRect clipped = rect.intersected(frame_rect);
+            if (clipped.isEmpty())
+                continue;
 
-            const int y_offset = rect.y() * y_stride + rect.x();
-            const int u_offset = (rect.y() / 2) * u_stride + (rect.x() / 2);
-            const int v_offset = (rect.y() / 2) * v_stride + (rect.x() / 2);
+            const int y_offset = clipped.y() * y_stride + clipped.x();
+            const int u_offset = (clipped.y() / 2) * u_stride + (clipped.x() / 2);
+            const int v_offset = (clipped.y() / 2) * v_stride + (clipped.x() / 2);
 
             libyuv::I420ToARGB(src.planeData(0) + y_offset, y_stride,
                                src.planeData(1) + u_offset, u_stride,
                                src.planeData(2) + v_offset, v_stride,
-                               dst.frameDataAtPos(rect.topLeft()), dst.stride(),
-                               rect.width(), rect.height());
+                               dst.frameDataAtPos(clipped.topLeft()), dst.stride(),
+                               clipped.width(), clipped.height());
         }
     }
 
