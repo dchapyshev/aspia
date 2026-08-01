@@ -272,15 +272,19 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
         return;
     }
 
-    Atom type;
-    int format;
-    unsigned long item_count;
-    unsigned long after;
-    unsigned char* data;
+    Atom type = X11_None;
+    int format = 0;
+    unsigned long item_count = 0;
+    unsigned long after = 0;
+    unsigned char* data = nullptr;
 
-    XGetWindowProperty(display_, clipboard_window_, selectionDataProperty(),
-                       0, ~0L, X11_True, AnyPropertyType, &type, &format,
-                       &item_count, &after, &data);
+    if (XGetWindowProperty(display_, clipboard_window_, selectionDataProperty(),
+                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           &item_count, &after, &data) != Success)
+    {
+        LOG(WARNING) << "XGetWindowProperty failed for an INCR chunk";
+    }
+
     if (type == X11_None)
         return;
 
@@ -380,15 +384,19 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
 
     capture_progress_time_ = Clock::now();
 
-    Atom type;
-    int format;
-    unsigned long item_count;
-    unsigned long after;
-    unsigned char* data;
+    Atom type = X11_None;
+    int format = 0;
+    unsigned long item_count = 0;
+    unsigned long after = 0;
+    unsigned char* data = nullptr;
 
-    XGetWindowProperty(display_, clipboard_window_, selection_event->property,
-                       0, ~0L, X11_True, AnyPropertyType, &type, &format,
-                       &item_count, &after, &data);
+    if (XGetWindowProperty(display_, clipboard_window_, selection_event->property,
+                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           &item_count, &after, &data) != Success)
+    {
+        LOG(WARNING) << "XGetWindowProperty failed for a selection reply";
+    }
+
     if (type == incr_atom_)
     {
         // Large selection: the property carries only the lower bound of the size, and deleting it
@@ -687,15 +695,19 @@ void XServerClipboard::handleTargetsNotify(XSelectionEvent* event)
 
     if (event->property != X11_None)
     {
-        Atom type;
-        int format;
-        unsigned long item_count;
-        unsigned long after;
-        unsigned char* data;
+        Atom type = X11_None;
+        int format = 0;
+        unsigned long item_count = 0;
+        unsigned long after = 0;
+        unsigned char* data = nullptr;
 
-        XGetWindowProperty(display_, clipboard_window_, event->property,
-                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
-                           &item_count, &after, &data);
+        if (XGetWindowProperty(display_, clipboard_window_, event->property,
+                               0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                               &item_count, &after, &data) != Success)
+        {
+            LOG(WARNING) << "XGetWindowProperty failed for a TARGETS reply";
+        }
+
         if (type == incr_atom_)
         {
             // A TARGETS list large enough to require an INCR transfer is nonconforming; abandon the
