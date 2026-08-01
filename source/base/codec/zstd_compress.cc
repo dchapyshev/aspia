@@ -85,6 +85,13 @@ T compressT(const T& source, int compress_level)
         return T();
     }
 
+    if (ret != 0)
+    {
+        LOG(ERROR) << "Incomplete compressed frame:" << ret << "bytes left";
+        return T();
+    }
+
+    target.resize(static_cast<T::size_type>(sizeof(quint32) + output.pos));
     return target;
 }
 

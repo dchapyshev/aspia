@@ -67,6 +67,19 @@ TEST(ZstdCompressTest, RoundTripStdString)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Regression test: compress() must return only the bytes the encoder produced. Without the trim it
+// returned the whole ZSTD_compressBound-sized buffer, i.e. more than the uncompressed input.
+TEST(ZstdCompressTest, CompressReturnsOnlyProducedBytes)
+{
+    const QByteArray original(100000, 'a');
+    const QByteArray compressed = ZstdCompress::compress(original);
+
+    ASSERT_FALSE(compressed.isEmpty());
+    EXPECT_LT(compressed.size(), 1000);
+    EXPECT_EQ(ZstdCompress::decompress(compressed), original);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(ZstdCompressTest, DecompressRejectsTooShort)
 {
     EXPECT_TRUE(ZstdCompress::decompress(QByteArray()).isEmpty());
