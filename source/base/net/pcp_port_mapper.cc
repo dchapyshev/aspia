@@ -224,6 +224,9 @@ void PcpPortMapper::sendRequest()
 
             if (error_code)
             {
+                if (error_code == asio::error::operation_aborted)
+                    return;
+
                 finishWithFailure(FROM_HERE);
                 return;
             }
