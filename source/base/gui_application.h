@@ -54,7 +54,10 @@ public:
     static T* findWorker()
     {
         GuiApplication* application = instance();
-        return application ? application->worker_manager_->find<T>() : nullptr;
+        if (!application || !application->worker_manager_)
+            return nullptr;
+
+        return application->worker_manager_->find<T>();
     }
 
     qint64 addWorker(std::unique_ptr<Worker> worker);
