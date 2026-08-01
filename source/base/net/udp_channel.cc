@@ -628,12 +628,12 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
     }
 
     // Reject pathological sizes before touching the header. The minimum valid payload is
-    // header + AEAD tag (16 bytes).
+    // header + AEAD tag (16 bytes). The datagram is only dropped: the transport is not
+    // authenticated, so anyone who reached the bound port could otherwise close the channel.
     static const qint64 kMinMessageSize = sizeof(Header) + 16;
     if (packet->dataLength < kMinMessageSize || packet->dataLength > kMaxMessageSize)
     {
-        CLOG(ERROR) << "Bad incoming message size:" << packet->dataLength;
-        onErrorOccurred(FROM_HERE);
+        CLOG(WARNING) << "Dropped incoming message with bad size:" << packet->dataLength;
         return;
     }
 
