@@ -477,7 +477,7 @@ JsonBackup::Result JsonBackup::importFromFile(const QString& file_path, const Se
     QByteArray salt = QByteArray::fromHex(root.value("salt").toString().toLatin1());
     QByteArray verifier = QByteArray::fromHex(root.value("verifier").toString().toLatin1());
 
-    if (salt.isEmpty() || verifier.isEmpty())
+    if (salt.size() != kSaltSize || verifier.isEmpty())
         return Result::INVALID_FORMAT;
 
     SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
