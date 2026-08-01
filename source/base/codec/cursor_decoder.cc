@@ -31,6 +31,11 @@ constexpr qsizetype kMaxCacheSize = 30;
 // malicious host from requesting huge pixel buffer allocations.
 constexpr int kMaxCursorSize = 512;
 
+// Upper bound on the match window a cursor frame is allowed to declare. The encoder compresses with
+// kCompressionRatio (see cursor_encoder.cc), for which zstd uses a 4 MB window. The default limit is
+// 128 MB, which a frame of a few dozen bytes can request.
+constexpr int kMaxWindowLog = 22;
+
 //--------------------------------------------------------------------------------------------------
 MouseCursor::Type parseType(proto::cursor::Shape::Type type)
 {
@@ -125,6 +130,13 @@ QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_sh
     if (ZSTD_isError(ret))
     {
         LOG(ERROR) << "ZSTD_initDStream failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
+        return QByteArray();
+    }
+
+    ret = ZSTD_DCtx_setParameter(stream_.get(), ZSTD_d_windowLogMax, kMaxWindowLog);
+    if (ZSTD_isError(ret))
+    {
+        LOG(ERROR) << "ZSTD_DCtx_setParameter failed:" << ZSTD_getErrorName(ret) << "(" << ret << ")";
         return QByteArray();
     }
 
