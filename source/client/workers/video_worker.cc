@@ -35,6 +35,8 @@
 
 namespace {
 
+const int kMaxDirtyRects = 1024;
+
 //--------------------------------------------------------------------------------------------------
 int calculateFps(int last_fps, MilliSeconds duration, qint64 count)
 {
@@ -380,12 +382,23 @@ void VideoWorker::decodePacket(const proto::video::Packet& packet)
     }
 
     const int rect_count = packet.dirty_rect_size();
-    if (dirty_rects_.capacity() < rect_count)
-        dirty_rects_.reserve(rect_count);
 
-    dirty_rects_.resize(rect_count);
-    for (int i = 0; i < rect_count; ++i)
-        dirty_rects_[i] = parse(packet.dirty_rect(i));
+    if (rect_count > kMaxDirtyRects)
+    {
+        LOG(WARNING) << "Too many dirty rects:" << rect_count;
+
+        dirty_rects_.resize(1);
+        dirty_rects_[0] = QRect(QPoint(0, 0), decoder_->frame().size());
+    }
+    else
+    {
+        if (dirty_rects_.capacity() < rect_count)
+            dirty_rects_.reserve(rect_count);
+
+        dirty_rects_.resize(rect_count);
+        for (int i = 0; i < rect_count; ++i)
+            dirty_rects_[i] = parse(packet.dirty_rect(i));
+    }
 
     const YuvConverter::Result convert_result =
         yuv_converter_.convert(decoder_->frame(), dirty_rects_);
