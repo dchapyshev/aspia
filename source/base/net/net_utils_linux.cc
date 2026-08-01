@@ -386,9 +386,10 @@ QList<NetUtils::Route> NetUtils::routeTable()
 
     file.readLine(); // Skip the header line.
 
-    while (!file.atEnd())
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
     {
-        const QList<QByteArray> fields = file.readLine().simplified().split(' ');
+        const QList<QByteArray> fields = line.simplified().split(' ');
         if (fields.size() < 8)
             continue;
 
