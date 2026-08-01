@@ -785,9 +785,12 @@ SysInfo::PowerOptions::Battery readBattery(Device& battery, ULONG tag)
     if (batteryInformation(battery, tag, BatterySerialNumber, text, sizeof(text)))
         result.serial_number = QString::fromWCharArray(text);
 
-    memset(text, 0, sizeof(text));
-    if (batteryInformation(battery, tag, BatteryTemperature, text, sizeof(text)))
-        result.temperature = QString::fromWCharArray(text);
+    ULONG temperature = 0;
+    if (batteryInformation(battery, tag, BatteryTemperature, &temperature, sizeof(temperature)) &&
+        temperature != 0)
+    {
+        result.temperature = QString::number(temperature / 10.0 - 273.15);
+    }
 
     BATTERY_MANUFACTURE_DATE date;
     memset(&date, 0, sizeof(date));
