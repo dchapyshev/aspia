@@ -75,8 +75,10 @@ private:
     VTDecompressionSessionRef session_ = nullptr;
 
     // Pixel buffer produced by the last decode; retained and locked while frame_ references its
-    // planes.
+    // planes. The buffer is exposed before it is locked, so releaseOutput() must know whether the
+    // lock actually happened.
     CVPixelBufferRef output_image_ = nullptr;
+    bool output_locked_ = false;
 
     // Result of the last decoded frame, written by outputCallback().
     OSStatus output_status_ = noErr;

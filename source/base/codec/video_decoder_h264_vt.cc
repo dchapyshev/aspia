@@ -266,6 +266,8 @@ VideoDecoder::Result VideoDecoderH264VT::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
+    output_locked_ = true;
+
     frame_.setPlane(0,
                     static_cast<const quint8*>(CVPixelBufferGetBaseAddressOfPlane(output_image_, 0)),
                     static_cast<int>(CVPixelBufferGetBytesPerRowOfPlane(output_image_, 0)));
@@ -388,7 +390,12 @@ void VideoDecoderH264VT::releaseOutput()
     if (!output_image_)
         return;
 
-    CVPixelBufferUnlockBaseAddress(output_image_, kCVPixelBufferLock_ReadOnly);
+    if (output_locked_)
+    {
+        CVPixelBufferUnlockBaseAddress(output_image_, kCVPixelBufferLock_ReadOnly);
+        output_locked_ = false;
+    }
+
     CVPixelBufferRelease(output_image_);
     output_image_ = nullptr;
 }
