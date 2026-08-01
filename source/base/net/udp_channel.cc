@@ -332,6 +332,12 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 {
+    if (!host_ || !peer_)
+    {
+        CLOG(ERROR) << "Attempt to send a message on a closed channel";
+        return;
+    }
+
     if (!encryptor_)
     {
         onErrorOccurred(FROM_HERE);
