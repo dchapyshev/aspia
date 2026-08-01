@@ -60,7 +60,6 @@ using PipeHandle = int;
 
 #if defined(Q_OS_WINDOWS)
 const char kNamePrefix[] = "\\\\.\\pipe\\aspia.";
-const DWORD kConnectTimeout = 3000; // ms
 using PipeHandle = HANDLE;
 #endif // defined(Q_OS_WINDOWS)
 
@@ -290,29 +289,23 @@ bool IpcChannel::connectAttempt()
 
 #if defined(Q_OS_WINDOWS)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
-    ScopedHandle handle;
 
-    while (true)
+    ScopedHandle handle(CreateFileW(qUtf16Printable(channel_path), GENERIC_WRITE | GENERIC_READ, 0,
+        nullptr, OPEN_EXISTING, flags, nullptr));
+    if (!handle.isValid())
     {
-        handle.reset(CreateFileW(qUtf16Printable(channel_path), GENERIC_WRITE | GENERIC_READ, 0,
-            nullptr, OPEN_EXISTING, flags, nullptr));
-        if (handle.isValid())
-            break;
-
         DWORD error_code = GetLastError();
-
-        if (error_code != ERROR_PIPE_BUSY)
+        if (error_code == ERROR_PIPE_BUSY)
+        {
+            CLOG(INFO) << "All pipe instances are busy (channel" << channel_name_ << ")";
+        }
+        else
         {
             CLOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
                         << "(channel" << channel_name_ << ")";
-            return false;
         }
 
-        if (!WaitNamedPipeW(qUtf16Printable(channel_path), kConnectTimeout))
-        {
-            PLOG(ERROR) << "WaitNamedPipeW failed (channel" << channel_name_ << ")";
-            return false;
-        }
+        return false;
     }
 
     std::error_code error_code;
