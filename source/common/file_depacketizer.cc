@@ -111,7 +111,7 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
         return false;
     }
 
-    if (file_->write(packet.data().data(), packet_size) == -1)
+    if (file_->write(packet.data().data(), packet_size) != static_cast<qint64>(packet_size))
     {
         LOG(ERROR) << "Unable to write file";
         return false;
