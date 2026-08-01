@@ -87,7 +87,7 @@ std::unique_ptr<proto::file_transfer::Packet> FilePacketizer::readNextPacket(
         return nullptr;
     }
 
-    if (file_->read(packet_buffer, packet_buffer_size) == -1)
+    if (file_->read(packet_buffer, packet_buffer_size) != static_cast<qint64>(packet_buffer_size))
     {
         LOG(ERROR) << "Unable to read file";
         return nullptr;
