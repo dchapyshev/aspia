@@ -459,8 +459,9 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
         {
             // The scripts are kept apart from the tools: a tool opens a window of the operating
             // system for the operator to work in, a script changes something on the machine itself.
-            QMenu* scripts_menu = tools_menu_->addMenu(
-                GuiApplication::svgIcon(":/img/terminal.svg"), tr("Scripts"));
+            const QIcon script_icon = GuiApplication::svgIcon(":/img/terminal.svg");
+
+            QMenu* scripts_menu = tools_menu_->addMenu(script_icon, tr("Scripts"));
             scripts_menu->setToolTipsVisible(true);
 
             const int script_count = std::min(tool_list.script_size(), kMaxToolCount);
@@ -472,6 +473,7 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
                 QAction* action = scripts_menu->addAction(
                     QString::fromStdString(script.name()).left(kMaxToolNameLength));
                 action->setData(script.id());
+                action->setIcon(script_icon);
                 action->setToolTip(
                     QString::fromStdString(script.description()).left(kMaxToolNameLength));
                 action->setProperty("is_script", true);
