@@ -776,6 +776,7 @@ QList<SysInfo::VideoAdapter> SysInfo::videoAdapters()
     }
 
     IOObjectRelease(iterator);
+    [metal_devices release];
     return result;
 }
 
