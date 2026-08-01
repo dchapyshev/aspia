@@ -407,7 +407,9 @@ QString driverRegistryString(HDEVINFO device_info, SP_DEVINFO_DATA* device_info_
         return QString();
 
     wchar_t value[MAX_PATH] = { 0 };
-    DWORD value_size = ARRAYSIZE(value);
+
+    // The size is in bytes, not in characters.
+    DWORD value_size = sizeof(value) - sizeof(value[0]);
 
     if (key.readValue(value_name, value, &value_size, nullptr) != ERROR_SUCCESS)
         return QString();
