@@ -2508,7 +2508,9 @@ TEST(SmbiosParserTest, AdditionalInfoEntryBehindTable)
 
     SmbiosAdditionalInfo info(enumerator.table());
     ASSERT_TRUE(info.isValid());
-    EXPECT_EQ(info.count(), 3);
+
+    // Only the whole entry is counted, not the three the table declares.
+    EXPECT_EQ(info.count(), 1);
 
     EXPECT_EQ(info.value(0), std::string("0x11"));
     EXPECT_TRUE(info.value(1).empty());
@@ -2601,7 +2603,8 @@ TEST(SmbiosParserTest, FirmwareInventoryHandlesBehindTable)
     EXPECT_EQ(inventory.imageSize(), 0ULL);
     EXPECT_EQ(inventory.state(), std::string("Unknown"));
     EXPECT_FALSE(inventory.isUpdatable());
-    EXPECT_EQ(inventory.componentCount(), 2);
+    // Only the handle that fits is counted, not the two the table declares.
+    EXPECT_EQ(inventory.componentCount(), 1);
     EXPECT_EQ(inventory.componentHandle(0), 0x000D);
     EXPECT_EQ(inventory.componentHandle(1), 0);
 }

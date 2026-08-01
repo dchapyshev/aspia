@@ -20,6 +20,7 @@
 
 #include <QDate>
 
+#include <algorithm>
 #include <cstddef>
 #include <cstring>
 
@@ -3733,7 +3734,27 @@ bool SmbiosAdditionalInfo::isValid() const
 //--------------------------------------------------------------------------------------------------
 int SmbiosAdditionalInfo::count() const
 {
-    return table_->count;
+    // The declared count is not to be trusted. The entries are of a variable length, so the only way
+    // to tell how many of them the table really holds is to walk it.
+    const quint8* start = reinterpret_cast<const quint8*>(table_);
+    quint32 offset = 0x05;
+    int count = 0;
+
+    while (count < table_->count)
+    {
+        // The fixed part of an entry is five bytes long, the length itself being the first of them.
+        if (offset + 0x05 > table_->length)
+            break;
+
+        const quint32 length = start[offset];
+        if (length < 0x05 || offset + length > table_->length)
+            break;
+
+        offset += length;
+        ++count;
+    }
+
+    return count;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4137,7 +4158,13 @@ quint64 SmbiosFirmwareInventory::imageSize() const
 //--------------------------------------------------------------------------------------------------
 int SmbiosFirmwareInventory::componentCount() const
 {
-    return table_->component_count;
+    // The declared count is not to be trusted: only the handles that fit into the length of the
+    // table are really there. 18h is the length of the table with no components listed behind it.
+    if (table_->length < 0x18)
+        return 0;
+
+    const int fits = (table_->length - 0x18) / 2;
+    return std::min(static_cast<int>(table_->component_count), fits);
 }
 
 //--------------------------------------------------------------------------------------------------
