@@ -137,6 +137,12 @@ void UdpChannel::bind(qintptr socket)
     if (host_ || mode_ != Mode::UNKNOWN)
         return;
 
+    if (socket == -1)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
     mode_ = Mode::READY_SOCKET;
 
     ENetAddress fake_address;
@@ -152,6 +158,7 @@ void UdpChannel::bind(qintptr socket)
     }
 
     enet_socket_destroy(host_->socket);
+    host_->socket = socket;
 
     ENetAddress address;
     if (enet_socket_get_address(socket, &address) < 0)
@@ -161,7 +168,6 @@ void UdpChannel::bind(qintptr socket)
         return;
     }
 
-    host_->socket = socket;
     host_->address = address;
 
     start();
@@ -250,6 +256,12 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     if (host_ || mode_ != Mode::UNKNOWN)
         return;
 
+    if (socket == -1)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
     mode_ = Mode::READY_SOCKET;
 
     ENetAddress fake_address;
@@ -265,6 +277,7 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     }
 
     enet_socket_destroy(host_->socket);
+    host_->socket = socket;
 
     ENetAddress bound_address;
     if (enet_socket_get_address(socket, &bound_address) < 0)
@@ -274,7 +287,6 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
         return;
     }
 
-    host_->socket = socket;
     host_->address = bound_address;
 
     ENetAddress enet_address;
