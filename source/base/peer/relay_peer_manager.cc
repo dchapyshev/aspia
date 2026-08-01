@@ -69,13 +69,12 @@ RelayPeerManager::ReadyConnection RelayPeerManager::takePendingConnection()
 //--------------------------------------------------------------------------------------------------
 void RelayPeerManager::onRelayConnectionReady()
 {
-    for (auto it = pending_.cbegin(), it_end = pending_.cend(); it != it_end; ++it)
+    // Only the peer that has just finished authentication gives up its channel. hasChannel() is
+    // true from the moment the channel is created, so walking the whole pending list here used to
+    // pick up the channels of peers that are still authenticating.
+    RelayPeer* peer = qobject_cast<RelayPeer*>(sender());
+    if (peer && peer->hasChannel())
     {
-        RelayPeer* peer = *it;
-
-        if (!peer->hasChannel())
-            continue;
-
         TcpChannel* channel = peer->takeChannel();
         channel->setParent(this);
 
