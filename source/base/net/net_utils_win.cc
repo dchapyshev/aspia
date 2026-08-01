@@ -26,6 +26,7 @@
 #include <TlHelp32.h>
 
 #include <limits>
+#include <unordered_map>
 #include <vector>
 
 #include "base/logging.h"
@@ -185,8 +186,10 @@ QByteArray extendedUdpTable()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString processNameByPid(HANDLE snapshot, DWORD process_id)
+std::unordered_map<DWORD, QString> processNames(HANDLE snapshot)
 {
+    std::unordered_map<DWORD, QString> result;
+
     PROCESSENTRY32W entry;
     entry.dwSize = sizeof(entry);
 
@@ -194,13 +197,12 @@ QString processNameByPid(HANDLE snapshot, DWORD process_id)
     {
         do
         {
-            if (entry.th32ProcessID == process_id)
-                return QString::fromWCharArray(entry.szExeFile);
+            result.emplace(entry.th32ProcessID, QString::fromWCharArray(entry.szExeFile));
         }
         while (Process32NextW(snapshot, &entry));
     }
 
-    return QString();
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -342,6 +344,7 @@ QList<NetUtils::Connection> NetUtils::connections()
     QList<Connection> result;
 
     ScopedHandle snapshot(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+    const std::unordered_map<DWORD, QString> process_names = processNames(snapshot.get());
 
     const QByteArray tcp_buffer = extendedTcpTable();
     if (!tcp_buffer.isEmpty())
@@ -353,7 +356,11 @@ QList<NetUtils::Connection> NetUtils::connections()
 
             Connection connection;
             connection.protocol = "TCP";
-            connection.process_name = processNameByPid(snapshot.get(), row.dwOwningPid);
+
+            auto process = process_names.find(row.dwOwningPid);
+            if (process != process_names.end())
+                connection.process_name = process->second;
+
             connection.local_address = ipToString(row.dwLocalAddr);
             connection.local_port = ntohs(static_cast<u_short>(row.dwLocalPort));
             connection.remote_address = ipToString(row.dwRemoteAddr);
@@ -374,7 +381,11 @@ QList<NetUtils::Connection> NetUtils::connections()
 
             Connection connection;
             connection.protocol = "UDP";
-            connection.process_name = processNameByPid(snapshot.get(), row.dwOwningPid);
+
+            auto process = process_names.find(row.dwOwningPid);
+            if (process != process_names.end())
+                connection.process_name = process->second;
+
             connection.local_address = ipToString(row.dwLocalAddr);
             connection.local_port = ntohs(static_cast<u_short>(row.dwLocalPort));
 
