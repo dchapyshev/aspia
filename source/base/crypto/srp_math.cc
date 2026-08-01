@@ -529,7 +529,17 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
         return BigNum();
     }
 
-    if (!BN_mod_exp(tmp, g, x, N, ctx))
+    BigNum x_const_time = BigNum::create();
+    if (!x_const_time.isValid())
+    {
+        LOG(ERROR) << "BigNum::create failed";
+        return BigNum();
+    }
+
+    BN_with_flags(x_const_time, x, BN_FLG_CONSTTIME);
+    BN_set_flags(tmp, BN_FLG_CONSTTIME);
+
+    if (!BN_mod_exp(tmp, g, x_const_time, N, ctx))
     {
         LOG(ERROR) << "BN_mod_exp failed";
         return BigNum();
@@ -554,7 +564,7 @@ BigNum SrpMath::calcClientKey(const BigNum& N, const BigNum& B, const BigNum& g,
         return BigNum();
     }
 
-    if (!BN_mul(tmp3, u, x, ctx))
+    if (!BN_mul(tmp3, u, x_const_time, ctx))
     {
         LOG(ERROR) << "BN_mul failed";
         return BigNum();
