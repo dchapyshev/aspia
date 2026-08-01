@@ -120,6 +120,10 @@ VideoDecoder::Result VideoDecoderH264VT::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
+    // The view still points into the previous pixel buffer, which releaseOutput() frees below.
+    // Drop the planes now so that the error paths leave frame() invalid.
+    frame_.reset(YuvFormat::NV12, size);
+
     const auto* data = reinterpret_cast<const quint8*>(packet.data().data());
     const std::vector<NalUnit> units = parseAnnexB(data, packet.data().size());
 
@@ -262,7 +266,6 @@ VideoDecoder::Result VideoDecoderH264VT::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
-    frame_.reset(YuvFormat::NV12, size);
     frame_.setPlane(0,
                     static_cast<const quint8*>(CVPixelBufferGetBaseAddressOfPlane(output_image_, 0)),
                     static_cast<int>(CVPixelBufferGetBytesPerRowOfPlane(output_image_, 0)));

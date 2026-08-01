@@ -144,6 +144,10 @@ VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
+    // The view still points into the staging texture, which the code below unmaps and may destroy.
+    // Drop the planes now so that the error paths leave frame() invalid.
+    frame_.reset(YuvFormat::NV12, size);
+
     if (!decoder_ || last_size_ != size)
     {
         destroyDecoder();

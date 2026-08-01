@@ -83,6 +83,10 @@ VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet)
         return Result::TEMPORARY_ERROR;
     }
 
+    // The view still points at the previous image, which vpx_codec_decode() is about to reuse or
+    // free. Drop the planes now so that the error paths below leave frame() invalid.
+    frame_.reset(YuvFormat::I420, size);
+
     // Do the actual decoding.
     vpx_codec_err_t ret =
         vpx_codec_decode(codec_.get(),
@@ -122,7 +126,6 @@ VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet)
         return Result::TEMPORARY_ERROR;
     }
 
-    frame_.reset(YuvFormat::I420, size);
     frame_.setPlane(0, image->planes[0], image->stride[0]);
     frame_.setPlane(1, image->planes[1], image->stride[1]);
     frame_.setPlane(2, image->planes[2], image->stride[2]);

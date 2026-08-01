@@ -224,6 +224,10 @@ VideoDecoder::Result VideoDecoderH264MC::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
+    // The view still points into |frame_buffer_|, which mapOutput() may reallocate. Drop the planes
+    // now so that the error paths below leave frame() invalid.
+    frame_.reset(frame_.format(), size);
+
     // The host emits a key frame on every resolution change, so a size change always coincides with a
     // fresh decoder pipeline.
     if (!codec_ || size != configured_size_)

@@ -91,6 +91,10 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
+    // The view still points at the previous frame, which DecodeFrame2() is about to reuse. Drop
+    // the planes now so that the error paths below leave frame() invalid.
+    frame_.reset(YuvFormat::I420, size);
+
     uint8_t* planes[3] = { nullptr, nullptr, nullptr };
     SBufferInfo info;
     memset(&info, 0, sizeof(info));
@@ -141,7 +145,6 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
         return Result::TEMPORARY_ERROR;
     }
 
-    frame_.reset(YuvFormat::I420, size);
     frame_.setPlane(0, planes[0], y_stride);
     frame_.setPlane(1, planes[1], uv_stride);
     frame_.setPlane(2, planes[2], uv_stride);
