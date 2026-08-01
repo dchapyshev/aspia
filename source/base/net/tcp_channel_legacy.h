@@ -241,6 +241,7 @@ private:
     std::unique_ptr<StreamDecryptor> decryptor_;
 
     QQueue<WriteTask> write_queue_;
+    int queued_service_tasks_ = 0;
     VariableSizeWriter variable_size_writer_;
 
     ReadState state_ = ReadState::IDLE;

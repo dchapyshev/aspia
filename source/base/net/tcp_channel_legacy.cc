@@ -39,6 +39,12 @@ const int kWriteQueueReservedSize = 128;
 const Seconds kKeepAliveInterval { 30 };
 const Seconds kKeepAliveTimeout { 30 };
 
+// Upper bound on service messages waiting in the write queue. A well-behaved peer sends one ping
+// per |kKeepAliveInterval| and waits for the reply, so replies never pile up. Without the bound a
+// peer that floods pings faster than its own socket drains grows the queue without limit, and the
+// service path is reachable before authentication completes.
+const int kMaxQueuedServiceTasks = 4;
+
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
@@ -699,6 +705,18 @@ void TcpChannelLegacy::onMessageReceived()
 void TcpChannelLegacy::addWriteTask(
     WriteTask::Type type, quint8 channel_id, const QByteArray& data, bool encrypted)
 {
+    if (type == WriteTask::Type::SERVICE_DATA)
+    {
+        if (queued_service_tasks_ >= kMaxQueuedServiceTasks)
+        {
+            CLOG(ERROR) << "Too many queued service messages";
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        ++queued_service_tasks_;
+    }
+
     const bool schedule_write = write_queue_.isEmpty();
 
     // Add the buffer to the queue for sending.
@@ -808,6 +826,9 @@ void TcpChannelLegacy::doWrite()
 
         // Update TX statistics.
         addTxBytes(bytes_transferred);
+
+        if (write_queue_.front().type() == WriteTask::Type::SERVICE_DATA)
+            --queued_service_tasks_;
 
         // Delete the sent message from the queue.
         write_queue_.pop_front();
@@ -969,6 +990,16 @@ void TcpChannelLegacy::doReadServiceHeader()
                 return;
             }
 
+            // A pong echoes the payload of the ping back, so the payload is rejected here, before
+            // it is read, unless it has exactly the size the protocol defines. The pong branch of
+            // doReadServiceData() enforces the same size.
+            if (header->length != static_cast<quint32>(keep_alive_counter_.size()))
+            {
+                CLOG(ERROR) << "Unexpected keep alive payload size:" << header->length;
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            }
+
             doReadServiceData(header->length);
         }
         else
@@ -1028,6 +1059,11 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
                 sendKeepAlive(KEEP_ALIVE_PONG,
                               io_->read_buffer.data() + sizeof(ServiceHeader),
                               io_->read_buffer.size() - sizeof(ServiceHeader));
+
+                // The reply is rejected when the service queue limit is reached, and that closes
+                // the channel.
+                if (!io_->alive)
+                    return;
             }
             else
             {
