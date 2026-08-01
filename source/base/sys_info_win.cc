@@ -1347,10 +1347,10 @@ QList<SysInfo::Session> SysInfo::sessions()
     QList<Session> result;
 
     DWORD level = 1;
-    ScopedWtsMemory<WTS_SESSION_INFO_1W> info;
     DWORD count = 0;
+    WTS_SESSION_INFO_1W* info = nullptr;
 
-    if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info.receive(), &count))
+    if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, &info, &count))
     {
         PLOG(ERROR) << "WTSEnumerateSessionsExW failed";
         return result;
@@ -1358,7 +1358,7 @@ QList<SysInfo::Session> SysInfo::sessions()
 
     for (DWORD i = 0; i < count; ++i)
     {
-        SessionId session_id = info[i]->SessionId;
+        SessionId session_id = info[i].SessionId;
         if (session_id == kServiceSessionId) // Don't add the system session.
             continue;
 
@@ -1424,6 +1424,7 @@ QList<SysInfo::Session> SysInfo::sessions()
         result.append(std::move(session));
     }
 
+    WTSFreeMemoryEx(WTSTypeSessionInfoLevel1, info, count);
     return result;
 }
 
