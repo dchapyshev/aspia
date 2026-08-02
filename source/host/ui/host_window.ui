@@ -75,9 +75,6 @@
       </item>
       <item>
        <widget class="QLineEdit" name="edit_id">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="text">
          <string notr="true">-</string>
         </property>
@@ -130,9 +127,6 @@ border: 0;
          </property>
          <item>
           <widget class="QLineEdit" name="edit_password">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
            <property name="text">
             <string notr="true">-</string>
            </property>
@@ -194,20 +188,29 @@ border-radius: 2px;
     </item>
     <item>
      <widget class="QWidget" name="widget_statusbar" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_status">
        <item>
-        <widget class="QPushButton" name="button_status">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+        <widget class="QLabel" name="label_status_icon"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_status">
          <property name="text">
           <string>Router is disabled</string>
          </property>
-         <property name="icon">
-          <iconset resource="../../common/resources/common.qrc">
-           <normaloff>:/img/close.svg</normaloff>:/img/close.svg</iconset>
-         </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_status">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

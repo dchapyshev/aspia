@@ -101,6 +101,8 @@ HostWindow::HostWindow(QWidget* parent)
     ui->edit_id->setText(kUnknownValue);
     ui->edit_password->setText(kUnknownValue);
 
+    updateStatusBar();
+
     tray_menu_.addAction(ui->action_show_chat);
     tray_menu_.addAction(ui->action_security_log);
     tray_menu_.addAction(ui->action_settings);
@@ -455,18 +457,15 @@ void HostWindow::onCredentialsChanged(const proto::user::Credentials& credential
 {
     LOG(INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
 
-    ui->button_new_password->setEnabled(true);
-
     bool has_id = credentials.host_id() != kInvalidHostId;
 
-    ui->edit_id->setEnabled(has_id);
-    ui->edit_id->setText(has_id ? formatHostId(credentials.host_id()) : tr("Not available"));
+    ui->edit_id->setText(has_id ? formatHostId(credentials.host_id()) : QString(kUnknownValue));
 
-    bool has_password = !credentials.password().empty();
+    bool has_password = has_id && !credentials.password().empty();
 
     ui->button_new_password->setEnabled(has_password);
-    ui->edit_password->setEnabled(has_password);
-    ui->edit_password->setText(QString::fromStdString(credentials.password()));
+    ui->edit_password->setText(has_password ?
+        QString::fromStdString(credentials.password()) : QString(kUnknownValue));
 
     updateTrayIconTooltip();
 }
@@ -627,12 +626,6 @@ void HostWindow::onAfterThemeChanged()
 
         set_edit_colors(ui->edit_id, edit_color);
         set_edit_colors(ui->edit_password, edit_color);
-
-        ui->button_status->setStyleSheet("QPushButton {"
-                                            "font: 11px;"
-                                            "text-align: left;"
-                                            "border: 0;"
-                                        "}");
 
         updateStatusBar();
     });
@@ -955,17 +948,15 @@ void HostWindow::updateStatusBar()
             return;
     }
 
-    ui->button_status->setText(message);
-    ui->button_status->setIcon(QIcon(icon));
+    ui->label_status->setText(message);
+    ui->label_status_icon->setPixmap(GuiApplication::svgPixmap(icon, QSize(16, 16)));
 
-    QString statusbar_text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
+    QString text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
 
-    ui->button_status->setStyleSheet(QString("QPushButton {"
+    ui->label_status->setStyleSheet(QString("QLabel {"
                                         "color: %1;"
                                         "font: 11px;"
-                                        "text-align: left;"
-                                        "border: 0;"
-                                    "}").arg(statusbar_text_color));
+                                    "}").arg(text_color));
 }
 
 //--------------------------------------------------------------------------------------------------
