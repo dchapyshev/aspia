@@ -24,6 +24,7 @@
 #include "base/serialization.h"
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/gateway_port_mapper.h"
@@ -137,12 +138,22 @@ bool UdpAttempt::deriveCrypto(const proto::peer::UdpReply& reply,
                               std::unique_ptr<DatagramEncryptor>* encryptor,
                               std::unique_ptr<DatagramDecryptor>* decryptor)
 {
-    SecureByteArray session_key(key_pair_.sessionKey(QByteArray::fromStdString(reply.public_key())));
-    if (session_key.isEmpty())
+    const QByteArray client_public_key = QByteArray::fromStdString(reply.public_key());
+
+    SecureByteArray shared_secret(key_pair_.sessionKey(client_public_key));
+    if (shared_secret.isEmpty())
     {
         CLOG(ERROR) << "Failed to derive UDP session key";
         return false;
     }
+
+    GenericHash hash(GenericHash::SHA256);
+
+    hash.addData(shared_secret);
+    hash.addData(key_pair_.publicKey());
+    hash.addData(client_public_key);
+
+    SecureByteArray session_key(hash.result());
 
     if (reply.encryption() != proto::key_exchange::ENCRYPTION_AES256_GCM)
     {

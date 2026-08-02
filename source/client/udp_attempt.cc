@@ -24,6 +24,7 @@
 #include "base/serialization.h"
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/gateway_port_mapper.h"
@@ -99,12 +100,20 @@ UdpChannel* UdpAttempt::createChannel()
         return nullptr;
     }
 
-    SecureByteArray session_key(key_pair_.sessionKey(host_public_key_));
-    if (session_key.isEmpty())
+    SecureByteArray shared_secret(key_pair_.sessionKey(host_public_key_));
+    if (shared_secret.isEmpty())
     {
         CLOG(ERROR) << "Failed to derive UDP session key";
         return nullptr;
     }
+
+    GenericHash hash(GenericHash::SHA256);
+
+    hash.addData(shared_secret);
+    hash.addData(host_public_key_);
+    hash.addData(key_pair_.publicKey());
+
+    SecureByteArray session_key(hash.result());
 
     std::unique_ptr<DatagramEncryptor> encryptor =
         DatagramEncryptor::createForAes256Gcm(session_key, iv_);
