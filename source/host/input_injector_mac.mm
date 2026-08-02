@@ -87,15 +87,7 @@ InputInjectorMac::~InputInjectorMac()
 {
     LOG(INFO) << "Dtor";
 
-    // Release any keys still held so they do not get stuck after the session ends.
-    for (const quint32& key : std::as_const(pressed_keys_))
-    {
-        const int keycode = KeycodeConverter::usbKeycodeToNativeKeycode(key);
-        if (keycode == KeycodeConverter::invalidNativeKeycode())
-            continue;
-
-        postKeyEvent(keycode, false);
-    }
+    InputInjectorMac::releaseAllInput();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,4 +187,25 @@ void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& event)
 void InputInjectorMac::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     // macOS has no public API for synthesizing touch input.
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorMac::releaseAllInput()
+{
+    for (const quint32& key : std::as_const(pressed_keys_))
+    {
+        const int keycode = KeycodeConverter::usbKeycodeToNativeKeycode(key);
+        if (keycode == KeycodeConverter::invalidNativeKeycode())
+            continue;
+
+        postKeyEvent(keycode, false);
+    }
+
+    pressed_keys_.clear();
+
+    if (last_mouse_mask_)
+    {
+        postMouseEvent(CGPointMake(last_mouse_pos_.x(), last_mouse_pos_.y()), 0);
+        last_mouse_mask_ = 0;
+    }
 }

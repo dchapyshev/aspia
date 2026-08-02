@@ -74,7 +74,7 @@ InputInjectorX11::~InputInjectorX11()
 {
     LOG(INFO) << "Dtor";
 
-    releasePressedKeys();
+    InputInjectorX11::releaseAllInput();
     setAutoRepeatEnabled(true);
 
     if (display_)
@@ -223,31 +223,34 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
             display_, DefaultScreen(display_), last_mouse_pos_.x(), last_mouse_pos_.y(), CurrentTime);
     }
 
-    if (left_button_pressed_ != left_button_pressed)
+    // A button missing from the global pointer mapping stays -1 in |pointer_button_map_|, and XTest
+    // answers such a button number with BadValue, which the default Xlib handler turns into exit().
+    // Such a button is never injected, so its state also stays untouched.
+    if (left_button_pressed_ != left_button_pressed && pointer_button_map_[0] > 0)
     {
         XTestFakeButtonEvent(display_, pointer_button_map_[0], left_button_pressed, CurrentTime);
         left_button_pressed_ = left_button_pressed;
     }
 
-    if (middle_button_pressed_ != middle_button_pressed)
+    if (middle_button_pressed_ != middle_button_pressed && pointer_button_map_[1] > 0)
     {
         XTestFakeButtonEvent(display_, pointer_button_map_[1], middle_button_pressed, CurrentTime);
         middle_button_pressed_ = middle_button_pressed;
     }
 
-    if (right_button_pressed_ != right_button_pressed)
+    if (right_button_pressed_ != right_button_pressed && pointer_button_map_[2] > 0)
     {
         XTestFakeButtonEvent(display_, pointer_button_map_[2], right_button_pressed, CurrentTime);
         right_button_pressed_ = right_button_pressed;
     }
 
-    if (back_button_pressed_ != back_button_pressed)
+    if (back_button_pressed_ != back_button_pressed && pointer_button_map_[7] > 0)
     {
         XTestFakeButtonEvent(display_, pointer_button_map_[7], back_button_pressed, CurrentTime);
         back_button_pressed_ = back_button_pressed;
     }
 
-    if (forward_button_pressed_ != forward_button_pressed)
+    if (forward_button_pressed_ != forward_button_pressed && pointer_button_map_[8] > 0)
     {
         XTestFakeButtonEvent(display_, pointer_button_map_[8], forward_button_pressed, CurrentTime);
         forward_button_pressed_ = forward_button_pressed;
@@ -270,7 +273,7 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         else
             wheel_button = pointer_button_map_[4];
 
-        for (int i = 0; i < wheel_ticks; ++i)
+        for (int i = 0; i < wheel_ticks && wheel_button > 0; ++i)
         {
             // Generate a button-down and a button-up to simulate a wheel click.
             XTestFakeButtonEvent(display_, wheel_button, true, CurrentTime);
@@ -296,7 +299,7 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
         else
             wheel_button = pointer_button_map_[5];
 
-        for (int i = 0; i < wheel_ticks; ++i)
+        for (int i = 0; i < wheel_ticks && wheel_button > 0; ++i)
         {
             XTestFakeButtonEvent(display_, wheel_button, true, CurrentTime);
             XTestFakeButtonEvent(display_, wheel_button, false, CurrentTime);
@@ -310,6 +313,49 @@ void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
 void InputInjectorX11::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorX11::releaseAllInput()
+{
+    auto it = pressed_keys_.begin();
+    while (it != pressed_keys_.end())
+    {
+        XTestFakeKeyEvent(display_, *it, 0, CurrentTime);
+        it = pressed_keys_.erase(it);
+    }
+
+    if (left_button_pressed_)
+    {
+        XTestFakeButtonEvent(display_, pointer_button_map_[0], 0, CurrentTime);
+        left_button_pressed_ = false;
+    }
+
+    if (middle_button_pressed_)
+    {
+        XTestFakeButtonEvent(display_, pointer_button_map_[1], 0, CurrentTime);
+        middle_button_pressed_ = false;
+    }
+
+    if (right_button_pressed_)
+    {
+        XTestFakeButtonEvent(display_, pointer_button_map_[2], 0, CurrentTime);
+        right_button_pressed_ = false;
+    }
+
+    if (back_button_pressed_)
+    {
+        XTestFakeButtonEvent(display_, pointer_button_map_[7], 0, CurrentTime);
+        back_button_pressed_ = false;
+    }
+
+    if (forward_button_pressed_)
+    {
+        XTestFakeButtonEvent(display_, pointer_button_map_[8], 0, CurrentTime);
+        forward_button_pressed_ = false;
+    }
+
+    XFlush(display_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -490,43 +536,6 @@ void InputInjectorX11::setAutoRepeatEnabled(bool enable)
 
     XChangeKeyboardControl(display_, KBAutoRepeatMode, &control);
     XFlush(display_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void InputInjectorX11::releasePressedKeys()
-{
-    if (!pressed_keys_.empty())
-    {
-        auto it = pressed_keys_.begin();
-        while (it != pressed_keys_.end())
-        {
-            XTestFakeKeyEvent(display_, *it, 0, CurrentTime);
-            XFlush(display_);
-
-            it = pressed_keys_.erase(it);
-        }
-    }
-
-    if (left_button_pressed_ || middle_button_pressed_ || right_button_pressed_)
-    {
-        if (left_button_pressed_)
-        {
-            XTestFakeButtonEvent(display_, pointer_button_map_[0], 0, CurrentTime);
-            left_button_pressed_ = false;
-        }
-
-        if (middle_button_pressed_)
-        {
-            XTestFakeButtonEvent(display_, pointer_button_map_[1], 0, CurrentTime);
-            middle_button_pressed_ = false;
-        }
-
-        if (right_button_pressed_)
-        {
-            XTestFakeButtonEvent(display_, pointer_button_map_[2], 0, CurrentTime);
-            right_button_pressed_ = false;
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

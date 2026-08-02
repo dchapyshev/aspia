@@ -79,6 +79,10 @@ private:
     // type() would actually change.
     void updateInjectorForCaptureType(ScreenCapturer::Type type);
 
+    // Asks the injector to let go of everything the client holds. Called when a gate closes: the
+    // release the client sends afterwards would be dropped and the key or button would stay down.
+    void releaseAllInput();
+
     // Owned on Windows/macOS, and on Linux for the X11/uinput captures. Null before the first
     // captured frame and when injection is delegated to ScreenWorker (Linux Wayland).
     ScopedQPointer<InputInjector> input_injector_;

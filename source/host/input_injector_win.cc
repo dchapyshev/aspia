@@ -156,6 +156,22 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Sends a mouse event that carries no position: without MOUSEEVENTF_MOVE the cursor stays put and
+// only the button state in |flags| is applied.
+void sendMouseButtons(DWORD flags, DWORD mouse_data)
+{
+    INPUT input;
+    memset(&input, 0, sizeof(input));
+
+    input.type          = INPUT_MOUSE;
+    input.mi.mouseData  = mouse_data;
+    input.mi.dwFlags    = flags;
+
+    if (!SendInput(1, &input, sizeof(input)))
+        PLOG(ERROR) << "SendInput failed";
+}
+
+//--------------------------------------------------------------------------------------------------
 void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 {
     INPUT input;
@@ -212,14 +228,7 @@ InputInjectorWin::~InputInjectorWin()
     LOG(INFO) << "Dtor";
 
     setBlockInputImpl(false);
-    for (const auto& key : std::as_const(pressed_keys_))
-    {
-        int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(key);
-        if (scancode != KeycodeConverter::invalidNativeKeycode())
-            sendKeyboardScancode(static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
-        else
-            LOG(ERROR) << "Invalid key code:" << key;
-    }
+    InputInjectorWin::releaseAllInput();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,6 +465,51 @@ void InputInjectorWin::injectTouchEvent(const proto::input::TouchEvent& event)
 {
     switchToInputDesktop();
     touch_injector_.injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorWin::releaseAllInput()
+{
+    for (const auto& key : std::as_const(pressed_keys_))
+    {
+        int scancode = KeycodeConverter::usbKeycodeToNativeKeycode(key);
+        if (scancode != KeycodeConverter::invalidNativeKeycode())
+            sendKeyboardScancode(static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
+        else
+            LOG(ERROR) << "Invalid key code:" << key;
+    }
+
+    pressed_keys_.clear();
+
+    if (!last_mouse_mask_)
+        return;
+
+    // The buttons were pressed through the swapped mapping if the host has one, so they have to be
+    // released through it as well.
+    static const bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
+
+    DWORD flags = 0;
+
+    if (last_mouse_mask_ & proto::input::MouseEvent::LEFT_BUTTON)
+        flags |= swap_buttons ? MOUSEEVENTF_RIGHTUP : MOUSEEVENTF_LEFTUP;
+
+    if (last_mouse_mask_ & proto::input::MouseEvent::RIGHT_BUTTON)
+        flags |= swap_buttons ? MOUSEEVENTF_LEFTUP : MOUSEEVENTF_RIGHTUP;
+
+    if (last_mouse_mask_ & proto::input::MouseEvent::MIDDLE_BUTTON)
+        flags |= MOUSEEVENTF_MIDDLEUP;
+
+    if (flags)
+        sendMouseButtons(flags, 0);
+
+    // Both X buttons travel in mouseData, so they cannot share one event.
+    if (last_mouse_mask_ & proto::input::MouseEvent::BACK_BUTTON)
+        sendMouseButtons(MOUSEEVENTF_XUP, XBUTTON1);
+
+    if (last_mouse_mask_ & proto::input::MouseEvent::FORWARD_BUTTON)
+        sendMouseButtons(MOUSEEVENTF_XUP, XBUTTON2);
+
+    last_mouse_mask_ = 0;
 }
 
 //--------------------------------------------------------------------------------------------------

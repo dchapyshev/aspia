@@ -40,6 +40,7 @@ public:
     void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
+    void releaseAllInput() final;
 
 private:
     void switchToInputDesktop();

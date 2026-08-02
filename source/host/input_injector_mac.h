@@ -39,6 +39,7 @@ public:
     void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
+    void releaseAllInput() final;
 
 private:
     // Global display coordinates (top-left of the main display is the origin) the capturer/client
@@ -51,7 +52,7 @@ private:
     // Previous button mask, used to detect press/release transitions.
     quint32 last_mouse_mask_ = 0;
 
-    // USB HID codes of the keys currently held, so the destructor can release them.
+    // USB HID codes of the keys currently held, so they can be released on demand.
     QSet<quint32> pressed_keys_;
 
     Q_DISABLE_COPY(InputInjectorMac)

@@ -221,6 +221,13 @@ void ScreenWorker::setBlockInput(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ScreenWorker::releaseAllInput()
+{
+    if (input_injector_)
+        input_injector_->releaseAllInput();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ScreenWorker::onConfigure(
     const proto::control::Config& config, bool vp8_supported, bool vp9_supported, bool h264_supported)
 {

@@ -376,3 +376,12 @@ void InputInjectorAndroid::injectTouchEvent(const proto::input::TouchEvent& /* e
     // Multi-touch forwarding as accessibility gestures is not implemented yet.
     NOTIMPLEMENTED();
 }
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorAndroid::releaseAllInput()
+{
+    left_pressed_ = false;
+    left_moved_ = false;
+    right_pressed_ = false;
+    modifiers_ = 0;
+}

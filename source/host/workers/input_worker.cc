@@ -163,18 +163,27 @@ void InputWorker::onInjectTouchEvent(const proto::input::TouchEvent& event)
 void InputWorker::onSetPaused(bool paused)
 {
     is_paused_ = paused;
+
+    if (paused)
+        releaseAllInput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputWorker::onSetMouseLocked(bool locked)
 {
     is_mouse_locked_ = locked;
+
+    if (locked)
+        releaseAllInput();
 }
 
 //--------------------------------------------------------------------------------------------------
 void InputWorker::onSetKeyboardLocked(bool locked)
 {
     is_keyboard_locked_ = locked;
+
+    if (locked)
+        releaseAllInput();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -368,5 +377,23 @@ void InputWorker::updateInjectorForCaptureType(ScreenCapturer::Type type)
         default:
             // Injector types not owned by this worker (Wayland) never reach here.
             break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputWorker::releaseAllInput()
+{
+    if (input_injector_)
+    {
+        input_injector_->releaseAllInput();
+    }
+    else if (screen_worker_)
+    {
+        QPointer<ScreenWorker> worker = screen_worker_;
+        QMetaObject::invokeMethod(worker, [worker]()
+        {
+            if (worker)
+                worker->releaseAllInput();
+        }, Qt::QueuedConnection);
     }
 }

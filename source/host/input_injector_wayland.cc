@@ -52,7 +52,10 @@ InputInjectorWayland::InputInjectorWayland(WaylandCompositorSource* source, QObj
 }
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorWayland::~InputInjectorWayland() = default;
+InputInjectorWayland::~InputInjectorWayland()
+{
+    InputInjectorWayland::releaseAllInput();
+}
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -88,7 +91,14 @@ void InputInjectorWayland::injectKeyEvent(const proto::input::KeyEvent& event)
     }
 
     bool pressed = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
-    source_->notifyKeyboardKeycode(keycode - kXkbKeycodeOffset, pressed);
+    const int code = keycode - kXkbKeycodeOffset;
+
+    if (pressed)
+        pressed_keys_.insert(code);
+    else
+        pressed_keys_.remove(code);
+
+    source_->notifyKeyboardKeycode(code, pressed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,6 +195,48 @@ void InputInjectorWayland::injectMouseEvent(const proto::input::MouseEvent& even
 void InputInjectorWayland::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorWayland::releaseAllInput()
+{
+    if (!source_)
+        return;
+
+    for (int code : std::as_const(pressed_keys_))
+        source_->notifyKeyboardKeycode(code, false);
+
+    pressed_keys_.clear();
+
+    if (left_button_pressed_)
+    {
+        source_->notifyPointerButton(kBtnLeft, false);
+        left_button_pressed_ = false;
+    }
+
+    if (middle_button_pressed_)
+    {
+        source_->notifyPointerButton(kBtnMiddle, false);
+        middle_button_pressed_ = false;
+    }
+
+    if (right_button_pressed_)
+    {
+        source_->notifyPointerButton(kBtnRight, false);
+        right_button_pressed_ = false;
+    }
+
+    if (back_button_pressed_)
+    {
+        source_->notifyPointerButton(kBtnSide, false);
+        back_button_pressed_ = false;
+    }
+
+    if (forward_button_pressed_)
+    {
+        source_->notifyPointerButton(kBtnExtra, false);
+        forward_button_pressed_ = false;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

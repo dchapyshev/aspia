@@ -20,6 +20,7 @@
 #define HOST_INPUT_INJECTOR_WAYLAND_H
 
 #include <QPoint>
+#include <QSet>
 #include <QSize>
 
 #include "host/input_injector.h"
@@ -46,6 +47,7 @@ public:
     void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
+    void releaseAllInput() final;
 
 private:
     void injectUnicode(uint code_point);
@@ -53,6 +55,9 @@ private:
     WaylandCompositorSource* source_ = nullptr;
     QSize screen_size_;
     QPoint screen_offset_;
+
+    // Evdev codes of the keys currently held.
+    QSet<int> pressed_keys_;
 
     bool left_button_pressed_ = false;
     bool middle_button_pressed_ = false;

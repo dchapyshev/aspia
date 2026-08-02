@@ -42,6 +42,7 @@ public:
     void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
+    void releaseAllInput() final;
 
 private:
     explicit InputInjectorX11(QObject* parent = nullptr);
@@ -54,7 +55,6 @@ private:
     bool isLockKey(int keycode);
     bool isAutoRepeatEnabled();
     void setAutoRepeatEnabled(bool enable);
-    void releasePressedKeys();
 
     // Finds a spare keycode that can be temporarily remapped to inject arbitrary Unicode characters.
     void initTextInjection();

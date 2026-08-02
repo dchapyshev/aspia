@@ -63,6 +63,7 @@ public:
     virtual void injectTextEvent(const proto::input::TextEvent& event) = 0;
     virtual void injectMouseEvent(const proto::input::MouseEvent& event) = 0;
     virtual void injectTouchEvent(const proto::input::TouchEvent& event) = 0;
+    virtual void releaseAllInput() = 0;
 
 private:
     const Type type_;

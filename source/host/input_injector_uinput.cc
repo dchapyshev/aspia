@@ -132,6 +132,8 @@ InputInjectorUinput::~InputInjectorUinput()
 {
     if (fd_ >= 0)
     {
+        InputInjectorUinput::releaseAllInput();
+
         ioctl(fd_, UI_DEV_DESTROY);
         ::close(fd_);
     }
@@ -250,7 +252,14 @@ void InputInjectorUinput::injectKeyEvent(const proto::input::KeyEvent& event)
     }
 
     const bool pressed = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
-    emitEvent(EV_KEY, static_cast<quint16>(keycode - kXkbKeycodeOffset), pressed ? 1 : 0);
+    const quint16 code = static_cast<quint16>(keycode - kXkbKeycodeOffset);
+
+    if (pressed)
+        pressed_keys_.insert(code);
+    else
+        pressed_keys_.remove(code);
+
+    emitEvent(EV_KEY, code, pressed ? 1 : 0);
     emitEvent(EV_SYN, SYN_REPORT, 0);
 }
 
@@ -355,4 +364,45 @@ void InputInjectorUinput::injectMouseEvent(const proto::input::MouseEvent& event
 void InputInjectorUinput::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputInjectorUinput::releaseAllInput()
+{
+    for (quint16 code : std::as_const(pressed_keys_))
+        emitEvent(EV_KEY, code, 0);
+
+    pressed_keys_.clear();
+
+    if (left_button_pressed_)
+    {
+        emitEvent(EV_KEY, BTN_LEFT, 0);
+        left_button_pressed_ = false;
+    }
+
+    if (middle_button_pressed_)
+    {
+        emitEvent(EV_KEY, BTN_MIDDLE, 0);
+        middle_button_pressed_ = false;
+    }
+
+    if (right_button_pressed_)
+    {
+        emitEvent(EV_KEY, BTN_RIGHT, 0);
+        right_button_pressed_ = false;
+    }
+
+    if (back_button_pressed_)
+    {
+        emitEvent(EV_KEY, BTN_SIDE, 0);
+        back_button_pressed_ = false;
+    }
+
+    if (forward_button_pressed_)
+    {
+        emitEvent(EV_KEY, BTN_EXTRA, 0);
+        forward_button_pressed_ = false;
+    }
+
+    emitEvent(EV_SYN, SYN_REPORT, 0);
 }

@@ -20,6 +20,7 @@
 #define HOST_INPUT_INJECTOR_UINPUT_H
 
 #include <QPoint>
+#include <QSet>
 #include <QSize>
 
 #include "host/input_injector.h"
@@ -44,6 +45,7 @@ public:
     void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
+    void releaseAllInput() final;
 
 private:
     bool init();
@@ -52,6 +54,9 @@ private:
     int fd_ = -1;
     QSize screen_size_;
     QPoint screen_offset_;
+
+    // Uinput codes of the keys currently held.
+    QSet<quint16> pressed_keys_;
 
     bool left_button_pressed_ = false;
     bool middle_button_pressed_ = false;

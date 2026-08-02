@@ -75,6 +75,7 @@ public:
     void injectMouseEvent(const proto::input::MouseEvent& event);
     void injectTouchEvent(const proto::input::TouchEvent& event);
     void setBlockInput(bool enable);
+    void releaseAllInput();
 
 public slots:
     // Applies the configuration merged over all connected clients and (re)starts capturing. Codec
