@@ -39,7 +39,6 @@ class ElevateUtil;
 class NotifierWindow;
 class PermissionDialog;
 class QTimer;
-class StatusDialog;
 
 class HostWindow final : public QMainWindow
 {
@@ -113,8 +112,6 @@ private:
     // must stay able to quit, e.g. for macOS "Quit & Reopen" after a permission change.
     QPointer<PermissionDialog> permission_dialog_;
 #endif // defined(Q_OS_MACOS)
-
-    StatusDialog* status_dialog_ = nullptr;
 
     QPointer<UserIpcWorker> ipc_worker_;
     ScopedQPointer<Clipboard> clipboard_;

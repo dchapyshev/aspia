@@ -52,9 +52,6 @@ collect_sources(SOURCE_COMMON_DESKTOP
     password_edit.h
     session_type.cc
     session_type.h
-    status_dialog.cc
-    status_dialog.h
-    status_dialog.ui
     two_factor_code_dialog.cc
     two_factor_code_dialog.h
     two_factor_code_dialog.ui

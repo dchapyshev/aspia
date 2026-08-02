@@ -32,7 +32,6 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "common/clipboard.h"
@@ -40,7 +39,6 @@
 #include "common/desktop/chat_widget.h"
 #include "common/desktop/language_action.h"
 #include "common/desktop/msg_box.h"
-#include "common/desktop/status_dialog.h"
 #include "host/database.h"
 #include "host/system_settings.h"
 #include "host/user_settings.h"
@@ -479,22 +477,6 @@ void HostWindow::onRouterStateChanged(const proto::user::RouterState& state)
     LOG(INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
 
-    QString router;
-
-    if (state.state() != proto::user::RouterState::DISABLED)
-    {
-        Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(QString::fromStdString(state.host_name()));
-        address.setPort(static_cast<quint16>(state.host_port()));
-
-        router = address.toString();
-    }
-
-    if (state.state() == proto::user::RouterState::DISABLED)
-        ui->button_status->setEnabled(false);
-    else
-        ui->button_status->setEnabled(true);
-
     if (state.state() != proto::user::RouterState::CONNECTED)
     {
         ui->button_new_password->setEnabled(false);
@@ -502,47 +484,8 @@ void HostWindow::onRouterStateChanged(const proto::user::RouterState& state)
         ui->edit_id->setText(kUnknownValue);
         ui->edit_password->setText(kUnknownValue);
     }
-    else
-    {
-        ui->button_status->setEnabled(true);
-    }
-
-    QString status;
-
-    switch (state.state())
-    {
-        case proto::user::RouterState::DISABLED:
-            status = tr("Router is disabled");
-            break;
-
-        case proto::user::RouterState::CONNECTING:
-            status = tr("Connecting to router %1...").arg(router);
-            break;
-
-        case proto::user::RouterState::CONNECTED:
-            status = tr("Connected to router %1").arg(router);
-            break;
-
-        case proto::user::RouterState::FAILED:
-            status = tr("Failed to connect to router %1").arg(router);
-            break;
-
-        default:
-            NOTREACHED();
-            return;
-    }
 
     updateStatusBar();
-
-    if (!status_dialog_)
-    {
-        status_dialog_ = new StatusDialog(this);
-
-        connect(ui->button_status, &QPushButton::clicked,
-                status_dialog_, &StatusDialog::show);
-    }
-
-    status_dialog_->addMessage(status);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -630,9 +573,6 @@ void HostWindow::onLanguageChanged(QAction* action)
     if (notifier_)
         notifier_->retranslateUi();
 
-    if (status_dialog_)
-        status_dialog_->retranslateUi();
-
     updateStatusBar();
 
     if (!ipc_worker_)
@@ -692,9 +632,6 @@ void HostWindow::onAfterThemeChanged()
                                             "font: 11px;"
                                             "text-align: left;"
                                             "border: 0;"
-                                        "}"
-                                        "QPushButton:hover:enabled {"
-                                            "text-decoration: underline;"
                                         "}");
 
         updateStatusBar();
@@ -1028,9 +965,6 @@ void HostWindow::updateStatusBar()
                                         "font: 11px;"
                                         "text-align: left;"
                                         "border: 0;"
-                                    "}"
-                                    "QPushButton:hover:enabled {"
-                                        "text-decoration: underline;"
                                     "}").arg(statusbar_text_color));
 }
 
