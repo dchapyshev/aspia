@@ -24,8 +24,15 @@
 #include "proto/stun.h"
 #include "router/settings.h"
 
+namespace {
+
+const Seconds kReportInterval{ 60 };
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 StunWorker::StunWorker()
+    : Worker(Thread::AsioDispatcher, kReportInterval)
 {
     LOG(INFO) << "Ctor";
 }
@@ -64,6 +71,24 @@ void StunWorker::onStop()
     udp_socket_->cancel(ignored_error);
     udp_socket_->close(ignored_error);
     udp_socket_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void StunWorker::onTimer(TimePoint /* now */)
+{
+    if (invalid_datagram_count_)
+    {
+        LOG(ERROR) << invalid_datagram_count_ << "invalid STUN datagram(s) dropped in the last"
+                   << kReportInterval.count() << "seconds";
+        invalid_datagram_count_ = 0;
+    }
+
+    if (read_error_count_)
+    {
+        LOG(ERROR) << read_error_count_ << "STUN socket read error(s) in the last"
+                   << kReportInterval.count() << "seconds. Last error:" << last_read_error_;
+        read_error_count_ = 0;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,7 +140,11 @@ void StunWorker::doReceiveRequest()
             if (error_code == asio::error::operation_aborted)
                 return;
 
-            LOG(ERROR) << "Error reading from socket:" << error_code;
+            // A read error is peer-triggerable too (an ICMP port unreachable for a reply sent to a
+            // spoofed source surfaces here), so it is counted rather than logged per datagram.
+            ++read_error_count_;
+            last_read_error_ = error_code;
+
             doReceiveRequest();
             return;
         }
@@ -123,16 +152,20 @@ void StunWorker::doReceiveRequest()
         proto::stun::PeerToStun message;
         if (!message.ParseFromArray(io_->read_buffer.data(), static_cast<int>(bytes_transferred)))
         {
-            LOG(ERROR) << "Unable to parse message";
+            ++invalid_datagram_count_;
         }
-        else if (message.has_endpoint_request())
+        else if (!message.has_endpoint_request())
+        {
+            ++invalid_datagram_count_;
+        }
+        else
         {
             const proto::stun::EndpointRequest& request = message.endpoint_request();
 
             if (request.magic_number() == 0xA0B1C2D3)
                 doSendAddressReply(request.transaction_id(), io_->remote_endpoint);
             else
-                LOG(ERROR) << "Invalid magic number:" << message.endpoint_request().magic_number();
+                ++invalid_datagram_count_;
         }
 
         doReceiveRequest();

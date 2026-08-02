@@ -23,6 +23,7 @@
 
 #include <array>
 #include <memory>
+#include <system_error>
 
 #include "base/shared_pointer.h"
 #include "base/threading/worker.h"
@@ -39,6 +40,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer(TimePoint now) final;
 
 private:
     bool startServer(quint16 port);
@@ -56,6 +58,10 @@ private:
 
     // Created in the worker thread so the socket binds to its io_context.
     std::unique_ptr<asio::ip::udp::socket> udp_socket_;
+
+    quint64 invalid_datagram_count_ = 0;
+    quint64 read_error_count_ = 0;
+    std::error_code last_read_error_;
 
     Q_DISABLE_COPY_MOVE(StunWorker)
 };
