@@ -201,7 +201,7 @@ void EventMonitor::powerCallback(
 //--------------------------------------------------------------------------------------------------
 CoreApplication::CoreApplication(int& argc, char* argv[])
     : QCoreApplication(argc, argv),
-      worker_manager_(std::make_unique<WorkerManager>())
+      worker_manager_(new WorkerManager())
 {
 #if defined(Q_OS_WINDOWS)
     ui_thread_ = std::make_unique<Thread>(Thread::QtDispatcher);
@@ -363,17 +363,14 @@ CoreApplication::~CoreApplication()
 #if defined(Q_OS_MACOS)
     event_monitor_.reset();
 #endif // defined(Q_OS_MACOS)
-
-    worker_manager_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
 int CoreApplication::exec()
 {
+    std::unique_ptr<WorkerManager> safe_deleter(worker_manager_);
     worker_manager_->start();
-    const int result = QCoreApplication::exec();
-    worker_manager_.reset();
-    return result;
+    return QCoreApplication::exec();
 }
 
 //--------------------------------------------------------------------------------------------------

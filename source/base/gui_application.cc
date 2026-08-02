@@ -94,7 +94,8 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 GuiApplication::GuiApplication(int& argc, char* argv[])
-    : QApplication(argc, argv)
+    : QApplication(argc, argv),
+      worker_manager_(new WorkerManager())
 {
     LOG(INFO) << "Ctor";
 
@@ -121,8 +122,6 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
     lock_file_ = std::make_unique<QLockFile>(temp_path + '/' + server_name_ + ".lock");
-
-    worker_manager_ = std::make_unique<WorkerManager>();
 
     const QStringList qm_file_list =
         QDir(kTranslationsDir).entryList(QStringList("*.qm"), QDir::Files);
@@ -228,7 +227,6 @@ GuiApplication::~GuiApplication()
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    worker_manager_.reset();
     lock_file_.reset();
     removeTranslators();
 }
@@ -236,10 +234,9 @@ GuiApplication::~GuiApplication()
 //--------------------------------------------------------------------------------------------------
 int GuiApplication::exec()
 {
+    std::unique_ptr<WorkerManager> safe_deleter(worker_manager_);
     worker_manager_->start();
-    const int result = QApplication::exec();
-    worker_manager_.reset();
-    return result;
+    return QApplication::exec();
 }
 
 //--------------------------------------------------------------------------------------------------

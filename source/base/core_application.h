@@ -63,7 +63,7 @@ signals:
     void sig_powerEvent(quint32 event);
 
 private:
-    std::unique_ptr<WorkerManager> worker_manager_;
+    ScopedQPointer<WorkerManager> worker_manager_;
 
 #if defined(Q_OS_WINDOWS)
     std::unique_ptr<Thread> ui_thread_;

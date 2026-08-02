@@ -104,8 +104,9 @@ void Worker::onThreadFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-WorkerManager::WorkerManager()
-    : thread_id_(std::this_thread::get_id())
+WorkerManager::WorkerManager(QObject* parent)
+    : QObject(parent),
+      thread_id_(std::this_thread::get_id())
 {
     // Nothing
 }

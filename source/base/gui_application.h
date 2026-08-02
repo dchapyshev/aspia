@@ -28,6 +28,7 @@
 
 #include <utility>
 
+#include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 
 class QLocalServer;
@@ -106,7 +107,7 @@ private:
     std::unique_ptr<QLockFile> lock_file_;
     QLocalServer* server_ = nullptr;
 
-    std::unique_ptr<WorkerManager> worker_manager_;
+    ScopedQPointer<WorkerManager> worker_manager_;
 
     QHash<QString, QStringList> locale_list_;
     QList<QTranslator*> translator_list_;

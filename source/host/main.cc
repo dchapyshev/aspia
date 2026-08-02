@@ -166,12 +166,10 @@ int runAgent(int& argc, char* argv[], const char* agent_type)
         HostUtils::printDebugInfo(
             HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
 
-        WorkerManager worker_manager;
-        worker_manager.add(std::make_unique<DesktopIpcWorker>());
-        worker_manager.add(std::make_unique<ScreenWorker>());
-        worker_manager.add(std::make_unique<InputWorker>());
-        worker_manager.add(std::make_unique<AudioWorker>());
-        worker_manager.start();
+        application.addWorker(std::make_unique<DesktopIpcWorker>());
+        application.addWorker(std::make_unique<ScreenWorker>());
+        application.addWorker(std::make_unique<InputWorker>());
+        application.addWorker(std::make_unique<AudioWorker>());
 
         return application.exec();
     }

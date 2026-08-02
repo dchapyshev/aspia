@@ -126,11 +126,13 @@ private:
     Q_DISABLE_COPY_MOVE(Worker)
 };
 
-class WorkerManager
+class WorkerManager final : public QObject
 {
+    Q_OBJECT
+
 public:
-    WorkerManager();
-    ~WorkerManager();
+    explicit WorkerManager(QObject* parent = nullptr);
+    ~WorkerManager() final;
 
     qint64 add(std::unique_ptr<Worker> worker);
     void start();
