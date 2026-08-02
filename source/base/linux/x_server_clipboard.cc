@@ -34,6 +34,13 @@ constexpr size_t kIncrChunkSize = 256 * 1024;
 // Upper bound for an incoming INCR transfer; a misbehaving owner cannot make us accumulate more.
 constexpr size_t kMaxIncrDataSize = 16 * 1024 * 1024;
 
+// Upper bound for a single XGetWindowProperty read, in units of 32 bits - that is what its
+// |long_length| argument counts. The size of a selection is chosen by whichever application owns
+// it, and Xlib allocates the whole requested range in one go, so an unbounded read means a large
+// clipboard in another program costs us that allocation before we get to look at the size. This is
+// the same ceiling the INCR path already keeps.
+constexpr long kMaxPropertyItems = static_cast<long>(kMaxIncrDataSize / 4);
+
 // An outgoing INCR transfer whose requestor has not consumed a chunk for this long is dropped.
 constexpr Seconds kOutgoingTransferTimeout(30);
 
@@ -279,7 +286,7 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
     unsigned char* data = nullptr;
 
     if (XGetWindowProperty(display_, clipboard_window_, selectionDataProperty(),
-                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           0, kMaxPropertyItems, X11_True, AnyPropertyType, &type, &format,
                            &item_count, &after, &data) != Success)
     {
         LOG(WARNING) << "XGetWindowProperty failed for an INCR chunk";
@@ -287,6 +294,22 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
 
     if (type == X11_None)
         return;
+
+    if (after)
+    {
+        // A single chunk larger than the whole transfer is allowed to be. The property is still on
+        // the window - a non-zero |after| means XGetWindowProperty did not delete it - and deleting
+        // it is also what asks the owner for the next chunk, so the drain keeps going.
+        LOG(WARNING) << "INCR chunk exceeds" << kMaxIncrDataSize << "bytes, dropping format";
+        XDeleteProperty(display_, clipboard_window_, selectionDataProperty());
+
+        incr_capture_overflow_ = true;
+        incr_capture_data_.clear();
+
+        if (data)
+            XFree(data);
+        return;
+    }
 
     if (item_count == 0)
     {
@@ -391,7 +414,7 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
     unsigned char* data = nullptr;
 
     if (XGetWindowProperty(display_, clipboard_window_, selection_event->property,
-                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                           0, kMaxPropertyItems, X11_True, AnyPropertyType, &type, &format,
                            &item_count, &after, &data) != Success)
     {
         LOG(WARNING) << "XGetWindowProperty failed for a selection reply";
@@ -408,6 +431,20 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
 
         if (data)
             XFree(data);
+        return;
+    }
+
+    if (after)
+    {
+        // The owner offered more than the cap in one go, without announcing INCR. The property is
+        // still on the window - a non-zero |after| means XGetWindowProperty did not delete it.
+        LOG(WARNING) << "Selection reply exceeds" << kMaxIncrDataSize << "bytes, dropping format";
+        XDeleteProperty(display_, clipboard_window_, selection_event->property);
+
+        if (data)
+            XFree(data);
+
+        finishCurrentTarget();
         return;
     }
 
@@ -702,10 +739,21 @@ void XServerClipboard::handleTargetsNotify(XSelectionEvent* event)
         unsigned char* data = nullptr;
 
         if (XGetWindowProperty(display_, clipboard_window_, event->property,
-                               0, ~0L, X11_True, AnyPropertyType, &type, &format,
+                               0, kMaxPropertyItems, X11_True, AnyPropertyType, &type, &format,
                                &item_count, &after, &data) != Success)
         {
             LOG(WARNING) << "XGetWindowProperty failed for a TARGETS reply";
+        }
+
+        if (after)
+        {
+            // A target list this long is not a target list. The property is still on the window -
+            // a non-zero |after| means XGetWindowProperty did not delete it.
+            LOG(WARNING) << "TARGETS reply exceeds" << kMaxIncrDataSize << "bytes, ignoring it";
+            XDeleteProperty(display_, clipboard_window_, event->property);
+
+            type = X11_None;
+            item_count = 0;
         }
 
         if (type == incr_atom_)
