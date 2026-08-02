@@ -34,10 +34,18 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
 namespace {
+
+// The user created by --create-config always gets id 1 (AUTOINCREMENT on an empty table). It is the
+// router's guaranteed way into the admin channel: the router has no CLI to restore administrator
+// access, so losing it means losing control over the installation. The record is therefore not
+// deletable, must keep SESSION_TYPE_ADMIN and must stay enabled - a disabled account is refused by
+// the authenticator just like one without the session type, so both would lock everyone out.
+constexpr qint64 kBuiltInUserId = 1;
 
 constexpr int kClientDeviceTokenSize = 32;
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
@@ -444,6 +452,13 @@ std::string_view Database::modifyUser(
         return proto::router::kErrorInvalidData;
     }
 
+    if (user.entry_id == kBuiltInUserId &&
+        (!(user.sessions & proto::router::SESSION_TYPE_ADMIN) || !(user.flags & User::ENABLED)))
+    {
+        LOG(ERROR) << "Attempt to revoke administrator access from the built-in user";
+        return proto::router::kErrorAccessDenied;
+    }
+
     if (password_changed)
         *password_changed = false;
 
@@ -583,6 +598,12 @@ std::string_view Database::removeUser(qint64 entry_id)
     {
         LOG(ERROR) << "Invalid user id:" << entry_id;
         return proto::router::kErrorInvalidData;
+    }
+
+    if (entry_id == kBuiltInUserId)
+    {
+        LOG(ERROR) << "Attempt to delete the built-in user";
+        return proto::router::kErrorAccessDenied;
     }
 
     SqlQuery query(db_, "DELETE FROM users WHERE id=?");

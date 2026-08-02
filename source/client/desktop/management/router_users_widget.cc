@@ -378,6 +378,8 @@ void RouterUsersWidget::onUserResultReceived(const proto::router::UserResult& re
             message = QT_TR_NOOP("Invalid data was passed.");
         else if (error_code == proto::router::kErrorAlreadyExists)
             message = QT_TR_NOOP("A user with the specified name already exists.");
+        else if (error_code == proto::router::kErrorAccessDenied)
+            message = QT_TR_NOOP("Access denied.");
         else if (error_code == proto::router::kErrorNotFound)
             message = QT_TR_NOOP("User not found. The list may be out of date.");
         else
