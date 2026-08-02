@@ -222,7 +222,7 @@ void UdpAttempt::sendProbeIfReady()
     // Once the channel can carry encrypted data both ways, send a real bandwidth probe and wait for
     // the peer's ack (see onChannelMessage). The round-trip both confirms the channel and yields its
     // initial bandwidth. Both conditions are required to send.
-    if (!enet_ready_ || !crypto_ready_ || probe_sent_)
+    if (!channel_ || connected_ || !enet_ready_ || !crypto_ready_ || probe_sent_)
         return;
     probe_sent_ = true;
 
