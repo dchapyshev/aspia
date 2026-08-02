@@ -849,11 +849,17 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
         return;
 
     QMenu menu;
-    menu.addAction(ui->action_desktop_connect);
-    menu.addAction(ui->action_terminal_connect);
-    menu.addAction(ui->action_file_transfer_connect);
-    menu.addAction(ui->action_chat_connect);
-    menu.addAction(ui->action_system_info_connect);
+
+    auto addProxy = [&menu](QAction* action)
+    {
+        menu.addAction(action->icon(), action->text(), action, &QAction::triggered);
+    };
+
+    addProxy(ui->action_desktop_connect);
+    addProxy(ui->action_terminal_connect);
+    addProxy(ui->action_file_transfer_connect);
+    addProxy(ui->action_chat_connect);
+    addProxy(ui->action_system_info_connect);
 
     std::optional<HostConfig> host;
     if (item->type() == SearchWidget::Item::Type::ROUTER)
@@ -1725,19 +1731,13 @@ void ManagementTab::updateActionsState()
     if (current_content_ == search_widget_)
     {
         SearchWidget::Item* host_item = search_widget_->currentItem();
-        const bool has_item = host_item != nullptr;
-        const bool is_local_host = has_item && host_item->type() == SearchWidget::Item::Type::LOCAL;
+        const bool is_local_host = host_item != nullptr &&
+            host_item->type() == SearchWidget::Item::Type::LOCAL;
 
         // Address-book operations apply to local hosts only; router hosts can only be connected.
         ui->action_delete_host->setVisible(is_local_host);
         ui->action_edit_host->setVisible(is_local_host);
         ui->action_copy_host->setVisible(is_local_host);
-
-        ui->action_desktop_connect->setVisible(has_item);
-        ui->action_file_transfer_connect->setVisible(has_item);
-        ui->action_chat_connect->setVisible(has_item);
-        ui->action_system_info_connect->setVisible(has_item);
-        ui->action_terminal_connect->setVisible(has_item);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
     {
