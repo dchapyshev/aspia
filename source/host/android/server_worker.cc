@@ -168,6 +168,11 @@ void ServerWorker::onStop()
     if (!tcp_server_)
         return;
 
+    const QList<Client*> file_clients = file_clients_;
+    file_clients_.clear();
+    for (auto* client : file_clients)
+        delete client;
+
     desktop_agent_.reset();
     router_manager_.reset();
     tcp_server_.reset();

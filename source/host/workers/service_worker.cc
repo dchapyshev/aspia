@@ -183,6 +183,15 @@ void ServiceWorker::onStop()
 {
     LOG(INFO) << "Service worker stopped";
 
+    const QList<Client*> clients = clients_;
+    clients_.clear();
+    for (auto* client : clients)
+        delete client;
+
+    for (const auto& pending : std::as_const(pending_confirmation_))
+        delete pending.tcp_channel;
+    pending_confirmation_.clear();
+
     router_manager_.reset();
     tcp_server_.reset();
     desktop_manager_.reset();

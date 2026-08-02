@@ -87,6 +87,7 @@ protected:
 
     void start(WorkerManager* manager);
     void stopSoon();
+    void join();
 
     // Finds a sibling worker registered in the same manager. Safe to call from the worker thread
     // once the worker has been started (the worker set does not change after that). Defined below

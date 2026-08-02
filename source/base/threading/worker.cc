@@ -60,6 +60,12 @@ void Worker::stopSoon()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Worker::join()
+{
+    thread_.wait();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Worker::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == timer_id_)
@@ -97,10 +103,6 @@ void Worker::onThreadFinished()
     onStop();
 
     current_worker_ = nullptr;
-
-    std::lock_guard lock(manager_->lock_);
-    --manager_->running_;
-    manager_->condition_.notify_all();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,11 +123,10 @@ WorkerManager::~WorkerManager()
     for (const auto& worker : workers_)
         worker.second->stopSoon();
 
-    {
-        std::unique_lock lock(lock_);
-        while (running_ != 0)
-            condition_.wait(lock);
-    }
+    // Wait until every worker thread has FULLY finished, including Qt's deferred-delete flush and
+    // the destruction of the thread's event dispatcher.
+    for (const auto& worker : workers_)
+        worker.second->join();
 
     workers_.clear();
 

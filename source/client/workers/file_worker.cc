@@ -120,6 +120,9 @@ void FileWorker::onStop()
 {
     LOG(INFO) << "File worker stopped";
 
+    delete remover_;
+    delete transfer_;
+
     remote_task_queue_.clear();
 
     delete remote_task_factory_;
