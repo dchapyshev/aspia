@@ -50,6 +50,9 @@ public slots:
     void onDisconnectSession(qint64 session_id);
 
 signals:
+    // Emitted from the worker thread once the acceptor is listening for peers.
+    void sig_ready();
+
     // Emitted from the worker thread when a pair of peers has been connected.
     void sig_sessionStarted();
 

@@ -131,6 +131,8 @@ void RouterWorker::onStart()
     RelayWorker* relay_worker = findWorker<RelayWorker>();
     CHECK(relay_worker);
 
+    connect(relay_worker, &RelayWorker::sig_ready,
+            this, &RouterWorker::onConnectToRouter, Qt::QueuedConnection);
     connect(relay_worker, &RelayWorker::sig_sessionStarted,
             this, &RouterWorker::onSessionStarted, Qt::QueuedConnection);
     connect(relay_worker, &RelayWorker::sig_sessionFinished,
@@ -139,8 +141,6 @@ void RouterWorker::onStart()
             this, &RouterWorker::onSessionStatistics, Qt::QueuedConnection);
     connect(this, &RouterWorker::sig_disconnectSession,
             relay_worker, &RelayWorker::onDisconnectSession, Qt::QueuedConnection);
-
-    connectToRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ void RouterWorker::onSessionStatistics(const proto::router::RelayStatistics& sta
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::connectToRouter()
+void RouterWorker::onConnectToRouter()
 {
     ClientAuthenticator* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
@@ -276,7 +276,7 @@ void RouterWorker::connectToRouter()
 void RouterWorker::delayedConnectToRouter()
 {
     LOG(INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
-    QTimer::singleShot(kReconnectTimeout, this, [this]() { connectToRouter(); });
+    QTimer::singleShot(kReconnectTimeout, this, &RouterWorker::onConnectToRouter);
 }
 
 //--------------------------------------------------------------------------------------------------

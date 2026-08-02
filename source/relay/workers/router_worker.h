@@ -50,9 +50,9 @@ private slots:
     void onSessionStarted();
     void onSessionFinished();
     void onSessionStatistics(const proto::router::RelayStatistics& statistics);
+    void onConnectToRouter();
 
 private:
-    void connectToRouter();
     void delayedConnectToRouter();
     void expireKey(quint32 key_id);
     void refreshKeyPool();
