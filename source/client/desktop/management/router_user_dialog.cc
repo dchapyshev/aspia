@@ -33,6 +33,15 @@
 #include "proto/router_constants.h"
 #include "ui_router_user_dialog.h"
 
+namespace {
+
+// The built-in user created by the router's --create-config. The router refuses to delete it, to
+// take away its administrator access or to disable it, because it is the only guaranteed way into
+// the admin channel. Mirrored here so the dialog does not offer a change that will be rejected.
+constexpr qint64 kBuiltInUserId = 1;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* parent)
     : QDialog(parent),
@@ -504,9 +513,13 @@ void RouterUserDialog::updateLoadingState()
 {
     const bool ready = users_loaded_;
 
+    // Only the two controls the router guards for the built-in user are locked; its name and
+    // password remain editable.
+    const bool built_in = entry_id_ == kBuiltInUserId;
+
     ui->edit_username->setEnabled(ready);
-    ui->checkbox_disable->setEnabled(ready);
-    ui->combo_access_level->setEnabled(ready);
+    ui->checkbox_disable->setEnabled(ready && !built_in);
+    ui->combo_access_level->setEnabled(ready && !built_in);
     ui->edit_password->setEnabled(ready && account_changed_);
     ui->edit_password_retry->setEnabled(ready && account_changed_);
 
