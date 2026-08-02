@@ -74,7 +74,7 @@ bool verifyNg(std::string_view N, std::string_view g)
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticatorLegacy::ClientAuthenticatorLegacy(QObject* parent)
-    : Authenticator(parent)
+    : Authenticator(Authenticator::Protocol::LEGACY, parent)
 {
     CLOG(TRACE) << "Ctor";
 }

@@ -25,7 +25,8 @@
 
 //--------------------------------------------------------------------------------------------------
 GenericHash::GenericHash(Type type)
-    : ctxt_(EVP_MD_CTX_new())
+    : type_(type),
+      ctxt_(EVP_MD_CTX_new())
 {
     CHECK(ctxt_) << "EVP_MD_CTX_new failed";
 

@@ -43,6 +43,8 @@ public:
     explicit GenericHash(Type type);
     ~GenericHash();
 
+    Type type() const { return type_; }
+
     static QByteArray hash(Type type, const void* data, size_t size);
     static QByteArray hash(Type type, std::string_view data);
     static QByteArray hash(Type type, const QByteArray& data);
@@ -59,6 +61,7 @@ public:
     void reset();
 
 private:
+    const Type type_;
     evp_md_ctx_st* ctxt_ = nullptr;
     const evp_md_st* md_ = nullptr;
 

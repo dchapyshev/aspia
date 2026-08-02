@@ -73,7 +73,7 @@ bool verifyNg(std::string_view N, std::string_view g)
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticator::ClientAuthenticator(QObject* parent)
-    : Authenticator(parent)
+    : Authenticator(Authenticator::Protocol::NG, parent)
 {
     CLOG(TRACE) << "Ctor";
 }

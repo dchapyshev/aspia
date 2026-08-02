@@ -43,7 +43,14 @@ class Authenticator : public QObject
     Q_OBJECT
 
 public:
-    explicit Authenticator(QObject* parent);
+    enum class Protocol
+    {
+        LEGACY,
+        NG
+    };
+    Q_ENUM(Protocol)
+
+    Authenticator(Protocol protocol, QObject* parent);
     virtual ~Authenticator() override;
 
     enum class State
@@ -118,7 +125,7 @@ protected:
     // keys. Return empty to use the raw master (legacy wire-compatible mode).
     [[nodiscard]] virtual QByteArray keyLabel(Direction direction) const = 0;
 
-    // Feeds key material (handshake bytes and/or raw shared secrets) into the running BLAKE2s256
+    // Feeds key material (handshake bytes and/or raw shared secrets) into the running transcript
     // accumulator that produces the session key. Order must match on both peers. Subclasses that
     // bind the full transcript feed handshake messages plus secrets; legacy subclasses feed only
     // raw secrets so that the resulting key matches pre-transcript-binding wire compatibility.
