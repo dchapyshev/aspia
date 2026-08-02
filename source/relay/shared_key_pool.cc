@@ -71,6 +71,20 @@ std::optional<SharedKeyPool::Key> SharedKeyPool::find(
 }
 
 //--------------------------------------------------------------------------------------------------
+std::optional<SharedKeyPool::Key> SharedKeyPool::findLegacy(
+    quint32 key_id, const std::string& peer_public_key) const
+{
+    std::shared_lock lock(lock_);
+
+    auto result = keys_.find(key_id);
+    if (result == keys_.end())
+        return std::nullopt;
+
+    const SessionKey& session_key = result->second;
+    return std::make_pair(session_key.legacySessionKey(peer_public_key), session_key.iv());
+}
+
+//--------------------------------------------------------------------------------------------------
 size_t SharedKeyPool::count() const
 {
     std::shared_lock lock(lock_);

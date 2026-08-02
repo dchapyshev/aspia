@@ -37,7 +37,14 @@ public:
 
     SecureByteArray privateKey() const;
     QByteArray publicKey() const;
+
+    // For the AES-256-GCM variant: the key is bound to both public keys.
     SecureByteArray sessionKey(const std::string& peer_public_key) const;
+
+    // For the ChaCha20-Poly1305 variant, which is what legacy peers speak: the key is the bare
+    // hash of the shared secret. Fixed with the released versions, do not touch.
+    SecureByteArray legacySessionKey(const std::string& peer_public_key) const;
+
     QByteArray iv() const;
 
 private:

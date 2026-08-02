@@ -42,8 +42,10 @@ public:
     // Removes the key |key_id| from the pool. Returns false if there is no such key.
     bool remove(quint32 key_id);
 
-    // Derives the session key and iv for the key |key_id| using |peer_public_key|.
+    // Derives the session key and iv for the key |key_id| using |peer_public_key|. The derivation
+    // follows the cipher the peer negotiated, see SessionKey.
     std::optional<Key> find(quint32 key_id, const std::string& peer_public_key) const;
+    std::optional<Key> findLegacy(quint32 key_id, const std::string& peer_public_key) const;
 
     size_t count() const;
     void clear();

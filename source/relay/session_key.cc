@@ -91,11 +91,28 @@ QByteArray SessionKey::publicKey() const
 //--------------------------------------------------------------------------------------------------
 SecureByteArray SessionKey::sessionKey(const std::string& peer_public_key) const
 {
-    SecureByteArray temp = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
-    if (temp.isEmpty())
+    SecureByteArray shared_secret = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
+    if (shared_secret.isEmpty())
         return SecureByteArray();
 
-    return SecureByteArray(GenericHash::hash(GenericHash::Type::BLAKE2s256, temp.toByteArray()));
+    GenericHash hash(GenericHash::Type::SHA256);
+
+    hash.addData(shared_secret);
+    hash.addData(key_pair_.publicKey());
+    hash.addData(QByteArray::fromStdString(peer_public_key));
+
+    return SecureByteArray(hash.result());
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureByteArray SessionKey::legacySessionKey(const std::string& peer_public_key) const
+{
+    SecureByteArray shared_secret = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
+    if (shared_secret.isEmpty())
+        return SecureByteArray();
+
+    return SecureByteArray(
+        GenericHash::hash(GenericHash::Type::BLAKE2s256, shared_secret.toByteArray()));
 }
 
 //--------------------------------------------------------------------------------------------------

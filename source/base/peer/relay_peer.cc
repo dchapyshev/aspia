@@ -293,19 +293,38 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         return QByteArray();
     }
 
-    SecureByteArray temp(key_pair.sessionKey(QByteArray::fromStdString(key.public_key())));
-    if (temp.isEmpty())
+    const QByteArray relay_public_key = QByteArray::fromStdString(key.public_key());
+    const bool is_aes256_gcm = key.encryption() == proto::router::RelayKey::ENCRYPTION_AES256_GCM;
+
+    SecureByteArray shared_secret(key_pair.sessionKey(relay_public_key));
+    if (shared_secret.isEmpty())
     {
         CLOG(ERROR) << "Failed to create session key";
         return QByteArray();
     }
 
-    SecureByteArray session_key(GenericHash::hash(GenericHash::Type::BLAKE2s256, temp.toByteArray()));
+    SecureByteArray session_key;
+
+    if (is_aes256_gcm)
+    {
+        GenericHash hash(GenericHash::Type::SHA256);
+
+        hash.addData(shared_secret);
+        hash.addData(relay_public_key);
+        hash.addData(key_pair.publicKey());
+
+        session_key = SecureByteArray(hash.result());
+    }
+    else
+    {
+        session_key = SecureByteArray(
+            GenericHash::hash(GenericHash::Type::BLAKE2s256, shared_secret.toByteArray()));
+    }
 
     std::unique_ptr<StreamEncryptor> encryptor;
     proto::relay::PeerToRelay::Encryption encryption;
 
-    if (key.encryption() == proto::router::RelayKey::ENCRYPTION_AES256_GCM)
+    if (is_aes256_gcm)
     {
         encryptor = StreamEncryptor::createForAes256Gcm(session_key, QByteArray::fromStdString(key.iv()));
         encryption = proto::relay::PeerToRelay::ENCRYPTION_AES256_GCM;
