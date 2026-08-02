@@ -35,6 +35,10 @@ class KeyPair;
 // the message via AES256 GCM. The ephemeral public key is prepended to the ciphertext
 // so the recipient can reconstruct the shared secret with their private key.
 //
+// The cipher key is BLAKE2s256(shared_secret || ephemeral_pk || recipient_pk), never the shared
+// secret itself: the raw X25519 output is not key material, and hashing both public keys into the
+// key ties a box to the pair it was sealed for.
+//
 // Output layout: ephemeral_pk (32) || iv (12) || ciphertext || tag (16).
 class SealedBox
 {

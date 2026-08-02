@@ -20,7 +20,30 @@
 
 #include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
+
+namespace {
+
+// The raw X25519 output is an encoded field element, not key material, and it says nothing about
+// who the box was meant for: X25519 answers with the same secret for several publicly computable
+// variants of one public key (RFC 7748 section 7). Both public keys therefore go into the hash, so
+// that the key of a box is tied to the pair it was sealed for. The handshake does the same thing
+// its own way - there the keys are inside the transcript (see Authenticator::sessionKey).
+SecureByteArray deriveKey(const SecureByteArray& shared_secret,
+                          const QByteArray& ephemeral_public_key,
+                          const QByteArray& recipient_public_key)
+{
+    GenericHash hash(GenericHash::BLAKE2s256);
+
+    hash.addData(shared_secret);
+    hash.addData(ephemeral_public_key);
+    hash.addData(recipient_public_key);
+
+    return SecureByteArray(hash.result());
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -46,7 +69,10 @@ QByteArray SealedBox::seal(const SecureByteArray& plaintext, const QByteArray& r
         return QByteArray();
     }
 
-    DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
+    const QByteArray ephemeral_public_key = ephemeral.publicKey();
+
+    DataCryptor cryptor(CipherType::AES256_GCM,
+        deriveKey(shared_secret, ephemeral_public_key, recipient_public_key));
     std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toByteArray());
     if (!encrypted.has_value())
     {
@@ -54,7 +80,7 @@ QByteArray SealedBox::seal(const SecureByteArray& plaintext, const QByteArray& r
         return QByteArray();
     }
 
-    return ephemeral.publicKey() + *encrypted;
+    return ephemeral_public_key + *encrypted;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,7 +109,8 @@ std::optional<SecureByteArray> SealedBox::open(QByteArrayView sealed, const KeyP
         return std::nullopt;
     }
 
-    DataCryptor cryptor(CipherType::AES256_GCM, shared_secret);
+    DataCryptor cryptor(CipherType::AES256_GCM,
+        deriveKey(shared_secret, ephemeral_public_key, recipient_key_pair.publicKey()));
     std::optional<QByteArray> decrypted = cryptor.decrypt(ciphertext);
     if (!decrypted.has_value())
         return std::nullopt;

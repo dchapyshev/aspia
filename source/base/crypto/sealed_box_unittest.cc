@@ -93,6 +93,29 @@ TEST(SealedBoxTest, TamperedEphemeralKey)
     ASSERT_FALSE(opened.has_value());
 }
 
+// X25519 masks the most significant bit of the peer public key (RFC 7748 section 5), so a key with
+// that bit set is a publicly computable equivalent of the original: the shared secret is the same.
+// The cipher key is bound to the recipient public key exactly so that such a box does not open.
+TEST(SealedBoxTest, EquivalentRecipientPublicKey)
+{
+    KeyPair recipient = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(recipient.isValid());
+
+    QByteArray equivalent_public_key = recipient.publicKey();
+    ASSERT_EQ(equivalent_public_key.size(), SealedBox::kPublicKeySize);
+    equivalent_public_key[SealedBox::kPublicKeySize - 1] =
+        static_cast<char>(equivalent_public_key.back() | 0x80);
+    ASSERT_NE(equivalent_public_key, recipient.publicKey());
+
+    const QByteArray message = QByteArray::fromHex("0123456789abcdef0123456789abcdef");
+
+    QByteArray sealed = SealedBox::seal(SecureByteArray(message), equivalent_public_key);
+    ASSERT_FALSE(sealed.isEmpty());
+
+    std::optional<SecureByteArray> opened = SealedBox::open(sealed, recipient);
+    ASSERT_FALSE(opened.has_value());
+}
+
 TEST(SealedBoxTest, TooSmall)
 {
     KeyPair recipient = KeyPair::create(KeyPair::Type::X25519);
