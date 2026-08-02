@@ -3,3 +3,10 @@
 # install does not fail; on an upgrade it refreshes an already-configured service. %post runs on both
 # install ($1=1) and upgrade ($1=2).
 /usr/bin/aspia_router --install || true
+
+# The upgrade replaced the binary, but a running service still executes the old one. try-restart
+# refreshes it and does nothing when the service is not running - a clean install without a
+# configuration, or a service the administrator stopped, is left alone.
+if [ -d /run/systemd/system ]; then
+    systemctl try-restart aspia-router.service >/dev/null 2>&1 || true
+fi

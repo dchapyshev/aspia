@@ -3,7 +3,16 @@ set -e
 
 # Register the service via the application itself (account and sandboxing are provisioned there,
 # shared with the command line). --install is a no-op when no configuration exists yet, so a clean
-# install does not fail; on an upgrade it refreshes an already-configured service.
+# install does not fail; on an upgrade it refreshes an already-configured service. A failure here
+# must not abort the installation - the files are in place and the service can be registered by
+# hand afterwards.
 if [ "$1" = "configure" ]; then
-    /usr/bin/aspia_router --install
+    /usr/bin/aspia_router --install || true
+fi
+
+# The upgrade replaced the binary, but a running service still executes the old one. try-restart
+# refreshes it and does nothing when the service is not running - a clean install without a
+# configuration, or a service the administrator stopped, is left alone.
+if [ "$1" = "configure" ] && [ -d /run/systemd/system ]; then
+    systemctl try-restart aspia-router.service >/dev/null 2>&1 || true
 fi

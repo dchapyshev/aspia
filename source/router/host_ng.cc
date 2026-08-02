@@ -33,6 +33,7 @@
 namespace {
 
 const size_t kHostKeySize = 512;
+const size_t kMaxHardwareIdSize = 64;
 
 thread_local std::set<HostId> g_assigned_temp_host_ids;
 
@@ -156,6 +157,14 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     if (host_id_ != kInvalidHostId)
     {
         CLOG(ERROR) << "Ignoring repeated host id request; host id" << host_id_ << "already assigned";
+        return;
+    }
+
+    if (host_id_request.hw_id().size() > kMaxHardwareIdSize)
+    {
+        CLOG(ERROR) << "Host reported an oversized hardware id (" << host_id_request.hw_id().size()
+                    << "bytes); disconnecting";
+        emit sig_finished(sessionId());
         return;
     }
 
