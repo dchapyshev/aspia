@@ -298,6 +298,23 @@ void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& respo
         return;
     }
 
+    if (!enroll)
+    {
+        // The secret and the counter are re-read instead of trusting the copies cached when the
+        // challenge was sent: an administrator can reset the OTP or delete the user while the
+        // session sits at the prompt, and the verification below must see that.
+        const RouterUser user = Database::instance().findUser(userId());
+        if (!user.isValid())
+        {
+            CLOG(INFO) << "User" << userName() << "is gone. Closing connection";
+            emit sig_finished(session_id_);
+            return;
+        }
+
+        user_otp_secret_ = user.otp_secret;
+        user_otp_counter_ = user.otp_counter;
+    }
+
     const QByteArray& secret = enroll ? tentative_otp_secret_ : user_otp_secret_;
 
     if (secret.isEmpty() || response.totp_code().empty())

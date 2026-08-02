@@ -332,10 +332,13 @@ void ClientWorker::onStopClients(qint64 user_id, const QList<qint64>& token_ids,
     QList<qint64> client_ids;
     for (Client* client : std::as_const(clients_))
     {
-        if (!client->isTwoFactorCompleted())
-            continue;
         if (client->userId() != user_id || client->sessionId() == except_client_id)
             continue;
+
+        // Sessions still at the 2FA stage are included: they already passed SRP with the
+        // credentials being revoked and need only a TOTP code to become full sessions. A
+        // revocation of specific tokens skips them for free - their token id is still 0, and
+        // token ids are validated as positive before they reach here.
         if (!token_ids.isEmpty() && !token_ids.contains(client->tokenId()))
             continue;
 
