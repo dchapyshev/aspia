@@ -108,6 +108,8 @@ list(APPEND SOURCE_HOST
     host_utils.cc
     host_utils.h
     input_injector.h
+    license_reader.cc
+    license_reader.h
     main.cc
     process_monitor.cc
     process_monitor.h

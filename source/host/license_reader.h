@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_LICENSE_READER_H
-#define BASE_LICENSE_READER_H
+#ifndef HOST_LICENSE_READER_H
+#define HOST_LICENSE_READER_H
 
 namespace proto::system_info {
 class Licenses;
@@ -25,4 +25,4 @@ class Licenses;
 
 void readLicensesInformation(proto::system_info::Licenses* licenses);
 
-#endif // BASE_LICENSE_READER_H
+#endif // HOST_LICENSE_READER_H

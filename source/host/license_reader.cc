@@ -16,7 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/license_reader.h"
+#include "host/license_reader.h"
+
+#include <QByteArray>
+#include <QFile>
+
+#include <string_view>
 
 #include "base/logging.h"
 #include "proto/system_info.h"
@@ -27,6 +32,108 @@
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
+
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+//--------------------------------------------------------------------------------------------------
+// Returns the contents of the ACPI "MSDM" table. The table is present only if the manufacturer has
+// embedded a product key into the firmware.
+QByteArray msdmTable()
+{
+#if defined(Q_OS_WINDOWS)
+    // Table identifiers are passed to the API as little-endian DWORDs, so the signature "MSDM" is
+    // written in reverse.
+    static const DWORD kAcpiProvider = 'ACPI';
+    static const DWORD kMsdmTable = 'MDSM';
+
+    UINT buffer_size = GetSystemFirmwareTable(kAcpiProvider, kMsdmTable, nullptr, 0);
+    if (!buffer_size)
+        return QByteArray();
+
+    QByteArray buffer;
+    buffer.resize(static_cast<qsizetype>(buffer_size));
+
+    if (!GetSystemFirmwareTable(kAcpiProvider, kMsdmTable, buffer.data(), buffer_size))
+    {
+        PLOG(ERROR) << "GetSystemFirmwareTable failed";
+        return QByteArray();
+    }
+
+    return buffer;
+#else
+    static const char kMsdmTablePath[] = "/sys/firmware/acpi/tables/MSDM";
+
+    // The table is readable by root only.
+    QFile file(kMsdmTablePath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG(INFO) << "Unable to open" << kMsdmTablePath << file.errorString();
+        return QByteArray();
+    }
+
+    return file.readAll();
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// The product key embedded into the firmware by the computer manufacturer. It stays there even if
+// another operating system is installed.
+void addOemProduct(proto::system_info::Licenses* message)
+{
+    // Microsoft Software Licensing Table (ACPI "MSDM"). Standard ACPI header followed by the
+    // software licensing data structure with the product key.
+#pragma pack(push, 1)
+    struct MsdmTable
+    {
+        quint8 acpi_header[36];
+        quint32 version;
+        quint32 reserved;
+        quint32 data_type;
+        quint32 data_reserved;
+        quint32 data_length;
+        char data[1];
+    };
+#pragma pack(pop)
+
+    static const quint32 kProductKeyDataType = 1;
+    static const quint32 kProductKeyLength = 29;
+
+    QByteArray table_data = msdmTable();
+
+    if (table_data.size() < static_cast<qsizetype>(offsetof(MsdmTable, data) + kProductKeyLength))
+    {
+        LOG(INFO) << "No MSDM table in firmware:" << table_data.size();
+        return;
+    }
+
+    const MsdmTable* table = reinterpret_cast<const MsdmTable*>(table_data.constData());
+
+    if (table->data_type != kProductKeyDataType || table->data_length != kProductKeyLength)
+    {
+        LOG(ERROR) << "Unexpected MSDM table contents:" << table->data_type << table->data_length;
+        return;
+    }
+
+    std::string_view product_key(table->data, table->data_length);
+
+    for (const char ch : product_key)
+    {
+        if ((ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9') && ch != '-')
+        {
+            LOG(ERROR) << "Invalid characters in OEM product key";
+            return;
+        }
+    }
+
+    proto::system_info::Licenses::License* item = message->add_license();
+
+    item->set_product_name("Windows (OEM)");
+
+    proto::system_info::Licenses::License::Field* field = item->add_field();
+
+    field->set_type(proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY);
+    field->set_value(product_key);
+}
+#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
@@ -408,6 +515,8 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
 void readLicensesInformation(proto::system_info::Licenses* licenses)
 {
 #if defined(Q_OS_WINDOWS)
+    addOemProduct(licenses);
+
 #if defined(Q_PROCESSOR_X86_32)
     BOOL is_wow64;
 
@@ -432,6 +541,8 @@ void readLicensesInformation(proto::system_info::Licenses* licenses)
     addMsProducts(licenses, 0);
     addVisualStudio(licenses, 0);
     addVMWareProducts(licenses, 0);
+#elif defined(Q_OS_LINUX)
+    addOemProduct(licenses);
 #else
     Q_UNUSED(licenses)
     NOTIMPLEMENTED();

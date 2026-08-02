@@ -30,7 +30,6 @@
 
 #include "base/edid.h"
 #include "base/event_enumerator.h"
-#include "base/license_reader.h"
 #include "base/logging.h"
 #include "base/physical_drive_reader.h"
 #include "base/serialization.h"
@@ -40,6 +39,7 @@
 #include "base/net/net_utils.h"
 #include "common/system_info_constants.h"
 #include "host/cpu_info.h"
+#include "host/license_reader.h"
 #include "host/process_monitor.h"
 #include "proto/system_info.h"
 

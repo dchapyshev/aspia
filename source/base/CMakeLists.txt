@@ -37,8 +37,6 @@ list(APPEND SOURCE_BASE
     event_enumerator.h
     gui_application.cc
     gui_application.h
-    license_reader.cc
-    license_reader.h
     location.cc
     location.h
     logging.cc
