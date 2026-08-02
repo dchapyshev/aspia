@@ -34,7 +34,7 @@ SecureByteArray deriveKey(const SecureByteArray& shared_secret,
                           const QByteArray& ephemeral_public_key,
                           const QByteArray& recipient_public_key)
 {
-    GenericHash hash(GenericHash::BLAKE2s256);
+    GenericHash hash(GenericHash::SHA256);
 
     hash.addData(shared_secret);
     hash.addData(ephemeral_public_key);
