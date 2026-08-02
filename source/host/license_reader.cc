@@ -29,6 +29,9 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
+
+#include <comdef.h>
+#include <slpublic.h>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -206,8 +209,123 @@ bool msProductName(const QString& id, QString* product_name, REGSAM access)
 }
 
 //--------------------------------------------------------------------------------------------------
-void addMsProduct(proto::system_info::Licenses* message, const QString& product_name,
-    const RegKey& key)
+QString queryProductKeyTail(HMODULE library)
+{
+    using SLOpenFunction = HRESULT(WINAPI*)(HSLC*);
+    using SLCloseFunction = HRESULT(WINAPI*)(HSLC);
+    using SLGetLicensingStatusInformationFunction =
+        HRESULT(WINAPI*)(HSLC, const SLID*, const SLID*, PCWSTR, UINT*, SL_LICENSING_STATUS**);
+    using SLGetInstalledProductKeyIdsFunction = HRESULT(WINAPI*)(HSLC, const SLID*, UINT*, SLID**);
+    using SLGetPKeyInformationFunction =
+        HRESULT(WINAPI*)(HSLC, const SLID*, PCWSTR, SLDATATYPE*, UINT*, PBYTE*);
+
+    // Application id of Windows in the software licensing service.
+    static const SLID kWindowsAppId =
+        { 0x55c92734, 0xd682, 0x4d71, { 0x98, 0x3e, 0xd6, 0xec, 0x3f, 0x16, 0x05, 0x9f } };
+
+    auto sl_open = reinterpret_cast<SLOpenFunction>(GetProcAddress(library, "SLOpen"));
+    auto sl_close = reinterpret_cast<SLCloseFunction>(GetProcAddress(library, "SLClose"));
+    auto sl_get_licensing_status = reinterpret_cast<SLGetLicensingStatusInformationFunction>(
+        GetProcAddress(library, "SLGetLicensingStatusInformation"));
+    auto sl_get_key_ids = reinterpret_cast<SLGetInstalledProductKeyIdsFunction>(
+        GetProcAddress(library, "SLGetInstalledProductKeyIds"));
+    auto sl_get_key_info = reinterpret_cast<SLGetPKeyInformationFunction>(
+        GetProcAddress(library, "SLGetPKeyInformation"));
+
+    if (!sl_open || !sl_close || !sl_get_licensing_status || !sl_get_key_ids || !sl_get_key_info)
+    {
+        PLOG(ERROR) << "GetProcAddress failed";
+        return QString();
+    }
+
+    HSLC context = nullptr;
+
+    _com_error error = sl_open(&context);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "SLOpen failed:" << error;
+        return QString();
+    }
+
+    UINT status_count = 0;
+    SL_LICENSING_STATUS* status = nullptr;
+    QString result;
+
+    error = sl_get_licensing_status(context, &kWindowsAppId, nullptr, nullptr, &status_count,
+                                    &status);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "SLGetLicensingStatusInformation failed:" << error;
+    }
+    else
+    {
+        for (UINT i = 0; i < status_count && result.isEmpty(); ++i)
+        {
+            // Only the product the system is licensed by is of interest.
+            if (status[i].eStatus != SL_LICENSING_STATUS_LICENSED)
+                continue;
+
+            UINT key_count = 0;
+            SLID* key_ids = nullptr;
+
+            error = sl_get_key_ids(context, &status[i].SkuId, &key_count, &key_ids);
+            if (FAILED(error.Error()))
+            {
+                LOG(ERROR) << "SLGetInstalledProductKeyIds failed:" << error;
+                continue;
+            }
+
+            for (UINT j = 0; j < key_count && result.isEmpty(); ++j)
+            {
+                SLDATATYPE type = SL_DATA_NONE;
+                UINT size = 0;
+                PBYTE data = nullptr;
+
+                error = sl_get_key_info(context, &key_ids[j], SL_INFO_KEY_PARTIAL_PRODUCT_KEY,
+                                        &type, &size, &data);
+                if (FAILED(error.Error()))
+                {
+                    LOG(ERROR) << "SLGetPKeyInformation failed:" << error;
+                    continue;
+                }
+
+                if (type == SL_DATA_SZ && size >= sizeof(wchar_t))
+                    result = QString::fromWCharArray(reinterpret_cast<const wchar_t*>(data));
+
+                LocalFree(data);
+            }
+
+            LocalFree(key_ids);
+        }
+
+        LocalFree(status);
+    }
+
+    sl_close(context);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Returns the last characters of the key the system is activated with. Empty if the software
+// licensing service does not report them.
+QString activatedProductKeyTail()
+{
+    HMODULE library = LoadLibraryExW(L"slc.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (!library)
+    {
+        PLOG(ERROR) << "LoadLibraryExW failed";
+        return QString();
+    }
+
+    QString key_tail = queryProductKeyTail(library);
+
+    FreeLibrary(library);
+    return key_tail;
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::system_info::Licenses::License* addMsProduct(proto::system_info::Licenses* message,
+    const QString& product_name, const RegKey& key)
 {
     DWORD product_id_size = 0;
 
@@ -216,7 +334,7 @@ void addMsProduct(proto::system_info::Licenses* message, const QString& product_
     {
         status = key.readValue("DPID", nullptr, &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return;
+            return nullptr;
     }
 
     std::unique_ptr<quint8[]> product_id = std::make_unique<quint8[]>(product_id_size);
@@ -226,7 +344,7 @@ void addMsProduct(proto::system_info::Licenses* message, const QString& product_
     {
         status = key.readValue("DPID", product_id.get(), &product_id_size, nullptr);
         if (status != ERROR_SUCCESS)
-            return;
+            return nullptr;
     }
 
     proto::system_info::Licenses::License* item = message->add_license();
@@ -266,6 +384,59 @@ void addMsProduct(proto::system_info::Licenses* message, const QString& product_
         owner->set_type(proto::system_info::Licenses::License::Field::TYPE_OWNER);
         owner->set_value(value.toStdString());
     }
+
+    return item;
+}
+
+//--------------------------------------------------------------------------------------------------
+// DigitalProductId does not always hold the key the system is activated with: an installation made
+// without entering a key leaves a generic key there. The key that was really used is known to the
+// software protection platform, so it is preferred when its last characters are the ones reported
+// by the licensing service.
+void useActivatedProductKey(proto::system_info::Licenses::License* item, REGSAM access)
+{
+    static const char kKeyPath[] =
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform";
+
+    QString key_tail = activatedProductKeyTail();
+    if (key_tail.isEmpty())
+        return;
+
+    proto::system_info::Licenses::License::Field* product_key = nullptr;
+
+    for (int i = 0; i < item->field_size(); ++i)
+    {
+        proto::system_info::Licenses::License::Field* field = item->mutable_field(i);
+
+        if (field->type() == proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY)
+        {
+            product_key = field;
+            break;
+        }
+    }
+
+    if (!product_key || QString::fromStdString(product_key->value()).endsWith(key_tail))
+        return;
+
+    RegKey key;
+
+    LONG status = key.open(HKEY_LOCAL_MACHINE, kKeyPath, access | KEY_READ);
+    if (status != ERROR_SUCCESS)
+        return;
+
+    QString backup_key;
+
+    status = key.readValue("BackupProductKeyDefault", &backup_key);
+    if (status != ERROR_SUCCESS)
+        return;
+
+    if (!backup_key.endsWith(key_tail))
+    {
+        LOG(INFO) << "No stored product key matches the activated one";
+        return;
+    }
+
+    product_key->set_value(backup_key.toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,7 +494,12 @@ void addMsProducts(proto::system_info::Licenses* message, REGSAM access)
         }
 
         if (!product_name.isEmpty())
-            addMsProduct(message, product_name, key);
+        {
+            proto::system_info::Licenses::License* item =
+                addMsProduct(message, product_name, key);
+            if (item)
+                useActivatedProductKey(item, access);
+        }
     }
 
     static const char* kMsProducts[] =
