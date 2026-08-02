@@ -31,9 +31,9 @@
 #include "client/router.h"
 #include "client/session_keeper.h"
 #include "client/desktop/authorization_dialog.h"
+#include "client/desktop/status_overlay.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/session_type.h"
-#include "common/desktop/status_dialog.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
 
@@ -54,12 +54,11 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
 {
     LOG(INFO) << "Ctor";
 
-    // Create a dialog to display the connection status.
-    status_dialog_ = new StatusDialog(this);
-    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
+    // Overlay that displays the connection status on top of the session UI.
+    status_overlay_ = new StatusOverlay(this);
 
-    // After closing the status dialog, close the session window.
-    connect(status_dialog_, &StatusDialog::finished, this, &ClientWindow::close);
+    // Closing the status overlay closes the session window.
+    connect(status_overlay_, &StatusOverlay::sig_closeRequested, this, &ClientWindow::close);
 
     drag_poll_timer_->setInterval(kDragPollInterval);
     connect(drag_poll_timer_, &QTimer::timeout, this, &ClientWindow::onDragPoll);
@@ -220,7 +219,6 @@ void ClientWindow::closeEvent(QCloseEvent* /* event */)
     LOG(INFO) << "Close event";
     drag_poll_timer_->stop();
     worker_manager_.reset();
-    emit sig_stop();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -251,7 +249,7 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
     switch (status)
     {
         case NetworkWorker::Status::STARTED:
-            status_dialog_->addMessageAndActivate(tr("Session started."));
+            status_overlay_->setProgress(tr("Session started."));
             break;
 
         case NetworkWorker::Status::RELAY_ERROR:
@@ -262,35 +260,21 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
         {
             if (session_state_->isConnectionByHostId())
             {
-                status_dialog_->addMessageAndActivate(
+                status_overlay_->setProgress(
                     tr("Connecting to host %1...").arg(session_state_->hostAddress()));
             }
             else
             {
-                status_dialog_->addMessageAndActivate(tr("Connecting to host %1:%2...")
+                status_overlay_->setProgress(tr("Connecting to host %1:%2...")
                     .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
             }
         }
         break;
 
         case NetworkWorker::Status::HOST_CONNECTED:
-        {
-            if (session_state_->isConnectionByHostId())
-            {
-                status_dialog_->addMessageAndActivate(
-                    tr("Connection to host %1 established.").arg(session_state_->hostAddress()));
-            }
-            else
-            {
-                status_dialog_->addMessageAndActivate(tr("Connection to host %1:%2 established.")
-                    .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
-            }
-
-            status_dialog_->setVisible(false);
+            status_overlay_->hide();
             reconnect_timeout_timer_->stop();
-            emit sig_connected();
-        }
-        break;
+            break;
 
         case NetworkWorker::Status::HOST_DISCONNECTED:
         {
@@ -366,10 +350,8 @@ void ClientWindow::setClientTitle(const HostConfig& host, proto::peer::SessionTy
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onErrorOccurred(const QString& message)
 {
-    hide();
     onInternalReset();
-
-    status_dialog_->addMessageAndActivate(message);
+    status_overlay_->setError(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,7 +377,7 @@ void ClientWindow::fetchConnectionOffer()
     session_state_->setRouterVersion(router->version());
 
     if (!session_state_->isReconnecting())
-        status_dialog_->addMessageAndActivate(tr("Requesting connection to the host..."));
+        status_overlay_->setProgress(tr("Requesting connection to the host..."));
 
     router->requestConnection(session_state_->hostId(), this,
         [this](const proto::router::ConnectionOffer& offer)
@@ -403,7 +385,7 @@ void ClientWindow::fetchConnectionOffer()
         if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
             if (!session_state_->isReconnecting())
-                status_dialog_->addMessageAndActivate(tr("Connection offer received."));
+                status_overlay_->setProgress(tr("Connection offer received."));
 
             session_state_->setConnectionOffer(offer);
             startNewSession();

@@ -39,6 +39,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     router_dialog.cc
     router_dialog.h
     router_dialog.ui
+    status_overlay.cc
+    status_overlay.h
     settings_tab.cc
     settings_tab.h
     settings_tab.ui)

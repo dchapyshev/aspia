@@ -34,7 +34,7 @@ enum SessionType : int;
 class QAction;
 class QTimer;
 class SessionKeeper;
-class StatusDialog;
+class StatusOverlay;
 class Worker;
 class WorkerManager;
 
@@ -75,15 +75,9 @@ public:
     virtual void restoreState(const QByteArray& state);
 
 signals:
-    void sig_stop();
     void sig_startConnection(std::shared_ptr<SessionState> session_state);
     void sig_sessionReady();
     void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
-
-    // Emitted when the connection to the host has been successfully established. The container
-    // uses this to create the session tab, so that during connection only the status dialog is
-    // shown and the tab appears only after a successful connect.
-    void sig_connected();
 
     // Emitted on each drag-poll tick while the user is dragging this widget as a top-level
     // window with the left mouse button held. The owner uses global_pos to update visual hints
@@ -167,7 +161,7 @@ private:
 
     const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
-    StatusDialog* status_dialog_ = nullptr;
+    StatusOverlay* status_overlay_ = nullptr;
     QTimer* drag_poll_timer_ = nullptr;
     QTimer* reconnect_timeout_timer_ = nullptr;
     QList<QAction*> session_connect_actions_;

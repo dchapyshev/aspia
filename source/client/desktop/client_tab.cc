@@ -66,15 +66,7 @@ ClientTab::ClientTab(ClientWindow* client_window, QWidget* parent)
     connect(client_window_, &ClientWindow::sig_dragFinished, this, &Tab::sig_dragFinished);
     connect(client_window_, &ClientWindow::sig_fullscreenRequested, this, &Tab::sig_fullscreenRequested);
     connect(client_window_, &ClientWindow::sig_minimizeRequested, this, &Tab::sig_minimizeRequested);
-    connect(client_window_, &ClientWindow::sig_showRequested, this, [this]()
-    {
-        // The client window hides itself on a connection error. When the session comes back after
-        // an auto-reconnect, the embedded widget must be shown again explicitly; a detached window
-        // is re-shown by MainWindow::onTabShowRequested.
-        if (!isDetached())
-            client_window_->show();
-        emit sig_showRequested();
-    });
+    connect(client_window_, &ClientWindow::sig_showRequested, this, &Tab::sig_showRequested);
     connect(client_window_, &ClientWindow::sig_actionsChanged, this, &Tab::sig_actionsChanged);
     connect(client_window_, &ClientWindow::sig_connectRequested, this, &Tab::sig_connectRequested);
 }

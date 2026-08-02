@@ -522,40 +522,28 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
 
     client_window->setWindowIcon(icon);
 
-    // Keep the session window owned by us during connection so that only the status dialog is
-    // shown. The session tab is created later, once the connection has been established.
+    // Parent the session window to us so that the authorization dialog shown by connectToHost is
+    // transient to the main window. The session tab takes ownership right after.
     client_window->setParent(this);
 
-    auto connected = std::make_shared<bool>(false);
-
-    connect(client_window, &ClientWindow::sig_connected, this,
-        [this, client_window, computer_name, icon, detached, connected]()
-    {
-        if (*connected)
-            return;
-        *connected = true;
-
-        ClientTab* client_tab = new ClientTab(client_window);
-        addTab(client_tab, computer_name, icon);
-
-        if (detached)
-        {
-            int index = ui->tabs->indexOf(client_tab);
-            ui->tabs->tabBar()->setTabVisible(index, false);
-            client_tab->detachToWindow();
-        }
-    });
-
-    // The session ended before it was ever connected (authorization cancelled or a connection
-    // error dismissed by the user). No tab was created, so just discard the window.
-    connect(client_window, &ClientWindow::sig_stop, this, [client_window, connected]()
-    {
-        if (!*connected)
-            client_window->deleteLater();
-    });
-
+    // Authorization rejected by the user - discard the window without creating a tab.
     if (!client_window->connectToHost(host, display_name))
+    {
         client_window->deleteLater();
+        return;
+    }
+
+    // The tab is created immediately; the connection progress is displayed by the status overlay
+    // inside the session window.
+    ClientTab* client_tab = new ClientTab(client_window);
+    addTab(client_tab, computer_name, icon);
+
+    if (detached)
+    {
+        int index = ui->tabs->indexOf(client_tab);
+        ui->tabs->tabBar()->setTabVisible(index, false);
+        client_tab->detachToWindow();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
