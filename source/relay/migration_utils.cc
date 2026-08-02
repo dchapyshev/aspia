@@ -61,23 +61,10 @@ void doConfigMigrate(const QJsonDocument& doc)
         settings.setRouterAddress(value);
     }
 
-    if (root_object.contains("RouterPort"))
-    {
-        quint16 value = root_object["RouterPort"].toString().toUShort();
-
-        if (value == DEFAULT_ROUTER_LEGACY_TCP_PORT)
-        {
-            LOG(INFO) << "Legacy RouterPort" << value << "remapped to relay port"
-                      << DEFAULT_ROUTER_RELAY_TCP_PORT;
-            value = DEFAULT_ROUTER_RELAY_TCP_PORT;
-        }
-        else
-        {
-            LOG(INFO) << "RouterPort:" << value;
-        }
-
-        settings.setRouterPort(value);
-    }
+    // Nothing to migrate here: the old value was the port of the single listener the old router
+    // used for everyone, while relays now have a listener of their own. Set the new port explicitly.
+    LOG(INFO) << "RouterPort:" << DEFAULT_ROUTER_RELAY_TCP_PORT;
+    settings.setRouterPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
 
     if (root_object.contains("RouterPublicKey"))
     {
