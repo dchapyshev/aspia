@@ -61,10 +61,10 @@ QString Settings::filePath()
 //--------------------------------------------------------------------------------------------------
 void Settings::reset()
 {
-    setPort(DEFAULT_ROUTER_TCP_PORT);
+    setHostPort(DEFAULT_ROUTER_HOST_TCP_PORT);
     setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
     setRelayPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
-    setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
+    setLegacyHostPort(DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT);
     setHostPrivateKey(SecureByteArray());
     setRelayPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
@@ -91,51 +91,51 @@ QString Settings::listenInterface() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setLegacyPort(quint16 port)
+void Settings::setLegacyHostPort(quint16 port)
 {
-    impl_.setValue("port", port);
+    impl_.setValue("legacy_host_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
-quint16 Settings::legacyPort() const
+quint16 Settings::legacyHostPort() const
 {
-    return impl_.value("port", DEFAULT_ROUTER_LEGACY_TCP_PORT).toUInt();
+    return impl_.value("legacy_host_port", DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPort(quint16 port)
+void Settings::setHostPort(quint16 port)
 {
-    impl_.setValue("tcp_port", port);
+    impl_.setValue("host_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
-quint16 Settings::port() const
+quint16 Settings::hostPort() const
 {
-    return impl_.value("tcp_port", DEFAULT_ROUTER_TCP_PORT).toUInt();
+    return impl_.value("host_port", DEFAULT_ROUTER_HOST_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setClientPort(quint16 port)
 {
-    impl_.setValue("client_tcp_port", port);
+    impl_.setValue("client_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::clientPort() const
 {
-    return impl_.value("client_tcp_port", DEFAULT_ROUTER_CLIENT_TCP_PORT).toUInt();
+    return impl_.value("client_port", DEFAULT_ROUTER_CLIENT_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRelayPort(quint16 port)
 {
-    impl_.setValue("relay_tcp_port", port);
+    impl_.setValue("relay_port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::relayPort() const
 {
-    return impl_.value("relay_tcp_port", DEFAULT_ROUTER_RELAY_TCP_PORT).toUInt();
+    return impl_.value("relay_port", DEFAULT_ROUTER_RELAY_TCP_PORT).toUInt();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -577,7 +577,7 @@ void ServiceWorker::onRemoveHost()
 
     Database& db = Database::instance();
     db.setRouterEnabled(false);
-    db.setRouterAddress(Address(DEFAULT_ROUTER_TCP_PORT));
+    db.setRouterAddress(Address(DEFAULT_ROUTER_HOST_TCP_PORT));
     db.setRouterPublicKey(QByteArray());
 
     HostStorage storage;

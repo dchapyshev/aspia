@@ -100,7 +100,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     {
         quint16 value = root_object["Port"].toString().toUShort();
         LOG(INFO) << "Port:" << value;
-        settings.setLegacyPort(value);
+        settings.setLegacyHostPort(value);
     }
 
     if (root_object.contains("PrivateKey"))

@@ -39,11 +39,11 @@ public:
     void setListenInterface(const QString& iface);
     QString listenInterface() const;
 
-    void setLegacyPort(quint16 port);
-    quint16 legacyPort() const;
+    void setLegacyHostPort(quint16 port);
+    quint16 legacyHostPort() const;
 
-    void setPort(quint16 port);
-    quint16 port() const;
+    void setHostPort(quint16 port);
+    quint16 hostPort() const;
 
     void setClientPort(quint16 port);
     quint16 clientPort() const;

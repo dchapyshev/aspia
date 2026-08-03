@@ -315,7 +315,7 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
     {
         Database& db = Database::instance();
 
-        const Address parsed = Address::fromString(address->text().trimmed(), DEFAULT_ROUTER_TCP_PORT);
+        const Address parsed = Address::fromString(address->text().trimmed(), DEFAULT_ROUTER_HOST_TCP_PORT);
 
         QSignalBlocker blocker(address);
         if (parsed.isValid())

@@ -158,7 +158,7 @@ bool importDatabase(const QJsonObject& obj)
     if (obj.contains(kRouterEnabled))
         db.setRouterEnabled(obj[kRouterEnabled].toBool());
     if (obj.contains(kRouterAddress))
-        db.setRouterAddress(Address::fromString(obj[kRouterAddress].toString(), DEFAULT_ROUTER_TCP_PORT));
+        db.setRouterAddress(Address::fromString(obj[kRouterAddress].toString(), DEFAULT_ROUTER_HOST_TCP_PORT));
     if (obj.contains(kRouterPublicKey))
         db.setRouterPublicKey(QByteArray::fromHex(obj[kRouterPublicKey].toString().toLatin1()));
     if (obj.contains(kConnectConfirmation))

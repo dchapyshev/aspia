@@ -355,7 +355,7 @@ bool Database::setRouterEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 Address Database::routerAddress() const
 {
-    return Address::fromString(readSetting(kSettingRouterAddress), DEFAULT_ROUTER_TCP_PORT);
+    return Address::fromString(readSetting(kSettingRouterAddress), DEFAULT_ROUTER_HOST_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------

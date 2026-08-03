@@ -149,7 +149,7 @@ void doHostMigrate(const QJsonDocument& doc)
         db.setOneTimePasswordLength(value);
     }
 
-    Address router_address(DEFAULT_ROUTER_TCP_PORT);
+    Address router_address(DEFAULT_ROUTER_HOST_TCP_PORT);
 
     if (root_object.contains("RouterAddress"))
     {

@@ -88,7 +88,7 @@ private:
     RelayPeerManager* peer_manager_ = nullptr;
     TimePoint reconnect_time_ = TimePoint::max();
 
-    Address router_address_ { DEFAULT_ROUTER_TCP_PORT };
+    Address router_address_ { DEFAULT_ROUTER_HOST_TCP_PORT };
     QByteArray public_key_;
 
     TimePoint password_expire_time_ = TimePoint::max();

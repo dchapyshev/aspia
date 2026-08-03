@@ -125,14 +125,14 @@ void HostWorker::onStart()
         return;
     }
 
-    quint16 port = settings.port();
+    quint16 port = settings.hostPort();
     if (!port)
     {
         LOG(ERROR) << "Invalid port specified in configuration file";
         return;
     }
 
-    quint16 legacy_port = settings.legacyPort();
+    quint16 legacy_port = settings.legacyHostPort();
     if (!legacy_port)
     {
         LOG(ERROR) << "Invalid legacy port specified in configuration file";

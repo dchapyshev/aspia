@@ -564,7 +564,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
-                ui->edit_router_address->text(), DEFAULT_ROUTER_TCP_PORT);
+                ui->edit_router_address->text(), DEFAULT_ROUTER_HOST_TCP_PORT);
             if (!router_address.isValid())
             {
                 MsgBox::warning(this, tr("Incorrect router address entered."));
