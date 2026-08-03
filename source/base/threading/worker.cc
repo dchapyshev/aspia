@@ -18,7 +18,11 @@
 
 #include "base/threading/worker.h"
 
+#include <QDeadlineTimer>
+#include <QStringList>
 #include <QTimerEvent>
+
+#include <vector>
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -41,6 +45,12 @@ Worker::~Worker()
 }
 
 //--------------------------------------------------------------------------------------------------
+QString Worker::name() const
+{
+    return metaObject()->className();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Worker::post(std::function<void()> work)
 {
     QMetaObject::invokeMethod(this, std::move(work), Qt::QueuedConnection);
@@ -50,6 +60,7 @@ void Worker::post(std::function<void()> work)
 void Worker::start(WorkerManager* manager)
 {
     manager_ = manager;
+    thread_.setObjectName(name());
     thread_.start();
 }
 
@@ -60,9 +71,9 @@ void Worker::stopSoon()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Worker::join()
+bool Worker::join(MilliSeconds timeout)
 {
-    thread_.wait();
+    return thread_.wait(QDeadlineTimer(timeout));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,7 +98,7 @@ void Worker::onThreadStarted()
         timer_id_ = startTimer(timer_interval_);
 
     std::lock_guard lock(manager_->lock_);
-    ++manager_->running_;
+    started_ = true;
     manager_->condition_.notify_all();
 }
 
@@ -120,17 +131,56 @@ WorkerManager::~WorkerManager()
 
     LOG(INFO) << "Stopping workers...";
 
+    if (watchdog_timer_id_ != 0)
+    {
+        killTimer(watchdog_timer_id_);
+        watchdog_timer_id_ = 0;
+    }
+
+    std::vector<Worker*> pending;
+    pending.reserve(workers_.size());
+
     for (const auto& worker : workers_)
+    {
+        pending.push_back(worker.second.get());
         worker.second->stopSoon();
+    }
 
     // Wait until every worker thread has FULLY finished, including Qt's deferred-delete flush and
-    // the destruction of the thread's event dispatcher.
-    for (const auto& worker : workers_)
-        worker.second->join();
+    // the destruction of the thread's event dispatcher. The threads are polled round-robin so one
+    // stuck worker does not hide the state of the others; the full list of still-running workers
+    // is reported periodically. Workers are destroyed strictly below, when ALL threads are done:
+    // a live (even stuck) thread may still access its sibling workers.
+    constexpr MilliSeconds kJoinPollInterval{ 50 };
+    constexpr MilliSeconds kJoinWarnInterval = Seconds(3);
+
+    TimePoint last_warn_time = Clock::now();
+    while (!pending.empty())
+    {
+        for (auto it = pending.begin(); it != pending.end();)
+        {
+            if ((*it)->join(kJoinPollInterval))
+                it = pending.erase(it);
+            else
+                ++it;
+        }
+
+        if (!pending.empty() && Clock::now() - last_warn_time >= kJoinWarnInterval)
+        {
+            QStringList names;
+            for (Worker* worker : pending)
+                names.append(worker->name());
+
+            LOG(ERROR) << "Worker threads have not finished yet:" << names.join(", ");
+            last_warn_time = Clock::now();
+        }
+    }
+
+    LOG(INFO) << "All workers stopped";
 
     workers_.clear();
 
-    LOG(INFO) << "All workers stopped";
+    LOG(INFO) << "All workers destroyed";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -158,12 +208,72 @@ void WorkerManager::start()
     for (const auto& worker : workers_)
         worker.second->start(this);
 
+    constexpr MilliSeconds kStartWarnInterval = Seconds(3);
+
     {
         std::unique_lock lock(lock_);
-        while (running_ < workers_.size())
-            condition_.wait(lock);
+
+        bool report = false;
+        for (;;)
+        {
+            QStringList pending;
+            for (const auto& worker : workers_)
+            {
+                if (!worker.second->started_)
+                    pending.append(worker.second->name());
+            }
+
+            if (pending.isEmpty())
+                break;
+
+            if (report)
+                LOG(ERROR) << "Worker threads have not started yet:" << pending.join(", ");
+
+            report = (condition_.wait_for(lock, kStartWarnInterval) == std::cv_status::timeout);
+        }
     }
 
     LOG(INFO) << "All workers started";
     started_ = true;
+    watchdog_timer_id_ = startTimer(Seconds(5));
+}
+
+
+//--------------------------------------------------------------------------------------------------
+void WorkerManager::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() != watchdog_timer_id_)
+        return;
+
+    const TimePoint now = Clock::now();
+    QStringList stalled;
+
+    for (const auto& entry : workers_)
+    {
+        Worker* worker = entry.second.get();
+
+        if (worker->pong_pending_.load(std::memory_order_relaxed))
+        {
+            const Seconds stall_time = DurationCast<Seconds>(now - worker->ping_time_);
+            stalled.append(QString("%1 (%2 s)").arg(worker->name()).arg(stall_time.count()));
+            worker->stall_reported_ = true;
+            continue;
+        }
+
+        if (worker->stall_reported_)
+        {
+            worker->stall_reported_ = false;
+            LOG(WARNING) << "Worker" << worker->name() << "event loop recovered";
+        }
+
+        worker->ping_time_ = now;
+        worker->pong_pending_.store(true, std::memory_order_relaxed);
+        worker->post([worker]()
+        {
+            worker->pong_pending_.store(false, std::memory_order_relaxed);
+        });
+    }
+
+    if (!stalled.isEmpty())
+        LOG(ERROR) << "Worker event loops are stalled:" << stalled.join(", ");
 }

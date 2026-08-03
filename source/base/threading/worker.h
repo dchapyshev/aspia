@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QPointer>
 
+#include <atomic>
 #include <condition_variable>
 #include <functional>
 #include <memory>
@@ -49,6 +50,9 @@ public:
 
     // Returns the worker owning the calling thread, or nullptr if the thread is not a worker.
     static Worker* current() { return current_worker_; }
+
+    // Human-readable worker name (the class name); used for the thread name and diagnostics.
+    QString name() const;
 
     // Executes |work| asynchronously in the worker thread. May be called from any thread.
     void post(std::function<void()> work);
@@ -87,7 +91,7 @@ protected:
 
     void start(WorkerManager* manager);
     void stopSoon();
-    void join();
+    bool join(MilliSeconds timeout);
 
     // Finds a sibling worker registered in the same manager. Safe to call from the worker thread
     // once the worker has been started (the worker set does not change after that). Defined below
@@ -121,6 +125,11 @@ private:
 
     const MilliSeconds timer_interval_;
     int timer_id_ = 0;
+    bool started_ = false;
+
+    std::atomic<bool> pong_pending_{ false };
+    TimePoint ping_time_;
+    bool stall_reported_ = false;
 
     static thread_local Worker* current_worker_;
 
@@ -162,6 +171,10 @@ public:
         return nullptr;
     }
 
+protected:
+    // QObject implementation.
+    void timerEvent(QTimerEvent* event) final;
+
 private:
     friend class Worker;
 
@@ -169,9 +182,9 @@ private:
 
     std::condition_variable condition_;
     std::mutex lock_;
-    size_t running_ = 0;
     bool started_ = false;
     qint64 next_worker_id_ = 0;
+    int watchdog_timer_id_ = 0;
 
     std::unordered_map<qint64, std::unique_ptr<Worker>> workers_;
 
