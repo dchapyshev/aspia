@@ -25,4 +25,6 @@ collect_sources(SOURCE_BASE_THREADING
     worker.h)
 
 collect_sources(SOURCE_BASE_THREADING_TESTS
-    asio_event_dispatcher_unittest.cc)
+    asio_event_dispatcher_unittest.cc
+    thread_unittest.cc
+    worker_unittest.cc)
