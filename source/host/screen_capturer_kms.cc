@@ -484,11 +484,17 @@ const Frame* ScreenCapturerKms::captureFrame(Error* error)
     if (!queue_.currentFrame() || queue_.currentFrame()->size() != size)
     {
         std::unique_ptr<Frame> frame = FrameAligned::create(size, kAlignment);
-        if (frame)
+        if (!frame)
         {
-            frame->setCapturerType(static_cast<quint32>(type()));
-            queue_.replaceCurrentFrame(std::move(frame));
+            // Without a frame of the new size there is nothing to import into: the frame left in the
+            // queue is sized for the previous mode and writing this framebuffer into it would go
+            // past its buffer.
+            LibDrm::modeFreeFB2(fb);
+            return nullptr;
         }
+
+        frame->setCapturerType(static_cast<quint32>(type()));
+        queue_.replaceCurrentFrame(std::move(frame));
     }
 
     Frame* current = queue_.currentFrame();
