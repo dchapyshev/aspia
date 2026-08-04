@@ -33,6 +33,8 @@ list(APPEND SOURCE_ROUTER_CORE
     group_request_handler.h
     host.cc
     host.h
+    host_id_handler.cc
+    host_id_handler.h
     host_legacy.cc
     host_legacy.h
     host_ng.cc
@@ -71,6 +73,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     client_worker_unittest.cc
     database_unittest.cc
     group_request_handler_unittest.cc
+    host_id_handler_unittest.cc
     host_lifecycle_unittest.cc
     host_request_handler_unittest.cc
     router_test_base.h

@@ -28,12 +28,11 @@
 #include "proto/router_host.h"
 #include "proto/router_peer.h"
 #include "router/database.h"
-#include "router/workers/client_worker.h"
+#include "router/host_id_handler.h"
 
 namespace {
 
 const size_t kHostKeySize = 512;
-const size_t kMaxHardwareIdSize = 64;
 
 thread_local std::set<HostId> g_assigned_temp_host_ids;
 
@@ -151,40 +150,34 @@ void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
-    // A host requests its id exactly once per session. Reject repeats so an untrusted host cannot
-    // overwrite host_id_ after assignment and desync the pending-removal finalization done in the
-    // destructor. A failed request leaves host_id_ invalid, so a legitimate retry still works.
-    if (host_id_ != kInvalidHostId)
-    {
-        CLOG(ERROR) << "Ignoring repeated host id request; host id" << host_id_ << "already assigned";
-        return;
-    }
+    HostIdHandler::Peer peer;
+    peer.computer_name = computerName();
+    peer.architecture = architecture();
+    peer.version = version().toString();
+    peer.os_name = osName();
+    peer.address = address();
 
-    if (host_id_request.hw_id().size() > kMaxHardwareIdSize)
+    const HostIdHandler::Result result =
+        HostIdHandler::handle(Database::instance(), host_id_request, peer, host_id_);
+
+    if (result.action == HostIdHandler::Action::IGNORE)
+        return;
+
+    if (result.action == HostIdHandler::Action::CLOSE)
     {
-        CLOG(ERROR) << "Host reported an oversized hardware id (" << host_id_request.hw_id().size()
-                    << "bytes); disconnecting";
         emit sig_finished(sessionId());
         return;
     }
 
-    hw_id_ = QByteArray::fromStdString(host_id_request.hw_id());
-    if (hw_id_.isEmpty())
-    {
-        CLOG(ERROR) << "Host did not report a hardware id; disconnecting";
-        emit sig_finished(sessionId());
-        return;
-    }
+    hw_id_ = result.hardware_id;
 
     proto::router::RouterToHost message;
     proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
 
-    if (host_id_request.type() == proto::router::HostIdRequest::NEW_ID)
+    if (result.action == HostIdHandler::Action::ISSUE_TEMP_ID)
     {
-        // A new host is not persisted until an administrator approves it. Issue a temporary id and
-        // hand the host its freshly generated key, but write nothing to the database. The key hash
-        // is retained so approval can persist it later. If the host reconnects before approval, its
-        // key is not found and it simply requests a new id again.
+        // The key and the temporary id belong to this session: the key is random material handed
+        // to the host, and the id is reserved until the session ends.
         std::string key = Random::string(kHostKeySize);
         key_hash_ = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
         host_id_ = reserveTempHostId();
@@ -194,54 +187,25 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         host_id_response->set_key(std::move(key));
 
         emit sig_hostIdAssigned(host_id_);
-        emit sig_notifyChanged(ClientWorker::NOTIFY_TEMP_HOSTS);
+        emit sig_notifyChanged(result.notify_flags);
 
         sendMessage(0, serialize(message));
         return;
     }
 
-    if (host_id_request.type() != proto::router::HostIdRequest::EXISTING_ID)
-    {
-        CLOG(ERROR) << "Unknown request type:" << host_id_request.type();
-        return;
-    }
+    host_id_ = result.host_id;
+    host_id_response->set_error_code(result.error_code);
 
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        return;
-    }
-
-    QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
-
-    std::string_view error_code = database.hostId(key_hash, &host_id_);
-    host_id_response->set_error_code(error_code);
-
-    if (error_code == proto::router::kErrorOk)
+    if (host_id_ != kInvalidHostId)
     {
         host_id_response->set_host_id(host_id_);
+
         emit sig_hostIdAssigned(host_id_);
-        emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
+        emit sig_notifyChanged(result.notify_flags);
     }
 
     sendMessage(0, serialize(message));
 
-    if (error_code != proto::router::kErrorOk)
-        return;
-
-    // If the host has a pending removal record, ignore connect metadata and reissue the remove
-    // command; the destructor will finalize the hosts_remove row when this session disconnects.
-    if (database.hasPendingHostRemoval(host_id_))
-    {
-        CLOG(INFO) << "Host" << host_id_ << "has pending removal, sending remove command";
+    if (result.removal_pending)
         sendRemoveCommand();
-        return;
-    }
-
-    if (!database.updateHostInfo(host_id_, hw_id_, computerName(), architecture(),
-                                 version().toString(), osName(), address()))
-    {
-        CLOG(WARNING) << "Failed to update host info for host_id:" << host_id_;
-    }
 }
