@@ -138,7 +138,7 @@ protected:
     QTemporaryDir temp_dir_;
     Database db_;
     RouterUser admin_;
-    UserRequestHandler::Caller caller_;
+    RequestCaller caller_;
 };
 
 //--------------------------------------------------------------------------------------------------

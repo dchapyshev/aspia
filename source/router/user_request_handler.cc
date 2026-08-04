@@ -30,7 +30,6 @@
 
 namespace {
 
-using Caller = UserRequestHandler::Caller;
 using Result = UserRequestHandler::Result;
 
 //--------------------------------------------------------------------------------------------------
@@ -51,7 +50,7 @@ std::unordered_map<qint64, QByteArray> workspaceKeys(const proto::router::User& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleAdd(Database& database, const Caller& caller, const proto::router::User& user,
+void handleAdd(Database& database, const RequestCaller& caller, const proto::router::User& user,
                Result* result)
 {
     LOG(INFO) << "User add request:" << user.name();
@@ -91,7 +90,7 @@ void handleAdd(Database& database, const Caller& caller, const proto::router::Us
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleModify(Database& database, const Caller& caller, const proto::router::User& user,
+void handleModify(Database& database, const RequestCaller& caller, const proto::router::User& user,
                   Result* result)
 {
     LOG(INFO) << "User modify request:" << user.name();
@@ -177,7 +176,7 @@ void handleDelete(Database& database, const proto::router::User& user, Result* r
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleResetOtp(Database& database, const Caller& caller, qint64 user_id, Result* result)
+void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user_id, Result* result)
 {
     if (user_id <= 0)
     {
@@ -214,7 +213,7 @@ void handleResetOtp(Database& database, const Caller& caller, qint64 user_id, Re
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleRevokeTokens(Database& database, const Caller& caller, const proto::router::User& user,
+void handleRevokeTokens(Database& database, const RequestCaller& caller, const proto::router::User& user,
                         Result* result)
 {
     const qint64 user_id = user.entry_id();
@@ -277,7 +276,7 @@ void handleRevokeTokens(Database& database, const Caller& caller, const proto::r
 //--------------------------------------------------------------------------------------------------
 // static
 UserRequestHandler::Result UserRequestHandler::handle(
-    Database& database, const Caller& caller, const proto::router::UserRequest& request)
+    Database& database, const RequestCaller& caller, const proto::router::UserRequest& request)
 {
     Result result;
     const std::string& command_name = request.command_name();

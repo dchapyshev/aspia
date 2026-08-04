@@ -27,16 +27,21 @@ list(APPEND SOURCE_ROUTER_CORE
     client_manager.h
     database.cc
     database.h
+    group_request_handler.cc
+    group_request_handler.h
     host.cc
     host.h
     host_legacy.cc
     host_legacy.h
     host_ng.cc
     host_ng.h
+    host_request_handler.cc
+    host_request_handler.h
     migration_utils.cc
     migration_utils.h
     relay.cc
     relay.h
+    request_caller.h
     router_user_list.cc
     router_user_list.h
     service.cc
@@ -50,15 +55,21 @@ list(APPEND SOURCE_ROUTER_CORE
     user_request_handler.cc
     user_request_handler.h
     workspace.cc
-    workspace.h)
+    workspace.h
+    workspace_request_handler.cc
+    workspace_request_handler.h)
 
 list(APPEND SOURCE_ROUTER
     main.cc)
 
 list(APPEND SOURCE_ROUTER_TESTS
     database_unittest.cc
+    group_request_handler_unittest.cc
+    host_request_handler_unittest.cc
+    router_test_base.h
     tests_main.cc
-    user_request_handler_unittest.cc)
+    user_request_handler_unittest.cc
+    workspace_request_handler_unittest.cc)
 
 include(workers/sources.cmake)
 

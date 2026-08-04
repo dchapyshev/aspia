@@ -16,27 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_USER_REQUEST_HANDLER_H
-#define ROUTER_USER_REQUEST_HANDLER_H
-
-#include <QList>
-#include <QString>
+#ifndef ROUTER_GROUP_REQUEST_HANDLER_H
+#define ROUTER_GROUP_REQUEST_HANDLER_H
 
 #include <string>
 
 #include "router/request_caller.h"
 
 namespace proto::router {
-class UserRequest;
+class GroupRequest;
 } // namespace proto::router
 
 class Database;
 
-// Handling of the user commands of the admin channel (add, modify, delete, OTP reset, token
-// revocation). Everything these commands need is the database, so the logic lives here instead of
-// inside the session: ClientAdmin stays a thin adapter that sends the reply and turns the returned
-// side effects into signals, and the whole surface is testable against a temporary database.
-class UserRequestHandler
+// Handling of the host-group commands of the manager channel (add, modify, delete). Everything
+// these commands need is the database, so the logic lives here instead of inside the session:
+// ClientManager stays a thin adapter that sends the reply and turns the returned side effects into
+// signals, and the whole surface is testable against a temporary database.
+class GroupRequestHandler
 {
 public:
     // The error code of the reply and everything the session must do after sending it.
@@ -44,21 +41,15 @@ public:
     {
         std::string error_code;
 
+        // Id of the created group (the add command only).
+        qint64 entry_id = 0;
+
         // ClientWorker::NOTIFY_* bits the sessions must be told about (0 - nothing changed).
         quint32 notify_flags = 0;
-
-        // Live sessions of this user must be dropped (0 - nothing to drop): the credentials they
-        // authenticated with are gone (password rotation, OTP reset, token revocation) or the
-        // account itself is gone or disabled.
-        qint64 stop_user_id = 0;
-
-        // Restricts the drop to the sessions holding these device tokens; empty means every
-        // session of |stop_user_id|.
-        QList<qint64> stop_token_ids;
     };
 
     static Result handle(Database& database, const RequestCaller& caller,
-                         const proto::router::UserRequest& request);
+                         const proto::router::GroupRequest& request);
 };
 
-#endif // ROUTER_USER_REQUEST_HANDLER_H
+#endif // ROUTER_GROUP_REQUEST_HANDLER_H

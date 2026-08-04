@@ -18,18 +18,16 @@
 
 #include "router/client_admin.h"
 
-#include <set>
-
 #include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/string_util.h"
 #include "router/database.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
 #include "router/user_request_handler.h"
+#include "router/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -174,7 +172,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
-    UserRequestHandler::Caller caller;
+    RequestCaller caller;
     caller.user_id = userId();
     caller.name = QString::fromStdString(userName());
 
@@ -388,131 +386,23 @@ void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
 {
+    RequestCaller caller;
+    caller.user_id = userId();
+    caller.name = QString::fromStdString(userName());
+
+    const WorkspaceRequestHandler::Result handled =
+        WorkspaceRequestHandler::handle(Database::instance(), caller, request);
+
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-        return;
-    }
-
-    const proto::router::Workspace& workspace = request.workspace();
-    const std::string name(strTrimmed(workspace.name()));
-    const std::string_view comment = workspace.comment();
-    const qint64 entry_id = workspace.entry_id();
-
-    std::set<HostId> desired_host_ids;
-    for (int i = 0; i < workspace.host_id_size(); ++i)
-        desired_host_ids.insert(workspace.host_id(i));
-
-    if (request.command_name() == proto::router::kCommandWorkspaceAdd)
-    {
-        CLOG(INFO) << "Workspace add request:" << name << "with" << workspace.access_size()
-                   << "access entries and" << desired_host_ids.size() << "hosts";
-
-        bool self_present = false;
-        QList<Workspace::Access> initial_access;
-        initial_access.reserve(workspace.access_size());
-
-        for (int i = 0; i < workspace.access_size(); ++i)
-        {
-            const proto::router::WorkspaceAccess& src = workspace.access(i);
-            Workspace::Access dst;
-            dst.user_id    = src.user_id();
-            dst.wrapped_gk = src.wrapped_gk();
-            dst.public_key = src.public_key();
-            initial_access.append(dst);
-
-            if (dst.user_id == userId())
-                self_present = true;
-        }
-
-        if (!self_present)
-        {
-            CLOG(ERROR) << "Admin" << userName() << "tried to create workspace without own access";
-            result->set_error_code(proto::router::kErrorInvalidData);
-        }
-        else
-        {
-            qint64 new_id = -1;
-            const std::string_view error_code =
-                database.addWorkspace(name, comment, initial_access, desired_host_ids, &new_id);
-            result->set_error_code(error_code);
-            if (error_code == proto::router::kErrorOk)
-            {
-                result->set_entry_id(new_id);
-
-                quint32 notify_flags = ClientWorker::NOTIFY_WORKSPACES;
-                if (!desired_host_ids.empty())
-                    notify_flags |= ClientWorker::NOTIFY_HOSTS;
-                emit sig_notifyChanged(notify_flags);
-            }
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandWorkspaceModify)
-    {
-        CLOG(INFO) << "Workspace modify request:" << entry_id << name
-                   << "with" << workspace.access_size() << "access entries and"
-                   << desired_host_ids.size() << "hosts";
-
-        bool self_present = false;
-        QList<Workspace::Access> desired_access;
-        desired_access.reserve(workspace.access_size());
-
-        for (int i = 0; i < workspace.access_size(); ++i)
-        {
-            const proto::router::WorkspaceAccess& src = workspace.access(i);
-            Workspace::Access dst;
-            dst.user_id    = src.user_id();
-            dst.wrapped_gk = src.wrapped_gk();
-            dst.public_key = src.public_key();
-            desired_access.append(dst);
-
-            if (dst.user_id == userId())
-                self_present = true;
-        }
-
-        if (!self_present)
-        {
-            CLOG(ERROR) << "Admin" << userName() << "tried to revoke own access to workspace" << entry_id;
-            result->set_error_code(proto::router::kErrorInvalidData);
-        }
-        else
-        {
-            const std::string_view error_code = database.modifyWorkspace(
-                entry_id, workspace.revision(), name, comment, desired_access, desired_host_ids);
-            result->set_error_code(error_code);
-            if (error_code == proto::router::kErrorOk)
-            {
-                // The host assignments can change even when |desired_host_ids| is empty (all
-                // the hosts of the workspace released), so the hosts are refetched in any case.
-                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS);
-            }
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
-    {
-        CLOG(INFO) << "Workspace delete request:" << entry_id;
-        const std::string_view error_code = database.removeWorkspace(entry_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-        {
-            // Workspace deletion also releases its hosts to workspace_id=0; signal both so
-            // clients refetch both lists with updated workspace_id columns.
-            emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS);
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown workspace request command:" << request.command_name();
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
+    result->set_error_code(handled.error_code);
+    if (handled.entry_id > 0)
+        result->set_entry_id(handled.entry_id);
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+
+    if (handled.notify_flags)
+        emit sig_notifyChanged(handled.notify_flags);
 }

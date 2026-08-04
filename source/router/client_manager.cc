@@ -20,13 +20,13 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/string_util.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/database.h"
-#include "router/workers/client_worker.h"
+#include "router/group_request_handler.h"
+#include "router/host_request_handler.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientManager::ClientManager(TcpChannel* channel, QObject* parent)
@@ -77,211 +77,45 @@ void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 {
-    proto::router::RouterToManager response;
-    proto::router::HostResult* result = response.mutable_host_result();
+    RequestCaller caller;
+    caller.user_id = userId();
+    caller.name = QString::fromStdString(userName());
+
+    const HostRequestHandler::Result handled =
+        HostRequestHandler::handle(Database::instance(), caller, request);
+
+    proto::router::RouterToManager message;
+    proto::router::HostResult* result = message.mutable_host_result();
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
+    result->set_error_code(handled.error_code);
 
-    auto reply = [&](const char* error_code)
-    {
-        result->set_error_code(error_code);
-        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(response));
-    };
+    sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
 
-    if (request.command_name() != proto::router::kCommandHostModify)
-    {
-        CLOG(ERROR) << "Unknown host edit command:" << request.command_name();
-        reply(proto::router::kErrorInvalidRequest);
-        return;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        reply(proto::router::kErrorInternalError);
-        return;
-    }
-
-    const proto::router::Host& host = request.host();
-    const HostId host_id = host.host_id();
-
-    // "Not found" and "could not check" are different answers - a database error must not be
-    // reported as a missing host.
-    bool workspace_known = false;
-    const qint64 workspace_id = database.hostWorkspaceId(host_id, &workspace_known);
-    if (!workspace_known)
-    {
-        CLOG(ERROR) << "Unable to resolve workspace of host" << host_id;
-        reply(proto::router::kErrorInternalError);
-        return;
-    }
-
-    if (workspace_id < 0)
-    {
-        CLOG(ERROR) << "Host not found:" << host_id;
-        reply(proto::router::kErrorNotFound);
-        return;
-    }
-
-    // Hosts that are not assigned to a workspace cannot be edited from manager/admin clients.
-    // Editor must also be a member of the host's workspace; admins are auto-included by design.
-    // "No access" and "could not check" are different answers - a database error must not be
-    // reported as a denial.
-    bool access_known = false;
-    const bool has_access =
-        workspace_id != 0 && database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
-    if (workspace_id != 0 && !access_known)
-    {
-        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        reply(proto::router::kErrorInternalError);
-        return;
-    }
-
-    if (!has_access)
-    {
-        CLOG(ERROR) << "User" << userId() << "cannot edit host" << host_id
-                    << "(workspace_id=" << workspace_id << ")";
-        reply(proto::router::kErrorAccessDenied);
-        return;
-    }
-
-    // group_id == 0 keeps the host at the workspace root; any other value must reference a group
-    // in the host's current workspace. A negative or unknown id is rejected here (the hosts table
-    // has no foreign key on group_id, so an unchecked value would orphan the host). Cross-workspace
-    // moves are not allowed.
-    const qint64 group_id = host.group_id();
-    if (group_id != 0)
-    {
-        bool group_known = false;
-        const Group group = database.findGroup(workspace_id, group_id, &group_known);
-        if (!group_known)
-        {
-            CLOG(ERROR) << "Unable to check group" << group_id << "in workspace" << workspace_id;
-            reply(proto::router::kErrorInternalError);
-            return;
-        }
-
-        if (group.entry_id == 0)
-        {
-            CLOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
-            reply(proto::router::kErrorInvalidData);
-            return;
-        }
-    }
-
-    const bool ok = database.modifyHost(host_id, group_id, host.display_name(), host.comment(),
-                                        host.user_name(), host.password());
-    if (!ok)
-    {
-        reply(proto::router::kErrorInternalError);
-        return;
-    }
-
-    reply(proto::router::kErrorOk);
-    emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
+    if (handled.notify_flags)
+        emit sig_notifyChanged(handled.notify_flags);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 {
+    RequestCaller caller;
+    caller.user_id = userId();
+    caller.name = QString::fromStdString(userName());
+
+    const GroupRequestHandler::Result handled =
+        GroupRequestHandler::handle(Database::instance(), caller, request);
+
     proto::router::RouterToManager message;
     proto::router::GroupResult* result = message.mutable_group_result();
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
-
-    const qint64 workspace_id = request.workspace_id();
-    const proto::router::Group& group = request.group();
-    const qint64 entry_id = group.entry_id();
-    const qint64 parent_id = group.parent_id();
-    const std::string name(strTrimmed(group.name()));
-    const std::string_view comment = group.comment();
-
-    if (workspace_id <= 0)
-    {
-        CLOG(ERROR) << "Invalid workspace id in group request:" << workspace_id;
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
-        return;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
-        return;
-    }
-
-    // Caller must be a member of the target workspace to manage its groups. Matches the
-    // workspace-access semantics used elsewhere; non-members do not see the workspace's
-    // wrapped_gk and cannot meaningfully add or edit AEAD-encrypted group fields anyway.
-    // "No access" and "could not check" are different answers.
-    bool access_known = false;
-    const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
-    if (!access_known)
-    {
-        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
-        return;
-    }
-
-    if (!has_access)
-    {
-        CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorAccessDenied);
-        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
-        return;
-    }
-
-    if (request.command_name() == proto::router::kCommandGroupAdd)
-    {
-        CLOG(INFO) << "Group add request: workspace_id=" << workspace_id
-                   << "parent_id=" << parent_id << "name=" << name;
-
-        qint64 new_id = -1;
-        const std::string_view error_code =
-            database.addGroup(workspace_id, parent_id, name, comment, &new_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-        {
-            result->set_entry_id(new_id);
-            emit sig_notifyChanged(ClientWorker::NOTIFY_GROUPS);
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandGroupModify)
-    {
-        CLOG(INFO) << "Group modify request: workspace_id=" << workspace_id
-                   << "entry_id=" << entry_id << "new_parent_id=" << parent_id
-                   << "name=" << name;
-
-        const std::string_view error_code =
-            database.modifyGroup(workspace_id, entry_id, parent_id, name, comment);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-            emit sig_notifyChanged(ClientWorker::NOTIFY_GROUPS);
-    }
-    else if (request.command_name() == proto::router::kCommandGroupDelete)
-    {
-        CLOG(INFO) << "Group delete request: workspace_id=" << workspace_id
-                   << "entry_id=" << entry_id;
-
-        const std::string_view error_code = database.removeGroup(workspace_id, entry_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-        {
-            // Deleting a group detaches hosts that pointed into its subtree to the workspace
-            // root, so signal both lists to refresh.
-            emit sig_notifyChanged(ClientWorker::NOTIFY_GROUPS | ClientWorker::NOTIFY_HOSTS);
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown group request command:" << request.command_name();
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
+    result->set_error_code(handled.error_code);
+    if (handled.entry_id > 0)
+        result->set_entry_id(handled.entry_id);
 
     sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
+
+    if (handled.notify_flags)
+        emit sig_notifyChanged(handled.notify_flags);
 }
