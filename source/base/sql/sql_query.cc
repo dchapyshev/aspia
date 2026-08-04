@@ -192,18 +192,20 @@ SqlQuery& SqlQuery::addBlob(const QByteArray& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SqlQuery::next()
+SqlQuery::StepResult SqlQuery::next()
 {
     if (!stmt_)
-        return false;
+        return StepResult::FAILED;
 
     const int result = sqlite3_step(stmt_);
     if (result == SQLITE_ROW)
-        return true;
+        return StepResult::ROW;
 
-    if (result != SQLITE_DONE)
-        logError("step");
-    return false;
+    if (result == SQLITE_DONE)
+        return StepResult::DONE;
+
+    logError("step");
+    return StepResult::FAILED;
 }
 
 //--------------------------------------------------------------------------------------------------

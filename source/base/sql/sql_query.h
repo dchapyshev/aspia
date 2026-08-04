@@ -75,9 +75,18 @@ public:
     // Execution.
     //----------------------------------------------------------------------------------------------
 
-    // Advances to the next row. Returns true when a row is available, false on completion or
-    // error (errors are logged). Use in SELECT loops: while (stmt.next()) { ... }.
-    bool next();
+    // Outcome of a single step of the statement.
+    enum class StepResult
+    {
+        ROW,    // A row is available.
+        DONE,   // The rows ran out.
+        FAILED, // A step error (logged), or the statement is invalid.
+    };
+
+    // Advances to the next row. Scan loops read rows while ROW is returned; when completeness
+    // matters (a partial scan must not pass for a complete result), DONE and FAILED must be
+    // treated differently.
+    StepResult next();
 
     // Runs a statement that yields no rows (INSERT/UPDATE/DELETE/DDL) to completion. Returns
     // true on success.

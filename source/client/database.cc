@@ -157,7 +157,7 @@ bool backfillHostGuids(SqlDatabase& db)
     QList<qint64> ids;
     {
         SqlQuery query(db, "SELECT id FROM hosts WHERE guid=''");
-        while (query.next())
+        while (query.next() == SqlQuery::StepResult::ROW)
             ids.append(query.columnInt64(0));
     }
 
@@ -223,7 +223,7 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
     query.addInt64(group_id);
 
     QList<HostConfig> hosts;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         hosts.append(readHost(query));
 
     return hosts;
@@ -243,7 +243,7 @@ QList<HostConfig> Database::allHosts() const
                         "FROM hosts");
 
     QList<HostConfig> hosts;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         hosts.append(readHost(query));
 
     return hosts;
@@ -386,7 +386,7 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
                         "FROM hosts WHERE id=?");
     query.addInt64(entry_id);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return std::nullopt;
 
     return readHost(query);
@@ -409,7 +409,7 @@ std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
                         "FROM hosts WHERE guid=?");
     query.addText(guid);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return std::nullopt;
 
     return readHost(query);
@@ -428,7 +428,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
                         "create_time, modify_time, connect_time, guid FROM hosts");
 
     QList<HostConfig> hosts;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
     {
         HostConfig host = readHost(query);
         if (host.name().contains(query_text, Qt::CaseInsensitive) ||
@@ -454,7 +454,7 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
     query.addInt64(parent_id);
 
     QList<GroupConfig> groups;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         groups.append(readGroup(query));
 
     return groups;
@@ -472,7 +472,7 @@ QList<GroupConfig> Database::allGroups() const
     SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups");
 
     QList<GroupConfig> groups;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         groups.append(readGroup(query));
 
     return groups;
@@ -582,7 +582,7 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
     SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups WHERE id=?");
     query.addInt64(group_id);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return std::nullopt;
 
     return readGroup(query);
@@ -601,7 +601,7 @@ QList<RouterConfig> Database::routerList() const
                         "device_token, guid FROM routers");
 
     QList<RouterConfig> routers;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         routers.append(readRouter(query));
 
     return routers;
@@ -706,7 +706,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
                         "guid FROM routers WHERE id=?");
     query.addInt64(router_id);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return std::nullopt;
 
     return readRouter(query);
@@ -914,7 +914,7 @@ bool Database::openDatabase()
 
     {
         SqlQuery pragma(db_, "PRAGMA quick_check");
-        if (pragma.next())
+        if (pragma.next() == SqlQuery::StepResult::ROW)
         {
             const QString result = pragma.columnText(0);
             if (result != "ok")
@@ -955,7 +955,7 @@ QString Database::readSetting(const QString& name) const
     SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
     query.addText(name);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return QString();
 
     return query.columnText(0);

@@ -146,7 +146,7 @@ QVector<User> Database::userList() const
     SqlQuery query(db_, "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users");
 
     QVector<User> users;
-    while (query.next())
+    while (query.next() == SqlQuery::StepResult::ROW)
         users.append(readUser(query));
 
     return users;
@@ -165,7 +165,7 @@ User Database::findUser(const QString& username) const
         "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE name=?");
     query.addText(username);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return User::kInvalidUser;
 
     return readUser(query);
@@ -184,7 +184,7 @@ User Database::findUser(qint64 entry_id) const
         "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE id=?");
     query.addInt64(entry_id);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return User::kInvalidUser;
 
     return readUser(query);
@@ -670,7 +670,7 @@ bool Database::openDatabase()
 
     {
         SqlQuery pragma(db_, "PRAGMA quick_check");
-        if (pragma.next())
+        if (pragma.next() == SqlQuery::StepResult::ROW)
         {
             const QString result = pragma.columnText(0);
             if (result != "ok")
@@ -703,7 +703,7 @@ QString Database::readSetting(const QString& name) const
     SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
     query.addText(name);
 
-    if (!query.next())
+    if (query.next() != SqlQuery::StepResult::ROW)
         return QString();
 
     return query.columnText(0);

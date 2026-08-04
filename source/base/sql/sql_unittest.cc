@@ -69,14 +69,14 @@ TEST(SqliteTest, InsertAndReadBack)
 
     SqlQuery select(db, "SELECT id, name, data, value FROM t");
     ASSERT_TRUE(select.isValid());
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
 
     EXPECT_EQ(select.columnInt64(0), 1);
     EXPECT_EQ(select.columnTextView(1), std::string_view("host-1"));
     EXPECT_EQ(select.columnBlobView(2), std::string_view("\x00\x01\x02", 3));
     EXPECT_EQ(select.columnInt64(3), 42);
 
-    EXPECT_FALSE(select.next());
+    EXPECT_EQ(select.next(), SqlQuery::StepResult::DONE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ TEST(SqliteTest, EmptyTextIsNotNull)
     ASSERT_TRUE(insert.exec());
 
     SqlQuery select(db, "SELECT name, data FROM t");
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_FALSE(select.columnIsNull(0));
     EXPECT_FALSE(select.columnIsNull(1));
     EXPECT_TRUE(select.columnTextView(0).empty());
@@ -117,9 +117,9 @@ TEST(SqliteTest, BlobFromStringView)
     ASSERT_TRUE(insert.exec());
 
     SqlQuery select(db, "SELECT data FROM t ORDER BY value");
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(select.columnBlobView(0), payload);
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_FALSE(select.columnIsNull(0));
     EXPECT_TRUE(select.columnBlobView(0).empty());
 }
@@ -140,7 +140,7 @@ TEST(SqliteTest, BlobFromNullPointer)
     ASSERT_TRUE(insert.exec());
 
     SqlQuery select(db, "SELECT data FROM t");
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_FALSE(select.columnIsNull(0));
     EXPECT_TRUE(select.columnBlobView(0).empty());
 }
@@ -161,8 +161,29 @@ TEST(SqliteTest, ResetReusesStatement)
     }
 
     SqlQuery count(db, "SELECT COUNT(*) FROM t");
-    ASSERT_TRUE(count.next());
+    ASSERT_EQ(count.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(count.columnInt64(0), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, NextDistinguishesErrorFromEndOfRows)
+{
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(createSchema(db));
+    ASSERT_TRUE(db.exec("INSERT INTO t (name, data, value) VALUES ('a', X'', 1)"));
+
+    // A clean scan yields its rows and then reports the natural end.
+    SqlQuery clean(db, "SELECT id FROM t");
+    ASSERT_TRUE(clean.isValid());
+    EXPECT_EQ(clean.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(clean.next(), SqlQuery::StepResult::DONE);
+
+    // zeroblob() over SQLITE_MAX_LENGTH fails at step time - the scan stops just like at the
+    // end of the rows, and only the FAILED result tells the difference.
+    SqlQuery broken(db, "SELECT zeroblob(1152921504606846976)");
+    ASSERT_TRUE(broken.isValid());
+    EXPECT_EQ(broken.next(), SqlQuery::StepResult::FAILED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,7 +204,7 @@ TEST(SqliteTest, TransactionRollbackOnScopeExit)
     }
 
     SqlQuery count(db, "SELECT COUNT(*) FROM t");
-    ASSERT_TRUE(count.next());
+    ASSERT_EQ(count.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(count.columnInt64(0), 0);
 }
 
@@ -206,7 +227,7 @@ TEST(SqliteTest, TransactionCommitPersists)
     }
 
     SqlQuery count(db, "SELECT COUNT(*) FROM t");
-    ASSERT_TRUE(count.next());
+    ASSERT_EQ(count.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(count.columnInt64(0), 1);
 }
 
@@ -229,7 +250,7 @@ TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
     ASSERT_TRUE(reader.beginTransaction());
     {
         SqlQuery select(reader, "SELECT COUNT(*) FROM t");
-        ASSERT_TRUE(select.next());
+        ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     }
 
     {
@@ -293,7 +314,7 @@ TEST(SqliteTest, UInt64RoundTrip)
     ASSERT_TRUE(insert.exec());
 
     SqlQuery select(db, "SELECT value FROM t");
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(select.columnUInt64(0), big);
 }
 
@@ -313,7 +334,7 @@ TEST(SqliteTest, CaseFoldSearchCyrillic)
     SqlQuery select(db, "SELECT COUNT(*) FROM t "
                                  "WHERE casefold(name) LIKE casefold(?) ESCAPE '\\'");
     select.addText(QString::fromUtf8("%бухгалтерии%"));
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(select.columnInt64(0), 1);
 }
 
@@ -325,6 +346,6 @@ TEST(SqliteTest, CaseFoldFunctionFoldsValue)
 
     SqlQuery select(db, "SELECT casefold(?)");
     select.addText(QString::fromUtf8("ПРИВЕТ World"));
-    ASSERT_TRUE(select.next());
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(select.columnText(0), QString::fromUtf8("привет world"));
 }
