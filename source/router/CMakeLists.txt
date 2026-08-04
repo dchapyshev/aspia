@@ -47,6 +47,8 @@ list(APPEND SOURCE_ROUTER_CORE
     shared_hosts.h
     shared_key_pool.cc
     shared_key_pool.h
+    user_request_handler.cc
+    user_request_handler.h
     workspace.cc
     workspace.h)
 
@@ -55,7 +57,8 @@ list(APPEND SOURCE_ROUTER
 
 list(APPEND SOURCE_ROUTER_TESTS
     database_unittest.cc
-    tests_main.cc)
+    tests_main.cc
+    user_request_handler_unittest.cc)
 
 include(workers/sources.cmake)
 

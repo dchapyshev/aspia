@@ -19,18 +19,17 @@
 #include "router/client_admin.h"
 
 #include <set>
-#include <unordered_map>
 
 #include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/string_util.h"
-#include "base/peer/router_user.h"
 #include "router/database.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
+#include "router/user_request_handler.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -175,165 +174,28 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
+    UserRequestHandler::Caller caller;
+    caller.user_id = userId();
+    caller.name = QString::fromStdString(userName());
+
+    const UserRequestHandler::Result handled =
+        UserRequestHandler::handle(Database::instance(), caller, request);
+
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
     result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
-    qint64 reset_otp_user_id = 0;
-    qint64 revoked_tokens_user_id = 0;
-    QList<qint64> revoked_token_ids;
-    qint64 password_changed_user_id = 0;
-    qint64 deleted_user_id = 0;
-
-    if (request.command_name() == proto::router::kCommandUserAdd)
-    {
-        result->set_error_code(addUser(request.user()));
-    }
-    else if (request.command_name() == proto::router::kCommandUserModify)
-    {
-        result->set_error_code(modifyUser(request.user(), &password_changed_user_id));
-    }
-    else if (request.command_name() == proto::router::kCommandUserDelete)
-    {
-        const qint64 user_id = request.user().entry_id();
-        const std::string error_code = deleteUser(request.user());
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-            deleted_user_id = user_id;
-    }
-    else if (request.command_name() == proto::router::kCommandUserResetOtp)
-    {
-        const qint64 user_id = request.user().entry_id();
-
-        if (user_id <= 0)
-        {
-            CLOG(ERROR) << "Invalid reset_otp request: user_id=" << user_id;
-            result->set_error_code(proto::router::kErrorInvalidRequest);
-        }
-        else
-        {
-            Database& database = Database::instance();
-            if (!database.isValid())
-            {
-                CLOG(ERROR) << "Failed to connect to database";
-                result->set_error_code(proto::router::kErrorInternalError);
-            }
-            else if (std::string_view error_code = database.clearUserOtp(user_id);
-                     error_code != proto::router::kErrorOk)
-            {
-                result->set_error_code(error_code);
-            }
-            else
-            {
-                reset_otp_user_id = user_id;
-
-                // Re-enrollment implies a new device key pair; existing device tokens must die
-                // with the secret they were issued against.
-                const std::string_view revoke_code = database.revokeUserClientDeviceTokens(user_id);
-                if (revoke_code != proto::router::kErrorOk)
-                {
-                    CLOG(WARNING) << "OTP cleared but failed to revoke device tokens for user"
-                                  << user_id << ":" << revoke_code;
-                    result->set_error_code(revoke_code);
-                }
-                else
-                {
-                    CLOG(INFO) << "OTP cleared for user" << user_id << "by" << userName();
-                    result->set_error_code(proto::router::kErrorOk);
-                }
-                emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
-            }
-        }
-    }
-    else if (request.command_name() == proto::router::kCommandUserRevokeTokens)
-    {
-        const qint64 user_id = request.user().entry_id();
-
-        if (user_id <= 0)
-        {
-            CLOG(ERROR) << "Invalid revoke_tokens request: user_id=" << user_id;
-            result->set_error_code(proto::router::kErrorInvalidRequest);
-        }
-        else
-        {
-            Database& database = Database::instance();
-            if (!database.isValid())
-            {
-                CLOG(ERROR) << "Failed to connect to database";
-                result->set_error_code(proto::router::kErrorInternalError);
-            }
-            else if (request.user().token_size() == 0)
-            {
-                // Empty list - drop every token of the user atomically.
-                const std::string_view error_code = database.revokeUserClientDeviceTokens(user_id);
-                if (error_code != proto::router::kErrorOk)
-                {
-                    result->set_error_code(error_code);
-                }
-                else
-                {
-                    revoked_tokens_user_id = user_id;
-                    CLOG(INFO) << "All device tokens of user" << user_id
-                               << "revoked by" << userName();
-                    result->set_error_code(proto::router::kErrorOk);
-                    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
-                }
-            }
-            else
-            {
-                std::string_view code = proto::router::kErrorOk;
-                QList<qint64> token_ids;
-                token_ids.reserve(request.user().token_size());
-
-                for (int i = 0; i < request.user().token_size(); ++i)
-                {
-                    const qint64 token_id = request.user().token(i).token_id();
-                    if (token_id <= 0)
-                    {
-                        CLOG(ERROR) << "Invalid token_id in revoke_tokens request";
-                        code = proto::router::kErrorInvalidRequest;
-                        break;
-                    }
-                    token_ids.append(token_id);
-                }
-
-                // Revoke atomically: either every requested token is removed or nothing is, so a
-                // missing token or database error never leaves a half-revoked set behind.
-                if (code == proto::router::kErrorOk && !token_ids.isEmpty())
-                {
-                    code = database.revokeClientDeviceTokens(user_id, token_ids);
-                    if (code == proto::router::kErrorOk)
-                    {
-                        CLOG(INFO) << token_ids.size() << "device token(s) of user" << user_id
-                                   << "revoked by" << userName();
-                        revoked_tokens_user_id = user_id;
-                        revoked_token_ids = token_ids;
-                        emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
-                    }
-                }
-                result->set_error_code(code);
-            }
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown user request command:" << request.command_name();
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-    }
+    result->set_error_code(handled.error_code);
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 
-    if (reset_otp_user_id > 0)
-        emit sig_stopClients(reset_otp_user_id, {}, 0);
+    if (handled.notify_flags)
+        emit sig_notifyChanged(handled.notify_flags);
 
-    if (revoked_tokens_user_id > 0)
-        emit sig_stopClients(revoked_tokens_user_id, revoked_token_ids, 0);
-
-    if (password_changed_user_id > 0)
-        emit sig_stopClients(password_changed_user_id, {}, 0);
-
-    if (deleted_user_id > 0)
-        emit sig_stopClients(deleted_user_id, {}, 0);
+    // After the reply: the sessions being stopped can include the one that sent the request (an
+    // administrator disabling its own account), and it must still see the result of its command.
+    if (handled.stop_user_id > 0)
+        emit sig_stopClients(handled.stop_user_id, handled.stop_token_ids, 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -653,156 +515,4 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string ClientAdmin::addUser(const proto::router::User& user)
-{
-    CLOG(INFO) << "User add request:" << user.name();
-
-    RouterUser new_user = RouterUser::parseFrom(user);
-    if (!new_user.isValid())
-    {
-        CLOG(ERROR) << "Failed to create user";
-        return proto::router::kErrorInternalError;
-    }
-
-    if (!User::isValidUserName(new_user.name))
-    {
-        CLOG(ERROR) << "Invalid user name:" << new_user.name;
-        return proto::router::kErrorInvalidData;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        return proto::router::kErrorInternalError;
-    }
-
-    // An administrator has access to every workspace. The keys of the workspaces sealed by the
-    // sender to the key pair of the new user are the access entries the database stores for it.
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.reserve(user.workspace_key_size());
-
-    for (int i = 0; i < user.workspace_key_size(); ++i)
-    {
-        const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
-        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-    }
-
-    const std::string_view error_code = database.addUser(new_user, wrapped_keys, userId());
-    if (error_code != proto::router::kErrorOk)
-    {
-        CLOG(ERROR) << "addUser failed:" << error_code;
-        return std::string(error_code);
-    }
-
-    // An administrator could have received access entries for the workspaces it had none for, so
-    // the clients must refetch the list of the workspaces as well.
-    quint32 notify_flags = ClientWorker::NOTIFY_USERS;
-    if (new_user.sessions & proto::router::SESSION_TYPE_ADMIN)
-        notify_flags |= ClientWorker::NOTIFY_WORKSPACES;
-
-    emit sig_notifyChanged(notify_flags);
-    return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* password_changed_user_id)
-{
-    CHECK(password_changed_user_id);
-    *password_changed_user_id = 0;
-
-    CLOG(INFO) << "User modify request:" << user.name();
-
-    if (user.entry_id() <= 0)
-    {
-        CLOG(ERROR) << "Invalid user ID:" << user.entry_id();
-        return proto::router::kErrorInvalidData;
-    }
-
-    RouterUser new_user = RouterUser::parseFrom(user);
-
-    // A request with empty credentials changes only the flags of the record; the stored
-    // credentials are kept (see Database::modifyUser), so their validity is not checked.
-    const bool has_credentials = !new_user.salt.isEmpty() || !new_user.verifier.isEmpty();
-    if (has_credentials && !new_user.isValid())
-    {
-        CLOG(ERROR) << "Failed to create user";
-        return proto::router::kErrorInternalError;
-    }
-
-    // The name is written only together with the credentials (see Database::modifyUser), so a
-    // flags-only request is not validated by a field it does not use.
-    if (has_credentials && !User::isValidUserName(new_user.name))
-    {
-        CLOG(ERROR) << "Invalid user name:" << new_user.name;
-        return proto::router::kErrorInvalidData;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        return proto::router::kErrorInternalError;
-    }
-
-    // On a password rotation the stored wrapped GKs must be replaced with the keys re-sealed by
-    // the admin to the new key pair. The user update, token revocation and re-wrap happen in one
-    // transaction inside modifyUser; if the re-sealed set is incomplete the whole change is
-    // rejected, so the user never loses workspace access. The keys are only consumed when the
-    // password actually changes (decided authoritatively inside modifyUser).
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.reserve(user.workspace_key_size());
-    for (int i = 0; i < user.workspace_key_size(); ++i)
-    {
-        const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
-        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-    }
-
-    bool password_changed = false;
-    const std::string_view error_code =
-        database.modifyUser(new_user, wrapped_keys, userId(), &password_changed);
-    if (error_code != proto::router::kErrorOk)
-    {
-        CLOG(ERROR) << "modifyUser failed:" << error_code;
-        return std::string(error_code);
-    }
-
-    if (password_changed)
-        *password_changed_user_id = new_user.entry_id;
-
-    // The access level of the request is not authoritative, so whether access entries were created
-    // for the workspaces (see Database::modifyUser) is unknown here. The list of the workspaces is
-    // refetched in any case: a user is modified rarely.
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES);
-    return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string ClientAdmin::deleteUser(const proto::router::User& user)
-{
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        return proto::router::kErrorInternalError;
-    }
-
-    qint64 entry_id = user.entry_id();
-
-    CLOG(INFO) << "User remove request:" << entry_id;
-
-    const std::string_view error_code = database.removeUser(entry_id);
-    if (error_code != proto::router::kErrorOk)
-    {
-        CLOG(ERROR) << "removeUser failed:" << error_code;
-        return std::string(error_code);
-    }
-
-    // The cascade dropped the user's access entries and moved the revisions of the affected
-    // workspaces, so the cached workspace lists are stale too.
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES);
-    return proto::router::kErrorOk;
 }

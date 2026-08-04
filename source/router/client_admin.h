@@ -28,7 +28,6 @@ class HostRequest;
 class PeerRequest;
 class RelayListRequest;
 class RelayRequest;
-class User;
 class UserListRequest;
 class UserRequest;
 class WorkspaceRequest;
@@ -58,10 +57,6 @@ private:
     void doRelayRequest(const proto::router::RelayRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
-
-    std::string addUser(const proto::router::User& user);
-    std::string modifyUser(const proto::router::User& user, qint64* password_changed_user_id);
-    std::string deleteUser(const proto::router::User& user);
 
     Q_DISABLE_COPY_MOVE(ClientAdmin)
 };
