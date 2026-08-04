@@ -78,6 +78,16 @@ RouterHostDialog::~RouterHostDialog()
 //--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onGroupListReceived(const Router::GroupList& list)
 {
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        // Without the group tree the dialog is unusable: the group combo stays empty and the
+        // OK button disabled. Tell the operator and close instead of hanging.
+        LOG(ERROR) << "Unable to get the list of the groups:" << list.error_code;
+        MsgBox::warning(this, tr("Failed to get list of groups."));
+        reject();
+        return;
+    }
+
     QList<GroupComboBox::Entry> entries;
     entries.reserve(list.groups.size());
     for (const Router::Group& group : std::as_const(list.groups))

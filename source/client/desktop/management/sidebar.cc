@@ -515,6 +515,21 @@ void Sidebar::changeRouterPassword(qint64 router_id)
             return;
         }
 
+        if (error_code == proto::router::kErrorConflict)
+        {
+            // The re-sealed key set was built from a stale workspace list (a workspace appeared
+            // meanwhile). Reloading the list refreshes the cached keys for a retry.
+            Router* router = Router::instance(router_id);
+            if (router)
+            {
+                router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
+                                       [](const Router::WorkspaceList&) {});
+            }
+            MsgBox::warning(this, tr("The list of workspaces was changed during the operation. "
+                                     "Please try again."));
+            return;
+        }
+
         const char* message;
         if (error_code == proto::router::kErrorInvalidRequest)
             message = QT_TR_NOOP("Invalid password change request.");
@@ -522,6 +537,8 @@ void Sidebar::changeRouterPassword(qint64 router_id)
             message = QT_TR_NOOP("Unknown internal error.");
         else if (error_code == proto::router::kErrorInvalidData)
             message = QT_TR_NOOP("Invalid data was passed.");
+        else if (error_code == proto::router::kErrorNotFound)
+            message = QT_TR_NOOP("The user no longer exists on the router.");
         else
             message = QT_TR_NOOP("Unknown error type.");
 
@@ -552,6 +569,14 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
     router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
         [this, router_id](const Router::WorkspaceList& list)
     {
+        if (list.error_code != proto::router::kErrorOk)
+        {
+            // An error reply carries no list; applying it would wipe every workspace (and the
+            // group subtrees) from the sidebar. Keep what is shown.
+            LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
+            return;
+        }
+
         setRouterWorkspaces(router_id, list.workspaces);
 
         // Once the workspace items are in place, fan out a host-group fetch per workspace.
@@ -566,6 +591,11 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
             router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
+                if (result.error_code != proto::router::kErrorOk)
+                {
+                    LOG(ERROR) << "Unable to get the list of the groups:" << result.error_code;
+                    return;
+                }
                 setRouterHostGroups(router_id, workspace_id, result.groups);
             });
         }
@@ -587,6 +617,12 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
         router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
             [this, router_id, workspace_id](const Router::GroupList& result)
         {
+            if (result.error_code != proto::router::kErrorOk)
+            {
+                // Same as onRefreshWorkspaces: an error reply must not empty the subtree.
+                LOG(ERROR) << "Unable to get the list of the groups:" << result.error_code;
+                return;
+            }
             setRouterHostGroups(router_id, workspace_id, result.groups);
         });
     }

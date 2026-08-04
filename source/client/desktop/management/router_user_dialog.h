@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "base/peer/router_user.h"
+#include "client/desktop/management/user_edit_model.h"
 
 class QAbstractButton;
 
@@ -81,11 +82,14 @@ private:
     std::unique_ptr<Ui::RouterUserDialog> ui;
     qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
-    RouterUser user_;
-    QStringList existing_names_;
+    // The whole edit state machine (snapshot, intents, no-op detection) lives in the model,
+    // where it is unit-tested; the dialog only feeds replies in and mirrors the state to the
+    // widgets. Tokens are display-only and stay here.
+    UserEditModel model_;
     QList<Token> tokens_;
-    bool account_changed_ = true;
-    bool users_loaded_ = false;
+    // Guards against stacked error boxes and double reject: several replies can arrive with an
+    // error while the first modal warning is still open.
+    bool closing_ = false;
     // Token ids of an in-flight revoke request. Empty when no revoke is pending; on success the
     // listed ids are dropped from |tokens_| locally.
     QList<qint64> pending_revoke_token_ids_;

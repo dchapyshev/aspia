@@ -188,6 +188,13 @@ void RouterTempHostsWidget::onApproveHost()
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onTempHostListReceived(const Router::TempHostList& list)
 {
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        // An error reply carries no list; applying it would empty the tree. Keep what is shown.
+        LOG(ERROR) << "Unable to get the list of the temporary hosts:" << list.error_code;
+        return;
+    }
+
     tree_->clear();
 
     for (const Router::TempHost& host : std::as_const(list.hosts))

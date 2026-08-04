@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QLocale>
 #include <QPushButton>
+#include <QScrollBar>
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
@@ -35,9 +36,9 @@
 
 namespace {
 
-// The built-in user created by the router's --create-config. The router refuses to delete it, to
-// take away its administrator access or to disable it, because it is the only guaranteed way into
-// the admin channel. Mirrored here so the dialog does not offer a change that will be rejected.
+// The built-in user created by the router's --create-config. The router refuses to delete it or to
+// disable it, because it is the only guaranteed way into the admin channel. Mirrored here so the
+// dialog does not offer a change that will be rejected.
 constexpr qint64 kBuiltInUserId = 1;
 
 } // namespace
@@ -47,7 +48,8 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterUserDialog>()),
       router_id_(router_id),
-      entry_id_(user_id)
+      entry_id_(user_id),
+      model_(user_id)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -72,6 +74,13 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
     {
         setAccountChanged(true);
+    });
+
+    // clicked() fires only on operator interaction, not on the programmatic setChecked of the
+    // list handler - exactly the boundary between an edit and the snapshot the model relies on.
+    connect(ui->checkbox_disable, &QCheckBox::clicked, this, [this]()
+    {
+        model_.setEnabledIntent(!ui->checkbox_disable->isChecked());
     });
 
     connect(ui->button_reset_otp, &QPushButton::clicked,
@@ -99,6 +108,16 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     {
         if (status != Router::Status::ONLINE)
             reject();
+    });
+
+    // The record can be changed from another console while the dialog is open (e.g. the user is
+    // disabled); without a refetch a later OK would write the stale snapshot back and silently
+    // undo that. The fields the operator has touched keep their edits (see onUserListReceived).
+    connect(router, &Router::sig_usersChanged, this, [this](qint64 /* router_id */)
+    {
+        Router* router = Router::instance(router_id_);
+        if (router)
+            router->listUsers(this, &RouterUserDialog::onUserListReceived);
     });
 
     router->listUsers(this, &RouterUserDialog::onUserListReceived);
@@ -130,7 +149,35 @@ bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 {
-    existing_names_.clear();
+    if (list.error_code() != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Unable to get the list of the users:" << list.error_code();
+        if (!model_.isLoaded() && !closing_)
+        {
+            // Without the list the dialog is unusable: the uniqueness check has no names, and in
+            // modify mode the form is never populated. Tell the operator and close instead of
+            // presenting an empty form as if it were real. closing_ collapses several failed
+            // replies (the ctor fetch plus refetches) into one message and one reject.
+            closing_ = true;
+            MsgBox::warning(this, tr("Failed to get list of users."));
+            reject();
+        }
+        // On a refetch keep the current snapshot: a transient error must not close the dialog
+        // under the hands of the operator.
+        return;
+    }
+
+    if (closing_)
+        return;
+
+    const bool initial_load = !model_.isLoaded();
+
+    // Split the reply into what the model owns (the record, the names) and what stays display
+    // only (tokens, OTP state).
+    RouterUser record;
+    bool record_found = false;
+    bool otp_active = false;
+    QStringList other_names;
     tokens_.clear();
 
     for (int i = 0; i < list.user_size(); ++i)
@@ -139,15 +186,9 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
         if (entry_id_ > 0 && user.entry_id() == entry_id_)
         {
-            // The user we are editing - populate the form. Its name is excluded from
-            // existing_names_ so the uniqueness check does not flag the unchanged name.
-            user_ = RouterUser::parseFrom(user);
-
-            ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
-            ui->edit_username->setText(user_.name);
-            ui->button_reset_otp->setVisible(user.otp_active());
-
-            setAccessLevel(accessLevelFromSessions(user_.sessions));
+            record_found = true;
+            record = RouterUser::parseFrom(user);
+            otp_active = user.otp_active();
 
             tokens_.reserve(user.token_size());
             for (int j = 0; j < user.token_size(); ++j)
@@ -160,16 +201,45 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
                 token.address      = QString::fromStdString(src.address());
                 tokens_.append(token);
             }
-
-            setAccountChanged(false);
         }
         else
         {
-            existing_names_.append(QString::fromStdString(user.name()));
+            // The own name is excluded so the uniqueness check does not flag the unchanged name.
+            other_names.append(QString::fromStdString(user.name()));
         }
     }
 
-    users_loaded_ = true;
+    if (!model_.applySnapshot(record, record_found, other_names))
+    {
+        // The record being edited is gone (deleted from another console). Every further action
+        // would fail with NotFound - or worse, close as a no-op over a nonexistent record - so
+        // the dialog closes right away.
+        LOG(ERROR) << "Edited user" << entry_id_ << "no longer exists";
+        closing_ = true;
+        MsgBox::warning(this, tr("The user was deleted from another console."));
+        reject();
+        return;
+    }
+
+    if (entry_id_ > 0)
+    {
+        // The widgets mirror the model: the checkbox shows the operator intent while one is
+        // set and the server state otherwise; the name follows the server only while the
+        // operator has not started editing the account.
+        ui->checkbox_disable->setChecked(!model_.desiredEnabled());
+        if (!model_.accountChanged() || initial_load)
+            ui->edit_username->setText(model_.snapshot().name);
+        ui->button_reset_otp->setVisible(otp_active);
+
+        if (initial_load)
+        {
+            // The access level never changes after creation (see I1 in router/database.h)
+            // and the password fields must not be reset by a background refetch.
+            setAccessLevel(accessLevelFromSessions(model_.snapshot().sessions));
+            setAccountChanged(false);
+        }
+    }
+
     updateTokenTree();
     updateLoadingState();
 }
@@ -177,12 +247,35 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& result)
 {
+    // The dialog is already going away (a refetch found the record deleted, or the list never
+    // loaded) - a late save result must not stack another message box on top.
+    if (closing_)
+        return;
+
     const std::string& error_code = result.error_code();
     if (error_code == proto::router::kErrorOk)
     {
         LOG(INFO) << "[ACTION] User saved";
         accept();
         close();
+        return;
+    }
+
+    if (error_code == proto::router::kErrorConflict)
+    {
+        // The workspace keys of the request were sealed from a stale list - a workspace appeared
+        // (or its key changed) after this console read it. Reloading the list refreshes the
+        // cached keys, so the operator can simply submit again.
+        LOG(ERROR) << "User save rejected: concurrent change";
+        Router* router = Router::instance(router_id_);
+        if (router)
+        {
+            router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
+                                   [](const Router::WorkspaceList&) {});
+        }
+        setEnabled(true);
+        MsgBox::warning(this, tr("The router data was changed from another console. The data "
+                                 "is being refreshed - please try again."));
         return;
     }
 
@@ -197,6 +290,8 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
         message = QT_TR_NOOP("A user with the specified name already exists.");
     else if (error_code == proto::router::kErrorNotFound)
         message = QT_TR_NOOP("User not found. The list may be out of date.");
+    else if (error_code == proto::router::kErrorAccessDenied)
+        message = QT_TR_NOOP("This change is not allowed for the selected user.");
     else
         message = QT_TR_NOOP("Unknown error type.");
 
@@ -369,7 +464,24 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (account_changed_)
+    // Nothing was edited - do not echo the snapshot back: between the fetch and this click
+    // another console could have changed the record (e.g. disabled the user), and even an
+    // "unchanged" save would silently overwrite that. The model tells a real edit from an
+    // unchanged form against the current server snapshot.
+    if (model_.isNoOpSave())
+    {
+        LOG(INFO) << "[ACTION] No changes - closing without a request";
+        accept();
+        close();
+        return;
+    }
+
+    // The request is built in a local record: the snapshot inside the model is written only by
+    // onUserListReceived. Mutating it here would poison the no-op check above on the retry
+    // after a failed save - the intended change would read as "already applied".
+    RouterUser request;
+
+    if (model_.accountChanged())
     {
         QString username = ui->edit_username->text();
 
@@ -383,9 +495,10 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        for (QStringList::size_type i = 0; i < existing_names_.size(); ++i)
+        const QStringList& existing_names = model_.otherNames();
+        for (QStringList::size_type i = 0; i < existing_names.size(); ++i)
         {
-            if (username.compare(existing_names_.at(i), Qt::CaseInsensitive) == 0)
+            if (username.compare(existing_names.at(i), Qt::CaseInsensitive) == 0)
             {
                 LOG(ERROR) << "User name already exists:" << username;
                 MsgBox::warning(this, tr("The username you entered already exists."));
@@ -441,26 +554,32 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         // Create new user (regenerates keys). entry_id is preserved for modify mode.
-        user_ = RouterUser::create(username, password);
-        user_.entry_id = entry_id_;
+        request = RouterUser::create(username, password);
+        request.entry_id = entry_id_;
 
-        if (!user_.isValid())
+        if (!request.isValid())
         {
             LOG(ERROR) << "Unable to create user";
             MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
             return;
         }
     }
+    else
+    {
+        // The credentials were not changed - do not echo the snapshot back. It could be out of
+        // date (the user rotated the password after this dialog was opened), and the router would
+        // treat the stale salt/verifier as a password change and revert the rotation. Empty
+        // fields keep the stored values; public_key stays for the workspace keys to be sealed.
+        request = model_.snapshot();
+        request.salt.clear();
+        request.verifier.clear();
+        request.wrap_private_key.clear();
+        request.wrap_salt.clear();
+    }
 
     // Only the selected level is stored; the router expands it to the implied lower levels.
-    quint32 sessions = ui->combo_access_level->currentData().toUInt();
-
-    quint32 flags = 0;
-    if (!ui->checkbox_disable->isChecked())
-        flags |= User::ENABLED;
-
-    user_.sessions = sessions;
-    user_.flags = flags;
+    request.sessions = ui->combo_access_level->currentData().toUInt();
+    request.flags = model_.flagsForSave();
 
     Router* router = Router::instance(router_id_);
     if (!router)
@@ -473,15 +592,15 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Submitting user (entry_id:" << entry_id_ << ")";
     if (entry_id_ > 0)
-        router->modifyUser(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->modifyUser(request.serialize(), this, &RouterUserDialog::onUserResultReceived);
     else
-        router->addUser(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->addUser(request.serialize(), this, &RouterUserDialog::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::setAccountChanged(bool changed)
 {
-    account_changed_ = changed;
+    model_.setAccountChanged(changed);
 
     ui->edit_password->setEnabled(changed);
     ui->edit_password_retry->setEnabled(changed);
@@ -511,17 +630,19 @@ void RouterUserDialog::setAccountChanged(bool changed)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::updateLoadingState()
 {
-    const bool ready = users_loaded_;
+    const bool ready = model_.isLoaded();
 
-    // Only the two controls the router guards for the built-in user are locked; its name and
-    // password remain editable.
+    // The built-in user cannot be disabled; its name and password remain editable.
     const bool built_in = entry_id_ == kBuiltInUserId;
 
     ui->edit_username->setEnabled(ready);
     ui->checkbox_disable->setEnabled(ready && !built_in);
-    ui->combo_access_level->setEnabled(ready && !built_in);
-    ui->edit_password->setEnabled(ready && account_changed_);
-    ui->edit_password_retry->setEnabled(ready && account_changed_);
+
+    // The access level is chosen when the user is created and is not editable afterwards.
+    ui->combo_access_level->setEnabled(ready && entry_id_ == 0);
+
+    ui->edit_password->setEnabled(ready && model_.accountChanged());
+    ui->edit_password_retry->setEnabled(ready && model_.accountChanged());
 
     if (QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok))
         ok_button->setEnabled(ready);
@@ -530,6 +651,14 @@ void RouterUserDialog::updateLoadingState()
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::updateTokenTree()
 {
+    // A rebuild also runs on every refetch (batched notifications arrive every few seconds
+    // while another console is active), so the selection and the scroll position are carried
+    // over - same reasoning as the lists of the workspace dialog.
+    QVariant selected_token;
+    if (QTreeWidgetItem* current = ui->tree_tokens->currentItem())
+        selected_token = current->data(0, Qt::UserRole);
+    const int scroll = ui->tree_tokens->verticalScrollBar()->value();
+
     ui->tree_tokens->clear();
 
     for (const Token& token : std::as_const(tokens_))
@@ -540,9 +669,14 @@ void RouterUserDialog::updateTokenTree()
         item->setText(2, token.address);
         item->setData(0, Qt::UserRole, QVariant::fromValue(token.token_id));
         ui->tree_tokens->addTopLevelItem(item);
+
+        if (selected_token.isValid() && item->data(0, Qt::UserRole) == selected_token)
+            ui->tree_tokens->setCurrentItem(item);
     }
 
-    ui->button_revoke_token->setEnabled(false);
+    ui->tree_tokens->verticalScrollBar()->setValue(scroll);
+
+    ui->button_revoke_token->setEnabled(ui->tree_tokens->currentItem() != nullptr);
     ui->button_revoke_all_tokens->setEnabled(!tokens_.isEmpty());
 }
 

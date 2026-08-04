@@ -82,6 +82,9 @@ private:
     std::unique_ptr<Ui::RouterUsersWidget> ui;
     qint64 router_id_ = 0;
     QLabel* status_users_label_ = nullptr;
+    // Guards the one-time warning about a failed initial load: the list is refetched on every
+    // batched notification, and a repeating transient error must not turn into a message storm.
+    bool load_error_shown_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterUsersWidget)
 };

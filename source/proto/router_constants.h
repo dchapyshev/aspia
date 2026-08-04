@@ -64,6 +64,7 @@ extern const char* const kErrorInvalidData;
 extern const char* const kErrorAlreadyExists;
 extern const char* const kErrorNotFound;
 extern const char* const kErrorAccessDenied;
+extern const char* const kErrorConflict;
 
 } // namespace proto::router
 

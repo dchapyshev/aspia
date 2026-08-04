@@ -62,9 +62,30 @@ struct DeviceToken
     std::string address;     // Address of the session at last use (or issue, if untouched).
 };
 
+// Invariants the write paths maintain, each enforced inside the mutating transaction. A change
+// to any user/workspace path must be checked against this list.
+// I1. users.sessions is written only by the INSERT of addUser: the access level of a user never
+//     changes after creation.
+// I2. Every administrator with a key pair has a workspace_access row for every workspace
+//     (grantMissingWorkspaceAccess on the user paths, checkAccessCoversAdmins on the workspace
+//     paths). One deliberate exception: a workspace the grantor of a new administrator cannot
+//     see is skipped (nobody can seal its key), leaving a temporary hole that the next save of
+//     that workspace closes via checkAccessCoversAdmins.
+// I3. Every stored wrapped_gk is sealed to the current public key of its user - the router
+//     cannot unseal or reseal, so it verifies the seal target instead (checkAccessSealTarget on
+//     the workspace paths, the keys_usable guard in modifyUser) and rejects what the user could
+//     never decrypt.
+// I4. A workspace modification applies only on top of the state the client saw
+//     (workspaces.revision): a save built from a stale snapshot is rejected with kErrorConflict,
+//     never applied over the concurrent change. Every change of the membership of a workspace
+//     moves its revision: modifyWorkspace itself, the access rows granted by
+//     grantMissingWorkspaceAccess and the rows removed by the cascade of removeUser.
 class Database
 {
 public:
+    // A default-constructed Database is not connected; open() (or instance(), which opens the
+    // per-thread connection itself) must be called first.
+    Database() = default;
     ~Database() = default;
 
     // Returns the per-thread cached Database. First call on a given thread opens the
@@ -74,25 +95,51 @@ public:
 
     static QString filePath();
 
+    // Opens (creating when absent) the database at |file_path| and ensures the schema.
+    // instance() opens the per-thread connection at filePath(); this entry exists so the tests
+    // can run every path against an isolated temporary database.
+    bool open(const QString& file_path);
+
     bool isValid() const;
 
     //----------------------------------------------------------------------------------------------
     // Users
     //----------------------------------------------------------------------------------------------
 
-    QList<RouterUser> userList() const;
-    bool addUser(const RouterUser& user);
+    // Fills |users| with every user record. Returns false on a database error - a partial list
+    // never passes for a complete one.
+    bool userList(QList<RouterUser>* users) const;
 
-    // Updates a user record. If the change rotates the password (salt/verifier differ from the
-    // stored ones), every device token is revoked and the workspace keys are re-wrapped from
-    // |wrapped_keys| atomically; |wrapped_keys| must then cover every workspace the user can
-    // access or the change is rejected (kErrorInvalidData) without modifying anything. When the
-    // password is unchanged |wrapped_keys| is ignored. If |password_changed| is not null it is set
-    // to whether the password was rotated (the authoritative check against the stored record).
+    // Adds a user record. An administrator has access to every workspace, so for an administrator
+    // an access entry is created for each existing workspace from |wrapped_keys| (for any other
+    // user |wrapped_keys| is ignored); |grantor_user_id| is the user that sent the request (see
+    // grantMissingWorkspaceAccess).
+    // Returns a proto::router error code.
+    std::string_view addUser(
+        const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys = {},
+        qint64 grantor_user_id = 0);
+
+    // Updates a user record. The access level is set at the creation of the user and never changes
+    // afterwards, so the session mask of |user| is ignored. A request with empty salt/verifier
+    // changes only the flags: the stored credentials are kept, so a snapshot taken before a
+    // concurrent password change cannot roll that change back. If the change rotates the key
+    // material (salt, verifier or public key differ from the stored ones), every device token is
+    // revoked and the workspace keys are re-wrapped from |wrapped_keys| atomically; |wrapped_keys|
+    // must then cover every workspace the user can access or the change is rejected
+    // (kErrorConflict - the sender's workspace list was stale) without modifying anything. When
+    // the key material is unchanged |wrapped_keys| is not used for the re-wrap, but an
+    // administrator is still granted the workspaces they have no access entry for (see
+    // grantMissingWorkspaceAccess) - only while the stored public key is not empty and still
+    // matches the snapshot in |user| that the keys were sealed to. If |password_changed| is not
+    // null it is set to whether the rotation happened (the authoritative check against the
+    // stored record).
     // Returns a proto::router error code.
     std::string_view modifyUser(
         const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys = {},
-        bool* password_changed = nullptr);
+        qint64 grantor_user_id = 0, bool* password_changed = nullptr);
+
+    // Removes a user; its workspace_access rows go with it by cascade, and the revision of every
+    // affected workspace is bumped in the same transaction (see I4).
     std::string_view removeUser(qint64 entry_id);
     RouterUser findUser(const QString& username) const;
     RouterUser findUser(qint64 entry_id) const;
@@ -147,10 +194,10 @@ public:
     // with no tokens, but returns kErrorNotFound if the user row is absent.
     std::string_view revokeUserClientDeviceTokens(qint64 user_id);
 
-    // Lists all device tokens owned by |user_id|. The router never exposes token material to
-    // admins - only the opaque numeric id and timestamp metadata. Returns an empty list on
-    // error or when the user has none.
-    std::vector<DeviceToken> listClientDeviceTokens(qint64 user_id) const;
+    // Fills |tokens| with all device tokens owned by |user_id|. The router never exposes token
+    // material to admins - only the opaque numeric id and timestamp metadata. Returns false on
+    // a database error.
+    bool listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts
@@ -168,9 +215,10 @@ public:
         std::string_view address);
 
     // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
-    // workspace. Returns -1 if the host_id is unknown. Used to validate user access before
-    // edits.
-    qint64 hostWorkspaceId(HostId host_id) const;
+    // workspace. Returns -1 if the host_id is unknown. |ok| (optional) is set to false when the
+    // answer could not be determined - a database error must not pass for a missing host.
+    // Used to validate user access before edits.
+    qint64 hostWorkspaceId(HostId host_id, bool* ok = nullptr) const;
 
     // Updates the admin/manager-editable fields of a host (display_name plain, the other three
     // AEAD-encrypted with the workspace GK by the caller). group_id == 0 places the host at the
@@ -193,9 +241,10 @@ public:
         proto::router::HostList* out) const;
 
     // Total host count in the same scope as the matching hosts() overload. Used by the client
-    // to drive pagination UI without fetching the full list.
-    qint64 hostCount() const;
-    qint64 hostCount(qint64 workspace_id, qint64 group_id) const;
+    // to drive pagination UI without fetching the full list. |ok| (optional) is set to false on
+    // a database error - a zero count from a failed query would truncate the pagination.
+    qint64 hostCount(bool* ok = nullptr) const;
+    qint64 hostCount(qint64 workspace_id, qint64 group_id, bool* ok = nullptr) const;
 
     // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted
     // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
@@ -228,38 +277,52 @@ public:
         proto::router::WorkspaceList* out) const;
     Workspace findWorkspace(qint64 entry_id) const;
 
-    // Initial access list may be empty - in that case the workspace has no GK yet; it will
-    // be generated when the first access is granted via modifyWorkspace(). The comment is
-    // stored as opaque bytes (AEAD-encrypted with the workspace GK on the client).
+    // The initial access list must contain every administrator that has a public key: an
+    // administrator has access to every workspace, and an incomplete list is rejected
+    // rather than completed - the GK only arrives here sealed, so the router cannot create
+    // the missing entries itself (see checkAccessCoversAdmins). Every entry must carry the
+    // public key its wrapped_gk is sealed to; it is checked against the stored key of the
+    // user (see checkAccessSealTarget). The comment is stored as opaque bytes
+    // (AEAD-encrypted with the workspace GK on the client). The host assignments are applied
+    // in the same transaction (see syncWorkspaceHosts), so on any error the workspace is not
+    // created at all.
     std::string_view addWorkspace(std::string_view name, std::string_view comment,
-        const QList<Workspace::Access>& initial_access, qint64* entry_id);
+        const QList<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
+        qint64* entry_id);
 
-    // Updates name/comment and synchronizes access in a single transaction. desired_access is
-    // the complete final access list: user_ids missing from it are revoked, user_ids absent
-    // from the current DB record are inserted with the supplied wrapped_gk, and user_ids
-    // already present preserve their existing wrapped_gk (the value in desired_access is
-    // ignored).
-    std::string_view modifyWorkspace(qint64 entry_id, std::string_view name, std::string_view comment,
-        const QList<Workspace::Access>& desired_access);
+    // Updates name/comment and synchronizes access and host assignments in a single
+    // transaction. base_revision is the revision the client based its edit on; a mismatch with
+    // the stored value is rejected (kErrorConflict) so a save built from a stale snapshot can
+    // never silently overwrite a concurrent change, and on success the stored revision is
+    // incremented. desired_access is the complete final access list: user_ids missing from it
+    // are revoked, user_ids absent from the current DB record are inserted with the supplied
+    // wrapped_gk (after checkAccessSealTarget on their public_key), and user_ids already
+    // present preserve their existing wrapped_gk (the value in desired_access is ignored).
+    // desired_host_ids is the complete final set of the hosts (see syncWorkspaceHosts).
+    std::string_view modifyWorkspace(qint64 entry_id, qint64 base_revision,
+        std::string_view name, std::string_view comment,
+        const QList<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids);
 
     // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0), and clears
-    // host fields encrypted with the workspace GK.
+    // host fields encrypted with the workspace GK. Deliberately takes no base_revision: a delete
+    // is an intent about the whole entity, not about a particular state of it, so it applies
+    // regardless of concurrent edits (unlike modifyWorkspace, see I4).
     std::string_view removeWorkspace(qint64 entry_id);
 
-    // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
-    // currently in this workspace but absent from the set are released (workspace_id <- 0);
-    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id). Every
-    // requested host must exist and be either unassigned or already in this workspace; hosts
-    // from another workspace are rejected so OK means the final set was applied.
-    std::string_view setWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids);
+    // Fills |workspace_ids| with the ids of every workspace the user has a workspace_access
+    // entry for. Returns false on a database error.
+    bool workspaceAccessIdsForUser(qint64 user_id, std::set<qint64>* workspace_ids) const;
 
-    // Returns the set of workspace ids the given user has a workspace_access entry for.
-    std::set<qint64> workspaceAccessIdsForUser(qint64 user_id) const;
+    // Fills |access_list| with {workspace_id, wrapped_gk} for every workspace the user has
+    // access to. Returns false on a database error - a partial key set would look to the user
+    // like revoked access.
+    bool workspaceAccessListForUser(qint64 user_id, std::vector<Workspace::Access>* access_list) const;
 
-    // Returns {workspace_id, wrapped_gk} for every workspace the user has access to.
-    std::vector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
-
-    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
+    // Returns whether the user has an access entry for the workspace; false also on a database
+    // error (fail-closed for the authorization checks). |ok| (optional) is set to false when
+    // the answer could not be determined - a caller whose skip-or-reject decision depends on
+    // the answer must not mistake an error for "no access".
+    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id, bool* ok = nullptr) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts Groups
@@ -270,13 +333,11 @@ public:
     // indexing on entry_id and linking via parent_id; display ordering is the client's job.
     void groupList(qint64 workspace_id, proto::router::GroupList* out) const;
 
-    // Returns direct children of parent_id within workspace_id. parent_id == 0 returns root
-    // groups (parent_id IS NULL in the table).
-    std::vector<Group> groupChildren(qint64 workspace_id, qint64 parent_id) const;
-
     // Returns the group with the given entry_id from workspace_id. Returns an empty Group
-    // (entry_id == 0) if no such row exists in this workspace.
-    Group findGroup(qint64 workspace_id, qint64 entry_id) const;
+    // (entry_id == 0) if no such row exists in this workspace. |ok| (optional) is set to false
+    // when the answer could not be determined - a database error must not pass for a missing
+    // group.
+    Group findGroup(qint64 workspace_id, qint64 entry_id, bool* ok = nullptr) const;
 
     // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
     // must reference an existing group within the same workspace. On success *entry_id is set
@@ -296,9 +357,43 @@ public:
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:
-    Database() = default;
-
     bool openDatabase();
+
+    // Creates access entries for every workspace the user has none for, taking the sealed group
+    // key of each from |wrapped_keys|, and bumps the revision of each granted workspace (see I4).
+    // A workspace whose key is not there is skipped if |grantor_user_id| (the user that sent the
+    // request) has no access to it either - then nobody can seal its key for the user. If the
+    // grantor does have access, the request was built from an out of date list of the workspaces
+    // and is rejected (kErrorConflict - the sender refetches and retries).
+    // Must be called inside a transaction. Returns a proto::router error code.
+    std::string_view grantMissingWorkspaceAccess(
+        qint64 user_id, qint64 grantor_user_id,
+        const std::unordered_map<qint64, QByteArray>& wrapped_keys);
+
+    // Checks that |access_user_ids| contains every administrator: an administrator has access to
+    // every workspace. The group key can be sealed for a user only by a client that has it, so an
+    // incomplete list is rejected (kErrorConflict - the usual cause is an administrator created
+    // after the sender took its user list, and a refetch resolves it) instead of being completed
+    // here. Must be called inside a transaction. Returns a proto::router error code.
+    std::string_view checkAccessCoversAdmins(const std::set<qint64>& access_user_ids);
+
+    // Checks that a new access entry can be stored: |public_key| (the key the sender sealed the
+    // wrapped_gk to) must match the current stored key of the user. A mismatch means the sender
+    // sealed to an out of date snapshot - the entry could never be unsealed - and is rejected
+    // with kErrorConflict, so the sender refetches the users and reseals. An unknown user is a
+    // conflict too (deleted after the snapshot); a user without a key pair is rejected with
+    // kErrorInvalidData - nobody can seal for it at all.
+    // Must be called inside a transaction. Returns a proto::router error code.
+    std::string_view checkAccessSealTarget(qint64 user_id, std::string_view public_key);
+
+    // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
+    // currently in this workspace but absent from the set are released (workspace_id <- 0);
+    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id). Every
+    // requested host must exist and be either unassigned or already in this workspace; a host
+    // that is gone or was claimed by another workspace is rejected with kErrorConflict (the
+    // sender lost a race and resolves it by refetching), so OK means the final set was applied.
+    // Must be called inside a transaction. Returns a proto::router error code.
+    std::string_view syncWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids);
 
     mutable SqlDatabase db_;
 

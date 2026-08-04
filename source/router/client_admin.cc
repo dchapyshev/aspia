@@ -127,29 +127,44 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
     }
     else
     {
-        list->set_error_code(proto::router::kErrorOk);
-
-        QList<RouterUser> users = database.userList();
-        for (const auto& user : std::as_const(users))
+        QList<RouterUser> users;
+        if (!database.userList(&users))
         {
-            proto::router::User* item = list->add_user();
-            item->CopyFrom(user.serialize());
+            list->set_error_code(proto::router::kErrorInternalError);
+        }
+        else
+        {
+            list->set_error_code(proto::router::kErrorOk);
 
-            // |otp_active| is a presentation-only flag derived from whether the user has a
-            // confirmed TOTP secret on file.
-            item->set_otp_active(!user.otp_secret.isEmpty());
-
-            // Attach the user's active device tokens. The router only ever exposes the opaque
-            // numeric id and timestamp metadata - never the token hash or any other material
-            // that could identify the token outside of the router.
-            std::vector<DeviceToken> tokens = database.listClientDeviceTokens(user.entry_id);
-            for (DeviceToken& src : tokens)
+            for (const auto& user : std::as_const(users))
             {
-                proto::router::User::Token* token = item->add_token();
-                token->set_token_id(src.token_id);
-                token->set_created_at(src.created_at);
-                token->set_last_used_at(src.last_used_at);
-                token->set_address(std::move(src.address));
+                proto::router::User* item = list->add_user();
+                item->CopyFrom(user.serialize());
+
+                // |otp_active| is a presentation-only flag derived from whether the user has a
+                // confirmed TOTP secret on file.
+                item->set_otp_active(!user.otp_secret.isEmpty());
+
+                // Attach the user's active device tokens. The router only ever exposes the opaque
+                // numeric id and timestamp metadata - never the token hash or any other material
+                // that could identify the token outside of the router.
+                std::vector<DeviceToken> tokens;
+                if (!database.listClientDeviceTokens(user.entry_id, &tokens))
+                {
+                    // A partially built reply must not pass for a complete one.
+                    list->clear_user();
+                    list->set_error_code(proto::router::kErrorInternalError);
+                    break;
+                }
+
+                for (DeviceToken& src : tokens)
+                {
+                    proto::router::User::Token* token = item->add_token();
+                    token->set_token_id(src.token_id);
+                    token->set_created_at(src.created_at);
+                    token->set_last_used_at(src.last_used_at);
+                    token->set_address(std::move(src.address));
+                }
             }
         }
     }
@@ -548,7 +563,8 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             const proto::router::WorkspaceAccess& src = workspace.access(i);
             Workspace::Access dst;
             dst.user_id    = src.user_id();
-            dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
+            dst.wrapped_gk = src.wrapped_gk();
+            dst.public_key = src.public_key();
             initial_access.append(dst);
 
             if (dst.user_id == userId())
@@ -563,26 +579,17 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
         else
         {
             qint64 new_id = -1;
-            std::string_view error_code = database.addWorkspace(name, comment, initial_access, &new_id);
+            const std::string_view error_code =
+                database.addWorkspace(name, comment, initial_access, desired_host_ids, &new_id);
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
             {
                 result->set_entry_id(new_id);
-                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES);
+
+                quint32 notify_flags = ClientWorker::NOTIFY_WORKSPACES;
                 if (!desired_host_ids.empty())
-                {
-                    error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
-                    if (error_code != proto::router::kErrorOk)
-                    {
-                        CLOG(ERROR) << "Workspace" << new_id
-                                    << "created but host assignments failed:" << error_code;
-                        result->set_error_code(error_code);
-                    }
-                    else
-                    {
-                        emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
-                    }
-                }
+                    notify_flags |= ClientWorker::NOTIFY_HOSTS;
+                emit sig_notifyChanged(notify_flags);
             }
         }
     }
@@ -601,7 +608,8 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
             const proto::router::WorkspaceAccess& src = workspace.access(i);
             Workspace::Access dst;
             dst.user_id    = src.user_id();
-            dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
+            dst.wrapped_gk = src.wrapped_gk();
+            dst.public_key = src.public_key();
             desired_access.append(dst);
 
             if (dst.user_id == userId())
@@ -615,22 +623,14 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
         }
         else
         {
-            std::string_view error_code = database.modifyWorkspace(entry_id, name, comment, desired_access);
+            const std::string_view error_code = database.modifyWorkspace(
+                entry_id, workspace.revision(), name, comment, desired_access, desired_host_ids);
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
             {
-                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES);
-                error_code = database.setWorkspaceHosts(entry_id, desired_host_ids);
-                if (error_code != proto::router::kErrorOk)
-                {
-                    CLOG(ERROR) << "Workspace" << entry_id
-                                << "modified but host assignments failed:" << error_code;
-                    result->set_error_code(error_code);
-                }
-                else
-                {
-                    emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);
-                }
+                // The host assignments can change even when |desired_host_ids| is empty (all
+                // the hosts of the workspace released), so the hosts are refetched in any case.
+                emit sig_notifyChanged(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS);
             }
         }
     }
@@ -680,10 +680,31 @@ std::string ClientAdmin::addUser(const proto::router::User& user)
         return proto::router::kErrorInternalError;
     }
 
-    if (!database.addUser(new_user))
-        return proto::router::kErrorInternalError;
+    // An administrator has access to every workspace. The keys of the workspaces sealed by the
+    // sender to the key pair of the new user are the access entries the database stores for it.
+    std::unordered_map<qint64, QByteArray> wrapped_keys;
+    wrapped_keys.reserve(user.workspace_key_size());
 
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
+    for (int i = 0; i < user.workspace_key_size(); ++i)
+    {
+        const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
+        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
+    }
+
+    const std::string_view error_code = database.addUser(new_user, wrapped_keys, userId());
+    if (error_code != proto::router::kErrorOk)
+    {
+        CLOG(ERROR) << "addUser failed:" << error_code;
+        return std::string(error_code);
+    }
+
+    // An administrator could have received access entries for the workspaces it had none for, so
+    // the clients must refetch the list of the workspaces as well.
+    quint32 notify_flags = ClientWorker::NOTIFY_USERS;
+    if (new_user.sessions & proto::router::SESSION_TYPE_ADMIN)
+        notify_flags |= ClientWorker::NOTIFY_WORKSPACES;
+
+    emit sig_notifyChanged(notify_flags);
     return proto::router::kErrorOk;
 }
 
@@ -702,13 +723,19 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* pas
     }
 
     RouterUser new_user = RouterUser::parseFrom(user);
-    if (!new_user.isValid())
+
+    // A request with empty credentials changes only the flags of the record; the stored
+    // credentials are kept (see Database::modifyUser), so their validity is not checked.
+    const bool has_credentials = !new_user.salt.isEmpty() || !new_user.verifier.isEmpty();
+    if (has_credentials && !new_user.isValid())
     {
         CLOG(ERROR) << "Failed to create user";
         return proto::router::kErrorInternalError;
     }
 
-    if (!User::isValidUserName(new_user.name))
+    // The name is written only together with the credentials (see Database::modifyUser), so a
+    // flags-only request is not validated by a field it does not use.
+    if (has_credentials && !User::isValidUserName(new_user.name))
     {
         CLOG(ERROR) << "Invalid user name:" << new_user.name;
         return proto::router::kErrorInvalidData;
@@ -735,7 +762,8 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* pas
     }
 
     bool password_changed = false;
-    const std::string_view error_code = database.modifyUser(new_user, wrapped_keys, &password_changed);
+    const std::string_view error_code =
+        database.modifyUser(new_user, wrapped_keys, userId(), &password_changed);
     if (error_code != proto::router::kErrorOk)
     {
         CLOG(ERROR) << "modifyUser failed:" << error_code;
@@ -745,7 +773,10 @@ std::string ClientAdmin::modifyUser(const proto::router::User& user, qint64* pas
     if (password_changed)
         *password_changed_user_id = new_user.entry_id;
 
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
+    // The access level of the request is not authoritative, so whether access entries were created
+    // for the workspaces (see Database::modifyUser) is unknown here. The list of the workspaces is
+    // refetched in any case: a user is modified rarely.
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES);
     return proto::router::kErrorOk;
 }
 
@@ -770,6 +801,8 @@ std::string ClientAdmin::deleteUser(const proto::router::User& user)
         return std::string(error_code);
     }
 
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
+    // The cascade dropped the user's access entries and moved the revisions of the affected
+    // workspaces, so the cached workspace lists are stale too.
+    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES);
     return proto::router::kErrorOk;
 }

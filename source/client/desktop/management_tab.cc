@@ -1267,7 +1267,12 @@ void ManagementTab::onDeleteWorkspaceAction()
         [this, router_id](const proto::router::WorkspaceResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
+        {
+            // The operator explicitly confirmed the delete - a silent no-op would read as a UI
+            // bug, so the failure is reported like every other mutation.
             LOG(ERROR) << "Workspace delete failed:" << result.error_code();
+            MsgBox::warning(this, tr("Failed to delete the workspace."));
+        }
         ui->sidebar->onRefreshWorkspaces(router_id);
     });
 }
@@ -1377,7 +1382,10 @@ void ManagementTab::onDeleteGroupAction()
     {
         if (result.error_code() != proto::router::kErrorOk)
         {
+            // Same as the workspace delete: the operator explicitly confirmed the action, so a
+            // silent no-op would read as a UI bug.
             LOG(ERROR) << "Group delete failed:" << result.error_code();
+            MsgBox::warning(this, tr("Failed to delete the group."));
             return;
         }
         ui->sidebar->onRefreshHostGroups(router_id);

@@ -34,6 +34,7 @@
 #include "base/peer/router_user.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "build/version.h"
+#include "proto/router_constants.h"
 #include "router/database.h"
 #include "router/migration_utils.h"
 #include "router/service.h"
@@ -297,7 +298,7 @@ int createConfig(QTextStream& out)
                     proto::router::SESSION_TYPE_CLIENT;
     user.flags = User::ENABLED;
 
-    if (!db.addUser(user))
+    if (db.addUser(user) != proto::router::kErrorOk)
     {
         out << "Failed to add user to database." << Qt::endl;
         return 1;

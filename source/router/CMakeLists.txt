@@ -16,7 +16,9 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_ROUTER
+# The implementation lives in a static library so both the router binary and the unit tests
+# link the same objects; the executable itself is only the entry point.
+list(APPEND SOURCE_ROUTER_CORE
     client.cc
     client.h
     client_admin.cc
@@ -31,7 +33,6 @@ list(APPEND SOURCE_ROUTER
     host_legacy.h
     host_ng.cc
     host_ng.h
-    main.cc
     migration_utils.cc
     migration_utils.h
     relay.cc
@@ -49,13 +50,20 @@ list(APPEND SOURCE_ROUTER
     workspace.cc
     workspace.h)
 
+list(APPEND SOURCE_ROUTER
+    main.cc)
+
+list(APPEND SOURCE_ROUTER_TESTS
+    database_unittest.cc
+    tests_main.cc)
+
 include(workers/sources.cmake)
 
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN win/router.rc)
 endif()
 
-source_group("" FILES ${SOURCE_ROUTER})
+source_group("" FILES ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER} ${SOURCE_ROUTER_TESTS})
 source_group(workers FILES ${SOURCE_ROUTER_WORKERS})
 
 if (WIN32)
@@ -71,13 +79,9 @@ if (APPLE)
     set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
-add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WORKERS} ${SOURCE_ROUTER_WIN})
+add_library(aspia_router_core STATIC ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER_WORKERS})
 
-if (WIN32)
-    set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-
-target_link_libraries(aspia_router
+target_link_libraries(aspia_router_core
     aspia_base
     aspia_proto
     OpenSSL::Crypto
@@ -86,6 +90,33 @@ target_link_libraries(aspia_router
     ${QT_PLATFORM_LIBS}
     ${ROUTER_PLATFORM_LIBS})
 
+set_property(TARGET aspia_router_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router_core PROPERTY AUTORCC ON)
+
+add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
+
+if (WIN32)
+    set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+target_link_libraries(aspia_router
+    aspia_router_core)
+
 set_property(TARGET aspia_router PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router PROPERTY AUTORCC ON)
+
+add_executable(aspia_router_tests ${SOURCE_ROUTER_TESTS})
+
+target_link_libraries(aspia_router_tests
+    aspia_router_core
+    GTest::gtest
+    ${THIRD_PARTY_LIBS})
+
+set_property(TARGET aspia_router_tests PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_router_tests PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_router_tests PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_router_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+
+add_test(NAME aspia_router_tests COMMAND aspia_router_tests)

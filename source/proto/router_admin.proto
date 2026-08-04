@@ -176,19 +176,31 @@ message UserResult
     int64 request_id    = 1;
     string command_name = 2; // Same as request command_name.
     string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
-                             // "already_exists" | "not_found"
+                             // "already_exists" | "not_found" | "access_denied" | "conflict"
+                             // "access_denied" - the change is refused for the built-in user.
+                             // "conflict"      - the request was built from a stale snapshot
+                             //                   (e.g. a workspace key is missing because the
+                             //                   workspace appeared meanwhile); refetch and retry.
 }
 
 message WorkspaceRequest
 {
     // "add"    - Workspace with name and full initial access list (each entry has user_id +
-    //            wrapped_gk). Empty access list is allowed; the workspace has no GK until the
-    //            first access is granted via "modify".
-    // "modify" - Workspace with entry_id, new name and the full desired access list. Server
-    //            computes the diff against the current state: for user_ids not yet present in
-    //            DB it inserts the supplied wrapped_gk, for user_ids missing from the request
-    //            it removes the access record. For user_ids already present wrapped_gk in the
-    //            request is ignored (existing wrapped_gk is preserved).
+    //            wrapped_gk + public_key). The list must contain every administrator that has
+    //            a public key; an incomplete list is rejected ("conflict" - the usual cause is
+    //            an administrator created after the sender took its user list). "conflict" is
+    //            also the answer when any snapshot the request was built from went stale: an
+    //            entry for a deleted user, an entry sealed to a rotated key, a host that was
+    //            deleted or claimed by another workspace meanwhile.
+    // "modify" - Workspace with entry_id, revision, new name and the full desired access list.
+    //            The revision must match the stored one, otherwise the request is rejected
+    //            ("conflict") - the edit was based on a stale snapshot; the same stale-snapshot
+    //            causes as in "add" answer "conflict" too. Server computes the
+    //            diff against the current state: for user_ids not yet present in DB it inserts
+    //            the supplied wrapped_gk (after checking public_key against the stored one),
+    //            for user_ids missing from the request it removes the access record. For
+    //            user_ids already present wrapped_gk in the request is ignored (existing
+    //            wrapped_gk is preserved).
     // "delete" - Workspace with entry_id.
     int64 request_id    = 1;
     string command_name = 2;
@@ -200,7 +212,7 @@ message WorkspaceResult
     int64 request_id    = 1;
     string command_name = 2; // Same as request command_name.
     string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
-                             // "already_exists" | "not_found"
+                             // "already_exists" | "not_found" | "conflict"
     int64 entry_id      = 4; // Id of created workspace for "add".
 }
 

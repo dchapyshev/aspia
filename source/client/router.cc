@@ -242,15 +242,42 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
         else if (message.has_user_list())
             dispatch(message.user_list().request_id(), message.user_list());
         else if (message.has_user_result())
-            dispatch(message.user_result().request_id(), message.user_result());
+        {
+            // A successful add/modify/delete can move workspace state too: adding an
+            // administrator grants it access entries and removing a user drops them by cascade,
+            // both bumping the revisions of the affected workspaces. Same false-conflict window
+            // as below. reset_otp/revoke_tokens do not touch workspaces, so the cache survives.
+            const proto::router::UserResult& user_result = message.user_result();
+            const std::string& command = user_result.command_name();
+            const bool moves_workspaces = command == proto::router::kCommandUserAdd ||
+                                          command == proto::router::kCommandUserModify ||
+                                          command == proto::router::kCommandUserDelete;
+            if (moves_workspaces && user_result.error_code() == proto::router::kErrorOk)
+                workspaces_loaded_ = false;
+            dispatch(user_result.request_id(), user_result);
+        }
         else if (message.has_host_result())
+        {
+            // Same reasoning as for the workspaces below: a successful host change makes the
+            // cached host lists stale until the batched notification arrives.
+            if (message.host_result().error_code() == proto::router::kErrorOk)
+                cached_hosts_.clear();
             dispatch(message.host_result().request_id(), message.host_result());
+        }
         else if (message.has_relay_result())
             dispatch(message.relay_result().request_id(), message.relay_result());
         else if (message.has_client_result())
             dispatch(message.client_result().request_id(), message.client_result());
         else if (message.has_workspace_result())
+        {
+            // A successful add/modify/delete makes the cached list (and the revisions in it)
+            // stale right now; the notification that would trigger a reload is batched on the
+            // router and arrives seconds later. Serving the stale cache meanwhile would base
+            // the next edit on an outdated revision - a false conflict.
+            if (message.workspace_result().error_code() == proto::router::kErrorOk)
+                workspaces_loaded_ = false;
             dispatch(message.workspace_result().request_id(), message.workspace_result());
+        }
         else if (message.has_peer_result())
             dispatch(message.peer_result().request_id(), message.peer_result());
         else
@@ -266,9 +293,21 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
         }
 
         if (message.has_host_result())
+        {
+            // Same reasoning as for the workspaces above: a successful host change makes the
+            // cached host lists stale until the batched notification arrives.
+            if (message.host_result().error_code() == proto::router::kErrorOk)
+                cached_hosts_.clear();
             dispatch(message.host_result().request_id(), message.host_result());
+        }
         else if (message.has_group_result())
+        {
+            // The result carries no workspace_id, so the whole group cache goes; group edits
+            // are rare enough that the extra reload does not matter.
+            if (message.group_result().error_code() == proto::router::kErrorOk)
+                cached_groups_.clear();
             dispatch(message.group_result().request_id(), message.group_result());
+        }
         else
             LOG(WARNING) << "Unhandled manager message";
     }
@@ -341,6 +380,7 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
     if (workspace.entry_id > 0)
         out->set_entry_id(workspace.entry_id);
     out->set_name(workspace.name.toStdString());
+    out->set_revision(workspace.revision);
 
     if (user_private_key_.isEmpty())
     {
@@ -348,21 +388,30 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
         return false;
     }
 
+    // A workspace being created has no id yet, so its key is not put into |workspace_cryptors_|:
+    // the entry would be stored under the id 0 and the next created workspace would find it and
+    // get the same group key. The real key comes back sealed for us with the list of the
+    // workspaces. An existing workspace without a cached key cannot be modified: a random key
+    // would encrypt the comment and the entries of the new users with a key nobody has.
     SecureByteArray group_key;
 
     auto it = workspace_cryptors_.find(workspace.entry_id);
-    if (it == workspace_cryptors_.end())
-    {
-        group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
-        it = workspace_cryptors_.emplace(workspace.entry_id,
-            DataCryptor(CipherType::AES256_GCM, group_key)).first;
-    }
-    else
+    if (it != workspace_cryptors_.end())
     {
         group_key = it->second.key();
     }
+    else if (workspace.entry_id == 0)
+    {
+        group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
+    }
+    else
+    {
+        LOG(ERROR) << "No group key for workspace" << workspace.entry_id;
+        return false;
+    }
 
-    out->set_comment(encrypt(it->second, workspace.comment).toStdString());
+    const DataCryptor cryptor(CipherType::AES256_GCM, group_key);
+    out->set_comment(encrypt(cryptor, workspace.comment).toStdString());
 
     for (const auto& access : workspace.access)
     {
@@ -379,6 +428,9 @@ bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::W
             return false;
         }
         dst->set_wrapped_gk(wrapped_gk.toStdString());
+        // The seal target travels with the key: the router checks it against the stored key of
+        // the user and rejects an entry sealed to an out of date snapshot.
+        dst->set_public_key(access.public_key.toStdString());
     }
 
     for (HostId host_id : std::as_const(workspace.host_ids))
@@ -505,7 +557,10 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
         SecureByteArray gk = unwrapGroupKey(QByteArray::fromStdString(wk.wrapped_gk()));
         if (gk.isEmpty())
         {
-            LOG(WARNING) << "Failed to unwrap GK for workspace" << wk.workspace_id();
+            // The hole this leaves in |workspace_cryptors_| makes every reseal-dependent
+            // operation (own password change, creating an administrator) answer "conflict"
+            // for this workspace, and no refetch can repair it - only a re-grant can.
+            LOG(ERROR) << "Failed to unwrap GK for workspace" << wk.workspace_id();
             continue;
         }
         workspace_cryptors_.emplace(wk.workspace_id(), DataCryptor(CipherType::AES256_GCM, std::move(gk)));
@@ -645,6 +700,7 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
         Router::Workspace& dst = decoded.workspaces.emplaceBack();
         dst.entry_id = src.entry_id();
         dst.name     = QString::fromStdString(src.name());
+        dst.revision = src.revision();
         dst.access.reserve(src.access_size());
 
         QByteArray self_wrapped_gk;
@@ -662,7 +718,12 @@ Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::Workspace
 
         SecureByteArray gk = unwrapGroupKey(self_wrapped_gk);
         if (gk.isEmpty())
+        {
+            // See readUserKeys: the missing cryptor makes reseal-dependent operations answer
+            // "conflict" for this workspace with no way for a refetch to recover.
+            LOG(ERROR) << "Failed to unwrap GK for workspace" << src.entry_id();
             continue;
+        }
 
         DataCryptor cryptor(CipherType::AES256_GCM, gk);
         if (!src.comment().empty())

@@ -83,6 +83,7 @@ public:
         qint64 entry_id = 0;
         QString name;
         QString comment;
+        qint64 revision = 0;
         QList<Access> access;
         QList<HostId> host_ids;
     };
@@ -561,6 +562,12 @@ void Router::addUser(const proto::router::User& user, QObject* receiver, Handler
     request->set_request_id(nextRequestId());
     request->set_command_name(proto::router::kCommandUserAdd);
     request->mutable_user()->CopyFrom(user);
+
+    // An administrator has access to every workspace, so our workspace keys are sealed to the key
+    // pair of the new user and become its access entries on the router.
+    if (user.sessions() & proto::router::SESSION_TYPE_ADMIN)
+        resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
+
     registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -736,7 +743,14 @@ void Router::addWorkspace(const Router::Workspace& workspace, QObject* receiver,
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
+    {
+        // The request is not sent, so no reply will ever come - report the failure the way the
+        // router would, otherwise the caller waits forever (the dialog stays disabled).
+        proto::router::WorkspaceResult result;
+        result.set_error_code(proto::router::kErrorInternalError);
+        invokeHandler(receiver, handler, result);
         return;
+    }
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
     request->set_request_id(nextRequestId());
@@ -752,7 +766,13 @@ void Router::modifyWorkspace(const Router::Workspace& workspace, QObject* receiv
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
+    {
+        // Same as addWorkspace(): the caller must not wait for a reply to a request never sent.
+        proto::router::WorkspaceResult result;
+        result.set_error_code(proto::router::kErrorInternalError);
+        invokeHandler(receiver, handler, result);
         return;
+    }
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
     request->set_request_id(nextRequestId());
@@ -830,6 +850,9 @@ void Router::listWorkspaces(CachePolicy policy, qint64 workspace_id, QObject* re
     if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && workspaces_loaded_)
     {
         Router::WorkspaceList cached;
+        // A network reply always carries an error code, so a handler is allowed to check it; the
+        // synthesized reply must not look like an error.
+        cached.error_code = proto::router::kErrorOk;
         cached.workspaces = cached_workspaces_;
         invokeHandler(receiver, handler, cached);
         return;
@@ -843,7 +866,9 @@ void Router::listWorkspaces(CachePolicy policy, qint64 workspace_id, QObject* re
         [this, workspace_id](const proto::router::WorkspaceList& raw)
     {
         Router::WorkspaceList decoded = decodeWorkspaceList(raw);
-        if (workspace_id == 0)
+        // An error reply carries no list - caching it would make the cache branch above serve
+        // the emptiness as a success.
+        if (workspace_id == 0 && decoded.error_code == proto::router::kErrorOk)
         {
             cached_workspaces_ = decoded.workspaces;
             workspaces_loaded_ = true;
@@ -860,6 +885,7 @@ void Router::listGroups(CachePolicy policy, qint64 workspace_id, QObject* receiv
     if (policy == CachePolicy::USE_CACHE && cached_groups_.contains(workspace_id))
     {
         Router::GroupList cached;
+        cached.error_code = proto::router::kErrorOk;
         cached.workspace_id = workspace_id;
         cached.groups = cached_groups_.value(workspace_id);
         invokeHandler(receiver, handler, cached);
@@ -874,7 +900,8 @@ void Router::listGroups(CachePolicy policy, qint64 workspace_id, QObject* receiv
         [this, workspace_id](const proto::router::GroupList& raw)
     {
         Router::GroupList decoded = decodeGroupList(raw);
-        cached_groups_[workspace_id] = decoded.groups;
+        if (decoded.error_code == proto::router::kErrorOk)
+            cached_groups_[workspace_id] = decoded.groups;
         return decoded;
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
@@ -892,6 +919,7 @@ void Router::listHosts(CachePolicy policy, proto::router::HostListRequest reques
     if (policy == CachePolicy::USE_CACHE && cacheable && cached_hosts_.contains(key))
     {
         Router::HostList cached;
+        cached.error_code = proto::router::kErrorOk;
         cached.workspace_id = key.workspace_id;
         cached.group_id = key.group_id;
         cached.hosts = cached_hosts_.value(key);
@@ -907,7 +935,7 @@ void Router::listHosts(CachePolicy policy, proto::router::HostListRequest reques
         [this, cacheable, key](const proto::router::HostList& raw)
     {
         Router::HostList decoded = decodeHostList(raw);
-        if (cacheable)
+        if (cacheable && decoded.error_code == proto::router::kErrorOk)
             cached_hosts_[key] = decoded.hosts;
         return decoded;
     });

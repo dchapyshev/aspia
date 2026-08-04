@@ -20,12 +20,11 @@
 #define CLIENT_DESKTOP_MANAGEMENT_ROUTER_WORKSPACE_DIALOG_H
 
 #include <QDialog>
-#include <QHash>
-#include <QSet>
 
 #include <memory>
 
 #include "client/router.h"
+#include "client/desktop/management/workspace_edit_model.h"
 
 class QAbstractButton;
 
@@ -54,19 +53,12 @@ private slots:
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
 
 private:
-    struct UserEntry
-    {
-        qint64 entry_id = 0;
-        bool is_admin   = false;
-        QString name;
-        QByteArray public_key;
-    };
-
     void onButtonBoxClicked(QAbstractButton* button);
     void onAddClicked();
     void onRemoveClicked();
     void onHostAddClicked();
     void onHostRemoveClicked();
+    void refetchLists();
     void rebuildLists();
     void updateButtonsState();
     void updateLoadingState();
@@ -74,15 +66,13 @@ private:
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
-    QStringList existing_names_;
-    QHash<qint64, UserEntry> users_;
-    QSet<qint64> initial_access_user_ids_;
-    QSet<qint64> access_user_ids_;
-    QSet<quint64> initial_host_ids_;
+
+    // The whole edit state machine (server snapshots, operator intents, effective sets, the
+    // revision paired with the host snapshot) lives in the model, where it is unit-tested; the
+    // dialog only feeds replies in and mirrors the state to the widgets.
+    WorkspaceEditModel model_;
     Router::Workspace workspace_;
-    bool workspaces_loaded_ = false;
-    bool users_loaded_ = false;
-    bool hosts_loaded_ = false;
+    bool closing_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterWorkspaceDialog)
 };

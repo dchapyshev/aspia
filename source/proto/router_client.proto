@@ -49,6 +49,7 @@ message WorkspaceAccess
 {
     int64 user_id    = 1;
     bytes wrapped_gk = 2;
+    bytes public_key = 3;
 }
 
 message Workspace
@@ -58,6 +59,7 @@ message Workspace
     bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
     repeated WorkspaceAccess access = 4;
     repeated uint64 host_id         = 5;
+    int64 revision                  = 6;
 }
 
 message WorkspaceListRequest
@@ -90,7 +92,7 @@ message GroupListRequest
 message GroupList
 {
     int64 request_id     = 1;
-    string error_code    = 2; // "ok" | "access_denied" | "internal_error"
+    string error_code    = 2; // "ok" | "invalid_request" | "access_denied" | "internal_error"
     int64 workspace_id   = 3; // Echo of the request, so the client can route the response.
     repeated Group group = 4;
 }
@@ -115,7 +117,11 @@ message ChangePasswordRequest
 message ChangePasswordResult
 {
     int64 request_id  = 1;
-    string error_code = 2; // "ok" | "invalid_request" | "invalid_data" | "internal_error"
+    string error_code = 2; // "ok" | "invalid_data" | "internal_error" | "conflict" | "not_found"
+                           // "conflict"  - the request lacks a re-sealed key for a workspace that
+                           //               appeared after the sender took its list; refetch the
+                           //               workspaces and retry.
+                           // "not_found" - the user record vanished (concurrent delete).
 }
 
 message ConnectionRequest
@@ -185,10 +191,10 @@ message HostListRequest
 message HostList
 {
     int64 request_id   = 1;
-    string error_code  = 2; // "ok" | "access_denied" | "internal_error"
+    string error_code  = 2; // "ok" | "invalid_request" | "access_denied" | "internal_error"
     int64 workspace_id = 3; // Echo of the request, so the client can route the response.
     int64 group_id     = 4; // Echo of the request.
-    int64 total_count  = 5; // Total hosts in scope.
+    int64 total_count  = 5; // Total hosts in scope. Unset on an error reply.
     repeated Host host = 6;
 }
 

@@ -529,6 +529,14 @@ void RouterHostsWidget::onHostListReceived(const Router::HostList& list)
     if (list.workspace_id != 0 || list.group_id != 0)
         return;
 
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        // An error reply carries no list; treating it as an empty one would remove every host
+        // from the tree. Keep what is shown - the next notification triggers another fetch.
+        LOG(ERROR) << "Unable to get the list of the hosts:" << list.error_code;
+        return;
+    }
+
     auto has_with_id = [](const Router::HostList& list, HostId host_id)
     {
         for (const Router::Host& host : std::as_const(list.hosts))
@@ -607,6 +615,14 @@ void RouterHostsWidget::onHostResultReceived(const proto::router::HostResult& re
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::onWorkspaceListReceived(const Router::WorkspaceList& list)
 {
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        // An error reply carries no list; applying it would blank the workspace column of every
+        // host row. Keep what is shown - the next notification triggers another fetch.
+        LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
+        return;
+    }
+
     workspace_names_.clear();
     for (const Router::Workspace& workspace : std::as_const(list.workspaces))
         workspace_names_.insert(workspace.entry_id, workspace.name);

@@ -105,7 +105,18 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 
     const proto::router::Host& host = request.host();
     const HostId host_id = host.host_id();
-    const qint64 workspace_id = database.hostWorkspaceId(host_id);
+
+    // "Not found" and "could not check" are different answers - a database error must not be
+    // reported as a missing host.
+    bool workspace_known = false;
+    const qint64 workspace_id = database.hostWorkspaceId(host_id, &workspace_known);
+    if (!workspace_known)
+    {
+        CLOG(ERROR) << "Unable to resolve workspace of host" << host_id;
+        reply(proto::router::kErrorInternalError);
+        return;
+    }
+
     if (workspace_id < 0)
     {
         CLOG(ERROR) << "Host not found:" << host_id;
@@ -115,7 +126,19 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 
     // Hosts that are not assigned to a workspace cannot be edited from manager/admin clients.
     // Editor must also be a member of the host's workspace; admins are auto-included by design.
-    if (workspace_id == 0 || !database.hasWorkspaceAccess(userId(), workspace_id))
+    // "No access" and "could not check" are different answers - a database error must not be
+    // reported as a denial.
+    bool access_known = false;
+    const bool has_access =
+        workspace_id != 0 && database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
+    if (workspace_id != 0 && !access_known)
+    {
+        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
+        reply(proto::router::kErrorInternalError);
+        return;
+    }
+
+    if (!has_access)
     {
         CLOG(ERROR) << "User" << userId() << "cannot edit host" << host_id
                     << "(workspace_id=" << workspace_id << ")";
@@ -128,11 +151,23 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
     // has no foreign key on group_id, so an unchecked value would orphan the host). Cross-workspace
     // moves are not allowed.
     const qint64 group_id = host.group_id();
-    if (group_id != 0 && database.findGroup(workspace_id, group_id).entry_id == 0)
+    if (group_id != 0)
     {
-        CLOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
-        reply(proto::router::kErrorInvalidData);
-        return;
+        bool group_known = false;
+        const Group group = database.findGroup(workspace_id, group_id, &group_known);
+        if (!group_known)
+        {
+            CLOG(ERROR) << "Unable to check group" << group_id << "in workspace" << workspace_id;
+            reply(proto::router::kErrorInternalError);
+            return;
+        }
+
+        if (group.entry_id == 0)
+        {
+            CLOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
+            reply(proto::router::kErrorInvalidData);
+            return;
+        }
     }
 
     const bool ok = database.modifyHost(host_id, group_id, host.display_name(), host.comment(),
@@ -182,7 +217,18 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
     // Caller must be a member of the target workspace to manage its groups. Matches the
     // workspace-access semantics used elsewhere; non-members do not see the workspace's
     // wrapped_gk and cannot meaningfully add or edit AEAD-encrypted group fields anyway.
-    if (!database.hasWorkspaceAccess(userId(), workspace_id))
+    // "No access" and "could not check" are different answers.
+    bool access_known = false;
+    const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
+    if (!access_known)
+    {
+        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
+        return;
+    }
+
+    if (!has_access)
     {
         CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
         result->set_error_code(proto::router::kErrorAccessDenied);

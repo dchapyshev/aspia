@@ -398,17 +398,22 @@ void Client::completeTwoFactor(std::string&& new_token)
 //--------------------------------------------------------------------------------------------------
 void Client::sendUserKeys()
 {
+    // Every early return below tears the session down: a client that never receives UserKeys
+    // would otherwise hang in the connecting state with no error, and nothing retries the send.
     Database& database = Database::instance();
     if (!database.isValid())
     {
-        CLOG(ERROR) << "Failed to connect to database";
+        CLOG(ERROR) << "Failed to connect to database. Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
     RouterUser user = database.findUser(userId());
     if (!user.isValid())
     {
-        CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId() << ")";
+        CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId()
+                      << "). Closing connection";
+        emit sig_finished(session_id_);
         return;
     }
 
@@ -421,7 +426,17 @@ void Client::sendUserKeys()
     user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
     user_keys->set_wrap_salt(user.wrap_salt.toStdString());
 
-    std::vector<Workspace::Access> keys = database.workspaceAccessListForUser(user.entry_id);
+    // Better no UserKeys at all than a silently partial set: the client would treat a missing
+    // workspace key as revoked access.
+    std::vector<Workspace::Access> keys;
+    if (!database.workspaceAccessListForUser(user.entry_id, &keys))
+    {
+        CLOG(ERROR) << "Failed to read workspace keys for user" << user.entry_id
+                    << ". Closing connection";
+        emit sig_finished(session_id_);
+        return;
+    }
+
     for (Workspace::Access& access : keys)
     {
         proto::router::UserKeys::WorkspaceKey* dst = user_keys->add_workspace_key();
@@ -580,25 +595,52 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
         return;
     }
 
-    if (mode == proto::router::HostListRequest::MODE_FILTERED &&
-        !database.hasWorkspaceAccess(userId(), workspace_id))
+    if (mode == proto::router::HostListRequest::MODE_FILTERED)
     {
-        CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorAccessDenied);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
+        // "No access" and "could not check" are different answers - a database error must not
+        // be reported as a denial.
+        bool access_known = false;
+        const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
+        if (!access_known)
+        {
+            CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
+            result->set_error_code(proto::router::kErrorInternalError);
+            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+            return;
+        }
+
+        if (!has_access)
+        {
+            CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
+            result->set_error_code(proto::router::kErrorAccessDenied);
+            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+            return;
+        }
     }
 
+    // A zero count from a failed query would make the client truncate its pagination while the
+    // list itself arrives non-empty - so a count failure fails the whole request.
+    bool count_known = false;
     if (mode == proto::router::HostListRequest::MODE_ALL)
     {
-        result->set_total_count(database.hostCount());
-        database.hosts(start_item, end_item, result);
+        result->set_total_count(database.hostCount(&count_known));
+        if (count_known)
+            database.hosts(start_item, end_item, result);
     }
     else
     {
-        result->set_total_count(database.hostCount(workspace_id, group_id));
-        database.hosts(workspace_id, group_id, start_item, end_item, result);
+        result->set_total_count(database.hostCount(workspace_id, group_id, &count_known));
+        if (count_known)
+            database.hosts(workspace_id, group_id, start_item, end_item, result);
     }
+
+    if (!count_known)
+        result->set_error_code(proto::router::kErrorInternalError);
+
+    // hosts() drops the partial list from an error reply; the count computed up front must not
+    // survive it either.
+    if (result->error_code() != proto::router::kErrorOk)
+        result->clear_total_count();
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -625,7 +667,14 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
 
     // Search is always scoped to every workspace the user can access, regardless of session type.
     // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
-    const std::set<qint64> workspace_ids = database.workspaceAccessIdsForUser(userId());
+    std::set<qint64> workspace_ids;
+    if (!database.workspaceAccessIdsForUser(userId(), &workspace_ids))
+    {
+        CLOG(ERROR) << "Failed to read workspace access list for user" << userId();
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
 
     database.searchHosts(QString::fromStdString(request.query()), workspace_ids, result);
 
@@ -712,7 +761,19 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
         return;
     }
 
-    if (!database.hasWorkspaceAccess(userId(), workspace_id))
+    // "No access" and "could not check" are different answers - a database error must not be
+    // reported as a denial.
+    bool access_known = false;
+    const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
+    if (!access_known)
+    {
+        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    if (!has_access)
     {
         CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
         result->set_error_code(proto::router::kErrorAccessDenied);
@@ -741,11 +802,17 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
         return;
     }
 
+    // Read-modify-write outside a transaction: the window between this findUser and the
+    // modifyUser below is closed only by every users/workspaces write going through the single
+    // ClientWorker thread. If client sessions are ever spread over several workers, this must
+    // move inside one transaction.
     RouterUser user = database.findUser(userId());
     if (!user.isValid())
     {
+        // The same concurrent delete caught a moment later inside modifyUser answers
+        // kErrorNotFound - one event, one code.
         CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId() << ")";
-        result->set_error_code(proto::router::kErrorInvalidData);
+        result->set_error_code(proto::router::kErrorNotFound);
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
     }
@@ -780,7 +847,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     // re-sealed key is present for every workspace the user can access, so a partial set can never
     // leave the user without workspace access. Only the password-derived fields differ here (the
     // rest were loaded from the database), so reusing modifyUser writes back identical values.
-    const std::string_view error_code = database.modifyUser(user, wrapped_keys);
+    const std::string_view error_code = database.modifyUser(user, wrapped_keys, userId());
     if (error_code != proto::router::kErrorOk)
     {
         CLOG(ERROR) << "Failed to change password for user" << userName() << ":" << error_code;
@@ -793,6 +860,9 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     result->set_error_code(proto::router::kErrorOk);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
+    // NOTIFY_USERS only: the repair branch of Database::modifyUser cannot create access entries
+    // on this path - the keys of the request come from the user's own cryptor cache, which only
+    // ever holds the workspaces the user already has an access entry for.
     emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the

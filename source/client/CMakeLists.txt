@@ -16,6 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+# The implementation lives in a static library so both the client binary and the unit tests
+# link the same objects; the executable itself is only the entry point.
 list(APPEND SOURCE_CLIENT_CORE
     aab_importer.cc
     aab_importer.h
@@ -29,7 +31,6 @@ list(APPEND SOURCE_CLIENT_CORE
     database.h
     config.cc
     config.h
-    main.cc
     file_error_code.cc
     file_error_code.h
     file_remove_queue_builder.cc
@@ -57,11 +58,18 @@ list(APPEND SOURCE_CLIENT_CORE
     udp_attempt.cc
     udp_attempt.h)
 
+list(APPEND SOURCE_CLIENT
+    main.cc)
+
+list(APPEND SOURCE_CLIENT_TESTS
+    desktop/management/edit_model_unittest.cc
+    tests_main.cc)
+
 if (WIN32)
     list(APPEND SOURCE_CLIENT_CORE
         audio_output_win.cc
-        audio_output_win.h
-        client.rc)
+        audio_output_win.h)
+    list(APPEND SOURCE_CLIENT client.rc)
 endif()
 
 if (LINUX)
@@ -99,7 +107,8 @@ if (WIN32)
     include(win/sources.cmake)
 endif()
 
-source_group("" FILES ${SOURCE_CLIENT_CORE})
+source_group("" FILES ${SOURCE_CLIENT_CORE} ${SOURCE_CLIENT})
+source_group(tests FILES ${SOURCE_CLIENT_TESTS})
 source_group(android FILES ${SOURCE_CLIENT_ANDROID})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
 source_group(desktop FILES ${SOURCE_CLIENT_CORE_DESKTOP})
@@ -136,14 +145,13 @@ if (APPLE)
 endif()
 
 if (ANDROID)
-    qt_add_executable(aspia_client
+    add_library(aspia_client_core STATIC
         ${SOURCE_CLIENT_CORE}
         ${SOURCE_CLIENT_ANDROID}
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
         ${SOURCE_CLIENT_WORKERS})
 else()
-    add_executable(aspia_client MACOSX_BUNDLE
-        ${aspia_client_ICON}
+    add_library(aspia_client_core STATIC
         ${SOURCE_CLIENT_CORE}
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
         ${SOURCE_CLIENT_CORE_DESKTOP}
@@ -157,7 +165,7 @@ else()
         ${SOURCE_CLIENT_WORKERS})
 endif()
 
-target_link_libraries(aspia_client PRIVATE
+target_link_libraries(aspia_client_core
     aspia_base
     aspia_common
     aspia_proto
@@ -165,6 +173,21 @@ target_link_libraries(aspia_client PRIVATE
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
+
+set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
+
+if (ANDROID)
+    qt_add_executable(aspia_client ${SOURCE_CLIENT})
+else()
+    add_executable(aspia_client MACOSX_BUNDLE
+        ${aspia_client_ICON}
+        ${SOURCE_CLIENT})
+endif()
+
+target_link_libraries(aspia_client PRIVATE
+    aspia_client_core)
 set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_client PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_client PROPERTY AUTORCC ON)
@@ -181,6 +204,22 @@ endif()
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_client PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+if (NOT ANDROID)
+    add_executable(aspia_client_tests ${SOURCE_CLIENT_TESTS})
+
+    target_link_libraries(aspia_client_tests
+        aspia_client_core
+        GTest::gtest
+        ${THIRD_PARTY_LIBS})
+
+    set_property(TARGET aspia_client_tests PROPERTY AUTOMOC ON)
+    set_property(TARGET aspia_client_tests PROPERTY AUTOUIC ON)
+    set_property(TARGET aspia_client_tests PROPERTY AUTORCC ON)
+    qt_import_plugins(aspia_client_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+
+    add_test(NAME aspia_client_tests COMMAND aspia_client_tests)
 endif()
 
 if (APPLE)

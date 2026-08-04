@@ -37,6 +37,7 @@
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 #include "ui_router_group_widget.h"
 
 namespace {
@@ -345,6 +346,14 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     // groups (e.g. an in-flight request issued before the user switched selection).
     if (list.workspace_id != workspace_id_ || list.group_id != group_id_)
         return;
+
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        // An error reply carries no list; treating it as an empty one would remove every host
+        // from the tree. Keep what is shown - the next notification triggers another fetch.
+        LOG(ERROR) << "Unable to get the list of the hosts:" << list.error_code;
+        return;
+    }
 
     auto has_with_id = [](const Router::HostList& list, HostId host_id)
     {

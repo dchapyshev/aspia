@@ -43,6 +43,7 @@
 #include "base/peer/host_id.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -363,6 +364,14 @@ void SearchWidget::addRouterHosts(const QString& query, qint64 router_id,
     // Drop a late response whose query no longer matches what the user is searching for.
     if (query != current_query_)
         return;
+
+    // Not fatal for the search as a whole (other sources still contribute), but without the log
+    // a failed router looks exactly like "nothing found" there.
+    if (list.error_code != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+        return;
+    }
 
     for (const Router::Host& host : std::as_const(list.hosts))
         new RouterItem(router_id, host, source_label, tree_host_);

@@ -72,4 +72,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     sidebar.cc
     sidebar.h
     sidebar_items.cc
-    sidebar_items.h)
+    sidebar_items.h
+    user_edit_model.cc
+    user_edit_model.h
+    workspace_edit_model.cc
+    workspace_edit_model.h)

@@ -36,6 +36,7 @@
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
 #include "proto/peer.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -299,6 +300,16 @@ void RemoteWidget::searchQuery(const QString& query)
             if (query != search_query_)
                 return;
 
+            // Not fatal for the search as a whole, but without the log a failed router looks
+            // exactly like "nothing found" there. The page is still rebuilt: the results of
+            // the PREVIOUS query must not stay on screen when every router failed.
+            if (list.error_code != proto::router::kErrorOk)
+            {
+                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+                rebuildSearchResults();
+                return;
+            }
+
             for (const Router::Host& host : list.hosts)
                 search_results_.append({ router_id, host });
 
@@ -459,10 +470,22 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
 
     router->listWorkspaces(policy, 0, this, [this, router_id, policy](const Router::WorkspaceList& list)
     {
+        // An error reply carries no list; applying it would wipe the workspaces of the router
+        // from the tree. Keep what is shown.
+        if (list.error_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to get the list of the workspaces:" << list.error_code;
+            return;
+        }
+
         QTreeWidgetItem* router_item = routerItem(router_id);
         if (!router_item)
             return;
 
+        // The rebuild below drops the old subtrees before the per-workspace group fetches
+        // return, so a failed group fetch leaves that workspace without children until the
+        // next notification. Accepted: keeping the old subtree would require a two-phase
+        // rebuild for a corner case that self-heals within one refresh cycle.
         qDeleteAll(router_item->takeChildren());
 
         // The unapproved-hosts entry sits above the workspaces; a tap opens the temporary host list.
@@ -490,6 +513,11 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
             session->listGroups(policy, workspace_id, this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
+                if (result.error_code != proto::router::kErrorOk)
+                {
+                    LOG(ERROR) << "Unable to get the list of the groups:" << result.error_code;
+                    return;
+                }
                 if (QTreeWidgetItem* parent = workspaceItem(router_id, workspace_id))
                     populateGroups(router_id, parent, result.groups);
             });
@@ -523,6 +551,13 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
             return;
         }
 
+        // An error reply carries no list; applying it would empty the page. Keep what is shown.
+        if (list.error_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to get the list of the hosts:" << list.error_code;
+            return;
+        }
+
         host_tree_->clear();
         hosts_ = list.hosts;
 
@@ -553,6 +588,13 @@ void RemoteWidget::fetchTempHosts()
         // Ignore the result if the selection changed while the request was in flight.
         if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
             return;
+
+        // An error reply carries no list; applying it would empty the page. Keep what is shown.
+        if (list.error_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to get the list of the temporary hosts:" << list.error_code;
+            return;
+        }
 
         temp_host_tree_->clear();
         temp_hosts_ = list.hosts;

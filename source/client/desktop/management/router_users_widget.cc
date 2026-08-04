@@ -317,6 +317,22 @@ bool RouterUsersWidget::eventFilter(QObject* watched, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
 {
+    if (list.error_code() != proto::router::kErrorOk)
+    {
+        // An error reply carries no list; treating it as an empty one would remove every user
+        // from the tree. Keep what is shown - the next notification triggers another fetch.
+        LOG(ERROR) << "Unable to get the list of the users:" << list.error_code();
+        if (ui->tree_users->topLevelItemCount() == 0 && !load_error_shown_)
+        {
+            // With nothing loaded yet an empty tree would silently pass for "no users".
+            load_error_shown_ = true;
+            MsgBox::warning(this, tr("Failed to get list of users."));
+        }
+        return;
+    }
+
+    load_error_shown_ = false;
+
     auto has_with_id = [](const proto::router::UserList& list, qint64 entry_id)
     {
         for (int i = 0; i < list.user_size(); ++i)
