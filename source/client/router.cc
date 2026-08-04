@@ -290,7 +290,17 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
     }
 
     if (result == RouterState::KeysResult::DECRYPT_FAILED)
+    {
+        // Nothing recovers from this. The password opened the account (the handshake passed) but
+        // not the private key stored with it, so every workspace stays locked and even a password
+        // change cannot re-seal the keys we were unable to read. Reconnecting would repeat it
+        // forever, and staying in CONNECTING would leave the user watching a connection the router
+        // considers established - so report it and end the session.
+        LOG(ERROR) << "Stored private key does not open with our password. Ending session";
+        emit sig_errorOccurred(config_.routerId(), TcpChannel::ErrorCode::CRYPTO_ERROR);
+        disconnectFromRouter();
         return;
+    }
 
     const QString router_guid = QString::fromStdString(user_keys.router_guid());
     if (!router_guid.isEmpty() && router_guid != config_.guid())

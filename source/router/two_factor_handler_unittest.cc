@@ -72,6 +72,19 @@ protected:
         return tokens.size();
     }
 
+    // Rows in the table, whether they are still usable or not.
+    qint64 storedTokenCount()
+    {
+        return countRaw("SELECT COUNT(*) FROM client_device_tokens");
+    }
+
+    // Moves the last use of a token |days| into the past.
+    bool ageToken(qint64 token_id, int days)
+    {
+        return execRaw(QString("UPDATE client_device_tokens SET last_used_at=last_used_at-%1 "
+                               "WHERE token_id=%2").arg(days * 24 * 3600).arg(token_id));
+    }
+
     // A fixed point in time: every step of the tests is placed relative to it, so nothing depends
     // on when the suite runs.
     static constexpr qint64 kNow = 1'700'000'000;
@@ -111,7 +124,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentRejectsWrongCode)
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
 
-    EXPECT_EQ(submitCode(handler, QStringLiteral("000000"), kNow).action,
+    EXPECT_EQ(submitCode(handler, "000000", kNow).action,
               TwoFactorHandler::Action::CLOSE);
     EXPECT_TRUE(db_.findUser(admin_.entry_id).otp_secret.isEmpty());
     EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
@@ -280,7 +293,7 @@ TEST_F(TwoFactorHandlerTest, SecretResetWhileThePromptIsOpenClosesTheSession)
 // The account can be deleted between the challenge and the answer.
 TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
@@ -305,7 +318,7 @@ TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
 TEST_F(TwoFactorHandlerTest, StageOfAnUnknownUserClosesTheSession)
 {
     caller_.user_id = 12345;
-    caller_.name = QStringLiteral("ghost");
+    caller_.name = "ghost";
 
     TwoFactorHandler handler;
     EXPECT_EQ(start(handler).action, TwoFactorHandler::Action::CLOSE);
@@ -373,7 +386,7 @@ TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
 // A token of another account must never authenticate this one.
 TEST_F(TwoFactorHandlerTest, TokenOfAnotherUserIsRejected)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
@@ -423,9 +436,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
     ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     // Eight days without a single use - one more than the lifetime of a token.
-    ASSERT_TRUE(execRaw(QStringLiteral(
-        "UPDATE client_device_tokens SET last_used_at=last_used_at-%1 WHERE token_id=%2")
-            .arg(8 * 24 * 3600).arg(token_id)));
+    ASSERT_TRUE(ageToken(token_id, 8));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -448,18 +459,14 @@ TEST_F(TwoFactorHandlerTest, TokenUseRefreshesItsLifetime)
     ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     // Six days: still inside the lifetime.
-    ASSERT_TRUE(execRaw(QStringLiteral(
-        "UPDATE client_device_tokens SET last_used_at=last_used_at-%1 WHERE token_id=%2")
-            .arg(6 * 24 * 3600).arg(token_id)));
+    ASSERT_TRUE(ageToken(token_id, 6));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
     ASSERT_EQ(submitToken(first, token).action, TwoFactorHandler::Action::ACCEPT);
 
     // The use moved the window: three more days must not expire it.
-    ASSERT_TRUE(execRaw(QStringLiteral(
-        "UPDATE client_device_tokens SET last_used_at=last_used_at-%1 WHERE token_id=%2")
-            .arg(3 * 24 * 3600).arg(token_id)));
+    ASSERT_TRUE(ageToken(token_id, 3));
 
     TwoFactorHandler second;
     ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -482,4 +489,76 @@ TEST_F(TwoFactorHandlerTest, TokenIsIgnoredDuringEnrollment)
     // The token alone leaves the response without a code: the enrollment cannot be confirmed.
     EXPECT_EQ(submitToken(handler, token).action, TwoFactorHandler::Action::CLOSE);
     EXPECT_TRUE(db_.findUser(admin_.entry_id).otp_secret.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The token list answers "which devices can log in as this user without a code". A token past its
+// lifetime cannot, so listing it would answer that question wrongly - and an administrator reading
+// it would see access that nobody has.
+TEST_F(TwoFactorHandlerTest, ExpiredTokenIsNotListed)
+{
+    std::string token;
+    qint64 token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_EQ(tokenCount(admin_.entry_id), 1u);
+
+    ASSERT_TRUE(ageToken(token_id, 8));
+
+    EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A device that is never used again leaves a row nobody can ever present. Issuing the next token
+// of the same user is the moment to drop those: without it the table only grows.
+TEST_F(TwoFactorHandlerTest, IssuingATokenDropsTheDeadOnesOfTheSameUser)
+{
+    std::string dead_token;
+    qint64 dead_token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &dead_token,
+                                           &dead_token_id));
+    ASSERT_TRUE(ageToken(dead_token_id, 8));
+
+    std::string token;
+    qint64 token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &token, &token_id));
+
+    EXPECT_EQ(storedTokenCount(), 1);
+    EXPECT_EQ(tokenCount(admin_.entry_id), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Only the dead ones: a user with several devices in use keeps all of them.
+TEST_F(TwoFactorHandlerTest, IssuingATokenKeepsTheLiveOnesOfTheSameUser)
+{
+    std::string first;
+    qint64 first_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &first, &first_id));
+    ASSERT_TRUE(ageToken(first_id, 6));
+
+    std::string second;
+    qint64 second_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &second, &second_id));
+
+    EXPECT_EQ(tokenCount(admin_.entry_id), 2u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The sweep stays inside the account being served: one login must not turn into a pass over the
+// whole table, and a row of somebody else is invisible to them anyway.
+TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
+{
+    const RouterUser other = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_TRUE(other.isValid());
+
+    std::string foreign_token;
+    qint64 foreign_token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(other.entry_id, "127.0.0.1", &foreign_token,
+                                           &foreign_token_id));
+    ASSERT_TRUE(ageToken(foreign_token_id, 8));
+
+    std::string token;
+    qint64 token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &token, &token_id));
+
+    EXPECT_EQ(storedTokenCount(), 2);
 }

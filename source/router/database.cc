@@ -1058,6 +1058,17 @@ bool Database::issueClientDeviceToken(
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
+    // A device that is never used again leaves behind a row nobody can ever present. Issuing the
+    // next token of the same user is the one moment its rows are guaranteed to be touched, so the
+    // dead ones go here; without it the table only grows. Only this user is swept: a single login
+    // must not turn into a pass over the whole table.
+    SqlQuery prune(db_, "DELETE FROM client_device_tokens WHERE user_id=? AND last_used_at < ?");
+    prune.addInt64(user_id);
+    prune.addInt64(now - kClientDeviceTokenTtlSec);
+
+    if (!prune.exec())
+        LOG(WARNING) << "Unable to prune expired client device tokens:" << db_.lastError();
+
     const char kSql[] =
         "INSERT INTO client_device_tokens "
         "(token_hash, user_id, created_at, last_used_at, address) VALUES (?, ?, ?, ?, ?)";
@@ -1276,11 +1287,16 @@ bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* 
         return false;
     }
 
+    // The list answers "which devices can log in as this user without a code", so it must hold
+    // exactly what findClientDeviceToken() would still accept: a token past its lifetime is not a
+    // credential any more, and reporting it would show access that nobody has. The boundary is the
+    // same one the presentation path uses.
     const char kSql[] =
         "SELECT token_id, created_at, last_used_at, address "
-        "FROM client_device_tokens WHERE user_id=? ORDER BY created_at";
+        "FROM client_device_tokens WHERE user_id=? AND last_used_at >= ? ORDER BY created_at";
     SqlQuery query(db_, kSql);
     query.addInt64(user_id);
+    query.addInt64(QDateTime::currentSecsSinceEpoch() - kClientDeviceTokenTtlSec);
 
     for (;;)
     {

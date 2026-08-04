@@ -36,6 +36,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "base/sql/sql_database.h"
+#include "base/sql/sql_query.h"
 #include "router/database.h"
 #include "router/request_caller.h"
 #include "router/workspace.h"
@@ -55,9 +56,9 @@ protected:
         file_path_ = temp_dir_.path() + "/router.db3";
         ASSERT_TRUE(db_.open(file_path_));
 
-        ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("admin"), kAllSessions)),
+        ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
                   proto::router::kErrorOk);
-        admin_ = db_.findUser(QStringLiteral("admin"));
+        admin_ = db_.findUser("admin");
         ASSERT_EQ(admin_.entry_id, 1);
 
         caller_.user_id = admin_.entry_id;
@@ -66,7 +67,7 @@ protected:
 
     static RouterUser makeUser(const QString& name, quint32 sessions)
     {
-        RouterUser user = RouterUser::create(name, SecureString(QStringLiteral("Password1234!")));
+        RouterUser user = RouterUser::create(name, SecureString("Password1234!"));
         user.sessions = sessions;
         user.flags = User::ENABLED;
         return user;
@@ -142,6 +143,21 @@ protected:
         if (!raw.open(file_path_))
             return false;
         return raw.exec(sql.toStdString().c_str());
+    }
+
+    // Counts rows the public API deliberately hides, so a test can tell "not shown" from "not
+    // there". Returns -1 when the query itself fails.
+    qint64 countRaw(const QString& sql)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return -1;
+
+        SqlQuery query(raw, sql.toStdString().c_str());
+        if (query.next() != SqlQuery::StepResult::ROW)
+            return -1;
+
+        return query.columnInt64(0);
     }
 
     QTemporaryDir temp_dir_;
