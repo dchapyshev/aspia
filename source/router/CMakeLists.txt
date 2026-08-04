@@ -72,9 +72,11 @@ list(APPEND SOURCE_ROUTER
 
 list(APPEND SOURCE_ROUTER_TESTS
     client_channel_handler_unittest.cc
+    client_session_unittest.cc
     client_worker_unittest.cc
     connection_offer_builder_unittest.cc
     database_unittest.cc
+    fake_tcp_channel.h
     group_request_handler_unittest.cc
     host_id_handler_unittest.cc
     host_lifecycle_unittest.cc

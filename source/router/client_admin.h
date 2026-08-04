@@ -38,7 +38,7 @@ class ClientAdmin final : public ClientManager
     Q_OBJECT
 
 public:
-    ClientAdmin(TcpChannel* channel, QObject* parent);
+    ClientAdmin(Database& database, TcpChannel* channel, QObject* parent);
     ~ClientAdmin() final;
 
 signals:

@@ -33,6 +33,7 @@
 #include "router/client.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
+#include "router/database.h"
 #include "router/router_user_list.h"
 #include "router/settings.h"
 #include "router/workers/host_worker.h"
@@ -265,16 +266,16 @@ void ClientWorker::onNewConnection()
         switch (session_type)
         {
             case proto::router::SESSION_TYPE_CLIENT:
-                client = new Client(channel, this);
+                client = new Client(Database::instance(), channel, this);
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
-                client = new ClientManager(channel, this);
+                client = new ClientManager(Database::instance(), channel, this);
                 break;
 
             case proto::router::SESSION_TYPE_ADMIN:
             {
-                ClientAdmin* admin = new ClientAdmin(channel, this);
+                ClientAdmin* admin = new ClientAdmin(Database::instance(), channel, this);
                 connect(admin, &ClientAdmin::sig_clientListRequest,
                         this, &ClientWorker::onClientListRequest);
                 connect(admin, &ClientAdmin::sig_clientRequest,

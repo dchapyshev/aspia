@@ -33,8 +33,8 @@
 #include "router/workers/relay_worker.h"
 
 //--------------------------------------------------------------------------------------------------
-ClientAdmin::ClientAdmin(TcpChannel* channel, QObject* parent)
-    : ClientManager(channel, parent)
+ClientAdmin::ClientAdmin(Database& database, TcpChannel* channel, QObject* parent)
+    : ClientManager(database, channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -116,8 +116,8 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
     proto::router::UserList* list = message.mutable_user_list();
     list->set_request_id(request.request_id());
 
-    Database& database = Database::instance();
-    if (!database.isValid())
+    Database& db = database();
+    if (!db.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
         list->set_error_code(proto::router::kErrorInternalError);
@@ -125,7 +125,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
     else
     {
         QList<RouterUser> users;
-        if (!database.userList(&users))
+        if (!db.userList(&users))
         {
             list->set_error_code(proto::router::kErrorInternalError);
         }
@@ -146,7 +146,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
                 // numeric id and timestamp metadata - never the token hash or any other material
                 // that could identify the token outside of the router.
                 std::vector<DeviceToken> tokens;
-                if (!database.listClientDeviceTokens(user.entry_id, &tokens))
+                if (!db.listClientDeviceTokens(user.entry_id, &tokens))
                 {
                     // A partially built reply must not pass for a complete one.
                     list->clear_user();
@@ -173,7 +173,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
 void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
     const UserRequestHandler::Result handled =
-        UserRequestHandler::handle(Database::instance(), requestCaller(), request);
+        UserRequestHandler::handle(database(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
@@ -383,7 +383,7 @@ void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
 {
     const WorkspaceRequestHandler::Result handled =
-        WorkspaceRequestHandler::handle(Database::instance(), requestCaller(), request);
+        WorkspaceRequestHandler::handle(database(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();

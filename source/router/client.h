@@ -28,6 +28,8 @@
 #include "router/request_caller.h"
 #include "router/two_factor_handler.h"
 
+class Database;
+
 namespace proto::router {
 class ChangePasswordRequest;
 class CheckHostStatus;
@@ -46,7 +48,10 @@ class Client : public QObject
     Q_OBJECT
 
 public:
-    Client(TcpChannel* channel, QObject* parent);
+    // |database| is the connection of the thread the session runs in; it outlives every session
+    // of that thread. Passing it instead of reaching for the per-thread singleton is what lets a
+    // session be driven against a temporary database in a test.
+    Client(Database& database, TcpChannel* channel, QObject* parent);
     virtual ~Client() override;
 
     void start();
@@ -83,6 +88,8 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Client);
 
+    Database& database() const { return database_; }
+
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer);
 
     // The identity the request handlers work with. Taken from the authenticated channel, never
@@ -112,6 +119,7 @@ private:
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
 
+    Database& database_;
     const qint64 session_id_;
     time_t start_time_ = 0;
 

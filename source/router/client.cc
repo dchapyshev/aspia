@@ -51,8 +51,9 @@ qint64 createClientId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Client::Client(TcpChannel* channel, QObject* parent)
+Client::Client(Database& database, TcpChannel* channel, QObject* parent)
     : QObject(parent),
+      database_(database),
       session_id_(createClientId()),
       tcp_channel_(channel)
 {
@@ -229,14 +230,14 @@ void Client::onStarted()
 //--------------------------------------------------------------------------------------------------
 void Client::doTwoFactorChallenge()
 {
-    applyTwoFactorResult(two_factor_.start(Database::instance(), requestCaller()));
+    applyTwoFactorResult(two_factor_.start(database_, requestCaller()));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
 {
     applyTwoFactorResult(two_factor_.handleResponse(
-        Database::instance(), requestCaller(), response, address(),
+        database_, requestCaller(), response, address(),
         QDateTime::currentSecsSinceEpoch()));
 }
 
@@ -292,15 +293,14 @@ void Client::sendUserKeys()
 {
     // Every early return below tears the session down: a client that never receives UserKeys
     // would otherwise hang in the connecting state with no error, and nothing retries the send.
-    Database& database = Database::instance();
-    if (!database.isValid())
+    if (!database_.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database. Closing connection";
         emit sig_finished(session_id_);
         return;
     }
 
-    RouterUser user = database.findUser(userId());
+    RouterUser user = database_.findUser(userId());
     if (!user.isValid())
     {
         CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId()
@@ -321,7 +321,7 @@ void Client::sendUserKeys()
     // Better no UserKeys at all than a silently partial set: the client would treat a missing
     // workspace key as revoked access.
     std::vector<Workspace::Access> keys;
-    if (!database.workspaceAccessListForUser(user.entry_id, &keys))
+    if (!database_.workspaceAccessListForUser(user.entry_id, &keys))
     {
         CLOG(ERROR) << "Failed to read workspace keys for user" << user.entry_id
                     << ". Closing connection";
@@ -412,7 +412,7 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
     proto::router::HostList* result = message.mutable_host_list();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleHostList(Database::instance(), requestCaller(), request, result);
+    ClientChannelHandler::handleHostList(database_, requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -428,7 +428,7 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
     proto::router::HostSearchResult* result = message.mutable_host_search_result();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleHostSearch(Database::instance(), requestCaller(), request, result);
+    ClientChannelHandler::handleHostSearch(database_, requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -466,7 +466,7 @@ void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest&
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
     list->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleWorkspaceList(Database::instance(), requestCaller(), request, list);
+    ClientChannelHandler::handleWorkspaceList(database_, requestCaller(), request, list);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -478,7 +478,7 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
     proto::router::GroupList* result = message.mutable_group_list();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleGroupList(Database::instance(), requestCaller(), request, result);
+    ClientChannelHandler::handleGroupList(database_, requestCaller(), request, result);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -487,7 +487,7 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
 void Client::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
 {
     const ClientChannelHandler::PasswordResult handled =
-        ClientChannelHandler::handleChangePassword(Database::instance(), requestCaller(), request);
+        ClientChannelHandler::handleChangePassword(database_, requestCaller(), request);
 
     proto::router::RouterToClient message;
     proto::router::ChangePasswordResult* result = message.mutable_change_password_result();

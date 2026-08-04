@@ -29,8 +29,8 @@
 #include "router/host_request_handler.h"
 
 //--------------------------------------------------------------------------------------------------
-ClientManager::ClientManager(TcpChannel* channel, QObject* parent)
-    : Client(channel, parent)
+ClientManager::ClientManager(Database& database, TcpChannel* channel, QObject* parent)
+    : Client(database, channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -78,7 +78,7 @@ void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 {
     const HostRequestHandler::Result handled =
-        HostRequestHandler::handle(Database::instance(), requestCaller(), request);
+        HostRequestHandler::handle(database(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::HostResult* result = message.mutable_host_result();
@@ -96,7 +96,7 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 {
     const GroupRequestHandler::Result handled =
-        GroupRequestHandler::handle(Database::instance(), requestCaller(), request);
+        GroupRequestHandler::handle(database(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::GroupResult* result = message.mutable_group_result();
