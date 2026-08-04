@@ -37,6 +37,8 @@ namespace proto::router {
 class ChangePasswordRequest;
 class Group;
 class Host;
+class RouterToAdmin;
+class RouterToManager;
 class User;
 class UserKeys;
 class Workspace;
@@ -171,6 +173,22 @@ public:
 
         pending.invoke(&response);
     }
+
+    //----------------------------------------------------------------------------------------------
+    // Incoming messages.
+    //----------------------------------------------------------------------------------------------
+
+    // Delivers a reply to whoever is waiting for it and drops the cached lists that reply has just
+    // made stale. Returns false when the message is not a reply to a request: the session-level
+    // messages (the two-factor stage, the keys, the change notifications) belong to Router, which
+    // owns the status and the persistence.
+    //
+    // Which lists are dropped mirrors what the router announces as changed for the same operation.
+    // The reply arrives at once while its notification is batched and comes seconds later; serving
+    // the cache in between would show state that is already gone.
+    bool routeReply(const proto::router::RouterToAdmin& message);
+    bool routeReply(const proto::router::RouterToManager& message);
+    bool routeReply(const proto::router::RouterToClient& message);
 
     //----------------------------------------------------------------------------------------------
     // Replies: decoding and caching.

@@ -176,52 +176,7 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
-        if (message.has_relay_list())
-            state_.dispatch(message.relay_list().request_id(), message.relay_list());
-        else if (message.has_client_list())
-            state_.dispatch(message.client_list().request_id(), message.client_list());
-        else if (message.has_user_list())
-            state_.dispatch(message.user_list().request_id(), message.user_list());
-        else if (message.has_user_result())
-        {
-            // A successful add/modify/delete can move workspace state too: adding an
-            // administrator grants it access entries and removing a user drops them by cascade,
-            // both bumping the revisions of the affected workspaces. Same false-conflict window
-            // as below. reset_otp/revoke_tokens do not touch workspaces, so the cache survives.
-            const proto::router::UserResult& user_result = message.user_result();
-            const std::string& command = user_result.command_name();
-            const bool moves_workspaces = command == proto::router::kCommandUserAdd ||
-                                          command == proto::router::kCommandUserModify ||
-                                          command == proto::router::kCommandUserDelete;
-            if (moves_workspaces && user_result.error_code() == proto::router::kErrorOk)
-                state_.invalidateWorkspaces();
-            state_.dispatch(user_result.request_id(), user_result);
-        }
-        else if (message.has_host_result())
-        {
-            // Same reasoning as for the workspaces below: a successful host change makes the
-            // cached host lists stale until the batched notification arrives.
-            if (message.host_result().error_code() == proto::router::kErrorOk)
-                state_.clearHostCache();
-            state_.dispatch(message.host_result().request_id(), message.host_result());
-        }
-        else if (message.has_relay_result())
-            state_.dispatch(message.relay_result().request_id(), message.relay_result());
-        else if (message.has_client_result())
-            state_.dispatch(message.client_result().request_id(), message.client_result());
-        else if (message.has_workspace_result())
-        {
-            // A successful add/modify/delete makes the cached list (and the revisions in it)
-            // stale right now; the notification that would trigger a reload is batched on the
-            // router and arrives seconds later. Serving the stale cache meanwhile would base
-            // the next edit on an outdated revision - a false conflict.
-            if (message.workspace_result().error_code() == proto::router::kErrorOk)
-                state_.invalidateWorkspaces();
-            state_.dispatch(message.workspace_result().request_id(), message.workspace_result());
-        }
-        else if (message.has_peer_result())
-            state_.dispatch(message.peer_result().request_id(), message.peer_result());
-        else
+        if (!state_.routeReply(message))
             LOG(WARNING) << "Unhandled admin message";
     }
     else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
@@ -233,23 +188,7 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
-        if (message.has_host_result())
-        {
-            // Same reasoning as for the workspaces above: a successful host change makes the
-            // cached host lists stale until the batched notification arrives.
-            if (message.host_result().error_code() == proto::router::kErrorOk)
-                state_.clearHostCache();
-            state_.dispatch(message.host_result().request_id(), message.host_result());
-        }
-        else if (message.has_group_result())
-        {
-            // The result carries no workspace_id, so the whole group cache goes; group edits
-            // are rare enough that the extra reload does not matter.
-            if (message.group_result().error_code() == proto::router::kErrorOk)
-                state_.clearGroupCache();
-            state_.dispatch(message.group_result().request_id(), message.group_result());
-        }
-        else
+        if (!state_.routeReply(message))
             LOG(WARNING) << "Unhandled manager message";
     }
     else if (channel_id == proto::router::CHANNEL_ID_CLIENT)
@@ -261,31 +200,17 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
+        // The session-level messages are ours: they move the status, touch the stored config and
+        // raise the signals the interface listens to. Everything else is a reply to a request.
         if (message.has_two_factor_challenge())
             readTwoFactorChallenge(message.two_factor_challenge());
         else if (message.has_two_factor_result())
             readTwoFactorResult(message.two_factor_result());
         else if (message.has_user_keys())
             readUserKeys(message.user_keys());
-        else if (message.has_connection_offer())
-            state_.dispatch(message.connection_offer().request_id(), message.connection_offer());
-        else if (message.has_host_status())
-            state_.dispatch(message.host_status().request_id(), message.host_status());
-        else if (message.has_host_list())
-            state_.dispatch(message.host_list().request_id(), message.host_list());
-        else if (message.has_host_search_result())
-            state_.dispatch(message.host_search_result().request_id(), message.host_search_result());
-        else if (message.has_temp_host_list())
-            state_.dispatch(message.temp_host_list().request_id(), message.temp_host_list());
-        else if (message.has_workspace_list())
-            state_.dispatch(message.workspace_list().request_id(), message.workspace_list());
-        else if (message.has_group_list())
-            state_.dispatch(message.group_list().request_id(), message.group_list());
-        else if (message.has_change_password_result())
-            state_.dispatch(message.change_password_result().request_id(), message.change_password_result());
         else if (message.has_notification())
             emitNotificationSignals(message.notification());
-        else
+        else if (!state_.routeReply(message))
             LOG(WARNING) << "Unhandled client message";
     }
     else

@@ -27,6 +27,7 @@
 #include "base/crypto/sealed_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
+#include "proto/router_manager.h"
 
 namespace {
 
@@ -156,6 +157,143 @@ void RouterState::clearCaches()
 bool RouterState::hasWorkspaceKey(qint64 workspace_id) const
 {
     return workspace_cryptors_.find(workspace_id) != workspace_cryptors_.end();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
+{
+    if (message.has_relay_list())
+    {
+        dispatch(message.relay_list().request_id(), message.relay_list());
+    }
+    else if (message.has_client_list())
+    {
+        dispatch(message.client_list().request_id(), message.client_list());
+    }
+    else if (message.has_user_list())
+    {
+        dispatch(message.user_list().request_id(), message.user_list());
+    }
+    else if (message.has_user_result())
+    {
+        const proto::router::UserResult& result = message.user_result();
+        const std::string& command = result.command_name();
+
+        // Adding an administrator grants it an access entry in every workspace and deleting a user
+        // drops its entries by cascade; both move the revisions of the workspaces involved.
+        // reset_otp and revoke_tokens touch nothing but the user itself.
+        const bool moves_workspaces = command == proto::router::kCommandUserAdd ||
+                                      command == proto::router::kCommandUserModify ||
+                                      command == proto::router::kCommandUserDelete;
+
+        if (moves_workspaces && result.error_code() == proto::router::kErrorOk)
+            invalidateWorkspaces();
+
+        dispatch(result.request_id(), result);
+    }
+    else if (message.has_host_result())
+    {
+        if (message.host_result().error_code() == proto::router::kErrorOk)
+            clearHostCache();
+
+        dispatch(message.host_result().request_id(), message.host_result());
+    }
+    else if (message.has_relay_result())
+    {
+        dispatch(message.relay_result().request_id(), message.relay_result());
+    }
+    else if (message.has_client_result())
+    {
+        dispatch(message.client_result().request_id(), message.client_result());
+    }
+    else if (message.has_workspace_result())
+    {
+        const proto::router::WorkspaceResult& result = message.workspace_result();
+        if (result.error_code() == proto::router::kErrorOk)
+        {
+            // Every workspace operation assigns hosts to the workspace or releases them from it,
+            // and deleting one takes its whole group tree with it - the same three lists the
+            // router marks as changed.
+            invalidateWorkspaces();
+            clearHostCache();
+
+            if (result.command_name() == proto::router::kCommandWorkspaceDelete)
+                clearGroupCache();
+        }
+
+        dispatch(result.request_id(), result);
+    }
+    else if (message.has_peer_result())
+    {
+        dispatch(message.peer_result().request_id(), message.peer_result());
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterState::routeReply(const proto::router::RouterToManager& message)
+{
+    if (message.has_host_result())
+    {
+        if (message.host_result().error_code() == proto::router::kErrorOk)
+            clearHostCache();
+
+        dispatch(message.host_result().request_id(), message.host_result());
+    }
+    else if (message.has_group_result())
+    {
+        const proto::router::GroupResult& result = message.group_result();
+        if (result.error_code() == proto::router::kErrorOk)
+        {
+            // The result carries no workspace id, so the whole group cache goes; group edits are
+            // rare enough that the extra reload does not matter. A deleted group also releases its
+            // hosts, which is why the host lists go with it.
+            clearGroupCache();
+
+            if (result.command_name() == proto::router::kCommandGroupDelete)
+                clearHostCache();
+        }
+
+        dispatch(result.request_id(), result);
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterState::routeReply(const proto::router::RouterToClient& message)
+{
+    // Nothing here invalidates a cache: these are read-only queries, and the one write among them
+    // (the password change) re-seals the keys the user already holds without moving any revision.
+    if (message.has_connection_offer())
+        dispatch(message.connection_offer().request_id(), message.connection_offer());
+    else if (message.has_host_status())
+        dispatch(message.host_status().request_id(), message.host_status());
+    else if (message.has_host_list())
+        dispatch(message.host_list().request_id(), message.host_list());
+    else if (message.has_host_search_result())
+        dispatch(message.host_search_result().request_id(), message.host_search_result());
+    else if (message.has_temp_host_list())
+        dispatch(message.temp_host_list().request_id(), message.temp_host_list());
+    else if (message.has_workspace_list())
+        dispatch(message.workspace_list().request_id(), message.workspace_list());
+    else if (message.has_group_list())
+        dispatch(message.group_list().request_id(), message.group_list());
+    else if (message.has_change_password_result())
+        dispatch(message.change_password_result().request_id(), message.change_password_result());
+    else
+        return false;
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
