@@ -27,6 +27,8 @@ list(APPEND SOURCE_ROUTER_CORE
     client_channel_handler.h
     client_manager.cc
     client_manager.h
+    connection_offer_builder.cc
+    connection_offer_builder.h
     database.cc
     database.h
     group_request_handler.cc
@@ -71,6 +73,7 @@ list(APPEND SOURCE_ROUTER
 list(APPEND SOURCE_ROUTER_TESTS
     client_channel_handler_unittest.cc
     client_worker_unittest.cc
+    connection_offer_builder_unittest.cc
     database_unittest.cc
     group_request_handler_unittest.cc
     host_id_handler_unittest.cc
