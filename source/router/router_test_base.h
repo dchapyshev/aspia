@@ -35,6 +35,7 @@
 #include "base/peer/user.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+#include "base/sql/sql_database.h"
 #include "router/database.h"
 #include "router/request_caller.h"
 #include "router/workspace.h"
@@ -51,7 +52,8 @@ protected:
     void SetUp() override
     {
         ASSERT_TRUE(temp_dir_.isValid());
-        ASSERT_TRUE(db_.open(temp_dir_.path() + "/router.db3"));
+        file_path_ = temp_dir_.path() + "/router.db3";
+        ASSERT_TRUE(db_.open(file_path_));
 
         ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("admin"), kAllSessions)),
                   proto::router::kErrorOk);
@@ -132,7 +134,18 @@ protected:
         return proto::router::Host();
     }
 
+    // Doctors rows the public API deliberately cannot produce (aged timestamps, induced holes).
+    // A second connection to the same file is fine: the database runs in WAL mode.
+    bool execRaw(const QString& sql)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+        return raw.exec(sql.toStdString().c_str());
+    }
+
     QTemporaryDir temp_dir_;
+    QString file_path_;
     Database db_;
     RouterUser admin_;
     RequestCaller caller_;

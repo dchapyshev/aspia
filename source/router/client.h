@@ -26,6 +26,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "router/request_caller.h"
+#include "router/two_factor_handler.h"
 
 namespace proto::router {
 class ChangePasswordRequest;
@@ -96,6 +97,10 @@ private slots:
 private:
     void doTwoFactorChallenge();
     void readTwoFactorResponse(const proto::router::TwoFactorResponse& response);
+
+    // Sends what the two-factor stage decided: a challenge, the completion of the stage, or the
+    // teardown of the session.
+    void applyTwoFactorResult(TwoFactorHandler::Result&& result);
     void completeTwoFactor(std::string&& new_token = std::string());
     void sendUserKeys();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
@@ -114,11 +119,9 @@ private:
     quint16 stun_port_ = 0;
     std::string router_guid_;
 
+    TwoFactorHandler two_factor_;
     bool two_factor_completed_ = false;
     qint64 token_id_ = 0;
-    QByteArray tentative_otp_secret_;
-    QByteArray user_otp_secret_;
-    quint64 user_otp_counter_ = 0;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

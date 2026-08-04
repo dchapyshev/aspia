@@ -27,7 +27,6 @@
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
-#include "base/crypto/totp.h"
 #include "base/threading/worker.h"
 #include "proto/relay_peer.h"
 #include "proto/router.h"
@@ -42,8 +41,6 @@
 #include "router/workers/relay_worker.h"
 
 namespace {
-
-const char kOtpIssuer[] = "Aspia Router";
 
 //--------------------------------------------------------------------------------------------------
 qint64 createClientId()
@@ -234,159 +231,45 @@ void Client::onStarted()
 //--------------------------------------------------------------------------------------------------
 void Client::doTwoFactorChallenge()
 {
-    proto::router::RouterToClient message;
-    proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
-
-    RouterUser user = Database::instance().findUser(userId());
-    if (!user.isValid())
-    {
-        // SRP already validated the user; reaching this branch implies the row vanished
-        // between authentication and the 2FA stage.
-        CLOG(WARNING) << "Authenticated user" << userName()
-                      << "disappeared from database. Closing connection";
-        emit sig_finished(session_id_);
-        return;
-    }
-
-    user_otp_secret_ = user.otp_secret;
-    user_otp_counter_ = user.otp_counter;
-
-    if (user_otp_secret_.isEmpty())
-    {
-        // First login or after admin reset. Generate a tentative secret and hand it to the
-        // client; the secret only reaches the database once the user confirms it with a
-        // valid code, so an abandoned dialog leaves the user un-enrolled.
-        tentative_otp_secret_ = Totp::generateSecret();
-        const QString uri = Totp::buildUri(
-            kOtpIssuer, QString::fromStdString(userName()), tentative_otp_secret_);
-
-        challenge->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
-        challenge->set_otpauth_uri(uri.toStdString());
-    }
-    else
-    {
-        challenge->set_mode(proto::router::TWO_FACTOR_MODE_ACTIVE);
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+    applyTwoFactorResult(two_factor_.start(Database::instance(), requestCaller()));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
 {
-    const qint64 now = QDateTime::currentSecsSinceEpoch();
-    const bool enroll = !tentative_otp_secret_.isEmpty();
+    applyTwoFactorResult(two_factor_.handleResponse(
+        Database::instance(), requestCaller(), response, address(),
+        QDateTime::currentSecsSinceEpoch()));
+}
 
-    if (!enroll && !response.token().empty())
+//--------------------------------------------------------------------------------------------------
+void Client::applyTwoFactorResult(TwoFactorHandler::Result&& result)
+{
+    switch (result.action)
     {
-        // Token path: client presented a previously issued bearer token. Validate by lookup
-        // and check that the token's owner matches the user that just passed SRP.
-        const std::string_view token = response.token();
-
-        qint64 stored_user_id = 0;
-        qint64 token_id = 0;
-        if (!Database::instance().findClientDeviceToken(token, &stored_user_id, &token_id) ||
-            stored_user_id != userId())
+        case TwoFactorHandler::Action::SEND_CHALLENGE:
         {
-            // The presented token is gone or owned by someone else (revoked, password
-            // change, database wiped). The user still has a valid TOTP secret, so instead
-            // of tearing down the connection we re-open the 2FA stage and ask for a code.
-            // |token_rejected| tells the client to drop the stale local copy and not retry
-            // the token path on this challenge.
-            CLOG(INFO) << "Device token rejected for user" << userName() << "- asking for TOTP";
-
             proto::router::RouterToClient message;
             proto::router::TwoFactorChallenge* challenge = message.mutable_two_factor_challenge();
-            challenge->set_mode(proto::router::TWO_FACTOR_MODE_ACTIVE);
-            challenge->set_token_rejected(true);
+            challenge->set_mode(result.challenge.mode);
+            if (!result.challenge.otpauth_uri.empty())
+                challenge->set_otpauth_uri(std::move(result.challenge.otpauth_uri));
+            if (result.challenge.token_rejected)
+                challenge->set_token_rejected(true);
+
             sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-            return;
         }
-
-        Database::instance().touchClientDeviceToken(token, address());
-        token_id_ = token_id;
-        completeTwoFactor();
         return;
-    }
 
-    if (!enroll)
-    {
-        // The secret and the counter are re-read instead of trusting the copies cached when the
-        // challenge was sent: an administrator can reset the OTP or delete the user while the
-        // session sits at the prompt, and the verification below must see that.
-        const RouterUser user = Database::instance().findUser(userId());
-        if (!user.isValid())
-        {
-            CLOG(INFO) << "User" << userName() << "is gone. Closing connection";
+        case TwoFactorHandler::Action::ACCEPT:
+            token_id_ = result.token_id;
+            completeTwoFactor(std::move(result.new_token));
+            return;
+
+        case TwoFactorHandler::Action::CLOSE:
             emit sig_finished(session_id_);
             return;
-        }
-
-        user_otp_secret_ = user.otp_secret;
-        user_otp_counter_ = user.otp_counter;
     }
-
-    const QByteArray& secret = enroll ? tentative_otp_secret_ : user_otp_secret_;
-
-    if (secret.isEmpty() || response.totp_code().empty())
-    {
-        CLOG(INFO) << "Empty TOTP code or no OTP secret for user" << userName() << ". Closing connection";
-        emit sig_finished(session_id_);
-        return;
-    }
-
-    const QString code = QString::fromStdString(response.totp_code());
-    quint64 matched_counter = 0;
-    if (!Totp::verify(secret, code, now, Totp::kDefaultStepSec, Totp::kDefaultDigits,
-                      Totp::kDefaultWindowSteps, &matched_counter))
-    {
-        CLOG(INFO) << "Invalid TOTP code for user" << userName() << ". Closing connection";
-        emit sig_finished(session_id_);
-        return;
-    }
-
-    // Replay protection: refuse any code whose step has already been consumed. ENROLL starts
-    // from counter 0, so the first valid code (any positive step) is accepted.
-    if (!enroll && matched_counter <= user_otp_counter_)
-    {
-        CLOG(INFO) << "Replayed TOTP code for user" << userName() << ". Closing connection";
-        emit sig_finished(session_id_);
-        return;
-    }
-
-    if (enroll)
-    {
-        if (!Database::instance().setUserOtp(userId(), tentative_otp_secret_, matched_counter))
-        {
-            CLOG(ERROR) << "Failed to persist OTP secret for user" << userName()
-                        << ". Closing connection";
-            emit sig_finished(session_id_);
-            return;
-        }
-        tentative_otp_secret_.clear();
-    }
-    else
-    {
-        if (!Database::instance().consumeUserOtpCounter(userId(), matched_counter))
-        {
-            CLOG(INFO) << "TOTP counter was already consumed for user" << userName()
-                       << ". Closing connection";
-            emit sig_finished(session_id_);
-            return;
-        }
-    }
-
-    // Any successful TOTP submission produces a fresh bearer token. Failure to persist the
-    // token is non-fatal: the user is still let in, they will be prompted for TOTP again
-    // next time.
-    std::string new_token;
-    qint64 new_token_id = 0;
-    if (!Database::instance().issueClientDeviceToken(userId(), address(), &new_token, &new_token_id))
-        CLOG(WARNING) << "Failed to issue device token for user" << userName();
-
-    token_id_ = new_token_id;
-
-    completeTwoFactor(std::move(new_token));
 }
 
 //--------------------------------------------------------------------------------------------------

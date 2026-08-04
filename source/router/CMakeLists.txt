@@ -54,6 +54,8 @@ list(APPEND SOURCE_ROUTER_CORE
     shared_hosts.h
     shared_key_pool.cc
     shared_key_pool.h
+    two_factor_handler.cc
+    two_factor_handler.h
     user_request_handler.cc
     user_request_handler.h
     workspace.cc
@@ -71,6 +73,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     host_request_handler_unittest.cc
     router_test_base.h
     tests_main.cc
+    two_factor_handler_unittest.cc
     user_request_handler_unittest.cc
     workspace_request_handler_unittest.cc)
 
