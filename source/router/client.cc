@@ -33,6 +33,7 @@
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+#include "router/client_channel_handler.h"
 #include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
@@ -199,6 +200,16 @@ void Client::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         CLOG(ERROR) << "Unhandled message from client";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+RequestCaller Client::requestCaller() const
+{
+    RequestCaller caller;
+    caller.user_id = userId();
+    caller.name = QString::fromStdString(userName());
+    caller.session_type = sessionType();
+    return caller;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -556,91 +567,11 @@ void Client::readCheckHostStatus(const proto::router::CheckHostStatus& check_hos
 //--------------------------------------------------------------------------------------------------
 void Client::readHostListRequest(const proto::router::HostListRequest& request)
 {
-    const proto::router::HostListRequest::Mode mode = request.mode();
-    const qint64 workspace_id = request.workspace_id();
-    const qint64 group_id = request.group_id();
-    const qint64 start_item = request.start_item();
-    const qint64 end_item = request.end_item();
-    const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
-
     proto::router::RouterToClient message;
     proto::router::HostList* result = message.mutable_host_list();
     result->set_request_id(request.request_id());
-    result->set_workspace_id(workspace_id);
-    result->set_group_id(group_id);
 
-    if (mode != proto::router::HostListRequest::MODE_ALL &&
-        mode != proto::router::HostListRequest::MODE_FILTERED)
-    {
-        CLOG(ERROR) << "Unknown host list mode:" << mode;
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    if (mode == proto::router::HostListRequest::MODE_ALL && !is_admin)
-    {
-        CLOG(ERROR) << "Non-admin requested MODE_ALL host list";
-        result->set_error_code(proto::router::kErrorAccessDenied);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    if (mode == proto::router::HostListRequest::MODE_FILTERED)
-    {
-        // "No access" and "could not check" are different answers - a database error must not
-        // be reported as a denial.
-        bool access_known = false;
-        const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
-        if (!access_known)
-        {
-            CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-            result->set_error_code(proto::router::kErrorInternalError);
-            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-            return;
-        }
-
-        if (!has_access)
-        {
-            CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
-            result->set_error_code(proto::router::kErrorAccessDenied);
-            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-            return;
-        }
-    }
-
-    // A zero count from a failed query would make the client truncate its pagination while the
-    // list itself arrives non-empty - so a count failure fails the whole request.
-    bool count_known = false;
-    if (mode == proto::router::HostListRequest::MODE_ALL)
-    {
-        result->set_total_count(database.hostCount(&count_known));
-        if (count_known)
-            database.hosts(start_item, end_item, result);
-    }
-    else
-    {
-        result->set_total_count(database.hostCount(workspace_id, group_id, &count_known));
-        if (count_known)
-            database.hosts(workspace_id, group_id, start_item, end_item, result);
-    }
-
-    if (!count_known)
-        result->set_error_code(proto::router::kErrorInternalError);
-
-    // hosts() drops the partial list from an error reply; the count computed up front must not
-    // survive it either.
-    if (result->error_code() != proto::router::kErrorOk)
-        result->clear_total_count();
+    ClientChannelHandler::handleHostList(Database::instance(), requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -656,27 +587,7 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
     proto::router::HostSearchResult* result = message.mutable_host_search_result();
     result->set_request_id(request.request_id());
 
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // Search is always scoped to every workspace the user can access, regardless of session type.
-    // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
-    std::set<qint64> workspace_ids;
-    if (!database.workspaceAccessIdsForUser(userId(), &workspace_ids))
-    {
-        CLOG(ERROR) << "Failed to read workspace access list for user" << userId();
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    database.searchHosts(QString::fromStdString(request.query()), workspace_ids, result);
+    ClientChannelHandler::handleHostSearch(Database::instance(), requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -714,22 +625,7 @@ void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest&
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
     list->set_request_id(request.request_id());
 
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        list->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // Each session sees only the workspaces it has a workspace_access entry for. Admins get the
-    // full access list per workspace (needed to manage membership); other sessions get only their
-    // own entry. workspace_id == 0 means all visible workspaces; > 0 narrows to a single entry.
-    if (sessionType() == proto::router::SESSION_TYPE_ADMIN)
-        database.workspaceListWithAllAccess(userId(), request.workspace_id(), list);
-    else
-        database.workspaceListWithOwnAccess(userId(), request.workspace_id(), list);
+    ClientChannelHandler::handleWorkspaceList(Database::instance(), requestCaller(), request, list);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -737,51 +633,11 @@ void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest&
 //--------------------------------------------------------------------------------------------------
 void Client::readGroupListRequest(const proto::router::GroupListRequest& request)
 {
-    const qint64 workspace_id = request.workspace_id();
-
     proto::router::RouterToClient message;
     proto::router::GroupList* result = message.mutable_group_list();
     result->set_request_id(request.request_id());
-    result->set_workspace_id(workspace_id);
 
-    if (workspace_id <= 0)
-    {
-        CLOG(ERROR) << "Invalid workspace id in group list request:" << workspace_id;
-        result->set_error_code(proto::router::kErrorInvalidRequest);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // "No access" and "could not check" are different answers - a database error must not be
-    // reported as a denial.
-    bool access_known = false;
-    const bool has_access = database.hasWorkspaceAccess(userId(), workspace_id, &access_known);
-    if (!access_known)
-    {
-        CLOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    if (!has_access)
-    {
-        CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
-        result->set_error_code(proto::router::kErrorAccessDenied);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    database.groupList(workspace_id, result);
+    ClientChannelHandler::handleGroupList(Database::instance(), requestCaller(), request, result);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -789,81 +645,22 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
 //--------------------------------------------------------------------------------------------------
 void Client::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
 {
+    const ClientChannelHandler::PasswordResult handled =
+        ClientChannelHandler::handleChangePassword(Database::instance(), requestCaller(), request);
+
     proto::router::RouterToClient message;
     proto::router::ChangePasswordResult* result = message.mutable_change_password_result();
     result->set_request_id(request.request_id());
-
-    Database& database = Database::instance();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        result->set_error_code(proto::router::kErrorInternalError);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // Read-modify-write outside a transaction: the window between this findUser and the
-    // modifyUser below is closed only by every users/workspaces write going through the single
-    // ClientWorker thread. If client sessions are ever spread over several workers, this must
-    // move inside one transaction.
-    RouterUser user = database.findUser(userId());
-    if (!user.isValid())
-    {
-        // The same concurrent delete caught a moment later inside modifyUser answers
-        // kErrorNotFound - one event, one code.
-        CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId() << ")";
-        result->set_error_code(proto::router::kErrorNotFound);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // Replace only the password-derived fields; keep name, group, sessions, flags intact.
-    user.salt             = QByteArray::fromStdString(request.salt());
-    user.verifier         = QByteArray::fromStdString(request.verifier());
-    user.public_key       = QByteArray::fromStdString(request.public_key());
-    user.wrap_private_key = QByteArray::fromStdString(request.wrap_private_key());
-    user.wrap_salt        = QByteArray::fromStdString(request.wrap_salt());
-
-    if (!user.isValid())
-    {
-        CLOG(ERROR) << "Rotated credentials produced an invalid user record";
-        result->set_error_code(proto::router::kErrorInvalidData);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    // The rotation produced a new key pair, so the workspace keys re-sealed by the client to the
-    // new public key must replace the stored ones (now sealed to the old, discarded key).
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.reserve(request.workspace_key_size());
-
-    for (int i = 0; i < request.workspace_key_size(); ++i)
-    {
-        const proto::router::ChangePasswordRequest::WorkspaceKey& wk = request.workspace_key(i);
-        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-    }
-
-    // Credentials and re-wrapped keys are persisted atomically: the password is rotated only if a
-    // re-sealed key is present for every workspace the user can access, so a partial set can never
-    // leave the user without workspace access. Only the password-derived fields differ here (the
-    // rest were loaded from the database), so reusing modifyUser writes back identical values.
-    const std::string_view error_code = database.modifyUser(user, wrapped_keys, userId());
-    if (error_code != proto::router::kErrorOk)
-    {
-        CLOG(ERROR) << "Failed to change password for user" << userName() << ":" << error_code;
-        result->set_error_code(error_code);
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-        return;
-    }
-
-    CLOG(INFO) << "User" << userName() << "rotated own credentials";
-    result->set_error_code(proto::router::kErrorOk);
+    result->set_error_code(handled.error_code);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
-    // NOTIFY_USERS only: the repair branch of Database::modifyUser cannot create access entries
-    // on this path - the keys of the request come from the user's own cryptor cache, which only
-    // ever holds the workspaces the user already has an access entry for.
-    emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
+    if (handled.notify_flags)
+        emit sig_notifyChanged(handled.notify_flags);
+
+    if (handled.error_code != proto::router::kErrorOk)
+        return;
+
+    CLOG(INFO) << "User" << userName() << "rotated own credentials";
 
     // This request always rotates the password (tokens are revoked in the transaction). Drop the
     // user's other live sessions but keep this one.
@@ -877,4 +674,3 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     token_id_ = 0;
     doTwoFactorChallenge();
 }
-

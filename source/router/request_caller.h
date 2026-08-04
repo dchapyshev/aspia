@@ -27,6 +27,10 @@ struct RequestCaller
 {
     qint64 user_id = 0;
     QString name; // Audit log only.
+
+    // proto::router::SessionType of the session (the one it authenticated as, out of the mask its
+    // record allows). Decides what a request is allowed to ask for, e.g. the unfiltered host list.
+    quint32 session_type = 0;
 };
 
 #endif // ROUTER_REQUEST_CALLER_H

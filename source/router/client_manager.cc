@@ -77,12 +77,8 @@ void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 {
-    RequestCaller caller;
-    caller.user_id = userId();
-    caller.name = QString::fromStdString(userName());
-
     const HostRequestHandler::Result handled =
-        HostRequestHandler::handle(Database::instance(), caller, request);
+        HostRequestHandler::handle(Database::instance(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::HostResult* result = message.mutable_host_result();
@@ -99,12 +95,8 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 {
-    RequestCaller caller;
-    caller.user_id = userId();
-    caller.name = QString::fromStdString(userName());
-
     const GroupRequestHandler::Result handled =
-        GroupRequestHandler::handle(Database::instance(), caller, request);
+        GroupRequestHandler::handle(Database::instance(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::GroupResult* result = message.mutable_group_result();

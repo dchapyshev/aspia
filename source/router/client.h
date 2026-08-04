@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
+#include "router/request_caller.h"
 
 namespace proto::router {
 class ChangePasswordRequest;
@@ -82,6 +83,10 @@ protected:
     LOG_DECLARE_CONTEXT(Client);
 
     virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer);
+
+    // The identity the request handlers work with. Taken from the authenticated channel, never
+    // from the request itself.
+    RequestCaller requestCaller() const;
 
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);

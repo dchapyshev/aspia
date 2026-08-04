@@ -172,12 +172,8 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
-    RequestCaller caller;
-    caller.user_id = userId();
-    caller.name = QString::fromStdString(userName());
-
     const UserRequestHandler::Result handled =
-        UserRequestHandler::handle(Database::instance(), caller, request);
+        UserRequestHandler::handle(Database::instance(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
@@ -386,12 +382,8 @@ void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
 {
-    RequestCaller caller;
-    caller.user_id = userId();
-    caller.name = QString::fromStdString(userName());
-
     const WorkspaceRequestHandler::Result handled =
-        WorkspaceRequestHandler::handle(Database::instance(), caller, request);
+        WorkspaceRequestHandler::handle(Database::instance(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();

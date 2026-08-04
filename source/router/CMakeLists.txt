@@ -23,6 +23,8 @@ list(APPEND SOURCE_ROUTER_CORE
     client.h
     client_admin.cc
     client_admin.h
+    client_channel_handler.cc
+    client_channel_handler.h
     client_manager.cc
     client_manager.h
     database.cc
@@ -63,6 +65,7 @@ list(APPEND SOURCE_ROUTER
     main.cc)
 
 list(APPEND SOURCE_ROUTER_TESTS
+    client_channel_handler_unittest.cc
     database_unittest.cc
     group_request_handler_unittest.cc
     host_request_handler_unittest.cc
