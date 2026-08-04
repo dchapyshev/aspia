@@ -79,14 +79,14 @@ TEST_F(WorkspaceRequestHandlerTest, AddCreatesWorkspaceAndNotifies)
 {
     const SecureByteArray gk(Random::byteArray(32));
     const WorkspaceRequestHandler::Result result = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, QStringLiteral("alpha"), gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk));
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_GT(result.entry_id, 0);
 
     // A creation can only claim hosts, so with none requested the host lists stay valid.
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_WORKSPACES));
-    EXPECT_EQ(workspaceName(result.entry_id), QStringLiteral("alpha"));
+    EXPECT_EQ(workspaceName(result.entry_id), "alpha");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ TEST_F(WorkspaceRequestHandlerTest, AddWithoutOwnAccessIsRejected)
 {
     const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, QStringLiteral("alpha"), gk);
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
     request.mutable_workspace()->clear_access();
 
     const WorkspaceRequestHandler::Result result = handle(request);
@@ -114,7 +114,7 @@ TEST_F(WorkspaceRequestHandlerTest, AddWithHostsClaimsThemAndNotifiesHosts)
 
     const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, QStringLiteral("alpha"), gk);
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
     request.mutable_workspace()->add_host_id(host_id);
 
     const WorkspaceRequestHandler::Result result = handle(request);
@@ -132,13 +132,13 @@ TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 {
     const SecureByteArray gk(Random::byteArray(32));
     const WorkspaceRequestHandler::Result first = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, QStringLiteral("  alpha  "), gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "  alpha  ", gk));
 
     ASSERT_EQ(first.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(workspaceName(first.entry_id), QStringLiteral("alpha"));
+    EXPECT_EQ(workspaceName(first.entry_id), "alpha");
 
     const WorkspaceRequestHandler::Result second = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, QStringLiteral("alpha"), gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk));
 
     EXPECT_EQ(second.error_code, proto::router::kErrorAlreadyExists);
     EXPECT_EQ(second.notify_flags, 0u);
@@ -149,11 +149,11 @@ TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceModify, QStringLiteral("beta"), gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
     request.mutable_workspace()->set_entry_id(workspace_id);
     request.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
 
@@ -165,7 +165,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
     // released), so the host lists are always announced as stale.
     EXPECT_EQ(result.notify_flags,
               quint32(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS));
-    EXPECT_EQ(workspaceName(workspace_id), QStringLiteral("beta"));
+    EXPECT_EQ(workspaceName(workspace_id), "beta");
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 }
 
@@ -175,11 +175,11 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 TEST_F(WorkspaceRequestHandlerTest, ModifyWithoutOwnAccessIsRejected)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceModify, QStringLiteral("beta"), gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
     request.mutable_workspace()->set_entry_id(workspace_id);
     request.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
     request.mutable_workspace()->clear_access();
@@ -188,7 +188,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyWithoutOwnAccessIsRejected)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(workspaceName(workspace_id), QStringLiteral("alpha"));
+    EXPECT_EQ(workspaceName(workspace_id), "alpha");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,18 +197,18 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyWithoutOwnAccessIsRejected)
 TEST_F(WorkspaceRequestHandlerTest, StaleRevisionIsConflict)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest first =
-        makeRequest(proto::router::kCommandWorkspaceModify, QStringLiteral("beta"), gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
     first.mutable_workspace()->set_entry_id(workspace_id);
     first.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
     ASSERT_EQ(handle(first).error_code, proto::router::kErrorOk);
 
     // The same request again - its revision is the one the first save consumed.
     proto::router::WorkspaceRequest stale =
-        makeRequest(proto::router::kCommandWorkspaceModify, QStringLiteral("gamma"), gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "gamma", gk);
     stale.mutable_workspace()->set_entry_id(workspace_id);
     stale.mutable_workspace()->set_revision(1);
 
@@ -216,7 +216,7 @@ TEST_F(WorkspaceRequestHandlerTest, StaleRevisionIsConflict)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
     EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(workspaceName(workspace_id), QStringLiteral("beta"));
+    EXPECT_EQ(workspaceName(workspace_id), "beta");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ TEST_F(WorkspaceRequestHandlerTest, DeleteReleasesHostsAndDropsGroups)
     ASSERT_NE(host_id, kInvalidHostId);
 
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
     ASSERT_GT(workspace_id, 0);
 
     qint64 group_id = -1;

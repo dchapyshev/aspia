@@ -258,7 +258,7 @@ TEST_F(ClientSessionTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 TEST_F(ClientSessionTest, ValidCodeDeliversTokenAndUserKeys)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
     withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
@@ -301,7 +301,7 @@ TEST_F(ClientSessionTest, WrongCodeEndsTheSession)
         client.start();
         channel->clearSent();
 
-        channel->receive(proto::router::CHANNEL_ID_CLIENT, totpResponse(QStringLiteral("000000")));
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, totpResponse("000000"));
 
         EXPECT_EQ(finished, 1);
         EXPECT_FALSE(client.isTwoFactorCompleted());
@@ -315,7 +315,7 @@ TEST_F(ClientSessionTest, WrongCodeEndsTheSession)
 TEST_F(ClientSessionTest, WorkspaceListIsAnsweredAfterTheStage)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace(QStringLiteral("alpha"), gk), 0);
+    ASSERT_GT(addWorkspace("alpha", gk), 0);
 
     withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                              [this](ClientAdmin& client, FakeTcpChannel* channel)
@@ -471,7 +471,7 @@ TEST_F(ClientSessionTest, MalformedMessagesAreIgnored)
 TEST_F(ClientSessionTest, PasswordChangeReopensTheTwoFactorStage)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
     withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,

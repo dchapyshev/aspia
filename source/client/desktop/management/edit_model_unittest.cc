@@ -36,7 +36,7 @@ WorkspaceEditModel::User makeUser(qint64 id, bool is_admin, const char* key = "k
     WorkspaceEditModel::User user;
     user.entry_id = id;
     user.is_admin = is_admin;
-    user.name = QStringLiteral("user-%1").arg(id);
+    user.name = QString("user-%1").arg(id);
     user.public_key = QByteArray(key);
     return user;
 }
@@ -47,7 +47,7 @@ WorkspaceEditModel::HostInfo makeHost(quint64 id, qint64 workspace_id)
     WorkspaceEditModel::HostInfo host;
     host.host_id = id;
     host.workspace_id = workspace_id;
-    host.computer_name = QStringLiteral("host-%1").arg(id);
+    host.computer_name = QString("host-%1").arg(id);
     return host;
 }
 
@@ -58,7 +58,7 @@ WorkspaceEditModel::WorkspaceInfo makeWorkspace(
     WorkspaceEditModel::WorkspaceInfo workspace;
     workspace.entry_id = id;
     workspace.revision = revision;
-    workspace.name = QStringLiteral("workspace-%1").arg(id);
+    workspace.name = QString("workspace-%1").arg(id);
     workspace.access_ids = access_ids;
     return workspace;
 }
@@ -68,7 +68,7 @@ RouterUser makeRecord(quint32 flags)
 {
     RouterUser user;
     user.entry_id = kClientId;
-    user.name = QStringLiteral("bob");
+    user.name = "bob";
     user.flags = flags;
     user.public_key = QByteArray("key");
     return user;
@@ -381,7 +381,7 @@ TEST(UserEditModel, DeletedRecordIsDetected)
 TEST(UserEditModel, CreateModeDefaults)
 {
     UserEditModel model(0);
-    ASSERT_TRUE(model.applySnapshot(RouterUser(), false, {QStringLiteral("admin")}));
+    ASSERT_TRUE(model.applySnapshot(RouterUser(), false, {"admin"}));
 
     EXPECT_TRUE(model.accountChanged());
     EXPECT_TRUE(model.desiredEnabled());

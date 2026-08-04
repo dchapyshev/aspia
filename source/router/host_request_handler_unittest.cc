@@ -34,7 +34,7 @@ protected:
         ASSERT_NE(host_id_, kInvalidHostId);
 
         gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace(QStringLiteral("alpha"), gk_, {host_id_});
+        workspace_id_ = addWorkspace("alpha", gk_, {host_id_});
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -128,7 +128,7 @@ TEST_F(HostRequestHandlerTest, UnassignedHostCannotBeEdited)
 //--------------------------------------------------------------------------------------------------
 TEST_F(HostRequestHandlerTest, NonMemberCannotEditHost)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
@@ -145,7 +145,7 @@ TEST_F(HostRequestHandlerTest, NonMemberCannotEditHost)
 //--------------------------------------------------------------------------------------------------
 TEST_F(HostRequestHandlerTest, HostIsMovedIntoGroupOfItsWorkspace)
 {
-    const qint64 group_id = addGroup(workspace_id_, QStringLiteral("servers"));
+    const qint64 group_id = addGroup(workspace_id_, "servers");
     ASSERT_GT(group_id, 0);
 
     const HostRequestHandler::Result result = handle(makeRequest(host_id_, group_id, "display"));
@@ -159,10 +159,10 @@ TEST_F(HostRequestHandlerTest, HostIsMovedIntoGroupOfItsWorkspace)
 // host in a tree it does not belong to.
 TEST_F(HostRequestHandlerTest, GroupOfAnotherWorkspaceIsRejected)
 {
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
-    const qint64 foreign_group = addGroup(other_id, QStringLiteral("foreign"));
+    const qint64 foreign_group = addGroup(other_id, "foreign");
     ASSERT_GT(foreign_group, 0);
 
     const HostRequestHandler::Result result =

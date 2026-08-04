@@ -35,7 +35,7 @@ protected:
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
         gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace(QStringLiteral("alpha"), gk_);
+        workspace_id_ = addWorkspace("alpha", gk_);
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -159,7 +159,7 @@ TEST_F(ClientChannelHandlerTest, AdminSeesEveryHostInModeAll)
 // The unfiltered list ignores workspace membership, so only an administrator may ask for it.
 TEST_F(ClientChannelHandlerTest, NonAdminCannotUseModeAll)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
@@ -175,7 +175,7 @@ TEST_F(ClientChannelHandlerTest, NonAdminCannotUseModeAll)
 //--------------------------------------------------------------------------------------------------
 TEST_F(ClientChannelHandlerTest, FilteredListRequiresWorkspaceAccess)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
     ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
@@ -281,25 +281,25 @@ TEST_F(ClientChannelHandlerTest, UnknownHostListModeIsInvalidRequest)
 // workspace the user is not a member of must not surface through it.
 TEST_F(ClientChannelHandlerTest, SearchIsScopedToAccessibleWorkspaces)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
     ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "alpha-host"), kInvalidHostId);
     ASSERT_NE(addHostTo("hash-2", other_id, 0, "beta-host"), kInvalidHostId);
 
     // The admin is a member of both.
-    const proto::router::HostSearchResult admin_result = searchHosts(QStringLiteral("host"));
+    const proto::router::HostSearchResult admin_result = searchHosts("host");
     EXPECT_EQ(admin_result.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(admin_result.host_size(), 2);
 
     // A user without any membership sees nothing, and that is not an error.
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
 
-    const proto::router::HostSearchResult client_result = searchHosts(QStringLiteral("host"));
+    const proto::router::HostSearchResult client_result = searchHosts("host");
     EXPECT_EQ(client_result.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(client_result.host_size(), 0);
 }
@@ -311,7 +311,7 @@ TEST_F(ClientChannelHandlerTest, SearchMatchesDisplayNameAndHostId)
     const HostId host_id = addHostTo("hash-1", workspace_id_, 0, "Accounting");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const proto::router::HostSearchResult by_name = searchHosts(QStringLiteral("count"));
+    const proto::router::HostSearchResult by_name = searchHosts("count");
     ASSERT_EQ(by_name.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(by_name.host_size(), 1);
     EXPECT_EQ(by_name.host(0).host_id(), host_id);
@@ -327,7 +327,7 @@ TEST_F(ClientChannelHandlerTest, SearchMatchesDisplayNameAndHostId)
 // An administrator manages membership, so it gets every member's access entry.
 TEST_F(ClientChannelHandlerTest, AdminSeesFullMembership)
 {
-    RouterUser client = addUser(QStringLiteral("client"), proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
@@ -346,7 +346,7 @@ TEST_F(ClientChannelHandlerTest, AdminSeesFullMembership)
 // other members are not its business.
 TEST_F(ClientChannelHandlerTest, NonAdminSeesOnlyOwnAccessEntry)
 {
-    RouterUser client = addUser(QStringLiteral("client"), proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
@@ -369,7 +369,7 @@ TEST_F(ClientChannelHandlerTest, NonAdminSeesOnlyOwnAccessEntry)
 // nor when asked for by id.
 TEST_F(ClientChannelHandlerTest, InvisibleWorkspaceIsNotListed)
 {
-    RouterUser client = addUser(QStringLiteral("client"), proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
 
@@ -385,7 +385,7 @@ TEST_F(ClientChannelHandlerTest, InvisibleWorkspaceIsNotListed)
 //--------------------------------------------------------------------------------------------------
 TEST_F(ClientChannelHandlerTest, WorkspaceListNarrowsToRequestedId)
 {
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
     EXPECT_EQ(workspaceList(0).workspace_size(), 2);
@@ -398,7 +398,7 @@ TEST_F(ClientChannelHandlerTest, WorkspaceListNarrowsToRequestedId)
 //--------------------------------------------------------------------------------------------------
 TEST_F(ClientChannelHandlerTest, GroupListIsScopedToItsWorkspace)
 {
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
     qint64 group_id = -1;
@@ -418,7 +418,7 @@ TEST_F(ClientChannelHandlerTest, GroupListIsScopedToItsWorkspace)
 //--------------------------------------------------------------------------------------------------
 TEST_F(ClientChannelHandlerTest, GroupListRequiresWorkspaceAccess)
 {
-    RouterUser client = addUser(QStringLiteral("client"), proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
 
@@ -447,7 +447,7 @@ TEST_F(ClientChannelHandlerTest, ChangePasswordRotatesCredentialsAndRevokesToken
     qint64 token_id = 0;
     ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
-    const RouterUser rotated = makeUser(QStringLiteral("admin"), kAllSessions);
+    const RouterUser rotated = makeUser("admin", kAllSessions);
 
     proto::router::ChangePasswordRequest request;
     request.set_salt(toStdString(rotated.salt));
@@ -488,7 +488,7 @@ TEST_F(ClientChannelHandlerTest, ChangePasswordKeepsOtpEnrollment)
     const QByteArray secret = Random::byteArray(32);
     ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 100));
 
-    const RouterUser rotated = makeUser(QStringLiteral("admin"), kAllSessions);
+    const RouterUser rotated = makeUser("admin", kAllSessions);
 
     proto::router::ChangePasswordRequest request;
     request.set_salt(toStdString(rotated.salt));
@@ -518,7 +518,7 @@ TEST_F(ClientChannelHandlerTest, ChangePasswordWithoutKeysIsConflict)
     qint64 token_id = 0;
     ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
-    const RouterUser rotated = makeUser(QStringLiteral("admin"), kAllSessions);
+    const RouterUser rotated = makeUser("admin", kAllSessions);
 
     proto::router::ChangePasswordRequest request;
     request.set_salt(toStdString(rotated.salt));
@@ -556,13 +556,13 @@ TEST_F(ClientChannelHandlerTest, ChangePasswordRejectsInvalidCredentials)
 // gives a moment later.
 TEST_F(ClientChannelHandlerTest, ChangePasswordOfDeletedUserIsNotFound)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
-    const RouterUser rotated = makeUser(QStringLiteral("client"),
+    const RouterUser rotated = makeUser("client",
                                         proto::router::SESSION_TYPE_CLIENT);
 
     proto::router::ChangePasswordRequest request;

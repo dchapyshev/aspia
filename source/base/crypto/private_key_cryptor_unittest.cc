@@ -29,7 +29,7 @@ TEST(PrivateKeyCryptorTest, RoundTrip)
 {
     const SecureByteArray private_key(QByteArray::fromHex(
         "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
-    const SecureString password(QStringLiteral("hunter2"));
+    const SecureString password("hunter2");
     const QByteArray salt = PrivateKeyCryptor::generateSalt();
 
     QByteArray encrypted = PrivateKeyCryptor::encrypt(private_key, password, salt);
@@ -43,8 +43,8 @@ TEST(PrivateKeyCryptorTest, RoundTrip)
 TEST(PrivateKeyCryptorTest, WrongPassword)
 {
     const SecureByteArray private_key(QByteArray::fromHex("deadbeefcafebabe"));
-    const SecureString password(QStringLiteral("correct"));
-    const SecureString wrong_password(QStringLiteral("incorrect"));
+    const SecureString password("correct");
+    const SecureString wrong_password("incorrect");
     const QByteArray salt = PrivateKeyCryptor::generateSalt();
 
     QByteArray encrypted = PrivateKeyCryptor::encrypt(private_key, password, salt);
@@ -57,7 +57,7 @@ TEST(PrivateKeyCryptorTest, WrongPassword)
 TEST(PrivateKeyCryptorTest, WrongSalt)
 {
     const SecureByteArray private_key(QByteArray::fromHex("deadbeefcafebabe"));
-    const SecureString password(QStringLiteral("hunter2"));
+    const SecureString password("hunter2");
     const QByteArray salt1 = PrivateKeyCryptor::generateSalt();
     const QByteArray salt2 = PrivateKeyCryptor::generateSalt();
     ASSERT_NE(salt1, salt2);
@@ -72,7 +72,7 @@ TEST(PrivateKeyCryptorTest, WrongSalt)
 TEST(PrivateKeyCryptorTest, InvalidSaltSize)
 {
     const SecureByteArray private_key(QByteArray::fromHex("deadbeef"));
-    const SecureString password(QStringLiteral("hunter2"));
+    const SecureString password("hunter2");
     const QByteArray short_salt(PrivateKeyCryptor::kSaltSize - 1, 0);
 
     QByteArray encrypted = PrivateKeyCryptor::encrypt(private_key, password, short_salt);
@@ -85,7 +85,7 @@ TEST(PrivateKeyCryptorTest, InvalidSaltSize)
 
 TEST(PrivateKeyCryptorTest, EmptyInputs)
 {
-    const SecureString password(QStringLiteral("hunter2"));
+    const SecureString password("hunter2");
     const QByteArray salt = PrivateKeyCryptor::generateSalt();
 
     ASSERT_TRUE(PrivateKeyCryptor::encrypt(SecureByteArray(), password, salt).isEmpty());
@@ -106,7 +106,7 @@ TEST(PrivateKeyCryptorTest, GeneratedSaltSize)
 TEST(PrivateKeyCryptorTest, NonDeterministic)
 {
     const SecureByteArray private_key(QByteArray::fromHex("deadbeefcafebabe"));
-    const SecureString password(QStringLiteral("hunter2"));
+    const SecureString password("hunter2");
     const QByteArray salt = PrivateKeyCryptor::generateSalt();
 
     QByteArray encrypted1 = PrivateKeyCryptor::encrypt(private_key, password, salt);

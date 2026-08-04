@@ -242,7 +242,7 @@ TEST_F(RouterStateTest, UnopenableWorkspaceKeyIsSkipped)
     proto::router::UserKeys::WorkspaceKey* foreign = keys.add_workspace_key();
     foreign->set_workspace_id(20);
     foreign->set_wrapped_gk(SealedBox::seal(groupKey(20),
-        RouterUser::create(QStringLiteral("other"), SecureString(kPassword)).public_key)
+        RouterUser::create("other", SecureString(kPassword)).public_key)
             .toStdString());
 
     ASSERT_EQ(state_.applyUserKeys(keys, SecureString(kPassword)), RouterState::KeysResult::OK);
@@ -259,11 +259,11 @@ TEST_F(RouterStateTest, WorkspaceListDecryptsCommentAndAddsKey)
     loadKeys({});
 
     const RouterWorkspaceList decoded =
-        state_.applyWorkspaceList(workspaceList({10}, QStringLiteral("secret")), 0);
+        state_.applyWorkspaceList(workspaceList({10}, "secret"), 0);
 
     ASSERT_EQ(decoded.error_code, QString::fromStdString(proto::router::kErrorOk));
     ASSERT_EQ(decoded.workspaces.size(), 1);
-    EXPECT_EQ(decoded.workspaces.at(0).comment, QStringLiteral("secret"));
+    EXPECT_EQ(decoded.workspaces.at(0).comment, "secret");
     EXPECT_TRUE(state_.hasWorkspaceKey(10));
 }
 
@@ -334,16 +334,16 @@ TEST_F(RouterStateTest, HostFieldsAreDecryptedWithTheWorkspaceKey)
     loadKeys({10});
 
     proto::router::HostList list = hostList(10, {HostId(1)}, 1);
-    list.mutable_host(0)->set_comment(encrypt(10, QStringLiteral("comment")));
-    list.mutable_host(0)->set_user_name(encrypt(10, QStringLiteral("user")));
-    list.mutable_host(0)->set_password(encrypt(10, QStringLiteral("password")));
+    list.mutable_host(0)->set_comment(encrypt(10, "comment"));
+    list.mutable_host(0)->set_user_name(encrypt(10, "user"));
+    list.mutable_host(0)->set_password(encrypt(10, "password"));
 
     const RouterHostList decoded = state_.applyHostList(list, RouterState::HostCacheKey(), false);
 
     ASSERT_EQ(decoded.hosts.size(), 1);
-    EXPECT_EQ(decoded.hosts.at(0).comment, QStringLiteral("comment"));
-    EXPECT_EQ(decoded.hosts.at(0).user_name, QStringLiteral("user"));
-    EXPECT_EQ(decoded.hosts.at(0).password.toString(), QStringLiteral("password"));
+    EXPECT_EQ(decoded.hosts.at(0).comment, "comment");
+    EXPECT_EQ(decoded.hosts.at(0).user_name, "user");
+    EXPECT_EQ(decoded.hosts.at(0).password.toString(), "password");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -354,12 +354,12 @@ TEST_F(RouterStateTest, HostOfUnknownWorkspaceKeepsPlainFieldsOnly)
     loadKeys({10});
 
     proto::router::HostList list = hostList(20, {HostId(1)}, 1);
-    list.mutable_host(0)->set_comment(encrypt(20, QStringLiteral("comment")));
+    list.mutable_host(0)->set_comment(encrypt(20, "comment"));
 
     const RouterHostList decoded = state_.applyHostList(list, RouterState::HostCacheKey(), false);
 
     ASSERT_EQ(decoded.hosts.size(), 1);
-    EXPECT_EQ(decoded.hosts.at(0).display_name, QStringLiteral("host"));
+    EXPECT_EQ(decoded.hosts.at(0).display_name, "host");
     EXPECT_TRUE(decoded.hosts.at(0).comment.isEmpty());
 }
 
@@ -423,12 +423,12 @@ TEST_F(RouterStateTest, GroupListIsDecryptedAndCached)
     proto::router::Group* group = list.add_group();
     group->set_entry_id(5);
     group->set_name("servers");
-    group->set_comment(encrypt(10, QStringLiteral("group comment")));
+    group->set_comment(encrypt(10, "group comment"));
 
     const RouterGroupList decoded = state_.applyGroupList(list);
 
     ASSERT_EQ(decoded.groups.size(), 1);
-    EXPECT_EQ(decoded.groups.at(0).comment, QStringLiteral("group comment"));
+    EXPECT_EQ(decoded.groups.at(0).comment, "group comment");
     EXPECT_EQ(decoded.groups.at(0).workspace_id, 10);
 
     const RouterGroupList* cached = state_.cachedGroupList(10);
@@ -579,12 +579,12 @@ TEST_F(RouterStateTest, WorkspaceSaveSealsForNewMembersOnly)
 {
     loadKeys({10});
 
-    const RouterUser other = RouterUser::create(QStringLiteral("other"), SecureString(kPassword));
+    const RouterUser other = RouterUser::create("other", SecureString(kPassword));
 
     RouterWorkspace workspace;
     workspace.entry_id = 10;
-    workspace.name = QStringLiteral("alpha");
-    workspace.comment = QStringLiteral("comment");
+    workspace.name = "alpha";
+    workspace.comment = "comment";
     workspace.revision = 3;
     workspace.access.append({ kUserId, QByteArray() });          // Already a member.
     workspace.access.append({ 2, other.public_key });            // Newly granted.
@@ -624,7 +624,7 @@ TEST_F(RouterStateTest, WorkspaceSaveWithoutItsKeyIsRefused)
 
     RouterWorkspace workspace;
     workspace.entry_id = 20;
-    workspace.name = QStringLiteral("beta");
+    workspace.name = "beta";
 
     proto::router::Workspace out;
     EXPECT_FALSE(state_.buildWorkspace(workspace, &out));
@@ -638,8 +638,8 @@ TEST_F(RouterStateTest, NewWorkspaceGetsAFreshKeyThatIsNotKept)
     loadKeys({});
 
     RouterWorkspace workspace;
-    workspace.name = QStringLiteral("alpha");
-    workspace.comment = QStringLiteral("comment");
+    workspace.name = "alpha";
+    workspace.comment = "comment";
 
     proto::router::Workspace first;
     ASSERT_TRUE(state_.buildWorkspace(workspace, &first));
@@ -660,7 +660,7 @@ TEST_F(RouterStateTest, HostAndGroupSavesRequireTheWorkspaceKey)
     RouterHost host;
     host.host_id = HostId(1);
     host.workspace_id = 20;
-    host.comment = QStringLiteral("comment");
+    host.comment = "comment";
 
     proto::router::Host host_out;
     EXPECT_FALSE(state_.buildHost(host, &host_out));
@@ -670,8 +670,8 @@ TEST_F(RouterStateTest, HostAndGroupSavesRequireTheWorkspaceKey)
     EXPECT_FALSE(host_out.comment().empty());
 
     RouterGroup group;
-    group.name = QStringLiteral("servers");
-    group.comment = QStringLiteral("comment");
+    group.name = "servers";
+    group.comment = "comment";
 
     proto::router::Group group_out;
     EXPECT_FALSE(state_.buildGroup(20, group, &group_out));
@@ -685,7 +685,7 @@ TEST_F(RouterStateTest, ResealCoversEveryHeldWorkspace)
 {
     loadKeys({10, 20});
 
-    const RouterUser other = RouterUser::create(QStringLiteral("other"), SecureString(kPassword));
+    const RouterUser other = RouterUser::create("other", SecureString(kPassword));
 
     proto::router::User user;
     state_.resealGroupKeys(other.public_key, &user);

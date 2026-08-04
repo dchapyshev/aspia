@@ -198,7 +198,7 @@ protected:
     }
 
     // Starts the server on the loopback interface. Returns the port it listens on, or zero.
-    quint16 startServer(const QString& iface = QStringLiteral("127.0.0.1"))
+    quint16 startServer(const QString& iface = "127.0.0.1")
     {
         quint16 port = 0;
 
@@ -286,7 +286,7 @@ protected:
                 client_error_.signal();
             });
 
-            client_channel_->connectTo(QStringLiteral("127.0.0.1"), port, Seconds(10));
+            client_channel_->connectTo("127.0.0.1", port, Seconds(10));
         });
     }
 
@@ -540,7 +540,7 @@ TEST_F(TcpChannelTest, WrongPasswordIsRefused)
     const quint16 port = startServer();
     ASSERT_NE(port, 0);
 
-    connectClient(port, QLatin1String(kUserName), QStringLiteral("WrongPassword!"),
+    connectClient(port, QLatin1String(kUserName), "WrongPassword!",
                   kAllowedSessionType);
 
     ASSERT_TRUE(client_error_.wait(1, kWaitTimeout));
@@ -556,7 +556,7 @@ TEST_F(TcpChannelTest, UnknownUserIsRefusedLikeAWrongPassword)
     const quint16 port = startServer();
     ASSERT_NE(port, 0);
 
-    connectClient(port, QStringLiteral("nobody"), QLatin1String(kPassword), kAllowedSessionType);
+    connectClient(port, "nobody", QLatin1String(kPassword), kAllowedSessionType);
 
     ASSERT_TRUE(client_error_.wait(1, kWaitTimeout));
     EXPECT_EQ(client_error_code_, TcpChannel::ErrorCode::ACCESS_DENIED);

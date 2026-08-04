@@ -94,7 +94,7 @@ TEST_F(HostLifecycleTest, PermanentIdsNeverEnterTheTemporaryRange)
     ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
 
     // The next AUTOINCREMENT value would be the first temporary id.
-    ASSERT_TRUE(execRaw(QStringLiteral("UPDATE sqlite_sequence SET seq=%1 WHERE name='hosts'")
+    ASSERT_TRUE(execRaw(QString("UPDATE sqlite_sequence SET seq=%1 WHERE name='hosts'")
                             .arg(kMinTempHostId - 1)));
 
     EXPECT_FALSE(db_.addHost("key-2", "hwid-2"));
@@ -111,7 +111,7 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
     ASSERT_NE(host_id, kInvalidHostId);
 
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
-                                   QStringLiteral("3.0.0"), "Windows", "192.168.1.10"));
+                                   "3.0.0", "Windows", "192.168.1.10"));
 
     proto::router::Host stored = findHost(host_id);
     EXPECT_EQ(stored.display_name(), "COMPUTER");
@@ -124,7 +124,7 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
                                std::string_view()));
 
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
-                                   QStringLiteral("3.0.1"), "Windows", "192.168.1.11"));
+                                   "3.0.1", "Windows", "192.168.1.11"));
 
     stored = findHost(host_id);
     EXPECT_EQ(stored.display_name(), "Accounting");
@@ -138,9 +138,9 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
 TEST_F(HostLifecycleTest, TelemetryOfAMissingHostFails)
 {
     EXPECT_FALSE(db_.updateHostInfo(HostId(12345), "hwid", "COMPUTER", "x86_64",
-                                    QStringLiteral("3.0.0"), "Windows", "127.0.0.1"));
+                                    "3.0.0", "Windows", "127.0.0.1"));
     EXPECT_FALSE(db_.updateHostInfo(kInvalidHostId, "hwid", "COMPUTER", "x86_64",
-                                    QStringLiteral("3.0.0"), "Windows", "127.0.0.1"));
+                                    "3.0.0", "Windows", "127.0.0.1"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ TEST_F(HostLifecycleTest, RemovedHostMakesAWorkspaceSaveConflict)
     ASSERT_NE(host_id, kInvalidHostId);
 
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
@@ -248,10 +248,10 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
-                                   QStringLiteral("3.0.0"), "Windows", "192.168.1.10"));
+                                   "3.0.0", "Windows", "192.168.1.10"));
 
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
     ASSERT_GT(workspace_id, 0);
     ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", "comment", "user", "password"));
 

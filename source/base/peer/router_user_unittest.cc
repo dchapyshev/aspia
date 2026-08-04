@@ -98,7 +98,7 @@ TEST(router_user_test, is_valid_requires_all_fields)
 
 TEST(router_user_test, wrap_private_key_decryptable_with_password)
 {
-    const SecureString password(QStringLiteral("Str0ngPass"));
+    const SecureString password("Str0ngPass");
     RouterUser user = RouterUser::create("alice", password);
     ASSERT_TRUE(user.isValid());
 

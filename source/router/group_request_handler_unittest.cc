@@ -31,7 +31,7 @@ protected:
         RouterTestBase::SetUp();
 
         gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace(QStringLiteral("alpha"), gk_);
+        workspace_id_ = addWorkspace("alpha", gk_);
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -89,7 +89,7 @@ TEST_F(GroupRequestHandlerTest, AddCreatesGroupAndNotifies)
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_GT(result.entry_id, 0);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_GROUPS));
-    EXPECT_EQ(groupName(workspace_id_, result.entry_id), QStringLiteral("servers"));
+    EXPECT_EQ(groupName(workspace_id_, result.entry_id), "servers");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ TEST_F(GroupRequestHandlerTest, AddCreatesGroupAndNotifies)
 // a non-member has nothing to encrypt with and no business editing the tree.
 TEST_F(GroupRequestHandlerTest, NonMemberIsDenied)
 {
-    const RouterUser client = addUser(QStringLiteral("client"),
+    const RouterUser client = addUser("client",
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
@@ -158,10 +158,10 @@ TEST_F(GroupRequestHandlerTest, AddRejectsEmptyName)
 // a tree encrypted with a different group key.
 TEST_F(GroupRequestHandlerTest, AddRejectsParentFromAnotherWorkspace)
 {
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
-    const qint64 foreign_group = addGroup(other_id, 0, QStringLiteral("foreign"));
+    const qint64 foreign_group = addGroup(other_id, 0, "foreign");
     ASSERT_GT(foreign_group, 0);
 
     proto::router::GroupRequest request =
@@ -178,7 +178,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsParentFromAnotherWorkspace)
 //--------------------------------------------------------------------------------------------------
 TEST_F(GroupRequestHandlerTest, ModifyRenamesAndNotifies)
 {
-    const qint64 group_id = addGroup(workspace_id_, 0, QStringLiteral("servers"));
+    const qint64 group_id = addGroup(workspace_id_, 0, "servers");
     ASSERT_GT(group_id, 0);
 
     proto::router::GroupRequest request =
@@ -190,16 +190,16 @@ TEST_F(GroupRequestHandlerTest, ModifyRenamesAndNotifies)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_GROUPS));
-    EXPECT_EQ(groupName(workspace_id_, group_id), QStringLiteral("workstations"));
+    EXPECT_EQ(groupName(workspace_id_, group_id), "workstations");
 }
 
 //--------------------------------------------------------------------------------------------------
 // Moving a group under its own descendant would cut the subtree off the tree entirely.
 TEST_F(GroupRequestHandlerTest, ModifyRejectsCycle)
 {
-    const qint64 parent_id = addGroup(workspace_id_, 0, QStringLiteral("parent"));
+    const qint64 parent_id = addGroup(workspace_id_, 0, "parent");
     ASSERT_GT(parent_id, 0);
-    const qint64 child_id = addGroup(workspace_id_, parent_id, QStringLiteral("child"));
+    const qint64 child_id = addGroup(workspace_id_, parent_id, "child");
     ASSERT_GT(child_id, 0);
 
     proto::router::GroupRequest request =
@@ -219,10 +219,10 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsCycle)
 // there, even for an administrator that has access to both.
 TEST_F(GroupRequestHandlerTest, ModifyOfForeignGroupIsNotFound)
 {
-    const qint64 other_id = addWorkspace(QStringLiteral("beta"), gk_);
+    const qint64 other_id = addWorkspace("beta", gk_);
     ASSERT_GT(other_id, 0);
 
-    const qint64 foreign_group = addGroup(other_id, 0, QStringLiteral("foreign"));
+    const qint64 foreign_group = addGroup(other_id, 0, "foreign");
     ASSERT_GT(foreign_group, 0);
 
     proto::router::GroupRequest request =
@@ -233,7 +233,7 @@ TEST_F(GroupRequestHandlerTest, ModifyOfForeignGroupIsNotFound)
     const GroupRequestHandler::Result result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
-    EXPECT_EQ(groupName(other_id, foreign_group), QStringLiteral("foreign"));
+    EXPECT_EQ(groupName(other_id, foreign_group), "foreign");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,9 +244,9 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const qint64 parent_id = addGroup(workspace_id_, 0, QStringLiteral("parent"));
+    const qint64 parent_id = addGroup(workspace_id_, 0, "parent");
     ASSERT_GT(parent_id, 0);
-    const qint64 child_id = addGroup(workspace_id_, parent_id, QStringLiteral("child"));
+    const qint64 child_id = addGroup(workspace_id_, parent_id, "child");
     ASSERT_GT(child_id, 0);
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),

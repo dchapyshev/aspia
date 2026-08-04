@@ -44,7 +44,7 @@ constexpr quint32 kAllSessions = proto::router::SESSION_TYPE_ADMIN |
 //--------------------------------------------------------------------------------------------------
 RouterUser makeUser(const QString& name, quint32 sessions)
 {
-    RouterUser user = RouterUser::create(name, SecureString(QStringLiteral("Password1234!")));
+    RouterUser user = RouterUser::create(name, SecureString("Password1234!"));
     user.sessions = sessions;
     user.flags = User::ENABLED;
     return user;
@@ -68,9 +68,9 @@ protected:
         ASSERT_TRUE(temp_dir_.isValid());
         ASSERT_TRUE(db_.open(temp_dir_.path() + "/router.db3"));
 
-        ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("admin"), kAllSessions)),
+        ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
                   proto::router::kErrorOk);
-        admin_ = db_.findUser(QStringLiteral("admin"));
+        admin_ = db_.findUser("admin");
         ASSERT_EQ(admin_.entry_id, 1);
 
         caller_.user_id = admin_.entry_id;
@@ -148,12 +148,12 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
 {
     const UserRequestHandler::Result result = handle(makeRequest(
         proto::router::kCommandUserAdd,
-        makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)));
+        makeUser("bob", proto::router::SESSION_TYPE_CLIENT)));
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
     EXPECT_EQ(result.stop_user_id, 0);
-    EXPECT_TRUE(db_.findUser(QStringLiteral("bob")).isValid());
+    EXPECT_TRUE(db_.findUser("bob").isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,10 +162,10 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
 TEST_F(UserRequestHandlerTest, AddAdminGrantsWorkspacesAndNotifies)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace(QStringLiteral("alpha"), gk);
+    const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
-    const RouterUser new_admin = makeUser(QStringLiteral("admin2"), kAllSessions);
+    const RouterUser new_admin = makeUser("admin2", kAllSessions);
     proto::router::UserRequest request = makeRequest(proto::router::kCommandUserAdd, new_admin);
 
     proto::router::User::WorkspaceKey* key = request.mutable_user()->add_workspace_key();
@@ -179,7 +179,7 @@ TEST_F(UserRequestHandlerTest, AddAdminGrantsWorkspacesAndNotifies)
               quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
 
     std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(db_.findUser(QStringLiteral("admin2")).entry_id,
+    ASSERT_TRUE(db_.workspaceAccessIdsForUser(db_.findUser("admin2").entry_id,
                                               &workspace_ids));
     EXPECT_TRUE(workspace_ids.contains(workspace_id));
 }
@@ -188,8 +188,8 @@ TEST_F(UserRequestHandlerTest, AddAdminGrantsWorkspacesAndNotifies)
 // A name the authenticator would never accept is refused before it reaches the database.
 TEST_F(UserRequestHandlerTest, AddUserRejectsInvalidName)
 {
-    RouterUser user = makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT);
-    user.name = QStringLiteral("   ");
+    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    user.name = "   ";
 
     const UserRequestHandler::Result result =
         handle(makeRequest(proto::router::kCommandUserAdd, user));
@@ -203,9 +203,9 @@ TEST_F(UserRequestHandlerTest, AddUserRejectsInvalidName)
 // refuses its next login, but a session that is already running would otherwise keep working.
 TEST_F(UserRequestHandlerTest, DisablingUserStopsItsSessions)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     RouterUser request_user;
     request_user.entry_id = user_id;
@@ -225,9 +225,9 @@ TEST_F(UserRequestHandlerTest, DisablingUserStopsItsSessions)
 // A change that revokes nothing must not tear the user's sessions down.
 TEST_F(UserRequestHandlerTest, EnabledModifyKeepsSessions)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const RouterUser stored = db_.findUser(QStringLiteral("bob"));
+    const RouterUser stored = db_.findUser("bob");
 
     RouterUser request_user;
     request_user.entry_id = stored.entry_id;
@@ -247,11 +247,11 @@ TEST_F(UserRequestHandlerTest, EnabledModifyKeepsSessions)
 // A password rotation invalidates every credential the live sessions authenticated with.
 TEST_F(UserRequestHandlerTest, PasswordRotationStopsSessions)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
-    RouterUser rotated = makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT);
+    RouterUser rotated = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
     rotated.entry_id = user_id;
 
     const UserRequestHandler::Result result =
@@ -266,9 +266,9 @@ TEST_F(UserRequestHandlerTest, PasswordRotationStopsSessions)
 TEST_F(UserRequestHandlerTest, RejectedRotationKeepsSessions)
 {
     const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace(QStringLiteral("alpha"), gk), 0);
+    ASSERT_GT(addWorkspace("alpha", gk), 0);
 
-    RouterUser rotated = makeUser(QStringLiteral("admin"), kAllSessions);
+    RouterUser rotated = makeUser("admin", kAllSessions);
     rotated.entry_id = admin_.entry_id;
 
     // No re-sealed key for the workspace: the whole change is refused.
@@ -299,9 +299,9 @@ TEST_F(UserRequestHandlerTest, ModifyUserRejectsInvalidId)
 // The deleted account keeps no sessions, and its access entries went with it - both lists are stale.
 TEST_F(UserRequestHandlerTest, DeleteUserStopsSessionsAndNotifies)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     const UserRequestHandler::Result result =
         handle(makeIdRequest(proto::router::kCommandUserDelete, user_id));
@@ -331,9 +331,9 @@ TEST_F(UserRequestHandlerTest, FailedDeleteHasNoSideEffects)
 // the old secret die with it and the sessions holding them are dropped.
 TEST_F(UserRequestHandlerTest, ResetOtpRevokesTokensAndStopsSessions)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     ASSERT_TRUE(db_.setUserOtp(user_id, Random::byteArray(32), 100));
     ASSERT_GT(issueToken(user_id), 0);
@@ -374,9 +374,9 @@ TEST_F(UserRequestHandlerTest, ResetOtpOfUnknownUserIsNotFound)
 // An empty token list means "every token of this user", and every session of the user goes with it.
 TEST_F(UserRequestHandlerTest, RevokeAllTokensStopsEverySession)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     ASSERT_GT(issueToken(user_id), 0);
     ASSERT_GT(issueToken(user_id), 0);
@@ -395,9 +395,9 @@ TEST_F(UserRequestHandlerTest, RevokeAllTokensStopsEverySession)
 // Named tokens: only the sessions holding them are stopped, the rest of the user's sessions stay.
 TEST_F(UserRequestHandlerTest, RevokeSelectedTokensStopsOnlyThem)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     const qint64 first_token = issueToken(user_id);
     const qint64 second_token = issueToken(user_id);
@@ -421,9 +421,9 @@ TEST_F(UserRequestHandlerTest, RevokeSelectedTokensStopsOnlyThem)
 // stopped for a change that did not happen.
 TEST_F(UserRequestHandlerTest, RevokeUnknownTokenIsAtomic)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
 
     const qint64 token_id = issueToken(user_id);
     ASSERT_GT(token_id, 0);
@@ -445,13 +445,13 @@ TEST_F(UserRequestHandlerTest, RevokeUnknownTokenIsAtomic)
 // A token of another user must not be revoked through the id of this one.
 TEST_F(UserRequestHandlerTest, RevokeForeignTokenIsRejected)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("alice"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("alice", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
 
-    const qint64 bob_id = db_.findUser(QStringLiteral("bob")).entry_id;
-    const qint64 alice_id = db_.findUser(QStringLiteral("alice")).entry_id;
+    const qint64 bob_id = db_.findUser("bob").entry_id;
+    const qint64 alice_id = db_.findUser("alice").entry_id;
 
     const qint64 alice_token = issueToken(alice_id);
     ASSERT_GT(alice_token, 0);
@@ -470,9 +470,9 @@ TEST_F(UserRequestHandlerTest, RevokeForeignTokenIsRejected)
 //--------------------------------------------------------------------------------------------------
 TEST_F(UserRequestHandlerTest, RevokeTokensRejectsInvalidTokenId)
 {
-    ASSERT_EQ(db_.addUser(makeUser(QStringLiteral("bob"), proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
               proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser(QStringLiteral("bob")).entry_id;
+    const qint64 user_id = db_.findUser("bob").entry_id;
     ASSERT_GT(issueToken(user_id), 0);
 
     proto::router::UserRequest request =

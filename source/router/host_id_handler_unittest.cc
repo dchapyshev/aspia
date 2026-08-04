@@ -30,7 +30,7 @@ protected:
 
         peer_.computer_name = "COMPUTER";
         peer_.architecture = "x86_64";
-        peer_.version = QStringLiteral("3.0.0");
+        peer_.version = "3.0.0";
         peer_.os_name = "Windows 11";
         peer_.address = "192.168.1.10";
     }
