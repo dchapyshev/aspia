@@ -49,6 +49,9 @@ list(APPEND SOURCE_CLIENT_CORE
     master_password.h
     router.cc
     router.h
+    router_state.cc
+    router_state.h
+    router_types.h
     session_keeper.cc
     session_keeper.h
     session_state.cc
@@ -63,6 +66,7 @@ list(APPEND SOURCE_CLIENT
 
 list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/edit_model_unittest.cc
+    router_state_unittest.cc
     tests_main.cc)
 
 if (WIN32)
