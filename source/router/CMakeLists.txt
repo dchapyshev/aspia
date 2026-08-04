@@ -68,10 +68,13 @@ list(APPEND SOURCE_ROUTER
 
 list(APPEND SOURCE_ROUTER_TESTS
     client_channel_handler_unittest.cc
+    client_worker_unittest.cc
     database_unittest.cc
     group_request_handler_unittest.cc
+    host_lifecycle_unittest.cc
     host_request_handler_unittest.cc
     router_test_base.h
+    shared_state_unittest.cc
     tests_main.cc
     two_factor_handler_unittest.cc
     user_request_handler_unittest.cc

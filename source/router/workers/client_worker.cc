@@ -394,14 +394,23 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
     {
         const qint64 entry_id = request.entry_id();
 
-        if (entry_id == -1)
-        {
-            QList<qint64> client_ids;
-            for (const auto& client : std::as_const(clients_))
-                client_ids.append(client->sessionId());
+        QList<qint64> session_ids;
+        session_ids.reserve(clients_.size());
+        for (const auto& client : std::as_const(clients_))
+            session_ids.append(client->sessionId());
 
+        const QList<qint64> targets =
+            sessionsToStop(session_ids, entry_id, session->sessionId());
+
+        if (targets.isEmpty() && entry_id != -1)
+        {
+            LOG(ERROR) << "Session not found:" << entry_id;
+            client_result->set_error_code(proto::router::kErrorInvalidEntryId);
+        }
+        else
+        {
             bool all_ok = true;
-            for (qint64 id : std::as_const(client_ids))
+            for (qint64 id : std::as_const(targets))
             {
                 if (!stopClient(id))
                 {
@@ -410,25 +419,24 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
                 }
             }
 
-            if (all_ok)
-            {
-                LOG(INFO) << "All client sessions disconnected by" << session->userName();
-                client_result->set_error_code(proto::router::kErrorOk);
-            }
-            else
+            if (!all_ok)
             {
                 client_result->set_error_code(proto::router::kErrorInternalError);
             }
-        }
-        else if (!stopClient(entry_id))
-        {
-            LOG(ERROR) << "Session not found:" << entry_id;
-            client_result->set_error_code(proto::router::kErrorInvalidEntryId);
-        }
-        else
-        {
-            LOG(INFO) << "Client session" << entry_id << "disconnected by" << session->userName();
-            client_result->set_error_code(proto::router::kErrorOk);
+            else
+            {
+                if (entry_id == -1)
+                {
+                    LOG(INFO) << "All client sessions disconnected by" << session->userName();
+                }
+                else
+                {
+                    LOG(INFO) << "Client session" << entry_id << "disconnected by"
+                              << session->userName();
+                }
+
+                client_result->set_error_code(proto::router::kErrorOk);
+            }
         }
     }
     else
@@ -438,6 +446,32 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
     }
 
     session->sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QList<qint64> ClientWorker::sessionsToStop(const QList<qint64>& session_ids, qint64 entry_id,
+                                           qint64 requesting_session_id)
+{
+    QList<qint64> targets;
+
+    if (entry_id == -1)
+    {
+        targets.reserve(session_ids.size());
+
+        for (qint64 session_id : session_ids)
+        {
+            if (session_id != requesting_session_id)
+                targets.append(session_id);
+        }
+
+        return targets;
+    }
+
+    if (session_ids.contains(entry_id))
+        targets.append(entry_id);
+
+    return targets;
 }
 
 //--------------------------------------------------------------------------------------------------

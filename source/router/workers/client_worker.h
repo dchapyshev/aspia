@@ -51,6 +51,16 @@ public:
         NOTIFY_GROUPS     = 1u << 6,
     };
 
+    // The sessions a "disconnect" command of the admin channel targets, taken from the ids of the
+    // live ones. |entry_id| == -1 means every session except the one that sent the command: an
+    // administrator that disconnects everybody must not have to reconnect and pass the two-factor
+    // stage again (the same rule the user commands follow). Any other value means that one
+    // session - including the requesting one, which the administrator can pick explicitly in the
+    // list. An id that is not there yields an empty result, which the caller reports as an
+    // invalid entry id.
+    static QList<qint64> sessionsToStop(const QList<qint64>& session_ids, qint64 entry_id,
+                                        qint64 requesting_session_id);
+
 protected:
     // Worker implementation.
     void onStart() final;
