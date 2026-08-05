@@ -425,6 +425,63 @@ TEST_F(TwoFactorHandlerTest, UnknownTokenIsRejected)
 }
 
 //--------------------------------------------------------------------------------------------------
+// After a rejection the client is told to go to the code prompt, so a second token on the same
+// session is not part of the flow. Answering it would leave an authenticated peer free to spin the
+// lookup, which takes a write lock of the database, as fast as the network allows.
+TEST_F(TwoFactorHandlerTest, SecondTokenOnTheSameSessionClosesIt)
+{
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result first = submitToken(handler, std::string(32, 'x'));
+    ASSERT_EQ(first.action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_TRUE(first.challenge.token_rejected);
+
+    EXPECT_EQ(submitToken(handler, std::string(32, 'y')).action,
+              TwoFactorHandler::Action::CLOSE);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The stage re-opens when the session rotates its own password, which issues the client a new
+// token. That token gets its own attempt.
+TEST_F(TwoFactorHandlerTest, ReopenedStageAllowsATokenAgain)
+{
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitToken(handler, std::string(32, 'x')).action,
+              TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result again = submitToken(handler, std::string(32, 'y'));
+
+    EXPECT_EQ(again.action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_TRUE(again.challenge.token_rejected);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The code prompt is what the client was sent to, so it still works after the token was refused.
+TEST_F(TwoFactorHandlerTest, CodeIsAcceptedAfterATokenWasRejected)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitToken(handler, std::string(32, 'x')).action,
+              TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    const TwoFactorHandler::Result accepted =
+        submitCode(handler, Totp::code(secret, kNow), kNow);
+
+    EXPECT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The token lives on a sliding window: one that has not been used within its lifetime is not a
 // credential any more, and the row goes with it instead of lingering in the table.
 TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)

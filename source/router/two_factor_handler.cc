@@ -44,6 +44,10 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
     user_otp_secret_ = user.otp_secret;
     user_otp_counter_ = user.otp_counter;
 
+    // A re-opened stage is a fresh one, and the token the client holds is not the one it presented
+    // before: the password change that re-opens the stage issues a new one.
+    token_rejected_ = false;
+
     result.action = Action::SEND_CHALLENGE;
 
     if (user_otp_secret_.isEmpty())
@@ -79,6 +83,16 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
     if (!enroll && !response.token().empty())
     {
+        // One token per session. The client was already told to drop it and ask the user for a
+        // code, so a second one is not the flow going wrong but a peer spinning a lookup that
+        // takes a write lock of the database.
+        if (token_rejected_)
+        {
+            LOG(INFO) << "Repeated device token from user" << caller.name << ". Closing connection";
+            result.action = Action::CLOSE;
+            return result;
+        }
+
         // Token path: the client presented a previously issued bearer token. Validate by lookup
         // and check that its owner is the user that just passed SRP.
         const std::string_view token = response.token();
@@ -93,6 +107,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
             // tearing the connection down we re-open the stage and ask for a code.
             LOG(INFO) << "Device token rejected for user" << caller.name << "- asking for TOTP";
 
+            token_rejected_ = true;
             result.action = Action::SEND_CHALLENGE;
             result.challenge.mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
             result.challenge.token_rejected = true;

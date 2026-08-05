@@ -84,6 +84,9 @@ private:
     // an administrator can reset the secret or delete the user while the prompt is open.
     QByteArray user_otp_secret_;
     quint64 user_otp_counter_ = 0;
+
+    // The client already presented a token and was told to go to the code prompt instead.
+    bool token_rejected_ = false;
 };
 
 #endif // ROUTER_TWO_FACTOR_HANDLER_H
