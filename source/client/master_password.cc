@@ -63,11 +63,11 @@ std::optional<QByteArray> decryptField(DataCryptor& cryptor, const QByteArray& b
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptField(DataCryptor& cryptor, const QByteArray& plain)
+std::optional<QByteArray> encryptField(DataCryptor& cryptor, const QByteArray& plain)
 {
     if (plain.isEmpty())
         return QByteArray();
-    return cryptor.encrypt(plain).value_or(QByteArray());
+    return cryptor.encrypt(plain);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,16 +154,32 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     QList<HostConfig> new_hosts;
     new_hosts.reserve(hosts.size());
 
+    // A field that fails to encrypt would otherwise be stored empty, and the plaintext it held is
+    // gone with the old key. Nothing has been written yet, so the old key goes back and the change
+    // is refused.
     for (int i = 0; i < hosts.size(); ++i)
     {
         HostConfig host = hosts[i];
         const HostFields& fields = host_fields[i];
 
-        host.setEncryptedName(encryptField(cryptor, fields.name));
-        host.setEncryptedComment(encryptField(cryptor, fields.comment));
-        host.setEncryptedAddress(encryptField(cryptor, fields.address));
-        host.setEncryptedUsername(encryptField(cryptor, fields.username));
-        host.setEncryptedPassword(encryptField(cryptor, fields.password));
+        std::optional<QByteArray> name = encryptField(cryptor, fields.name);
+        std::optional<QByteArray> comment = encryptField(cryptor, fields.comment);
+        std::optional<QByteArray> address = encryptField(cryptor, fields.address);
+        std::optional<QByteArray> username = encryptField(cryptor, fields.username);
+        std::optional<QByteArray> password = encryptField(cryptor, fields.password);
+
+        if (!name || !comment || !address || !username || !password)
+        {
+            LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
+            cryptor.setKey(old_key);
+            return false;
+        }
+
+        host.setEncryptedName(*name);
+        host.setEncryptedComment(*comment);
+        host.setEncryptedAddress(*address);
+        host.setEncryptedUsername(*username);
+        host.setEncryptedPassword(*password);
 
         new_hosts.append(host);
     }
@@ -176,8 +192,18 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         GroupConfig group = groups[i];
         const GroupFields& fields = group_fields[i];
 
-        group.setEncryptedName(encryptField(cryptor, fields.name));
-        group.setEncryptedComment(encryptField(cryptor, fields.comment));
+        std::optional<QByteArray> name = encryptField(cryptor, fields.name);
+        std::optional<QByteArray> comment = encryptField(cryptor, fields.comment);
+
+        if (!name || !comment)
+        {
+            LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
+            cryptor.setKey(old_key);
+            return false;
+        }
+
+        group.setEncryptedName(*name);
+        group.setEncryptedComment(*comment);
 
         new_groups.append(group);
     }
@@ -190,11 +216,24 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         RouterConfig router = routers[i];
         const RouterFields& fields = router_fields[i];
 
-        router.setEncryptedDisplayName(encryptField(cryptor, fields.name));
-        router.setEncryptedAddress(encryptField(cryptor, fields.address));
-        router.setEncryptedUsername(encryptField(cryptor, fields.username));
-        router.setEncryptedPassword(encryptField(cryptor, fields.password));
-        router.setEncryptedDeviceToken(encryptField(cryptor, fields.device_token));
+        std::optional<QByteArray> name = encryptField(cryptor, fields.name);
+        std::optional<QByteArray> address = encryptField(cryptor, fields.address);
+        std::optional<QByteArray> username = encryptField(cryptor, fields.username);
+        std::optional<QByteArray> password = encryptField(cryptor, fields.password);
+        std::optional<QByteArray> device_token = encryptField(cryptor, fields.device_token);
+
+        if (!name || !address || !username || !password || !device_token)
+        {
+            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
+            cryptor.setKey(old_key);
+            return false;
+        }
+
+        router.setEncryptedDisplayName(*name);
+        router.setEncryptedAddress(*address);
+        router.setEncryptedUsername(*username);
+        router.setEncryptedPassword(*password);
+        router.setEncryptedDeviceToken(*device_token);
 
         new_routers.append(router);
     }

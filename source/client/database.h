@@ -30,10 +30,19 @@
 class Database
 {
 public:
+    // A default-constructed Database is not connected; open() (or instance(), which opens the
+    // per-thread connection itself) must be called first.
+    Database() = default;
     ~Database() = default;
 
     static Database& instance();
     static QString filePath();
+
+    // Opens (creating when absent) the database at |file_path| and ensures the schema. instance()
+    // opens the per-thread connection at filePath(); this entry exists so the tests can run every
+    // path against an isolated temporary database.
+    bool open(const QString& file_path);
+
     bool isValid() const;
 
     // Hosts.
@@ -98,8 +107,6 @@ public:
     bool clearBiometricUnlock();
 
 private:
-    Database() = default;
-
     bool openDatabase();
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
 

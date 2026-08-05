@@ -87,9 +87,11 @@ RouterConfig readRouter(const SqlQuery& query)
 //--------------------------------------------------------------------------------------------------
 bool createTables(SqlDatabase& db)
 {
+    // A group without a parent and a host without a group are the ones at the root: the root is
+    // where the tree starts and not a record of its own, so there is no id for them to name.
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
                  "\"id\" INTEGER UNIQUE,"
-                 "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"parent_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE CASCADE,"
                  "\"name\" BLOB DEFAULT X'',"
                  "\"comment\" BLOB DEFAULT X'',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
@@ -100,7 +102,7 @@ bool createTables(SqlDatabase& db)
 
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                  "\"id\" INTEGER UNIQUE,"
-                 "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"group_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE SET NULL,"
                  "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                  "\"name\" BLOB DEFAULT X'',"
                  "\"comment\" BLOB DEFAULT X'',"
@@ -217,9 +219,9 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
-                        "create_time, modify_time, connect_time, guid "
-                        "FROM hosts WHERE group_id=?");
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
+                        "username, password, create_time, modify_time, connect_time, guid "
+                        "FROM hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
 
     QList<HostConfig> hosts;
@@ -238,7 +240,8 @@ QList<HostConfig> Database::allHosts() const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
+                        "username, password, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts");
 
@@ -274,7 +277,7 @@ bool Database::addHost(HostConfig& host)
 
     SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, address, "
                         "username, password, create_time, modify_time, connect_time, guid) "
-                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addBlob(host.encryptedName());
@@ -308,8 +311,8 @@ bool Database::modifyHost(HostConfig& host)
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
-    SqlQuery query(db_, "UPDATE hosts SET group_id=?, router_id=?, name=?, comment=?, address=?, "
-                        "username=?, password=?, modify_time=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
+                        "address=?, username=?, password=?, modify_time=? WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addBlob(host.encryptedName());
@@ -381,7 +384,8 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
+                        "username, password, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE id=?");
     query.addInt64(entry_id);
@@ -404,7 +408,8 @@ std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
     if (guid.isEmpty())
         return std::nullopt;
 
-    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
+                        "username, password, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE guid=?");
     query.addText(guid);
@@ -424,7 +429,8 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, group_id, router_id, name, comment, address, username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
+                        "username, password, "
                         "create_time, modify_time, connect_time, guid FROM hosts");
 
     QList<HostConfig> hosts;
@@ -450,7 +456,8 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups WHERE parent_id=?");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups "
+                        "WHERE parent_id IS NULLIF(?, 0)");
     query.addInt64(parent_id);
 
     QList<GroupConfig> groups;
@@ -469,7 +476,7 @@ QList<GroupConfig> Database::allGroups() const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups");
 
     QList<GroupConfig> groups;
     while (query.next() == SqlQuery::StepResult::ROW)
@@ -488,7 +495,7 @@ bool Database::addGroup(GroupConfig& group)
     }
 
     SqlQuery query(db_, "INSERT INTO groups (id, parent_id, name, comment) "
-                        "VALUES (NULL, ?, ?, ?)");
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?)");
     query.addInt64(group.parentId());
     query.addBlob(group.encryptedName());
     query.addBlob(group.encryptedComment());
@@ -512,7 +519,7 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE groups SET parent_id=?, name=?, comment=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
     query.addInt64(group.parentId());
     query.addBlob(group.encryptedName());
     query.addBlob(group.encryptedComment());
@@ -536,7 +543,7 @@ bool Database::moveGroup(qint64 group_id, qint64 new_parent_id)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE groups SET parent_id=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0) WHERE id=?");
     query.addInt64(new_parent_id);
     query.addInt64(group_id);
 
@@ -558,7 +565,17 @@ bool Database::removeGroup(qint64 group_id)
         return false;
     }
 
-    SqlQuery query(db_, "DELETE FROM groups WHERE id=?");
+    // The root is the parent every group of the top level names and not a record of its own.
+    if (group_id <= 0)
+    {
+        LOG(ERROR) << "Invalid group id:" << group_id;
+        return false;
+    }
+
+    // The child groups go with it and the hosts of the whole subtree move to the root. Both are
+    // declared by the tables themselves, so no path can leave a row pointing at a group that is
+    // gone - the tree is walked from the root down and such a row is in no place the user can reach.
+    SqlQuery query(db_, "DELETE FROM \"groups\" WHERE id=?");
     query.addInt64(group_id);
 
     if (!query.exec())
@@ -579,7 +596,7 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, parent_id, name, comment FROM groups WHERE id=?");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups WHERE id=?");
     query.addInt64(group_id);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -790,11 +807,23 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
 
     // On any failure the early return skips commit(), so the transaction destructor rolls back and
     // the address book stays fully readable with the old master password.
-    for (HostConfig host : hosts)
+    //
+    // Only the ciphertext is written. Going through modifyHost() would stamp every host as edited
+    // now, and the moment a host was last edited is a column of the list the user reads.
+    for (const HostConfig& host : hosts)
     {
-        if (!modifyHost(host))
+        SqlQuery query(db_, "UPDATE hosts SET name=?, comment=?, address=?, username=?, password=? "
+                            "WHERE id=?");
+        query.addBlob(host.encryptedName());
+        query.addBlob(host.encryptedComment());
+        query.addBlob(host.encryptedAddress());
+        query.addBlob(host.encryptedUsername());
+        query.addBlob(host.encryptedPassword());
+        query.addInt64(host.id());
+
+        if (!query.exec())
         {
-            LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
+            LOG(ERROR) << "Unable to re-encrypt host" << host.id() << ":" << db_.lastError();
             return false;
         }
     }
@@ -904,6 +933,12 @@ bool Database::openDatabase()
         return false;
     }
 
+    return open(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::open(const QString& file_path)
+{
     LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
 
     if (!db_.open(file_path))
@@ -926,7 +961,20 @@ bool Database::openDatabase()
         }
     }
 
-    if (!createTables(db_) || !backfillHostGuids(db_))
+    if (!createTables(db_))
+    {
+        db_.close();
+        return false;
+    }
+
+    if (!db_.exec("PRAGMA foreign_keys = ON"))
+    {
+        LOG(ERROR) << "Unable to enable foreign keys:" << db_.lastError();
+        db_.close();
+        return false;
+    }
+
+    if (!backfillHostGuids(db_))
     {
         db_.close();
         return false;
