@@ -27,6 +27,7 @@
 #include "client/page_model.h"
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/host_list_model.h"
 
 namespace Ui {
 class RouterGroupWidget;
@@ -85,6 +86,7 @@ private:
     void updateStatusLabel();
     void updatePagination();
     void startDrag();
+    const RouterHost* currentHost() const;
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
     qint64 router_id_ = 0;
@@ -95,6 +97,7 @@ private:
     QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
 
+    HostListModel* model_ = nullptr;
     PageModel hosts_page_;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)

@@ -19,7 +19,6 @@
 #include "client/desktop/management/router_group_widget.h"
 
 #include <QApplication>
-#include <QCollator>
 #include <QComboBox>
 #include <QDataStream>
 #include <QDateTime>
@@ -43,92 +42,6 @@
 #include "proto/router_constants.h"
 #include "ui_router_group_widget.h"
 
-namespace {
-
-enum Column
-{
-    COLUMN_DISPLAY_NAME = 0,
-    COLUMN_HOST_ID,
-    COLUMN_COMPUTER_NAME,
-    COLUMN_ADDRESS,
-    COLUMN_USER_NAME,
-    COLUMN_COMMENT,
-    COLUMN_OS,
-    COLUMN_VERSION,
-    COLUMN_ARCH,
-    COLUMN_LAST_CONNECT,
-    COLUMN_LAST_MODIFY,
-    COLUMN_STATUS
-};
-
-class HostTreeItem final : public QTreeWidgetItem
-{
-    Q_DECLARE_TR_FUNCTIONS(HostTreeItem)
-
-public:
-    explicit HostTreeItem(const Router::Host& updated_host)
-    {
-        updateItem(updated_host);
-    }
-
-    void updateItem(const Router::Host& updated_host)
-    {
-        host = updated_host;
-
-        QString name = host.display_name;
-        if (name.isEmpty())
-            name = host.computer_name;
-
-        const QString last_connect = host.last_connect > 0 ? QLocale::system().toString(
-            QDateTime::fromSecsSinceEpoch(host.last_connect), QLocale::ShortFormat) : QString();
-        const QString last_modify = host.last_modify > 0 ? QLocale::system().toString(
-            QDateTime::fromSecsSinceEpoch(host.last_modify), QLocale::ShortFormat) : QString();
-
-        setIcon(COLUMN_DISPLAY_NAME, QIcon(host.online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg"));
-        setText(COLUMN_DISPLAY_NAME, name);
-        setText(COLUMN_HOST_ID, QString::number(host.host_id));
-        setText(COLUMN_COMPUTER_NAME, host.computer_name);
-        setText(COLUMN_ADDRESS, host.address);
-        setText(COLUMN_USER_NAME, host.user_name);
-        setText(COLUMN_COMMENT, host.comment);
-        setText(COLUMN_OS, host.os_name);
-        setText(COLUMN_VERSION, host.version);
-        setText(COLUMN_ARCH, host.cpu_arch);
-        setText(COLUMN_LAST_CONNECT, last_connect);
-        setText(COLUMN_LAST_MODIFY, last_modify);
-        setText(COLUMN_STATUS, host.online ? tr("Online") : tr("Offline"));
-    }
-
-    // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const final
-    {
-        const int column = treeWidget()->sortColumn();
-        const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
-
-        if (column == COLUMN_HOST_ID)
-            return host.host_id < other_item->host.host_id;
-        if (column == COLUMN_LAST_CONNECT)
-            return host.last_connect < other_item->host.last_connect;
-        if (column == COLUMN_LAST_MODIFY)
-            return host.last_modify < other_item->host.last_modify;
-        if (column == COLUMN_DISPLAY_NAME)
-        {
-            QCollator collator;
-            collator.setCaseSensitivity(Qt::CaseInsensitive);
-            collator.setNumericMode(true);
-            return collator.compare(text(COLUMN_DISPLAY_NAME), other.text(COLUMN_DISPLAY_NAME)) < 0;
-        }
-        return QTreeWidgetItem::operator<(other);
-    }
-
-    Router::Host host;
-
-private:
-    Q_DISABLE_COPY_MOVE(HostTreeItem)
-};
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent),
@@ -139,24 +52,48 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    // The order the columns are shown in. The header state saved by the user is restored on top
+    // of it, so it only decides what the view looks like the first time.
+    model_ = new HostListModel({ HostListModel::Column::DISPLAY_NAME,
+                                 HostListModel::Column::HOST_ID,
+                                 HostListModel::Column::COMPUTER_NAME,
+                                 HostListModel::Column::ADDRESS,
+                                 HostListModel::Column::USER_NAME,
+                                 HostListModel::Column::COMMENT,
+                                 HostListModel::Column::OS,
+                                 HostListModel::Column::VERSION,
+                                 HostListModel::Column::ARCH,
+                                 HostListModel::Column::LAST_CONNECT,
+                                 HostListModel::Column::LAST_MODIFY,
+                                 HostListModel::Column::STATUS }, this);
+    ui->tree_host->setModel(model_);
+
+    // Turned on again after the model is set: the view wires the header up to the sort of whatever
+    // model it has, and at the time the generated setup ran there was none.
+    ui->tree_host->setSortingEnabled(true);
+
     ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tree_host->header()->setSectionHidden(COLUMN_USER_NAME, true);
-    ui->tree_host->header()->setSectionHidden(COLUMN_ARCH, true);
-    ui->tree_host->header()->setSectionHidden(COLUMN_COMMENT, true);
-    ui->tree_host->header()->setSectionHidden(COLUMN_ADDRESS, true);
+    ui->tree_host->header()->setSectionHidden(
+        model_->sectionOf(HostListModel::Column::USER_NAME), true);
+    ui->tree_host->header()->setSectionHidden(
+        model_->sectionOf(HostListModel::Column::ARCH), true);
+    ui->tree_host->header()->setSectionHidden(
+        model_->sectionOf(HostListModel::Column::COMMENT), true);
+    ui->tree_host->header()->setSectionHidden(
+        model_->sectionOf(HostListModel::Column::ADDRESS), true);
 
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);
 
     ui->tree_host->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_host, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_host, &QWidget::customContextMenuRequested,
             this, &RouterGroupWidget::onHostContextMenu);
 
-    connect(ui->tree_host, &QTreeWidget::itemSelectionChanged,
+    connect(ui->tree_host->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterGroupWidget::sig_currentChanged);
 
-    connect(ui->tree_host, &QTreeWidget::itemActivated,
-            this, [this](QTreeWidgetItem*, int) { emit sig_activated(); });
+    connect(ui->tree_host, &QAbstractItemView::activated,
+            this, [this](const QModelIndex&) { emit sig_activated(); });
 
     // The largest entry is the largest page the router serves (kMaxHostPageSize).
     ui->combo_hosts_page_size->addItem("25", QVariant::fromValue<qint64>(25));
@@ -210,7 +147,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
     // Another selection is another list, so its paging starts over.
     hosts_page_.clear();
 
-    ui->tree_host->clear();
+    model_->setHosts({});
     updateStatusLabel();
     fetchHosts(Router::CachePolicy::USE_CACHE);
 }
@@ -218,14 +155,14 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
 //--------------------------------------------------------------------------------------------------
 bool RouterGroupWidget::hasSelectedHost() const
 {
-    return ui->tree_host->currentItem() != nullptr;
+    return currentHost() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 Router::Host RouterGroupWidget::selectedHost() const
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
-    return item ? item->host : Router::Host();
+    const RouterHost* host = currentHost();
+    return host ? *host : Router::Host();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -312,11 +249,11 @@ void RouterGroupWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onEditHost()
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->currentItem());
-    if (!item)
+    const RouterHost* host = currentHost();
+    if (!host)
         return;
 
-    RouterHostDialog dialog(router_id_, workspace_name_, item->host, this);
+    RouterHostDialog dialog(router_id_, workspace_name_, *host, this);
     if (dialog.exec() == QDialog::Accepted)
         fetchHosts(Router::CachePolicy::RELOAD);
 }
@@ -378,43 +315,16 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
         return;
     }
 
-    auto has_with_id = [](const Router::HostList& list, HostId host_id)
-    {
-        for (const Router::Host& host : std::as_const(list.hosts))
-        {
-            if (host.host_id == host_id)
-                return true;
-        }
-        return false;
-    };
+    const RouterHost* selected = currentHost();
+    const HostId selected_host_id = selected ? selected->host_id : kInvalidHostId;
 
-    // Remove from the UI all hosts that are not in the list.
-    for (int i = ui->tree_host->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->topLevelItem(i));
-        if (!has_with_id(list, item->host.host_id))
-            delete item;
-    }
+    model_->setHosts(list.hosts);
 
-    // Adding and updating elements in the UI.
-    for (const Router::Host& host : std::as_const(list.hosts))
-    {
-        bool found = false;
-
-        for (int j = 0; j < ui->tree_host->topLevelItemCount(); ++j)
-        {
-            HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->topLevelItem(j));
-            if (item->host.host_id == host.host_id)
-            {
-                item->updateItem(host);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            ui->tree_host->addTopLevelItem(new HostTreeItem(host));
-    }
+    // The page is replaced whole, so the row the user was on has to be found again by the host it
+    // was showing.
+    const int selected_row = model_->rowOf(selected_host_id);
+    if (selected_row >= 0)
+        ui->tree_host->setCurrentIndex(model_->index(selected_row, 0));
 
     const bool page_moved = hosts_page_.setTotalCount(list.total_count);
     updatePagination();
@@ -476,7 +386,8 @@ void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_host->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -491,11 +402,11 @@ void RouterGroupWidget::onHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
 {
-    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(pos));
-    if (!item)
+    const QModelIndex index = ui->tree_host->indexAt(pos);
+    if (!index.isValid())
         return;
 
-    ui->tree_host->setCurrentItem(item);
+    ui->tree_host->setCurrentIndex(index);
     emit sig_contextMenu(ui->tree_host->viewport()->mapToGlobal(pos));
 }
 
@@ -521,7 +432,7 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::updateStatusLabel()
 {
-    status_hosts_label_->setText(tr("%n host(s)", "", ui->tree_host->topLevelItemCount()));
+    status_hosts_label_->setText(tr("%n host(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -548,15 +459,22 @@ void RouterGroupWidget::startDrag()
     if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
         return;
 
-    HostTreeItem* host_item = static_cast<HostTreeItem*>(ui->tree_host->itemAt(start_pos_));
-    if (!host_item)
+    const QModelIndex index = ui->tree_host->indexAt(start_pos_);
+    const RouterHost* host = model_->hostAt(index.row());
+    if (!host)
         return;
 
     RouterHostDrag drag(this);
-    drag.setHost(router_id_, host_item->host, mime_type_);
+    drag.setHost(router_id_, *host, mime_type_);
 
-    const QIcon icon = host_item->icon(0);
+    const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
     drag.exec(Qt::MoveAction);
+}
+
+//--------------------------------------------------------------------------------------------------
+const RouterHost* RouterGroupWidget::currentHost() const
+{
+    return model_->hostAt(ui->tree_host->currentIndex().row());
 }
