@@ -43,6 +43,7 @@
 #include "client/desktop/management/local_group_widget.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "common/desktop/two_factor_code_dialog.h"
 #include "common/desktop/two_factor_enroll_dialog.h"
 #include "proto/router_client.h"
@@ -530,19 +531,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
             return;
         }
 
-        const char* message;
-        if (error_code == proto::router::kErrorInvalidRequest)
-            message = QT_TR_NOOP("Invalid password change request.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == proto::router::kErrorInvalidData)
-            message = QT_TR_NOOP("Invalid data was passed.");
-        else if (error_code == proto::router::kErrorNotFound)
-            message = QT_TR_NOOP("The user no longer exists on the router.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
+        MsgBox::warning(this, routerErrorText(error_code));
     });
 }
 

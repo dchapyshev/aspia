@@ -525,6 +525,46 @@ TEST_F(RouterStateTest, DecoderRunsBeforeTheHandler)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Every kind of reply has a shape that says "no". A connection offer is the odd one out, because
+// success is the zero of its enum and a made-up reply would otherwise read as an offer to connect.
+TEST_F(RouterStateTest, ALostSessionAnswersEveryKindOfCaller)
+{
+    QObject receiver;
+
+    proto::router::HostRequest host_request;
+    host_request.set_request_id(state_.nextRequestId());
+    proto::router::HostResult host_result;
+    state_.registerPending<proto::router::HostResult>(&host_request, &receiver,
+        [&](const proto::router::HostResult& result) { host_result = result; });
+
+    proto::router::ConnectionRequest offer_request;
+    offer_request.set_request_id(state_.nextRequestId());
+    proto::router::ConnectionOffer offer;
+    state_.registerPending<proto::router::ConnectionOffer>(&offer_request, &receiver,
+        [&](const proto::router::ConnectionOffer& result) { offer = result; });
+
+    proto::router::WorkspaceListRequest list_request;
+    list_request.set_request_id(state_.nextRequestId());
+    RouterWorkspaceList workspaces;
+    bool workspaces_called = false;
+    state_.registerPending<proto::router::WorkspaceList>(&list_request, &receiver,
+        [&](const RouterWorkspaceList& list) { workspaces = list; workspaces_called = true; },
+        [](const proto::router::WorkspaceList& raw)
+    {
+        RouterWorkspaceList list;
+        list.error_code = QString::fromStdString(raw.error_code());
+        return list;
+    });
+
+    state_.clearPending();
+
+    EXPECT_EQ(host_result.error_code(), proto::router::kErrorLostConnection);
+    EXPECT_EQ(offer.error_code(), proto::router::ConnectionOffer::UNKNOWN_ERROR);
+    ASSERT_TRUE(workspaces_called);
+    EXPECT_EQ(workspaces.error_code, QString::fromUtf8(proto::router::kErrorLostConnection));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The router re-opens the two-factor stage of a live session after a password change and drops
 // everything it receives until the stage completes. The session is suspended then: the replies we
 // wait for will never arrive and the cached lists are no longer known to be current.
@@ -539,11 +579,12 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
 
     QObject receiver;
     int calls = 0;
+    std::string last_error;
 
     proto::router::UserListRequest request;
     request.set_request_id(state_.nextRequestId());
     state_.registerPending<proto::router::UserList>(&request, &receiver,
-        [&calls](const proto::router::UserList&) { ++calls; });
+        [&](const proto::router::UserList& list) { ++calls; last_error = list.error_code(); });
 
     state_.clearCaches();
     state_.clearPending();
@@ -552,10 +593,14 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
     EXPECT_FALSE(state_.workspacesLoaded());
     EXPECT_EQ(state_.cachedHostList(key), nullptr);
 
+    // The caller is told the answer will never come, once.
+    EXPECT_EQ(calls, 1);
+    EXPECT_EQ(last_error, proto::router::kErrorLostConnection);
+
     // A late reply to a request of the dead window must not reach the caller.
     proto::router::UserList response;
     state_.dispatch(request.request_id(), response);
-    EXPECT_EQ(calls, 0);
+    EXPECT_EQ(calls, 1);
 
     // The keys survive: the session is being re-authenticated, not lost.
     EXPECT_TRUE(state_.hasWorkspaceKey(10));

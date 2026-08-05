@@ -105,9 +105,11 @@ void Router::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Router::disconnectFromRouter()
 {
+    // The status moves first, so the callers answered by clearSessionState() below already see a
+    // session that cannot serve them.
     disconnectWorker();
-    clearSessionState();
     setStatus(Status::OFFLINE);
+    clearSessionState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,8 +121,8 @@ void Router::updateConfig(const RouterConfig& config)
     if (need_reconnect && status_ != Status::OFFLINE)
     {
         disconnectWorker();
-        clearSessionState();
         setStatus(Status::CONNECTING);
+        clearSessionState();
         connectWorker();
     }
 }
@@ -153,10 +155,11 @@ void Router::onTcpErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_co
         return;
 
     LOG(INFO) << "Router connection error:" << error_code;
-    clearSessionState();
 
     if (status_ != Status::OFFLINE)
         setStatus(Status::CONNECTING);
+
+    clearSessionState();
 
     emit sig_errorOccurred(config_.routerId(), error_code);
 }

@@ -55,5 +55,6 @@ const char* const kErrorAlreadyExists  = "already_exists";
 const char* const kErrorNotFound       = "not_found";
 const char* const kErrorAccessDenied   = "access_denied";
 const char* const kErrorConflict       = "conflict";
+const char* const kErrorLostConnection = "lost_connection";
 
 } // namespace proto::router

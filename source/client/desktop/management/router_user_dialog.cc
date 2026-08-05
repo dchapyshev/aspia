@@ -28,6 +28,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/router.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "common/desktop/password_edit.h"
 #include "proto/router.h"
 #include "proto/router_admin.h"
@@ -279,25 +280,9 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
         return;
     }
 
-    const char* message;
-    if (error_code == proto::router::kErrorInvalidRequest)
-        message = QT_TR_NOOP("Invalid user request.");
-    else if (error_code == proto::router::kErrorInternalError)
-        message = QT_TR_NOOP("Unknown internal error.");
-    else if (error_code == proto::router::kErrorInvalidData)
-        message = QT_TR_NOOP("Invalid data was passed.");
-    else if (error_code == proto::router::kErrorAlreadyExists)
-        message = QT_TR_NOOP("A user with the specified name already exists.");
-    else if (error_code == proto::router::kErrorNotFound)
-        message = QT_TR_NOOP("User not found. The list may be out of date.");
-    else if (error_code == proto::router::kErrorAccessDenied)
-        message = QT_TR_NOOP("This change is not allowed for the selected user.");
-    else
-        message = QT_TR_NOOP("Unknown error type.");
-
     LOG(ERROR) << "User save failed:" << error_code;
     setEnabled(true);
-    MsgBox::warning(this, tr(message));
+    MsgBox::warning(this, routerErrorText(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,7 +326,7 @@ void RouterUserDialog::onResetOtpResultReceived(const proto::router::UserResult&
     }
 
     LOG(ERROR) << "OTP reset failed:" << error_code;
-    MsgBox::warning(this, tr("Unknown internal error."));
+    MsgBox::warning(this, routerErrorText(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,16 +419,8 @@ void RouterUserDialog::onRevokeResultReceived(const proto::router::UserResult& r
         return;
     }
 
-    const char* message;
-    if (error_code == proto::router::kErrorNotFound)
-        message = QT_TR_NOOP("Session not found. The list may be out of date.");
-    else if (error_code == proto::router::kErrorInvalidRequest)
-        message = QT_TR_NOOP("Invalid sign-out request.");
-    else
-        message = QT_TR_NOOP("Unknown internal error.");
-
     LOG(ERROR) << "Token revoke failed:" << error_code;
-    MsgBox::warning(this, tr(message));
+    MsgBox::warning(this, routerErrorText(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------

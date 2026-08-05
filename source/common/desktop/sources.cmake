@@ -50,6 +50,8 @@ collect_sources(SOURCE_COMMON_DESKTOP
     msg_box.h
     password_edit.cc
     password_edit.h
+    router_error.cc
+    router_error.h
     session_type.cc
     session_type.h
     two_factor_code_dialog.cc

@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -375,23 +376,9 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
         return;
     }
 
-    const char* message;
-    if (error_code == proto::router::kErrorInvalidRequest)
-        message = QT_TR_NOOP("Invalid workspace request.");
-    else if (error_code == proto::router::kErrorInternalError)
-        message = QT_TR_NOOP("Unknown internal error.");
-    else if (error_code == proto::router::kErrorInvalidData)
-        message = QT_TR_NOOP("Invalid data was passed.");
-    else if (error_code == proto::router::kErrorAlreadyExists)
-        message = QT_TR_NOOP("A workspace with the specified name already exists.");
-    else if (error_code == proto::router::kErrorNotFound)
-        message = QT_TR_NOOP("Workspace not found.");
-    else
-        message = QT_TR_NOOP("Unknown error type.");
-
     LOG(ERROR) << "Workspace save failed:" << error_code;
     setEnabled(true);
-    MsgBox::warning(this, tr(message));
+    MsgBox::warning(this, routerErrorText(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------

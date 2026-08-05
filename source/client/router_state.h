@@ -23,6 +23,7 @@
 #include <QPointer>
 
 #include <functional>
+#include <string>
 #include <string_view>
 #include <typeinfo>
 #include <unordered_map>
@@ -33,6 +34,7 @@
 #include "base/logging.h"
 #include "client/router_types.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace proto::router {
 class ChangePasswordRequest;
@@ -107,7 +109,10 @@ public:
 
     qint64 nextRequestId() { return ++next_request_id_; }
     int pendingCount() const { return pending_.size(); }
-    void clearPending() { pending_.clear(); }
+
+    // Answers every caller still waiting with a made-up lost-connection reply. Without it a dialog
+    // that disabled itself for the round trip stays disabled until the user kills the window.
+    void clearPending();
 
     // Invokes |handler| (either a member-function-pointer of |receiver| or any callable taking
     // const ArgT&) with |arg|.
@@ -118,6 +123,17 @@ public:
             (static_cast<OwnerClass<HandlerT>*>(receiver)->*handler)(arg);
         else
             handler(arg);
+    }
+
+    // The reply made up for a caller whose request died with the session. SUCCESS is the zero of
+    // the offer enum, so that one is set by hand; a status of a host is unknown at zero already.
+    static void setLostConnection(proto::router::ConnectionOffer* offer);
+
+    template<typename T>
+    static void setLostConnection(T* response)
+    {
+        if constexpr (requires { response->set_error_code(std::string()); })
+            response->set_error_code(proto::router::kErrorLostConnection);
     }
 
     // Register a response handler keyed by the request's request_id(). The dispatcher passes the
@@ -134,9 +150,15 @@ public:
         pending_.emplace(request->request_id(),
             QPointer<QObject>(receiver),
             &typeid(ResponseT),
-            [receiver, handler = std::move(handler)](const void* parsed)
+            [receiver, handler](const void* parsed)
         {
             invokeHandler(receiver, handler, *static_cast<const ResponseT*>(parsed));
+        },
+            [receiver, handler = std::move(handler)]
+        {
+            ResponseT response;
+            setLostConnection(&response);
+            invokeHandler(receiver, handler, response);
         });
     }
 
@@ -151,9 +173,15 @@ public:
         pending_.emplace(request->request_id(),
             QPointer<QObject>(receiver),
             &typeid(RawT),
-            [receiver, handler = std::move(handler), decoder = std::move(decoder)](const void* parsed)
+            [receiver, handler, decoder](const void* parsed)
         {
             invokeHandler(receiver, handler, decoder(*static_cast<const RawT*>(parsed)));
+        },
+            [receiver, handler = std::move(handler), decoder = std::move(decoder)]
+        {
+            RawT response;
+            setLostConnection(&response);
+            invokeHandler(receiver, handler, decoder(response));
         });
     }
 
@@ -256,6 +284,7 @@ private:
         QPointer<QObject> receiver;
         const std::type_info* response_type = nullptr;
         std::function<void(const void* response)> invoke;
+        std::function<void()> fail;
     };
 
     // Type-trait that yields the class that owns a member-function-pointer. Used by

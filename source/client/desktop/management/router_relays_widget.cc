@@ -40,6 +40,7 @@
 #include "client/router.h"
 #include "common/desktop/formatter.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_relays_widget.h"
@@ -655,18 +656,7 @@ void RouterRelaysWidget::onRelayResultReceived(const proto::router::RelayResult&
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
     {
-        const char* message;
-
-        if (error_code == proto::router::kErrorInvalidRequest)
-            message = QT_TR_NOOP("Invalid relay request.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == proto::router::kErrorInvalidEntryId)
-            message = QT_TR_NOOP("Invalid entry id.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
+        MsgBox::warning(this, routerErrorText(error_code));
     }
 
     fetchRelays();
@@ -678,16 +668,7 @@ void RouterRelaysWidget::onPeerResultReceived(const proto::router::PeerResult& r
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
     {
-        const char* message;
-
-        if (error_code == proto::router::kErrorNotFound)
-            message = QT_TR_NOOP("Relay session not found.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
+        MsgBox::warning(this, routerErrorText(error_code));
     }
 }
 

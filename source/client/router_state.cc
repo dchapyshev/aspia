@@ -135,13 +135,34 @@ RouterState::KeysResult RouterState::applyUserKeys(const proto::router::UserKeys
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+void RouterState::setLostConnection(proto::router::ConnectionOffer* offer)
+{
+    offer->set_error_code(proto::router::ConnectionOffer::UNKNOWN_ERROR);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterState::clearPending()
+{
+    // Taken out first because a caller being answered can start a new request right away.
+    const QHash<qint64, Pending> pending = std::move(pending_);
+    pending_.clear();
+
+    for (const Pending& entry : pending)
+    {
+        if (!entry.receiver.isNull() && entry.fail)
+            entry.fail();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterState::clearSession()
 {
     user_id_ = 0;
     user_name_.clear();
     user_private_key_.clear();
     workspace_cryptors_.clear();
-    pending_.clear();
+    clearPending();
 }
 
 //--------------------------------------------------------------------------------------------------

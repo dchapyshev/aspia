@@ -34,6 +34,7 @@
 #include "client/router.h"
 #include "client/desktop/management/router_user_dialog.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_users_widget.h"
@@ -384,24 +385,7 @@ void RouterUsersWidget::onUserResultReceived(const proto::router::UserResult& re
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
     {
-        const char* message;
-
-        if (error_code == proto::router::kErrorInvalidRequest)
-            message = QT_TR_NOOP("Invalid user request.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == proto::router::kErrorInvalidData)
-            message = QT_TR_NOOP("Invalid data was passed.");
-        else if (error_code == proto::router::kErrorAlreadyExists)
-            message = QT_TR_NOOP("A user with the specified name already exists.");
-        else if (error_code == proto::router::kErrorAccessDenied)
-            message = QT_TR_NOOP("Access denied.");
-        else if (error_code == proto::router::kErrorNotFound)
-            message = QT_TR_NOOP("User not found. The list may be out of date.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
+        MsgBox::warning(this, routerErrorText(error_code));
     }
 
     fetchUsers();

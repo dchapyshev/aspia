@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_group_dialog.h"
@@ -123,23 +124,9 @@ void RouterGroupDialog::onGroupResultReceived(const proto::router::GroupResult& 
         return;
     }
 
-    const char* message;
-    if (error_code == proto::router::kErrorInvalidRequest)
-        message = QT_TR_NOOP("Invalid group request.");
-    else if (error_code == proto::router::kErrorInternalError)
-        message = QT_TR_NOOP("Unknown internal error.");
-    else if (error_code == proto::router::kErrorInvalidData)
-        message = QT_TR_NOOP("Invalid data was passed.");
-    else if (error_code == proto::router::kErrorAccessDenied)
-        message = QT_TR_NOOP("Access denied.");
-    else if (error_code == proto::router::kErrorNotFound)
-        message = QT_TR_NOOP("Group not found.");
-    else
-        message = QT_TR_NOOP("Unknown error type.");
-
     LOG(ERROR) << "Group save failed:" << error_code;
     setEnabled(true);
-    MsgBox::warning(this, tr(message));
+    MsgBox::warning(this, routerErrorText(error_code));
 }
 
 //--------------------------------------------------------------------------------------------------

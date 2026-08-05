@@ -27,6 +27,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/router_error.h"
 #include "common/desktop/password_edit.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
@@ -110,20 +111,7 @@ void RouterHostDialog::onHostResultReceived(const proto::router::HostResult& res
     const std::string& error_code = result.error_code();
     if (error_code != proto::router::kErrorOk)
     {
-        const char* message;
-
-        if (error_code == proto::router::kErrorAccessDenied)
-            message = QT_TR_NOOP("Access denied.");
-        else if (error_code == proto::router::kErrorNotFound)
-            message = QT_TR_NOOP("Host not found.");
-        else if (error_code == proto::router::kErrorInvalidData)
-            message = QT_TR_NOOP("Invalid data was passed.");
-        else if (error_code == proto::router::kErrorInternalError)
-            message = QT_TR_NOOP("Unknown internal error.");
-        else
-            message = QT_TR_NOOP("Unknown error type.");
-
-        MsgBox::warning(this, tr(message));
+        MsgBox::warning(this, routerErrorText(error_code));
         ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(true);
         return;
     }
