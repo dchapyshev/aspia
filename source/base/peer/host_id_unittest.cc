@@ -25,8 +25,27 @@
 TEST(host_id_test, is_host_id_valid_digits)
 {
     EXPECT_TRUE(isHostId("123456"));
-    EXPECT_TRUE(isHostId("0"));
     EXPECT_TRUE(isHostId("99999999999"));
+}
+
+// A string is asked whether it names a host before it is turned into one, so what the check accepts
+// has to be what the conversion can use. Anything else gets past the message the user would see and
+// travels on as the id that stands for "no host".
+TEST(host_id_test, is_host_id_agrees_with_the_conversion)
+{
+    // The value that stands for "no host" is not the name of one.
+    EXPECT_FALSE(isHostId("0"));
+    EXPECT_FALSE(isHostId("0000"));
+
+    // Digits of another script are digits to QChar, but not to the conversion.
+    EXPECT_FALSE(isHostId(QString::fromUtf8("\xD9\xA1\xD9\xA2\xD9\xA3")));
+
+    // More than an id can hold.
+    EXPECT_FALSE(isHostId("99999999999999999999999"));
+
+    // What the conversion does use stays accepted.
+    EXPECT_TRUE(isHostId("123456"));
+    EXPECT_TRUE(isHostId("18446744073709551615"));
 }
 
 TEST(host_id_test, is_host_id_empty_string)

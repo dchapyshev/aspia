@@ -135,6 +135,54 @@ TEST_F(DatabaseTest, RootIsNotAGroupAndIsNotRemoved)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A group put inside its own subtree closes a loop. The tree is walked from the root down, so the
+// group and everything under it drop out of it for good; and a path built by walking parents upward
+// from a host inside the loop never ends.
+TEST_F(DatabaseTest, GroupIsNotMovedIntoItsOwnSubtree)
+{
+    const qint64 parent = addGroup("parent", 0);
+    const qint64 child = addGroup("child", parent);
+    const qint64 grandchild = addGroup("grandchild", child);
+
+    EXPECT_FALSE(db_.moveGroup(parent, grandchild));
+    EXPECT_FALSE(db_.moveGroup(parent, parent));
+
+    EXPECT_EQ(db_.findGroup(parent)->parentId(), 0);
+    EXPECT_EQ(db_.groupList(0).size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Editing a group is the other way its parent is written, and it is no different.
+TEST_F(DatabaseTest, EditedGroupIsNotMadeAChildOfItsOwnChild)
+{
+    const qint64 parent = addGroup("parent", 0);
+    const qint64 child = addGroup("child", parent);
+
+    GroupConfig group = *db_.findGroup(parent);
+    group.setParentId(child);
+
+    EXPECT_FALSE(db_.modifyGroup(group));
+
+    EXPECT_EQ(db_.findGroup(parent)->parentId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A move to a group that is not below it is what the check is there to allow.
+TEST_F(DatabaseTest, GroupIsMovedUnderAGroupOutsideItsSubtree)
+{
+    const qint64 first = addGroup("first", 0);
+    addGroup("child", first);
+    const qint64 second = addGroup("second", 0);
+
+    EXPECT_TRUE(db_.moveGroup(first, second));
+    EXPECT_EQ(db_.findGroup(first)->parentId(), second);
+
+    // And back to the root, which is not a group and cannot be below anything.
+    EXPECT_TRUE(db_.moveGroup(first, 0));
+    EXPECT_EQ(db_.findGroup(first)->parentId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Changing the master password rewrites every record under the new key. The record itself did not
 // change, so the moment it was last edited must survive: it is a column of the list the user reads.
 TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)

@@ -45,26 +45,6 @@ HostId createTempHostId()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool isHostId(const QString& str)
-{
-    if (str.isEmpty())
-        return false;
-
-    bool result = true;
-
-    for (qsizetype i = 0; i < str.size(); ++i)
-    {
-        if (!str.at(i).isDigit())
-        {
-            result = false;
-            break;
-        }
-    }
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
 HostId stringToHostId(const QString& str)
 {
     if (str.isEmpty())
@@ -76,6 +56,25 @@ HostId stringToHostId(const QString& str)
         return kInvalidHostId;
 
     return host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isHostId(const QString& str)
+{
+    if (str.isEmpty())
+        return false;
+
+    // Only the digits the conversion below reads. QChar counts the decimal digits of every script
+    // as digits, and a string of those would pass the check the user sees and fail the conversion.
+    for (QChar character : str)
+    {
+        if (character < QChar('0') || character > QChar('9'))
+            return false;
+    }
+
+    // What the conversion cannot use does not name a host: a value larger than an id holds, and the
+    // one that stands for no host at all.
+    return stringToHostId(str) != kInvalidHostId;
 }
 
 //--------------------------------------------------------------------------------------------------

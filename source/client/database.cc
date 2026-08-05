@@ -146,6 +146,36 @@ bool createTables(SqlDatabase& db)
 }
 
 //--------------------------------------------------------------------------------------------------
+// True when the new parent is the group itself or one of the groups below it. Such a move closes a
+// loop: the group and everything under it drop out of the tree, which is walked from the root down,
+// and a path built by walking parents upward from a host inside the loop never ends.
+bool wouldCloseLoop(SqlDatabase& db, qint64 group_id, qint64 new_parent_id)
+{
+    // The root is where the tree starts and is below nothing.
+    if (new_parent_id <= 0)
+        return false;
+
+    if (new_parent_id == group_id)
+        return true;
+
+    // Walks the parents of the new parent upward. On a tree that is still whole the walk ends at
+    // the root, and SQLite caps a runaway recursion by itself.
+    const char kSql[] =
+        "WITH RECURSIVE ancestors(id) AS ("
+        "    SELECT id FROM \"groups\" WHERE id=?"
+        "    UNION ALL"
+        "    SELECT g.parent_id FROM \"groups\" g JOIN ancestors a ON g.id = a.id "
+        "      WHERE g.parent_id IS NOT NULL"
+        ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1";
+
+    SqlQuery query(db, kSql);
+    query.addInt64(new_parent_id);
+    query.addInt64(group_id);
+
+    return query.next() == SqlQuery::StepResult::ROW;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Host entries created before the GUID column existed get one on the first open.
 bool backfillHostGuids(SqlDatabase& db)
 {
@@ -519,6 +549,12 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
+    if (wouldCloseLoop(db_, group.id(), group.parentId()))
+    {
+        LOG(ERROR) << "Group" << group.id() << "cannot be put under" << group.parentId();
+        return false;
+    }
+
     SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
     query.addInt64(group.parentId());
     query.addBlob(group.encryptedName());
@@ -540,6 +576,12 @@ bool Database::moveGroup(qint64 group_id, qint64 new_parent_id)
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (wouldCloseLoop(db_, group_id, new_parent_id))
+    {
+        LOG(ERROR) << "Group" << group_id << "cannot be put under" << new_parent_id;
         return false;
     }
 
