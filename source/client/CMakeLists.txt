@@ -49,6 +49,8 @@ list(APPEND SOURCE_CLIENT_CORE
     master_password.h
     router.cc
     router.h
+    router_cache.cc
+    router_cache.h
     router_codec.cc
     router_codec.h
     router_keys.cc
@@ -84,6 +86,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
     json_backup_unittest.cc
+    router_cache_unittest.cc
     router_codec_unittest.cc
     router_keys_unittest.cc
     router_rpc_unittest.cc

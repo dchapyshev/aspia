@@ -31,7 +31,7 @@ namespace {
 
 constexpr qint64 kWorkspaceId = 10;
 
-const RouterState::HostCacheKey kHostKey { kWorkspaceId, 0, 0, 100 };
+const RouterCache::HostKey kHostKey { kWorkspaceId, 0, 0, 100 };
 
 } // namespace
 
@@ -104,9 +104,9 @@ protected:
 
         state_.applyHostList(hostList(kWorkspaceId, { HostId(1) }, 1), kHostKey, true);
 
-        ASSERT_TRUE(state_.workspacesLoaded());
-        ASSERT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-        ASSERT_NE(state_.cachedHostList(kHostKey), nullptr);
+        ASSERT_TRUE(state_.cache().workspacesLoaded());
+        ASSERT_NE(state_.cache().groupList(kWorkspaceId), nullptr);
+        ASSERT_NE(state_.cache().hostList(kHostKey), nullptr);
     }
 
     static proto::router::RouterToAdmin workspaceResult(const char* command, const char* error_code)
@@ -198,42 +198,7 @@ TEST_F(RouterStateTest, FailedWorkspaceListChangesNothing)
 
     EXPECT_TRUE(state_.keys().hasWorkspaceKey(10));
     EXPECT_TRUE(state_.keys().hasWorkspaceKey(20));
-    EXPECT_FALSE(state_.workspacesLoaded());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(RouterStateTest, CachedWorkspaceListLooksLikeASuccessfulReply)
-{
-    loadKeys({10});
-    state_.applyWorkspaceList(workspaceList({10}), 0);
-
-    ASSERT_TRUE(state_.workspacesLoaded());
-
-    const RouterWorkspaceList cached = state_.cachedWorkspaceList();
-    EXPECT_EQ(cached.error_code, QString::fromStdString(proto::router::kErrorOk));
-    EXPECT_EQ(cached.workspaces.size(), 1);
-
-    // An edit that moved the workspaces marks the cache stale without dropping the keys.
-    state_.invalidateWorkspaces();
-    EXPECT_FALSE(state_.workspacesLoaded());
-    EXPECT_TRUE(state_.keys().hasWorkspaceKey(10));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The page is part of the identity of a cached host list: serving the rows of one page for another
-// would show the wrong hosts.
-TEST_F(RouterStateTest, HostPagesAreCachedApart)
-{
-    loadKeys({10});
-
-    const RouterState::HostCacheKey first{ 10, 0, 0, 9 };
-    const RouterState::HostCacheKey second{ 10, 0, 10, 19 };
-
-    state_.applyHostList(hostList(10, {HostId(1)}, 25), first, true);
-
-    ASSERT_NE(state_.cachedHostList(first), nullptr);
-    EXPECT_EQ(state_.cachedHostList(first)->hosts.size(), 1);
-    EXPECT_EQ(state_.cachedHostList(second), nullptr);
+    EXPECT_FALSE(state_.cache().workspacesLoaded());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,28 +208,14 @@ TEST_F(RouterStateTest, CachedHostListKeepsTotalCountAndEchoes)
 {
     loadKeys({10});
 
-    const RouterState::HostCacheKey key{ 10, 0, 0, 9 };
+    const RouterCache::HostKey key{ 10, 0, 0, 9 };
     state_.applyHostList(hostList(10, {HostId(1), HostId(2)}, 25), key, true);
 
-    const RouterHostList* cached = state_.cachedHostList(key);
+    const RouterHostList* cached = state_.cache().hostList(key);
     ASSERT_NE(cached, nullptr);
     EXPECT_EQ(cached->total_count, 25);
     EXPECT_EQ(cached->workspace_id, 10);
     EXPECT_EQ(cached->error_code, QString::fromStdString(proto::router::kErrorOk));
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(RouterStateTest, FailedHostListIsNotCached)
-{
-    loadKeys({10});
-
-    proto::router::HostList failed;
-    failed.set_error_code(proto::router::kErrorAccessDenied);
-
-    const RouterState::HostCacheKey key{ 10, 0, 0, 0 };
-    state_.applyHostList(failed, key, true);
-
-    EXPECT_EQ(state_.cachedHostList(key), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -287,78 +238,10 @@ TEST_F(RouterStateTest, GroupListIsDecryptedAndCached)
     EXPECT_EQ(decoded.groups.at(0).comment, "group comment");
     EXPECT_EQ(decoded.groups.at(0).workspace_id, 10);
 
-    const RouterGroupList* cached = state_.cachedGroupList(10);
+    const RouterGroupList* cached = state_.cache().groupList(10);
     ASSERT_NE(cached, nullptr);
     EXPECT_EQ(cached->groups.size(), 1);
-    EXPECT_EQ(state_.cachedGroupList(20), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(RouterStateTest, FailedGroupListIsNotCached)
-{
-    loadKeys({10});
-
-    proto::router::GroupList failed;
-    failed.set_error_code(proto::router::kErrorAccessDenied);
-    failed.set_workspace_id(10);
-
-    state_.applyGroupList(failed);
-
-    EXPECT_EQ(state_.cachedGroupList(10), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A notification is the router saying a change made elsewhere left what we hold out of date. The
-// invalidation next to a reply only covers what this client wrote, so without this a caller that
-// accepts a cached answer keeps being served the very rows the notification was about.
-TEST_F(RouterStateTest, NotificationDropsOnlyTheListsItNames)
-{
-    fillCaches();
-
-    proto::router::Notification hosts;
-    hosts.set_hosts_dirty(true);
-    state_.applyNotification(hosts);
-
-    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
-    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-    EXPECT_TRUE(state_.workspacesLoaded());
-
-    fillCaches();
-
-    proto::router::Notification groups;
-    groups.set_groups_dirty(true);
-    state_.applyNotification(groups);
-
-    EXPECT_EQ(state_.cachedGroupList(kWorkspaceId), nullptr);
-    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
-
-    fillCaches();
-
-    proto::router::Notification workspaces;
-    workspaces.set_workspaces_dirty(true);
-    state_.applyNotification(workspaces);
-
-    EXPECT_FALSE(state_.workspacesLoaded());
-    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// What the notification says nothing about is still good: those lists are not cached here at all,
-// and dropping the ones that are would cost a reload for nothing.
-TEST_F(RouterStateTest, NotificationOfSomethingElseKeepsTheLists)
-{
-    fillCaches();
-
-    proto::router::Notification notification;
-    notification.set_users_dirty(true);
-    notification.set_relays_dirty(true);
-    notification.set_clients_dirty(true);
-    notification.set_temp_hosts_dirty(true);
-    state_.applyNotification(notification);
-
-    EXPECT_TRUE(state_.workspacesLoaded());
-    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
+    EXPECT_EQ(state_.cache().groupList(20), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -374,7 +257,7 @@ TEST_F(RouterStateTest, DecoderRunsBeforeTheHandler)
     proto::router::HostListRequest request;
     request.set_request_id(state_.rpc().nextRequestId());
 
-    const RouterState::HostCacheKey key{ 10, 0, 0, 0 };
+    const RouterCache::HostKey key{ 10, 0, 0, 0 };
     state_.rpc().registerPending<proto::router::HostList>(&request, &receiver,
         [&delivered](const RouterHostList& list) { delivered = list; },
         [this, key](const proto::router::HostList& raw)
@@ -385,7 +268,7 @@ TEST_F(RouterStateTest, DecoderRunsBeforeTheHandler)
     state_.rpc().dispatch(request.request_id(), hostList(10, {HostId(1)}, 1));
 
     EXPECT_EQ(delivered.hosts.size(), 1);
-    EXPECT_NE(state_.cachedHostList(key), nullptr);
+    EXPECT_NE(state_.cache().hostList(key), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -396,10 +279,10 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
 {
     loadKeys({10});
 
-    const RouterState::HostCacheKey key{ 10, 0, 0, 0 };
+    const RouterCache::HostKey key{ 10, 0, 0, 0 };
     state_.applyHostList(hostList(10, {HostId(1)}, 1), key, true);
     state_.applyWorkspaceList(workspaceList({10}), 0);
-    ASSERT_TRUE(state_.workspacesLoaded());
+    ASSERT_TRUE(state_.cache().workspacesLoaded());
 
     QObject receiver;
     int calls = 0;
@@ -414,8 +297,8 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
     state_.rpc().clearPending();
 
     EXPECT_EQ(state_.rpc().pendingCount(), 0);
-    EXPECT_FALSE(state_.workspacesLoaded());
-    EXPECT_EQ(state_.cachedHostList(key), nullptr);
+    EXPECT_FALSE(state_.cache().workspacesLoaded());
+    EXPECT_EQ(state_.cache().hostList(key), nullptr);
 
     // The caller is told the answer will never come, once.
     EXPECT_EQ(calls, 1);
@@ -520,145 +403,20 @@ TEST_F(RouterStateTest, SessionMessagesAreNotReplies)
 
 //--------------------------------------------------------------------------------------------------
 // A reply nobody waits for any more (the dialog was closed) is still a reply: the cache rules that
-// come with it must run.
+// come with it must run. What the rules are is the business of RouterCache; here it only matters
+// that every reply channel feeds them.
 TEST_F(RouterStateTest, ReplyWithoutARequestStillAppliesItsRules)
 {
     fillCaches();
 
     EXPECT_TRUE(state_.routeReply(workspaceResult(proto::router::kCommandWorkspaceModify,
                                                   proto::router::kErrorOk)));
-    EXPECT_FALSE(state_.workspacesLoaded());
-}
+    EXPECT_FALSE(state_.cache().workspacesLoaded());
 
-//--------------------------------------------------------------------------------------------------
-// Every workspace operation assigns hosts to the workspace or releases them from it, so the cached
-// host lists are stale the moment the reply arrives - seconds before the batched notification that
-// would refresh them.
-TEST_F(RouterStateTest, WorkspaceChangeDropsTheHostsItMoved)
-{
     fillCaches();
 
-    ASSERT_TRUE(state_.routeReply(workspaceResult(proto::router::kCommandWorkspaceModify,
-                                                  proto::router::kErrorOk)));
-
-    EXPECT_FALSE(state_.workspacesLoaded());
-    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
-
-    // A modified workspace keeps its group tree.
-    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Deleting a workspace takes its whole group tree with it. Keeping the cached groups would show
-// the branches of a workspace that is gone.
-TEST_F(RouterStateTest, WorkspaceDeleteAlsoDropsTheGroupsItTookWithIt)
-{
-    fillCaches();
-
-    ASSERT_TRUE(state_.routeReply(workspaceResult(proto::router::kCommandWorkspaceDelete,
-                                                  proto::router::kErrorOk)));
-
-    EXPECT_FALSE(state_.workspacesLoaded());
-    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
-    EXPECT_EQ(state_.cachedGroupList(kWorkspaceId), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A refused operation changed nothing, so there is nothing to reload.
-TEST_F(RouterStateTest, FailedWorkspaceChangeKeepsTheCaches)
-{
-    fillCaches();
-
-    ASSERT_TRUE(state_.routeReply(workspaceResult(proto::router::kCommandWorkspaceDelete,
-                                                  proto::router::kErrorConflict)));
-
-    EXPECT_TRUE(state_.workspacesLoaded());
-    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
-    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A deleted group releases its hosts, which is why the host lists go with it.
-TEST_F(RouterStateTest, GroupDeleteAlsoDropsTheHostsItReleased)
-{
-    fillCaches();
-
-    ASSERT_TRUE(state_.routeReply(groupResult(proto::router::kCommandGroupDelete,
+    EXPECT_TRUE(state_.routeReply(groupResult(proto::router::kCommandGroupDelete,
                                               proto::router::kErrorOk)));
-
-    EXPECT_EQ(state_.cachedGroupList(kWorkspaceId), nullptr);
-    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
-
-    // Groups are not part of a workspace record, so the workspace list is still current.
-    EXPECT_TRUE(state_.workspacesLoaded());
-}
-
-//--------------------------------------------------------------------------------------------------
-// Adding or renaming a group moves no host.
-TEST_F(RouterStateTest, GroupAddKeepsTheHostCache)
-{
-    fillCaches();
-
-    ASSERT_TRUE(state_.routeReply(groupResult(proto::router::kCommandGroupAdd,
-                                              proto::router::kErrorOk)));
-
-    EXPECT_EQ(state_.cachedGroupList(kWorkspaceId), nullptr);
-    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A host change is a host change: the workspaces and the groups are untouched.
-TEST_F(RouterStateTest, HostChangeDropsOnlyTheHostCache)
-{
-    fillCaches();
-
-    proto::router::RouterToManager message;
-    proto::router::HostResult* result = message.mutable_host_result();
-    result->set_request_id(1);
-    result->set_command_name(proto::router::kCommandHostModify);
-    result->set_error_code(proto::router::kErrorOk);
-
-    ASSERT_TRUE(state_.routeReply(message));
-
-    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
-    EXPECT_TRUE(state_.workspacesLoaded());
-    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Adding an administrator grants it an access entry in every workspace and deleting a user drops
-// its entries by cascade - both move the revisions the cached list carries.
-TEST_F(RouterStateTest, MembershipUserCommandsDropTheWorkspaceCache)
-{
-    for (const char* command : { proto::router::kCommandUserAdd,
-                                 proto::router::kCommandUserModify,
-                                 proto::router::kCommandUserDelete })
-    {
-        fillCaches();
-
-        ASSERT_TRUE(state_.routeReply(userResult(command, proto::router::kErrorOk)));
-
-        EXPECT_FALSE(state_.workspacesLoaded()) << "command: " << command;
-
-        // Users are not cached, and no user command moves a host or a group.
-        EXPECT_NE(state_.cachedHostList(kHostKey), nullptr) << "command: " << command;
-        EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr) << "command: " << command;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-// Resetting the second factor or revoking a token touches nothing but the user itself.
-TEST_F(RouterStateTest, TokenUserCommandsKeepTheCaches)
-{
-    for (const char* command : { proto::router::kCommandUserResetOtp,
-                                 proto::router::kCommandUserRevokeTokens })
-    {
-        fillCaches();
-
-        ASSERT_TRUE(state_.routeReply(userResult(command, proto::router::kErrorOk)));
-
-        EXPECT_TRUE(state_.workspacesLoaded()) << "command: " << command;
-        EXPECT_NE(state_.cachedHostList(kHostKey), nullptr) << "command: " << command;
-        EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr) << "command: " << command;
-    }
+    EXPECT_EQ(state_.cache().groupList(kWorkspaceId), nullptr);
+    EXPECT_EQ(state_.cache().hostList(kHostKey), nullptr);
 }

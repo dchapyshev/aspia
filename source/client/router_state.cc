@@ -36,10 +36,7 @@ void RouterState::clearSession()
 //--------------------------------------------------------------------------------------------------
 void RouterState::clearCaches()
 {
-    workspaces_loaded_ = false;
-    cached_workspaces_ = RouterWorkspaceList();
-    cached_groups_.clear();
-    cached_hosts_.clear();
+    cache_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,26 +57,18 @@ bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
     else if (message.has_user_result())
     {
         const proto::router::UserResult& result = message.user_result();
-        const std::string& command = result.command_name();
-
-        // Adding an administrator grants it an access entry in every workspace and deleting a user
-        // drops its entries by cascade; both move the revisions of the workspaces involved.
-        // reset_otp and revoke_tokens touch nothing but the user itself.
-        const bool moves_workspaces = command == proto::router::kCommandUserAdd ||
-                                      command == proto::router::kCommandUserModify ||
-                                      command == proto::router::kCommandUserDelete;
-
-        if (moves_workspaces && result.error_code() == proto::router::kErrorOk)
-            invalidateWorkspaces();
+        cache_.onResult(RouterCache::Result::USER, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
 
         rpc_.dispatch(result.request_id(), result);
     }
     else if (message.has_host_result())
     {
-        if (message.host_result().error_code() == proto::router::kErrorOk)
-            clearHostCache();
+        const proto::router::HostResult& result = message.host_result();
+        cache_.onResult(RouterCache::Result::HOST, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
 
-        rpc_.dispatch(message.host_result().request_id(), message.host_result());
+        rpc_.dispatch(result.request_id(), result);
     }
     else if (message.has_relay_result())
     {
@@ -92,17 +81,8 @@ bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
     else if (message.has_workspace_result())
     {
         const proto::router::WorkspaceResult& result = message.workspace_result();
-        if (result.error_code() == proto::router::kErrorOk)
-        {
-            // Every workspace operation assigns hosts to the workspace or releases them from it,
-            // and deleting one takes its whole group tree with it - the same three lists the
-            // router marks as changed.
-            invalidateWorkspaces();
-            clearHostCache();
-
-            if (result.command_name() == proto::router::kCommandWorkspaceDelete)
-                clearGroupCache();
-        }
+        cache_.onResult(RouterCache::Result::WORKSPACE, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
 
         rpc_.dispatch(result.request_id(), result);
     }
@@ -123,24 +103,17 @@ bool RouterState::routeReply(const proto::router::RouterToManager& message)
 {
     if (message.has_host_result())
     {
-        if (message.host_result().error_code() == proto::router::kErrorOk)
-            clearHostCache();
+        const proto::router::HostResult& result = message.host_result();
+        cache_.onResult(RouterCache::Result::HOST, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
 
-        rpc_.dispatch(message.host_result().request_id(), message.host_result());
+        rpc_.dispatch(result.request_id(), result);
     }
     else if (message.has_group_result())
     {
         const proto::router::GroupResult& result = message.group_result();
-        if (result.error_code() == proto::router::kErrorOk)
-        {
-            // The result carries no workspace id, so the whole group cache goes; group edits are
-            // rare enough that the extra reload does not matter. A deleted group also releases its
-            // hosts, which is why the host lists go with it.
-            clearGroupCache();
-
-            if (result.command_name() == proto::router::kCommandGroupDelete)
-                clearHostCache();
-        }
+        cache_.onResult(RouterCache::Result::GROUP, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
 
         rpc_.dispatch(result.request_id(), result);
     }
@@ -150,22 +123,6 @@ bool RouterState::routeReply(const proto::router::RouterToManager& message)
     }
 
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterState::applyNotification(const proto::router::Notification& notification)
-{
-    // Each flag names the list it is about, so only that one goes. The rest of what the router
-    // announces - users, relays, clients, temporary hosts - is fetched fresh every time and has no
-    // cache here to drop.
-    if (notification.hosts_dirty())
-        clearHostCache();
-
-    if (notification.groups_dirty())
-        clearGroupCache();
-
-    if (notification.workspaces_dirty())
-        invalidateWorkspaces();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,9 +209,7 @@ RouterWorkspaceList RouterState::applyWorkspaceList(const proto::router::Workspa
     if (full_list)
     {
         keys_.dropKeysExcept(visible_ids);
-
-        cached_workspaces_ = decoded;
-        workspaces_loaded_ = true;
+        cache_.storeWorkspaces(decoded);
     }
 
     return decoded;
@@ -262,13 +217,12 @@ RouterWorkspaceList RouterState::applyWorkspaceList(const proto::router::Workspa
 
 //--------------------------------------------------------------------------------------------------
 RouterHostList RouterState::applyHostList(const proto::router::HostList& list,
-                                          const HostCacheKey& key, bool cacheable)
+                                          const RouterCache::HostKey& key, bool cacheable)
 {
     RouterHostList decoded = decodeRouterHostList(keys_, list);
 
-    // An error reply carries no list - caching it would serve the emptiness as a success.
-    if (cacheable && decoded.error_code == proto::router::kErrorOk)
-        cached_hosts_[key] = decoded;
+    if (cacheable)
+        cache_.storeHosts(key, decoded);
 
     return decoded;
 }
@@ -277,35 +231,6 @@ RouterHostList RouterState::applyHostList(const proto::router::HostList& list,
 RouterGroupList RouterState::applyGroupList(const proto::router::GroupList& list)
 {
     RouterGroupList decoded = decodeRouterGroupList(keys_, list);
-
-    if (decoded.error_code == proto::router::kErrorOk)
-        cached_groups_[decoded.workspace_id] = decoded;
-
+    cache_.storeGroups(decoded);
     return decoded;
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterWorkspaceList RouterState::cachedWorkspaceList() const
-{
-    RouterWorkspaceList cached = cached_workspaces_;
-    cached.error_code = proto::router::kErrorOk;
-    return cached;
-}
-
-//--------------------------------------------------------------------------------------------------
-const RouterHostList* RouterState::cachedHostList(const HostCacheKey& key) const
-{
-    const auto it = cached_hosts_.constFind(key);
-    if (it == cached_hosts_.constEnd())
-        return nullptr;
-    return &it.value();
-}
-
-//--------------------------------------------------------------------------------------------------
-const RouterGroupList* RouterState::cachedGroupList(qint64 workspace_id) const
-{
-    const auto it = cached_groups_.constFind(workspace_id);
-    if (it == cached_groups_.constEnd())
-        return nullptr;
-    return &it.value();
 }

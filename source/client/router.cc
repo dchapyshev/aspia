@@ -418,7 +418,7 @@ void Router::emitNotificationSignals(const proto::router::Notification& notifica
 {
     const qint64 router_id = config_.routerId();
 
-    state_.applyNotification(notification);
+    state_.cache().onNotification(notification);
 
     if (notification.temp_hosts_dirty())
         emit sig_tempHostsChanged(router_id);

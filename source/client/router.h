@@ -636,9 +636,9 @@ void Router::deleteGroup(qint64 workspace_id, qint64 entry_id, QObject* receiver
 template<typename HandlerT>
 void Router::listWorkspaces(CachePolicy policy, qint64 workspace_id, QObject* receiver, HandlerT handler)
 {
-    if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && state_.workspacesLoaded())
+    if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && state_.cache().workspacesLoaded())
     {
-        RouterRpc::invokeHandler(receiver, handler, state_.cachedWorkspaceList());
+        RouterRpc::invokeHandler(receiver, handler, state_.cache().workspaceList());
         return;
     }
 
@@ -660,7 +660,7 @@ void Router::listGroups(CachePolicy policy, qint64 workspace_id, QObject* receiv
 {
     if (policy == CachePolicy::USE_CACHE)
     {
-        const Router::GroupList* cached = state_.cachedGroupList(workspace_id);
+        const Router::GroupList* cached = state_.cache().groupList(workspace_id);
         if (cached)
         {
             RouterRpc::invokeHandler(receiver, handler, *cached);
@@ -689,12 +689,12 @@ void Router::listHosts(CachePolicy policy, proto::router::HostListRequest reques
     // The requested page is part of the key: two pages of the same selection are different
     // answers, and the total count of the whole scope travels with them.
     const bool cacheable = request.mode() == proto::router::HostListRequest::MODE_FILTERED;
-    const RouterState::HostCacheKey key{ request.workspace_id(), request.group_id(),
+    const RouterCache::HostKey key{ request.workspace_id(), request.group_id(),
                                          request.offset(), request.count() };
 
     if (policy == CachePolicy::USE_CACHE && cacheable)
     {
-        const Router::HostList* cached = state_.cachedHostList(key);
+        const Router::HostList* cached = state_.cache().hostList(key);
         if (cached)
         {
             RouterRpc::invokeHandler(receiver, handler, *cached);
