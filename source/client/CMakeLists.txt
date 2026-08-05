@@ -51,6 +51,8 @@ list(APPEND SOURCE_CLIENT_CORE
     router.h
     router_state.cc
     router_state.h
+    page_model.cc
+    page_model.h
     search_page_model.cc
     search_page_model.h
     router_types.h
@@ -69,6 +71,7 @@ list(APPEND SOURCE_CLIENT
 list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/edit_model_unittest.cc
     router_state_unittest.cc
+    page_model_unittest.cc
     search_page_model_unittest.cc
     tests_main.cc)
 

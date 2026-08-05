@@ -22,6 +22,8 @@
 #include <QList>
 #include <QtTypes>
 
+#include "client/page_model.h"
+
 // Pagination of a host search whose matches come from several sources at once: the local address
 // book and every router the client is connected to. Each source counts and orders its own matches
 // and can hand out an arbitrary window of them, but none of them knows about the others, so the
@@ -58,19 +60,19 @@ public:
     // the result, which is what the user is shown anyway, and the pages of the others stay whole.
     int addSource(qint64 match_count);
 
-    void setPageSize(qint64 page_size);
-    qint64 pageSize() const { return page_size_; }
+    void setPageSize(qint64 page_size) { page_.setPageSize(page_size); }
+    qint64 pageSize() const { return page_.pageSize(); }
 
     // Matches over every source.
-    qint64 totalCount() const { return total_count_; }
+    qint64 totalCount() const { return page_.totalCount(); }
 
     // At least one, even when nothing was found: the user is always on a page.
-    qint64 pageCount() const;
+    qint64 pageCount() const { return page_.pageCount(); }
 
     // Zero based. Out of range values are clamped to the last page, so a page that disappeared
     // under the user (a source lost its matches on a refetch) does not leave an empty view.
-    qint64 currentPage() const { return current_page_; }
-    void setCurrentPage(qint64 page);
+    qint64 currentPage() const { return page_.currentPage(); }
+    void setCurrentPage(qint64 page) { page_.setCurrentPage(page); }
 
     // The windows to ask the sources for to fill the current page, in the order the results are
     // to be shown. Empty when nothing was found.
@@ -78,9 +80,7 @@ public:
 
 private:
     QList<qint64> source_counts_;
-    qint64 total_count_ = 0;
-    qint64 page_size_ = 50;
-    qint64 current_page_ = 0;
+    PageModel page_;
 };
 
 #endif // CLIENT_SEARCH_PAGE_MODEL_H

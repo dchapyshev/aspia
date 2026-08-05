@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "client/config.h"
+#include "client/page_model.h"
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
 
@@ -109,9 +110,7 @@ private:
     // the workspace column without a dedicated workspaces view.
     QHash<qint64, QString> workspace_names_;
 
-    qint64 hosts_page_size_ = 100;
-    qint64 hosts_current_page_ = 1;
-    qint64 hosts_total_count_ = 0;
+    PageModel hosts_page_;
 
     Q_DISABLE_COPY_MOVE(RouterHostsWidget)
 };

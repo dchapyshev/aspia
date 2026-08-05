@@ -208,8 +208,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
     group_id_ = group_id;
 
     // Another selection is another list, so its paging starts over.
-    current_page_ = 1;
-    total_count_ = 0;
+    hosts_page_.clear();
 
     ui->tree_host->clear();
     updateStatusLabel();
@@ -417,16 +416,22 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
             ui->tree_host->addTopLevelItem(new HostTreeItem(host));
     }
 
-    total_count_ = list.total_count;
+    const bool page_moved = hosts_page_.setTotalCount(list.total_count);
     updatePagination();
     updateStatusLabel();
+
+    // The page the list was fetched for is gone, so the tree was just emptied. Nothing else asks
+    // for the page it was moved to, and the user would be left looking at nothing. The cached
+    // answer for that page is from before the change, so it is not the one to show.
+    if (page_moved)
+        fetchHosts(Router::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onPageSizeChanged(int /* index */)
 {
-    page_size_ = ui->combo_hosts_page_size->currentData().toLongLong();
-    current_page_ = 1;
+    hosts_page_.setPageSize(ui->combo_hosts_page_size->currentData().toLongLong());
+    hosts_page_.setCurrentPage(0);
     fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
@@ -436,32 +441,30 @@ void RouterGroupWidget::onPageChanged(int index)
     if (index < 0)
         return;
 
-    const qint64 page = index + 1;
-    if (page == current_page_)
+    if (index == hosts_page_.currentPage())
         return;
 
-    current_page_ = page;
+    hosts_page_.setCurrentPage(index);
     fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onPrevClicked()
 {
-    if (current_page_ <= 1)
+    if (hosts_page_.currentPage() <= 0)
         return;
 
-    --current_page_;
+    hosts_page_.setCurrentPage(hosts_page_.currentPage() - 1);
     fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::onNextClicked()
 {
-    const qint64 total_pages = (total_count_ + page_size_ - 1) / page_size_;
-    if (current_page_ >= total_pages)
+    if (hosts_page_.currentPage() >= hosts_page_.pageCount() - 1)
         return;
 
-    ++current_page_;
+    hosts_page_.setCurrentPage(hosts_page_.currentPage() + 1);
     fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
@@ -510,8 +513,8 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id_);
     request.set_group_id(group_id_);
-    request.set_offset((current_page_ - 1) * page_size_);
-    request.set_count(page_size_);
+    request.set_offset(hosts_page_.offset());
+    request.set_count(hosts_page_.pageSize());
     router->listHosts(policy, std::move(request), this, &RouterGroupWidget::onHostListReceived);
 }
 
@@ -524,24 +527,17 @@ void RouterGroupWidget::updateStatusLabel()
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::updatePagination()
 {
-    qint64 total_pages = 1;
-    if (total_count_ > 0)
-        total_pages = (total_count_ + page_size_ - 1) / page_size_;
-
-    if (current_page_ > total_pages)
-        current_page_ = total_pages;
-    if (current_page_ < 1)
-        current_page_ = 1;
+    const qint64 total_pages = hosts_page_.pageCount();
 
     QSignalBlocker blocker(ui->combo_hosts_page);
     ui->combo_hosts_page->clear();
     for (qint64 i = 1; i <= total_pages; ++i)
         ui->combo_hosts_page->addItem(QString::number(i));
-    ui->combo_hosts_page->setCurrentIndex(static_cast<int>(current_page_ - 1));
+    ui->combo_hosts_page->setCurrentIndex(static_cast<int>(hosts_page_.currentPage()));
 
     ui->combo_hosts_page->setEnabled(total_pages > 1);
-    ui->button_hosts_prev->setEnabled(current_page_ > 1);
-    ui->button_hosts_next->setEnabled(current_page_ < total_pages);
+    ui->button_hosts_prev->setEnabled(hosts_page_.currentPage() > 0);
+    ui->button_hosts_next->setEnabled(hosts_page_.currentPage() < total_pages - 1);
 }
 
 //--------------------------------------------------------------------------------------------------

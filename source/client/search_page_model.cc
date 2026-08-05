@@ -24,8 +24,7 @@
 void SearchPageModel::clear()
 {
     source_counts_.clear();
-    total_count_ = 0;
-    current_page_ = 0;
+    page_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -34,33 +33,9 @@ int SearchPageModel::addSource(qint64 match_count)
     CHECK_GE(match_count, 0);
 
     source_counts_.append(match_count);
-    total_count_ += match_count;
+    page_.setTotalCount(page_.totalCount() + match_count);
 
     return static_cast<int>(source_counts_.size()) - 1;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SearchPageModel::setPageSize(qint64 page_size)
-{
-    CHECK_GT(page_size, 0);
-    page_size_ = page_size;
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 SearchPageModel::pageCount() const
-{
-    if (total_count_ <= 0)
-        return 1;
-
-    return (total_count_ + page_size_ - 1) / page_size_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SearchPageModel::setCurrentPage(qint64 page)
-{
-    const qint64 last_page = pageCount() - 1;
-
-    current_page_ = qBound(qint64(0), page, last_page);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,8 +43,8 @@ QList<SearchPageModel::Slice> SearchPageModel::currentSlices() const
 {
     QList<Slice> slices;
 
-    const qint64 window_start = current_page_ * page_size_;
-    const qint64 window_end = window_start + page_size_;
+    const qint64 window_start = page_.offset();
+    const qint64 window_end = window_start + page_.pageSize();
 
     // Walk the sources in order, tracking where each of them starts in the whole result, and take
     // the part of it the window covers. A source before or after the window contributes nothing.

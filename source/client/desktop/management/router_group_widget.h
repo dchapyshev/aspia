@@ -24,6 +24,7 @@
 #include <QPoint>
 
 #include "client/config.h"
+#include "client/page_model.h"
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
 
@@ -94,9 +95,7 @@ private:
     QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
 
-    qint64 page_size_ = 100;
-    qint64 current_page_ = 1;
-    qint64 total_count_ = 0;
+    PageModel hosts_page_;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };
