@@ -21,6 +21,8 @@
 
 namespace proto::router {
 
+constexpr int kMaxHostPageSize = 100;
+
 // Command names for HostRequest.
 extern const char* const kCommandHostDisconnect;
 extern const char* const kCommandHostRemove;

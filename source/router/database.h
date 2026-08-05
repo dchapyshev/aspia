@@ -238,16 +238,16 @@ public:
         std::string_view comment, std::string_view user_name, std::string_view password);
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
-    // reading rows straight into the protobuf message. [start_item, end_item] gives an inclusive
-    // paging window; leaving both endpoints at 0 requests the unpaged mode. Any other range
-    // must be valid and bounded. The Host.online field is left unset - it reflects runtime session
-    // state the database does not track and is filled by the caller.
-    void hosts(qint64 start_item, qint64 end_item, proto::router::HostList* out) const;
+    // reading rows straight into the protobuf message. |offset| and |count| give the requested
+    // page; it is mandatory, so a zero count is refused along with a negative offset or a count
+    // over the cap. The Host.online field is left unset - it reflects runtime session state the
+    // database does not track and is filled by the caller.
+    void hosts(qint64 offset, qint64 count, proto::router::HostList* out) const;
 
     // Appends hosts in the given workspace and group (exact match on both columns) to |out| and
-    // sets its error_code. [start_item, end_item] gives an inclusive paging window; leaving both
-    // endpoints at 0 requests the unpaged mode. Any other range must be valid and bounded.
-    void hosts(qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item,
+    // sets its error_code. |offset| and |count| give the page; it is mandatory and bounded the
+    // same way as in the overload above.
+    void hosts(qint64 workspace_id, qint64 group_id, qint64 offset, qint64 count,
         proto::router::HostList* out) const;
 
     // Total host count in the same scope as the matching hosts() overload. Used by the client
@@ -258,10 +258,11 @@ public:
 
     // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted
     // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
-    // an empty list yields no results. Matches are appended to |out| and its error_code is set;
-    // Host.online is left unset.
+    // an empty list yields no results. The page is mandatory and bounded exactly like the one of
+    // hosts(). Matches are appended to |out|, its total_count is set to the number of matches in
+    // the whole scope and its error_code is set; Host.online is left unset.
     void searchHosts(const QString& query, const std::set<qint64>& workspace_ids,
-        proto::router::HostSearchResult* out) const;
+        qint64 offset, qint64 count, proto::router::HostSearchResult* out) const;
 
     // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the
     // host_id is then kept until the host process acknowledges the removal command.

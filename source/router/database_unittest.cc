@@ -123,7 +123,7 @@ protected:
     proto::router::Host findHost(HostId host_id)
     {
         proto::router::HostList list;
-        db_.hosts(0, 0, &list);
+        db_.hosts(0, proto::router::kMaxHostPageSize, &list);
         for (int i = 0; i < list.host_size(); ++i)
         {
             if (list.host(i).host_id() == host_id)

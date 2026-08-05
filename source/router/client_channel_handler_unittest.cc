@@ -20,6 +20,8 @@
 
 #include <unordered_map>
 
+#include "base/serialization.h"
+#include "base/net/tcp_channel.h"
 #include "router/router_test_base.h"
 #include "router/workers/client_worker.h"
 
@@ -59,7 +61,7 @@ protected:
         // final set, and a host missing from it would be released.
         std::set<HostId> hosts;
         proto::router::HostList list;
-        db_.hosts(0, 0, &list);
+        db_.hosts(0, proto::router::kMaxHostPageSize, &list);
         for (int i = 0; i < list.host_size(); ++i)
         {
             if (list.host(i).workspace_id() == workspace_id)
@@ -96,6 +98,9 @@ protected:
         request.set_mode(mode);
         request.set_workspace_id(workspace_id);
         request.set_group_id(group_id);
+        // The page is mandatory; a test that is not about paging asks for the largest one.
+        request.set_offset(0);
+        request.set_count(proto::router::kMaxHostPageSize);
         return request;
     }
 
@@ -110,6 +115,9 @@ protected:
     {
         proto::router::HostSearchRequest request;
         request.set_query(query.toStdString());
+        // The page is mandatory; a test that is not about paging asks for the largest one.
+        request.set_offset(0);
+        request.set_count(proto::router::kMaxHostPageSize);
 
         proto::router::HostSearchResult out;
         ClientChannelHandler::handleHostSearch(db_, caller_, request, &out);
@@ -231,8 +239,8 @@ TEST_F(ClientChannelHandlerTest, PaginationReturnsWindowAndFullCount)
 
     proto::router::HostListRequest request =
         hostListRequest(proto::router::HostListRequest::MODE_ALL, 0, 0);
-    request.set_start_item(1);
-    request.set_end_item(2);
+    request.set_offset(1);
+    request.set_count(2);
 
     const proto::router::HostList list = hostList(request);
 
@@ -242,7 +250,7 @@ TEST_F(ClientChannelHandlerTest, PaginationReturnsWindowAndFullCount)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An unbounded or reversed range is refused instead of being clamped, and the count of the failed
+// A malformed or oversized page is refused instead of being clamped, and the count of the failed
 // reply is dropped with the list.
 TEST_F(ClientChannelHandlerTest, InvalidPaginationIsRejectedWithoutCount)
 {
@@ -250,16 +258,16 @@ TEST_F(ClientChannelHandlerTest, InvalidPaginationIsRejectedWithoutCount)
 
     proto::router::HostListRequest request =
         hostListRequest(proto::router::HostListRequest::MODE_ALL, 0, 0);
-    request.set_start_item(10);
-    request.set_end_item(2);
+    request.set_offset(-1);
+    request.set_count(10);
 
-    const proto::router::HostList reversed = hostList(request);
-    EXPECT_EQ(reversed.error_code(), proto::router::kErrorInvalidRequest);
-    EXPECT_EQ(reversed.host_size(), 0);
-    EXPECT_EQ(reversed.total_count(), 0);
+    const proto::router::HostList negative = hostList(request);
+    EXPECT_EQ(negative.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(negative.host_size(), 0);
+    EXPECT_EQ(negative.total_count(), 0);
 
-    request.set_start_item(0);
-    request.set_end_item(100000);
+    request.set_offset(0);
+    request.set_count(proto::router::kMaxHostPageSize + 1);
 
     const proto::router::HostList huge = hostList(request);
     EXPECT_EQ(huge.error_code(), proto::router::kErrorInvalidRequest);
@@ -321,6 +329,114 @@ TEST_F(ClientChannelHandlerTest, SearchMatchesDisplayNameAndHostId)
     ASSERT_EQ(by_id.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(by_id.host_size(), 1);
     EXPECT_EQ(by_id.host(0).host_id(), host_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request that names no page is refused in either mode. The whole point of the page is that the
+// size of a reply never follows the size of the database: a reply the channel cannot carry is not
+// sent but ends the session, so a client that forgot to page has to hear about it.
+TEST_F(ClientChannelHandlerTest, ListWithoutAPageIsRejected)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
+
+    for (const auto mode : { proto::router::HostListRequest::MODE_ALL,
+                             proto::router::HostListRequest::MODE_FILTERED })
+    {
+        proto::router::HostListRequest request = hostListRequest(mode, workspace_id_, 0);
+        request.set_offset(0);
+        request.set_count(0);
+
+        const proto::router::HostList list = hostList(request);
+
+        EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest) << mode;
+        EXPECT_EQ(list.host_size(), 0) << mode;
+        EXPECT_EQ(list.total_count(), 0) << mode;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// A full page of hosts whose every field sits on its limit still fits what the channel can carry.
+// This is what picks the value of kMaxHostPageSize, and it is the assumption that quietly breaks
+// once a field is added to a host record or a field limit is raised.
+TEST_F(ClientChannelHandlerTest, FullPageOfLargestHostsFitsTheChannel)
+{
+    // Written straight into the table: the point is the size of the reply, not the path the rows
+    // took to get there.
+    const QString sql = QString(
+        "INSERT INTO hosts (id, key, hwid, workspace_id, group_id, display_name, computer_name, "
+        "cpu_arch, version, os_name, address, comment, user_name, password) "
+        "WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n < %1) "
+        "SELECT NULL, randomblob(64), 'hwid', %2, 0, "
+        "substr(hex(zeroblob(64)),1,%3), substr(hex(zeroblob(64)),1,64), "
+        "substr(hex(zeroblob(32)),1,32), '3.0.0.0', substr(hex(zeroblob(64)),1,64), "
+        "'255.255.255.255', zeroblob(%4), zeroblob(%5), zeroblob(%5) FROM seq")
+        .arg(proto::router::kMaxHostPageSize).arg(workspace_id_)
+        .arg(kMaxEntryNameLength).arg(kMaxCommentLength).arg(kMaxCredentialLength);
+
+    ASSERT_TRUE(execRaw(sql));
+
+    proto::router::HostListRequest request =
+        hostListRequest(proto::router::HostListRequest::MODE_FILTERED, workspace_id_, 0);
+
+    proto::router::RouterToClient message;
+    proto::router::HostList* list = message.mutable_host_list();
+    ClientChannelHandler::handleHostList(db_, caller_, request, list);
+
+    ASSERT_EQ(list->error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(list->host_size(), proto::router::kMaxHostPageSize);
+
+    EXPECT_LE(serialize(message).size(), qsizetype(TcpChannel::kMaxMessageSize));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The search answers with the page that was asked for and with the number of matches in the whole
+// scope, so the client can walk the rest instead of being handed a silently cut list.
+TEST_F(ClientChannelHandlerTest, SearchReturnsWindowAndFullCount)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "host-a"), kInvalidHostId);
+    ASSERT_NE(addHostTo("hash-2", workspace_id_, 0, "host-b"), kInvalidHostId);
+    ASSERT_NE(addHostTo("hash-3", workspace_id_, 0, "host-c"), kInvalidHostId);
+
+    proto::router::HostSearchRequest request;
+    request.set_query("host");
+    request.set_offset(1);
+    request.set_count(2);
+
+    proto::router::HostSearchResult result;
+    ClientChannelHandler::handleHostSearch(db_, caller_, request, &result);
+
+    EXPECT_EQ(result.error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(result.host_size(), 2);
+    EXPECT_EQ(result.host(0).display_name(), "host-b");
+    EXPECT_EQ(result.host(1).display_name(), "host-c");
+    EXPECT_EQ(result.total_count(), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The search is bounded by the same rule as the list, and a refused request carries neither
+// matches nor a count.
+TEST_F(ClientChannelHandlerTest, SearchWithAnInvalidPageIsRejected)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "host-a"), kInvalidHostId);
+
+    proto::router::HostSearchRequest request;
+    request.set_query("host");
+
+    proto::router::HostSearchResult no_page;
+    ClientChannelHandler::handleHostSearch(db_, caller_, request, &no_page);
+
+    EXPECT_EQ(no_page.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(no_page.host_size(), 0);
+    EXPECT_EQ(no_page.total_count(), 0);
+
+    request.set_offset(0);
+    request.set_count(proto::router::kMaxHostPageSize + 1);
+
+    proto::router::HostSearchResult huge;
+    ClientChannelHandler::handleHostSearch(db_, caller_, request, &huge);
+
+    EXPECT_EQ(huge.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(huge.total_count(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

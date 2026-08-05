@@ -86,13 +86,13 @@ void ClientChannelHandler::handleHostList(Database& database, const RequestCalle
     {
         out->set_total_count(database.hostCount(&count_known));
         if (count_known)
-            database.hosts(request.start_item(), request.end_item(), out);
+            database.hosts(request.offset(), request.count(), out);
     }
     else
     {
         out->set_total_count(database.hostCount(workspace_id, group_id, &count_known));
         if (count_known)
-            database.hosts(workspace_id, group_id, request.start_item(), request.end_item(), out);
+            database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
     }
 
     if (!count_known)
@@ -120,7 +120,8 @@ void ClientChannelHandler::handleHostSearch(Database& database, const RequestCal
         return;
     }
 
-    database.searchHosts(QString::fromStdString(request.query()), workspace_ids, out);
+    database.searchHosts(QString::fromStdString(request.query()), workspace_ids,
+                         request.offset(), request.count(), out);
 }
 
 //--------------------------------------------------------------------------------------------------

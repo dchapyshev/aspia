@@ -176,6 +176,8 @@ TEST_F(HostRequestHandlerTest, HostListStaysSendableAfterOversizedEdits)
     list_request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     list_request.set_workspace_id(workspace_id_);
     list_request.set_group_id(0);
+    list_request.set_offset(0);
+    list_request.set_count(proto::router::kMaxHostPageSize);
 
     caller_.session_type = proto::router::SESSION_TYPE_MANAGER;
 

@@ -180,10 +180,8 @@ message HostListRequest
 
     int64 request_id   = 1;
     Mode mode          = 2;
-    // Inclusive page range. Leaving both endpoints at 0 requests the unpaged mode;
-    // any other range must be valid and bounded by the router.
-    int64 start_item   = 3;
-    int64 end_item     = 4;
+    int64 offset       = 3; // Index of the first item, zero based.
+    int64 count        = 4; // Items to return. A zero count is refused, as is one over the cap.
     int64 workspace_id = 5;
     int64 group_id     = 6;
 }
@@ -202,13 +200,16 @@ message HostSearchRequest
 {
     int64 request_id = 1;
     string query     = 2;
+    int64 offset     = 3;
+    int64 count      = 4;
 }
 
 message HostSearchResult
 {
     int64 request_id   = 1;
-    string error_code  = 2; // "ok" | "access_denied" | "internal_error"
-    repeated Host host = 3;
+    string error_code  = 2; // "ok" | "invalid_request" | "internal_error"
+    int64 total_count  = 3; // Total matches in scope. Unset on an error reply.
+    repeated Host host = 4;
 }
 
 message TempHost

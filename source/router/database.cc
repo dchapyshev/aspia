@@ -55,25 +55,14 @@ constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding wi
 // anyway. Long enough for a machine that spends months switched off; after it the id is gone and
 // the host has to be approved again.
 constexpr qint64 kHostRemovalTtlSec = 180 * 24 * 3600;
-constexpr qint64 kMaxHostListPageSize = 1000;
 
-// A host-list request with both range endpoints left at their proto defaults means "unpaged" -
-// callers that do not page simply leave the fields unset. Any other range is an explicit page
-// and must stay bounded.
-bool isHostListPaginationEnabled(qint64 start_item, qint64 end_item)
+// Every host query has to name the page it wants. Whatever comes out of one goes into a single
+// reply, and a reply the channel cannot carry is not sent at all but ends the session, so the size
+// of an answer must never follow the size of the database. A request that names no page has a
+// count of zero and is refused along with one that asks for more than the cap.
+bool isHostPageValid(qint64 offset, qint64 count)
 {
-    return start_item != 0 || end_item != 0;
-}
-
-bool isHostListPaginationValid(qint64 start_item, qint64 end_item)
-{
-    if (!isHostListPaginationEnabled(start_item, end_item))
-        return true;
-
-    if (start_item < 0 || end_item < start_item)
-        return false;
-
-    return end_item - start_item < kMaxHostListPageSize;
+    return offset >= 0 && count > 0 && count <= proto::router::kMaxHostPageSize;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1598,7 +1587,7 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view disp
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList* out) const
+void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) const
 {
     if (!isValid())
     {
@@ -1607,18 +1596,16 @@ void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList
         return;
     }
 
-    if (!isHostListPaginationValid(start_item, end_item))
+    if (!isHostPageValid(offset, count))
     {
-        LOG(ERROR) << "Invalid host list page range:" << start_item << "-" << end_item;
+        LOG(ERROR) << "Invalid host list page: offset" << offset << "count" << count;
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }
-
-    const bool paginate = isHostListPaginationEnabled(start_item, end_item);
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify FROM hosts",
-        paginate ? " LIMIT ? OFFSET ?" : ""});
+        " LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
     if (!query.isValid())
@@ -1628,11 +1615,8 @@ void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList
         return;
     }
 
-    if (paginate)
-    {
-        query.addInt64(end_item - start_item + 1);
-        query.addInt64(start_item);
-    }
+    query.addInt64(count);
+    query.addInt64(offset);
 
     for (;;)
     {
@@ -1670,8 +1654,8 @@ void Database::hosts(qint64 start_item, qint64 end_item, proto::router::HostList
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
-    qint64 end_item, proto::router::HostList* out) const
+void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
+    qint64 count, proto::router::HostList* out) const
 {
     if (!isValid())
     {
@@ -1680,19 +1664,17 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
         return;
     }
 
-    if (!isHostListPaginationValid(start_item, end_item))
+    if (!isHostPageValid(offset, count))
     {
-        LOG(ERROR) << "Invalid host list page range:" << start_item << "-" << end_item;
+        LOG(ERROR) << "Invalid host list page: offset" << offset << "count" << count;
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }
-
-    const bool paginate = isHostListPaginationEnabled(start_item, end_item);
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, user_name, password, last_connect, last_modify "
         "FROM hosts WHERE workspace_id=? AND group_id=?",
-        paginate ? " LIMIT ? OFFSET ?" : ""});
+        " LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
     if (!query.isValid())
@@ -1704,11 +1686,8 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 start_item,
 
     query.addInt64(workspace_id);
     query.addInt64(group_id);
-    if (paginate)
-    {
-        query.addInt64(end_item - start_item + 1);
-        query.addInt64(start_item);
-    }
+    query.addInt64(count);
+    query.addInt64(offset);
 
     for (;;)
     {
@@ -1804,8 +1783,8 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id, bool* ok) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::searchHosts(const QString& query_text,
-    const std::set<qint64>& workspace_ids, proto::router::HostSearchResult* out) const
+void Database::searchHosts(const QString& query_text, const std::set<qint64>& workspace_ids,
+    qint64 offset, qint64 count, proto::router::HostSearchResult* out) const
 {
     if (!isValid())
     {
@@ -1814,8 +1793,16 @@ void Database::searchHosts(const QString& query_text,
         return;
     }
 
+    if (!isHostPageValid(offset, count))
+    {
+        LOG(ERROR) << "Invalid host search page: offset" << offset << "count" << count;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
     if (workspace_ids.empty() || query_text.isEmpty())
     {
+        out->set_total_count(0);
         out->set_error_code(proto::router::kErrorOk);
         return;
     }
@@ -1834,18 +1821,49 @@ void Database::searchHosts(const QString& query_text,
     for (size_t i = 0; i < workspace_ids.size(); ++i)
         placeholders.append("?");
 
+    // The predicate is written once and used by both statements, so the count and the page can
+    // never disagree about what a match is.
+    const QString where =
+        " FROM hosts WHERE workspace_id IN (" + placeholders.join(',') + ") "
+        "AND (casefold(display_name) LIKE casefold(?) ESCAPE '\\' "
+        "OR CAST(id AS TEXT) LIKE ? ESCAPE '\\')";
+
+    // A zero count from a failed query would make the client truncate its pagination while the
+    // page itself arrives non-empty, so a count failure fails the whole request.
+    const QString count_sql = "SELECT COUNT(*)" + where;
+    SqlQuery count_query(db_, count_sql.toStdString());
+    if (!count_query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    for (qint64 workspace_id : workspace_ids)
+        count_query.addInt64(workspace_id);
+    count_query.addText(pattern);
+    count_query.addText(pattern);
+
+    // COUNT(*) always yields exactly one row, so anything but ROW is a database error.
+    if (count_query.next() != SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    out->set_total_count(count_query.columnInt64(0));
+
     const QString sql =
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-        "version, os_name, address, comment, user_name, password, last_connect, last_modify "
-        "FROM hosts WHERE workspace_id IN (" + placeholders.join(',') + ") "
-        "AND (casefold(display_name) LIKE casefold(?) ESCAPE '\\' "
-        "OR CAST(id AS TEXT) LIKE ? ESCAPE '\\') "
-        "ORDER BY display_name";
+        "version, os_name, address, comment, user_name, password, last_connect, last_modify" +
+        where + " ORDER BY display_name LIMIT ? OFFSET ?";
 
     SqlQuery query(db_, sql.toStdString());
     if (!query.isValid())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        out->clear_total_count();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
@@ -1854,15 +1872,19 @@ void Database::searchHosts(const QString& query_text,
         query.addInt64(workspace_id);
     query.addText(pattern);
     query.addText(pattern);
+    query.addInt64(count);
+    query.addInt64(offset);
 
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            // An error reply must not carry the partial list scanned so far.
+            // An error reply must not carry the partial list scanned so far, nor the count that
+            // was read before it.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             out->clear_host();
+            out->clear_total_count();
             out->set_error_code(proto::router::kErrorInternalError);
             return;
         }
