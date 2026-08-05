@@ -232,7 +232,33 @@ void HostListModel::sort(int column, Qt::SortOrder order)
     sort_order_ = order;
 
     emit layoutAboutToBeChanged();
+
+    // What the persistent indexes point at is read before the rows move. Without this the selection
+    // of the view stays on the row number and ends up on whatever host sorted into it.
+    const QModelIndexList old_indexes = persistentIndexList();
+
+    QList<HostId> selected_ids;
+    selected_ids.reserve(old_indexes.size());
+
+    for (const QModelIndex& old_index : old_indexes)
+    {
+        const RouterHost* host = hostAt(old_index.row());
+        selected_ids.append(host ? host->host_id : kInvalidHostId);
+    }
+
     applySort();
+
+    QModelIndexList new_indexes;
+    new_indexes.reserve(old_indexes.size());
+
+    for (int i = 0; i < old_indexes.size(); ++i)
+    {
+        const int row = rowOf(selected_ids[i]);
+        new_indexes.append(row < 0 ? QModelIndex() : index(row, old_indexes[i].column()));
+    }
+
+    changePersistentIndexList(old_indexes, new_indexes);
+
     emit layoutChanged();
 }
 

@@ -71,6 +71,10 @@ int countOpenHandles()
 
 int main(int argc, char **argv)
 {
+    // The resources live in a static library, so nothing in the tests refers to the object that
+    // registers them and the linker leaves it out. Icons then resolve to nothing.
+    Q_INIT_RESOURCE(common);
+
     int handles_before = countOpenHandles();
     int ret;
 
