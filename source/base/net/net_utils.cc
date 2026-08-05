@@ -21,7 +21,12 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 
+#include <asio/ip/address.hpp>
+
 #include <limits>
+#include <system_error>
+
+#include "base/logging.h"
 
 namespace {
 
@@ -141,6 +146,28 @@ bool NetUtils::isValidIpAddress(const QString& ip_address)
     QHostAddress address(ip_address);
     return address.protocol() == QAbstractSocket::IPv4Protocol ||
            address.protocol() == QAbstractSocket::IPv6Protocol;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool NetUtils::isValidListenInterface(const QString& iface)
+{
+    // An unset value is the documented way of saying "every interface", so it is valid.
+    if (iface.isEmpty())
+        return true;
+
+    // Parsed the same way the listeners parse it when they bind, and not with QHostAddress: a
+    // validator that is more permissive than the parser would pass a setting the listener then
+    // refuses, and the service would simply never come up.
+    std::error_code error_code;
+    asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Invalid interface address:" << error_code;
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -73,8 +73,6 @@ public:
     bool hasReadyConnections();
     TcpChannel* nextReadyConnection();
 
-    static bool isValidListenInterface(const QString& iface);
-
 signals:
     void sig_newConnection();
 

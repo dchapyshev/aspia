@@ -18,8 +18,11 @@
 
 #include "router/workers/stun_worker.h"
 
+#include <asio/ip/address.hpp>
+
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/net/net_utils.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "proto/stun.h"
 #include "router/settings.h"
@@ -53,7 +56,21 @@ void StunWorker::onStart()
         return;
     }
 
-    if (!startServer(settings.stunPort()))
+    QString listen_interface = settings.listenInterface();
+    if (!NetUtils::isValidListenInterface(listen_interface))
+    {
+        LOG(ERROR) << "Invalid listen interface address";
+        return;
+    }
+
+    quint16 port = settings.stunPort();
+    if (!port)
+    {
+        LOG(ERROR) << "Invalid stun port specified in configuration file";
+        return;
+    }
+
+    if (!startServer(port, listen_interface))
         LOG(ERROR) << "Unable to start STUN listener";
 }
 
@@ -92,14 +109,33 @@ void StunWorker::onTimer(TimePoint /* now */)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool StunWorker::startServer(quint16 port)
+bool StunWorker::startServer(quint16 port, const QString& iface)
 {
-    asio::ip::udp::endpoint endpoint(asio::ip::udp::v4(), port);
+    LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
+
+    std::error_code error_code;
+    asio::ip::address listen_address;
+
+    if (!iface.isEmpty())
+    {
+        listen_address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "Invalid listen address:" << iface << "(" << error_code << ")";
+            return false;
+        }
+    }
+    else
+    {
+        // The peers of the STUN service speak IPv4 only (see StunPeer), so the wildcard here is
+        // the IPv4 one and not the dual-stack IPv6 wildcard the TCP listeners fall back to.
+        listen_address = asio::ip::address_v4::any();
+    }
+
+    asio::ip::udp::endpoint endpoint(listen_address, port);
 
     io_ = SharedPointer<IoState>(new IoState());
     udp_socket_ = std::make_unique<asio::ip::udp::socket>(AsioEventDispatcher::ioContext());
-
-    std::error_code error_code;
 
     udp_socket_->open(endpoint.protocol(), error_code);
     if (error_code)

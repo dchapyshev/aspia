@@ -197,24 +197,6 @@ TcpChannel* TcpServerLegacy::nextReadyConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-bool TcpServerLegacy::isValidListenInterface(const QString& iface)
-{
-    if (iface.isEmpty())
-        return true;
-
-    asio::error_code error_code;
-    asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Invalid interface address:" << error_code;
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpServerLegacy::onTimer(TimePoint now)
 {
     QList<TcpChannel*> expired;

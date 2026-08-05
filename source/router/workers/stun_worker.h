@@ -19,6 +19,8 @@
 #ifndef ROUTER_WORKERS_STUN_WORKER_H
 #define ROUTER_WORKERS_STUN_WORKER_H
 
+#include <QString>
+
 #include <asio/ip/udp.hpp>
 
 #include <array>
@@ -43,7 +45,7 @@ protected:
     void onTimer(TimePoint now) final;
 
 private:
-    bool startServer(quint16 port);
+    bool startServer(quint16 port, const QString& iface);
     void doReceiveRequest();
     bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 

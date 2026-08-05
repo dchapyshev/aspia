@@ -72,4 +72,5 @@ collect_sources(SOURCE_BASE_NET_TESTS
     address_unittest.cc
     anti_replay_window_unittest.cc
     flood_guard_unittest.cc
+    net_utils_unittest.cc
     tcp_channel_unittest.cc)

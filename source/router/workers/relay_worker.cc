@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/net/net_utils.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "router/relay.h"
@@ -91,7 +92,7 @@ void RelayWorker::onStart()
     }
 
     QString listen_interface = settings.listenInterface();
-    if (!TcpServer::isValidListenInterface(listen_interface))
+    if (!NetUtils::isValidListenInterface(listen_interface))
     {
         LOG(ERROR) << "Invalid listen interface address";
         return;

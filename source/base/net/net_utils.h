@@ -114,6 +114,12 @@ public:
     // Returns true if |ip_address| is a valid IPv4 or IPv6 literal.
     static bool isValidIpAddress(const QString& ip_address);
 
+    // Returns true if |iface| can be used as the listen interface of a server: either an address
+    // literal of the machine, or an empty value meaning every interface. Used by the TCP and UDP
+    // listeners alike, so a configuration that restricts the process to one address restricts all
+    // of its listeners.
+    static bool isValidListenInterface(const QString& iface);
+
     // Returns true if |host| is a syntactically valid host name.
     static bool isValidHostName(const QString& host);
 
