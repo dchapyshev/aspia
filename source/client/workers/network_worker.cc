@@ -32,6 +32,7 @@
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 #include "proto/router_peer.h"
 
 // Registers NetworkWorker::Status so it can cross threads through the queued sig_statusChanged.
@@ -436,7 +437,7 @@ void NetworkWorker::startConnection()
         }
 
         const proto::router::ConnectionOffer offer = session_state_->connectionOffer();
-        if (offer.error_code() != proto::router::ConnectionOffer::SUCCESS)
+        if (offer.error_code() != proto::router::kErrorOk)
         {
             LOG(ERROR) << "Connection offer not provided or has error";
             return;

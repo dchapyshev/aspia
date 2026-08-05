@@ -138,15 +138,8 @@ message CheckHostStatus
 
 message HostStatus
 {
-    enum Status
-    {
-        STATUS_UNKNOWN = 0;
-        STATUS_OFFLINE = 1;
-        STATUS_ONLINE  = 2;
-    }
-
     int64 request_id     = 1;
-    Status status        = 2;
+    string error_code    = 2;
     peer.Version version = 3;
 }
 

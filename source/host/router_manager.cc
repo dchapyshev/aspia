@@ -257,7 +257,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
         const proto::router::ConnectionOffer& connection_offer = in_message.connection_offer();
 
-        if (connection_offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
+        if (connection_offer.error_code() == proto::router::kErrorOk)
         {
             ServerAuthenticator* authenticator = new ServerAuthenticator();
             authenticator->setUserList(user_list_);

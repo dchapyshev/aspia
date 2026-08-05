@@ -52,6 +52,7 @@
 #include "proto/chat.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -344,7 +345,7 @@ void ChatWindow::requestConnectionOffer(Router* router)
     router->requestConnection(session_state_->hostId(), this,
         [this](const proto::router::ConnectionOffer& offer)
     {
-        if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
+        if (offer.error_code() == proto::router::kErrorOk)
         {
             session_state_->setConnectionOffer(offer);
             startNewSession();

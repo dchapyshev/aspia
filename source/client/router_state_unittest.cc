@@ -452,49 +452,57 @@ TEST_F(RouterStateTest, FailedGroupListIsNotCached)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(RouterStateTest, DispatchInvokesTheHandlerOnce)
+// A notification is the router saying a change made elsewhere left what we hold out of date. The
+// invalidation next to a reply only covers what this client wrote, so without this a caller that
+// accepts a cached answer keeps being served the very rows the notification was about.
+TEST_F(RouterStateTest, NotificationDropsOnlyTheListsItNames)
 {
-    QObject receiver;
-    int calls = 0;
+    fillCaches();
 
-    proto::router::UserListRequest request;
-    request.set_request_id(state_.nextRequestId());
-    state_.registerPending<proto::router::UserList>(&request, &receiver,
-        [&calls](const proto::router::UserList&) { ++calls; });
+    proto::router::Notification hosts;
+    hosts.set_hosts_dirty(true);
+    state_.applyNotification(hosts);
 
-    EXPECT_EQ(state_.pendingCount(), 1);
+    EXPECT_EQ(state_.cachedHostList(kHostKey), nullptr);
+    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
+    EXPECT_TRUE(state_.workspacesLoaded());
 
-    proto::router::UserList response;
-    response.set_request_id(request.request_id());
+    fillCaches();
 
-    state_.dispatch(request.request_id(), response);
-    EXPECT_EQ(calls, 1);
-    EXPECT_EQ(state_.pendingCount(), 0);
+    proto::router::Notification groups;
+    groups.set_groups_dirty(true);
+    state_.applyNotification(groups);
 
-    // A second reply with the same id has nothing to deliver to.
-    state_.dispatch(request.request_id(), response);
-    EXPECT_EQ(calls, 1);
+    EXPECT_EQ(state_.cachedGroupList(kWorkspaceId), nullptr);
+    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
+
+    fillCaches();
+
+    proto::router::Notification workspaces;
+    workspaces.set_workspaces_dirty(true);
+    state_.applyNotification(workspaces);
+
+    EXPECT_FALSE(state_.workspacesLoaded());
+    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The receiver is a widget that can be closed while its request is in flight.
-TEST_F(RouterStateTest, DispatchSkipsDestroyedReceiver)
+// What the notification says nothing about is still good: those lists are not cached here at all,
+// and dropping the ones that are would cost a reload for nothing.
+TEST_F(RouterStateTest, NotificationOfSomethingElseKeepsTheLists)
 {
-    int calls = 0;
+    fillCaches();
 
-    proto::router::UserListRequest request;
-    request.set_request_id(state_.nextRequestId());
+    proto::router::Notification notification;
+    notification.set_users_dirty(true);
+    notification.set_relays_dirty(true);
+    notification.set_clients_dirty(true);
+    notification.set_temp_hosts_dirty(true);
+    state_.applyNotification(notification);
 
-    {
-        QObject receiver;
-        state_.registerPending<proto::router::UserList>(&request, &receiver,
-            [&calls](const proto::router::UserList&) { ++calls; });
-    }
-
-    proto::router::UserList response;
-    state_.dispatch(request.request_id(), response);
-
-    EXPECT_EQ(calls, 0);
+    EXPECT_TRUE(state_.workspacesLoaded());
+    EXPECT_NE(state_.cachedGroupList(kWorkspaceId), nullptr);
+    EXPECT_NE(state_.cachedHostList(kHostKey), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,60 +516,20 @@ TEST_F(RouterStateTest, DecoderRunsBeforeTheHandler)
     RouterHostList delivered;
 
     proto::router::HostListRequest request;
-    request.set_request_id(state_.nextRequestId());
+    request.set_request_id(state_.rpc().nextRequestId());
 
     const RouterState::HostCacheKey key{ 10, 0, 0, 0 };
-    state_.registerPending<proto::router::HostList>(&request, &receiver,
+    state_.rpc().registerPending<proto::router::HostList>(&request, &receiver,
         [&delivered](const RouterHostList& list) { delivered = list; },
         [this, key](const proto::router::HostList& raw)
     {
         return state_.applyHostList(raw, key, true);
     });
 
-    state_.dispatch(request.request_id(), hostList(10, {HostId(1)}, 1));
+    state_.rpc().dispatch(request.request_id(), hostList(10, {HostId(1)}, 1));
 
     EXPECT_EQ(delivered.hosts.size(), 1);
     EXPECT_NE(state_.cachedHostList(key), nullptr);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Every kind of reply has a shape that says "no". A connection offer is the odd one out, because
-// success is the zero of its enum and a made-up reply would otherwise read as an offer to connect.
-TEST_F(RouterStateTest, ALostSessionAnswersEveryKindOfCaller)
-{
-    QObject receiver;
-
-    proto::router::HostRequest host_request;
-    host_request.set_request_id(state_.nextRequestId());
-    proto::router::HostResult host_result;
-    state_.registerPending<proto::router::HostResult>(&host_request, &receiver,
-        [&](const proto::router::HostResult& result) { host_result = result; });
-
-    proto::router::ConnectionRequest offer_request;
-    offer_request.set_request_id(state_.nextRequestId());
-    proto::router::ConnectionOffer offer;
-    state_.registerPending<proto::router::ConnectionOffer>(&offer_request, &receiver,
-        [&](const proto::router::ConnectionOffer& result) { offer = result; });
-
-    proto::router::WorkspaceListRequest list_request;
-    list_request.set_request_id(state_.nextRequestId());
-    RouterWorkspaceList workspaces;
-    bool workspaces_called = false;
-    state_.registerPending<proto::router::WorkspaceList>(&list_request, &receiver,
-        [&](const RouterWorkspaceList& list) { workspaces = list; workspaces_called = true; },
-        [](const proto::router::WorkspaceList& raw)
-    {
-        RouterWorkspaceList list;
-        list.error_code = QString::fromStdString(raw.error_code());
-        return list;
-    });
-
-    state_.clearPending();
-
-    EXPECT_EQ(host_result.error_code(), proto::router::kErrorLostConnection);
-    EXPECT_EQ(offer.error_code(), proto::router::ConnectionOffer::UNKNOWN_ERROR);
-    ASSERT_TRUE(workspaces_called);
-    EXPECT_EQ(workspaces.error_code, QString::fromUtf8(proto::router::kErrorLostConnection));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -582,14 +550,14 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
     std::string last_error;
 
     proto::router::UserListRequest request;
-    request.set_request_id(state_.nextRequestId());
-    state_.registerPending<proto::router::UserList>(&request, &receiver,
+    request.set_request_id(state_.rpc().nextRequestId());
+    state_.rpc().registerPending<proto::router::UserList>(&request, &receiver,
         [&](const proto::router::UserList& list) { ++calls; last_error = list.error_code(); });
 
     state_.clearCaches();
-    state_.clearPending();
+    state_.rpc().clearPending();
 
-    EXPECT_EQ(state_.pendingCount(), 0);
+    EXPECT_EQ(state_.rpc().pendingCount(), 0);
     EXPECT_FALSE(state_.workspacesLoaded());
     EXPECT_EQ(state_.cachedHostList(key), nullptr);
 
@@ -599,7 +567,7 @@ TEST_F(RouterStateTest, SuspendedSessionDropsPendingRepliesAndCaches)
 
     // A late reply to a request of the dead window must not reach the caller.
     proto::router::UserList response;
-    state_.dispatch(request.request_id(), response);
+    state_.rpc().dispatch(request.request_id(), response);
     EXPECT_EQ(calls, 1);
 
     // The keys survive: the session is being re-authenticated, not lost.
@@ -614,7 +582,7 @@ TEST_F(RouterStateTest, ClearedSessionKeepsNoKeys)
 
     EXPECT_EQ(state_.userId(), 0);
     EXPECT_FALSE(state_.hasWorkspaceKey(10));
-    EXPECT_EQ(state_.pendingCount(), 0);
+    EXPECT_EQ(state_.rpc().pendingCount(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -904,8 +872,8 @@ TEST_F(RouterStateTest, AdminReplyReachesItsRequest)
     int calls = 0;
 
     proto::router::UserListRequest request;
-    request.set_request_id(state_.nextRequestId());
-    state_.registerPending<proto::router::UserList>(&request, &receiver,
+    request.set_request_id(state_.rpc().nextRequestId());
+    state_.rpc().registerPending<proto::router::UserList>(&request, &receiver,
         [&calls](const proto::router::UserList&) { ++calls; });
 
     proto::router::RouterToAdmin message;
@@ -922,8 +890,8 @@ TEST_F(RouterStateTest, ManagerReplyReachesItsRequest)
     int calls = 0;
 
     proto::router::GroupRequest request;
-    request.set_request_id(state_.nextRequestId());
-    state_.registerPending<proto::router::GroupResult>(&request, &receiver,
+    request.set_request_id(state_.rpc().nextRequestId());
+    state_.rpc().registerPending<proto::router::GroupResult>(&request, &receiver,
         [&calls](const proto::router::GroupResult&) { ++calls; });
 
     proto::router::RouterToManager message;
@@ -940,8 +908,8 @@ TEST_F(RouterStateTest, ClientReplyReachesItsRequest)
     int calls = 0;
 
     proto::router::CheckHostStatus request;
-    request.set_request_id(state_.nextRequestId());
-    state_.registerPending<proto::router::HostStatus>(&request, &receiver,
+    request.set_request_id(state_.rpc().nextRequestId());
+    state_.rpc().registerPending<proto::router::HostStatus>(&request, &receiver,
         [&calls](const proto::router::HostStatus&) { ++calls; });
 
     proto::router::RouterToClient message;

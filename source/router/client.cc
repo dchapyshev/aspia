@@ -359,7 +359,7 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
     offer->Swap(&built.offer);
     offer->set_request_id(request.request_id());
 
-    if (offer->error_code() != proto::router::ConnectionOffer::SUCCESS)
+    if (offer->error_code() != proto::router::kErrorOk)
     {
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
@@ -393,12 +393,12 @@ void Client::readCheckHostStatus(const proto::router::CheckHostStatus& check_hos
     std::optional<SharedHosts::Host> host_info = SharedHosts::instance().find(check_host_status.host_id());
     if (host_info.has_value())
     {
-        host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
+        host_status->set_error_code(proto::router::kErrorOk);
         host_status->mutable_version()->CopyFrom(serialize(host_info->version));
     }
     else
     {
-        host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
+        host_status->set_error_code(proto::router::kErrorHostOffline);
     }
 
     CLOG(INFO) << "Sending host status:" << *host_status;

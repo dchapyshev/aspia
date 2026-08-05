@@ -19,6 +19,7 @@
 
 #include "base/version_constants.h"
 #include "proto/relay_peer.h"
+#include "proto/router_constants.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 
@@ -79,7 +80,7 @@ TEST_F(ConnectionOfferBuilderTest, OfferCarriesTheRelayCredentialsAndTheSecret)
 
     const ConnectionOfferBuilder::Result result = build();
 
-    ASSERT_EQ(result.offer.error_code(), proto::router::ConnectionOffer::SUCCESS);
+    ASSERT_EQ(result.offer.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(result.relay_session_id, 42);
     EXPECT_EQ(result.relay_key_id, 7u);
 
@@ -108,8 +109,8 @@ TEST_F(ConnectionOfferBuilderTest, EveryOfferGetsItsOwnKeyAndSecret)
     const ConnectionOfferBuilder::Result first = build();
     const ConnectionOfferBuilder::Result second = build();
 
-    ASSERT_EQ(first.offer.error_code(), proto::router::ConnectionOffer::SUCCESS);
-    ASSERT_EQ(second.offer.error_code(), proto::router::ConnectionOffer::SUCCESS);
+    ASSERT_EQ(first.offer.error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(second.offer.error_code(), proto::router::kErrorOk);
 
     EXPECT_NE(first.relay_key_id, second.relay_key_id);
     EXPECT_NE(first.offer.relay().secret(), second.offer.relay().secret());
@@ -125,7 +126,7 @@ TEST_F(ConnectionOfferBuilderTest, OfflineHostSpendsNoKey)
 
     const ConnectionOfferBuilder::Result result = build();
 
-    EXPECT_EQ(result.offer.error_code(), proto::router::ConnectionOffer::PEER_NOT_FOUND);
+    EXPECT_EQ(result.offer.error_code(), proto::router::kErrorHostOffline);
     EXPECT_FALSE(result.offer.has_relay());
     EXPECT_EQ(result.relay_session_id, 0);
     EXPECT_EQ(SharedKeyPool::instance().count(42), 1u);
@@ -140,7 +141,7 @@ TEST_F(ConnectionOfferBuilderTest, EmptyKeyPoolIsReported)
 
     const ConnectionOfferBuilder::Result result = build();
 
-    EXPECT_EQ(result.offer.error_code(), proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+    EXPECT_EQ(result.offer.error_code(), proto::router::kErrorKeyPoolEmpty);
     EXPECT_FALSE(result.offer.has_relay());
     EXPECT_EQ(result.relay_key_id, 0u);
 }

@@ -79,6 +79,8 @@ extern const char* const kErrorNotFound;
 extern const char* const kErrorAccessDenied;
 extern const char* const kErrorConflict;
 extern const char* const kErrorLostConnection;
+extern const char* const kErrorHostOffline;
+extern const char* const kErrorKeyPoolEmpty;
 
 } // namespace proto::router
 

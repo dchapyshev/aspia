@@ -26,6 +26,7 @@
 #include "base/peer/host_id.h"
 #include "client/router.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -72,7 +73,7 @@ void OnlineCheckerRouter::onHostStatusReceived(const proto::router::HostStatus& 
     if (hosts_.isEmpty())
         return;
 
-    const bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
+    const bool online = host_status.error_code() == proto::router::kErrorOk;
     emit sig_checkerResult(hosts_.front().id(), online);
     hosts_.pop_front();
     checkNextHost();

@@ -135,34 +135,13 @@ RouterState::KeysResult RouterState::applyUserKeys(const proto::router::UserKeys
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-void RouterState::setLostConnection(proto::router::ConnectionOffer* offer)
-{
-    offer->set_error_code(proto::router::ConnectionOffer::UNKNOWN_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterState::clearPending()
-{
-    // Taken out first because a caller being answered can start a new request right away.
-    const QHash<qint64, Pending> pending = std::move(pending_);
-    pending_.clear();
-
-    for (const Pending& entry : pending)
-    {
-        if (!entry.receiver.isNull() && entry.fail)
-            entry.fail();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterState::clearSession()
 {
     user_id_ = 0;
     user_name_.clear();
     user_private_key_.clear();
     workspace_cryptors_.clear();
-    clearPending();
+    rpc_.clearPending();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,15 +164,15 @@ bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
 {
     if (message.has_relay_list())
     {
-        dispatch(message.relay_list().request_id(), message.relay_list());
+        rpc_.dispatch(message.relay_list().request_id(), message.relay_list());
     }
     else if (message.has_client_list())
     {
-        dispatch(message.client_list().request_id(), message.client_list());
+        rpc_.dispatch(message.client_list().request_id(), message.client_list());
     }
     else if (message.has_user_list())
     {
-        dispatch(message.user_list().request_id(), message.user_list());
+        rpc_.dispatch(message.user_list().request_id(), message.user_list());
     }
     else if (message.has_user_result())
     {
@@ -210,22 +189,22 @@ bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
         if (moves_workspaces && result.error_code() == proto::router::kErrorOk)
             invalidateWorkspaces();
 
-        dispatch(result.request_id(), result);
+        rpc_.dispatch(result.request_id(), result);
     }
     else if (message.has_host_result())
     {
         if (message.host_result().error_code() == proto::router::kErrorOk)
             clearHostCache();
 
-        dispatch(message.host_result().request_id(), message.host_result());
+        rpc_.dispatch(message.host_result().request_id(), message.host_result());
     }
     else if (message.has_relay_result())
     {
-        dispatch(message.relay_result().request_id(), message.relay_result());
+        rpc_.dispatch(message.relay_result().request_id(), message.relay_result());
     }
     else if (message.has_client_result())
     {
-        dispatch(message.client_result().request_id(), message.client_result());
+        rpc_.dispatch(message.client_result().request_id(), message.client_result());
     }
     else if (message.has_workspace_result())
     {
@@ -242,11 +221,11 @@ bool RouterState::routeReply(const proto::router::RouterToAdmin& message)
                 clearGroupCache();
         }
 
-        dispatch(result.request_id(), result);
+        rpc_.dispatch(result.request_id(), result);
     }
     else if (message.has_peer_result())
     {
-        dispatch(message.peer_result().request_id(), message.peer_result());
+        rpc_.dispatch(message.peer_result().request_id(), message.peer_result());
     }
     else
     {
@@ -264,7 +243,7 @@ bool RouterState::routeReply(const proto::router::RouterToManager& message)
         if (message.host_result().error_code() == proto::router::kErrorOk)
             clearHostCache();
 
-        dispatch(message.host_result().request_id(), message.host_result());
+        rpc_.dispatch(message.host_result().request_id(), message.host_result());
     }
     else if (message.has_group_result())
     {
@@ -280,7 +259,7 @@ bool RouterState::routeReply(const proto::router::RouterToManager& message)
                 clearHostCache();
         }
 
-        dispatch(result.request_id(), result);
+        rpc_.dispatch(result.request_id(), result);
     }
     else
     {
@@ -291,26 +270,42 @@ bool RouterState::routeReply(const proto::router::RouterToManager& message)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterState::applyNotification(const proto::router::Notification& notification)
+{
+    // Each flag names the list it is about, so only that one goes. The rest of what the router
+    // announces - users, relays, clients, temporary hosts - is fetched fresh every time and has no
+    // cache here to drop.
+    if (notification.hosts_dirty())
+        clearHostCache();
+
+    if (notification.groups_dirty())
+        clearGroupCache();
+
+    if (notification.workspaces_dirty())
+        invalidateWorkspaces();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool RouterState::routeReply(const proto::router::RouterToClient& message)
 {
     // Nothing here invalidates a cache: these are read-only queries, and the one write among them
     // (the password change) re-seals the keys the user already holds without moving any revision.
     if (message.has_connection_offer())
-        dispatch(message.connection_offer().request_id(), message.connection_offer());
+        rpc_.dispatch(message.connection_offer().request_id(), message.connection_offer());
     else if (message.has_host_status())
-        dispatch(message.host_status().request_id(), message.host_status());
+        rpc_.dispatch(message.host_status().request_id(), message.host_status());
     else if (message.has_host_list())
-        dispatch(message.host_list().request_id(), message.host_list());
+        rpc_.dispatch(message.host_list().request_id(), message.host_list());
     else if (message.has_host_search_result())
-        dispatch(message.host_search_result().request_id(), message.host_search_result());
+        rpc_.dispatch(message.host_search_result().request_id(), message.host_search_result());
     else if (message.has_temp_host_list())
-        dispatch(message.temp_host_list().request_id(), message.temp_host_list());
+        rpc_.dispatch(message.temp_host_list().request_id(), message.temp_host_list());
     else if (message.has_workspace_list())
-        dispatch(message.workspace_list().request_id(), message.workspace_list());
+        rpc_.dispatch(message.workspace_list().request_id(), message.workspace_list());
     else if (message.has_group_list())
-        dispatch(message.group_list().request_id(), message.group_list());
+        rpc_.dispatch(message.group_list().request_id(), message.group_list());
     else if (message.has_change_password_result())
-        dispatch(message.change_password_result().request_id(), message.change_password_result());
+        rpc_.dispatch(message.change_password_result().request_id(), message.change_password_result());
     else
         return false;
 

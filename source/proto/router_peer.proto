@@ -39,17 +39,8 @@ message PeerInfo
 
 message ConnectionOffer
 {
-    enum ErrorCode
-    {
-        SUCCESS        = 0;
-        UNKNOWN_ERROR  = 1;
-        PEER_NOT_FOUND = 2;
-        ACCESS_DENIED  = 3;
-        KEY_POOL_EMPTY = 4;
-    }
-
     int64 request_id         = 1;
-    ErrorCode error_code     = 2;
+    string error_code        = 2;
     RelayCredentials relay   = 3;
     StunServerInfo stun_info = 4;
     PeerInfo peer_info       = 5;

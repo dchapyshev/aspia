@@ -48,6 +48,11 @@ QString routerErrorText(std::string_view error_code)
             "RouterError", "The data has changed on the router. Refresh the list and try again.");
     else if (error_code == proto::router::kErrorLostConnection)
         message = QT_TRANSLATE_NOOP("RouterError", "Connection to the router lost.");
+    else if (error_code == proto::router::kErrorHostOffline)
+        message = QT_TRANSLATE_NOOP("RouterError", "The host with the specified ID is not online.");
+    else if (error_code == proto::router::kErrorKeyPoolEmpty)
+        message = QT_TRANSLATE_NOOP(
+            "RouterError", "There are no relays available or the key pool is empty.");
     else
         message = QT_TRANSLATE_NOOP("RouterError", "Unknown error type.");
 

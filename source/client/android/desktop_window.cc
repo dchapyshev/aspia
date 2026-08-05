@@ -45,6 +45,7 @@
 #include "common/android/message_dialog.h"
 #include "common/clipboard.h"
 #include "common/desktop_session_constants.h"
+#include "common/desktop/router_error.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
@@ -55,6 +56,7 @@
 #include "proto/desktop_video.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -221,30 +223,14 @@ void DesktopWindow::requestConnectionOffer(Router* router)
     router->requestConnection(session_state_->hostId(), this,
         [this](const proto::router::ConnectionOffer& offer)
     {
-        if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
+        if (offer.error_code() == proto::router::kErrorOk)
         {
             session_state_->setConnectionOffer(offer);
             startNewSession();
             return;
         }
 
-        QString error;
-        switch (offer.error_code())
-        {
-            case proto::router::ConnectionOffer::PEER_NOT_FOUND:
-                error = tr("The host with the specified ID is not online.");
-                break;
-            case proto::router::ConnectionOffer::ACCESS_DENIED:
-                error = tr("Access is denied.");
-                break;
-            case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
-                error = tr("There are no relays available or the key pool is empty.");
-                break;
-            default:
-                error = tr("Error requesting connection via router.");
-                break;
-        }
-        setStatusText(error);
+        setStatusText(routerErrorText(offer.error_code()));
     });
 }
 

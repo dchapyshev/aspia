@@ -234,7 +234,7 @@ void Router::setStatus(Status status)
     if (status_ != Status::ONLINE)
     {
         state_.clearCaches();
-        state_.clearPending();
+        state_.rpc().clearPending();
     }
 
     emit sig_statusChanged(config_.routerId(), status_);
@@ -417,6 +417,8 @@ void Router::persistChangedPassword(const SecureString& new_password)
 void Router::emitNotificationSignals(const proto::router::Notification& notification)
 {
     const qint64 router_id = config_.routerId();
+
+    state_.applyNotification(notification);
 
     if (notification.temp_hosts_dirty())
         emit sig_tempHostsChanged(router_id);

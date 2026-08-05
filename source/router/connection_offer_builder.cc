@@ -19,6 +19,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
+#include "proto/router_constants.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 
@@ -33,7 +34,7 @@ ConnectionOfferBuilder::Result ConnectionOfferBuilder::build(
     if (!host_info.has_value())
     {
         LOG(ERROR) << "Host with id" << client.host_id << "NOT found!";
-        result.offer.set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
+        result.offer.set_error_code(proto::router::kErrorHostOffline);
         return result;
     }
 
@@ -43,14 +44,14 @@ ConnectionOfferBuilder::Result ConnectionOfferBuilder::build(
     if (!credentials.has_value())
     {
         LOG(ERROR) << "Empty key pool";
-        result.offer.set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+        result.offer.set_error_code(proto::router::kErrorKeyPoolEmpty);
         return result;
     }
 
     result.relay_session_id = credentials->session_id;
     result.relay_key_id = credentials->key.key_id();
 
-    result.offer.set_error_code(proto::router::ConnectionOffer::SUCCESS);
+    result.offer.set_error_code(proto::router::kErrorOk);
 
     proto::router::PeerInfo* peer_info = result.offer.mutable_peer_info();
     peer_info->set_is_legacy(host_info->version < kVersion_3_0_0);

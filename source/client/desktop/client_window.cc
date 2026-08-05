@@ -33,9 +33,11 @@
 #include "client/desktop/authorization_dialog.h"
 #include "client/desktop/status_overlay.h"
 #include "client/workers/network_worker.h"
+#include "common/desktop/router_error.h"
 #include "common/desktop/session_type.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -382,7 +384,7 @@ void ClientWindow::fetchConnectionOffer()
     router->requestConnection(session_state_->hostId(), this,
         [this](const proto::router::ConnectionOffer& offer)
     {
-        if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
+        if (offer.error_code() == proto::router::kErrorOk)
         {
             if (!session_state_->isReconnecting())
                 status_overlay_->setProgress(tr("Connection offer received."));
@@ -392,7 +394,7 @@ void ClientWindow::fetchConnectionOffer()
             return;
         }
 
-        if (offer.error_code() == proto::router::ConnectionOffer::PEER_NOT_FOUND &&
+        if (offer.error_code() == proto::router::kErrorHostOffline &&
             session_state_->isReconnecting())
         {
             // Host is offline - wait a few seconds and try again. Client's internal
@@ -402,23 +404,8 @@ void ClientWindow::fetchConnectionOffer()
             return;
         }
 
-        QString error;
-        switch (offer.error_code())
-        {
-            case proto::router::ConnectionOffer::PEER_NOT_FOUND:
-                error = tr("The host with the specified ID is not online");
-                break;
-            case proto::router::ConnectionOffer::ACCESS_DENIED:
-                error = tr("Access is denied");
-                break;
-            case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
-                error = tr("There are no relays available or the key pool is empty");
-                break;
-            default:
-                error = tr("Unknown error");
-                break;
-        }
-        onErrorOccurred(tr("Error requesting connection via router: %1.").arg(error));
+        onErrorOccurred(tr("Error requesting connection via router.") + ' ' +
+                        routerErrorText(offer.error_code()));
     });
 }
 
