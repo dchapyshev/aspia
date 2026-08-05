@@ -60,7 +60,10 @@ bool RouterUser::isValid() const
     return User::isValid() &&
            !public_key.isEmpty() &&
            !wrap_private_key.isEmpty() &&
-           !wrap_salt.isEmpty();
+           !wrap_salt.isEmpty() &&
+           public_key.size() <= static_cast<qsizetype>(kMaxPublicKeySize) &&
+           wrap_private_key.size() <= static_cast<qsizetype>(kMaxWrapPrivateKeySize) &&
+           wrap_salt.size() <= static_cast<qsizetype>(kMaxWrapSaltSize);
 }
 
 //--------------------------------------------------------------------------------------------------

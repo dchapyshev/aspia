@@ -485,20 +485,21 @@ const RouterGroupList* RouterState::cachedGroupList(qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterState::buildWorkspace(const RouterWorkspace& workspace,
-                                 proto::router::Workspace* out) const
+std::string_view RouterState::buildWorkspace(const RouterWorkspace& workspace,
+                                             proto::router::Workspace* out) const
 {
     CHECK(out);
 
     if (workspace.entry_id > 0)
         out->set_entry_id(workspace.entry_id);
-    out->set_name(workspace.name.toStdString());
+    // Trimmed here because that is the value the router stores and measures.
+    out->set_name(workspace.name.trimmed().toStdString());
     out->set_revision(workspace.revision);
 
     if (user_private_key_.isEmpty())
     {
         LOG(ERROR) << "User private key unavailable";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     // A workspace being created has no id yet, so its key is not put into |workspace_cryptors_|:
@@ -520,7 +521,7 @@ bool RouterState::buildWorkspace(const RouterWorkspace& workspace,
     else
     {
         LOG(ERROR) << "No group key for workspace" << workspace.entry_id;
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     const DataCryptor cryptor(CipherType::AES256_GCM, group_key);
@@ -538,22 +539,36 @@ bool RouterState::buildWorkspace(const RouterWorkspace& workspace,
         if (wrapped_gk.isEmpty())
         {
             LOG(ERROR) << "Failed to seal group key for user_id:" << access.user_id;
-            return false;
+            return proto::router::kErrorInternalError;
         }
         dst->set_wrapped_gk(wrapped_gk.toStdString());
         // The seal target travels with the key: the router checks it against the stored key of
         // the user and rejects an entry sealed to an out of date snapshot.
         dst->set_public_key(access.public_key.toStdString());
+
+        if (dst->wrapped_gk().size() > proto::router::kMaxWrappedKeyLength)
+        {
+            LOG(ERROR) << "Oversized wrapped key for user_id:" << access.user_id;
+            return proto::router::kErrorInvalidData;
+        }
     }
 
     for (HostId host_id : std::as_const(workspace.host_ids))
         out->add_host_id(host_id);
 
-    return true;
+    // The name is mandatory. Sizes are of the bytes that go out, not of the text the user typed.
+    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
+        out->comment().size() > proto::router::kMaxCommentLength)
+    {
+        LOG(ERROR) << "Invalid field in workspace" << workspace.entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterState::buildHost(const RouterHost& host, proto::router::Host* out) const
+std::string_view RouterState::buildHost(const RouterHost& host, proto::router::Host* out) const
 {
     CHECK(out);
 
@@ -561,7 +576,7 @@ bool RouterState::buildHost(const RouterHost& host, proto::router::Host* out) co
     if (it == workspace_cryptors_.end())
     {
         LOG(ERROR) << "No cached cryptor for workspace" << host.workspace_id;
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     out->set_host_id(host.host_id);
@@ -572,29 +587,50 @@ bool RouterState::buildHost(const RouterHost& host, proto::router::Host* out) co
     out->set_comment(encrypt(cryptor, host.comment).toStdString());
     out->set_user_name(encrypt(cryptor, host.user_name).toStdString());
     out->set_password(encrypt(cryptor, host.password.toString()).toStdString());
-    return true;
+
+    // Every field of a host is optional (an empty display name falls back to the computer name),
+    // so only the sizes are checked.
+    if (out->display_name().size() > proto::router::kMaxEntryNameLength ||
+        out->comment().size() > proto::router::kMaxCommentLength ||
+        out->user_name().size() > proto::router::kMaxCredentialLength ||
+        out->password().size() > proto::router::kMaxCredentialLength)
+    {
+        LOG(ERROR) << "Oversized field in host" << host.host_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterState::buildGroup(qint64 workspace_id, const RouterGroup& group,
-                             proto::router::Group* out) const
+std::string_view RouterState::buildGroup(qint64 workspace_id, const RouterGroup& group,
+                                         proto::router::Group* out) const
 {
     CHECK(out);
 
     if (group.entry_id > 0)
         out->set_entry_id(group.entry_id);
     out->set_parent_id(group.parent_id);
-    out->set_name(group.name.toStdString());
+    out->set_name(group.name.trimmed().toStdString());
 
     const auto it = workspace_cryptors_.find(workspace_id);
     if (it == workspace_cryptors_.end())
     {
         LOG(ERROR) << "No cached cryptor for workspace" << workspace_id;
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     out->set_comment(encrypt(it->second, group.comment).toStdString());
-    return true;
+
+    // The name is mandatory.
+    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
+        out->comment().size() > proto::router::kMaxCommentLength)
+    {
+        LOG(ERROR) << "Invalid field in group" << group.entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

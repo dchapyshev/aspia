@@ -19,13 +19,14 @@
 #include "router/workspace.h"
 
 #include "base/string_util.h"
+#include "proto/router_constants.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool Workspace::isValidName(std::string_view name)
 {
     const std::string_view trimmed = strTrimmed(name);
-    return !trimmed.empty() && trimmed.size() <= kMaxNameLength;
+    return !trimmed.empty() && trimmed.size() <= proto::router::kMaxEntryNameLength;
 }
 
 //--------------------------------------------------------------------------------------------------

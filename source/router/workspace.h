@@ -36,9 +36,8 @@ public:
     Workspace(Workspace&& other) noexcept = default;
     Workspace& operator=(Workspace&& other) noexcept = default;
 
-    static const size_t kMaxNameLength = 64;
-
-    // Validates a UTF-8 name: non-empty after trimming and at most kMaxNameLength bytes.
+    // Validates a UTF-8 name. Non-empty after trimming and within the bound the protocol sets for
+    // the name of an entry.
     static bool isValidName(std::string_view name);
 
     bool isValid() const;

@@ -504,6 +504,17 @@ std::string_view Database::addUser(
         return proto::router::kErrorInvalidData;
     }
 
+    // The whole set, not only the keys that get consumed, so a bad one is answered and not ignored.
+    for (const auto& [workspace_id, wrapped_gk] : wrapped_keys)
+    {
+        if (wrapped_gk.isEmpty() ||
+            wrapped_gk.size() > static_cast<qsizetype>(proto::router::kMaxWrappedKeyLength))
+        {
+            LOG(ERROR) << "Invalid wrapped key for workspace" << workspace_id;
+            return proto::router::kErrorInvalidData;
+        }
+    }
+
     SqlTransaction transaction(db_);
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
@@ -589,6 +600,16 @@ std::string_view Database::modifyUser(
     {
         LOG(ERROR) << "Not valid user";
         return proto::router::kErrorInvalidData;
+    }
+
+    for (const auto& [workspace_id, wrapped_gk] : wrapped_keys)
+    {
+        if (wrapped_gk.isEmpty() ||
+            wrapped_gk.size() > static_cast<qsizetype>(proto::router::kMaxWrappedKeyLength))
+        {
+            LOG(ERROR) << "Invalid wrapped key for workspace" << workspace_id;
+            return proto::router::kErrorInvalidData;
+        }
     }
 
     if (user.entry_id == kBuiltInUserId && !(user.flags & User::ENABLED))
@@ -2286,7 +2307,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > kMaxCommentLength)
+    if (comment.size() > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Workspace comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
@@ -2295,7 +2316,9 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     std::set<qint64> initial_ids;
     for (const Workspace::Access& access : initial_access)
     {
-        if (access.user_id <= 0 || access.wrapped_gk.empty() || access.public_key.empty())
+        if (access.user_id <= 0 || access.public_key.empty() ||
+            access.wrapped_gk.empty() ||
+            access.wrapped_gk.size() > proto::router::kMaxWrappedKeyLength)
         {
             LOG(ERROR) << "Invalid access record";
             return proto::router::kErrorInvalidData;
@@ -2418,7 +2441,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > kMaxCommentLength)
+    if (comment.size() > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Workspace comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
@@ -2566,9 +2589,10 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         if (current_ids.contains(access.user_id))
             continue;
 
-        if (access.wrapped_gk.empty())
+        if (access.wrapped_gk.empty() ||
+            access.wrapped_gk.size() > proto::router::kMaxWrappedKeyLength)
         {
-            LOG(ERROR) << "Missing wrapped_gk for new access entry, user_id:" << access.user_id;
+            LOG(ERROR) << "Invalid wrapped_gk for new access entry, user_id:" << access.user_id;
             return proto::router::kErrorInvalidData;
         }
 
@@ -2902,13 +2926,13 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty() || strTrimmed(name).size() > kMaxEntryNameLength)
+    if (strTrimmed(name).empty() || strTrimmed(name).size() > proto::router::kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > kMaxCommentLength)
+    if (comment.size() > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Group comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
@@ -2985,13 +3009,13 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty() || strTrimmed(name).size() > kMaxEntryNameLength)
+    if (strTrimmed(name).empty() || strTrimmed(name).size() > proto::router::kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > kMaxCommentLength)
+    if (comment.size() > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Group comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;

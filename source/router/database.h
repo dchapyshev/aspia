@@ -40,16 +40,6 @@ class HostSearchResult;
 class WorkspaceList;
 } // namespace proto::router
 
-// Bounds on the free-form fields a manager stores. Every one of them is read back into a list
-// reply, and a reply larger than the message limit of the channel does not get sent at all, it
-// ends the session instead. Without a bound here a single entry would keep breaking every client
-// that lists it, and the record stays in the database, so it would break them again after every
-// reconnect. The name limit matches Workspace::kMaxNameLength and User::kMaxUserNameLength. The
-// other two count bytes of AEAD ciphertext, which the router cannot look inside of.
-constexpr size_t kMaxEntryNameLength = 64;
-constexpr size_t kMaxCommentLength = 8 * 1024;
-constexpr size_t kMaxCredentialLength = 1024;
-
 // A node in a workspace's host-group tree. Root nodes have parent_id == 0. Names are not
 // required to be unique within a parent: two siblings with the same name are allowed and the
 // client disambiguates by entry_id. Cycle protection on re-parent walks parent links upward

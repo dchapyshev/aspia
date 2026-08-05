@@ -452,8 +452,15 @@ template<typename HandlerT>
 void Router::editHost(const Router::Host& host, QObject* receiver, HandlerT handler)
 {
     proto::router::Host serialized;
-    if (!state_.buildHost(host, &serialized))
+    const std::string_view build_error = state_.buildHost(host, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        // Nothing is sent, so no reply will come. Without this the caller waits forever.
+        proto::router::HostResult result;
+        result.set_error_code(std::string(build_error));
+        RouterState::invokeHandler(receiver, handler, result);
         return;
+    }
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_host_request();
     request->set_request_id(state_.nextRequestId());
@@ -508,12 +515,12 @@ template<typename HandlerT>
 void Router::addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
-    if (!state_.buildWorkspace(workspace, &ws))
+    const std::string_view build_error = state_.buildWorkspace(workspace, &ws);
+    if (build_error != proto::router::kErrorOk)
     {
-        // The request is not sent, so no reply will ever come - report the failure the way the
-        // router would, otherwise the caller waits forever (the dialog stays disabled).
+        // Nothing is sent, so no reply will come. Without this the caller waits forever.
         proto::router::WorkspaceResult result;
-        result.set_error_code(proto::router::kErrorInternalError);
+        result.set_error_code(std::string(build_error));
         RouterState::invokeHandler(receiver, handler, result);
         return;
     }
@@ -531,11 +538,12 @@ template<typename HandlerT>
 void Router::modifyWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
-    if (!state_.buildWorkspace(workspace, &ws))
+    const std::string_view build_error = state_.buildWorkspace(workspace, &ws);
+    if (build_error != proto::router::kErrorOk)
     {
-        // Same as addWorkspace(): the caller must not wait for a reply to a request never sent.
+        // Nothing is sent, so no reply will come. Without this the caller waits forever.
         proto::router::WorkspaceResult result;
-        result.set_error_code(proto::router::kErrorInternalError);
+        result.set_error_code(std::string(build_error));
         RouterState::invokeHandler(receiver, handler, result);
         return;
     }
@@ -566,8 +574,15 @@ template<typename HandlerT>
 void Router::addGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
-    if (!state_.buildGroup(workspace_id, group, &serialized))
+    const std::string_view build_error = state_.buildGroup(workspace_id, group, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        // Nothing is sent, so no reply will come. Without this the caller waits forever.
+        proto::router::GroupResult result;
+        result.set_error_code(std::string(build_error));
+        RouterState::invokeHandler(receiver, handler, result);
         return;
+    }
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(state_.nextRequestId());
@@ -583,8 +598,15 @@ template<typename HandlerT>
 void Router::modifyGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
-    if (!state_.buildGroup(workspace_id, group, &serialized))
+    const std::string_view build_error = state_.buildGroup(workspace_id, group, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        // Nothing is sent, so no reply will come. Without this the caller waits forever.
+        proto::router::GroupResult result;
+        result.set_error_code(std::string(build_error));
+        RouterState::invokeHandler(receiver, handler, result);
         return;
+    }
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(state_.nextRequestId());

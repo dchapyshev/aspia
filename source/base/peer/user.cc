@@ -151,5 +151,8 @@ User User::create(const QString& name, const SecureString& password)
 //--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
-    return !name.isEmpty() && !salt.isEmpty() && !group.isEmpty() && !verifier.isEmpty();
+    return isValidUserName(name) && SrpMath::pairByGroup(group).has_value() &&
+           !salt.isEmpty() && !verifier.isEmpty() &&
+           salt.size() <= static_cast<qsizetype>(kMaxSaltSize) &&
+           verifier.size() <= static_cast<qsizetype>(kMaxVerifierSize);
 }

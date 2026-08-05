@@ -92,6 +92,30 @@ TEST(router_user_test, is_valid_requires_all_fields)
     EXPECT_FALSE(u_no_name.isValid());
 }
 
+// A record is valid only if it can actually be used. A name the authenticator would refuse and an
+// SRP group nobody has the parameters for both make the account impossible to log into.
+TEST(router_user_test, is_valid_rejects_an_unusable_name_or_group)
+{
+    RouterUser user = RouterUser::create("testuser", SecureString("password"));
+    ASSERT_TRUE(user.isValid());
+
+    RouterUser blank_name = user;
+    blank_name.name = "   ";
+    EXPECT_FALSE(blank_name.isValid());
+
+    RouterUser bad_name = user;
+    bad_name.name = "bob smith";
+    EXPECT_FALSE(bad_name.isValid());
+
+    RouterUser long_name = user;
+    long_name.name = QString(User::kMaxUserNameLength + 1, QChar('n'));
+    EXPECT_FALSE(long_name.isValid());
+
+    RouterUser unknown_group = user;
+    unknown_group.group = "1024";
+    EXPECT_FALSE(unknown_group.isValid());
+}
+
 // ============================================================================
 // Private key encryption roundtrip
 // ============================================================================

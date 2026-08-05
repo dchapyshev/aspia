@@ -23,6 +23,7 @@
 #include <QPointer>
 
 #include <functional>
+#include <string_view>
 #include <typeinfo>
 #include <unordered_map>
 
@@ -235,9 +236,13 @@ public:
     // Requests: encoding.
     //----------------------------------------------------------------------------------------------
 
-    bool buildWorkspace(const RouterWorkspace& workspace, proto::router::Workspace* out) const;
-    bool buildHost(const RouterHost& host, proto::router::Host* out) const;
-    bool buildGroup(qint64 workspace_id, const RouterGroup& group, proto::router::Group* out) const;
+    // Encode an edited record into its message. Answers with a protocol error code, so a request
+    // the router would refuse is reported in the same terms without being sent.
+    std::string_view buildWorkspace(const RouterWorkspace& workspace,
+                                    proto::router::Workspace* out) const;
+    std::string_view buildHost(const RouterHost& host, proto::router::Host* out) const;
+    std::string_view buildGroup(qint64 workspace_id, const RouterGroup& group,
+                                proto::router::Group* out) const;
 
     // Re-seals every workspace key we hold to |new_public_key| and appends the results to the
     // message (any proto with a repeated WorkspaceKey workspace_key field).

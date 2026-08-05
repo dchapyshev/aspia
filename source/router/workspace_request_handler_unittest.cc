@@ -126,6 +126,20 @@ TEST_F(WorkspaceRequestHandlerTest, AddWithHostsClaimsThemAndNotifiesHosts)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A workspace must be named, and blanks alone are not a name.
+TEST_F(WorkspaceRequestHandlerTest, AddRejectsEmptyName)
+{
+    const SecureByteArray gk(Random::byteArray(32));
+
+    const WorkspaceRequestHandler::Result result = handle(
+        makeRequest(proto::router::kCommandWorkspaceAdd, "   ", gk));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
+    EXPECT_EQ(result.notify_flags, 0u);
+    EXPECT_EQ(result.entry_id, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The name of a workspace is what the operator typed, spaces included; the stored value is trimmed
 // so " alpha " and "alpha" cannot coexist.
 TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
@@ -154,7 +168,7 @@ TEST_F(WorkspaceRequestHandlerTest, OversizedCommentIsRejected)
     const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
         makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
-    request.mutable_workspace()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+    request.mutable_workspace()->set_comment(std::string(proto::router::kMaxCommentLength + 1, 'c'));
 
     const WorkspaceRequestHandler::Result result = handle(request);
 
@@ -169,7 +183,7 @@ TEST_F(WorkspaceRequestHandlerTest, CommentAtTheLimitIsAccepted)
     const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
         makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
-    request.mutable_workspace()->set_comment(std::string(kMaxCommentLength, 'c'));
+    request.mutable_workspace()->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
 
     const WorkspaceRequestHandler::Result result = handle(request);
 

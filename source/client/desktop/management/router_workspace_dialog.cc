@@ -31,12 +31,6 @@
 #include "proto/router_constants.h"
 #include "ui_router_workspace_dialog.h"
 
-namespace {
-
-constexpr int kMaxNameLength = 64;
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceDialog::RouterWorkspaceDialog(
     qint64 router_id, qint64 workspace_id, QWidget* parent)
@@ -49,7 +43,8 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    ui->edit_name->setMaxLength(kMaxNameLength);
+    // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
+    ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);

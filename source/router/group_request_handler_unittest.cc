@@ -162,7 +162,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsOversizedName)
 {
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
-    request.mutable_group()->set_name(std::string(kMaxEntryNameLength + 1, 'n'));
+    request.mutable_group()->set_name(std::string(proto::router::kMaxEntryNameLength + 1, 'n'));
 
     const GroupRequestHandler::Result result = handle(request);
 
@@ -176,7 +176,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsOversizedComment)
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
     request.mutable_group()->set_name("servers");
-    request.mutable_group()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+    request.mutable_group()->set_comment(std::string(proto::router::kMaxCommentLength + 1, 'c'));
 
     const GroupRequestHandler::Result result = handle(request);
 
@@ -190,8 +190,8 @@ TEST_F(GroupRequestHandlerTest, AddAcceptsFieldsAtTheLimit)
 {
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
-    request.mutable_group()->set_name(std::string(kMaxEntryNameLength, 'n'));
-    request.mutable_group()->set_comment(std::string(kMaxCommentLength, 'c'));
+    request.mutable_group()->set_name(std::string(proto::router::kMaxEntryNameLength, 'n'));
+    request.mutable_group()->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
 
     const GroupRequestHandler::Result result = handle(request);
 
@@ -208,7 +208,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
     proto::router::GroupRequest name_request =
         makeRequest(proto::router::kCommandGroupModify, workspace_id_);
     name_request.mutable_group()->set_entry_id(group_id);
-    name_request.mutable_group()->set_name(std::string(kMaxEntryNameLength + 1, 'n'));
+    name_request.mutable_group()->set_name(std::string(proto::router::kMaxEntryNameLength + 1, 'n'));
 
     EXPECT_EQ(handle(name_request).error_code, proto::router::kErrorInvalidData);
 
@@ -216,7 +216,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
         makeRequest(proto::router::kCommandGroupModify, workspace_id_);
     comment_request.mutable_group()->set_entry_id(group_id);
     comment_request.mutable_group()->set_name("servers");
-    comment_request.mutable_group()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+    comment_request.mutable_group()->set_comment(std::string(proto::router::kMaxCommentLength + 1, 'c'));
 
     EXPECT_EQ(handle(comment_request).error_code, proto::router::kErrorInvalidData);
 

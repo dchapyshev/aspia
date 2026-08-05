@@ -43,6 +43,12 @@ public:
     static const size_t kMaxPasswordLength = 64;
     static const size_t kSafePasswordLength = 8;
 
+    // The salt is 64 bytes, the verifier at most as wide as the modulus of the widest SRP group
+    // (8192 bits). Bounded because the record is stored as the peer sends it and travels back in
+    // the user list.
+    static const size_t kMaxSaltSize = 128;
+    static const size_t kMaxVerifierSize = 1024;
+
     static bool isValidUserName(const QString& username);
     static bool isValidPassword(const SecureString& password);
     static bool isSafePassword(const SecureString& password);

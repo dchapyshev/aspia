@@ -26,12 +26,6 @@
 #include "proto/router_constants.h"
 #include "ui_router_group_dialog.h"
 
-namespace {
-
-constexpr int kMaxNameLength = 64;
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterGroupDialog::RouterGroupDialog(
     qint64 router_id, qint64 workspace_id, const QString& workspace_name,
@@ -49,7 +43,8 @@ RouterGroupDialog::RouterGroupDialog(
 
     setWindowTitle(entry_id_ > 0 ? tr("Edit Group") : tr("Add Group"));
 
-    ui->edit_name->setMaxLength(kMaxNameLength);
+    // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
+    ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterGroupDialog::onButtonBoxClicked);
 

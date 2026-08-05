@@ -58,14 +58,7 @@ void handleAdd(Database& database, const RequestCaller& caller, const proto::rou
     RouterUser new_user = RouterUser::parseFrom(user);
     if (!new_user.isValid())
     {
-        LOG(ERROR) << "Failed to create user";
-        result->error_code = proto::router::kErrorInternalError;
-        return;
-    }
-
-    if (!User::isValidUserName(new_user.name))
-    {
-        LOG(ERROR) << "Invalid user name:" << new_user.name;
+        LOG(ERROR) << "Invalid user record:" << new_user.name;
         result->error_code = proto::router::kErrorInvalidData;
         return;
     }
@@ -104,21 +97,13 @@ void handleModify(Database& database, const RequestCaller& caller, const proto::
 
     RouterUser new_user = RouterUser::parseFrom(user);
 
-    // A request with empty credentials changes only the flags of the record; the stored
-    // credentials are kept (see Database::modifyUser), so their validity is not checked.
+    // A request with empty credentials changes only the flags of the record; the stored credentials
+    // and the name are kept (see Database::modifyUser), so the fields it does not write are not
+    // validated.
     const bool has_credentials = !new_user.salt.isEmpty() || !new_user.verifier.isEmpty();
     if (has_credentials && !new_user.isValid())
     {
-        LOG(ERROR) << "Failed to create user";
-        result->error_code = proto::router::kErrorInternalError;
-        return;
-    }
-
-    // The name is written only together with the credentials (see Database::modifyUser), so a
-    // flags-only request is not validated by a field it does not use.
-    if (has_credentials && !User::isValidUserName(new_user.name))
-    {
-        LOG(ERROR) << "Invalid user name:" << new_user.name;
+        LOG(ERROR) << "Invalid user record:" << new_user.name;
         result->error_code = proto::router::kErrorInvalidData;
         return;
     }

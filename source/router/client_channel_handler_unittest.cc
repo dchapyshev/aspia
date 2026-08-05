@@ -21,6 +21,7 @@
 #include <unordered_map>
 
 #include "base/serialization.h"
+#include "proto/router_admin.h"
 #include "base/net/tcp_channel.h"
 #include "router/router_test_base.h"
 #include "router/workers/client_worker.h"
@@ -371,7 +372,7 @@ TEST_F(ClientChannelHandlerTest, FullPageOfLargestHostsFitsTheChannel)
         "substr(hex(zeroblob(32)),1,32), '3.0.0.0', substr(hex(zeroblob(64)),1,64), "
         "'255.255.255.255', zeroblob(%4), zeroblob(%5), zeroblob(%5) FROM seq")
         .arg(proto::router::kMaxHostPageSize).arg(workspace_id_)
-        .arg(kMaxEntryNameLength).arg(kMaxCommentLength).arg(kMaxCredentialLength);
+        .arg(proto::router::kMaxEntryNameLength).arg(proto::router::kMaxCommentLength).arg(proto::router::kMaxCredentialLength);
 
     ASSERT_TRUE(execRaw(sql));
 
@@ -665,6 +666,109 @@ TEST_F(ClientChannelHandlerTest, ChangePasswordRejectsInvalidCredentials)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every blob here is a fixed-size product of the crypto, so anything larger is not a credential.
+TEST_F(ClientChannelHandlerTest, ChangePasswordRejectsOversizedCredentials)
+{
+    const RouterUser rotated = makeUser("admin", kAllSessions);
+    const std::string oversized(64 * 1024, 'x');
+
+    struct Field
+    {
+        const char* name;
+        void (proto::router::ChangePasswordRequest::*setter)(const std::string&);
+    };
+
+    const Field fields[] =
+    {
+        { "salt",             &proto::router::ChangePasswordRequest::set_salt },
+        { "verifier",         &proto::router::ChangePasswordRequest::set_verifier },
+        { "public_key",       &proto::router::ChangePasswordRequest::set_public_key },
+        { "wrap_private_key", &proto::router::ChangePasswordRequest::set_wrap_private_key },
+        { "wrap_salt",        &proto::router::ChangePasswordRequest::set_wrap_salt },
+    };
+
+    for (const Field& field : fields)
+    {
+        proto::router::ChangePasswordRequest request;
+        request.set_salt(toStdString(rotated.salt));
+        request.set_verifier(toStdString(rotated.verifier));
+        request.set_public_key(toStdString(rotated.public_key));
+        request.set_wrap_private_key(toStdString(rotated.wrap_private_key));
+        request.set_wrap_salt(toStdString(rotated.wrap_salt));
+
+        proto::router::ChangePasswordRequest::WorkspaceKey* key = request.add_workspace_key();
+        key->set_workspace_id(workspace_id_);
+        key->set_wrapped_gk(toStdString(SealedBox::seal(gk_, rotated.public_key)));
+
+        (request.*(field.setter))(oversized);
+
+        const ClientChannelHandler::PasswordResult result =
+            ClientChannelHandler::handleChangePassword(db_, caller_, request);
+
+        EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData) << field.name;
+        EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier) << field.name;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router stores the re-sealed key without looking inside, so its size is all it can judge.
+TEST_F(ClientChannelHandlerTest, ChangePasswordRejectsAnOversizedWorkspaceKey)
+{
+    const RouterUser rotated = makeUser("admin", kAllSessions);
+
+    proto::router::ChangePasswordRequest request;
+    request.set_salt(toStdString(rotated.salt));
+    request.set_verifier(toStdString(rotated.verifier));
+    request.set_public_key(toStdString(rotated.public_key));
+    request.set_wrap_private_key(toStdString(rotated.wrap_private_key));
+    request.set_wrap_salt(toStdString(rotated.wrap_salt));
+
+    proto::router::ChangePasswordRequest::WorkspaceKey* key = request.add_workspace_key();
+    key->set_workspace_id(workspace_id_);
+    key->set_wrapped_gk(std::string(64 * 1024, 'x'));
+
+    const ClientChannelHandler::PasswordResult result =
+        ClientChannelHandler::handleChangePassword(db_, caller_, request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
+    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A client rotates its own credentials unattended, and they all land in the administrator user
+// list. An unbounded record would kill every administrator session that opens that list,
+// including the one that would delete the offender.
+TEST_F(ClientChannelHandlerTest, UserListStaysSendableAfterACredentialRotation)
+{
+    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_TRUE(client.isValid());
+    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+
+    const std::string oversized(1024 * 1024, 'x');
+
+    proto::router::ChangePasswordRequest request;
+    request.set_salt(oversized);
+    request.set_verifier(oversized);
+    request.set_public_key(oversized);
+    request.set_wrap_private_key(oversized);
+    request.set_wrap_salt(oversized);
+
+    ClientChannelHandler::handleChangePassword(db_, caller_, request);
+
+    QList<RouterUser> users;
+    ASSERT_TRUE(db_.userList(&users));
+
+    proto::router::RouterToAdmin message;
+    proto::router::UserList* list = message.mutable_user_list();
+    list->set_error_code(proto::router::kErrorOk);
+
+    for (const RouterUser& user : std::as_const(users))
+        list->add_user()->CopyFrom(user.serialize());
+
+    EXPECT_LE(serialize(message).size(), TcpChannel::kMaxMessageSize);
 }
 
 //--------------------------------------------------------------------------------------------------

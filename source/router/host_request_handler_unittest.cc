@@ -101,10 +101,10 @@ TEST_F(HostRequestHandlerTest, MemberEditsHostAndNotifies)
 TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
 {
     const struct { const char* what; size_t size; } kCases[] = {
-        { "display_name", kMaxEntryNameLength + 1 },
-        { "comment",      kMaxCommentLength + 1 },
-        { "user_name",    kMaxCredentialLength + 1 },
-        { "password",     kMaxCredentialLength + 1 }
+        { "display_name", proto::router::kMaxEntryNameLength + 1 },
+        { "comment",      proto::router::kMaxCommentLength + 1 },
+        { "user_name",    proto::router::kMaxCredentialLength + 1 },
+        { "password",     proto::router::kMaxCredentialLength + 1 }
     };
 
     for (const auto& test_case : kCases)
@@ -140,18 +140,18 @@ TEST_F(HostRequestHandlerTest, FieldsAtTheLimitAreAccepted)
 {
     proto::router::HostRequest request = makeRequest(host_id_, 0, "display");
     proto::router::Host* host = request.mutable_host();
-    host->set_display_name(std::string(kMaxEntryNameLength, 'n'));
-    host->set_comment(std::string(kMaxCommentLength, 'c'));
-    host->set_user_name(std::string(kMaxCredentialLength, 'u'));
-    host->set_password(std::string(kMaxCredentialLength, 'p'));
+    host->set_display_name(std::string(proto::router::kMaxEntryNameLength, 'n'));
+    host->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
+    host->set_user_name(std::string(proto::router::kMaxCredentialLength, 'u'));
+    host->set_password(std::string(proto::router::kMaxCredentialLength, 'p'));
 
     EXPECT_EQ(handle(request).error_code, proto::router::kErrorOk);
 
     const proto::router::Host stored = findHost(host_id_);
-    EXPECT_EQ(stored.display_name().size(), kMaxEntryNameLength);
-    EXPECT_EQ(stored.comment().size(), kMaxCommentLength);
-    EXPECT_EQ(stored.user_name().size(), kMaxCredentialLength);
-    EXPECT_EQ(stored.password().size(), kMaxCredentialLength);
+    EXPECT_EQ(stored.display_name().size(), proto::router::kMaxEntryNameLength);
+    EXPECT_EQ(stored.comment().size(), proto::router::kMaxCommentLength);
+    EXPECT_EQ(stored.user_name().size(), proto::router::kMaxCredentialLength);
+    EXPECT_EQ(stored.password().size(), proto::router::kMaxCredentialLength);
 }
 
 //--------------------------------------------------------------------------------------------------

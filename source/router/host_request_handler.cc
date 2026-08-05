@@ -42,10 +42,10 @@ HostRequestHandler::Result HostRequestHandler::handle(
     const proto::router::Host& host = request.host();
     const HostId host_id = host.host_id();
 
-    if (host.display_name().size() > kMaxEntryNameLength ||
-        host.comment().size() > kMaxCommentLength ||
-        host.user_name().size() > kMaxCredentialLength ||
-        host.password().size() > kMaxCredentialLength)
+    if (host.display_name().size() > proto::router::kMaxEntryNameLength ||
+        host.comment().size() > proto::router::kMaxCommentLength ||
+        host.user_name().size() > proto::router::kMaxCredentialLength ||
+        host.password().size() > proto::router::kMaxCredentialLength)
     {
         LOG(ERROR) << "Oversized field in host edit request for host" << host_id;
         result.error_code = proto::router::kErrorInvalidData;
