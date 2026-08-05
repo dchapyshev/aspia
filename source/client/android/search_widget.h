@@ -24,6 +24,7 @@
 #include <QVariant>
 #include <QWidget>
 
+class IconButton;
 class Label;
 class SearchHighlightDelegate;
 class TreeWidget;
@@ -48,16 +49,26 @@ public:
     // non-empty query shows the "nothing found" hint instead of the blank initial state.
     void setResults(const QList<Result>& results, const QString& query);
 
+    // Shows which page of the whole result is on screen. The row hides itself while there is
+    // only one page, so a search that fits on one screen looks as it did before.
+    void setPage(qint64 current_page, qint64 page_count);
+
     // Clears the results (e.g. when the screen is opened).
     void reset();
 
 signals:
     void sig_activated(const QVariant& data);
+    void sig_prevPage();
+    void sig_nextPage();
 
 private:
     TreeWidget* results_;
     SearchHighlightDelegate* delegate_;
     Label* empty_label_;
+    Label* page_label_;
+    IconButton* prev_button_;
+    IconButton* next_button_;
+    QWidget* page_bar_;
 
     Q_DISABLE_COPY_MOVE(SearchWidget)
 };

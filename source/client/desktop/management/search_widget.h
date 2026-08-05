@@ -19,13 +19,18 @@
 #ifndef CLIENT_DESKTOP_MANAGEMENT_SEARCH_WIDGET_H
 #define CLIENT_DESKTOP_MANAGEMENT_SEARCH_WIDGET_H
 
+#include <QHash>
+#include <QList>
 #include <QPoint>
 #include <QTreeWidgetItem>
 
 #include "client/config.h"
 #include "client/router.h"
+#include "client/search_page_model.h"
 #include "client/desktop/management/content_widget.h"
 
+class IconTextButton;
+class QComboBox;
 class QLabel;
 class QStatusBar;
 class QTimer;
@@ -103,20 +108,65 @@ signals:
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
     void dispatchRouterSearch();
+    void onPageChanged(int index);
+    void onPrevClicked();
+    void onNextClicked();
 
 private:
     class HighlightDelegate;
 
     LocalItem* findItemByEntryId(qint64 entry_id) const;
-    void addRouterHosts(const QString& query, qint64 router_id, const QString& source_label,
-                        const Router::HostList& list);
     void updateStatusLabels();
+
+    // Counts the matches of the local address book and of every online router, in that order, and
+    // hands the counts to the page model. The page itself is fetched once every source answered.
+    void countSources();
+    void onSourceCounted(int slot, qint64 match_count);
+
+    // Asks every source for the window of the current page and shows the windows once they are
+    // all in, so the rows never appear in the wrong order.
+    void fetchCurrentPage();
+    void showCurrentPage();
+    void updatePagination();
 
     QTreeWidget* tree_host_ = nullptr;
     QLabel* status_results_label_ = nullptr;
     HighlightDelegate* highlight_delegate_ = nullptr;
     QTimer* router_search_timer_ = nullptr;
+    QComboBox* combo_page_ = nullptr;
+    IconTextButton* button_prev_ = nullptr;
+    IconTextButton* button_next_ = nullptr;
     QString current_query_;
+
+    // One source of matches. The local address book comes first and each online router follows,
+    // ordered by its id, so the whole result has an order that does not depend on which router
+    // answers first.
+    struct Source
+    {
+        qint64 router_id = 0; // 0 - the local address book.
+        QString label;
+        qint64 match_count = -1; // -1 until the source answered; it drops out if it never does.
+    };
+
+    // The window of the current page that one source contributes, and the rows it answered with.
+    struct PageSlice
+    {
+        int source = -1;
+        qint64 offset = 0;
+        qint64 count = 0;
+        bool ready = false;
+        QList<Router::Host> router_hosts;
+    };
+
+    SearchPageModel page_model_;
+    QList<Source> sources_;
+    QList<PageSlice> page_slices_;
+    QList<HostConfig> local_matches_;
+    QHash<qint64, GroupConfig> local_groups_;
+
+    // Replies of a query the user has already moved on from are dropped by this, and so are the
+    // replies of an earlier page of the same query.
+    quint64 generation_ = 0;
 
     Q_DISABLE_COPY_MOVE(SearchWidget)
 };

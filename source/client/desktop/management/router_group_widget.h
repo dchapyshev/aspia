@@ -72,12 +72,17 @@ protected:
 
 private slots:
     void onHostListReceived(const Router::HostList& list);
+    void onPageSizeChanged(int index);
+    void onPageChanged(int index);
+    void onPrevClicked();
+    void onNextClicked();
     void onHeaderContextMenu(const QPoint& pos);
     void onHostContextMenu(const QPoint& pos);
 
 private:
     void fetchHosts(Router::CachePolicy policy);
     void updateStatusLabel();
+    void updatePagination();
     void startDrag();
 
     std::unique_ptr<Ui::RouterGroupWidget> ui;
@@ -88,6 +93,10 @@ private:
     QString mime_type_;
     QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
+
+    qint64 page_size_ = 100;
+    qint64 current_page_ = 1;
+    qint64 total_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };

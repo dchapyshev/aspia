@@ -178,10 +178,11 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
 
     ui->tree_hosts->installEventFilter(this);
 
+    // The largest entry is the largest page the router serves (kMaxHostPageSize).
+    ui->combo_hosts_page_size->addItem("25", QVariant::fromValue<qint64>(25));
     ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
     ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
-    ui->combo_hosts_page_size->addItem("200", QVariant::fromValue<qint64>(200));
-    ui->combo_hosts_page_size->setCurrentIndex(1);
+    ui->combo_hosts_page_size->setCurrentIndex(2);
 
     ui->button_hosts_next->setIconOnRight(true);
 
@@ -719,8 +720,8 @@ void RouterHostsWidget::fetchHosts()
 
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    request.set_start_item(start);
-    request.set_end_item(start + hosts_page_size_ - 1);
+    request.set_offset(start);
+    request.set_count(hosts_page_size_);
     router->listHosts(Router::CachePolicy::RELOAD, std::move(request), this,
                       &RouterHostsWidget::onHostListReceived);
 }

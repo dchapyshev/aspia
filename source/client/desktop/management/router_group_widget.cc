@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QCollator>
+#include <QComboBox>
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
@@ -29,7 +30,9 @@
 #include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QSignalBlocker>
 #include <QStatusBar>
+#include <QToolButton>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -155,6 +158,23 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     connect(ui->tree_host, &QTreeWidget::itemActivated,
             this, [this](QTreeWidgetItem*, int) { emit sig_activated(); });
 
+    // The largest entry is the largest page the router serves (kMaxHostPageSize).
+    ui->combo_hosts_page_size->addItem("25", QVariant::fromValue<qint64>(25));
+    ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
+    ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
+    ui->combo_hosts_page_size->setCurrentIndex(2);
+
+    ui->button_hosts_next->setIconOnRight(true);
+
+    connect(ui->combo_hosts_page_size, &QComboBox::currentIndexChanged,
+            this, &RouterGroupWidget::onPageSizeChanged);
+    connect(ui->combo_hosts_page, &QComboBox::currentIndexChanged,
+            this, &RouterGroupWidget::onPageChanged);
+    connect(ui->button_hosts_prev, &QToolButton::clicked, this, &RouterGroupWidget::onPrevClicked);
+    connect(ui->button_hosts_next, &QToolButton::clicked, this, &RouterGroupWidget::onNextClicked);
+
+    updatePagination();
+
     ui->tree_host->viewport()->installEventFilter(this);
     ui->tree_host->installEventFilter(this);
 }
@@ -186,6 +206,10 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
     workspace_id_ = workspace_id;
     workspace_name_ = workspace_name;
     group_id_ = group_id;
+
+    // Another selection is another list, so its paging starts over.
+    current_page_ = 1;
+    total_count_ = 0;
 
     ui->tree_host->clear();
     updateStatusLabel();
@@ -393,7 +417,52 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
             ui->tree_host->addTopLevelItem(new HostTreeItem(host));
     }
 
+    total_count_ = list.total_count;
+    updatePagination();
     updateStatusLabel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onPageSizeChanged(int /* index */)
+{
+    page_size_ = ui->combo_hosts_page_size->currentData().toLongLong();
+    current_page_ = 1;
+    fetchHosts(Router::CachePolicy::USE_CACHE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onPageChanged(int index)
+{
+    if (index < 0)
+        return;
+
+    const qint64 page = index + 1;
+    if (page == current_page_)
+        return;
+
+    current_page_ = page;
+    fetchHosts(Router::CachePolicy::USE_CACHE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onPrevClicked()
+{
+    if (current_page_ <= 1)
+        return;
+
+    --current_page_;
+    fetchHosts(Router::CachePolicy::USE_CACHE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::onNextClicked()
+{
+    const qint64 total_pages = (total_count_ + page_size_ - 1) / page_size_;
+    if (current_page_ >= total_pages)
+        return;
+
+    ++current_page_;
+    fetchHosts(Router::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -441,6 +510,8 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id_);
     request.set_group_id(group_id_);
+    request.set_offset((current_page_ - 1) * page_size_);
+    request.set_count(page_size_);
     router->listHosts(policy, std::move(request), this, &RouterGroupWidget::onHostListReceived);
 }
 
@@ -448,6 +519,29 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
 void RouterGroupWidget::updateStatusLabel()
 {
     status_hosts_label_->setText(tr("%n host(s)", "", ui->tree_host->topLevelItemCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::updatePagination()
+{
+    qint64 total_pages = 1;
+    if (total_count_ > 0)
+        total_pages = (total_count_ + page_size_ - 1) / page_size_;
+
+    if (current_page_ > total_pages)
+        current_page_ = total_pages;
+    if (current_page_ < 1)
+        current_page_ = 1;
+
+    QSignalBlocker blocker(ui->combo_hosts_page);
+    ui->combo_hosts_page->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        ui->combo_hosts_page->addItem(QString::number(i));
+    ui->combo_hosts_page->setCurrentIndex(static_cast<int>(current_page_ - 1));
+
+    ui->combo_hosts_page->setEnabled(total_pages > 1);
+    ui->button_hosts_prev->setEnabled(current_page_ > 1);
+    ui->button_hosts_next->setEnabled(current_page_ < total_pages);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -215,10 +215,11 @@ public:
                    HandlerT handler);
 
     // Substring search over hosts by display name and host_id across every workspace accessible
-    // to the user. The response is the decoded plain HostList struct (full match set, no
-    // pagination).
+    // to the user. The page is mandatory, exactly as for listHosts; total_count of the answer is
+    // the number of matches in the whole scope. Results are not cached.
     template<typename HandlerT>
-    void searchHosts(const QString& query, QObject* receiver, HandlerT handler);
+    void searchHosts(const QString& query, qint64 offset, qint64 count, QObject* receiver,
+                     HandlerT handler);
 
     // List the temporary (unapproved) hosts currently online. Available to every session type;
     // |address| in each entry is populated only for admin sessions.
@@ -666,7 +667,7 @@ void Router::listHosts(CachePolicy policy, proto::router::HostListRequest reques
     // answers, and the total count of the whole scope travels with them.
     const bool cacheable = request.mode() == proto::router::HostListRequest::MODE_FILTERED;
     const RouterState::HostCacheKey key{ request.workspace_id(), request.group_id(),
-                                         request.start_item(), request.end_item() };
+                                         request.offset(), request.count() };
 
     if (policy == CachePolicy::USE_CACHE && cacheable)
     {
@@ -692,12 +693,15 @@ void Router::listHosts(CachePolicy policy, proto::router::HostListRequest reques
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::searchHosts(const QString& query, QObject* receiver, HandlerT handler)
+void Router::searchHosts(const QString& query, qint64 offset, qint64 count, QObject* receiver,
+                         HandlerT handler)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_host_search_request();
     request->set_request_id(state_.nextRequestId());
     request->set_query(query.toStdString());
+    request->set_offset(offset);
+    request->set_count(count);
     state_.registerPending<proto::router::HostSearchResult>(request, receiver, std::move(handler),
         [this](const proto::router::HostSearchResult& raw)
     {

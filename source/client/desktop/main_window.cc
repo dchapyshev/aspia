@@ -59,6 +59,7 @@
 #include "common/desktop/session_type.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/peer.h"
+#include "proto/router_constants.h"
 #include "ui_main_window.h"
 
 namespace {
@@ -231,7 +232,7 @@ void MainWindow::connectToUrl(const QString& url)
             HostId host_id = host_url.hostId();
             proto::peer::SessionType session_type = host_url.sessionType();
 
-            router->searchHosts(hostIdToString(host_id), this,
+            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, this,
                 [this, router_id, host_id, session_type](const Router::HostList& list)
             {
                 HostConfig host;

@@ -67,14 +67,14 @@ public:
     {
         qint64 workspace_id = 0;
         qint64 group_id = 0;
-        qint64 start_item = 0;
-        qint64 end_item = 0;
+        qint64 offset = 0;
+        qint64 count = 0;
 
         bool operator==(const HostCacheKey& other) const = default;
 
         friend size_t qHash(const HostCacheKey& key, size_t seed = 0)
         {
-            return qHashMulti(seed, key.workspace_id, key.group_id, key.start_item, key.end_item);
+            return qHashMulti(seed, key.workspace_id, key.group_id, key.offset, key.count);
         }
     };
 

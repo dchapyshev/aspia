@@ -26,9 +26,11 @@
 #include <QTextDocument>
 #include <QTextOption>
 #include <QTreeWidget>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
+#include "common/android/icon_button.h"
 #include "common/android/label.h"
 #include "common/android/tree_widget.h"
 
@@ -163,7 +165,11 @@ SearchWidget::SearchWidget(QWidget* parent)
     : QWidget(parent),
       results_(new TreeWidget()),
       delegate_(new SearchHighlightDelegate(this)),
-      empty_label_(new Label(QString(), Label::Role::CAPTION))
+      empty_label_(new Label(QString(), Label::Role::CAPTION)),
+      page_label_(new Label(QString(), Label::Role::CAPTION)),
+      prev_button_(new IconButton(":/img/arrow-left.svg")),
+      next_button_(new IconButton(":/img/arrow-right.svg")),
+      page_bar_(new QWidget())
 {
     results_->setColumnCount(2);
     results_->setRootIsDecorated(false);
@@ -176,11 +182,27 @@ SearchWidget::SearchWidget(QWidget* parent)
     empty_label_->setAlignment(Qt::AlignCenter);
     empty_label_->setVisible(false);
 
+    page_label_->setAlignment(Qt::AlignCenter);
+
+    QHBoxLayout* page_layout = new QHBoxLayout(page_bar_);
+    page_layout->setContentsMargins(0, 0, 0, 0);
+    page_layout->addStretch();
+    page_layout->addWidget(prev_button_);
+    page_layout->addWidget(page_label_);
+    page_layout->addWidget(next_button_);
+    page_layout->addStretch();
+
+    page_bar_->setVisible(false);
+
+    connect(prev_button_, &IconButton::clicked, this, &SearchWidget::sig_prevPage);
+    connect(next_button_, &IconButton::clicked, this, &SearchWidget::sig_nextPage);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(empty_label_);
     layout->addWidget(results_, 1);
+    layout->addWidget(page_bar_);
 
     connect(results_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int)
     {
@@ -212,9 +234,19 @@ void SearchWidget::setResults(const QList<Result>& results, const QString& query
 }
 
 //--------------------------------------------------------------------------------------------------
+void SearchWidget::setPage(qint64 current_page, qint64 page_count)
+{
+    page_bar_->setVisible(page_count > 1);
+    page_label_->setText(tr("%1 of %2").arg(current_page + 1).arg(page_count));
+    prev_button_->setEnabled(current_page > 0);
+    next_button_->setEnabled(current_page < page_count - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SearchWidget::reset()
 {
     delegate_->setQuery(QString());
     results_->clear();
     empty_label_->setVisible(false);
+    page_bar_->setVisible(false);
 }

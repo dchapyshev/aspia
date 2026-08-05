@@ -23,17 +23,21 @@
 #include <QDataStream>
 #include <QEvent>
 #include <QFontMetrics>
+#include <QComboBox>
 #include <QHash>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QIODevice>
 #include <QLabel>
 #include <QMenu>
 #include <QPainter>
+#include <QSignalBlocker>
 #include <QStatusBar>
 #include <QStyledItemDelegate>
 #include <QTextDocument>
 #include <QTextOption>
 #include <QTimer>
+#include <QToolButton>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
@@ -43,6 +47,7 @@
 #include "base/peer/host_id.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "common/desktop/icon_text_button.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -51,6 +56,15 @@ const int kColumnName    = 0;
 const int kColumnAddress = 1;
 const int kColumnGroup   = 2;
 const int kColumnComment = 3;
+
+// Matches shown at a time, over every source together. Not larger than the page a router
+// serves at once, because a page that spans a single source is fetched with one request.
+const qint64 kPageSize = proto::router::kMaxHostPageSize;
+
+// Match counts a source can carry while it has not answered yet, or has failed to. Both keep
+// it out of the paging arithmetic; only the first one makes the page wait for it.
+const qint64 kSourceUnanswered = -1;
+const qint64 kSourceFailed     = -2;
 
 //--------------------------------------------------------------------------------------------------
 QString buildHighlightedHtml(const QString& text, const QString& query)
@@ -95,6 +109,11 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
         parts.prepend(it.value().name());
         current = it.value().parentId();
     }
+
+    // Every group of the address book hangs off its root, so the path starts there whatever the
+    // depth. A host that is in no group is in the root itself and shows the root alone. The name
+    // is the one the sidebar puts on it.
+    parts.prepend(QCoreApplication::translate("Sidebar", "Local"));
 
     return parts.join(" / ");
 }
@@ -291,7 +310,33 @@ SearchWidget::SearchWidget(QWidget* parent)
     router_search_timer_->setInterval(MilliSeconds(300));
     connect(router_search_timer_, &QTimer::timeout, this, &SearchWidget::dispatchRouterSearch);
 
+    button_prev_ = new IconTextButton(this);
+    button_prev_->setText(tr("Previous"));
+    button_prev_->setToolTip(tr("Previous page"));
+    button_prev_->setIcon(QIcon(":/img/arrow-left.svg"));
+
+    combo_page_ = new QComboBox(this);
+
+    button_next_ = new IconTextButton(this);
+    button_next_->setText(tr("Next"));
+    button_next_->setToolTip(tr("Next page"));
+    button_next_->setIcon(QIcon(":/img/arrow-right.svg"));
+    button_next_->setIconOnRight(true);
+
+    connect(button_prev_, &QToolButton::clicked, this, &SearchWidget::onPrevClicked);
+    connect(button_next_, &QToolButton::clicked, this, &SearchWidget::onNextClicked);
+    connect(combo_page_, &QComboBox::currentIndexChanged, this, &SearchWidget::onPageChanged);
+
+    QHBoxLayout* pagination_layout = new QHBoxLayout();
+    pagination_layout->addWidget(button_prev_);
+    pagination_layout->addWidget(combo_page_);
+    pagination_layout->addWidget(button_next_);
+    pagination_layout->addStretch();
+
     layout->addWidget(tree_host_);
+    layout->addLayout(pagination_layout);
+
+    updatePagination();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,76 +352,308 @@ void SearchWidget::search(const QString& query)
     highlight_delegate_->setQuery(query);
     tree_host_->clear();
 
+    ++generation_;
+    page_model_.clear();
+    sources_.clear();
+    page_slices_.clear();
+    local_matches_.clear();
+    local_groups_.clear();
+
     if (query.isEmpty())
     {
         router_search_timer_->stop();
+        updatePagination();
         updateStatusLabels();
         return;
     }
 
     Database& db = Database::instance();
 
-    QHash<qint64, GroupConfig> groups;
     const QList<GroupConfig> all_groups = db.allGroups();
-    groups.reserve(all_groups.size());
+    local_groups_.reserve(all_groups.size());
     for (const GroupConfig& group : std::as_const(all_groups))
-        groups.insert(group.id(), group);
+        local_groups_.insert(group.id(), group);
 
-    const QList<HostConfig> results = db.searchHosts(query);
+    local_matches_ = db.searchHosts(query);
 
-    for (const HostConfig& host : std::as_const(results))
-        new LocalItem(host, buildGroupPath(host.groupId(), groups), tree_host_);
+    // The local matches are in hand already, so the local part of the first page is shown at
+    // once, with the local address book as the only source. The routers are queried after the
+    // debounce, not on every keystroke, and the page is rebuilt when they answer.
+    Source local;
+    local.router_id = 0;
+    local.match_count = local_matches_.size();
+    sources_.append(local);
 
-    updateStatusLabels();
-
-    // Local results are shown right away; router workspaces are queried after a short debounce.
+    fetchCurrentPage();
     router_search_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::dispatchRouterSearch()
 {
-    const QString query = current_query_;
-    if (query.isEmpty())
+    if (current_query_.isEmpty())
         return;
 
-    const QList<RouterConfig> routers = Database::instance().routerList();
+    countSources();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::countSources()
+{
+    const QString query = current_query_;
+
+    // Any reply still on its way belongs to the source list that is being replaced here.
+    const quint64 generation = ++generation_;
+
+    sources_.clear();
+    page_slices_.clear();
+
+    // The local address book is the first source and its count is known already.
+    Source local;
+    local.router_id = 0;
+    local.match_count = local_matches_.size();
+    sources_.append(local);
+
+    // Then the routers, ordered by id, so the whole result keeps one order however fast each of
+    // them answers.
+    QList<RouterConfig> routers = Database::instance().routerList();
+    std::sort(routers.begin(), routers.end(), [](const RouterConfig& first, const RouterConfig& second)
+    {
+        return first.routerId() < second.routerId();
+    });
+
+    QList<int> pending;
+
     for (const RouterConfig& config : std::as_const(routers))
     {
         Router* router = Router::instance(config.routerId());
         if (!router || router->status() != Router::Status::ONLINE)
             continue;
 
-        const qint64 router_id = config.routerId();
-        const QString source_label = config.displayLabel();
-        router->searchHosts(query, this, [this, query, router_id, source_label](
-            const Router::HostList& list)
+        Source source;
+        source.router_id = config.routerId();
+        source.label = config.displayLabel();
+        sources_.append(source);
+
+        pending.append(static_cast<int>(sources_.size()) - 1);
+    }
+
+    if (pending.isEmpty())
+    {
+        // Nothing but the local address book to page over.
+        fetchCurrentPage();
+        return;
+    }
+
+    for (int slot : std::as_const(pending))
+    {
+        const qint64 router_id = sources_[slot].router_id;
+        Router* router = Router::instance(router_id);
+
+        // A single record is asked for: what is wanted here is the size of the whole match set,
+        // and the page itself is fetched once every source has reported.
+        router->searchHosts(query, 0, 1, this,
+            [this, generation, slot, router_id](const Router::HostList& list)
         {
-            addRouterHosts(query, router_id, source_label, list);
+            if (generation != generation_)
+                return;
+
+            if (list.error_code != proto::router::kErrorOk)
+            {
+                // Not fatal for the search as a whole (the other sources still contribute), but
+                // without the log a failed router looks exactly like "nothing found" there.
+                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+                onSourceCounted(slot, kSourceFailed);
+                return;
+            }
+
+            onSourceCounted(slot, list.total_count);
         });
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::addRouterHosts(const QString& query, qint64 router_id,
-                                  const QString& source_label, const Router::HostList& list)
+void SearchWidget::onSourceCounted(int slot, qint64 match_count)
 {
-    // Drop a late response whose query no longer matches what the user is searching for.
-    if (query != current_query_)
+    if (slot < 0 || slot >= sources_.size())
         return;
 
-    // Not fatal for the search as a whole (other sources still contribute), but without the log
-    // a failed router looks exactly like "nothing found" there.
-    if (list.error_code != proto::router::kErrorOk)
+    sources_[slot].match_count = match_count;
+
+    // The boundaries of a page depend on every count, so a page built from a part of them would be
+    // rebuilt with different rows the moment the rest arrives.
+    for (const Source& source : std::as_const(sources_))
     {
-        LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
-        return;
+        if (source.match_count == kSourceUnanswered)
+            return;
     }
 
-    for (const Router::Host& host : std::as_const(list.hosts))
-        new RouterItem(router_id, host, source_label, tree_host_);
+    fetchCurrentPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::fetchCurrentPage()
+{
+    const qint64 wanted_page = page_model_.currentPage();
+
+    // A source that never answered is left out. Its matches are missing from the result either
+    // way, and a hole of unknown size would shift the pages of every source after it.
+    page_model_.clear();
+    page_model_.setPageSize(kPageSize);
+
+    QList<int> model_to_source;
+    for (int i = 0; i < sources_.size(); ++i)
+    {
+        if (sources_[i].match_count < 0)
+            continue;
+
+        page_model_.addSource(sources_[i].match_count);
+        model_to_source.append(i);
+    }
+
+    page_model_.setCurrentPage(wanted_page);
+    page_slices_.clear();
+
+    // A reply still on its way belongs to the page being left, and the slot it would write
+    // into is about to mean something else.
+    ++generation_;
+
+    const QList<SearchPageModel::Slice> slices = page_model_.currentSlices();
+    for (const SearchPageModel::Slice& slice : slices)
+    {
+        PageSlice page_slice;
+        page_slice.source = model_to_source[slice.source];
+        page_slice.offset = slice.offset;
+        page_slice.count = slice.count;
+        page_slices_.append(page_slice);
+    }
+
+    updatePagination();
+
+    const QString query = current_query_;
+    const quint64 generation = generation_;
+
+    for (int i = 0; i < page_slices_.size(); ++i)
+    {
+        PageSlice& slice = page_slices_[i];
+        const qint64 router_id = sources_[slice.source].router_id;
+
+        if (router_id == 0)
+        {
+            // The local matches are in memory, so the window is a range of them.
+            slice.ready = true;
+            continue;
+        }
+
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            slice.ready = true;
+            continue;
+        }
+
+        router->searchHosts(query, slice.offset, slice.count, this,
+            [this, generation, i, router_id](const Router::HostList& list)
+        {
+            if (generation != generation_ || i >= page_slices_.size())
+                return;
+
+            if (list.error_code != proto::router::kErrorOk)
+                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+            else
+                page_slices_[i].router_hosts = list.hosts;
+
+            page_slices_[i].ready = true;
+            showCurrentPage();
+        });
+    }
+
+    showCurrentPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::showCurrentPage()
+{
+    // The rows of a page are shown together. A source that is still in flight would otherwise put
+    // its rows after the ones of a source that comes later in the order.
+    for (const PageSlice& slice : std::as_const(page_slices_))
+    {
+        if (!slice.ready)
+            return;
+    }
+
+    tree_host_->clear();
+
+    for (const PageSlice& slice : std::as_const(page_slices_))
+    {
+        const Source& source = sources_[slice.source];
+
+        if (source.router_id == 0)
+        {
+            for (qint64 i = slice.offset; i < slice.offset + slice.count; ++i)
+            {
+                if (i >= local_matches_.size())
+                    break;
+
+                const HostConfig& host = local_matches_[i];
+                new LocalItem(host, buildGroupPath(host.groupId(), local_groups_), tree_host_);
+            }
+        }
+        else
+        {
+            for (const Router::Host& host : std::as_const(slice.router_hosts))
+                new RouterItem(source.router_id, host, source.label, tree_host_);
+        }
+    }
 
     updateStatusLabels();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::updatePagination()
+{
+    const qint64 page_count = page_model_.pageCount();
+    const qint64 current_page = page_model_.currentPage();
+
+    QSignalBlocker blocker(combo_page_);
+    combo_page_->clear();
+    for (qint64 i = 1; i <= page_count; ++i)
+        combo_page_->addItem(QString::number(i));
+    combo_page_->setCurrentIndex(static_cast<int>(current_page));
+
+    combo_page_->setEnabled(page_count > 1);
+    button_prev_->setEnabled(current_page > 0);
+    button_next_->setEnabled(current_page < page_count - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::onPageChanged(int index)
+{
+    if (index < 0 || index == page_model_.currentPage())
+        return;
+
+    page_model_.setCurrentPage(index);
+    fetchCurrentPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::onPrevClicked()
+{
+    if (page_model_.currentPage() <= 0)
+        return;
+
+    page_model_.setCurrentPage(page_model_.currentPage() - 1);
+    fetchCurrentPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::onNextClicked()
+{
+    if (page_model_.currentPage() >= page_model_.pageCount() - 1)
+        return;
+
+    page_model_.setCurrentPage(page_model_.currentPage() + 1);
+    fetchCurrentPage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,6 +663,15 @@ void SearchWidget::clear()
     current_query_.clear();
     highlight_delegate_->setQuery(QString());
     tree_host_->clear();
+
+    ++generation_;
+    page_model_.clear();
+    sources_.clear();
+    page_slices_.clear();
+    local_matches_.clear();
+    local_groups_.clear();
+
+    updatePagination();
     updateStatusLabels();
 }
 
@@ -536,5 +822,8 @@ SearchWidget::LocalItem* SearchWidget::findItemByEntryId(qint64 entry_id) const
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::updateStatusLabels()
 {
-    status_results_label_->setText(tr("%n result(s)", "", tree_host_->topLevelItemCount()));
+    // The count is of the whole result and not of the page: the page is what the user can
+    // see, the count is what they can reach.
+    status_results_label_->setText(
+        tr("%n result(s)", "", static_cast<int>(page_model_.totalCount())));
 }

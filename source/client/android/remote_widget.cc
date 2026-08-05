@@ -55,6 +55,12 @@ constexpr qint64 kTempHostsMarker = -2;
 // Item data role for the host rows on the host page.
 constexpr int kHostIdRole = Qt::UserRole;
 
+// Marks the row that loads the next page of hosts instead of opening one.
+constexpr int kMoreRole = Qt::UserRole + 1;
+
+// Hosts fetched per request on the host page. Cannot exceed what the router serves at once.
+constexpr qint64 kHostPageSize = proto::router::kMaxHostPageSize;
+
 //--------------------------------------------------------------------------------------------------
 QString statusIconPath(Router::Status status)
 {
@@ -169,6 +175,12 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     // A tap on a host opens the session-type chooser.
     connect(host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
+        if (item && item->data(0, kMoreRole).toBool())
+        {
+            fetchHosts(Router::CachePolicy::USE_CACHE, true);
+            return;
+        }
+
         HostConfig config;
         if (hostConfigForItem(item, &config))
             showSessionMenu(config);
@@ -183,6 +195,24 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     });
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
     connect(search_button_, &IconButton::clicked, this, &RemoteWidget::showSearch);
+
+    connect(search_page_, &SearchWidget::sig_prevPage, this, [this]()
+    {
+        if (search_page_model_.currentPage() <= 0)
+            return;
+
+        search_page_model_.setCurrentPage(search_page_model_.currentPage() - 1);
+        fetchSearchPage();
+    });
+
+    connect(search_page_, &SearchWidget::sig_nextPage, this, [this]()
+    {
+        if (search_page_model_.currentPage() >= search_page_model_.pageCount() - 1)
+            return;
+
+        search_page_model_.setCurrentPage(search_page_model_.currentPage() + 1);
+        fetchSearchPage();
+    });
     connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
     {
         const int index = data.toInt();
@@ -280,42 +310,192 @@ void RemoteWidget::searchQuery(const QString& query)
     search_query_ = query;
     search_results_.clear();
 
+    ++search_generation_;
+    search_page_model_.clear();
+    search_sources_.clear();
+    search_slices_.clear();
+
     if (query.isEmpty())
     {
         search_page_->setResults({}, QString());
+        search_page_->setPage(0, 1);
         return;
     }
 
-    // Each online router is searched across all of its workspaces; results stream in asynchronously.
-    for (const RouterConfig& config : Database::instance().routerList())
+    countSearchSources();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::countSearchSources()
+{
+    const QString query = search_query_;
+
+    // Any reply still on its way belongs to the source list being replaced here.
+    const quint64 generation = ++search_generation_;
+
+    search_sources_.clear();
+    search_slices_.clear();
+
+    QList<RouterConfig> routers = Database::instance().routerList();
+    std::sort(routers.begin(), routers.end(), [](const RouterConfig& first, const RouterConfig& second)
     {
-        const qint64 router_id = config.routerId();
-        Router* router = Router::instance(router_id);
+        return first.routerId() < second.routerId();
+    });
+
+    for (const RouterConfig& config : std::as_const(routers))
+    {
+        Router* router = Router::instance(config.routerId());
         if (!router || router->status() != Router::Status::ONLINE)
             continue;
 
-        router->searchHosts(query, this, [this, router_id, query](const Router::HostList& list)
+        SearchSource source;
+        source.router_id = config.routerId();
+        search_sources_.append(source);
+    }
+
+    if (search_sources_.isEmpty())
+    {
+        fetchSearchPage();
+        return;
+    }
+
+    for (int slot = 0; slot < search_sources_.size(); ++slot)
+    {
+        const qint64 router_id = search_sources_[slot].router_id;
+        Router* router = Router::instance(router_id);
+
+        // A single record is asked for: what is wanted here is the size of the whole match set,
+        // and the page itself is fetched once every router has reported.
+        router->searchHosts(query, 0, 1, this,
+            [this, generation, slot, router_id](const Router::HostList& list)
         {
-            // Ignore responses for a query the user has already moved on from.
-            if (query != search_query_)
+            if (generation != search_generation_)
                 return;
 
-            // Not fatal for the search as a whole, but without the log a failed router looks
-            // exactly like "nothing found" there. The page is still rebuilt: the results of
-            // the PREVIOUS query must not stay on screen when every router failed.
             if (list.error_code != proto::router::kErrorOk)
             {
+                // Not fatal for the search as a whole, but without the log a failed router looks
+                // exactly like "nothing found" there.
                 LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
-                rebuildSearchResults();
+                onSearchSourceCounted(slot, -2);
                 return;
             }
 
-            for (const Router::Host& host : list.hosts)
-                search_results_.append({ router_id, host });
-
-            rebuildSearchResults();
+            onSearchSourceCounted(slot, list.total_count);
         });
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::onSearchSourceCounted(int slot, qint64 match_count)
+{
+    if (slot < 0 || slot >= search_sources_.size())
+        return;
+
+    search_sources_[slot].match_count = match_count;
+
+    // The boundaries of a page depend on every count, so a page built from a part of them would be
+    // rebuilt with different rows the moment the rest arrives.
+    for (const SearchSource& source : std::as_const(search_sources_))
+    {
+        if (source.match_count == -1)
+            return;
+    }
+
+    fetchSearchPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::fetchSearchPage()
+{
+    const qint64 wanted_page = search_page_model_.currentPage();
+
+    // A router that never answered is left out. Its matches are missing from the result either
+    // way, and a hole of unknown size would shift the pages of every source after it.
+    search_page_model_.clear();
+    search_page_model_.setPageSize(proto::router::kMaxHostPageSize);
+
+    QList<int> model_to_source;
+    for (int i = 0; i < search_sources_.size(); ++i)
+    {
+        if (search_sources_[i].match_count < 0)
+            continue;
+
+        search_page_model_.addSource(search_sources_[i].match_count);
+        model_to_source.append(i);
+    }
+
+    search_page_model_.setCurrentPage(wanted_page);
+    search_slices_.clear();
+
+    // A reply still on its way belongs to the page being left, and the slot it would write
+    // into is about to mean something else.
+    ++search_generation_;
+
+    const QList<SearchPageModel::Slice> slices = search_page_model_.currentSlices();
+    for (const SearchPageModel::Slice& slice : slices)
+    {
+        SearchSlice search_slice;
+        search_slice.source = model_to_source[slice.source];
+        search_slice.offset = slice.offset;
+        search_slice.count = slice.count;
+        search_slices_.append(search_slice);
+    }
+
+    const QString query = search_query_;
+    const quint64 generation = search_generation_;
+
+    for (int i = 0; i < search_slices_.size(); ++i)
+    {
+        const qint64 router_id = search_sources_[search_slices_[i].source].router_id;
+        Router* router = Router::instance(router_id);
+        if (!router)
+        {
+            search_slices_[i].ready = true;
+            continue;
+        }
+
+        router->searchHosts(query, search_slices_[i].offset, search_slices_[i].count, this,
+            [this, generation, i, router_id](const Router::HostList& list)
+        {
+            if (generation != search_generation_ || i >= search_slices_.size())
+                return;
+
+            if (list.error_code != proto::router::kErrorOk)
+                LOG(ERROR) << "Host search failed on router" << router_id << ":" << list.error_code;
+            else
+                search_slices_[i].hosts = list.hosts;
+
+            search_slices_[i].ready = true;
+            showSearchPage();
+        });
+    }
+
+    showSearchPage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::showSearchPage()
+{
+    // The rows of a page are shown together. A router that is still in flight would otherwise put
+    // its rows after the ones of a router that comes later in the order.
+    for (const SearchSlice& slice : std::as_const(search_slices_))
+    {
+        if (!slice.ready)
+            return;
+    }
+
+    search_results_.clear();
+
+    for (const SearchSlice& slice : std::as_const(search_slices_))
+    {
+        const qint64 router_id = search_sources_[slice.source].router_id;
+
+        for (const Router::Host& host : std::as_const(slice.hosts))
+            search_results_.append({ router_id, host });
+    }
+
+    rebuildSearchResults();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,6 +519,7 @@ void RemoteWidget::rebuildSearchResults()
     }
 
     search_page_->setResults(results, search_query_);
+    search_page_->setPage(search_page_model_.currentPage(), search_page_model_.pageCount());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,6 +553,10 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     host_router_id_ = item->data(0, kRouterIdRole).toLongLong();
     host_workspace_id_ = workspace_id;
     host_group_id_ = item->data(0, kGroupIdRole).toLongLong();
+
+    // Another selection is another list, so its paging starts over.
+    hosts_.clear();
+    hosts_total_count_ = 0;
 
     // Clear at once so the previous group's hosts are not left on screen while a request is in
     // flight; a cached selection refills synchronously below.
@@ -526,7 +711,7 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::fetchHosts(Router::CachePolicy policy)
+void RemoteWidget::fetchHosts(Router::CachePolicy policy, bool append)
 {
     Router* router = Router::instance(host_router_id_);
     if (!router || router->status() != Router::Status::ONLINE)
@@ -535,14 +720,17 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
     const qint64 router_id = host_router_id_;
     const qint64 workspace_id = host_workspace_id_;
     const qint64 group_id = host_group_id_;
+    const qint64 offset = append ? hosts_.size() : 0;
 
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
     request.set_workspace_id(workspace_id);
     request.set_group_id(group_id);
+    request.set_offset(offset);
+    request.set_count(kHostPageSize);
 
     router->listHosts(policy, std::move(request), this,
-        [this, router_id, workspace_id, group_id](const Router::HostList& list)
+        [this, router_id, workspace_id, group_id, append](const Router::HostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
         if (stack_->currentIndex() != kPageHosts || router_id != host_router_id_ ||
@@ -558,20 +746,38 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy)
             return;
         }
 
-        host_tree_->clear();
-        hosts_ = list.hosts;
+        if (append)
+            hosts_.append(list.hosts);
+        else
+            hosts_ = list.hosts;
 
-        for (const Router::Host& host : list.hosts)
-        {
-            const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
-
-            QTreeWidgetItem* item =
-                new QTreeWidgetItem(host_tree_, { name, QString("ID %1").arg(host.host_id) });
-            item->setIcon(0, GuiApplication::svgIcon(host.online ? ":/img/computer-online.svg"
-                                                                 : ":/img/computer-offline.svg"));
-            item->setData(0, kHostIdRole, QVariant::fromValue(host.host_id));
-        }
+        hosts_total_count_ = list.total_count;
+        rebuildHostRows();
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::rebuildHostRows()
+{
+    host_tree_->clear();
+
+    for (const Router::Host& host : std::as_const(hosts_))
+    {
+        const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
+
+        QTreeWidgetItem* item =
+            new QTreeWidgetItem(host_tree_, { name, QString("ID %1").arg(host.host_id) });
+        item->setIcon(0, GuiApplication::svgIcon(host.online ? ":/img/computer-online.svg"
+                                                             : ":/img/computer-offline.svg"));
+        item->setData(0, kHostIdRole, QVariant::fromValue(host.host_id));
+    }
+
+    if (hosts_.size() >= hosts_total_count_)
+        return;
+
+    QTreeWidgetItem* more = new QTreeWidgetItem(
+        host_tree_, { tr("Show more"), tr("%1 of %2").arg(hosts_.size()).arg(hosts_total_count_) });
+    more->setData(0, kMoreRole, true);
 }
 
 //--------------------------------------------------------------------------------------------------

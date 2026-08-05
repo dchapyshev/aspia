@@ -427,6 +427,7 @@ RouterHostList RouterState::decodeHostSearchResult(
 {
     RouterHostList decoded;
     decoded.error_code = QString::fromStdString(result.error_code());
+    decoded.total_count = result.total_count();
     decoded.hosts.reserve(result.host_size());
 
     for (int i = 0; i < result.host_size(); ++i)
