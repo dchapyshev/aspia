@@ -28,7 +28,7 @@
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
      </property>
-     <widget class="QTreeWidget" name="tree_relays">
+     <widget class="QTreeView" name="tree_relays">
       <property name="editTriggers">
        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
       </property>
@@ -47,49 +47,11 @@
       <property name="expandsOnDoubleClick">
        <bool>false</bool>
       </property>
-      <property name="supportedDragActions">
-       <set>Qt::DropAction::IgnoreAction</set>
-      </property>
       <attribute name="headerShowSortIndicator" stdset="0">
        <bool>true</bool>
       </attribute>
-      <column>
-       <property name="text">
-        <string>Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Connect Time</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Pool Size</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Version</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Computer Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Architecture</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Operating System</string>
-       </property>
-      </column>
      </widget>
-     <widget class="QTreeWidget" name="tree_peers">
+     <widget class="QTreeView" name="tree_peers">
       <property name="editTriggers">
        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
       </property>
@@ -108,41 +70,6 @@
       <attribute name="headerShowSortIndicator" stdset="0">
        <bool>true</bool>
       </attribute>
-      <column>
-       <property name="text">
-        <string>User Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Host ID</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Host Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Client Address</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Transferred</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Duration</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Idle</string>
-       </property>
-      </column>
      </widget>
     </widget>
    </item>

@@ -45,112 +45,6 @@
 #include "proto/router_constants.h"
 #include "ui_router_relays_widget.h"
 
-namespace {
-
-class RelayTreeItem final : public QTreeWidgetItem
-{
-public:
-    explicit RelayTreeItem(const proto::router::RelayInfo& info)
-    {
-        updateItem(info);
-
-        QString time = QLocale::system().toString(
-            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
-
-        setIcon(0, QIcon(":/img/stack.svg"));
-        setText(0, QString::fromStdString(info.ip_address()));
-        setText(1, time);
-
-        const proto::peer::Version& version = info.version();
-
-        setText(3, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
-        setText(4, QString::fromStdString(info.computer_name()));
-        setText(5, QString::fromStdString(info.architecture()));
-        setText(6, QString::fromStdString(info.os_name()));
-    }
-
-    void updateItem(const proto::router::RelayInfo& updated_info)
-    {
-        info = updated_info;
-        setText(2, QString::number(info.pool_size()));
-    }
-
-    // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const final
-    {
-        if (treeWidget()->sortColumn() == 1)
-        {
-            const RelayTreeItem* other_item = static_cast<const RelayTreeItem*>(&other);
-            return info.timepoint() < other_item->info.timepoint();
-        }
-
-        return QTreeWidgetItem::operator<(other);
-    }
-
-    proto::router::RelayInfo info;
-
-private:
-    Q_DISABLE_COPY_MOVE(RelayTreeItem)
-};
-
-class PeerTreeItem final : public QTreeWidgetItem
-{
-public:
-    explicit PeerTreeItem(const proto::router::Peer& connection)
-    {
-        updateItem(connection);
-
-        setIcon(0, QIcon(":/img/user.svg"));
-        setText(0, QString::fromStdString(conn.client_user_name()));
-        setText(1, QString::number(conn.host_id()));
-        setText(2, QString::fromStdString(conn.host_address()));
-        setText(3, QString::fromStdString(conn.client_address()));
-    }
-
-    void updateItem(const proto::router::Peer& connection)
-    {
-        conn = connection;
-        setText(4, Formatter::sizeToString(conn.bytes_transferred()));
-        setText(5, Formatter::delayToString(Seconds(conn.duration())));
-        setText(6, Formatter::delayToString(Seconds(conn.idle_time())));
-    }
-
-    // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem &other) const final
-    {
-        int column = treeWidget()->sortColumn();
-        if (column == 1)
-        {
-            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
-            return conn.host_id() < other_item->conn.host_id();
-        }
-        else if (column == 4)
-        {
-            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
-            return conn.bytes_transferred() < other_item->conn.bytes_transferred();
-        }
-        else if (column == 5)
-        {
-            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
-            return conn.duration() < other_item->conn.duration();
-        }
-        else if (column == 6)
-        {
-            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
-            return conn.idle_time() < other_item->conn.idle_time();
-        }
-
-        return QTreeWidgetItem::operator<(other);
-    }
-
-    proto::router::Peer conn;
-
-private:
-    Q_DISABLE_COPY_MOVE(PeerTreeItem)
-};
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_RELAYS, parent),
@@ -160,19 +54,30 @@ RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    relay_model_ = new RelayListModel(this);
+    peer_model_ = new PeerListModel(this);
+
+    ui->tree_relays->setModel(relay_model_);
+    ui->tree_peers->setModel(peer_model_);
+
+    // Turned on again after the models are set: a view wires its header up to the sort of whatever
+    // model it has, and at the time the generated setup ran there was none.
+    ui->tree_relays->setSortingEnabled(true);
+    ui->tree_peers->setSortingEnabled(true);
+
     ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_relays, &QWidget::customContextMenuRequested,
             this, &RouterRelaysWidget::onRelayContextMenu);
 
     ui->tree_relays->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_relays->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterRelaysWidget::onHeaderContextMenu);
 
-    connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged,
+    connect(ui->tree_relays->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterRelaysWidget::onCurrentRelayChanged);
 
     ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_peers, &QWidget::customContextMenuRequested,
             this, &RouterRelaysWidget::onPeerContextMenu);
 }
 
@@ -198,8 +103,8 @@ void RouterRelaysWidget::showRouter(qint64 router_id)
             {
                 if (status != Router::Status::ONLINE)
                 {
-                    ui->tree_relays->clear();
-                    ui->tree_peers->clear();
+                    relay_model_->clear();
+                    peer_model_->clear();
                     updateStatusLabel();
                 }
             });
@@ -208,8 +113,8 @@ void RouterRelaysWidget::showRouter(qint64 router_id)
 
     router_id_ = router_id;
 
-    ui->tree_relays->clear();
-    ui->tree_peers->clear();
+    relay_model_->clear();
+    peer_model_->clear();
     updateStatusLabel();
     fetchRelays();
 }
@@ -217,27 +122,26 @@ void RouterRelaysWidget::showRouter(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterRelaysWidget::hasSelectedRelay() const
 {
-    return ui->tree_relays->currentItem() != nullptr;
+    return currentRelay() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 int RouterRelaysWidget::relayCount() const
 {
-    return ui->tree_relays->topLevelItemCount();
+    return relay_model_->rowCount();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::copyCurrentRelayRow()
 {
-    QTreeWidgetItem* item = ui->tree_relays->currentItem();
-    if (!item)
+    const int row = ui->tree_relays->currentIndex().row();
+    if (row < 0)
         return;
 
     QString result;
-    const int column_count = item->columnCount();
-    for (int i = 0; i < column_count; ++i)
+    for (int i = 0; i < relay_model_->columnCount(); ++i)
     {
-        const QString text = item->text(i);
+        const QString text = relay_model_->index(row, i).data().toString();
         if (!text.isEmpty())
             result += text + ' ';
     }
@@ -253,11 +157,11 @@ void RouterRelaysWidget::copyCurrentRelayRow()
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::copyCurrentRelayColumn(int column)
 {
-    QTreeWidgetItem* item = ui->tree_relays->currentItem();
-    if (!item || column < 0)
+    const int row = ui->tree_relays->currentIndex().row();
+    if (row < 0 || column < 0 || column >= relay_model_->columnCount())
         return;
 
-    const QString text = item->text(column);
+    const QString text = relay_model_->index(row, column).data().toString();
     if (text.isEmpty())
         return;
 
@@ -355,10 +259,9 @@ void RouterRelaysWidget::save()
 
     QJsonArray root_array;
 
-    for (int i = 0; i < ui->tree_relays->topLevelItemCount(); ++i)
+    for (int i = 0; i < relay_model_->rowCount(); ++i)
     {
-        const proto::router::RelayInfo& info =
-            static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(i))->info;
+        const proto::router::RelayInfo& info = *relay_model_->relayAt(i);
 
         QJsonObject relay_object;
 
@@ -442,15 +345,15 @@ void RouterRelaysWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onDisconnectRelay()
 {
-    RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
-    if (!tree_item)
+    const proto::router::RelayInfo* relay = currentRelay();
+    if (!relay)
     {
         LOG(INFO) << "No selected relay";
         return;
     }
 
     if (MsgBox::question(this, tr("Are you sure you want to disconnect relay \"%1\"?")
-        .arg(QString::fromStdString(tree_item->info.ip_address()))) != MsgBox::Yes)
+        .arg(QString::fromStdString(relay->ip_address()))) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Disconnect relay rejected by user";
         return;
@@ -461,13 +364,13 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    router->disconnectRelay(tree_item->info.entry_id(), this, &RouterRelaysWidget::onRelayResultReceived);
+    router->disconnectRelay(relay->entry_id(), this, &RouterRelaysWidget::onRelayResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onDisconnectAllRelays()
 {
-    if (ui->tree_relays->topLevelItemCount() <= 0)
+    if (relay_model_->rowCount() <= 0)
     {
         LOG(INFO) << "Relay list is empty";
         return;
@@ -491,7 +394,6 @@ void RouterRelaysWidget::onDisconnectAllRelays()
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onCurrentRelayChanged()
 {
-    ui->tree_peers->clear();
     updateRelayStatistics();
     emit sig_currentChanged();
 }
@@ -499,29 +401,32 @@ void RouterRelaysWidget::onCurrentRelayChanged()
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onRelayContextMenu(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui->tree_relays->itemAt(pos);
-    if (item)
-        ui->tree_relays->setCurrentItem(item);
+    const QModelIndex index = ui->tree_relays->indexAt(pos);
+    if (index.isValid())
+        ui->tree_relays->setCurrentIndex(index);
 
-    const int column = ui->tree_relays->indexAt(pos).column();
+    const int column = index.column();
     emit sig_contextMenu(ui->tree_relays->viewport()->mapToGlobal(pos), column);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
 {
-    RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
-    if (!relay_item)
+    const proto::router::RelayInfo* relay = currentRelay();
+    if (!relay)
         return;
 
-    QTreeWidgetItem* item = ui->tree_peers->itemAt(pos);
-    if (!item)
+    const QModelIndex index = ui->tree_peers->indexAt(pos);
+    if (!index.isValid())
         return;
 
-    ui->tree_peers->setCurrentItem(item);
+    ui->tree_peers->setCurrentIndex(index);
 
-    PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(item);
-    const int column = ui->tree_peers->indexAt(pos).column();
+    const proto::router::Peer* peer = currentPeer();
+    if (!peer)
+        return;
+
+    const int column = index.column();
     const QPoint global_pos = ui->tree_peers->viewport()->mapToGlobal(pos);
 
     QMenu menu;
@@ -538,7 +443,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
     {
         if (MsgBox::question(this,
                 tr("Are you sure you want to disconnect peer \"%1\"?")
-                    .arg(QString::fromStdString(peer_item->conn.client_user_name())))
+                    .arg(QString::fromStdString(peer->client_user_name())))
             != MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Disconnect peer rejected by user";
@@ -550,16 +455,15 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
             return;
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
-        router->disconnectPeer(relay_item->info.entry_id(), peer_item->conn.peer_id(),
+        router->disconnectPeer(relay->entry_id(), peer->peer_id(),
             this, &RouterRelaysWidget::onPeerResultReceived);
     }
     else if (selected == copy_row_action)
     {
         QString result;
-        const int column_count = peer_item->columnCount();
-        for (int i = 0; i < column_count; ++i)
+        for (int i = 0; i < peer_model_->columnCount(); ++i)
         {
-            const QString text = peer_item->text(i);
+            const QString text = peer_model_->index(index.row(), i).data().toString();
             if (!text.isEmpty())
                 result += text + ' ';
         }
@@ -573,7 +477,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
     }
     else if (selected == copy_value_action)
     {
-        const QString text = peer_item->text(column);
+        const QString text = peer_model_->index(index.row(), column).data().toString();
         if (text.isEmpty())
             return;
 
@@ -590,7 +494,8 @@ void RouterRelaysWidget::onHeaderContextMenu(const QPoint& pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_relays->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(
+            relay_model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -605,46 +510,16 @@ void RouterRelaysWidget::onHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::onRelayListReceived(const proto::router::RelayList& relays)
 {
-    auto has_with_id = [](const proto::router::RelayList& relays, qint64 entry_id)
-    {
-        for (int i = 0; i < relays.relay_size(); ++i)
-        {
-            if (relays.relay(i).entry_id() == entry_id)
-                return true;
-        }
+    const proto::router::RelayInfo* selected = currentRelay();
+    const qint64 selected_entry_id = selected ? selected->entry_id() : 0;
 
-        return false;
-    };
+    relay_model_->setRelays(relays);
 
-    // Remove from the UI all relays that are not in the list.
-    for (int i = ui->tree_relays->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(i));
-
-        if (!has_with_id(relays, item->info.entry_id()))
-            delete item;
-    }
-
-    // Adding and updating elements in the UI.
-    for (int i = 0; i < relays.relay_size(); ++i)
-    {
-        const proto::router::RelayInfo& info = relays.relay(i);
-        bool found = false;
-
-        for (int j = 0; j < ui->tree_relays->topLevelItemCount(); ++j)
-        {
-            RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(j));
-            if (item->info.entry_id() == info.entry_id())
-            {
-                item->updateItem(info);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            ui->tree_relays->addTopLevelItem(new RelayTreeItem(info));
-    }
+    // The list is replaced whole, so the row the user was on has to be found again by the relay it
+    // was showing.
+    const int selected_row = relay_model_->rowOf(selected_entry_id);
+    if (selected_row >= 0)
+        ui->tree_relays->setCurrentIndex(relay_model_->index(selected_row, 0));
 
     updateRelayStatistics();
     updateStatusLabel();
@@ -688,63 +563,48 @@ void RouterRelaysWidget::fetchRelays()
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::updateRelayStatistics()
 {
-    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
-    if (!item)
+    const proto::router::RelayInfo* relay = currentRelay();
+    if (!relay)
     {
+        peer_model_->clear();
         ui->tree_peers->setEnabled(false);
         return;
     }
 
     ui->tree_peers->setEnabled(true);
 
-    if (!item->info.has_statistics())
+    // A relay that reports no statistics is serving nobody as far as we know, so the pairs of the
+    // relay that was shown before are not left standing.
+    if (!relay->has_statistics())
+    {
+        peer_model_->clear();
         return;
-
-    const proto::router::RelayInfo::Statistics& stats = item->info.statistics();
-
-    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, qint64 peer_id)
-    {
-        for (int i = 0; i < stats.peer_size(); ++i)
-        {
-            if (stats.peer(i).peer_id() == peer_id)
-                return true;
-        }
-
-        return false;
-    };
-
-    // Remove from the UI all connections that are not in the list.
-    for (int i = ui->tree_peers->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(i));
-        if (!has_with_id(stats, peer_item->conn.peer_id()))
-            delete peer_item;
     }
 
-    // Adding and updating elements in the UI.
-    for (int i = 0; i < stats.peer_size(); ++i)
-    {
-        const proto::router::Peer& connection = stats.peer(i);
-        bool found = false;
+    const proto::router::Peer* selected = currentPeer();
+    const qint64 selected_peer_id = selected ? selected->peer_id() : 0;
 
-        for (int j = 0; j < ui->tree_peers->topLevelItemCount(); ++j)
-        {
-            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(j));
-            if (peer_item->conn.peer_id() == connection.peer_id())
-            {
-                peer_item->updateItem(connection);
-                found = true;
-                break;
-            }
-        }
+    peer_model_->setPeers(relay->statistics());
 
-        if (!found)
-            ui->tree_peers->addTopLevelItem(new PeerTreeItem(connection));
-    }
+    const int selected_row = peer_model_->rowOf(selected_peer_id);
+    if (selected_row >= 0)
+        ui->tree_peers->setCurrentIndex(peer_model_->index(selected_row, 0));
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::updateStatusLabel()
 {
-    status_relays_label_->setText(tr("%n relay(s)", "", ui->tree_relays->topLevelItemCount()));
+    status_relays_label_->setText(tr("%n relay(s)", "", relay_model_->rowCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+const proto::router::RelayInfo* RouterRelaysWidget::currentRelay() const
+{
+    return relay_model_->relayAt(ui->tree_relays->currentIndex().row());
+}
+
+//--------------------------------------------------------------------------------------------------
+const proto::router::Peer* RouterRelaysWidget::currentPeer() const
+{
+    return peer_model_->peerAt(ui->tree_peers->currentIndex().row());
 }

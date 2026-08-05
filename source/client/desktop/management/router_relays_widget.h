@@ -23,6 +23,8 @@
 
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/peer_list_model.h"
+#include "client/desktop/management/relay_list_model.h"
 
 namespace Ui {
 class RouterRelaysWidget;
@@ -85,7 +87,13 @@ private:
     void updateRelayStatistics();
     void updateStatusLabel();
 
+    // The relay and the pair of peers of the rows the user is on, or null when the lists are empty.
+    const proto::router::RelayInfo* currentRelay() const;
+    const proto::router::Peer* currentPeer() const;
+
     std::unique_ptr<Ui::RouterRelaysWidget> ui;
+    RelayListModel* relay_model_ = nullptr;
+    PeerListModel* peer_model_ = nullptr;
     qint64 router_id_ = 0;
     QLabel* status_relays_label_ = nullptr;
 
