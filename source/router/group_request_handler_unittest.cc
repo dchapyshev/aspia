@@ -154,6 +154,77 @@ TEST_F(GroupRequestHandlerTest, AddRejectsEmptyName)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Everything stored here comes back in the group list of the workspace, and a reply that outgrows
+// the message limit of the channel is not sent but ends the session. So the fields are bounded on
+// the way in, or one entry would break every client that opens the workspace, over and over,
+// because the entry stays in the database.
+TEST_F(GroupRequestHandlerTest, AddRejectsOversizedName)
+{
+    proto::router::GroupRequest request =
+        makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
+    request.mutable_group()->set_name(std::string(kMaxEntryNameLength + 1, 'n'));
+
+    const GroupRequestHandler::Result result = handle(request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
+    EXPECT_EQ(groupCount(workspace_id_), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(GroupRequestHandlerTest, AddRejectsOversizedComment)
+{
+    proto::router::GroupRequest request =
+        makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
+    request.mutable_group()->set_name("servers");
+    request.mutable_group()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+
+    const GroupRequestHandler::Result result = handle(request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
+    EXPECT_EQ(groupCount(workspace_id_), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The bound is a maximum and not a step below one, so an entry that sits exactly on it is stored.
+TEST_F(GroupRequestHandlerTest, AddAcceptsFieldsAtTheLimit)
+{
+    proto::router::GroupRequest request =
+        makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
+    request.mutable_group()->set_name(std::string(kMaxEntryNameLength, 'n'));
+    request.mutable_group()->set_comment(std::string(kMaxCommentLength, 'c'));
+
+    const GroupRequestHandler::Result result = handle(request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(groupCount(workspace_id_), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
+{
+    const qint64 group_id = addGroup(workspace_id_, 0, "servers");
+    ASSERT_GT(group_id, 0);
+
+    proto::router::GroupRequest name_request =
+        makeRequest(proto::router::kCommandGroupModify, workspace_id_);
+    name_request.mutable_group()->set_entry_id(group_id);
+    name_request.mutable_group()->set_name(std::string(kMaxEntryNameLength + 1, 'n'));
+
+    EXPECT_EQ(handle(name_request).error_code, proto::router::kErrorInvalidData);
+
+    proto::router::GroupRequest comment_request =
+        makeRequest(proto::router::kCommandGroupModify, workspace_id_);
+    comment_request.mutable_group()->set_entry_id(group_id);
+    comment_request.mutable_group()->set_name("servers");
+    comment_request.mutable_group()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+
+    EXPECT_EQ(handle(comment_request).error_code, proto::router::kErrorInvalidData);
+
+    EXPECT_EQ(groupName(workspace_id_, group_id), "servers");
+    EXPECT_TRUE(db_.findGroup(workspace_id_, group_id).comment.empty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // parent_id must point into the same workspace: a link across the boundary would put a group into
 // a tree encrypted with a different group key.
 TEST_F(GroupRequestHandlerTest, AddRejectsParentFromAnotherWorkspace)

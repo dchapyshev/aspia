@@ -2264,6 +2264,12 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
         return proto::router::kErrorInvalidData;
     }
 
+    if (comment.size() > kMaxCommentLength)
+    {
+        LOG(ERROR) << "Workspace comment is too long:" << comment.size();
+        return proto::router::kErrorInvalidData;
+    }
+
     std::set<qint64> initial_ids;
     for (const Workspace::Access& access : initial_access)
     {
@@ -2387,6 +2393,12 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
     if (!Workspace::isValidName(name))
     {
         LOG(ERROR) << "Invalid workspace name:" << name;
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (comment.size() > kMaxCommentLength)
+    {
+        LOG(ERROR) << "Workspace comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
     }
 
@@ -2868,9 +2880,15 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty())
+    if (strTrimmed(name).empty() || strTrimmed(name).size() > kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (comment.size() > kMaxCommentLength)
+    {
+        LOG(ERROR) << "Group comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
     }
 
@@ -2945,9 +2963,15 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty())
+    if (strTrimmed(name).empty() || strTrimmed(name).size() > kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (comment.size() > kMaxCommentLength)
+    {
+        LOG(ERROR) << "Group comment is too long:" << comment.size();
         return proto::router::kErrorInvalidData;
     }
 

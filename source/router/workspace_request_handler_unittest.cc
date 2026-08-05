@@ -146,6 +146,38 @@ TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The comment is read back in the workspace list, and a reply larger than the message limit of the
+// channel is not sent but ends the session instead, so it is bounded on the way in. The name is
+// already bounded by Workspace::isValidName.
+TEST_F(WorkspaceRequestHandlerTest, OversizedCommentIsRejected)
+{
+    const SecureByteArray gk(Random::byteArray(32));
+    proto::router::WorkspaceRequest request =
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
+    request.mutable_workspace()->set_comment(std::string(kMaxCommentLength + 1, 'c'));
+
+    const WorkspaceRequestHandler::Result result = handle(request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
+    EXPECT_EQ(result.notify_flags, 0u);
+    EXPECT_EQ(result.entry_id, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(WorkspaceRequestHandlerTest, CommentAtTheLimitIsAccepted)
+{
+    const SecureByteArray gk(Random::byteArray(32));
+    proto::router::WorkspaceRequest request =
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
+    request.mutable_workspace()->set_comment(std::string(kMaxCommentLength, 'c'));
+
+    const WorkspaceRequestHandler::Result result = handle(request);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(workspaceName(result.entry_id), "alpha");
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 {
     const SecureByteArray gk(Random::byteArray(32));

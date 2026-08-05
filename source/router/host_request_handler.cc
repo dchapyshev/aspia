@@ -42,6 +42,16 @@ HostRequestHandler::Result HostRequestHandler::handle(
     const proto::router::Host& host = request.host();
     const HostId host_id = host.host_id();
 
+    if (host.display_name().size() > kMaxEntryNameLength ||
+        host.comment().size() > kMaxCommentLength ||
+        host.user_name().size() > kMaxCredentialLength ||
+        host.password().size() > kMaxCredentialLength)
+    {
+        LOG(ERROR) << "Oversized field in host edit request for host" << host_id;
+        result.error_code = proto::router::kErrorInvalidData;
+        return result;
+    }
+
     // "Not found" and "could not check" are different answers - a database error must not be
     // reported as a missing host.
     bool workspace_known = false;

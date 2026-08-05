@@ -18,7 +18,11 @@
 
 #include "router/host_request_handler.h"
 
+#include "base/serialization.h"
+#include "base/net/tcp_channel.h"
+#include "proto/router_client.h"
 #include "proto/router_manager.h"
+#include "router/client_channel_handler.h"
 #include "router/router_test_base.h"
 #include "router/workers/client_worker.h"
 
@@ -87,6 +91,101 @@ TEST_F(HostRequestHandlerTest, MemberEditsHostAndNotifies)
     EXPECT_EQ(stored.display_name(), "display");
     EXPECT_EQ(stored.comment(), "encrypted-comment");
     EXPECT_GT(stored.last_modify(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every stored field comes back in the host list, and a reply larger than the message limit of the
+// channel is not sent but ends the session instead. Two hosts carrying a three-megabyte comment
+// were enough to push the list of one group past that limit, and since the records stay in the
+// database the session was torn down again after every reconnect. So the fields are bounded here.
+TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
+{
+    const struct { const char* what; size_t size; } kCases[] = {
+        { "display_name", kMaxEntryNameLength + 1 },
+        { "comment",      kMaxCommentLength + 1 },
+        { "user_name",    kMaxCredentialLength + 1 },
+        { "password",     kMaxCredentialLength + 1 }
+    };
+
+    for (const auto& test_case : kCases)
+    {
+        proto::router::HostRequest request = makeRequest(host_id_, 0, "display");
+        proto::router::Host* host = request.mutable_host();
+        const std::string oversized(test_case.size, 'x');
+
+        if (test_case.what == std::string_view("display_name"))
+            host->set_display_name(oversized);
+        else if (test_case.what == std::string_view("comment"))
+            host->set_comment(oversized);
+        else if (test_case.what == std::string_view("user_name"))
+            host->set_user_name(oversized);
+        else
+            host->set_password(oversized);
+
+        EXPECT_EQ(handle(request).error_code, proto::router::kErrorInvalidData) << test_case.what;
+    }
+
+    // Nothing of any of those requests reached the record.
+    const proto::router::Host stored = findHost(host_id_);
+    EXPECT_TRUE(stored.display_name().empty());
+    EXPECT_TRUE(stored.comment().empty());
+    EXPECT_TRUE(stored.user_name().empty());
+    EXPECT_TRUE(stored.password().empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The bounds are maximums and not a step below one, so a request that sits exactly on them is
+// stored.
+TEST_F(HostRequestHandlerTest, FieldsAtTheLimitAreAccepted)
+{
+    proto::router::HostRequest request = makeRequest(host_id_, 0, "display");
+    proto::router::Host* host = request.mutable_host();
+    host->set_display_name(std::string(kMaxEntryNameLength, 'n'));
+    host->set_comment(std::string(kMaxCommentLength, 'c'));
+    host->set_user_name(std::string(kMaxCredentialLength, 'u'));
+    host->set_password(std::string(kMaxCredentialLength, 'p'));
+
+    EXPECT_EQ(handle(request).error_code, proto::router::kErrorOk);
+
+    const proto::router::Host stored = findHost(host_id_);
+    EXPECT_EQ(stored.display_name().size(), kMaxEntryNameLength);
+    EXPECT_EQ(stored.comment().size(), kMaxCommentLength);
+    EXPECT_EQ(stored.user_name().size(), kMaxCredentialLength);
+    EXPECT_EQ(stored.password().size(), kMaxCredentialLength);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The scenario the bounds exist for, end to end. Two hosts of one workspace are fed a comment of
+// three megabytes each. With both edits refused the group listing serializes to something the
+// channel can carry, where before it came to 6291527 bytes against a limit of 5242880.
+TEST_F(HostRequestHandlerTest, HostListStaysSendableAfterOversizedEdits)
+{
+    const HostId second_id = addHost("hash-2");
+    ASSERT_NE(second_id, kInvalidHostId);
+    ASSERT_TRUE(execRaw(QString("UPDATE hosts SET workspace_id=%1 WHERE id=%2")
+                        .arg(workspace_id_).arg(second_id)));
+
+    for (HostId id : { host_id_, second_id })
+    {
+        proto::router::HostRequest request = makeRequest(id, 0, "display");
+        request.mutable_host()->set_comment(std::string(3 * 1024 * 1024, 'x'));
+        EXPECT_EQ(handle(request).error_code, proto::router::kErrorInvalidData);
+    }
+
+    proto::router::HostListRequest list_request;
+    list_request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
+    list_request.set_workspace_id(workspace_id_);
+    list_request.set_group_id(0);
+
+    caller_.session_type = proto::router::SESSION_TYPE_MANAGER;
+
+    proto::router::RouterToClient message;
+    proto::router::HostList* list = message.mutable_host_list();
+    ClientChannelHandler::handleHostList(db_, caller_, list_request, list);
+
+    ASSERT_EQ(list->error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(list->host_size(), 2);
+    EXPECT_LE(serialize(message).size(), qsizetype(TcpChannel::kMaxMessageSize));
 }
 
 //--------------------------------------------------------------------------------------------------
