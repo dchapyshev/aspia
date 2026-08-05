@@ -22,6 +22,7 @@
 #include <memory>
 
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/user_list_model.h"
 
 namespace Ui {
 class RouterUsersWidget;
@@ -79,8 +80,12 @@ private:
     void fetchUsers();
     void updateStatusLabel();
 
+    // The user of the row the user of the application is on, or null when the list is empty.
+    const RouterUser* currentUser() const;
+
     std::unique_ptr<Ui::RouterUsersWidget> ui;
     qint64 router_id_ = 0;
+    UserListModel* model_ = nullptr;
     QLabel* status_users_label_ = nullptr;
     // Guards the one-time warning about a failed initial load: the list is refetched on every
     // batched notification, and a repeating transient error must not turn into a message storm.

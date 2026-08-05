@@ -71,6 +71,7 @@ list(APPEND SOURCE_CLIENT
 list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
+    desktop/management/user_list_model_unittest.cc
     router_state_unittest.cc
     page_model_unittest.cc
     search_page_model_unittest.cc

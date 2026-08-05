@@ -24,7 +24,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeWidget" name="tree_users">
+    <widget class="QTreeView" name="tree_users">
      <property name="editTriggers">
       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
@@ -46,21 +46,6 @@
      <attribute name="headerShowSortIndicator" stdset="0">
       <bool>true</bool>
      </attribute>
-     <column>
-      <property name="text">
-       <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Enabled</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Session Types</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

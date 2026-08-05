@@ -18,7 +18,6 @@
 
 #include "client/desktop/management/router_users_widget.h"
 
-#include <QCollator>
 #include <QDataStream>
 #include <QEvent>
 #include <QHeaderView>
@@ -29,7 +28,6 @@
 #include <QStatusBar>
 
 #include "base/logging.h"
-#include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "client/router.h"
 #include "client/desktop/management/router_user_dialog.h"
@@ -38,72 +36,6 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_users_widget.h"
-
-namespace {
-
-class UserTreeItem final : public QTreeWidgetItem
-{
-    Q_DECLARE_TR_FUNCTIONS(UserTreeItem)
-
-public:
-    explicit UserTreeItem(const proto::router::User& user)
-    {
-        updateItem(user);
-    }
-
-    void updateItem(const proto::router::User& updated_user)
-    {
-        user = RouterUser::parseFrom(updated_user);
-
-        setText(0, QString::fromStdString(updated_user.name()));
-        setText(1, updated_user.flags() & User::ENABLED ? tr("Yes") : tr("No"));
-        setText(2, sessionsToString(updated_user.sessions()));
-
-        if (updated_user.flags() & User::ENABLED)
-            setIcon(0, QIcon(":/img/user.svg"));
-        else
-            setIcon(0, QIcon(":/img/locked-user.svg"));
-    }
-
-    // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const final
-    {
-        int column = treeWidget()->sortColumn();
-        if (column == 0)
-        {
-            QCollator collator;
-            collator.setCaseSensitivity(Qt::CaseInsensitive);
-            collator.setNumericMode(true);
-
-            return collator.compare(text(0), other.text(0)) < 0;
-        }
-        else
-        {
-            return QTreeWidgetItem::operator<(other);
-        }
-    }
-
-    QString sessionsToString(quint32 sessions)
-    {
-        QStringList list;
-
-        if (sessions & proto::router::SESSION_TYPE_ADMIN)
-            list.append(tr("Administrator"));
-        if (sessions & proto::router::SESSION_TYPE_MANAGER)
-            list.append(tr("Manager"));
-        if (sessions & proto::router::SESSION_TYPE_CLIENT)
-            list.append(tr("Client"));
-
-        return list.join(", ");
-    }
-
-    RouterUser user;
-
-private:
-    Q_DISABLE_COPY_MOVE(UserTreeItem)
-};
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterUsersWidget::RouterUsersWidget(QWidget* parent)
@@ -114,18 +46,25 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    model_ = new UserListModel(this);
+    ui->tree_users->setModel(model_);
+
+    // Turned on again after the model is set: the view wires the header up to the sort of whatever
+    // model it has, and at the time the generated setup ran there was none.
+    ui->tree_users->setSortingEnabled(true);
+
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_users, &QWidget::customContextMenuRequested,
             this, &RouterUsersWidget::onUserContextMenu);
 
     ui->tree_users->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_users->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterUsersWidget::onHeaderContextMenu);
 
-    connect(ui->tree_users, &QTreeWidget::itemSelectionChanged,
+    connect(ui->tree_users->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterUsersWidget::sig_currentChanged);
-    connect(ui->tree_users, &QTreeWidget::itemActivated,
-            this, [this](QTreeWidgetItem*, int) { onModifyUser(); });
+    connect(ui->tree_users, &QAbstractItemView::activated,
+            this, [this](const QModelIndex&) { onModifyUser(); });
 
     ui->tree_users->installEventFilter(this);
 }
@@ -151,7 +90,7 @@ void RouterUsersWidget::showRouter(qint64 router_id)
             {
                 if (status != Router::Status::ONLINE)
                 {
-                    ui->tree_users->clear();
+                    model_->clear();
                     updateStatusLabel();
                 }
             });
@@ -160,7 +99,7 @@ void RouterUsersWidget::showRouter(qint64 router_id)
 
     router_id_ = router_id;
 
-    ui->tree_users->clear();
+    model_->clear();
     updateStatusLabel();
     fetchUsers();
 }
@@ -168,7 +107,7 @@ void RouterUsersWidget::showRouter(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterUsersWidget::hasSelectedUser() const
 {
-    return ui->tree_users->currentItem() != nullptr;
+    return currentUser() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,14 +181,14 @@ void RouterUsersWidget::onAddUser()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onModifyUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
-    if (!tree_item)
+    const RouterUser* user = currentUser();
+    if (!user)
     {
         LOG(INFO) << "No selected user";
         return;
     }
 
-    RouterUserDialog dialog(router_id_, tree_item->user.entry_id, this);
+    RouterUserDialog dialog(router_id_, user->entry_id, this);
     if (dialog.exec() == QDialog::Accepted)
         fetchUsers();
 }
@@ -257,14 +196,14 @@ void RouterUsersWidget::onModifyUser()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onDeleteUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
-    if (!tree_item)
+    const RouterUser* user = currentUser();
+    if (!user)
     {
         LOG(INFO) << "No selected user";
         return;
     }
 
-    qint64 entry_id = tree_item->user.entry_id;
+    qint64 entry_id = user->entry_id;
     if (entry_id == 1)
     {
         LOG(INFO) << "Unable to delete built-in user";
@@ -273,7 +212,7 @@ void RouterUsersWidget::onDeleteUser()
     }
 
     if (MsgBox::question(this,
-            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0)))
+            tr("Are you sure you want to delete user \"%1\"?").arg(user->name))
         != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Delete user rejected by user";
@@ -323,7 +262,7 @@ void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
         // An error reply carries no list; treating it as an empty one would remove every user
         // from the tree. Keep what is shown - the next notification triggers another fetch.
         LOG(ERROR) << "Unable to get the list of the users:" << list.error_code();
-        if (ui->tree_users->topLevelItemCount() == 0 && !load_error_shown_)
+        if (model_->rowCount() == 0 && !load_error_shown_)
         {
             // With nothing loaded yet an empty tree would silently pass for "no users".
             load_error_shown_ = true;
@@ -334,46 +273,16 @@ void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
 
     load_error_shown_ = false;
 
-    auto has_with_id = [](const proto::router::UserList& list, qint64 entry_id)
-    {
-        for (int i = 0; i < list.user_size(); ++i)
-        {
-            if (list.user(i).entry_id() == entry_id)
-                return true;
-        }
+    const RouterUser* selected = currentUser();
+    const qint64 selected_entry_id = selected ? selected->entry_id : 0;
 
-        return false;
-    };
+    model_->setUsers(list);
 
-    // Remove from the UI all users that are not in the list.
-    for (int i = ui->tree_users->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-
-        if (!has_with_id(list, item->user.entry_id))
-            delete item;
-    }
-
-    // Adding and updating elements in the UI.
-    for (int i = 0; i < list.user_size(); ++i)
-    {
-        const proto::router::User& info = list.user(i);
-        bool found = false;
-
-        for (int j = 0; j < ui->tree_users->topLevelItemCount(); ++j)
-        {
-            UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(j));
-            if (item->user.entry_id == info.entry_id())
-            {
-                item->updateItem(info);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            ui->tree_users->addTopLevelItem(new UserTreeItem(info));
-    }
+    // The list is replaced whole, so the row the user was on has to be found again by the record it
+    // was showing.
+    const int selected_row = model_->rowOf(selected_entry_id);
+    if (selected_row >= 0)
+        ui->tree_users->setCurrentIndex(model_->index(selected_row, 0));
 
     emit sig_currentChanged();
     updateStatusLabel();
@@ -394,13 +303,13 @@ void RouterUsersWidget::onUserResultReceived(const proto::router::UserResult& re
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onUserContextMenu(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui->tree_users->itemAt(pos);
-    if (item)
-        ui->tree_users->setCurrentItem(item);
+    const QModelIndex index = ui->tree_users->indexAt(pos);
+    if (index.isValid())
+        ui->tree_users->setCurrentIndex(index);
 
     User user;
-    if (item)
-        user = static_cast<UserTreeItem*>(item)->user;
+    if (const RouterUser* selected = model_->userAt(index.row()))
+        user = *selected;
 
     emit sig_userContextMenu(user, ui->tree_users->viewport()->mapToGlobal(pos));
 }
@@ -413,7 +322,8 @@ void RouterUsersWidget::onHeaderContextMenu(const QPoint& pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_users->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -441,5 +351,11 @@ void RouterUsersWidget::fetchUsers()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::updateStatusLabel()
 {
-    status_users_label_->setText(tr("%n user(s)", "", ui->tree_users->topLevelItemCount()));
+    status_users_label_->setText(tr("%n user(s)", "", model_->rowCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+const RouterUser* RouterUsersWidget::currentUser() const
+{
+    return model_->userAt(ui->tree_users->currentIndex().row());
 }
