@@ -41,9 +41,9 @@ void LocalGroupDrag::setGroupItem(SidebarLocalGroup* group_item, const QString& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostMimeData::setHostItem(LocalGroupWidget::Item* host_item, const QString& mime_type)
+void LocalHostMimeData::setHost(const HostConfig& host, const QString& mime_type)
 {
-    host_item_ = host_item;
+    host_ = host;
     setData(mime_type, QByteArray());
 }
 
@@ -55,10 +55,10 @@ LocalHostDrag::LocalHostDrag(QObject* drag_source)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostDrag::setHostItem(LocalGroupWidget::Item* host_item, const QString& mime_type)
+void LocalHostDrag::setHost(const HostConfig& host, const QString& mime_type)
 {
     LocalHostMimeData* mime_data = new LocalHostMimeData();
-    mime_data->setHostItem(host_item, mime_type);
+    mime_data->setHost(host, mime_type);
     setMimeData(mime_data);
 }
 

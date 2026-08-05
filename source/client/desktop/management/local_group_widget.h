@@ -21,12 +21,12 @@
 
 #include <QPoint>
 #include <QPointer>
-#include <QTreeWidget>
 
 #include <memory>
 
 #include "client/config.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/local_host_list_model.h"
 
 namespace Ui {
 class LocalGroupWidget;
@@ -44,29 +44,8 @@ public:
     explicit LocalGroupWidget(QWidget* parent = nullptr);
     ~LocalGroupWidget() final;
 
-    class Item : public QTreeWidgetItem
-    {
-    public:
-        Item(const HostConfig& host, QTreeWidget* parent);
-
-        HostConfig& host() { return host_; }
-        qint64 entryId() const { return host_.id(); }
-        qint64 groupId() const { return host_.groupId(); }
-        qint64 routerId() const { return host_.routerId(); }
-        QString computerName() const { return host_.name(); }
-        QString hostAddress() const { return host_.address(); }
-        void setConnectTime(qint64 connect_time);
-        void setOnlineStatus(bool online);
-        void clearOnlineStatus();
-        void updateFrom(const HostConfig& host);
-
-        bool operator<(const QTreeWidgetItem& other) const final;
-
-    private:
-        HostConfig host_;
-    };
-
-    Item* currentItem();
+    // The host of the row the user is on, or null when the list is empty.
+    const HostConfig* currentHost() const;
     qint64 currentGroupId() const { return current_group_id_; }
     void showGroup(qint64 group_id);
     void setConnectTime(qint64 entry_id, qint64 connect_time);
@@ -107,9 +86,9 @@ private:
     void updateStatusLabels();
     void startOnlineChecker();
     void clearOnlineStatuses();
-    Item* findItemByEntryId(qint64 entry_id) const;
 
     std::unique_ptr<Ui::LocalGroupWidget> ui;
+    LocalHostListModel* model_ = nullptr;
     QString mime_type_;
     QPoint start_pos_;
 

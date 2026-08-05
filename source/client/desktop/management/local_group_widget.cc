@@ -38,28 +38,6 @@
 #include "client/online_checker/online_checker.h"
 #include "ui_local_group_widget.h"
 
-namespace {
-
-const int kColumnName = 0;
-const int kColumnAddress = 1;
-const int kColumnComment = 2;
-const int kColumnCreated = 3;
-const int kColumnModified = 4;
-const int kColumnConnect = 5;
-const int kColumnStatus = 6;
-
-//--------------------------------------------------------------------------------------------------
-QString formatTimestamp(qint64 unix_seconds)
-{
-    if (unix_seconds <= 0)
-        return QString();
-
-    return QLocale::system().toString(
-        QDateTime::fromSecsSinceEpoch(unix_seconds), QLocale::ShortFormat);
-}
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     : ContentWidget(Type::LOCAL_GROUP, parent),
@@ -74,6 +52,13 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 
     ui->setupUi(this);
 
+    model_ = new LocalHostListModel(this);
+    ui->tree_host->setModel(model_);
+
+    // Turned on again after the model is set: the view wires the header up to the sort of whatever
+    // model it has, and at the time the generated setup ran there was none.
+    ui->tree_host->setSortingEnabled(true);
+
     status_check_label_->setVisible(false);
 
     ui->tree_host->viewport()->installEventFilter(this);
@@ -84,41 +69,28 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &LocalGroupWidget::onHeaderContextMenu);
 
-    connect(ui->tree_host, &QTreeWidget::itemActivated,
-            this, [this](QTreeWidgetItem* item, int /* column */)
+    connect(ui->tree_host, &QAbstractItemView::activated, this, [this](const QModelIndex& index)
     {
-        if (!item)
-            return;
-
-        Item* host_item = static_cast<Item*>(item);
-        emit sig_activated(host_item->entryId());
+        if (const HostConfig* host = model_->hostAt(index.row()))
+            emit sig_activated(host->id());
     });
 
-    connect(ui->tree_host, &QTreeWidget::currentItemChanged,
-            this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
+    connect(ui->tree_host->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, [this](const QModelIndex& current, const QModelIndex& /* previous */)
     {
-        qint64 entry_id = -1;
-
-        if (current)
-        {
-            Item* host_item = static_cast<Item*>(current);
-            entry_id = host_item->entryId();
-        }
-
-        emit sig_currentChanged(entry_id);
+        const HostConfig* host = model_->hostAt(current.row());
+        emit sig_currentChanged(host ? host->id() : -1);
     });
 
-    connect(ui->tree_host, &QTreeWidget::customContextMenuRequested,
-            this, [this](const QPoint& pos)
+    connect(ui->tree_host, &QWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
-        qint64 entry_id = 0;
-        Item* item = static_cast<Item*>(ui->tree_host->itemAt(pos));
-        if (item)
-        {
-            ui->tree_host->setCurrentItem(item);
-            entry_id = item->entryId();
-        }
-        emit sig_contextMenu(entry_id, ui->tree_host->viewport()->mapToGlobal(pos));
+        const QModelIndex index = ui->tree_host->indexAt(pos);
+        if (index.isValid())
+            ui->tree_host->setCurrentIndex(index);
+
+        const HostConfig* host = model_->hostAt(index.row());
+        emit sig_contextMenu(host ? host->id() : 0,
+                             ui->tree_host->viewport()->mapToGlobal(pos));
     });
 
     connect(online_checker_, &OnlineChecker::sig_checkerResult,
@@ -134,9 +106,9 @@ LocalGroupWidget::~LocalGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item* LocalGroupWidget::currentItem()
+const HostConfig* LocalGroupWidget::currentHost() const
 {
-    return static_cast<Item*>(ui->tree_host->currentItem());
+    return model_->hostAt(ui->tree_host->currentIndex().row());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,12 +116,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     current_group_id_ = group_id;
 
-    ui->tree_host->clear();
-
-    QList<HostConfig> hosts = Database::instance().hostList(group_id);
-
-    for (const HostConfig& host : std::as_const(hosts))
-        new Item(host, ui->tree_host);
+    model_->setHosts(Database::instance().hostList(group_id));
 
     updateStatusLabels();
 
@@ -160,16 +127,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::setConnectTime(qint64 entry_id, qint64 connect_time)
 {
-    const int count = ui->tree_host->topLevelItemCount();
-    for (int i = 0; i < count; ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        if (item->entryId() == entry_id)
-        {
-            item->setConnectTime(connect_time);
-            break;
-        }
-    }
+    model_->setConnectTime(entry_id, connect_time);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,19 +139,18 @@ void LocalGroupWidget::setOnlineCheckEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::setCurrentHost(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
-    if (!item)
+    const int row = model_->rowOf(entry_id);
+    if (row < 0)
         return;
 
-    ui->tree_host->setCurrentItem(item);
+    ui->tree_host->setCurrentIndex(model_->index(row, 0));
     ui->tree_host->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
-    if (!item)
+    if (model_->rowOf(entry_id) < 0)
         return;
 
     std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
@@ -203,24 +160,23 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
         return;
     }
 
-    item->updateFrom(*updated);
+    model_->updateHost(*updated);
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
-    if (!item)
+    const int row = model_->rowOf(entry_id);
+    if (row < 0)
         return;
 
-    int row = ui->tree_host->indexOfTopLevelItem(item);
-    delete ui->tree_host->takeTopLevelItem(row);
+    model_->removeHost(entry_id);
 
-    int count = ui->tree_host->topLevelItemCount();
+    // The row the user was on is gone, so the one that took its place is picked instead.
+    const int count = model_->rowCount();
     if (count > 0)
     {
-        int next_row = qMin(row, count - 1);
-        ui->tree_host->setCurrentItem(ui->tree_host->topLevelItem(next_row));
+        ui->tree_host->setCurrentIndex(model_->index(qMin(row, count - 1), 0));
         ui->tree_host->setFocus();
     }
 
@@ -259,13 +215,10 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
 void LocalGroupWidget::reload()
 {
     QList<qint64> ids;
-    ids.reserve(ui->tree_host->topLevelItemCount());
-    for (int i = 0; i < ui->tree_host->topLevelItemCount(); ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        if (item)
-            ids.append(item->entryId());
-    }
+    ids.reserve(model_->rowCount());
+    for (const HostConfig& host : model_->hosts())
+        ids.append(host.id());
+
     online_checker_->invalidate(ids);
 
     startOnlineChecker();
@@ -364,7 +317,8 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_host->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -379,15 +333,7 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
 {
-    for (int i = 0; i < ui->tree_host->topLevelItemCount(); ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        if (item->entryId() == entry_id)
-        {
-            item->setOnlineStatus(online);
-            break;
-        }
-    }
+    model_->setOnlineStatus(entry_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -400,14 +346,15 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startDrag()
 {
-    Item* host_item = static_cast<Item*>(ui->tree_host->itemAt(start_pos_));
-    if (!host_item)
+    const QModelIndex index = ui->tree_host->indexAt(start_pos_);
+    const HostConfig* host = model_->hostAt(index.row());
+    if (!host)
         return;
 
     LocalHostDrag drag(this);
-    drag.setHostItem(host_item, mime_type_);
+    drag.setHost(*host, mime_type_);
 
-    const QIcon icon = host_item->icon(0);
+    const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
     drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
     drag.exec(Qt::MoveAction);
@@ -421,8 +368,7 @@ void LocalGroupWidget::updateStatusLabels()
         child_groups_count = Database::instance().groupList(current_group_id_).size();
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
-    status_hosts_label_->setText(
-        tr("%n child host(s)", "", ui->tree_host->topLevelItemCount()));
+    status_hosts_label_->setText(tr("%n child host(s)", "", model_->rowCount()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,14 +376,7 @@ void LocalGroupWidget::startOnlineChecker()
 {
     clearOnlineStatuses();
 
-    OnlineChecker::HostList hosts;
-
-    for (int i = 0; i < ui->tree_host->topLevelItemCount(); ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        if (item)
-            hosts.emplace_back(item->host());
-    }
+    OnlineChecker::HostList hosts = model_->hosts();
 
     if (hosts.isEmpty())
     {
@@ -454,90 +393,5 @@ void LocalGroupWidget::startOnlineChecker()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::clearOnlineStatuses()
 {
-    const int count = ui->tree_host->topLevelItemCount();
-    for (int i = 0; i < count; ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        item->clearOnlineStatus();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item* LocalGroupWidget::findItemByEntryId(qint64 entry_id) const
-{
-    const int count = ui->tree_host->topLevelItemCount();
-    for (int i = 0; i < count; ++i)
-    {
-        Item* item = static_cast<Item*>(ui->tree_host->topLevelItem(i));
-        if (item->entryId() == entry_id)
-            return item;
-    }
-    return nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item::Item(const HostConfig& host, QTreeWidget* parent)
-    : QTreeWidgetItem(parent)
-{
-    updateFrom(host);
-    setIcon(kColumnName, QIcon(":/img/computer.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::Item::setConnectTime(qint64 connect_time)
-{
-    host_.setConnectTime(connect_time);
-    setText(kColumnConnect, formatTimestamp(connect_time));
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::Item::setOnlineStatus(bool online)
-{
-    setText(kColumnStatus, online ? tr("Online") : tr("Offline"));
-    setIcon(kColumnName, QIcon(online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::Item::clearOnlineStatus()
-{
-    setText(kColumnStatus, QString());
-    setIcon(kColumnName, QIcon(":/img/computer.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::Item::updateFrom(const HostConfig& host)
-{
-    host_ = host;
-
-    QString single_line_comment = host.comment();
-    single_line_comment.replace('\n', ' ').replace('\r', ' ');
-
-    setText(kColumnName, host.name());
-    setText(kColumnAddress, host.address());
-    setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, host.comment());
-    setText(kColumnCreated, formatTimestamp(host.createTime()));
-    setText(kColumnModified, formatTimestamp(host.modifyTime()));
-    setText(kColumnConnect, formatTimestamp(host.connectTime()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool LocalGroupWidget::Item::operator<(const QTreeWidgetItem& other) const
-{
-    const int column = treeWidget() ? treeWidget()->sortColumn() : 0;
-
-    if (column == kColumnCreated || column == kColumnModified || column == kColumnConnect)
-    {
-        const Item* other_item = dynamic_cast<const Item*>(&other);
-        if (other_item)
-        {
-            if (column == kColumnCreated)
-                return host_.createTime() < other_item->host_.createTime();
-            if (column == kColumnModified)
-                return host_.modifyTime() < other_item->host_.modifyTime();
-            return host_.connectTime() < other_item->host_.connectTime();
-        }
-    }
-
-    return QTreeWidgetItem::operator<(other);
+    model_->clearOnlineStatuses();
 }

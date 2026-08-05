@@ -22,8 +22,9 @@
 #include "client/config.h"
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/temp_host_list_model.h"
 
-class QTreeWidget;
+class QTreeView;
 
 namespace proto::router {
 class HostResult;
@@ -64,7 +65,11 @@ private:
     void fetchTempHosts();
     bool isAdmin() const;
 
-    QTreeWidget* tree_ = nullptr;
+    // The host of the row the user is on, or null when the list is empty.
+    const RouterTempHost* currentHost() const;
+
+    QTreeView* tree_ = nullptr;
+    TempHostListModel* model_ = nullptr;
     qint64 router_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterTempHostsWidget)

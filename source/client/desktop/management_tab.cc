@@ -674,11 +674,11 @@ void ManagementTab::onConnectAction(QAction* action)
 
     if (current_content_ == local_group_widget_)
     {
-        LocalGroupWidget::Item* item = local_group_widget_->currentItem();
-        if (!item)
+        const HostConfig* current = local_group_widget_->currentHost();
+        if (!current)
             return;
 
-        std::optional<HostConfig> found = Database::instance().findHost(item->entryId());
+        std::optional<HostConfig> found = Database::instance().findHost(current->id());
         if (!found.has_value())
         {
             MsgBox::warning(this,
@@ -1758,12 +1758,12 @@ void ManagementTab::updateActionsState()
         ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
         ui->action_edit_group->setVisible(sidebar_item->groupId() != 0);
 
-        LocalGroupWidget::Item* host_item = local_group_widget_->currentItem();
+        const bool has_host = local_group_widget_->currentHost() != nullptr;
 
         ui->action_add_host->setVisible(true);
-        ui->action_delete_host->setVisible(host_item != nullptr);
-        ui->action_edit_host->setVisible(host_item != nullptr);
-        ui->action_copy_host->setVisible(host_item != nullptr);
+        ui->action_delete_host->setVisible(has_host);
+        ui->action_edit_host->setVisible(has_host);
+        ui->action_copy_host->setVisible(has_host);
     }
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE)
     {
@@ -1990,8 +1990,8 @@ qint64 ManagementTab::currentHostEntryId() const
 {
     if (current_content_ == local_group_widget_)
     {
-        LocalGroupWidget::Item* item = local_group_widget_->currentItem();
-        return item ? item->entryId() : -1;
+        const HostConfig* host = local_group_widget_->currentHost();
+        return host ? host->id() : -1;
     }
 
     if (current_content_ == search_widget_)

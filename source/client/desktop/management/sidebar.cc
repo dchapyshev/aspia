@@ -1315,12 +1315,8 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
-        if (!host_item)
-            return true;
-
         // Don't allow drop to the same group.
-        if (host_item->groupId() == target_item->groupId())
+        if (host_mime_data->host().groupId() == target_item->groupId())
             return true;
 
         tree_widget_->clearSelection();
@@ -1473,12 +1469,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        LocalGroupWidget::Item* host_item = host_mime_data->hostItem();
-        if (!host_item)
-        {
-            restoreSelection();
-            return true;
-        }
+        const HostConfig& dragged_host = host_mime_data->host();
 
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
@@ -1494,7 +1485,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        if (host_item->groupId() == target_item->groupId())
+        if (dragged_host.groupId() == target_item->groupId())
         {
             restoreSelection();
             return true;
@@ -1504,7 +1495,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         QList<HostConfig> target_hosts = Database::instance().hostList(target_item->groupId());
         for (const HostConfig& existing : std::as_const(target_hosts))
         {
-            if (existing.name() == host_item->computerName())
+            if (existing.name() == dragged_host.name())
             {
                 MsgBox::warning(tree_widget_, tr("A host with this name already exists in the selected group."));
                 restoreSelection();
@@ -1513,7 +1504,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the host's group in the database.
-        std::optional<HostConfig> host = Database::instance().findHost(host_item->entryId());
+        std::optional<HostConfig> host = Database::instance().findHost(dragged_host.id());
         if (!host.has_value())
         {
             restoreSelection();

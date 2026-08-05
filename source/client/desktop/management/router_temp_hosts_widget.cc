@@ -19,7 +19,7 @@
 #include "client/desktop/management/router_temp_hosts_widget.h"
 
 #include <QHeaderView>
-#include <QTreeWidget>
+#include <QTreeView>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
@@ -28,68 +28,29 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 
-namespace {
-
-enum TempHostColumn
-{
-    TEMP_HOST_COLUMN_ID = 0,
-    TEMP_HOST_COLUMN_COMPUTER_NAME,
-    TEMP_HOST_COLUMN_OS,
-    TEMP_HOST_COLUMN_VERSION,
-    TEMP_HOST_COLUMN_ADDRESS
-};
-
-//--------------------------------------------------------------------------------------------------
-class TempHostTreeItem final : public QTreeWidgetItem
-{
-public:
-    explicit TempHostTreeItem(const Router::TempHost& host)
-    {
-        updateItem(host);
-    }
-
-    void updateItem(const Router::TempHost& updated)
-    {
-        info = updated;
-        setIcon(TEMP_HOST_COLUMN_ID, QIcon(":/img/computer.svg"));
-        setText(TEMP_HOST_COLUMN_ID, QString::number(info.temp_id));
-        setText(TEMP_HOST_COLUMN_COMPUTER_NAME, info.computer_name);
-        setText(TEMP_HOST_COLUMN_OS, info.os_name);
-        setText(TEMP_HOST_COLUMN_VERSION, info.version);
-        setText(TEMP_HOST_COLUMN_ADDRESS, info.address);
-    }
-
-    Router::TempHost info;
-
-private:
-    Q_DISABLE_COPY_MOVE(TempHostTreeItem)
-};
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_TEMP_HOSTS, parent),
-      tree_(new QTreeWidget(this))
+      tree_(new QTreeView(this)),
+      model_(new TempHostListModel(this))
 {
     LOG(INFO) << "Ctor";
 
     tree_->setRootIsDecorated(false);
     tree_->setAllColumnsShowFocus(true);
-    tree_->setSortingEnabled(true);
     tree_->setSelectionMode(QAbstractItemView::SingleSelection);
-    tree_->setHeaderLabels({ tr("ID"), tr("Computer Name"), tr("Operating System"),
-                             tr("Version"), tr("Address") });
+    tree_->setModel(model_);
+    tree_->setSortingEnabled(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(tree_);
 
-    connect(tree_, &QTreeWidget::itemSelectionChanged,
+    connect(tree_->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterTempHostsWidget::sig_currentChanged);
 
     tree_->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(tree_, &QTreeWidget::customContextMenuRequested,
+    connect(tree_, &QWidget::customContextMenuRequested,
             this, &RouterTempHostsWidget::onContextMenu);
 }
 
@@ -114,7 +75,7 @@ void RouterTempHostsWidget::showRouter(qint64 router_id)
             connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
             {
                 if (status != Router::Status::ONLINE)
-                    tree_->clear();
+                    model_->clear();
             });
         }
     }
@@ -122,16 +83,16 @@ void RouterTempHostsWidget::showRouter(qint64 router_id)
     router_id_ = router_id;
 
     // The peer address is only delivered to admin sessions, so hide the column for the rest.
-    tree_->setColumnHidden(TEMP_HOST_COLUMN_ADDRESS, !isAdmin());
+    tree_->setColumnHidden(static_cast<int>(TempHostListModel::Column::ADDRESS), !isAdmin());
 
-    tree_->clear();
+    model_->clear();
     fetchTempHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterTempHostsWidget::hasSelectedHost() const
 {
-    return tree_->currentItem() != nullptr;
+    return currentHost() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -139,13 +100,13 @@ HostConfig RouterTempHostsWidget::selectedHostConfig() const
 {
     HostConfig config;
 
-    TempHostTreeItem* item = static_cast<TempHostTreeItem*>(tree_->currentItem());
-    if (!item || item->info.temp_id == kInvalidHostId)
+    const RouterTempHost* host = currentHost();
+    if (!host || host->temp_id == kInvalidHostId)
         return config;
 
     config.setRouterId(router_id_);
-    config.setAddress(hostIdToString(item->info.temp_id));
-    config.setName(item->info.computer_name);
+    config.setAddress(hostIdToString(host->temp_id));
+    config.setName(host->computer_name);
     return config;
 }
 
@@ -170,8 +131,8 @@ void RouterTempHostsWidget::reload()
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onApproveHost()
 {
-    TempHostTreeItem* item = static_cast<TempHostTreeItem*>(tree_->currentItem());
-    if (!item)
+    const RouterTempHost* host = currentHost();
+    if (!host)
     {
         LOG(INFO) << "No selected temporary host";
         return;
@@ -182,7 +143,7 @@ void RouterTempHostsWidget::onApproveHost()
         return;
 
     LOG(INFO) << "[ACTION] Approve temporary host requested by user";
-    router->approveHost(item->info.temp_id, this, &RouterTempHostsWidget::onHostResultReceived);
+    router->approveHost(host->temp_id, this, &RouterTempHostsWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,10 +156,16 @@ void RouterTempHostsWidget::onTempHostListReceived(const Router::TempHostList& l
         return;
     }
 
-    tree_->clear();
+    const RouterTempHost* selected = currentHost();
+    const HostId selected_temp_id = selected ? selected->temp_id : kInvalidHostId;
 
-    for (const Router::TempHost& host : std::as_const(list.hosts))
-        tree_->addTopLevelItem(new TempHostTreeItem(host));
+    model_->setHosts(list.hosts);
+
+    // The list is replaced whole, so the row the user was on has to be found again by the host it
+    // was showing.
+    const int selected_row = model_->rowOf(selected_temp_id);
+    if (selected_row >= 0)
+        tree_->setCurrentIndex(model_->index(selected_row, 0));
 
     emit sig_currentChanged();
 }
@@ -232,12 +199,18 @@ bool RouterTempHostsWidget::isAdmin() const
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
 {
-    QTreeWidgetItem* item = tree_->itemAt(pos);
-    if (item)
-        tree_->setCurrentItem(item);
+    const QModelIndex index = tree_->indexAt(pos);
+    if (index.isValid())
+        tree_->setCurrentIndex(index);
 
     if (!hasSelectedHost())
         return;
 
     emit sig_contextMenu(tree_->viewport()->mapToGlobal(pos));
+}
+
+//--------------------------------------------------------------------------------------------------
+const RouterTempHost* RouterTempHostsWidget::currentHost() const
+{
+    return model_->hostAt(tree_->currentIndex().row());
 }

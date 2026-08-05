@@ -36,6 +36,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     local_host_dialog.cc
     local_host_dialog.h
     local_host_dialog.ui
+    local_host_list_model.cc
+    local_host_list_model.h
     peer_list_model.cc
     peer_list_model.h
     relay_list_model.cc
@@ -81,6 +83,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     sidebar.h
     sidebar_items.cc
     sidebar_items.h
+    temp_host_list_model.cc
+    temp_host_list_model.h
     user_edit_model.cc
     user_edit_model.h
     user_list_model.cc

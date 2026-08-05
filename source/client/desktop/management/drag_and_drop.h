@@ -22,8 +22,8 @@
 #include <QDrag>
 #include <QMimeData>
 
+#include "client/config.h"
 #include "client/router.h"
-#include "client/desktop/management/local_group_widget.h"
 
 class SidebarLocalGroup;
 class SidebarRouterGroup;
@@ -58,11 +58,13 @@ public:
     LocalHostMimeData() = default;
     ~LocalHostMimeData() final = default;
 
-    void setHostItem(LocalGroupWidget::Item* host_item, const QString& mime_type);
-    LocalGroupWidget::Item* hostItem() const { return host_item_; }
+    // The record itself and not the row it is drawn on: the list is free to be refilled while the
+    // drag is still in flight.
+    void setHost(const HostConfig& host, const QString& mime_type);
+    const HostConfig& host() const { return host_; }
 
 private:
-    LocalGroupWidget::Item* host_item_ = nullptr;
+    HostConfig host_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -71,7 +73,7 @@ class LocalHostDrag final : public QDrag
 public:
     explicit LocalHostDrag(QObject* drag_source = nullptr);
 
-    void setHostItem(LocalGroupWidget::Item* host_item, const QString& mime_type);
+    void setHost(const HostConfig& host, const QString& mime_type);
 };
 
 //--------------------------------------------------------------------------------------------------
