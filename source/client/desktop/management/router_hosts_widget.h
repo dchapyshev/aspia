@@ -27,6 +27,7 @@
 #include "client/page_model.h"
 #include "client/router.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/host_list_model.h"
 
 namespace Ui {
 class RouterHostsWidget;
@@ -99,7 +100,7 @@ private:
     void updateHostsPagination();
     void updateStatusLabel();
     QString workspaceNameById(qint64 workspace_id) const;
-    void refreshHostsWorkspaceColumn();
+    const RouterHost* currentHost() const;
     void saveHostsToFile();
 
     std::unique_ptr<Ui::RouterHostsWidget> ui;
@@ -110,6 +111,7 @@ private:
     // the workspace column without a dedicated workspaces view.
     QHash<qint64, QString> workspace_names_;
 
+    HostListModel* model_ = nullptr;
     PageModel hosts_page_;
 
     Q_DISABLE_COPY_MOVE(RouterHostsWidget)

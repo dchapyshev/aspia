@@ -23,6 +23,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     drag_and_drop.h
     group_combo_box.cc
     group_combo_box.h
+    host_list_model.cc
+    host_list_model.h
     local_group_dialog.cc
     local_group_dialog.h
     local_group_dialog.ui

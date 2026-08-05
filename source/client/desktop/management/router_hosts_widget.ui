@@ -24,7 +24,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeWidget" name="tree_hosts">
+    <widget class="QTreeView" name="tree_hosts">
      <property name="editTriggers">
       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
@@ -43,71 +43,6 @@
      <property name="expandsOnDoubleClick">
       <bool>false</bool>
      </property>
-     <column>
-      <property name="text">
-       <string>Host ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Display Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Computer Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Address</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>User Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Comment</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Workspace</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Operating System</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Version</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Architecture</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Last Connect</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Last Modify</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Status</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
