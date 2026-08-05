@@ -451,6 +451,70 @@ TEST_F(TcpChannelTest, ServerWithoutAnInterfaceAcceptsIpv4Peers)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Nothing else on the machine may bind the port of a running listener. The router and the host
+// listen from a service, so a local account could otherwise take the port and answer the peers.
+TEST_F(TcpChannelTest, ListeningPortCannotBeTakenOverByAnotherSocket)
+{
+    const quint16 port = startServer();
+    ASSERT_NE(port, 0);
+
+    worker_->invoke([port]()
+    {
+        asio::ip::tcp::acceptor intruder(AsioEventDispatcher::ioContext());
+        const asio::ip::tcp::endpoint endpoint(asio::ip::make_address("127.0.0.1"), port);
+
+        std::error_code error_code;
+
+        intruder.open(endpoint.protocol(), error_code);
+        ASSERT_FALSE(error_code) << error_code.message();
+
+        // The same option a hijacker would use, and the one the server itself asks for.
+        intruder.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+        ASSERT_FALSE(error_code) << error_code.message();
+
+        intruder.bind(endpoint, error_code);
+        EXPECT_TRUE(error_code) << "the listening port was taken over";
+
+        if (!error_code)
+        {
+            std::error_code ignored_error;
+            intruder.close(ignored_error);
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The other half of that rule. Claiming the port exclusively must not cost a restarted service its
+// port. A connection that was served and closed leaves the operating system with state for it, and
+// the listener still has to come back up on the same port, or every restart of the router would
+// leave it unreachable until that state expires.
+TEST_F(TcpChannelTest, ListenerRebindsAfterAServedConnection)
+{
+    const quint16 port = connectAuthenticatedPair();
+    ASSERT_NE(port, 0);
+
+    bool restarted = false;
+
+    worker_->invoke([&]()
+    {
+        // Both ends go away, so the connection is closed rather than merely forgotten.
+        delete client_channel_;
+        client_channel_ = nullptr;
+
+        delete server_channel_;
+        server_channel_ = nullptr;
+
+        delete server_;
+        server_ = new TcpServer();
+        server_->setUserList(user_list_);
+
+        restarted = server_->start(port, "127.0.0.1");
+    });
+
+    EXPECT_TRUE(restarted);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A message arrives whole, on the channel id it was sent on, in both directions.
 TEST_F(TcpChannelTest, MessagesRoundTripInBothDirections)
 {

@@ -147,7 +147,18 @@ bool TcpServer::start(quint16 port, const QString& iface)
         return false;
     }
 
+    // SO_REUSEADDR means different things on the two platforms, hence the split. On Unix it lets a
+    // restarted service bind its port again while connections of the previous instance are still in
+    // TIME_WAIT, and a second listener still cannot take a port that somebody already listens on.
+    // On Windows any process under any account can bind the same port and the connections go to
+    // whoever bound last, so there the port is claimed exclusively. A restart does not suffer from
+    // that, because on Windows TIME_WAIT holds connections and not listening sockets.
+#if defined(Q_OS_WINDOWS)
+    acceptor_.set_option(
+        asio::detail::socket_option::boolean<SOL_SOCKET, SO_EXCLUSIVEADDRUSE>(true), error_code);
+#else
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+#endif
     if (error_code)
     {
         LOG(ERROR) << "acceptor::set_option failed:" << error_code;

@@ -146,7 +146,13 @@ bool TcpServerLegacy::start(quint16 port, const QString& iface)
         return false;
     }
 
+    // Why the option differs per platform is explained in TcpServer::start.
+#if defined(Q_OS_WINDOWS)
+    acceptor_.set_option(
+        asio::detail::socket_option::boolean<SOL_SOCKET, SO_EXCLUSIVEADDRUSE>(true), error_code);
+#else
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
+#endif
     if (error_code)
     {
         LOG(ERROR) << "acceptor::set_option failed:" << error_code;
