@@ -33,6 +33,14 @@
 #include "router/shared_hosts.h"
 #include "router/workers/client_worker.h"
 
+namespace {
+
+// A queued removal expires in months, so sweeping once a day is often enough and keeps the work
+// away from the connection storms the worker also serves.
+const Hours kRemovalSweepInterval{ 24 };
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 HostWorker::HostWorker()
     : Worker(Thread::AsioDispatcher, Seconds(1))
@@ -200,6 +208,18 @@ void HostWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostWorker::onTimer(TimePoint now)
+{
+    if (now < next_removal_sweep_)
+        return;
+    next_removal_sweep_ = now + kRemovalSweepInterval;
+
+    Database& database = Database::instance();
+    if (database.isValid())
+        database.pruneExpiredHostRemovals();
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostWorker::onNewHostConnection()
 {
     CHECK(server_);
@@ -208,7 +228,7 @@ void HostWorker::onNewHostConnection()
         TcpChannel* channel = server_->nextReadyConnection();
         LOG(INFO) << "New host:" << channel->peerAddress();
 
-        HostNG* host = new HostNG(channel, this);
+        HostNG* host = new HostNG(Database::instance(), channel, this);
         hosts_.emplace_back(host);
         connect(host, &HostNG::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
@@ -226,7 +246,7 @@ void HostWorker::onNewLegacyHostConnection()
         TcpChannel* channel = legacy_server_->nextReadyConnection();
         LOG(INFO) << "New legacy host:" << channel->peerAddress();
 
-        HostLegacy* host = new HostLegacy(channel, this);
+        HostLegacy* host = new HostLegacy(Database::instance(), channel, this);
         hosts_.emplace_back(host);
         connect(host, &HostLegacy::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
         connect(host, &HostLegacy::sig_hostIdRemoved, this, &HostWorker::onHostIdRemoved);

@@ -35,8 +35,9 @@ qint64 createHostId()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Host::Host(TcpChannel* channel, QObject* parent)
+Host::Host(Database& database, TcpChannel* channel, QObject* parent)
     : QObject(parent),
+      database_(database),
       session_id_(createHostId()),
       tcp_channel_(channel)
 {

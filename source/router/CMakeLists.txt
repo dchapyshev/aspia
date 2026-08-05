@@ -72,7 +72,7 @@ list(APPEND SOURCE_ROUTER
 
 list(APPEND SOURCE_ROUTER_TESTS
     client_channel_handler_unittest.cc
-    client_session_unittest.cc
+    client_unittest.cc
     client_worker_unittest.cc
     connection_offer_builder_unittest.cc
     database_unittest.cc
@@ -80,8 +80,10 @@ list(APPEND SOURCE_ROUTER_TESTS
     group_request_handler_unittest.cc
     host_id_handler_unittest.cc
     host_lifecycle_unittest.cc
+    host_ng_unittest.cc
     host_request_handler_unittest.cc
     router_test_base.h
+    router_test_worker.h
     shared_state_unittest.cc
     tests_main.cc
     two_factor_handler_unittest.cc

@@ -13,90 +13,24 @@
 // GNU General Public License for more details.
 //
 
-#include <condition_variable>
-#include <functional>
 #include <memory>
-#include <mutex>
 #include <optional>
 
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/totp.h"
-#include "base/threading/worker.h"
 #include "proto/router_admin.h"
 #include "proto/router_manager.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
-#include "router/database.h"
 #include "router/fake_tcp_channel.h"
 #include "router/router_test_base.h"
-
-namespace {
-
-// The thread a session lives in on the router. A real worker: it carries the database connection of
-// its own thread and the clock that drives the session channel, so a session under test is created,
-// driven and destroyed exactly where the router does it - no assumption of the session is relaxed
-// to make it testable.
-class SessionWorker final : public Worker
-{
-public:
-    explicit SessionWorker(const QString& file_path)
-        : Worker(Thread::AsioDispatcher, Seconds(1)),
-          file_path_(file_path)
-    {
-        // Nothing
-    }
-
-    ~SessionWorker() final = default;
-
-    // Runs |work| in the worker thread and returns once it has finished. The caller is blocked
-    // meanwhile, which keeps the test itself sequential.
-    void invoke(const std::function<void()>& work)
-    {
-        std::mutex lock;
-        std::condition_variable finished;
-        bool done = false;
-
-        post([&]()
-        {
-            work();
-
-            std::lock_guard guard(lock);
-            done = true;
-            finished.notify_one();
-        });
-
-        std::unique_lock guard(lock);
-        finished.wait(guard, [&]() { return done; });
-    }
-
-    // The connection of the worker thread. Only valid inside invoke().
-    Database& database() { return *database_; }
-
-protected:
-    // Worker implementation.
-    void onStart() final
-    {
-        database_ = std::make_unique<Database>();
-        CHECK(database_->open(file_path_));
-    }
-
-    void onStop() final
-    {
-        database_.reset();
-    }
-
-private:
-    const QString file_path_;
-    std::unique_ptr<Database> database_;
-};
-
-} // namespace
+#include "router/router_test_worker.h"
 
 // A whole session end to end: the messages it answers, the ones it drops, and the order the stages
 // come in. The session is driven through the fake channel, so nothing here mocks the router - it is
 // the real Client, in a real worker thread, with a real database.
-class ClientSessionTest : public RouterTestBase
+class ClientTest : public RouterTestBase
 {
 protected:
     void SetUp() override
@@ -106,7 +40,7 @@ protected:
         secret_ = Totp::generateSecret();
         ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret_, 0));
 
-        std::unique_ptr<SessionWorker> worker = std::make_unique<SessionWorker>(file_path_);
+        std::unique_ptr<RouterTestWorker> worker = std::make_unique<RouterTestWorker>(file_path_);
         worker_ = worker.get();
 
         workers_.add(std::move(worker));
@@ -115,9 +49,9 @@ protected:
 
     // Creates the session in the worker thread, runs |body| there and destroys it there. The
     // channel belongs to the session, so it goes away with it.
-    template <typename SessionT>
-    void withSession(quint32 session_type,
-                     const std::function<void(SessionT&, FakeTcpChannel*)>& body)
+    template <typename ClientT>
+    void withClient(quint32 session_type,
+                    const std::function<void(ClientT&, FakeTcpChannel*)>& body)
     {
         worker_->invoke([&]()
         {
@@ -125,8 +59,8 @@ protected:
             channel->setPeer(admin_.entry_id, admin_.name.toStdString(), session_type,
                              kVersion_3_0_0);
 
-            SessionT session(worker_->database(), channel, nullptr);
-            body(session, channel);
+            ClientT client(worker_->database(), channel, nullptr);
+            body(client, channel);
         });
     }
 
@@ -196,17 +130,17 @@ protected:
     // Destroyed before the database and the temporary directory of the base fixture: the worker
     // thread must be gone before the file it works with.
     WorkerManager workers_;
-    SessionWorker* worker_ = nullptr;
+    RouterTestWorker* worker_ = nullptr;
     QByteArray secret_;
 };
 
 //--------------------------------------------------------------------------------------------------
 // The stage opens by itself: a session that just came up asks for the second factor before it
 // answers anything.
-TEST_F(ClientSessionTest, SessionOpensWithTheTwoFactorStage)
+TEST_F(ClientTest, TwoFactorStageOpensOnStart)
 {
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [](Client& client, FakeTcpChannel* channel)
     {
         client.start();
 
@@ -222,10 +156,10 @@ TEST_F(ClientSessionTest, SessionOpensWithTheTwoFactorStage)
 //--------------------------------------------------------------------------------------------------
 // Nothing is served before the second factor: a client that skips the stage and asks for data gets
 // no answer at all.
-TEST_F(ClientSessionTest, RequestsBeforeTheSecondFactorAreDropped)
+TEST_F(ClientTest, RequestsBeforeTheSecondFactorAreDropped)
 {
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [](Client& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -238,10 +172,10 @@ TEST_F(ClientSessionTest, RequestsBeforeTheSecondFactorAreDropped)
 
 //--------------------------------------------------------------------------------------------------
 // The same rule on the privileged channels of an administrator session.
-TEST_F(ClientSessionTest, AdminRequestsBeforeTheSecondFactorAreDropped)
+TEST_F(ClientTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 {
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [](ClientAdmin& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -255,14 +189,14 @@ TEST_F(ClientSessionTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 //--------------------------------------------------------------------------------------------------
 // A valid code completes the stage: the client gets a device token for the next login and the keys
 // of its workspaces, and only then is the session usable.
-TEST_F(ClientSessionTest, ValidCodeDeliversTokenAndUserKeys)
+TEST_F(ClientTest, ValidCodeDeliversTokenAndUserKeys)
 {
     const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [this, workspace_id](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [this, workspace_id](Client& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -290,10 +224,10 @@ TEST_F(ClientSessionTest, ValidCodeDeliversTokenAndUserKeys)
 
 //--------------------------------------------------------------------------------------------------
 // A wrong code ends the session instead of letting the client try again on the same connection.
-TEST_F(ClientSessionTest, WrongCodeEndsTheSession)
+TEST_F(ClientTest, WrongCodeEndsTheConnection)
 {
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [](Client& client, FakeTcpChannel* channel)
     {
         int finished = 0;
         QObject::connect(&client, &Client::sig_finished, [&finished](qint64) { ++finished; });
@@ -312,13 +246,13 @@ TEST_F(ClientSessionTest, WrongCodeEndsTheSession)
 //--------------------------------------------------------------------------------------------------
 // After the stage the session answers, and the answer carries back the id of the request so the
 // client can route it.
-TEST_F(ClientSessionTest, WorkspaceListIsAnsweredAfterTheStage)
+TEST_F(ClientTest, WorkspaceListIsAnsweredAfterTheStage)
 {
     const SecureByteArray gk(Random::byteArray(32));
     ASSERT_GT(addWorkspace("alpha", gk), 0);
 
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [this](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -338,10 +272,10 @@ TEST_F(ClientSessionTest, WorkspaceListIsAnsweredAfterTheStage)
 //--------------------------------------------------------------------------------------------------
 // The privileged channels belong to the session types that authenticated for them: an ordinary
 // client session does not answer on them, whatever it sends.
-TEST_F(ClientSessionTest, ClientSessionIgnoresThePrivilegedChannels)
+TEST_F(ClientTest, PlainClientIgnoresThePrivilegedChannels)
 {
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [this](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [this](Client& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -354,10 +288,10 @@ TEST_F(ClientSessionTest, ClientSessionIgnoresThePrivilegedChannels)
 
 //--------------------------------------------------------------------------------------------------
 // The administrator channel is answered only by an administrator session.
-TEST_F(ClientSessionTest, AdminChannelIsAnsweredByAnAdminSession)
+TEST_F(ClientTest, AdminChannelIsAnsweredByAnAdministrator)
 {
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [this](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -376,10 +310,10 @@ TEST_F(ClientSessionTest, AdminChannelIsAnsweredByAnAdminSession)
 //--------------------------------------------------------------------------------------------------
 // A manager session manages hosts and groups; the user, workspace and relay commands are not its
 // business, and the channel they live on is not answered by it at all.
-TEST_F(ClientSessionTest, ManagerSessionIgnoresTheAdminChannel)
+TEST_F(ClientTest, ManagerIgnoresTheAdminChannel)
 {
-    withSession<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
-                               [this](ClientManager& client, FakeTcpChannel* channel)
+    withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
+                              [this](ClientManager& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -406,10 +340,10 @@ TEST_F(ClientSessionTest, ManagerSessionIgnoresTheAdminChannel)
 
 //--------------------------------------------------------------------------------------------------
 // The stage is over: a second answer to it is not a way back into it.
-TEST_F(ClientSessionTest, SecondTwoFactorResponseIsIgnored)
+TEST_F(ClientTest, SecondTwoFactorResponseIsIgnored)
 {
-    withSession<Client>(proto::router::SESSION_TYPE_CLIENT,
-                        [this](Client& client, FakeTcpChannel* channel)
+    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
+                       [this](Client& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -424,10 +358,10 @@ TEST_F(ClientSessionTest, SecondTwoFactorResponseIsIgnored)
 //--------------------------------------------------------------------------------------------------
 // An unknown command is answered - with a refusal. A request that never gets a reply would leave
 // the console waiting forever.
-TEST_F(ClientSessionTest, UnknownAdminCommandIsRefusedNotIgnored)
+TEST_F(ClientTest, UnknownAdminCommandIsRefusedNotIgnored)
 {
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [this](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -449,10 +383,10 @@ TEST_F(ClientSessionTest, UnknownAdminCommandIsRefusedNotIgnored)
 
 //--------------------------------------------------------------------------------------------------
 // Garbage on the wire is not a reason to answer or to crash.
-TEST_F(ClientSessionTest, MalformedMessagesAreIgnored)
+TEST_F(ClientTest, MalformedMessagesAreIgnored)
 {
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [this](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -468,14 +402,14 @@ TEST_F(ClientSessionTest, MalformedMessagesAreIgnored)
 // Changing your own password revokes every device token, this session's included, so the router
 // re-opens the two-factor stage. Until it is passed again the session answers nothing - which is
 // exactly why the client must treat a challenge on a live session as a disconnect.
-TEST_F(ClientSessionTest, PasswordChangeReopensTheTwoFactorStage)
+TEST_F(ClientTest, PasswordChangeReopensTheTwoFactorStage)
 {
     const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id = addWorkspace("alpha", gk);
     ASSERT_GT(workspace_id, 0);
 
-    withSession<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                             [this, &gk, workspace_id](ClientAdmin& client, FakeTcpChannel* channel)
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this, &gk, workspace_id](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 

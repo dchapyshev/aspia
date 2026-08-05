@@ -90,6 +90,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer(TimePoint now) final;
 
 private slots:
     void onNewHostConnection();
@@ -111,6 +112,10 @@ private:
     ScopedQPointer<TcpServer> server_;
     ScopedQPointer<TcpServerLegacy> legacy_server_;
     QList<Host*> hosts_;
+
+    // When the queue of unacknowledged removals is swept next. Starts at the epoch, so the first
+    // tick after the router comes up does it.
+    TimePoint next_removal_sweep_;
 
     Q_DISABLE_COPY_MOVE(HostWorker)
 };

@@ -33,8 +33,8 @@ constexpr qsizetype kMaxHostIdsPerSession = 32;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HostLegacy::HostLegacy(TcpChannel* channel, QObject* parent)
-    : Host(channel, parent)
+HostLegacy::HostLegacy(Database& database, TcpChannel* channel, QObject* parent)
+    : Host(database, channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -105,8 +105,8 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
         return;
     }
 
-    Database& database = Database::instance();
-    if (!database.isValid())
+    Database& db = database();
+    if (!db.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database";
         return;
@@ -129,17 +129,17 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
     const QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, host_id_request.key());
 
     HostId host_id = kInvalidHostId;
-    std::string_view error_code = database.hostId(key_hash, &host_id);
+    std::string_view error_code = db.hostId(key_hash, &host_id);
 
     if (error_code == proto::router::kErrorOk)
     {
         // Legacy protocol has no router->host remove command. A reconnecting host with a
         // pending removal must not become online again; consume the pending row and tell the
         // legacy peer that the old id is gone.
-        if (database.hasPendingHostRemoval(host_id))
+        if (db.hasPendingHostRemoval(host_id))
         {
             CLOG(INFO) << "Legacy host" << host_id << "has pending removal";
-            if (database.finalizeHostRemoval(host_id))
+            if (db.finalizeHostRemoval(host_id))
             {
                 host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
                 emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);

@@ -50,6 +50,11 @@ constexpr qint64 kBuiltInUserId = 1;
 
 constexpr int kClientDeviceTokenSize = 32;
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
+
+// How long a queued host removal waits for the host to acknowledge it before the record is dropped
+// anyway. Long enough for a machine that spends months switched off; after it the id is gone and
+// the host has to be approved again.
+constexpr qint64 kHostRemovalTtlSec = 180 * 24 * 3600;
 constexpr qint64 kMaxHostListPageSize = 1000;
 
 // A host-list request with both range endpoints left at their proto defaults means "unpaged" -
@@ -2003,6 +2008,31 @@ bool Database::finalizeHostRemoval(HostId host_id)
     // Idempotent: the desired end state is "no hosts_remove row for this id". A second finalization
     // (duplicate ack, or another session already finalized) deletes zero rows but still succeeded,
     // so report success instead of a spurious failure.
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::pruneExpiredHostRemovals()
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "DELETE FROM hosts_remove WHERE timestamp < ?");
+    query.addInt64(QDateTime::currentSecsSinceEpoch() - kHostRemovalTtlSec);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to prune expired host removals:" << db_.lastError();
+        return false;
+    }
+
+    const int count = db_.changes();
+    if (count > 0)
+        LOG(INFO) << "Dropped" << count << "host removals nobody acknowledged";
+
     return true;
 }
 

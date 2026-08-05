@@ -31,6 +31,13 @@ protected:
         return host_id;
     }
 
+    // Moves the moment a removal was queued |days| into the past.
+    bool ageRemoval(HostId host_id, int days)
+    {
+        return execRaw(QString("UPDATE hosts_remove SET timestamp=timestamp-%1 WHERE host_id=%2")
+                           .arg(qint64(days) * 24 * 3600).arg(host_id));
+    }
+
     qint64 hostCount()
     {
         bool ok = false;
@@ -265,4 +272,68 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     EXPECT_TRUE(stored.comment().empty());
     EXPECT_TRUE(stored.user_name().empty());
     EXPECT_TRUE(stored.password().empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removal nobody ever acknowledged does not sit in the queue forever: after the grace period the
+// record is dropped, and with it the id. The machine behind it has to be approved anew.
+TEST_F(HostLifecycleTest, UnacknowledgedRemovalExpires)
+{
+    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    const HostId host_id = hostIdByKey("key-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(db_.hasPendingHostRemoval(host_id));
+
+    // One day past the grace period.
+    ASSERT_TRUE(ageRemoval(host_id, 181));
+
+    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
+    EXPECT_FALSE(db_.hasPendingHostRemoval(host_id));
+
+    // The key means nothing to the router any more.
+    std::string_view error_code;
+    EXPECT_EQ(hostIdByKey("key-1", &error_code), kInvalidHostId);
+    EXPECT_EQ(error_code, proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Inside the grace period the host is still expected back: the id is kept, so a machine that spends
+// months switched off is still told to remove itself when it returns.
+TEST_F(HostLifecycleTest, RemovalInsideTheGracePeriodIsKept)
+{
+    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    const HostId host_id = hostIdByKey("key-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(ageRemoval(host_id, 179));
+
+    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
+    EXPECT_TRUE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_EQ(hostIdByKey("key-1"), host_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The sweep takes the expired ones and leaves the rest alone.
+TEST_F(HostLifecycleTest, SweepTakesOnlyTheExpiredRemovals)
+{
+    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(db_.addHost("key-2", "hwid-2"));
+
+    const HostId expired_id = hostIdByKey("key-1");
+    const HostId fresh_id = hostIdByKey("key-2");
+    ASSERT_NE(expired_id, kInvalidHostId);
+    ASSERT_NE(fresh_id, kInvalidHostId);
+
+    ASSERT_TRUE(db_.scheduleHostRemoval(expired_id));
+    ASSERT_TRUE(db_.scheduleHostRemoval(fresh_id));
+    ASSERT_TRUE(ageRemoval(expired_id, 200));
+
+    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
+
+    EXPECT_FALSE(db_.hasPendingHostRemoval(expired_id));
+    EXPECT_TRUE(db_.hasPendingHostRemoval(fresh_id));
+    EXPECT_EQ(countRaw("SELECT COUNT(*) FROM hosts_remove"), 1);
 }

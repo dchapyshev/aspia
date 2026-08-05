@@ -259,6 +259,11 @@ public:
     bool hasPendingHostRemoval(HostId host_id) const;
     bool finalizeHostRemoval(HostId host_id);
 
+    // Drops the queued removals nobody ever acknowledged. A host that never comes back would keep
+    // its row - and with it its id - forever; after the grace period the record is gone for good
+    // and the same machine has to be approved anew. Returns false only on a database error.
+    bool pruneExpiredHostRemovals();
+
     //----------------------------------------------------------------------------------------------
     // Workspaces
     //----------------------------------------------------------------------------------------------

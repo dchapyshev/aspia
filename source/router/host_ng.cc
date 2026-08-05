@@ -59,8 +59,8 @@ void releaseTempHostId(HostId host_id)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-HostNG::HostNG(TcpChannel* channel, QObject* parent)
-    : Host(channel, parent)
+HostNG::HostNG(Database& database, TcpChannel* channel, QObject* parent)
+    : Host(database, channel, parent)
 {
     CLOG(TRACE) << "Ctor";
 }
@@ -78,10 +78,10 @@ HostNG::~HostNG()
     // resurface, so finalize the hosts_remove row here.
     if (remove_command_sent_ && host_id_ != kInvalidHostId)
     {
-        Database& database = Database::instance();
-        if (database.isValid())
+        Database& db = database();
+        if (db.isValid())
         {
-            if (!database.finalizeHostRemoval(host_id_))
+            if (!db.finalizeHostRemoval(host_id_))
                 CLOG(WARNING) << "Failed to finalize removal for host_id:" << host_id_;
         }
         else
@@ -158,7 +158,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     peer.address = address();
 
     const HostIdHandler::Result result =
-        HostIdHandler::handle(Database::instance(), host_id_request, peer, host_id_);
+        HostIdHandler::handle(database(), host_id_request, peer, host_id_);
 
     if (result.action == HostIdHandler::Action::IGNORE)
         return;
@@ -186,8 +186,11 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
         host_id_response->set_host_id(host_id_);
         host_id_response->set_key(std::move(key));
 
-        emit sig_hostIdAssigned(host_id_);
-        emit sig_notifyChanged(result.notify_flags);
+        if (!result.removal_pending)
+        {
+            emit sig_hostIdAssigned(host_id_);
+            emit sig_notifyChanged(result.notify_flags);
+        }
 
         sendMessage(0, serialize(message));
         return;
@@ -200,8 +203,17 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     {
         host_id_response->set_host_id(host_id_);
 
-        emit sig_hostIdAssigned(host_id_);
-        emit sig_notifyChanged(result.notify_flags);
+        // A host on its way out is not announced as reachable. Publishing it would put it back
+        // among the online hosts, and a client that still knows the id could ask for a connection
+        // offer to a host the administrator has already removed - the record is gone from every
+        // list, so nothing else would tell the client otherwise. The id is still handed over: the
+        // host needs to know which record the remove command is about, and the session finalizes
+        // the removal when it ends.
+        if (!result.removal_pending)
+        {
+            emit sig_hostIdAssigned(host_id_);
+            emit sig_notifyChanged(result.notify_flags);
+        }
     }
 
     sendMessage(0, serialize(message));
