@@ -23,6 +23,8 @@
 
 #include "base/crypto/secure_string.h"
 
+class Database;
+
 class JsonBackup
 {
 public:
@@ -57,15 +59,15 @@ public:
         int total() const { return routers + groups + hosts; }
     };
 
-    // Exports the local address book (routers, groups, hosts) to |file_path|, encrypted with
+    // Exports the address book of |db| (routers, groups, hosts) to |file_path|, encrypted with
     // |password|. |counts| (optional) receives the number of exported entries.
-    static Result exportToFile(const QString& file_path, const SecureString& password,
+    static Result exportToFile(Database& db, const QString& file_path, const SecureString& password,
                                ExportCounts* counts = nullptr);
 
-    // Imports the address book from |file_path|, decrypting it with |password|, into the local
-    // database. |counts| (optional) receives the added/skipped tallies.
-    static Result importFromFile(const QString& file_path, const SecureString& password,
-                                 ImportCounts* counts = nullptr);
+    // Imports the address book from |file_path|, decrypting it with |password|, into |db|.
+    // |counts| (optional) receives the added/skipped tallies.
+    static Result importFromFile(Database& db, const QString& file_path,
+                                 const SecureString& password, ImportCounts* counts = nullptr);
 
 private:
     Q_DISABLE_COPY_MOVE(JsonBackup)

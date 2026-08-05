@@ -305,7 +305,7 @@ void LocalWidget::onImport()
         return;
 
     JsonBackup::ImportCounts counts;
-    switch (JsonBackup::importFromFile(path, dialog.password(), &counts))
+    switch (JsonBackup::importFromFile(Database::instance(), path, dialog.password(), &counts))
     {
         case JsonBackup::Result::SUCCESS:
             reload();
@@ -347,7 +347,8 @@ void LocalWidget::onExport()
         return;
 
     JsonBackup::ExportCounts counts;
-    if (JsonBackup::exportToFile(path, dialog.password(), &counts) == JsonBackup::Result::SUCCESS)
+    if (JsonBackup::exportToFile(Database::instance(), path, dialog.password(), &counts) ==
+        JsonBackup::Result::SUCCESS)
     {
         MessageDialog::info(this, tr("Export"),
             tr("Exported %n router(s), ", nullptr, counts.routers) +

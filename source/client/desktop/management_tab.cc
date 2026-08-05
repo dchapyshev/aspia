@@ -1497,7 +1497,8 @@ void ManagementTab::onExportBookAction()
         return;
 
     JsonBackup::ExportCounts counts;
-    const JsonBackup::Result result = JsonBackup::exportToFile(file_path, dialog.password(), &counts);
+    const JsonBackup::Result result =
+        JsonBackup::exportToFile(Database::instance(), file_path, dialog.password(), &counts);
 
     if (result != JsonBackup::Result::SUCCESS)
     {
@@ -1547,7 +1548,8 @@ void ManagementTab::onImportBookAction()
         return;
 
     JsonBackup::ImportCounts counts;
-    const JsonBackup::Result result = JsonBackup::importFromFile(file_path, dialog.password(), &counts);
+    const JsonBackup::Result result =
+        JsonBackup::importFromFile(Database::instance(), file_path, dialog.password(), &counts);
 
     switch (result)
     {

@@ -28,6 +28,7 @@
 #include <QSet>
 #include <QUuid>
 
+#include <algorithm>
 #include <memory>
 #include <optional>
 
@@ -51,7 +52,9 @@ constexpr int kMaxCommentLength = 2048;
 using ImportCounters = JsonBackup::ImportCounts;
 
 //--------------------------------------------------------------------------------------------------
-QString encryptToHex(const DataCryptor& cryptor, const QString& value)
+// A field that fails to encrypt must not be written as an empty one: the file would be short of
+// what the user was told it holds, and nothing in it would say so.
+std::optional<QString> encryptToHex(const DataCryptor& cryptor, const QString& value)
 {
     if (value.isEmpty())
         return QString();
@@ -60,10 +63,7 @@ QString encryptToHex(const DataCryptor& cryptor, const QString& value)
     std::optional<QByteArray> encrypted = cryptor.encrypt(plain.toByteArray());
 
     if (!encrypted.has_value())
-    {
-        LOG(ERROR) << "Encryption failed";
-        return QString();
-    }
+        return std::nullopt;
 
     return QString::fromLatin1(encrypted->toHex());
 }
@@ -109,47 +109,80 @@ QString sanitizedComment(const QString& comment)
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
+std::optional<QJsonObject> buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
 {
+    std::optional<QString> display_name = encryptToHex(cryptor, router.displayName());
+    std::optional<QString> address = encryptToHex(cryptor, router.address());
+    std::optional<QString> username = encryptToHex(cryptor, router.username());
+    std::optional<QString> password = encryptToHex(cryptor, router.password().toString());
+
+    if (!display_name || !address || !username || !password)
+    {
+        LOG(ERROR) << "Unable to encrypt router:" << router.routerId();
+        return std::nullopt;
+    }
+
     QJsonObject object;
     object.insert("id", static_cast<qint64>(router.routerId()));
-    object.insert("display_name", encryptToHex(cryptor, router.displayName()));
-    object.insert("address", encryptToHex(cryptor, router.address()));
+    object.insert("display_name", *display_name);
+    object.insert("address", *address);
     object.insert("session_type", static_cast<int>(router.sessionType()));
-    object.insert("username", encryptToHex(cryptor, router.username()));
-    object.insert("password", encryptToHex(cryptor, router.password().toString()));
+    object.insert("username", *username);
+    object.insert("password", *password);
     return object;
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
+std::optional<QJsonObject> buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 {
+    std::optional<QString> name = encryptToHex(cryptor, group.name());
+    std::optional<QString> comment = encryptToHex(cryptor, group.comment());
+
+    if (!name || !comment)
+    {
+        LOG(ERROR) << "Unable to encrypt group:" << group.id();
+        return std::nullopt;
+    }
+
     QJsonObject object;
     object.insert("id", static_cast<qint64>(group.id()));
     object.insert("parent_id", static_cast<qint64>(group.parentId()));
-    object.insert("name", encryptToHex(cryptor, group.name()));
-    object.insert("comment", encryptToHex(cryptor, group.comment()));
+    object.insert("name", *name);
+    object.insert("comment", *comment);
     return object;
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildHost(const HostConfig& host, const DataCryptor& cryptor)
+std::optional<QJsonObject> buildHost(const HostConfig& host, const DataCryptor& cryptor)
 {
+    std::optional<QString> name = encryptToHex(cryptor, host.name());
+    std::optional<QString> comment = encryptToHex(cryptor, host.comment());
+    std::optional<QString> address = encryptToHex(cryptor, host.address());
+    std::optional<QString> username = encryptToHex(cryptor, host.username());
+    std::optional<QString> password = encryptToHex(cryptor, host.password().toString());
+
+    if (!name || !comment || !address || !username || !password)
+    {
+        LOG(ERROR) << "Unable to encrypt host:" << host.id();
+        return std::nullopt;
+    }
+
     QJsonObject object;
     object.insert("id", static_cast<qint64>(host.id()));
     object.insert("group_id", static_cast<qint64>(host.groupId()));
     object.insert("router_id", static_cast<qint64>(host.routerId()));
     object.insert("guid", host.guid());
-    object.insert("name", encryptToHex(cryptor, host.name()));
-    object.insert("comment", encryptToHex(cryptor, host.comment()));
-    object.insert("address", encryptToHex(cryptor, host.address()));
-    object.insert("username", encryptToHex(cryptor, host.username()));
-    object.insert("password", encryptToHex(cryptor, host.password().toString()));
+    object.insert("name", *name);
+    object.insert("comment", *comment);
+    object.insert("address", *address);
+    object.insert("username", *username);
+    object.insert("password", *password);
     return object;
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor, ImportCounters* counters)
+qint64 importRouter(Database& db, const QJsonObject& router_object, const DataCryptor& cryptor,
+                    ImportCounters* counters)
 {
     int session_type = router_object.value("session_type").toInt(proto::router::SESSION_TYPE_CLIENT);
 
@@ -171,7 +204,6 @@ qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor
         return 0;
     }
 
-    Database& db = Database::instance();
     const QList<RouterConfig> existing = db.routerList();
     for (const RouterConfig& router : std::as_const(existing))
     {
@@ -211,14 +243,16 @@ bool readGroupIds(const QJsonObject& object, qint64* id, qint64* parent_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void importGroups(const QJsonArray& groups_array,
+void importGroups(Database& db,
+                  const QJsonArray& groups_array,
                   const DataCryptor& cryptor,
                   QHash<qint64, qint64>* group_id_map,
                   ImportCounters* counters)
 {
-    Database& db = Database::instance();
-
     QHash<qint64, QList<QJsonObject>> children;
+    QList<QJsonObject> all_groups;
+    QSet<qint64> present_ids;
+
     for (const QJsonValue& value : std::as_const(groups_array))
     {
         if (!value.isObject())
@@ -231,6 +265,8 @@ void importGroups(const QJsonArray& groups_array,
             continue;
 
         children[parent_id].append(group_object);
+        all_groups.append(group_object);
+        present_ids.insert(id);
     }
 
     group_id_map->insert(0, 0);
@@ -242,6 +278,26 @@ void importGroups(const QJsonArray& groups_array,
 
     QList<qint64> queue;
     queue.append(0);
+
+    // A parent the file does not carry names no group, so what hangs off it starts at the root -
+    // where a host whose group is missing is put as well. Leaving those out would take their own
+    // children with them, and the tally would say nothing about any of it.
+    QList<qint64> missing_parents;
+    for (auto it = children.constBegin(); it != children.constEnd(); ++it)
+    {
+        if (it.key() != 0 && !present_ids.contains(it.key()))
+            missing_parents.append(it.key());
+    }
+
+    // The hash hands them over in whatever order it likes, and the order decides which of the
+    // groups ends up first at the root.
+    std::sort(missing_parents.begin(), missing_parents.end());
+
+    for (qint64 parent_id : std::as_const(missing_parents))
+    {
+        group_id_map->insert(parent_id, 0);
+        queue.append(parent_id);
+    }
 
     while (!queue.isEmpty())
     {
@@ -292,17 +348,28 @@ void importGroups(const QJsonArray& groups_array,
             queue.append(old_id);
         }
     }
+
+    // What the walk never reached names itself as its own parent, straight away or around a ring of
+    // groups. That cannot be a tree, so it is not imported - and the tally says so instead of the
+    // rows quietly not being there.
+    for (const QJsonObject& group_object : std::as_const(all_groups))
+    {
+        qint64 old_id = 0;
+        qint64 old_parent_id = 0;
+
+        if (readGroupIds(group_object, &old_id, &old_parent_id) && !visited_ids.contains(old_id))
+            ++counters->groups_skipped;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void importHosts(const QJsonArray& hosts_array,
-                     const QHash<qint64, qint64>& group_id_map,
-                     const QHash<qint64, qint64>& router_id_map,
-                     const DataCryptor& cryptor,
-                     ImportCounters* counters)
+void importHosts(Database& db,
+                 const QJsonArray& hosts_array,
+                 const QHash<qint64, qint64>& group_id_map,
+                 const QHash<qint64, qint64>& router_id_map,
+                 const DataCryptor& cryptor,
+                 ImportCounters* counters)
 {
-    Database& db = Database::instance();
-
     for (const QJsonValue& value : std::as_const(hosts_array))
     {
         if (!value.isObject())
@@ -371,10 +438,9 @@ void importHosts(const QJsonArray& hosts_array,
 
 //--------------------------------------------------------------------------------------------------
 // static
-JsonBackup::Result JsonBackup::exportToFile(const QString& file_path, const SecureString& password,
-                                            ExportCounts* counts)
+JsonBackup::Result JsonBackup::exportToFile(Database& db, const QString& file_path,
+                                            const SecureString& password, ExportCounts* counts)
 {
-    Database& db = Database::instance();
     if (!db.isValid())
         return Result::DATABASE_UNAVAILABLE;
 
@@ -399,22 +465,42 @@ JsonBackup::Result JsonBackup::exportToFile(const QString& file_path, const Secu
     root.insert("salt", QString::fromLatin1(salt.toHex()));
     root.insert("verifier", QString::fromLatin1(verifier->toHex()));
 
+    // A record that cannot be written whole fails the export. Half of one in the file would be read
+    // back as a record whose fields the user had emptied.
     QJsonArray routers_array;
     const QList<RouterConfig> routers = db.routerList();
     for (const RouterConfig& router : std::as_const(routers))
-        routers_array.append(buildRouter(router, cryptor));
+    {
+        std::optional<QJsonObject> object = buildRouter(router, cryptor);
+        if (!object.has_value())
+            return Result::INTERNAL_ERROR;
+
+        routers_array.append(*object);
+    }
     root.insert("routers", routers_array);
 
     QJsonArray groups_array;
     const QList<GroupConfig> groups = db.allGroups();
     for (const GroupConfig& group : std::as_const(groups))
-        groups_array.append(buildGroup(group, cryptor));
+    {
+        std::optional<QJsonObject> object = buildGroup(group, cryptor);
+        if (!object.has_value())
+            return Result::INTERNAL_ERROR;
+
+        groups_array.append(*object);
+    }
     root.insert("groups", groups_array);
 
     QJsonArray hosts_array;
     const QList<HostConfig> hosts = db.allHosts();
     for (const HostConfig& host : std::as_const(hosts))
-        hosts_array.append(buildHost(host, cryptor));
+    {
+        std::optional<QJsonObject> object = buildHost(host, cryptor);
+        if (!object.has_value())
+            return Result::INTERNAL_ERROR;
+
+        hosts_array.append(*object);
+    }
     root.insert("hosts", hosts_array);
 
     QJsonDocument document(root);
@@ -445,8 +531,8 @@ JsonBackup::Result JsonBackup::exportToFile(const QString& file_path, const Secu
 
 //--------------------------------------------------------------------------------------------------
 // static
-JsonBackup::Result JsonBackup::importFromFile(const QString& file_path, const SecureString& password,
-                                              ImportCounts* counts)
+JsonBackup::Result JsonBackup::importFromFile(Database& db, const QString& file_path,
+                                              const SecureString& password, ImportCounts* counts)
 {
     QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly))
@@ -486,7 +572,6 @@ JsonBackup::Result JsonBackup::importFromFile(const QString& file_path, const Se
     if (!cryptor->decrypt(verifier).has_value())
         return Result::WRONG_PASSWORD;
 
-    Database& db = Database::instance();
     if (!db.isValid())
         return Result::DATABASE_UNAVAILABLE;
 
@@ -502,17 +587,17 @@ JsonBackup::Result JsonBackup::importFromFile(const QString& file_path, const Se
 
         QJsonObject router_object = value.toObject();
         qint64 old_id = router_object.value("id").toInteger(0);
-        qint64 new_id = importRouter(router_object, *cryptor, &counters);
+        qint64 new_id = importRouter(db, router_object, *cryptor, &counters);
         if (new_id != 0)
             router_id_map.insert(old_id, new_id);
     }
 
     QHash<qint64, qint64> group_id_map;
     QJsonArray groups_array = root.value("groups").toArray();
-    importGroups(groups_array, *cryptor, &group_id_map, &counters);
+    importGroups(db, groups_array, *cryptor, &group_id_map, &counters);
 
     QJsonArray hosts_array = root.value("hosts").toArray();
-    importHosts(hosts_array, group_id_map, router_id_map, *cryptor, &counters);
+    importHosts(db, hosts_array, group_id_map, router_id_map, *cryptor, &counters);
 
     cryptor.reset();
 

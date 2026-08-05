@@ -78,6 +78,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/search_result_model_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
+    json_backup_unittest.cc
     router_state_unittest.cc
     page_model_unittest.cc
     search_page_model_unittest.cc
