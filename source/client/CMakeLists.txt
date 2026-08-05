@@ -74,6 +74,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/host_list_model_unittest.cc
     desktop/management/local_host_list_model_unittest.cc
     desktop/management/relay_list_model_unittest.cc
+    desktop/management/search_result_model_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
     router_state_unittest.cc

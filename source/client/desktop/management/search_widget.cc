@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QIODevice>
+#include <QItemSelectionModel>
 #include <QLabel>
 #include <QMenu>
 #include <QPainter>
@@ -38,7 +39,7 @@
 #include <QTextOption>
 #include <QTimer>
 #include <QToolButton>
-#include <QTreeWidget>
+#include <QTreeView>
 #include <QVBoxLayout>
 
 #include <optional>
@@ -118,61 +119,41 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
     return parts.join(" / ");
 }
 
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
-SearchWidget::LocalItem::LocalItem(const HostConfig& host, const QString& group_path,
-                                   QTreeWidget* parent)
-    : Item(Type::LOCAL, parent)
+SearchResultModel::Row makeLocalRow(const HostConfig& host, const QString& group_path)
 {
-    setIcon(kColumnName, QIcon(":/img/computer.svg"));
-    updateFrom(host, group_path);
+    SearchResultModel::Row row;
+    row.type = SearchResultModel::Type::LOCAL;
+    row.host = host;
+    row.source = group_path;
+    return row;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::LocalItem::updateFrom(const HostConfig& host, const QString& group_path)
+// A router host is put into a record of the same shape as one of the address book, so a row of
+// either kind is shown and connected to the same way. The record is never stored, so it has no id.
+SearchResultModel::Row makeRouterRow(qint64 router_id, const Router::Host& host,
+                                     const QString& source_label)
 {
-    host_ = host;
-
-    QString single_line_comment = host.comment();
-    single_line_comment.replace('\n', ' ').replace('\r', ' ');
-
-    setText(kColumnName, host.name());
-    setText(kColumnAddress, host.address());
-    setText(kColumnGroup, group_path);
-    setToolTip(kColumnGroup, group_path);
-    setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, host.comment());
-}
-
-//--------------------------------------------------------------------------------------------------
-SearchWidget::RouterItem::RouterItem(qint64 router_id, const Router::Host& host,
-                                     const QString& source_label, QTreeWidget* parent)
-    : Item(Type::ROUTER, parent)
-{
-    setIcon(kColumnName, QIcon(":/img/computer.svg"));
-
     QString name = host.display_name;
     if (name.isEmpty())
         name = host.computer_name;
 
-    host_.setRouterId(router_id);
-    host_.setAddress(hostIdToString(host.host_id));
-    host_.setName(name);
-    host_.setUsername(host.user_name);
-    host_.setPassword(host.password);
-    host_.setComment(host.comment);
+    SearchResultModel::Row row;
+    row.type = SearchResultModel::Type::ROUTER;
+    row.source = source_label;
 
-    QString single_line_comment = host.comment;
-    single_line_comment.replace('\n', ' ').replace('\r', ' ');
+    row.host.setRouterId(router_id);
+    row.host.setAddress(hostIdToString(host.host_id));
+    row.host.setName(name);
+    row.host.setUsername(host.user_name);
+    row.host.setPassword(host.password);
+    row.host.setComment(host.comment);
 
-    setText(kColumnName, name);
-    setText(kColumnAddress, host_.address());
-    setText(kColumnGroup, source_label);
-    setToolTip(kColumnGroup, source_label);
-    setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, host.comment.toHtmlEscaped());
+    return row;
 }
+
+} // namespace
 
 class SearchWidget::HighlightDelegate final : public QStyledItemDelegate
 {
@@ -257,16 +238,18 @@ SearchWidget::SearchWidget(QWidget* parent)
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    tree_host_ = new QTreeWidget(this);
+    model_ = new SearchResultModel(this);
+
+    tree_host_ = new QTreeView(this);
     tree_host_->setContextMenuPolicy(Qt::CustomContextMenu);
     tree_host_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tree_host_->setRootIsDecorated(false);
     tree_host_->setIndentation(0);
-    tree_host_->setSortingEnabled(true);
-    tree_host_->setColumnCount(4);
+    tree_host_->setModel(model_);
 
-    QStringList headers;
-    headers << tr("Name") << tr("Address / ID") << tr("Group") << tr("Comment");
-    tree_host_->setHeaderLabels(headers);
+    // Turned on after the model is set: the view wires the header up to the sort of whatever model
+    // it has, and without one there is nothing to sort.
+    tree_host_->setSortingEnabled(true);
 
     QHeaderView* header = tree_host_->header();
     header->resizeSection(kColumnName, 200);
@@ -283,23 +266,24 @@ SearchWidget::SearchWidget(QWidget* parent)
     header->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header, &QHeaderView::customContextMenuRequested, this, &SearchWidget::onHeaderContextMenu);
 
-    connect(tree_host_, &QTreeWidget::itemActivated,
-            this, [this](QTreeWidgetItem* item, int /* column */)
+    connect(tree_host_, &QAbstractItemView::activated, this, [this](const QModelIndex& index)
     {
-        if (!item)
+        if (!index.isValid())
             return;
 
-        tree_host_->setCurrentItem(item);
+        tree_host_->setCurrentIndex(index);
         emit sig_activated();
     });
 
-    connect(tree_host_, &QTreeWidget::currentItemChanged, this, &SearchWidget::sig_currentChanged);
+    connect(tree_host_->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &SearchWidget::sig_currentChanged);
 
-    connect(tree_host_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& pos)
+    connect(tree_host_, &QWidget::customContextMenuRequested, this, [this](const QPoint& pos)
     {
-        Item* item = static_cast<Item*>(tree_host_->itemAt(pos));
-        if (item)
-            tree_host_->setCurrentItem(item);
+        const QModelIndex index = tree_host_->indexAt(pos);
+        if (index.isValid())
+            tree_host_->setCurrentIndex(index);
+
         emit sig_contextMenu(tree_host_->viewport()->mapToGlobal(pos));
     });
 
@@ -350,7 +334,7 @@ void SearchWidget::search(const QString& query)
 {
     current_query_ = query;
     highlight_delegate_->setQuery(query);
-    tree_host_->clear();
+    model_->clear();
 
     ++generation_;
     page_model_.clear();
@@ -582,7 +566,7 @@ void SearchWidget::showCurrentPage()
             return;
     }
 
-    tree_host_->clear();
+    QList<SearchResultModel::Row> rows;
 
     for (const PageSlice& slice : std::as_const(page_slices_))
     {
@@ -596,15 +580,17 @@ void SearchWidget::showCurrentPage()
                     break;
 
                 const HostConfig& host = local_matches_[i];
-                new LocalItem(host, buildGroupPath(host.groupId(), local_groups_), tree_host_);
+                rows.append(makeLocalRow(host, buildGroupPath(host.groupId(), local_groups_)));
             }
         }
         else
         {
             for (const Router::Host& host : std::as_const(slice.router_hosts))
-                new RouterItem(source.router_id, host, source.label, tree_host_);
+                rows.append(makeRouterRow(source.router_id, host, source.label));
         }
     }
+
+    model_->setRows(rows);
 
     updateStatusLabels();
 }
@@ -662,7 +648,7 @@ void SearchWidget::clear()
     router_search_timer_->stop();
     current_query_.clear();
     highlight_delegate_->setQuery(QString());
-    tree_host_->clear();
+    model_->clear();
 
     ++generation_;
     page_model_.clear();
@@ -676,27 +662,26 @@ void SearchWidget::clear()
 }
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item* SearchWidget::currentItem()
+const SearchResultModel::Row* SearchWidget::currentRow() const
 {
-    return static_cast<Item*>(tree_host_->currentItem());
+    return model_->rowAt(tree_host_->currentIndex().row());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::setCurrentHost(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
-    if (!item)
+    const int row = model_->rowOfEntry(entry_id);
+    if (row < 0)
         return;
 
-    tree_host_->setCurrentItem(item);
+    tree_host_->setCurrentIndex(model_->index(row, 0));
     tree_host_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::refreshItem(qint64 entry_id)
 {
-    LocalItem* item = findItemByEntryId(entry_id);
-    if (!item)
+    if (model_->rowOfEntry(entry_id) < 0)
         return;
 
     std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
@@ -712,24 +697,23 @@ void SearchWidget::refreshItem(qint64 entry_id)
     for (const GroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);
 
-    item->updateFrom(*updated, buildGroupPath(updated->groupId(), groups));
+    model_->updateEntry(*updated, buildGroupPath(updated->groupId(), groups));
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByEntryId(entry_id);
-    if (!item)
+    const int row = model_->rowOfEntry(entry_id);
+    if (row < 0)
         return;
 
-    int row = tree_host_->indexOfTopLevelItem(item);
-    delete tree_host_->takeTopLevelItem(row);
+    model_->removeEntry(entry_id);
 
-    int count = tree_host_->topLevelItemCount();
+    // The row the user was on is gone, so the one that took its place is picked instead.
+    const int count = model_->rowCount();
     if (count > 0)
     {
-        int next_row = qMin(row, count - 1);
-        tree_host_->setCurrentItem(tree_host_->topLevelItem(next_row));
+        tree_host_->setCurrentIndex(model_->index(qMin(row, count - 1), 0));
         tree_host_->setFocus();
     }
 
@@ -794,7 +778,9 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(tree_host_->headerItem()->text(i), i, &menu);
+        const QString name = model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+
+        ColumnAction* action = new ColumnAction(name, i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -804,19 +790,6 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
-}
-
-//--------------------------------------------------------------------------------------------------
-SearchWidget::LocalItem* SearchWidget::findItemByEntryId(qint64 entry_id) const
-{
-    const int count = tree_host_->topLevelItemCount();
-    for (int i = 0; i < count; ++i)
-    {
-        LocalItem* item = dynamic_cast<LocalItem*>(tree_host_->topLevelItem(i));
-        if (item && item->entryId() == entry_id)
-            return item;
-    }
-    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

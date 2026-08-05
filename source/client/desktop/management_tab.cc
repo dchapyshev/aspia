@@ -695,19 +695,19 @@ void ManagementTab::onConnectAction(QAction* action)
     }
     else if (current_content_ == search_widget_)
     {
-        SearchWidget::Item* item = search_widget_->currentItem();
-        if (!item)
+        const SearchResultModel::Row* row = search_widget_->currentRow();
+        if (!row)
             return;
 
-        if (item->type() == SearchWidget::Item::Type::ROUTER)
+        if (row->type == SearchResultModel::Type::ROUTER)
         {
-            host = item->hostConfig();
+            host = row->host;
             if (!validateHostForConnect(host))
                 return;
         }
         else
         {
-            std::optional<HostConfig> found = Database::instance().findHost(item->entryId());
+            std::optional<HostConfig> found = Database::instance().findHost(row->host.id());
             if (!found.has_value())
             {
                 MsgBox::warning(this,
@@ -786,20 +786,20 @@ void ManagementTab::onRouterGroupConnect()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onSearchConnect()
 {
-    SearchWidget::Item* item = search_widget_->currentItem();
-    if (!item)
+    const SearchResultModel::Row* row = search_widget_->currentRow();
+    if (!row)
         return;
 
-    if (item->type() == SearchWidget::Item::Type::ROUTER)
+    if (row->type == SearchResultModel::Type::ROUTER)
     {
-        HostConfig host = item->hostConfig();
+        HostConfig host = row->host;
         if (!validateHostForConnect(host))
             return;
         emit sig_connectRequested(host, defaultSessionType());
     }
     else
     {
-        onLocalConnect(item->entryId());
+        onLocalConnect(row->host.id());
     }
 }
 
@@ -844,8 +844,8 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onSearchContextMenu(const QPoint& pos)
 {
-    SearchWidget::Item* item = search_widget_->currentItem();
-    if (!item)
+    const SearchResultModel::Row* row = search_widget_->currentRow();
+    if (!row)
         return;
 
     QMenu menu;
@@ -862,10 +862,10 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     addProxy(ui->action_system_info_connect);
 
     std::optional<HostConfig> host;
-    if (item->type() == SearchWidget::Item::Type::ROUTER)
-        host = item->hostConfig();
+    if (row->type == SearchResultModel::Type::ROUTER)
+        host = row->host;
     else
-        host = Database::instance().findHost(item->entryId());
+        host = Database::instance().findHost(row->host.id());
 
     if (host.has_value())
     {
@@ -874,7 +874,7 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     }
 
     // Router hosts have no address-book record to edit, copy or delete.
-    if (item->type() == SearchWidget::Item::Type::LOCAL)
+    if (row->type == SearchResultModel::Type::LOCAL)
     {
         menu.addSeparator();
         menu.addAction(ui->action_edit_host);
@@ -1738,9 +1738,8 @@ void ManagementTab::updateActionsState()
 
     if (current_content_ == search_widget_)
     {
-        SearchWidget::Item* host_item = search_widget_->currentItem();
-        const bool is_local_host = host_item != nullptr &&
-            host_item->type() == SearchWidget::Item::Type::LOCAL;
+        const SearchResultModel::Row* row = search_widget_->currentRow();
+        const bool is_local_host = row != nullptr && row->type == SearchResultModel::Type::LOCAL;
 
         // Address-book operations apply to local hosts only; router hosts can only be connected.
         ui->action_delete_host->setVisible(is_local_host);
@@ -1996,8 +1995,8 @@ qint64 ManagementTab::currentHostEntryId() const
 
     if (current_content_ == search_widget_)
     {
-        SearchWidget::Item* item = search_widget_->currentItem();
-        return item ? item->entryId() : -1;
+        const SearchResultModel::Row* row = search_widget_->currentRow();
+        return row ? row->host.id() : -1;
     }
 
     return -1;

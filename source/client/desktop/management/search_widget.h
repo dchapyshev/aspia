@@ -22,19 +22,19 @@
 #include <QHash>
 #include <QList>
 #include <QPoint>
-#include <QTreeWidgetItem>
 
 #include "client/config.h"
 #include "client/router.h"
 #include "client/search_page_model.h"
 #include "client/desktop/management/content_widget.h"
+#include "client/desktop/management/search_result_model.h"
 
 class IconTextButton;
 class QComboBox;
 class QLabel;
 class QStatusBar;
 class QTimer;
-class QTreeWidget;
+class QTreeView;
 
 class SearchWidget final : public ContentWidget
 {
@@ -44,51 +44,12 @@ public:
     explicit SearchWidget(QWidget* parent = nullptr);
     ~SearchWidget() final;
 
-    class Item : public QTreeWidgetItem
-    {
-    public:
-        enum class Type { LOCAL, ROUTER };
-
-        Item(Type type, QTreeWidget* parent)
-            : QTreeWidgetItem(parent),
-              type_(type)
-        {
-            // Nothing
-        }
-
-        Type type() const { return type_; }
-
-        // Local entry id, or -1 for router hosts (host_.id() defaults to -1 and is never set).
-        qint64 entryId() const { return host_.id(); }
-        HostConfig hostConfig() const { return host_; }
-
-    protected:
-        HostConfig host_;
-
-    private:
-        const Type type_;
-    };
-
-    class LocalItem final : public Item
-    {
-    public:
-        LocalItem(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
-
-        qint64 groupId() const { return host_.groupId(); }
-        QString computerName() const { return host_.name(); }
-        void updateFrom(const HostConfig& host, const QString& group_path);
-    };
-
-    class RouterItem final : public Item
-    {
-    public:
-        RouterItem(qint64 router_id, const Router::Host& host, const QString& source_label,
-                   QTreeWidget* parent);
-    };
-
     void search(const QString& query);
     void clear();
-    Item* currentItem();
+
+    // Null when nothing is selected.
+    const SearchResultModel::Row* currentRow() const;
+
     QString currentQuery() const { return current_query_; }
     void setCurrentHost(qint64 entry_id);
     void refreshItem(qint64 entry_id);
@@ -115,7 +76,6 @@ private slots:
 private:
     class HighlightDelegate;
 
-    LocalItem* findItemByEntryId(qint64 entry_id) const;
     void updateStatusLabels();
 
     // Counts the matches of the local address book and of every online router, in that order, and
@@ -129,7 +89,8 @@ private:
     void showCurrentPage();
     void updatePagination();
 
-    QTreeWidget* tree_host_ = nullptr;
+    QTreeView* tree_host_ = nullptr;
+    SearchResultModel* model_ = nullptr;
     QLabel* status_results_label_ = nullptr;
     HighlightDelegate* highlight_delegate_ = nullptr;
     QTimer* router_search_timer_ = nullptr;

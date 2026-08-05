@@ -77,6 +77,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     search_dialog.cc
     search_dialog.h
     search_dialog.ui
+    search_result_model.cc
+    search_result_model.h
     search_widget.cc
     search_widget.h
     sidebar.cc
