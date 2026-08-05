@@ -22,6 +22,7 @@
 #include <memory>
 
 #include "client/router.h"
+#include "client/desktop/management/client_list_model.h"
 #include "client/desktop/management/content_widget.h"
 
 namespace Ui {
@@ -79,9 +80,11 @@ private slots:
 private:
     void fetchClients();
     void updateStatusLabel();
+    const proto::router::ClientInfo* currentClient() const;
 
     std::unique_ptr<Ui::RouterClientsWidget> ui;
     qint64 router_id_ = 0;
+    ClientListModel* model_ = nullptr;
     QLabel* status_clients_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterClientsWidget)

@@ -20,7 +20,6 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QCollator>
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
@@ -43,64 +42,6 @@
 #include "proto/router_constants.h"
 #include "ui_router_clients_widget.h"
 
-namespace {
-
-class ClientTreeItem final : public QTreeWidgetItem
-{
-public:
-    explicit ClientTreeItem(const proto::router::ClientInfo& info)
-    {
-        setIcon(0, QIcon(":/img/computer.svg"));
-        updateItem(info);
-    }
-
-    void updateItem(const proto::router::ClientInfo& updated_info)
-    {
-        info = updated_info;
-
-        QString time = QLocale::system().toString(
-            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
-
-        setText(0, QString::fromStdString(info.computer_name()));
-        setText(1, QString::fromStdString(info.ip_address()));
-        setText(2, time);
-
-        const proto::peer::Version& version = info.version();
-
-        setText(3, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
-        setText(4, QString::fromStdString(info.architecture()));
-        setText(5, QString::fromStdString(info.os_name()));
-    }
-
-    // QTreeWidgetItem implementation.
-    bool operator<(const QTreeWidgetItem& other) const final
-    {
-        int column = treeWidget()->sortColumn();
-        if (column == 0)
-        {
-            QCollator collator;
-            collator.setCaseSensitivity(Qt::CaseInsensitive);
-            collator.setNumericMode(true);
-
-            return collator.compare(text(0), other.text(0)) < 0;
-        }
-        else if (column == 2)
-        {
-            const ClientTreeItem* other_item = static_cast<const ClientTreeItem*>(&other);
-            return info.timepoint() < other_item->info.timepoint();
-        }
-
-        return QTreeWidgetItem::operator<(other);
-    }
-
-    proto::router::ClientInfo info;
-
-private:
-    Q_DISABLE_COPY_MOVE(ClientTreeItem)
-};
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_CLIENTS, parent),
@@ -110,15 +51,22 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    model_ = new ClientListModel(this);
+    ui->tree_clients->setModel(model_);
+
+    // Turned on again after the model is set: the view wires the header up to the sort of whatever
+    // model it has, and at the time the generated setup ran there was none.
+    ui->tree_clients->setSortingEnabled(true);
+
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_clients, &QWidget::customContextMenuRequested,
             this, &RouterClientsWidget::onClientContextMenu);
 
     ui->tree_clients->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_clients->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterClientsWidget::onHeaderContextMenu);
 
-    connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged,
+    connect(ui->tree_clients->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterClientsWidget::sig_currentChanged);
 }
 
@@ -144,7 +92,7 @@ void RouterClientsWidget::showRouter(qint64 router_id)
             {
                 if (status != Router::Status::ONLINE)
                 {
-                    ui->tree_clients->clear();
+                    model_->clear();
                     updateStatusLabel();
                 }
             });
@@ -153,7 +101,7 @@ void RouterClientsWidget::showRouter(qint64 router_id)
 
     router_id_ = router_id;
 
-    ui->tree_clients->clear();
+    model_->clear();
     updateStatusLabel();
     fetchClients();
 }
@@ -161,27 +109,26 @@ void RouterClientsWidget::showRouter(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterClientsWidget::hasSelectedClient() const
 {
-    return ui->tree_clients->currentItem() != nullptr;
+    return currentClient() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 int RouterClientsWidget::clientCount() const
 {
-    return ui->tree_clients->topLevelItemCount();
+    return model_->rowCount();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::copyCurrentClientRow()
 {
-    QTreeWidgetItem* item = ui->tree_clients->currentItem();
-    if (!item)
+    const int row = ui->tree_clients->currentIndex().row();
+    if (row < 0)
         return;
 
     QString result;
-    const int column_count = item->columnCount();
-    for (int i = 0; i < column_count; ++i)
+    for (int i = 0; i < model_->columnCount(); ++i)
     {
-        const QString text = item->text(i);
+        const QString text = model_->index(row, i).data().toString();
         if (!text.isEmpty())
             result += text + ' ';
     }
@@ -197,11 +144,11 @@ void RouterClientsWidget::copyCurrentClientRow()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::copyCurrentClientColumn(int column)
 {
-    QTreeWidgetItem* item = ui->tree_clients->currentItem();
-    if (!item || column < 0)
+    const int row = ui->tree_clients->currentIndex().row();
+    if (row < 0 || column < 0 || column >= model_->columnCount())
         return;
 
-    const QString text = item->text(column);
+    const QString text = model_->index(row, column).data().toString();
     if (text.isEmpty())
         return;
 
@@ -271,10 +218,9 @@ void RouterClientsWidget::save()
 
     QJsonArray root_array;
 
-    for (int i = 0; i < ui->tree_clients->topLevelItemCount(); ++i)
+    for (int i = 0; i < model_->rowCount(); ++i)
     {
-        const proto::router::ClientInfo& info =
-            static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(i))->info;
+        const proto::router::ClientInfo& info = *model_->clientAt(i);
 
         QJsonObject client_object;
 
@@ -331,15 +277,15 @@ void RouterClientsWidget::deactivate(QStatusBar* statusbar)
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onDisconnectClient()
 {
-    ClientTreeItem* tree_item = static_cast<ClientTreeItem*>(ui->tree_clients->currentItem());
-    if (!tree_item)
+    const proto::router::ClientInfo* client = currentClient();
+    if (!client)
     {
         LOG(INFO) << "No selected client";
         return;
     }
 
     if (MsgBox::question(this, tr("Are you sure you want to disconnect client \"%1\"?")
-        .arg(QString::fromStdString(tree_item->info.computer_name()))) != MsgBox::Yes)
+        .arg(QString::fromStdString(client->computer_name()))) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Disconnect client rejected by user";
         return;
@@ -350,13 +296,13 @@ void RouterClientsWidget::onDisconnectClient()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    router->disconnectClient(tree_item->info.entry_id(), this, &RouterClientsWidget::onClientResultReceived);
+    router->disconnectClient(client->entry_id(), this, &RouterClientsWidget::onClientResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onDisconnectAllClients()
 {
-    if (ui->tree_clients->topLevelItemCount() <= 0)
+    if (model_->rowCount() <= 0)
     {
         LOG(INFO) << "Client list is empty";
         return;
@@ -380,46 +326,16 @@ void RouterClientsWidget::onDisconnectAllClients()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& clients)
 {
-    auto has_with_id = [](const proto::router::ClientList& clients, qint64 entry_id)
-    {
-        for (int i = 0; i < clients.client_size(); ++i)
-        {
-            if (clients.client(i).entry_id() == entry_id)
-                return true;
-        }
+    const proto::router::ClientInfo* selected = currentClient();
+    const qint64 selected_entry_id = selected ? selected->entry_id() : 0;
 
-        return false;
-    };
+    model_->setClients(clients);
 
-    // Remove from the UI all clients that are not in the list.
-    for (int i = ui->tree_clients->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        ClientTreeItem* item = static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(i));
-
-        if (!has_with_id(clients, item->info.entry_id()))
-            delete item;
-    }
-
-    // Adding and updating elements in the UI.
-    for (int i = 0; i < clients.client_size(); ++i)
-    {
-        const proto::router::ClientInfo& info = clients.client(i);
-        bool found = false;
-
-        for (int j = 0; j < ui->tree_clients->topLevelItemCount(); ++j)
-        {
-            ClientTreeItem* item = static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(j));
-            if (item->info.entry_id() == info.entry_id())
-            {
-                item->updateItem(info);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            ui->tree_clients->addTopLevelItem(new ClientTreeItem(info));
-    }
+    // The list is replaced whole, so the row the user was on has to be found again by the session
+    // it was showing.
+    const int selected_row = model_->rowOf(selected_entry_id);
+    if (selected_row >= 0)
+        ui->tree_clients->setCurrentIndex(model_->index(selected_row, 0));
 
     emit sig_currentChanged();
     updateStatusLabel();
@@ -440,11 +356,11 @@ void RouterClientsWidget::onClientResultReceived(const proto::router::ClientResu
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onClientContextMenu(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui->tree_clients->itemAt(pos);
-    if (item)
-        ui->tree_clients->setCurrentItem(item);
+    const QModelIndex index = ui->tree_clients->indexAt(pos);
+    if (index.isValid())
+        ui->tree_clients->setCurrentIndex(index);
 
-    const int column = ui->tree_clients->indexAt(pos).column();
+    const int column = index.column();
     emit sig_contextMenu(ui->tree_clients->viewport()->mapToGlobal(pos), column);
 }
 
@@ -456,7 +372,8 @@ void RouterClientsWidget::onHeaderContextMenu(const QPoint& pos)
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui->tree_clients->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(
+            model_->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString(), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -484,5 +401,11 @@ void RouterClientsWidget::fetchClients()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::updateStatusLabel()
 {
-    status_clients_label_->setText(tr("%n client(s)", "", ui->tree_clients->topLevelItemCount()));
+    status_clients_label_->setText(tr("%n client(s)", "", model_->rowCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+const proto::router::ClientInfo* RouterClientsWidget::currentClient() const
+{
+    return model_->clientAt(ui->tree_clients->currentIndex().row());
 }

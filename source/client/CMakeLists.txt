@@ -69,6 +69,7 @@ list(APPEND SOURCE_CLIENT
     main.cc)
 
 list(APPEND SOURCE_CLIENT_TESTS
+    desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc

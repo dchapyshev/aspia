@@ -24,7 +24,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeWidget" name="tree_clients">
+    <widget class="QTreeView" name="tree_clients">
      <property name="editTriggers">
       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
@@ -43,36 +43,6 @@
      <property name="expandsOnDoubleClick">
       <bool>false</bool>
      </property>
-     <column>
-      <property name="text">
-       <string>Computer Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>IP Address</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Connect Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Version</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Architecture</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Operating System</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

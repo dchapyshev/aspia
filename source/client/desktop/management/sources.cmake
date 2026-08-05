@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
+    client_list_model.cc
+    client_list_model.h
     content_widget.cc
     content_widget.h
     drag_and_drop.cc
