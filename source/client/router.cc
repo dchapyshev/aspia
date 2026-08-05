@@ -282,17 +282,17 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 {
     LOG(INFO) << "User keys received (user_id:" << user_keys.user_id() << ")";
 
-    const RouterState::KeysResult result =
-        state_.applyUserKeys(user_keys, SecureString(config_.password()));
+    const RouterKeys::Result result =
+        state_.keys().apply(user_keys, SecureString(config_.password()));
 
-    if (result == RouterState::KeysResult::PASSWORD_CHANGE_REQUIRED)
+    if (result == RouterKeys::Result::PASSWORD_CHANGE_REQUIRED)
     {
         LOG(WARNING) << "User has no wrap key/salt; prompting password change";
         emit sig_passwordChangeRequired(config_.routerId());
         return;
     }
 
-    if (result == RouterState::KeysResult::DECRYPT_FAILED)
+    if (result == RouterKeys::Result::DECRYPT_FAILED)
     {
         // Nothing recovers from this. The password opened the account (the handshake passed) but
         // not the private key stored with it, so every workspace stays locked and even a password

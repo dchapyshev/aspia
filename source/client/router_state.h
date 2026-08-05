@@ -21,43 +21,25 @@
 
 #include <QHash>
 
-#include <string_view>
-#include <unordered_map>
-
-#include "base/crypto/data_cryptor.h"
-#include "base/crypto/secure_byte_array.h"
-#include "base/crypto/secure_string.h"
+#include "client/router_keys.h"
 #include "client/router_rpc.h"
 #include "client/router_types.h"
 #include "proto/router_client.h"
 
 namespace proto::router {
-class ChangePasswordRequest;
-class Group;
-class Host;
 class RouterToAdmin;
 class RouterToManager;
-class User;
-class UserKeys;
-class Workspace;
 } // namespace proto::router
 
-// Everything the client knows about a router session except the socket: who we are, the group keys
-// we hold, the replies we still wait for and the decoded lists we cached. No networking and no
-// database, so the decoding, the key handling and the cache policy are unit-testable; Router keeps
-// the transport, the status machine and the persistence.
+// Everything the client knows about a router session except the socket, tied together: the keys
+// (RouterKeys), the replies still waited for (RouterRpc) and the decoded lists it caches itself.
+// No networking and no database; Router keeps the transport, the status machine and the
+// persistence.
 class RouterState
 {
 public:
     RouterState() = default;
     ~RouterState() = default;
-
-    enum class KeysResult
-    {
-        OK,                      // Identity and workspace keys are loaded.
-        PASSWORD_CHANGE_REQUIRED, // The record has no wrapped private key yet.
-        DECRYPT_FAILED           // The password does not open the stored private key.
-    };
 
     // Identifies a cached host list. The page is part of the identity: two pages of the same
     // selection are different answers, and serving one for the other would show the wrong rows.
@@ -77,13 +59,20 @@ public:
     };
 
     //----------------------------------------------------------------------------------------------
-    // Session identity and keys.
+    // The parts of the session with a life of their own.
     //----------------------------------------------------------------------------------------------
 
-    // Takes the identity and the workspace keys of the session from the UserKeys message. A key
-    // that cannot be unwrapped is skipped, leaving a hole that no refetch can repair - only a
-    // re-grant can.
-    KeysResult applyUserKeys(const proto::router::UserKeys& user_keys, const SecureString& password);
+    // The identity and the key material. The session decides when they are loaded and dropped;
+    // whoever decodes or builds an encrypted record borrows the cryptors from here.
+    RouterKeys& keys() { return keys_; }
+
+    // The correlation of requests to the callers waiting for the answers. The session only owns
+    // it, so a suspended or lost session can fail every waiting caller.
+    RouterRpc& rpc() { return rpc_; }
+
+    //----------------------------------------------------------------------------------------------
+    // Session lifetime.
+    //----------------------------------------------------------------------------------------------
 
     // Drops the identity, the keys and the requests we still wait for. The lists stay: they are
     // dropped by clearCaches() when the session is known to be gone.
@@ -92,19 +81,6 @@ public:
     // Drops every cached list. Also called when the session is suspended (the router re-opens the
     // two-factor stage), because from that moment nothing guarantees the lists are still current.
     void clearCaches();
-
-    qint64 userId() const { return user_id_; }
-    const QString& userName() const { return user_name_; }
-    bool hasWorkspaceKey(qint64 workspace_id) const;
-    int workspaceKeyCount() const { return static_cast<int>(workspace_cryptors_.size()); }
-
-    //----------------------------------------------------------------------------------------------
-    // Requests we still wait for.
-    //----------------------------------------------------------------------------------------------
-
-    // The correlation of requests to the callers waiting for the answers lives in its own module;
-    // the session only owns it, so a suspended or lost session can fail every waiting caller.
-    RouterRpc& rpc() { return rpc_; }
 
     //----------------------------------------------------------------------------------------------
     // Incoming messages.
@@ -143,9 +119,6 @@ public:
     // Decodes the group list of a workspace and caches it unless the reply is an error.
     RouterGroupList applyGroupList(const proto::router::GroupList& list);
 
-    RouterHostList decodeHostSearchResult(const proto::router::HostSearchResult& result) const;
-    RouterTempHostList decodeTempHostList(const proto::router::TempHostList& list) const;
-
     //----------------------------------------------------------------------------------------------
     // Cached lists.
     //----------------------------------------------------------------------------------------------
@@ -167,34 +140,9 @@ public:
     void clearHostCache() { cached_hosts_.clear(); }
     void clearGroupCache() { cached_groups_.clear(); }
 
-    //----------------------------------------------------------------------------------------------
-    // Requests: encoding.
-    //----------------------------------------------------------------------------------------------
-
-    // Encode an edited record into its message. Answers with a protocol error code, so a request
-    // the router would refuse is reported in the same terms without being sent.
-    std::string_view buildWorkspace(const RouterWorkspace& workspace,
-                                    proto::router::Workspace* out) const;
-    std::string_view buildHost(const RouterHost& host, proto::router::Host* out) const;
-    std::string_view buildGroup(qint64 workspace_id, const RouterGroup& group,
-                                proto::router::Group* out) const;
-
-    // Re-seals every workspace key we hold to |new_public_key| and appends the results to the
-    // message (any proto with a repeated WorkspaceKey workspace_key field).
-    void resealGroupKeys(const QByteArray& new_public_key, proto::router::User* user) const;
-    void resealGroupKeys(const QByteArray& new_public_key,
-                         proto::router::ChangePasswordRequest* request) const;
-
 private:
-    RouterHost decodeHost(const proto::router::Host& src) const;
-    SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
-
+    RouterKeys keys_;
     RouterRpc rpc_;
-
-    qint64 user_id_ = 0;
-    QString user_name_;
-    SecureByteArray user_private_key_;
-    std::unordered_map<qint64, DataCryptor> workspace_cryptors_;
 
     // Decoded list cache served to the list callers that accept a cached answer.
     bool workspaces_loaded_ = false;

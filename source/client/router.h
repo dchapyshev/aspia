@@ -32,6 +32,7 @@
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
 #include "client/config.h"
+#include "client/router_codec.h"
 #include "client/router_state.h"
 #include "client/router_types.h"
 #include "proto/router_admin.h"
@@ -332,7 +333,7 @@ void Router::addUser(const proto::router::User& user, QObject* receiver, Handler
     // An administrator has access to every workspace, so our workspace keys are sealed to the key
     // pair of the new user and become its access entries on the router.
     if (user.sessions() & proto::router::SESSION_TYPE_ADMIN)
-        state_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
+        state_.keys().resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
 
     state_.rpc().registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
@@ -347,7 +348,7 @@ void Router::modifyUser(const proto::router::User& user, QObject* receiver, Hand
     request->set_request_id(state_.rpc().nextRequestId());
     request->set_command_name(proto::router::kCommandUserModify);
     request->mutable_user()->CopyFrom(user);
-    state_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
+    state_.keys().resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
     state_.rpc().registerPending<proto::router::UserResult>(request, receiver, std::move(handler));
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -452,7 +453,7 @@ template<typename HandlerT>
 void Router::editHost(const Router::Host& host, QObject* receiver, HandlerT handler)
 {
     proto::router::Host serialized;
-    const std::string_view build_error = state_.buildHost(host, &serialized);
+    const std::string_view build_error = buildRouterHost(state_.keys(), host, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply will come. Without this the caller waits forever.
@@ -515,7 +516,7 @@ template<typename HandlerT>
 void Router::addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
-    const std::string_view build_error = state_.buildWorkspace(workspace, &ws);
+    const std::string_view build_error = buildRouterWorkspace(state_.keys(), workspace, &ws);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply will come. Without this the caller waits forever.
@@ -538,7 +539,7 @@ template<typename HandlerT>
 void Router::modifyWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
-    const std::string_view build_error = state_.buildWorkspace(workspace, &ws);
+    const std::string_view build_error = buildRouterWorkspace(state_.keys(), workspace, &ws);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply will come. Without this the caller waits forever.
@@ -574,7 +575,7 @@ template<typename HandlerT>
 void Router::addGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = state_.buildGroup(workspace_id, group, &serialized);
+    const std::string_view build_error = buildRouterGroup(state_.keys(), workspace_id, group, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply will come. Without this the caller waits forever.
@@ -598,7 +599,7 @@ template<typename HandlerT>
 void Router::modifyGroup(qint64 workspace_id, const Router::Group& group, QObject* receiver, HandlerT handler)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = state_.buildGroup(workspace_id, group, &serialized);
+    const std::string_view build_error = buildRouterGroup(state_.keys(), workspace_id, group, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply will come. Without this the caller waits forever.
@@ -727,7 +728,7 @@ void Router::searchHosts(const QString& query, qint64 offset, qint64 count, QObj
     state_.rpc().registerPending<proto::router::HostSearchResult>(request, receiver, std::move(handler),
         [this](const proto::router::HostSearchResult& raw)
     {
-        return state_.decodeHostSearchResult(raw);
+        return decodeRouterHostSearchResult(state_.keys(), raw);
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -742,7 +743,7 @@ void Router::listTempHosts(QObject* receiver, HandlerT handler)
     state_.rpc().registerPending<proto::router::TempHostList>(request, receiver, std::move(handler),
         [this](const proto::router::TempHostList& raw)
     {
-        return state_.decodeTempHostList(raw);
+        return decodeRouterTempHostList(raw);
     });
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -775,7 +776,7 @@ void Router::requestConnection(HostId host_id, QObject* receiver, HandlerT handl
 template<typename HandlerT>
 void Router::changePassword(const SecureString& new_password, QObject* receiver, HandlerT handler)
 {
-    RouterUser new_user = RouterUser::create(state_.userName(), new_password);
+    RouterUser new_user = RouterUser::create(state_.keys().userName(), new_password);
 
     proto::router::ClientToRouter message;
     auto* request = message.mutable_change_password_request();
@@ -786,7 +787,7 @@ void Router::changePassword(const SecureString& new_password, QObject* receiver,
     request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
     request->set_wrap_salt(new_user.wrap_salt.toStdString());
 
-    state_.resealGroupKeys(new_user.public_key, request);
+    state_.keys().resealGroupKeys(new_user.public_key, request);
 
     state_.rpc().registerPending<proto::router::ChangePasswordResult>(request, receiver,
         [this, new_password, handler = std::move(handler)](const proto::router::ChangePasswordResult& result)
