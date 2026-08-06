@@ -200,13 +200,16 @@ void ServiceWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceWorker::onTimer(TimePoint /* now */)
+void ServiceWorker::onTimer(TimePoint now)
 {
-    constexpr Minutes kConfirmationTimeout{ 1 };
+    // The dialog decides on its own clock, which starts later than this one because the request
+    // still travels over IPC and the window has to open. It takes up to a minute either way, so a
+    // minute here dropped the connection right before the answer arrived.
+    constexpr Minutes kConfirmationTimeout{ 2 };
 
     for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end();)
     {
-        if (Clock::now() - it->start_time >= kConfirmationTimeout)
+        if (now - it->start_time >= kConfirmationTimeout)
         {
             TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();
