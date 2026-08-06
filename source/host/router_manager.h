@@ -63,6 +63,7 @@ public slots:
     void start();
     void onSettingsChanged();
     void onOneTimeSessionsChanged(quint32 one_time_sessions);
+    void onNewOneTimePassword();
     void onUserSessionAttached();
 
 signals:

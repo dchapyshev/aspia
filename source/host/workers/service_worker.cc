@@ -742,7 +742,7 @@ void ServiceWorker::connectToRouter(const Location& location)
             update_worker, &UpdateWorker::onCheckUpdates, Qt::QueuedConnection);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
-    connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onSettingsChanged);
+    connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onNewOneTimePassword);
     connect(user_session_, &UserSession::sig_attached, router_manager_, &RouterManager::onUserSessionAttached);
 
     router_manager_->start();

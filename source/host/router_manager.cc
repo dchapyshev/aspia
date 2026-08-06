@@ -133,6 +133,19 @@ void RouterManager::onOneTimeSessionsChanged(quint32 one_time_sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterManager::onNewOneTimePassword()
+{
+    if (!database_.oneTimePassword())
+    {
+        LOG(INFO) << "One-time password is disabled";
+        return;
+    }
+
+    renewOneTimePassword();
+    emit sig_credentialsChanged(host_id_, one_time_password_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterManager::onUserSessionAttached()
 {
     emit sig_routerStateChanged(router_state_);
@@ -333,10 +346,7 @@ void RouterManager::onTimer(TimePoint now)
         tcp_channel_->tick(now);
 
     if (now >= password_expire_time_)
-    {
-        renewOneTimePassword();
-        emit sig_credentialsChanged(host_id_, one_time_password_);
-    }
+        onNewOneTimePassword();
 
     if (now >= reconnect_time_)
     {

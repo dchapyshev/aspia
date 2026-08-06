@@ -472,3 +472,26 @@ TEST_F(RouterManagerTest, OneTimePasswordSurvivesUnrelatedSettingsChanges)
     });
     EXPECT_EQ(lastPassword(), first_password);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Asking for a new password is the one thing that does take the current one away, and what the user
+// is shown afterwards is the password that was actually put in place.
+TEST_F(RouterManagerTest, ExplicitRequestReplacesTheOneTimePassword)
+{
+    startManager(true);
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
+
+    const SecureString first_password = lastPassword();
+    ASSERT_FALSE(first_password.isEmpty());
+
+    const int seen = credentials_received_.load();
+
+    host_worker_->invoke([this]() { manager_->onNewOneTimePassword(); });
+
+    EXPECT_GT(credentials_received_.load(), seen);
+    EXPECT_FALSE(lastPassword().isEmpty());
+    EXPECT_NE(lastPassword(), first_password);
+}
