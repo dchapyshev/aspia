@@ -157,7 +157,10 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     peer.os_name = osName();
     peer.address = address();
 
-    const HostIdResult result = handleHostIdRequest(database(), host_id_request, peer, host_id_);
+    ++id_request_count_;
+
+    const HostIdResult result =
+        handleHostIdRequest(database(), host_id_request, peer, host_id_, id_request_count_);
 
     if (result.action == HostIdResult::Action::IGNORE)
         return;

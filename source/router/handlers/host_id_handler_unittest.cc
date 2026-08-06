@@ -36,9 +36,9 @@ protected:
     }
 
     HostIdResult handle(const proto::router::HostIdRequest& request,
-                                 HostId current_host_id = kInvalidHostId)
+                        HostId current_host_id = kInvalidHostId, int request_count = 1)
     {
-        return handleHostIdRequest(db_, request, peer_, current_host_id);
+        return handleHostIdRequest(db_, request, peer_, current_host_id, request_count);
     }
 
     static proto::router::HostIdRequest existingIdRequest(std::string_view key)
@@ -142,9 +142,20 @@ TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheDatabaseIsUnavailable)
     ASSERT_FALSE(unavailable.isValid());
 
     const HostIdResult result =
-        handleHostIdRequest(unavailable, existingIdRequest("key-1"), peer_, kInvalidHostId);
+        handleHostIdRequest(unavailable, existingIdRequest("key-1"), peer_, kInvalidHostId, 1);
 
     EXPECT_EQ(result.action, HostIdResult::Action::CLOSE);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A lookup that finds nothing leaves the session free to ask again, and that is what a host told
+// "not found" does. A peer that keeps asking is spending the router, not looking for its id.
+TEST_F(HostIdHandlerTest, TooManyRequestsDisconnectTheHost)
+{
+    EXPECT_EQ(handle(existingIdRequest("key-unknown"), kInvalidHostId, 5).action,
+              HostIdResult::Action::SEND_RESPONSE);
+    EXPECT_EQ(handle(existingIdRequest("key-unknown"), kInvalidHostId, 6).action,
+              HostIdResult::Action::CLOSE);
 }
 
 //--------------------------------------------------------------------------------------------------

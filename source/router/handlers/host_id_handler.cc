@@ -28,15 +28,28 @@ namespace {
 // bound: an unauthenticated peer must not be able to push an arbitrary blob into the database.
 constexpr size_t kMaxHardwareIdSize = 64;
 
+// A request that finds nothing leaves the session without an id, so it does not spend the single
+// attempt the check below refuses a repeat with. Two requests are all a host ever needs, and the
+// rest is a peer that keeps the router looking things up for free.
+constexpr int kMaxIdRequests = 5;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 HostIdResult handleHostIdRequest(Database& database, const proto::router::HostIdRequest& request,
-                                 const HostIdPeer& peer, HostId current_host_id)
+                                 const HostIdPeer& peer, HostId current_host_id, int request_count)
 {
     using Action = HostIdResult::Action;
 
     HostIdResult result;
+
+    if (request_count > kMaxIdRequests)
+    {
+        LOG(ERROR) << "Too many host id requests in one session (" << request_count
+                   << "); disconnecting";
+        result.action = Action::CLOSE;
+        return result;
+    }
 
     // A host requests its id exactly once per session. Reject repeats so an untrusted host cannot
     // overwrite the assigned id and desync the pending-removal finalization the session does when

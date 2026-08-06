@@ -62,6 +62,7 @@ private:
     HostId host_id_ = kInvalidHostId;
     QByteArray key_hash_;
     QByteArray hw_id_;
+    int id_request_count_ = 0;
     bool remove_command_sent_ = false;
 
     Q_DISABLE_COPY_MOVE(HostNG)

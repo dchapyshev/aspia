@@ -54,6 +54,9 @@ const char kHardwareId[] = "hw-id-of-the-host";
 // How long a session that has not asked for an id is kept.
 constexpr Seconds kIdentifyTimeout{ 30 };
 
+// How many id requests one session may make.
+constexpr int kMaxIdRequests = 5;
+
 //--------------------------------------------------------------------------------------------------
 // A free loopback port for the listener of the worker. The port is released before the worker
 // starts, and the worker binds with reuse_address, so the window between the two is harmless.
@@ -230,6 +233,21 @@ protected:
         return waitFor([this]() { return assigned_host_id_.load() == host_id_; });
     }
 
+    // One more request for an existing id, the way a host that was told "not found" would repeat.
+    void sendIdRequest(const char* key)
+    {
+        peer_worker_->invoke([this, key]()
+        {
+            proto::router::HostToRouter message;
+            proto::router::HostIdRequest* request = message.mutable_host_id_request();
+            request->set_type(proto::router::HostIdRequest::EXISTING_ID);
+            request->set_key(key);
+            request->set_hw_id(kHardwareId);
+
+            channel_->send(0, serialize(message));
+        });
+    }
+
     // Fires the timer with the synthetic |now| until the router drops the peer. The polling covers
     // the gap between the authentication of the peer and the moment the worker picks the session up.
     [[nodiscard]] bool firedUntilDisconnected(TimePoint now)
@@ -297,6 +315,20 @@ TEST_F(HostWorkerTest, SilentSessionIsDropped)
     ASSERT_TRUE(connectHost(false));
 
     EXPECT_TRUE(firedUntilDisconnected(Clock::now() + kIdentifyTimeout + Seconds(1)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request that finds nothing does not spend the single attempt a session has, or a host told
+// "not found" could not ask for a new id. What it must not buy is an endless stream of lookups on
+// a connection that costs the peer nothing.
+TEST_F(HostWorkerTest, TooManyIdRequestsCloseTheSession)
+{
+    ASSERT_TRUE(connectHost(false));
+
+    for (int i = 0; i < kMaxIdRequests + 1; ++i)
+        sendIdRequest("the-key-nobody-knows");
+
+    EXPECT_TRUE(waitFor([this]() { return disconnected_.load(); }));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -76,8 +76,9 @@ struct HostIdResult
 
 // |current_host_id| is what the session was assigned already (kInvalidHostId while it has none):
 // a host asks exactly once per session, and a repeat is refused so it cannot overwrite the id its
-// pending-removal bookkeeping is tied to.
+// pending-removal bookkeeping is tied to. |request_count| counts this request in, including the
+// ones that found nothing and left the session without an id.
 HostIdResult handleHostIdRequest(Database& database, const proto::router::HostIdRequest& request,
-                                 const HostIdPeer& peer, HostId current_host_id);
+                                 const HostIdPeer& peer, HostId current_host_id, int request_count);
 
 #endif // ROUTER_HANDLERS_HOST_ID_HANDLER_H
