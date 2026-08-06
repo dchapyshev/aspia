@@ -52,6 +52,7 @@ Relay::Relay(TcpChannel* channel, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Relay::~Relay()
 {
+    SharedKeyPool::instance().remove(session_id_);
     CLOG(INFO) << "Dtor";
 }
 

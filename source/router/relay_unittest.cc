@@ -302,6 +302,26 @@ TEST_F(RelayTest, PeerRequestIsForwardedToTheRelay)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The keys of a relay are only good while its session lives, because they name a relay the router
+// has a connection to. A session the worker has already dropped can still be handed a pool by its
+// socket before it is destroyed, and nothing would ever remove those keys afterwards.
+TEST_F(RelayTest, KeysDoNotOutliveTheirSession)
+{
+    qint64 session_id = 0;
+
+    withRelay([&session_id](Relay& relay, FakeTcpChannel* channel)
+    {
+        session_id = relay.sessionId();
+
+        channel->receive(0, keyPool("relay.example", 8080, { makeKey(10) }));
+        EXPECT_EQ(SharedKeyPool::instance().count(session_id), 1u);
+    });
+
+    EXPECT_EQ(SharedKeyPool::instance().count(session_id), 0u);
+    EXPECT_FALSE(SharedKeyPool::instance().take().has_value());
+}
+
+//--------------------------------------------------------------------------------------------------
 // Anything the router cannot make sense of leaves no keys, no statistics and no answer behind.
 TEST_F(RelayTest, GarbageFromTheRelayIsIgnored)
 {
