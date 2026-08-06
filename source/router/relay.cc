@@ -24,6 +24,7 @@
 namespace {
 
 constexpr size_t kMaxStatisticsSize = 256 * 1024;
+constexpr int kMaxKeysPerPool = 1000;
 
 //--------------------------------------------------------------------------------------------------
 qint64 createRelayId()
@@ -157,6 +158,12 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
     {
         CLOG(ERROR) << "Ignoring key pool with invalid peer endpoint (host:" << peer_host
                     << "port:" << peer_port << ")";
+        return;
+    }
+
+    if (key_pool.key_size() > kMaxKeysPerPool)
+    {
+        CLOG(ERROR) << "Ignoring oversized key pool:" << key_pool.key_size();
         return;
     }
 

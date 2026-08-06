@@ -173,6 +173,31 @@ TEST_F(RelayTest, PoolWithAnUnusableEndpointIsIgnored)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A relay is capped at a thousand peer sessions and never has more keys than that to announce, but
+// the channel carries a message big enough for a hundred times more. Every key over the limit of
+// the pool writes a line to the log, so one pool can fill it with tens of thousands of them.
+TEST_F(RelayTest, PoolLargerThanTheCapacityOfARelayIsIgnored)
+{
+    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    {
+        constexpr int kMaxKeysPerPool = 1000;
+
+        std::vector<proto::router::RelayKey> keys;
+        keys.reserve(kMaxKeysPerPool + 1);
+        for (int i = 0; i <= kMaxKeysPerPool; ++i)
+            keys.push_back(makeKey(static_cast<quint32>(i)));
+
+        channel->receive(0, keyPool("relay.example", 8080, keys));
+        EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 0u);
+
+        // A pool of exactly that many keys is what a relay working at its capacity announces.
+        keys.pop_back();
+        channel->receive(0, keyPool("relay.example", 8080, keys));
+        EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), size_t(kMaxKeysPerPool));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // A key without usable material spends the offer that takes it and then fails at the relay, which
 // cannot derive a session from it. The client sees a broken connection and has nothing better to
 // retry with, because the pool holds more keys like that one.
