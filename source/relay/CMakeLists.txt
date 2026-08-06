@@ -50,7 +50,7 @@ if (WIN32)
 endif()
 
 source_group("" FILES ${SOURCE_RELAY_CORE} ${SOURCE_RELAY} ${SOURCE_RELAY_TESTS})
-source_group(workers FILES ${SOURCE_RELAY_WORKERS})
+source_group(workers FILES ${SOURCE_RELAY_WORKERS} ${SOURCE_RELAY_WORKERS_TESTS})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_RELAY_WIN})
@@ -93,7 +93,7 @@ set_property(TARGET aspia_relay PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_relay PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_relay PROPERTY AUTORCC ON)
 
-add_executable(aspia_relay_tests ${SOURCE_RELAY_TESTS})
+add_executable(aspia_relay_tests ${SOURCE_RELAY_TESTS} ${SOURCE_RELAY_WORKERS_TESTS})
 
 target_link_libraries(aspia_relay_tests
     aspia_relay_core

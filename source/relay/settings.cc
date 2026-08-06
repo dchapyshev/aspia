@@ -22,9 +22,24 @@
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString configFilePath()
+{
+    // The override lets tests and unusual deployments point the relay at their own file.
+    QString file_path = qEnvironmentVariable("ASPIA_RELAY_CONFIG_FILE");
+    if (!file_path.isEmpty())
+        return file_path;
+
+    return BasePaths::appConfigDir() + "/relay.conf";
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(BasePaths::appConfigDir() + "/relay.conf", XmlSettings::format())
+    : impl_(configFilePath(), XmlSettings::format())
 {
     // Nothing
 }

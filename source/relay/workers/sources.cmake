@@ -21,3 +21,6 @@ collect_sources(SOURCE_RELAY_WORKERS
     relay_worker.h
     router_worker.cc
     router_worker.h)
+
+collect_sources(SOURCE_RELAY_WORKERS_TESTS
+    relay_worker_unittest.cc)
