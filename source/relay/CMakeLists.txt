@@ -36,7 +36,10 @@ list(APPEND SOURCE_RELAY
     main.cc)
 
 list(APPEND SOURCE_RELAY_TESTS
+    pending_session_unittest.cc
+    relay_test_worker.h
     session_key_unittest.cc
+    session_unittest.cc
     shared_key_pool_unittest.cc
     tests_main.cc)
 
