@@ -58,8 +58,7 @@ Host::~Host()
 //--------------------------------------------------------------------------------------------------
 void Host::start()
 {
-    std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
-    start_time_ = std::chrono::system_clock::to_time_t(time_point);
+    start_time_ = Clock::now();
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
     emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);

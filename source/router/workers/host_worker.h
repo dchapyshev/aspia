@@ -117,6 +117,7 @@ private:
     // tick after the router comes up does it.
     TimePoint next_removal_sweep_;
 
+    friend class HostWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(HostWorker)
 };
 

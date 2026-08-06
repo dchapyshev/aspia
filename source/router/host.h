@@ -23,6 +23,7 @@
 #include <QVersionNumber>
 
 #include "base/logging.h"
+#include "base/time_types.h"
 #include "base/net/tcp_channel.h"
 
 class Database;
@@ -51,7 +52,7 @@ public:
 
     qint64 sessionId() const { return session_id_; }
     const std::string& address() const { return tcp_channel_->peerAddress(); }
-    time_t startTime() const { return start_time_; }
+    TimePoint startTime() const { return start_time_; }
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
@@ -74,7 +75,7 @@ private slots:
 private:
     Database& database_;
     const qint64 session_id_;
-    time_t start_time_ = 0;
+    TimePoint start_time_;
     TcpChannel* tcp_channel_ = nullptr;
 };
 

@@ -40,6 +40,10 @@ namespace {
 // away from the connection storms the worker also serves.
 const Hours kRemovalSweepInterval{ 24 };
 
+// A host asks for its id as soon as it is authenticated, so a session that has not asked serves
+// nobody. Anonymous access means anybody can open one and keep it for as long as it likes.
+constexpr Seconds kIdentifyTimeout{ 30 };
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -211,6 +215,31 @@ void HostWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void HostWorker::onTimer(TimePoint now)
 {
+    QList<Host*> silent;
+
+    for (Host* host : std::as_const(hosts_))
+    {
+        if (now - host->startTime() < kIdentifyTimeout)
+            continue;
+
+        if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
+        {
+            if (host_ng->hostId() == kInvalidHostId)
+                silent.append(host);
+            continue;
+        }
+
+        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
+        if (host_legacy && host_legacy->hostIdList().isEmpty())
+            silent.append(host);
+    }
+
+    for (Host* host : std::as_const(silent))
+    {
+        LOG(WARNING) << "Session without a host id dropped (session id" << host->sessionId() << ")";
+        removeHostSession(host);
+    }
+
     if (now < next_removal_sweep_)
         return;
     next_removal_sweep_ = now + kRemovalSweepInterval;

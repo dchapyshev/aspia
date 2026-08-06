@@ -25,6 +25,8 @@
 #include <asio/ip/tcp.hpp>
 
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <thread>
 
 #include "base/serialization.h"
@@ -49,6 +51,9 @@ const Seconds kWaitTimeout{ 30 };
 const char kHostKey[] = "the-key-the-host-presents";
 const char kHardwareId[] = "hw-id-of-the-host";
 
+// How long a session that has not asked for an id is kept.
+constexpr Seconds kIdentifyTimeout{ 30 };
+
 //--------------------------------------------------------------------------------------------------
 // A free loopback port for the listener of the worker. The port is released before the worker
 // starts, and the worker binds with reuse_address, so the window between the two is harmless.
@@ -68,6 +73,40 @@ quint16 pickFreePort()
 }
 
 } // namespace
+
+// Fires the timer of the worker with a synthetic clock, in the thread of the worker. In production
+// the timer runs with the real time, and the tests cannot wait the real timeouts out.
+class HostWorkerTestPeer
+{
+public:
+    explicit HostWorkerTestPeer(HostWorker* worker)
+        : worker_(worker)
+    {
+        // Nothing
+    }
+
+    void fireTimer(TimePoint now)
+    {
+        std::mutex lock;
+        std::condition_variable finished;
+        bool done = false;
+
+        worker_->post([&]()
+        {
+            worker_->onTimer(now);
+
+            std::lock_guard guard(lock);
+            done = true;
+            finished.notify_one();
+        });
+
+        std::unique_lock guard(lock);
+        finished.wait(guard, [&]() { return done; });
+    }
+
+private:
+    HostWorker* worker_;
+};
 
 // The host channel of the router end to end. A real HostWorker listens on the loopback interface
 // with the anonymous access it grants hosts, and the peer of the test connects and asks for its id
@@ -134,10 +173,11 @@ protected:
     }
 
     // Connects a peer that behaves like a host: anonymous authentication as a host session, then
-    // one request for its existing id. Returns once the router has answered.
-    [[nodiscard]] bool connectHost()
+    // one request for its existing id. Returns once the router has answered. A peer that does not
+    // ask stays silent after the authentication, and the call returns as soon as it is in.
+    [[nodiscard]] bool connectHost(bool ask_for_id = true)
     {
-        peer_worker_->invoke([this]()
+        peer_worker_->invoke([this, ask_for_id]()
         {
             ClientAuthenticator* authenticator = new ClientAuthenticator();
             authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
@@ -148,9 +188,19 @@ protected:
 
             QObject::connect(peer_worker_, &Worker::sig_tick, channel_, &TcpChannel::tick);
 
-            QObject::connect(channel_, &TcpChannel::sig_authenticated, channel_, [this]()
+            QObject::connect(channel_, &TcpChannel::sig_errorOccurred, channel_,
+                             [this](TcpChannel::ErrorCode /* error_code */)
+            {
+                disconnected_ = true;
+            });
+
+            QObject::connect(channel_, &TcpChannel::sig_authenticated, channel_, [this, ask_for_id]()
             {
                 channel_->setPaused(false);
+                authenticated_ = true;
+
+                if (!ask_for_id)
+                    return;
 
                 proto::router::HostToRouter message;
                 proto::router::HostIdRequest* request = message.mutable_host_id_request();
@@ -174,7 +224,29 @@ protected:
             channel_->connectTo("127.0.0.1", host_port_);
         });
 
+        if (!ask_for_id)
+            return waitFor([this]() { return authenticated_.load(); });
+
         return waitFor([this]() { return assigned_host_id_.load() == host_id_; });
+    }
+
+    // Fires the timer with the synthetic |now| until the router drops the peer. The polling covers
+    // the gap between the authentication of the peer and the moment the worker picks the session up.
+    [[nodiscard]] bool firedUntilDisconnected(TimePoint now)
+    {
+        HostWorkerTestPeer timer(host_worker_);
+
+        const TimePoint give_up = Clock::now() + kWaitTimeout;
+        while (Clock::now() < give_up)
+        {
+            timer.fireTimer(now);
+            if (disconnected_.load())
+                return true;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
+        return false;
     }
 
     // Polls |condition| until it holds. The wait bounds a broken test, the condition is what the
@@ -200,6 +272,8 @@ protected:
     quint16 host_port_ = 0;
     HostId host_id_ = kInvalidHostId;
     std::atomic<HostId> assigned_host_id_ { kInvalidHostId };
+    std::atomic<bool> authenticated_ { false };
+    std::atomic<bool> disconnected_ { false };
 
     WorkerManager workers_;
     RouterTestWorker* peer_worker_ = nullptr;
@@ -213,6 +287,16 @@ TEST_F(HostWorkerTest, ConnectedHostIsAnnounced)
 {
     ASSERT_TRUE(connectHost());
     EXPECT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host asks for its id as soon as it is authenticated. A session that never asks serves nobody,
+// and anonymous access means anybody can open one, so it is not kept around.
+TEST_F(HostWorkerTest, SilentSessionIsDropped)
+{
+    ASSERT_TRUE(connectHost(false));
+
+    EXPECT_TRUE(firedUntilDisconnected(Clock::now() + kIdentifyTimeout + Seconds(1)));
 }
 
 //--------------------------------------------------------------------------------------------------
