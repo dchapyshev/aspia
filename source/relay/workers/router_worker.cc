@@ -25,6 +25,7 @@
 #include "base/peer/client_authenticator.h"
 #include "proto/key_exchange.h"
 #include "proto/router.h"
+#include "proto/router_constants.h"
 #include "relay/session_key.h"
 #include "relay/settings.h"
 #include "relay/shared_key_pool.h"
@@ -204,7 +205,7 @@ void RouterWorker::onTcpMessageReceived(quint8 /* channel_id */, const QByteArra
     {
         const proto::router::PeerRequest& request = message->peer_request();
 
-        if (request.command_name() == "disconnect")
+        if (request.command_name() == proto::router::kCommandPeerDisconnect)
         {
             emit sig_disconnectSession(request.peer_id());
         }
