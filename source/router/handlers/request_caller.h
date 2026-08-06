@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_REQUEST_CALLER_H
-#define ROUTER_REQUEST_CALLER_H
+#ifndef ROUTER_HANDLERS_REQUEST_CALLER_H
+#define ROUTER_HANDLERS_REQUEST_CALLER_H
 
 #include <QString>
 
@@ -33,4 +33,4 @@ struct RequestCaller
     quint32 session_type = 0;
 };
 
-#endif // ROUTER_REQUEST_CALLER_H
+#endif // ROUTER_HANDLERS_REQUEST_CALLER_H

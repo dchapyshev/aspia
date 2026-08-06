@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 
-#include "router/host_id_handler.h"
+#include "router/handlers/host_id_handler.h"
 
 #include "base/crypto/generic_hash.h"
 #include "proto/router_host.h"
@@ -35,10 +35,10 @@ protected:
         peer_.address = "192.168.1.10";
     }
 
-    HostIdHandler::Result handle(const proto::router::HostIdRequest& request,
+    HostIdResult handle(const proto::router::HostIdRequest& request,
                                  HostId current_host_id = kInvalidHostId)
     {
-        return HostIdHandler::handle(db_, request, peer_, current_host_id);
+        return handleHostIdRequest(db_, request, peer_, current_host_id);
     }
 
     static proto::router::HostIdRequest existingIdRequest(std::string_view key)
@@ -79,7 +79,7 @@ protected:
         return ok ? count : -1;
     }
 
-    HostIdHandler::Peer peer_;
+    HostIdPeer peer_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -87,9 +87,9 @@ protected:
 // and a key it can come back with once an administrator approves it.
 TEST_F(HostIdHandlerTest, UnapprovedHostGetsATemporaryId)
 {
-    const HostIdHandler::Result result = handle(newIdRequest());
+    const HostIdResult result = handle(newIdRequest());
 
-    EXPECT_EQ(result.action, HostIdHandler::Action::ISSUE_TEMP_ID);
+    EXPECT_EQ(result.action, HostIdResult::Action::ISSUE_TEMP_ID);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_TEMP_HOSTS));
     EXPECT_EQ(result.hardware_id, QByteArray("hwid-1"));
     EXPECT_EQ(hostCount(), 0);
@@ -103,7 +103,7 @@ TEST_F(HostIdHandlerTest, HostWithoutHardwareIdIsDisconnected)
     proto::router::HostIdRequest request = newIdRequest();
     request.clear_hw_id();
 
-    EXPECT_EQ(handle(request).action, HostIdHandler::Action::CLOSE);
+    EXPECT_EQ(handle(request).action, HostIdResult::Action::CLOSE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,10 +113,10 @@ TEST_F(HostIdHandlerTest, OversizedHardwareIdIsDisconnected)
     proto::router::HostIdRequest request = newIdRequest();
     request.set_hw_id(std::string(65, 'x'));
 
-    EXPECT_EQ(handle(request).action, HostIdHandler::Action::CLOSE);
+    EXPECT_EQ(handle(request).action, HostIdResult::Action::CLOSE);
 
     request.set_hw_id(std::string(64, 'x'));
-    EXPECT_EQ(handle(request).action, HostIdHandler::Action::ISSUE_TEMP_ID);
+    EXPECT_EQ(handle(request).action, HostIdResult::Action::ISSUE_TEMP_ID);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,9 +127,9 @@ TEST_F(HostIdHandlerTest, RepeatedRequestIsIgnored)
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const HostIdHandler::Result result = handle(existingIdRequest("key-1"), host_id);
+    const HostIdResult result = handle(existingIdRequest("key-1"), host_id);
 
-    EXPECT_EQ(result.action, HostIdHandler::Action::IGNORE);
+    EXPECT_EQ(result.action, HostIdResult::Action::IGNORE);
     EXPECT_EQ(result.notify_flags, 0u);
 }
 
@@ -139,7 +139,7 @@ TEST_F(HostIdHandlerTest, UnknownRequestTypeIsIgnored)
     proto::router::HostIdRequest request = newIdRequest();
     request.set_type(static_cast<proto::router::HostIdRequest::Type>(42));
 
-    EXPECT_EQ(handle(request).action, HostIdHandler::Action::IGNORE);
+    EXPECT_EQ(handle(request).action, HostIdResult::Action::IGNORE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,9 +150,9 @@ TEST_F(HostIdHandlerTest, ApprovedHostGetsItsIdAndRefreshesItsTelemetry)
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const HostIdHandler::Result result = handle(existingIdRequest("key-1"));
+    const HostIdResult result = handle(existingIdRequest("key-1"));
 
-    EXPECT_EQ(result.action, HostIdHandler::Action::SEND_RESPONSE);
+    EXPECT_EQ(result.action, HostIdResult::Action::SEND_RESPONSE);
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.host_id, host_id);
     EXPECT_FALSE(result.removal_pending);
@@ -172,9 +172,9 @@ TEST_F(HostIdHandlerTest, ApprovedHostGetsItsIdAndRefreshesItsTelemetry)
 // the host is told so and asks for a new id.
 TEST_F(HostIdHandlerTest, UnknownKeyIsRefused)
 {
-    const HostIdHandler::Result result = handle(existingIdRequest("key-unknown"));
+    const HostIdResult result = handle(existingIdRequest("key-unknown"));
 
-    EXPECT_EQ(result.action, HostIdHandler::Action::SEND_RESPONSE);
+    EXPECT_EQ(result.action, HostIdResult::Action::SEND_RESPONSE);
     EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
     EXPECT_EQ(result.host_id, kInvalidHostId);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -191,9 +191,9 @@ TEST_F(HostIdHandlerTest, HostScheduledForRemovalIsToldToUninstall)
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
 
-    const HostIdHandler::Result result = handle(existingIdRequest("key-1"));
+    const HostIdResult result = handle(existingIdRequest("key-1"));
 
-    EXPECT_EQ(result.action, HostIdHandler::Action::SEND_RESPONSE);
+    EXPECT_EQ(result.action, HostIdResult::Action::SEND_RESPONSE);
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.host_id, host_id);
     EXPECT_TRUE(result.removal_pending);

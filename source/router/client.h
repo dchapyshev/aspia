@@ -25,10 +25,11 @@
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "router/request_caller.h"
-#include "router/two_factor_handler.h"
+#include "router/handlers/request_caller.h"
+#include "router/handlers/two_factor_handler.h"
 
 class Database;
+struct RequestResult;
 
 namespace proto::router {
 class ChangePasswordRequest;
@@ -95,6 +96,11 @@ protected:
     // The identity the request handlers work with. Taken from the authenticated channel, never
     // from the request itself.
     RequestCaller requestCaller() const;
+
+    // Turns the side effects a command handler returned into signals. Called after the reply is
+    // sent: the sessions being stopped can include the one that sent the request (an administrator
+    // disabling its own account), and it must still see the result of its command.
+    void applyRequestResult(const RequestResult& result);
 
 private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);

@@ -23,31 +23,20 @@ list(APPEND SOURCE_ROUTER_CORE
     client.h
     client_admin.cc
     client_admin.h
-    client_channel_handler.cc
-    client_channel_handler.h
     client_manager.cc
     client_manager.h
-    connection_offer_builder.cc
-    connection_offer_builder.h
     database.cc
     database.h
-    group_request_handler.cc
-    group_request_handler.h
     host.cc
     host.h
-    host_id_handler.cc
-    host_id_handler.h
     host_legacy.cc
     host_legacy.h
     host_ng.cc
     host_ng.h
-    host_request_handler.cc
-    host_request_handler.h
     migration_utils.cc
     migration_utils.h
     relay.cc
     relay.h
-    request_caller.h
     router_user_list.cc
     router_user_list.h
     service.cc
@@ -58,38 +47,24 @@ list(APPEND SOURCE_ROUTER_CORE
     shared_hosts.h
     shared_key_pool.cc
     shared_key_pool.h
-    two_factor_handler.cc
-    two_factor_handler.h
-    user_request_handler.cc
-    user_request_handler.h
     workspace.cc
-    workspace.h
-    workspace_request_handler.cc
-    workspace_request_handler.h)
+    workspace.h)
 
 list(APPEND SOURCE_ROUTER
     main.cc)
 
 list(APPEND SOURCE_ROUTER_TESTS
-    client_channel_handler_unittest.cc
     client_unittest.cc
-    client_worker_unittest.cc
-    connection_offer_builder_unittest.cc
     database_unittest.cc
     fake_tcp_channel.h
-    group_request_handler_unittest.cc
-    host_id_handler_unittest.cc
     host_lifecycle_unittest.cc
     host_ng_unittest.cc
-    host_request_handler_unittest.cc
     router_test_base.h
     router_test_worker.h
     shared_state_unittest.cc
-    tests_main.cc
-    two_factor_handler_unittest.cc
-    user_request_handler_unittest.cc
-    workspace_request_handler_unittest.cc)
+    tests_main.cc)
 
+include(handlers/sources.cmake)
 include(workers/sources.cmake)
 
 if (WIN32)
@@ -97,7 +72,8 @@ if (WIN32)
 endif()
 
 source_group("" FILES ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER} ${SOURCE_ROUTER_TESTS})
-source_group(workers FILES ${SOURCE_ROUTER_WORKERS})
+source_group(handlers FILES ${SOURCE_ROUTER_HANDLERS} ${SOURCE_ROUTER_HANDLERS_TESTS})
+source_group(workers FILES ${SOURCE_ROUTER_WORKERS} ${SOURCE_ROUTER_WORKERS_TESTS})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_ROUTER_WIN})
@@ -112,7 +88,8 @@ if (APPLE)
     set(ROUTER_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
-add_library(aspia_router_core STATIC ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER_WORKERS})
+add_library(aspia_router_core STATIC ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER_HANDLERS}
+    ${SOURCE_ROUTER_WORKERS})
 
 target_link_libraries(aspia_router_core
     aspia_base
@@ -140,7 +117,8 @@ set_property(TARGET aspia_router PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router PROPERTY AUTORCC ON)
 
-add_executable(aspia_router_tests ${SOURCE_ROUTER_TESTS})
+add_executable(aspia_router_tests ${SOURCE_ROUTER_TESTS} ${SOURCE_ROUTER_HANDLERS_TESTS}
+    ${SOURCE_ROUTER_WORKERS_TESTS})
 
 target_link_libraries(aspia_router_tests
     aspia_router_core

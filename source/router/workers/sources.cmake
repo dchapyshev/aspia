@@ -25,3 +25,6 @@ collect_sources(SOURCE_ROUTER_WORKERS
     relay_worker.h
     stun_worker.cc
     stun_worker.h)
+
+collect_sources(SOURCE_ROUTER_WORKERS_TESTS
+    client_worker_unittest.cc)

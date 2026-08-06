@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 
-#include "router/two_factor_handler.h"
+#include "router/handlers/two_factor_handler.h"
 
 #include <QUrl>
 #include <QUrlQuery>

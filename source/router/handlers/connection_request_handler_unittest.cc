@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 
-#include "router/connection_offer_builder.h"
+#include "router/handlers/connection_request_handler.h"
 
 #include <gtest/gtest.h>
 
@@ -25,7 +25,7 @@
 
 // The offer that puts a client and a host on the same relay, built from the two registries the
 // workers keep. Both are process-wide, so every test starts from empty ones.
-class ConnectionOfferBuilderTest : public testing::Test
+class ConnectionRequestHandlerTest : public testing::Test
 {
 protected:
     void SetUp() override
@@ -59,26 +59,26 @@ protected:
         SharedKeyPool::instance().add(relay_session_id, "relay.example", 8080, key);
     }
 
-    ConnectionOfferBuilder::Result build()
+    ConnectionRequestResult build()
     {
-        return ConnectionOfferBuilder::build(SharedHosts::instance(), SharedKeyPool::instance(),
+        return handleConnectionRequest(SharedHosts::instance(), SharedKeyPool::instance(),
                                              client_);
     }
 
     static constexpr HostId kHostId = 100;
 
-    ConnectionOfferBuilder::Client client_;
+    ConnectionRequestClient client_;
 };
 
 //--------------------------------------------------------------------------------------------------
 // The offer carries everything both peers need: where the relay is, the one-time key, and the
 // secret that lets the relay pair them.
-TEST_F(ConnectionOfferBuilderTest, OfferCarriesTheRelayCredentialsAndTheSecret)
+TEST_F(ConnectionRequestHandlerTest, OfferCarriesTheRelayCredentialsAndTheSecret)
 {
     addHost(kVersion_3_0_0, "198.51.100.7");
     addRelayKey(42, 7);
 
-    const ConnectionOfferBuilder::Result result = build();
+    const ConnectionRequestResult result = build();
 
     ASSERT_EQ(result.offer.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(result.relay_session_id, 42);
@@ -100,14 +100,14 @@ TEST_F(ConnectionOfferBuilderTest, OfferCarriesTheRelayCredentialsAndTheSecret)
 
 //--------------------------------------------------------------------------------------------------
 // Two offers must never hand out the same key or the same pairing secret.
-TEST_F(ConnectionOfferBuilderTest, EveryOfferGetsItsOwnKeyAndSecret)
+TEST_F(ConnectionRequestHandlerTest, EveryOfferGetsItsOwnKeyAndSecret)
 {
     addHost(kVersion_3_0_0);
     addRelayKey(42, 7);
     addRelayKey(42, 8);
 
-    const ConnectionOfferBuilder::Result first = build();
-    const ConnectionOfferBuilder::Result second = build();
+    const ConnectionRequestResult first = build();
+    const ConnectionRequestResult second = build();
 
     ASSERT_EQ(first.offer.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(second.offer.error_code(), proto::router::kErrorOk);
@@ -120,11 +120,11 @@ TEST_F(ConnectionOfferBuilderTest, EveryOfferGetsItsOwnKeyAndSecret)
 //--------------------------------------------------------------------------------------------------
 // The host is not connected: the client is told so, and no key is burned on an offer nobody can
 // answer.
-TEST_F(ConnectionOfferBuilderTest, OfflineHostSpendsNoKey)
+TEST_F(ConnectionRequestHandlerTest, OfflineHostSpendsNoKey)
 {
     addRelayKey(42, 7);
 
-    const ConnectionOfferBuilder::Result result = build();
+    const ConnectionRequestResult result = build();
 
     EXPECT_EQ(result.offer.error_code(), proto::router::kErrorHostOffline);
     EXPECT_FALSE(result.offer.has_relay());
@@ -135,11 +135,11 @@ TEST_F(ConnectionOfferBuilderTest, OfflineHostSpendsNoKey)
 //--------------------------------------------------------------------------------------------------
 // No relay announced any keys (none is connected, or they are all drained): an offer without a key
 // would be useless, so the client is told to try again.
-TEST_F(ConnectionOfferBuilderTest, EmptyKeyPoolIsReported)
+TEST_F(ConnectionRequestHandlerTest, EmptyKeyPoolIsReported)
 {
     addHost(kVersion_3_0_0);
 
-    const ConnectionOfferBuilder::Result result = build();
+    const ConnectionRequestResult result = build();
 
     EXPECT_EQ(result.offer.error_code(), proto::router::kErrorKeyPoolEmpty);
     EXPECT_FALSE(result.offer.has_relay());
@@ -149,7 +149,7 @@ TEST_F(ConnectionOfferBuilderTest, EmptyKeyPoolIsReported)
 //--------------------------------------------------------------------------------------------------
 // AES is used only when both ends understand it. A pair where either side is older falls back to
 // the cipher the legacy relay code speaks - otherwise the session would fail after the handshake.
-TEST_F(ConnectionOfferBuilderTest, CipherIsTheBestBothPeersUnderstand)
+TEST_F(ConnectionRequestHandlerTest, CipherIsTheBestBothPeersUnderstand)
 {
     const QVersionNumber legacy(2, 7, 0);
 
@@ -177,7 +177,7 @@ TEST_F(ConnectionOfferBuilderTest, CipherIsTheBestBothPeersUnderstand)
 //--------------------------------------------------------------------------------------------------
 // The client is told upfront whether it is about to talk to an old host, so it can speak the
 // protocol that host understands.
-TEST_F(ConnectionOfferBuilderTest, LegacyHostIsAnnouncedToTheClient)
+TEST_F(ConnectionRequestHandlerTest, LegacyHostIsAnnouncedToTheClient)
 {
     addHost(QVersionNumber(2, 7, 0));
     addRelayKey(42, 7);
@@ -194,7 +194,7 @@ TEST_F(ConnectionOfferBuilderTest, LegacyHostIsAnnouncedToTheClient)
 //--------------------------------------------------------------------------------------------------
 // The STUN endpoint is attached only when this router actually runs one; the peers try a direct
 // connection with it before falling back to the relay.
-TEST_F(ConnectionOfferBuilderTest, StunInfoIsAttachedOnlyWhenTheServerRuns)
+TEST_F(ConnectionRequestHandlerTest, StunInfoIsAttachedOnlyWhenTheServerRuns)
 {
     addHost(kVersion_3_0_0);
     addRelayKey(42, 7);
@@ -204,7 +204,7 @@ TEST_F(ConnectionOfferBuilderTest, StunInfoIsAttachedOnlyWhenTheServerRuns)
     addRelayKey(42, 8);
     client_.stun_port = 8065;
 
-    const ConnectionOfferBuilder::Result result = build();
+    const ConnectionRequestResult result = build();
     ASSERT_TRUE(result.offer.has_stun_info());
     EXPECT_EQ(result.offer.stun_info().port(), 8065);
     EXPECT_EQ(result.offer.stun_info().version(), 1u);

@@ -13,8 +13,8 @@
 // GNU General Public License for more details.
 //
 
-#ifndef ROUTER_HOST_ID_HANDLER_H
-#define ROUTER_HOST_ID_HANDLER_H
+#ifndef ROUTER_HANDLERS_HOST_ID_HANDLER_H
+#define ROUTER_HANDLERS_HOST_ID_HANDLER_H
 
 #include <QByteArray>
 #include <QString>
@@ -34,20 +34,20 @@ class Database;
 // socket, the temporary id reservation and the key it generates for a host that is not approved
 // yet. That keeps the rules of the host channel testable: what an unapproved host gets, what a
 // removed one gets, and what makes the router drop the connection.
-class HostIdHandler
-{
-public:
-    // What the host reported about itself over the authenticated channel. Stored as the telemetry
-    // of this connection when the host is a known one.
-    struct Peer
-    {
-        std::string computer_name;
-        std::string architecture;
-        QString version;
-        std::string os_name;
-        std::string address;
-    };
 
+// What the host reported about itself over the authenticated channel. Stored as the telemetry of
+// this connection when the host is a known one.
+struct HostIdPeer
+{
+    std::string computer_name;
+    std::string architecture;
+    QString version;
+    std::string os_name;
+    std::string address;
+};
+
+struct HostIdResult
+{
     enum class Action
     {
         IGNORE,        // Repeated or malformed request: no answer at all.
@@ -56,31 +56,28 @@ public:
         SEND_RESPONSE  // The database answered - with an id or with an error code.
     };
 
-    struct Result
-    {
-        Action action = Action::IGNORE;
+    Action action = Action::IGNORE;
 
-        // SEND_RESPONSE: the answer for the host.
-        std::string error_code;
-        HostId host_id = kInvalidHostId;
+    // SEND_RESPONSE: the answer for the host.
+    std::string error_code;
+    HostId host_id = kInvalidHostId;
 
-        // SEND_RESPONSE: the host is scheduled for removal, so the remove command goes out right
-        // after the reply and the telemetry of this connection is deliberately not stored - the
-        // record is on its way out.
-        bool removal_pending = false;
+    // SEND_RESPONSE: the host is scheduled for removal, so the remove command goes out right
+    // after the reply and the telemetry of this connection is deliberately not stored - the
+    // record is on its way out.
+    bool removal_pending = false;
 
-        // ClientWorker::NOTIFY_* bits the sessions must be told about (0 - nothing changed).
-        quint32 notify_flags = 0;
+    // ClientWorker::NOTIFY_* bits the sessions must be told about (0 - nothing changed).
+    quint32 notify_flags = 0;
 
-        // The validated hardware id of the host; the session keeps it for the approval command.
-        QByteArray hardware_id;
-    };
-
-    // |current_host_id| is what the session was assigned already (kInvalidHostId while it has
-    // none): a host asks exactly once per session, and a repeat is refused so it cannot overwrite
-    // the id its pending-removal bookkeeping is tied to.
-    static Result handle(Database& database, const proto::router::HostIdRequest& request,
-                         const Peer& peer, HostId current_host_id);
+    // The validated hardware id of the host; the session keeps it for the approval command.
+    QByteArray hardware_id;
 };
 
-#endif // ROUTER_HOST_ID_HANDLER_H
+// |current_host_id| is what the session was assigned already (kInvalidHostId while it has none):
+// a host asks exactly once per session, and a repeat is refused so it cannot overwrite the id its
+// pending-removal bookkeeping is tied to.
+HostIdResult handleHostIdRequest(Database& database, const proto::router::HostIdRequest& request,
+                                 const HostIdPeer& peer, HostId current_host_id);
+
+#endif // ROUTER_HANDLERS_HOST_ID_HANDLER_H

@@ -29,11 +29,14 @@
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/client_channel_handler.h"
-#include "router/connection_offer_builder.h"
 #include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
+#include "router/handlers/connection_request_handler.h"
+#include "router/handlers/group_request_handler.h"
+#include "router/handlers/host_request_handler.h"
+#include "router/handlers/user_request_handler.h"
+#include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -209,6 +212,16 @@ RequestCaller Client::requestCaller() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::applyRequestResult(const RequestResult& result)
+{
+    if (result.notify_flags)
+        emit sig_notifyChanged(result.notify_flags);
+
+    if (result.stop_user_id > 0)
+        emit sig_stopClients(result.stop_user_id, result.stop_token_ids, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
     CLOG(INFO) << "Network error:" << error_code;
@@ -344,14 +357,14 @@ void Client::readConnectionRequest(const proto::router::ConnectionRequest& reque
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
-    ConnectionOfferBuilder::Client client;
+    ConnectionRequestClient client;
     client.host_id = request.host_id();
     client.version = version();
     client.address = address();
     client.user_name = userName();
     client.stun_port = stun_port_;
 
-    ConnectionOfferBuilder::Result built = ConnectionOfferBuilder::build(
+    ConnectionRequestResult built = handleConnectionRequest(
         SharedHosts::instance(), SharedKeyPool::instance(), client);
 
     proto::router::RouterToClient message;
@@ -412,7 +425,7 @@ void Client::readHostListRequest(const proto::router::HostListRequest& request)
     proto::router::HostList* result = message.mutable_host_list();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleHostList(database_, requestCaller(), request, result);
+    handleHostList(database_, requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -428,7 +441,7 @@ void Client::readHostSearchRequest(const proto::router::HostSearchRequest& reque
     proto::router::HostSearchResult* result = message.mutable_host_search_result();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleHostSearch(database_, requestCaller(), request, result);
+    handleHostSearch(database_, requestCaller(), request, result);
 
     // Mark currently connected hosts as online.
     for (proto::router::Host& host : *result->mutable_host())
@@ -466,7 +479,7 @@ void Client::readWorkspaceListRequest(const proto::router::WorkspaceListRequest&
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
     list->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleWorkspaceList(database_, requestCaller(), request, list);
+    handleWorkspaceList(database_, requestCaller(), request, list);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -478,7 +491,7 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
     proto::router::GroupList* result = message.mutable_group_list();
     result->set_request_id(request.request_id());
 
-    ClientChannelHandler::handleGroupList(database_, requestCaller(), request, result);
+    handleGroupList(database_, requestCaller(), request, result);
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -486,8 +499,7 @@ void Client::readGroupListRequest(const proto::router::GroupListRequest& request
 //--------------------------------------------------------------------------------------------------
 void Client::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
 {
-    const ClientChannelHandler::PasswordResult handled =
-        ClientChannelHandler::handleChangePassword(database_, requestCaller(), request);
+    const RequestResult handled = handleChangePassword(database_, requestCaller(), request);
 
     proto::router::RouterToClient message;
     proto::router::ChangePasswordResult* result = message.mutable_change_password_result();
@@ -495,8 +507,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
     result->set_error_code(handled.error_code);
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 
-    if (handled.notify_flags)
-        emit sig_notifyChanged(handled.notify_flags);
+    applyRequestResult(handled);
 
     if (handled.error_code != proto::router::kErrorOk)
         return;

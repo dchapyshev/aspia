@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 
-#include "router/connection_offer_builder.h"
+#include "router/handlers/connection_request_handler.h"
 
 #include "base/logging.h"
 #include "base/version_constants.h"
@@ -24,11 +24,10 @@
 #include "router/shared_key_pool.h"
 
 //--------------------------------------------------------------------------------------------------
-// static
-ConnectionOfferBuilder::Result ConnectionOfferBuilder::build(
-    SharedHosts& hosts, SharedKeyPool& key_pool, const Client& client)
+ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPool& key_pool,
+                                                const ConnectionRequestClient& client)
 {
-    Result result;
+    ConnectionRequestResult result;
 
     const std::optional<SharedHosts::Host> host_info = hosts.find(client.host_id);
     if (!host_info.has_value())

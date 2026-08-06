@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/workspace_request_handler.h"
+#include "router/handlers/workspace_request_handler.h"
 
 #include <set>
 
@@ -24,14 +24,15 @@
 #include "base/string_util.h"
 #include "base/peer/host_id.h"
 #include "proto/router_admin.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
-#include "router/workers/client_worker.h"
 #include "router/workspace.h"
+#include "router/workers/client_worker.h"
 
 namespace {
 
-using Result = WorkspaceRequestHandler::Result;
+using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
 // The access list of the request. |self_present| tells whether the sender kept its own entry: an
@@ -161,12 +162,31 @@ void handleDelete(Database& database, qint64 entry_id, Result* result)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-WorkspaceRequestHandler::Result WorkspaceRequestHandler::handle(
-    Database& database, const RequestCaller& caller,
-    const proto::router::WorkspaceRequest& request)
+std::string_view checkWorkspaceAccess(Database& database, const RequestCaller& caller,
+                                      qint64 workspace_id)
 {
-    Result result;
+    bool access_known = false;
+    const bool has_access = database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known);
+    if (!access_known)
+    {
+        LOG(ERROR) << "Unable to check access to workspace" << workspace_id;
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!has_access)
+    {
+        LOG(ERROR) << "User" << caller.user_id << "has no access to workspace" << workspace_id;
+        return proto::router::kErrorAccessDenied;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+RequestResult handleWorkspaceRequest(Database& database, const RequestCaller& caller,
+                                     const proto::router::WorkspaceRequest& request)
+{
+    RequestResult result;
     const std::string& command_name = request.command_name();
 
     if (command_name == proto::router::kCommandWorkspaceAdd)
@@ -188,4 +208,19 @@ WorkspaceRequestHandler::Result WorkspaceRequestHandler::handle(
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleWorkspaceList(Database& database, const RequestCaller& caller,
+                         const proto::router::WorkspaceListRequest& request,
+                         proto::router::WorkspaceList* out)
+{
+    // Each session sees only the workspaces it has a workspace_access entry for. Admins get the
+    // full access list per workspace (needed to manage membership); other sessions get only their
+    // own entry - the membership of a workspace is not theirs to see. workspace_id == 0 means all
+    // visible workspaces; > 0 narrows to a single entry.
+    if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
+        database.workspaceListWithAllAccess(caller.user_id, request.workspace_id(), out);
+    else
+        database.workspaceListWithOwnAccess(caller.user_id, request.workspace_id(), out);
 }

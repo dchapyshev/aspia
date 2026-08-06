@@ -16,21 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/user_request_handler.h"
+#include "router/handlers/user_request_handler.h"
 
 #include <unordered_map>
+#include <vector>
 
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "proto/router_admin.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
 #include "router/workers/client_worker.h"
 
 namespace {
 
-using Result = UserRequestHandler::Result;
+using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
 // The group keys the sender re-sealed to the key pair of the user. The router can neither unseal
@@ -259,11 +261,10 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller, const p
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-UserRequestHandler::Result UserRequestHandler::handle(
-    Database& database, const RequestCaller& caller, const proto::router::UserRequest& request)
+RequestResult handleUserRequest(Database& database, const RequestCaller& caller,
+                                const proto::router::UserRequest& request)
 {
-    Result result;
+    RequestResult result;
     const std::string& command_name = request.command_name();
 
     if (command_name == proto::router::kCommandUserAdd)
@@ -292,5 +293,130 @@ UserRequestHandler::Result UserRequestHandler::handle(
         result.error_code = proto::router::kErrorInvalidRequest;
     }
 
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleUserList(Database& database, proto::router::UserList* out)
+{
+    if (!database.isValid())
+    {
+        LOG(ERROR) << "Failed to connect to database";
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    QList<RouterUser> users;
+    if (!database.userList(&users))
+    {
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    out->set_error_code(proto::router::kErrorOk);
+
+    for (const auto& user : std::as_const(users))
+    {
+        proto::router::User* item = out->add_user();
+        item->CopyFrom(user.serialize());
+
+        // |otp_active| is a presentation-only flag derived from whether the user has a confirmed
+        // TOTP secret on file.
+        item->set_otp_active(!user.otp_secret.isEmpty());
+
+        // Attach the user's active device tokens. The router only ever exposes the opaque numeric
+        // id and timestamp metadata - never the token hash or any other material that could
+        // identify the token outside of the router.
+        std::vector<DeviceToken> tokens;
+        if (!database.listClientDeviceTokens(user.entry_id, &tokens))
+        {
+            // A partially built reply must not pass for a complete one.
+            out->clear_user();
+            out->set_error_code(proto::router::kErrorInternalError);
+            return;
+        }
+
+        for (DeviceToken& src : tokens)
+        {
+            proto::router::User::Token* token = item->add_token();
+            token->set_token_id(src.token_id);
+            token->set_created_at(src.created_at);
+            token->set_last_used_at(src.last_used_at);
+            token->set_address(std::move(src.address));
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+RequestResult handleChangePassword(Database& database, const RequestCaller& caller,
+                                   const proto::router::ChangePasswordRequest& request)
+{
+    RequestResult result;
+
+    // Checked before the lookup below: a user that could not be read must not pass for a user that
+    // is not there - the answers mean different things to the client.
+    if (!database.isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        result.error_code = proto::router::kErrorInternalError;
+        return result;
+    }
+
+    // Read-modify-write outside a transaction: the window between this findUser and the modifyUser
+    // below is closed only by every users/workspaces write going through the single ClientWorker
+    // thread. If client sessions are ever spread over several workers, this must move inside one
+    // transaction.
+    RouterUser user = database.findUser(caller.user_id);
+    if (!user.isValid())
+    {
+        // The same concurrent delete caught a moment later inside modifyUser answers
+        // kErrorNotFound - one event, one code.
+        LOG(WARNING) << "Authenticated user not found in database (user_id:" << caller.user_id << ")";
+        result.error_code = proto::router::kErrorNotFound;
+        return result;
+    }
+
+    // Replace only the password-derived fields; keep name, group, sessions, flags intact.
+    user.salt             = QByteArray::fromStdString(request.salt());
+    user.verifier         = QByteArray::fromStdString(request.verifier());
+    user.public_key       = QByteArray::fromStdString(request.public_key());
+    user.wrap_private_key = QByteArray::fromStdString(request.wrap_private_key());
+    user.wrap_salt        = QByteArray::fromStdString(request.wrap_salt());
+
+    if (!user.isValid())
+    {
+        LOG(ERROR) << "Rotated credentials produced an invalid user record";
+        result.error_code = proto::router::kErrorInvalidData;
+        return result;
+    }
+
+    // The rotation produced a new key pair, so the workspace keys re-sealed by the client to the
+    // new public key must replace the stored ones (now sealed to the old, discarded key).
+    std::unordered_map<qint64, QByteArray> wrapped_keys;
+    wrapped_keys.reserve(request.workspace_key_size());
+
+    for (int i = 0; i < request.workspace_key_size(); ++i)
+    {
+        const proto::router::ChangePasswordRequest::WorkspaceKey& wk = request.workspace_key(i);
+        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
+    }
+
+    // Credentials and re-wrapped keys are persisted atomically: the password is rotated only if a
+    // re-sealed key is present for every workspace the user can access, so a partial set can never
+    // leave the user without workspace access. Only the password-derived fields differ here (the
+    // rest were loaded from the database), so reusing modifyUser writes back identical values.
+    const std::string_view error_code = database.modifyUser(user, wrapped_keys, caller.user_id);
+    result.error_code = error_code;
+
+    if (error_code != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Failed to change password for user" << caller.name << ":" << error_code;
+        return result;
+    }
+
+    // NOTIFY_USERS only: the repair branch of Database::modifyUser cannot create access entries on
+    // this path - the keys of the request come from the user's own cryptor cache, which only ever
+    // holds the workspaces the user already has an access entry for.
+    result.notify_flags = ClientWorker::NOTIFY_USERS;
     return result;
 }

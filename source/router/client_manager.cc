@@ -25,8 +25,8 @@
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/database.h"
-#include "router/group_request_handler.h"
-#include "router/host_request_handler.h"
+#include "router/handlers/group_request_handler.h"
+#include "router/handlers/host_request_handler.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientManager::ClientManager(Database& database, TcpChannel* channel, QObject* parent)
@@ -77,8 +77,7 @@ void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 {
-    const HostRequestHandler::Result handled =
-        HostRequestHandler::handle(database(), requestCaller(), request);
+    const RequestResult handled = handleHostRequest(database(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::HostResult* result = message.mutable_host_result();
@@ -88,15 +87,13 @@ void ClientManager::doHostRequest(const proto::router::HostRequest& request)
 
     sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
 
-    if (handled.notify_flags)
-        emit sig_notifyChanged(handled.notify_flags);
+    applyRequestResult(handled);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 {
-    const GroupRequestHandler::Result handled =
-        GroupRequestHandler::handle(database(), requestCaller(), request);
+    const RequestResult handled = handleGroupRequest(database(), requestCaller(), request);
 
     proto::router::RouterToManager message;
     proto::router::GroupResult* result = message.mutable_group_result();
@@ -108,6 +105,5 @@ void ClientManager::doGroupRequest(const proto::router::GroupRequest& request)
 
     sendMessage(proto::router::CHANNEL_ID_MANAGER, serialize(message));
 
-    if (handled.notify_flags)
-        emit sig_notifyChanged(handled.notify_flags);
+    applyRequestResult(handled);
 }

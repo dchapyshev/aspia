@@ -21,13 +21,13 @@
 #include "base/core_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "router/database.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "router/client.h"
-#include "router/user_request_handler.h"
-#include "router/workspace_request_handler.h"
+#include "router/database.h"
+#include "router/handlers/user_request_handler.h"
+#include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
@@ -116,55 +116,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
     proto::router::UserList* list = message.mutable_user_list();
     list->set_request_id(request.request_id());
 
-    Database& db = database();
-    if (!db.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        list->set_error_code(proto::router::kErrorInternalError);
-    }
-    else
-    {
-        QList<RouterUser> users;
-        if (!db.userList(&users))
-        {
-            list->set_error_code(proto::router::kErrorInternalError);
-        }
-        else
-        {
-            list->set_error_code(proto::router::kErrorOk);
-
-            for (const auto& user : std::as_const(users))
-            {
-                proto::router::User* item = list->add_user();
-                item->CopyFrom(user.serialize());
-
-                // |otp_active| is a presentation-only flag derived from whether the user has a
-                // confirmed TOTP secret on file.
-                item->set_otp_active(!user.otp_secret.isEmpty());
-
-                // Attach the user's active device tokens. The router only ever exposes the opaque
-                // numeric id and timestamp metadata - never the token hash or any other material
-                // that could identify the token outside of the router.
-                std::vector<DeviceToken> tokens;
-                if (!db.listClientDeviceTokens(user.entry_id, &tokens))
-                {
-                    // A partially built reply must not pass for a complete one.
-                    list->clear_user();
-                    list->set_error_code(proto::router::kErrorInternalError);
-                    break;
-                }
-
-                for (DeviceToken& src : tokens)
-                {
-                    proto::router::User::Token* token = item->add_token();
-                    token->set_token_id(src.token_id);
-                    token->set_created_at(src.created_at);
-                    token->set_last_used_at(src.last_used_at);
-                    token->set_address(std::move(src.address));
-                }
-            }
-        }
-    }
+    handleUserList(database(), list);
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
@@ -172,8 +124,7 @@ void ClientAdmin::doUserListRequest(const proto::router::UserListRequest& reques
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
-    const UserRequestHandler::Result handled =
-        UserRequestHandler::handle(database(), requestCaller(), request);
+    const RequestResult handled = handleUserRequest(database(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
@@ -183,13 +134,7 @@ void ClientAdmin::doUserRequest(const proto::router::UserRequest& request)
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 
-    if (handled.notify_flags)
-        emit sig_notifyChanged(handled.notify_flags);
-
-    // After the reply: the sessions being stopped can include the one that sent the request (an
-    // administrator disabling its own account), and it must still see the result of its command.
-    if (handled.stop_user_id > 0)
-        emit sig_stopClients(handled.stop_user_id, handled.stop_token_ids, 0);
+    applyRequestResult(handled);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -382,8 +327,7 @@ void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
 {
-    const WorkspaceRequestHandler::Result handled =
-        WorkspaceRequestHandler::handle(database(), requestCaller(), request);
+    const RequestResult handled = handleWorkspaceRequest(database(), requestCaller(), request);
 
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();
@@ -395,6 +339,5 @@ void ClientAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& requ
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 
-    if (handled.notify_flags)
-        emit sig_notifyChanged(handled.notify_flags);
+    applyRequestResult(handled);
 }

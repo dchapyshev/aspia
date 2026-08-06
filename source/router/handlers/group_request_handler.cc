@@ -16,21 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/group_request_handler.h"
+#include "router/handlers/group_request_handler.h"
 
 #include "base/logging.h"
 #include "base/string_util.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/database.h"
+#include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 
 //--------------------------------------------------------------------------------------------------
-// static
-GroupRequestHandler::Result GroupRequestHandler::handle(
-    Database& database, const RequestCaller& caller, const proto::router::GroupRequest& request)
+RequestResult handleGroupRequest(Database& database, const RequestCaller& caller,
+                                 const proto::router::GroupRequest& request)
 {
-    Result result;
+    RequestResult result;
 
     const qint64 workspace_id = request.workspace_id();
     const proto::router::Group& group = request.group();
@@ -47,23 +48,13 @@ GroupRequestHandler::Result GroupRequestHandler::handle(
         return result;
     }
 
-    // Caller must be a member of the target workspace to manage its groups. Matches the
-    // workspace-access semantics used elsewhere; non-members do not see the workspace's wrapped_gk
-    // and cannot meaningfully add or edit AEAD-encrypted group fields anyway. "No access" and
-    // "could not check" are different answers.
-    bool access_known = false;
-    const bool has_access = database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known);
-    if (!access_known)
+    // Caller must be a member of the target workspace to manage its groups. Non-members do not see
+    // the workspace's wrapped_gk and cannot meaningfully add or edit AEAD-encrypted group fields
+    // anyway.
+    const std::string_view access_code = checkWorkspaceAccess(database, caller, workspace_id);
+    if (access_code != proto::router::kErrorOk)
     {
-        LOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        result.error_code = proto::router::kErrorInternalError;
-        return result;
-    }
-
-    if (!has_access)
-    {
-        LOG(ERROR) << "User" << caller.user_id << "has no access to workspace" << workspace_id;
-        result.error_code = proto::router::kErrorAccessDenied;
+        result.error_code = access_code;
         return result;
     }
 
@@ -118,4 +109,29 @@ GroupRequestHandler::Result GroupRequestHandler::handle(
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleGroupList(Database& database, const RequestCaller& caller,
+                     const proto::router::GroupListRequest& request,
+                     proto::router::GroupList* out)
+{
+    const qint64 workspace_id = request.workspace_id();
+    out->set_workspace_id(workspace_id);
+
+    if (workspace_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id in group list request:" << workspace_id;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    const std::string_view access_code = checkWorkspaceAccess(database, caller, workspace_id);
+    if (access_code != proto::router::kErrorOk)
+    {
+        out->set_error_code(access_code);
+        return;
+    }
+
+    database.groupList(workspace_id, out);
 }

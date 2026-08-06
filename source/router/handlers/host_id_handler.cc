@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 
-#include "router/host_id_handler.h"
+#include "router/handlers/host_id_handler.h"
 
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
@@ -31,12 +31,12 @@ constexpr size_t kMaxHardwareIdSize = 64;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-HostIdHandler::Result HostIdHandler::handle(Database& database,
-                                            const proto::router::HostIdRequest& request,
-                                            const Peer& peer, HostId current_host_id)
+HostIdResult handleHostIdRequest(Database& database, const proto::router::HostIdRequest& request,
+                                 const HostIdPeer& peer, HostId current_host_id)
 {
-    Result result;
+    using Action = HostIdResult::Action;
+
+    HostIdResult result;
 
     // A host requests its id exactly once per session. Reject repeats so an untrusted host cannot
     // overwrite the assigned id and desync the pending-removal finalization the session does when

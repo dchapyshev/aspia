@@ -16,21 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/host_request_handler.h"
+#include "router/handlers/host_request_handler.h"
+
+#include <set>
 
 #include "base/logging.h"
 #include "base/peer/host_id.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/database.h"
+#include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 
 //--------------------------------------------------------------------------------------------------
-// static
-HostRequestHandler::Result HostRequestHandler::handle(
-    Database& database, const RequestCaller& caller, const proto::router::HostRequest& request)
+RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
+                                const proto::router::HostRequest& request)
 {
-    Result result;
+    RequestResult result;
 
     if (request.command_name() != proto::router::kCommandHostModify)
     {
@@ -126,4 +129,86 @@ HostRequestHandler::Result HostRequestHandler::handle(
     result.error_code = proto::router::kErrorOk;
     result.notify_flags = ClientWorker::NOTIFY_HOSTS;
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleHostList(Database& database, const RequestCaller& caller,
+                    const proto::router::HostListRequest& request,
+                    proto::router::HostList* out)
+{
+    const proto::router::HostListRequest::Mode mode = request.mode();
+    const qint64 workspace_id = request.workspace_id();
+    const qint64 group_id = request.group_id();
+    const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
+
+    out->set_workspace_id(workspace_id);
+    out->set_group_id(group_id);
+
+    if (mode != proto::router::HostListRequest::MODE_ALL &&
+        mode != proto::router::HostListRequest::MODE_FILTERED)
+    {
+        LOG(ERROR) << "Unknown host list mode:" << mode;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    if (mode == proto::router::HostListRequest::MODE_ALL && !is_admin)
+    {
+        LOG(ERROR) << "Non-admin requested MODE_ALL host list";
+        out->set_error_code(proto::router::kErrorAccessDenied);
+        return;
+    }
+
+    if (mode == proto::router::HostListRequest::MODE_FILTERED)
+    {
+        const std::string_view access_code = checkWorkspaceAccess(database, caller, workspace_id);
+        if (access_code != proto::router::kErrorOk)
+        {
+            out->set_error_code(access_code);
+            return;
+        }
+    }
+
+    // A zero count from a failed query would make the client truncate its pagination while the
+    // list itself arrives non-empty - so a count failure fails the whole request.
+    bool count_known = false;
+    if (mode == proto::router::HostListRequest::MODE_ALL)
+    {
+        out->set_total_count(database.hostCount(&count_known));
+        if (count_known)
+            database.hosts(request.offset(), request.count(), out);
+    }
+    else
+    {
+        out->set_total_count(database.hostCount(workspace_id, group_id, &count_known));
+        if (count_known)
+            database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
+    }
+
+    if (!count_known)
+        out->set_error_code(proto::router::kErrorInternalError);
+
+    // hosts() drops the partial list from an error reply; the count computed up front must not
+    // survive it either.
+    if (out->error_code() != proto::router::kErrorOk)
+        out->clear_total_count();
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleHostSearch(Database& database, const RequestCaller& caller,
+                      const proto::router::HostSearchRequest& request,
+                      proto::router::HostSearchResult* out)
+{
+    // Search is always scoped to every workspace the user can access, regardless of session type.
+    // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
+    std::set<qint64> workspace_ids;
+    if (!database.workspaceAccessIdsForUser(caller.user_id, &workspace_ids))
+    {
+        LOG(ERROR) << "Failed to read workspace access list for user" << caller.user_id;
+        out->set_error_code(proto::router::kErrorInternalError);
+        return;
+    }
+
+    database.searchHosts(QString::fromStdString(request.query()), workspace_ids,
+                         request.offset(), request.count(), out);
 }

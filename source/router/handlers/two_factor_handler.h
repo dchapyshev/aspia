@@ -13,8 +13,8 @@
 // GNU General Public License for more details.
 //
 
-#ifndef ROUTER_TWO_FACTOR_HANDLER_H
-#define ROUTER_TWO_FACTOR_HANDLER_H
+#ifndef ROUTER_HANDLERS_TWO_FACTOR_HANDLER_H
+#define ROUTER_HANDLERS_TWO_FACTOR_HANDLER_H
 
 #include <QByteArray>
 
@@ -22,7 +22,7 @@
 #include <string_view>
 
 #include "proto/router_client.h"
-#include "router/request_caller.h"
+#include "router/handlers/request_caller.h"
 
 class Database;
 
@@ -89,4 +89,4 @@ private:
     bool token_rejected_ = false;
 };
 
-#endif // ROUTER_TWO_FACTOR_HANDLER_H
+#endif // ROUTER_HANDLERS_TWO_FACTOR_HANDLER_H

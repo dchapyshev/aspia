@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/group_request_handler.h"
+#include "router/handlers/group_request_handler.h"
 
 #include "proto/router_manager.h"
 #include "router/router_test_base.h"
@@ -35,9 +35,9 @@ protected:
         ASSERT_GT(workspace_id_, 0);
     }
 
-    GroupRequestHandler::Result handle(const proto::router::GroupRequest& request)
+    RequestResult handle(const proto::router::GroupRequest& request)
     {
-        return GroupRequestHandler::handle(db_, caller_, request);
+        return handleGroupRequest(db_, caller_, request);
     }
 
     proto::router::GroupRequest makeRequest(std::string_view command, qint64 workspace_id)
@@ -73,6 +73,16 @@ protected:
         return list.group_size();
     }
 
+    proto::router::GroupList groupList(qint64 workspace_id)
+    {
+        proto::router::GroupListRequest request;
+        request.set_workspace_id(workspace_id);
+
+        proto::router::GroupList out;
+        handleGroupList(db_, caller_, request, &out);
+        return out;
+    }
+
     SecureByteArray gk_;
     qint64 workspace_id_ = 0;
 };
@@ -84,7 +94,7 @@ TEST_F(GroupRequestHandlerTest, AddCreatesGroupAndNotifies)
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
     request.mutable_group()->set_name("servers");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_GT(result.entry_id, 0);
@@ -108,7 +118,7 @@ TEST_F(GroupRequestHandlerTest, NonMemberIsDenied)
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
     request.mutable_group()->set_name("servers");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorAccessDenied);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -121,7 +131,7 @@ TEST_F(GroupRequestHandlerTest, InvalidWorkspaceIdIsInvalidRequest)
     proto::router::GroupRequest request = makeRequest(proto::router::kCommandGroupAdd, 0);
     request.mutable_group()->set_name("servers");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidRequest);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -135,7 +145,7 @@ TEST_F(GroupRequestHandlerTest, UnknownWorkspaceIsDenied)
     proto::router::GroupRequest request = makeRequest(proto::router::kCommandGroupAdd, 12345);
     request.mutable_group()->set_name("servers");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorAccessDenied);
 }
@@ -147,7 +157,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsEmptyName)
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
     request.mutable_group()->set_name("   ");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(groupCount(workspace_id_), 0);
@@ -164,7 +174,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsOversizedName)
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);
     request.mutable_group()->set_name(std::string(proto::router::kMaxEntryNameLength + 1, 'n'));
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(groupCount(workspace_id_), 0);
@@ -178,7 +188,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsOversizedComment)
     request.mutable_group()->set_name("servers");
     request.mutable_group()->set_comment(std::string(proto::router::kMaxCommentLength + 1, 'c'));
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(groupCount(workspace_id_), 0);
@@ -193,7 +203,7 @@ TEST_F(GroupRequestHandlerTest, AddAcceptsFieldsAtTheLimit)
     request.mutable_group()->set_name(std::string(proto::router::kMaxEntryNameLength, 'n'));
     request.mutable_group()->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(groupCount(workspace_id_), 1);
@@ -240,7 +250,7 @@ TEST_F(GroupRequestHandlerTest, AddRejectsParentFromAnotherWorkspace)
     request.mutable_group()->set_name("servers");
     request.mutable_group()->set_parent_id(foreign_group);
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(groupCount(workspace_id_), 0);
@@ -257,7 +267,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRenamesAndNotifies)
     request.mutable_group()->set_entry_id(group_id);
     request.mutable_group()->set_name("workstations");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_GROUPS));
@@ -279,7 +289,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsCycle)
     request.mutable_group()->set_parent_id(child_id);
     request.mutable_group()->set_name("parent");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -301,7 +311,7 @@ TEST_F(GroupRequestHandlerTest, ModifyOfForeignGroupIsNotFound)
     request.mutable_group()->set_entry_id(foreign_group);
     request.mutable_group()->set_name("stolen");
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
     EXPECT_EQ(groupName(other_id, foreign_group), "foreign");
@@ -330,7 +340,7 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
         makeRequest(proto::router::kCommandGroupDelete, workspace_id_);
     request.mutable_group()->set_entry_id(parent_id);
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags,
@@ -347,7 +357,7 @@ TEST_F(GroupRequestHandlerTest, DeleteOfUnknownGroupIsNotFound)
         makeRequest(proto::router::kCommandGroupDelete, workspace_id_);
     request.mutable_group()->set_entry_id(12345);
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -359,8 +369,48 @@ TEST_F(GroupRequestHandlerTest, UnknownCommandIsInvalidRequest)
     proto::router::GroupRequest request = makeRequest("group_frobnicate", workspace_id_);
     request.mutable_group()->set_entry_id(1);
 
-    const GroupRequestHandler::Result result = handle(request);
+    const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidRequest);
     EXPECT_EQ(result.notify_flags, 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(GroupRequestHandlerTest, GroupListIsScopedToItsWorkspace)
+{
+    const qint64 other_id = addWorkspace("beta", gk_);
+    ASSERT_GT(other_id, 0);
+
+    ASSERT_GT(addGroup(workspace_id_, 0, "servers"), 0);
+    ASSERT_GT(addGroup(other_id, 0, "foreign"), 0);
+
+    const proto::router::GroupList list = groupList(workspace_id_);
+
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    ASSERT_EQ(list.group_size(), 1);
+    EXPECT_EQ(list.group(0).name(), "servers");
+    EXPECT_EQ(list.workspace_id(), workspace_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(GroupRequestHandlerTest, GroupListRequiresWorkspaceAccess)
+{
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_TRUE(client.isValid());
+    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+
+    const proto::router::GroupList list = groupList(workspace_id_);
+
+    EXPECT_EQ(list.error_code(), proto::router::kErrorAccessDenied);
+    EXPECT_EQ(list.group_size(), 0);
+    EXPECT_EQ(list.workspace_id(), workspace_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(GroupRequestHandlerTest, GroupListOfInvalidWorkspaceIsInvalidRequest)
+{
+    const proto::router::GroupList list = groupList(0);
+
+    EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(list.group_size(), 0);
 }

@@ -28,7 +28,7 @@
 #include "proto/router_host.h"
 #include "proto/router_peer.h"
 #include "router/database.h"
-#include "router/host_id_handler.h"
+#include "router/handlers/host_id_handler.h"
 
 namespace {
 
@@ -150,20 +150,19 @@ void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
-    HostIdHandler::Peer peer;
+    HostIdPeer peer;
     peer.computer_name = computerName();
     peer.architecture = architecture();
     peer.version = version().toString();
     peer.os_name = osName();
     peer.address = address();
 
-    const HostIdHandler::Result result =
-        HostIdHandler::handle(database(), host_id_request, peer, host_id_);
+    const HostIdResult result = handleHostIdRequest(database(), host_id_request, peer, host_id_);
 
-    if (result.action == HostIdHandler::Action::IGNORE)
+    if (result.action == HostIdResult::Action::IGNORE)
         return;
 
-    if (result.action == HostIdHandler::Action::CLOSE)
+    if (result.action == HostIdResult::Action::CLOSE)
     {
         emit sig_finished(sessionId());
         return;
@@ -174,7 +173,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     proto::router::RouterToHost message;
     proto::router::HostIdResponse* host_id_response = message.mutable_host_id_response();
 
-    if (result.action == HostIdHandler::Action::ISSUE_TEMP_ID)
+    if (result.action == HostIdResult::Action::ISSUE_TEMP_ID)
     {
         // The key and the temporary id belong to this session: the key is random material handed
         // to the host, and the id is reserved until the session ends.

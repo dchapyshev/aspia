@@ -38,8 +38,8 @@
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "router/database.h"
-#include "router/request_caller.h"
 #include "router/workspace.h"
+#include "router/handlers/request_caller.h"
 
 // Shared fixture for the request handlers: an isolated database in a temporary directory, starting
 // from the state --create-config leaves behind (the built-in administrator with id 1), plus the
@@ -84,6 +84,14 @@ protected:
         if (db_.addUser(makeUser(name, sessions)) != proto::router::kErrorOk)
             return RouterUser();
         return db_.findUser(name);
+    }
+
+    // A session of the given user and type, in place of the built-in administrator.
+    void setCaller(const RouterUser& user, proto::router::SessionType session_type)
+    {
+        caller_.user_id = user.entry_id;
+        caller_.name = user.name;
+        caller_.session_type = session_type;
     }
 
     // One access entry for |user|, sealed to its current key and carrying the seal target the
