@@ -104,7 +104,7 @@ RouterHostList decodeRouterHostList(const RouterKeys& keys, const proto::router:
     decoded.error_code   = QString::fromStdString(list.error_code());
     decoded.workspace_id = list.workspace_id();
     decoded.group_id     = list.group_id();
-    decoded.total_count  = list.total_count();
+    decoded.total_count  = qMax<qint64>(0, list.total_count());
     decoded.hosts.reserve(list.host_size());
 
     for (int i = 0; i < list.host_size(); ++i)
@@ -119,7 +119,7 @@ RouterHostList decodeRouterHostSearchResult(const RouterKeys& keys,
 {
     RouterHostList decoded;
     decoded.error_code = QString::fromStdString(result.error_code());
-    decoded.total_count = result.total_count();
+    decoded.total_count = qMax<qint64>(0, result.total_count());
     decoded.hosts.reserve(result.host_size());
 
     for (int i = 0; i < result.host_size(); ++i)

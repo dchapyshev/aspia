@@ -351,3 +351,20 @@ TEST_F(RouterCodecTest, RecordWhoseFieldFailsToEncryptIsRefused)
     EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
               proto::router::kErrorInternalError);
 }
+
+//--------------------------------------------------------------------------------------------------
+// The count of a scope is never negative. One that arrives so is not data the pagination can work
+// with - it takes a non-negative count as its contract and ends the process on anything else - so
+// the codec is where it stops.
+TEST_F(RouterCodecTest, NegativeTotalCountDoesNotReachTheCallers)
+{
+    loadKeys(&keys_, {10});
+
+    proto::router::HostList list = hostList(10, {HostId(1)}, -5);
+    EXPECT_EQ(decodeRouterHostList(keys_, list).total_count, 0);
+
+    proto::router::HostSearchResult search;
+    search.set_error_code(proto::router::kErrorOk);
+    search.set_total_count(-5);
+    EXPECT_EQ(decodeRouterHostSearchResult(keys_, search).total_count, 0);
+}

@@ -20,6 +20,7 @@
 
 #include <QHash>
 #include <QHeaderView>
+#include <QSet>
 #include <QStackedWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
@@ -90,10 +91,16 @@ void populateGroups(qint64 router_id, QTreeWidgetItem* workspace_item,
 
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
+    QSet<qint64> visited;
     std::function<void(qint64, QTreeWidgetItem*)> build = [&](qint64 parent_id, QTreeWidgetItem* parent)
     {
         for (const Router::Group* group : std::as_const(children_of[parent_id]))
         {
+            // Guard against cycles and duplicate entry_ids in the untrusted group list.
+            if (visited.contains(group->entry_id))
+                continue;
+            visited.insert(group->entry_id);
+
             QTreeWidgetItem* item = new QTreeWidgetItem(parent, { group->name });
             item->setIcon(0, icon);
             item->setData(0, kRouterIdRole, router_id);
