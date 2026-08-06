@@ -40,8 +40,9 @@ const Seconds kReconnectTimeout{ 10 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterManager::RouterManager(QObject* parent)
+RouterManager::RouterManager(Database& database, QObject* parent)
     : QObject(parent),
+      database_(database),
       peer_manager_(new RelayPeerManager(this)),
       user_list_(new HostUserList())
 {
@@ -85,10 +86,8 @@ void RouterManager::start()
 //--------------------------------------------------------------------------------------------------
 void RouterManager::onSettingsChanged()
 {
-    Database& db = Database::instance();
-
-    Address new_address = db.routerAddress();
-    QByteArray new_public_key = db.routerPublicKey();
+    Address new_address = database_.routerAddress();
+    QByteArray new_public_key = database_.routerPublicKey();
 
     // Check if the connection parameters have changed.
     if (router_address_ != new_address || public_key_ != new_public_key)
@@ -105,7 +104,7 @@ void RouterManager::onSettingsChanged()
         connectToRouter();
     }
 
-    if (!db.oneTimePassword())
+    if (!database_.oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
         password_expire_time_ = TimePoint::max();
@@ -118,12 +117,12 @@ void RouterManager::onSettingsChanged()
         LOG(INFO) << "One-time password is enabled";
 
         PasswordGenerator generator;
-        generator.setCharacters(db.oneTimePasswordCharacters());
-        generator.setLength(db.oneTimePasswordLength());
+        generator.setCharacters(database_.oneTimePasswordCharacters());
+        generator.setLength(database_.oneTimePasswordLength());
 
         one_time_password_ = generator.result();
 
-        MilliSeconds expire_interval = db.oneTimePasswordExpire();
+        MilliSeconds expire_interval = database_.oneTimePasswordExpire();
         if (expire_interval > MilliSeconds(0))
             password_expire_time_ = Clock::now() + expire_interval;
         else

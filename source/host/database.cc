@@ -129,6 +129,17 @@ QString Database::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+std::unique_ptr<Database> Database::openForTesting(const QString& file_path)
+{
+    std::unique_ptr<Database> database(new Database());
+    if (!database->open(file_path))
+        return nullptr;
+
+    return database;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::isValid() const
 {
     return db_.isOpen();
@@ -624,35 +635,8 @@ bool Database::verifyPassword(const SecureString& password) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::openDatabase()
+bool Database::open(const QString& file_path)
 {
-    QString dir_path = directoryPath();
-    if (dir_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid directory path";
-        return false;
-    }
-
-    QFileInfo dir_info(dir_path);
-    if (dir_info.exists())
-    {
-        if (!dir_info.isDir())
-        {
-            LOG(ERROR) << "Unable to create directory for database. Need to delete file:"
-                       << dir_path;
-            return false;
-        }
-    }
-    else
-    {
-        if (!QDir().mkpath(dir_path))
-        {
-            LOG(ERROR) << "Unable to create directory for database";
-            return false;
-        }
-    }
-
-    QString file_path = filePath();
     if (file_path.isEmpty())
     {
         LOG(ERROR) << "Invalid file path";
@@ -689,6 +673,45 @@ bool Database::openDatabase()
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::openDatabase()
+{
+    QString dir_path = directoryPath();
+    if (dir_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid directory path";
+        return false;
+    }
+
+    QFileInfo dir_info(dir_path);
+    if (dir_info.exists())
+    {
+        if (!dir_info.isDir())
+        {
+            LOG(ERROR) << "Unable to create directory for database. Need to delete file:"
+                       << dir_path;
+            return false;
+        }
+    }
+    else
+    {
+        if (!QDir().mkpath(dir_path))
+        {
+            LOG(ERROR) << "Unable to create directory for database";
+            return false;
+        }
+    }
+
+    QString file_path = filePath();
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid file path";
+        return false;
+    }
+
+    return open(file_path);
 }
 
 //--------------------------------------------------------------------------------------------------

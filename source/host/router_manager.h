@@ -34,6 +34,7 @@
 #include "host/host_user_list.h"
 #include "proto/user.h"
 
+class Database;
 class RelayPeerManager;
 
 class RouterManager final : public QObject
@@ -41,7 +42,8 @@ class RouterManager final : public QObject
     Q_OBJECT
 
 public:
-    explicit RouterManager(QObject* parent = nullptr);
+    // |database| belongs to the thread the manager runs in and outlives it.
+    explicit RouterManager(Database& database, QObject* parent = nullptr);
     ~RouterManager() final;
 
     const Address& routerAddress() const { return router_address_; }
@@ -84,6 +86,8 @@ private:
     void hostIdRequest();
     User createOneTimeUser() const;
 
+    Database& database_;
+
     ScopedQPointer<TcpChannel> tcp_channel_;
     RelayPeerManager* peer_manager_ = nullptr;
     TimePoint reconnect_time_ = TimePoint::max();
@@ -102,6 +106,7 @@ private:
 
     QQueue<ReadyConnection> channels_;
 
+    friend class RouterManagerTestPeer;
     Q_DISABLE_COPY_MOVE(RouterManager)
 };
 

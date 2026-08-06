@@ -306,7 +306,7 @@ void ServerWorker::connectToRouter()
     if (router_manager_)
         return;
 
-    router_manager_ = new RouterManager(this);
+    router_manager_ = new RouterManager(Database::instance(), this);
 
     connect(router_manager_, &RouterManager::sig_clientConnected,
             this, &ServerWorker::onNewRelayConnection);

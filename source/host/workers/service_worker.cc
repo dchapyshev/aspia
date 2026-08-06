@@ -729,7 +729,7 @@ void ServiceWorker::connectToRouter(const Location& location)
     }
 
     LOG(INFO) << "Connecting to router from" << location;
-    router_manager_ = new RouterManager(this);
+    router_manager_ = new RouterManager(Database::instance(), this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged, user_session_, &UserSession::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);

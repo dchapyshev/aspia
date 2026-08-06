@@ -24,6 +24,8 @@
 #include <QString>
 #include <QVector>
 
+#include <memory>
+
 #include "base/time_types.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
@@ -62,6 +64,11 @@ public:
     static Database& instance();
     static QString directoryPath();
     static QString filePath();
+
+    // Opens (creating when absent) an isolated database at |file_path| and ensures the schema.
+    // Only for the tests; production code goes through instance(), which owns the per-thread
+    // connection at filePath(). Returns nothing when the file cannot be opened.
+    static std::unique_ptr<Database> openForTesting(const QString& file_path);
 
     bool isValid() const;
 
@@ -120,6 +127,7 @@ public:
 private:
     Database() = default;
 
+    bool open(const QString& file_path);
     bool openDatabase();
 
     QString readSetting(const QString& name) const;
