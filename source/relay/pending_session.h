@@ -24,6 +24,8 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include <string>
+
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/time_types.h"
@@ -56,7 +58,7 @@ public:
     // Releases a socket from a class.
     asio::ip::tcp::socket takeSocket();
 
-    const QString& address() const;
+    const std::string& address() const;
     Seconds duration(TimePoint now) const;
     quint32 keyId() const;
 
@@ -85,7 +87,7 @@ private:
 
     SharedPointer<IoState> io_ { new IoState() };
 
-    QString address_;
+    std::string address_;
     TimePoint start_time_;
 
     // Absolute deadline for the current phase: start_time_ + handshake timeout before the handshake,

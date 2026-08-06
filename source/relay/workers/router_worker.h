@@ -21,6 +21,7 @@
 
 #include <map>
 #include <optional>
+#include <string>
 
 #include "base/serialization.h"
 #include "base/scoped_qpointer.h"
@@ -66,7 +67,7 @@ private:
     QByteArray router_public_key_;
 
     // Peers settings.
-    QString peer_address_;
+    std::string peer_address_;
     quint16 peer_port_ = 0;
     quint32 max_peer_count_ = 0;
 

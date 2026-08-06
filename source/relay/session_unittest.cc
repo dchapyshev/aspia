@@ -184,7 +184,7 @@ TEST_F(SessionTest, OversizedIdentityFieldIsTruncated)
 
     worker_->invoke([this]()
     {
-        EXPECT_EQ(session_->clientUserName().size(), 255);
+        EXPECT_EQ(session_->clientUserName().size(), 255u);
     });
 }
 
@@ -196,8 +196,8 @@ TEST_F(SessionTest, BrokenSecretLeavesIdentityEmpty)
 
     worker_->invoke([this]()
     {
-        EXPECT_TRUE(session_->clientAddress().isEmpty());
-        EXPECT_TRUE(session_->clientUserName().isEmpty());
+        EXPECT_TRUE(session_->clientAddress().empty());
+        EXPECT_TRUE(session_->clientUserName().empty());
         EXPECT_EQ(session_->hostId(), kInvalidHostId);
     });
 

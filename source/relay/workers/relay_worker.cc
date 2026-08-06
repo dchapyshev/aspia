@@ -92,28 +92,23 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SharedK
 }
 
 //--------------------------------------------------------------------------------------------------
-QString peerAddress(const asio::ip::tcp::socket& socket)
+std::string peerAddress(const asio::ip::tcp::socket& socket)
 {
     try
     {
         std::error_code error_code;
         asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
         if (error_code)
-        {
             LOG(ERROR) << "Unable to get endpoint for accepted connection:" << error_code;
-        }
         else
-        {
-            std::string address = endpoint.address().to_string();
-            return QString::fromLocal8Bit(address.c_str(), static_cast<int>(address.size()));
-        }
+            return endpoint.address().to_string();
     }
     catch (const std::exception& e)
     {
         LOG(ERROR) << "Unable to get address for pending session:" << e.what();
     }
 
-    return QString();
+    return std::string();
 }
 
 } // namespace
@@ -355,9 +350,9 @@ void RelayWorker::onTimer(TimePoint now)
             proto::router::Peer* peer = statistics.add_peer();
             peer->set_peer_id(session->sessionId());
             peer->set_status(proto::router::Peer::STATUS_ACTIVE);
-            peer->set_client_address(session->clientAddress().toStdString());
-            peer->set_client_user_name(session->clientUserName().toStdString());
-            peer->set_host_address(session->hostAddress().toStdString());
+            peer->set_client_address(session->clientAddress());
+            peer->set_client_user_name(session->clientUserName());
+            peer->set_host_address(session->hostAddress());
             peer->set_host_id(session->hostId());
             peer->set_bytes_transferred(session->bytesTransferred());
             peer->set_idle_time(session->idleTime(now).count());

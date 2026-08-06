@@ -26,14 +26,12 @@
 
 namespace {
 
-constexpr int kMaxIdentityFieldLength = 255;
+constexpr size_t kMaxIdentityFieldLength = 255;
 
 //--------------------------------------------------------------------------------------------------
-QString identityField(const std::string& value)
+std::string identityField(const std::string& value)
 {
-    if (value.size() <= static_cast<size_t>(kMaxIdentityFieldLength))
-        return QString::fromStdString(value);
-    return QString::fromUtf8(value.data(), kMaxIdentityFieldLength);
+    return value.substr(0, kMaxIdentityFieldLength);
 }
 
 } // namespace

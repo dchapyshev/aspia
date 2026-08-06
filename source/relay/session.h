@@ -24,6 +24,8 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include <string>
+
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/time_types.h"
@@ -43,9 +45,9 @@ public:
     void start();
 
     qint64 sessionId() const { return session_id_; }
-    const QString& clientAddress() const { return client_address_; }
-    const QString& clientUserName() const { return client_user_name_; }
-    const QString& hostAddress() const { return host_address_; }
+    const std::string& clientAddress() const { return client_address_; }
+    const std::string& clientUserName() const { return client_user_name_; }
+    const std::string& hostAddress() const { return host_address_; }
     HostId hostId() const { return host_id_; }
     Seconds idleTime(TimePoint current_time) const;
     Seconds duration(TimePoint current_time) const;
@@ -59,9 +61,9 @@ private:
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
     qint64 session_id_ = 0;
-    QString client_address_;
-    QString client_user_name_;
-    QString host_address_;
+    std::string client_address_;
+    std::string client_user_name_;
+    std::string host_address_;
     HostId host_id_ = kInvalidHostId;
 
     TimePoint start_time_;

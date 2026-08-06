@@ -123,7 +123,7 @@ void RouterWorker::onStart()
     router_address_ = router_address;
     router_port_ = router_port;
     router_public_key_ = router_public_key;
-    peer_address_ = peer_address;
+    peer_address_ = peer_address.toStdString();
     peer_port_ = peer_port;
     max_peer_count_ = max_peer_count;
 
@@ -336,7 +336,7 @@ void RouterWorker::refreshKeyPool()
     proto::router::RelayKeyPool* relay_key_pool =
         outgoing_message_.newMessage<proto::router::RelayToRouter>().mutable_key_pool();
 
-    relay_key_pool->set_peer_host(peer_address_.toStdString());
+    relay_key_pool->set_peer_host(peer_address_);
     relay_key_pool->set_peer_port(peer_port_);
 
     // Add the requested number of keys to the pool.

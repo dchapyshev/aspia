@@ -491,8 +491,12 @@ TEST_F(RelayWorkerTest, HandshakedPeerWaitsBeyondTheHandshakeBudget)
     asio::ip::tcp::socket client = connectPeer();
     sendHandshake(client, key, shared_secret);
 
-    // Ticks past the handshake budget. The handshake is processed well within this loop, so the
-    // later ticks genuinely test a handshaked session against the passed budget.
+    // The handshake must be processed before the first tick: a tick that arrives earlier sweeps
+    // the peer as a silent one, legitimately. The worker reads the loopback in the background, so
+    // a plain wait covers the delivery.
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    // Ticks past the handshake budget genuinely test a handshaked peer against the passed budget.
     RelayWorkerTestPeer timer(worker_);
     const TimePoint past_handshake_budget = Clock::now() + kPendingHandshakeTimeout + Seconds(1);
     for (int i = 0; i < 20; ++i)

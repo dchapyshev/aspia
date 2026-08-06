@@ -53,8 +53,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
         }
         else
         {
-            std::string address = endpoint.address().to_string();
-            address_ = QString::fromLocal8Bit(address.c_str(), static_cast<qint64>(address.size()));
+            address_ = endpoint.address().to_string();
         }
     }
     catch (const std::exception& e)
@@ -118,7 +117,7 @@ asio::ip::tcp::socket PendingSession::takeSocket()
 }
 
 //--------------------------------------------------------------------------------------------------
-const QString& PendingSession::address() const
+const std::string& PendingSession::address() const
 {
     return address_;
 }
