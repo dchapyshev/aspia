@@ -20,12 +20,18 @@
 
 #include <QHash>
 
+#include <set>
+
+#include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/peer/router_user.h"
 #include "base/serialization.h"
 #include "build/build_config.h"
 #include "client/database.h"
+#include "client/router_codec.h"
 #include "client/workers/router_worker.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -65,10 +71,14 @@ Router::Router(const RouterConfig& config, QObject* parent)
 
     instances().insert(config_.routerId(), this);
 
+    // The interface runs on GuiApplication, the headless tools on CoreApplication.
     router_worker_ = GuiApplication::findWorker<RouterWorker>();
     if (!router_worker_)
+        router_worker_ = CoreApplication::findWorker<RouterWorker>();
+
+    if (!router_worker_)
     {
-        LOG(FATAL) << "Router worker not found";
+        LOG(ERROR) << "Router worker not found";
         return;
     }
 
@@ -77,6 +87,8 @@ Router::Router(const RouterConfig& config, QObject* parent)
     connect(router_worker_, &RouterWorker::sig_errorOccurred, this, &Router::onTcpErrorOccurred,
             Qt::QueuedConnection);
     connect(router_worker_, &RouterWorker::sig_messageReceived, this, &Router::onTcpMessageReceived,
+            Qt::QueuedConnection);
+    connect(this, &Router::sig_sendMessage, router_worker_, &RouterWorker::onSendMessage,
             Qt::QueuedConnection);
 }
 
@@ -133,7 +145,507 @@ void Router::submitTwoFactorCode(const QString& totp_code)
     proto::router::ClientToRouter message;
     proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
     response->set_totp_code(totp_code.toStdString());
-    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listRelays(RouterCallback<proto::router::RelayList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_relay_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listClients(RouterCallback<proto::router::ClientList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_client_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listUsers(RouterCallback<proto::router::UserList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::addUser(const proto::router::User& user,
+                     RouterCallback<proto::router::UserResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandUserAdd);
+    request->mutable_user()->CopyFrom(user);
+
+    // An administrator has access to every workspace, so our workspace keys are sealed to the key
+    // pair of the new user and become its access entries on the router.
+    if (user.sessions() & proto::router::SESSION_TYPE_ADMIN)
+        keys_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
+
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::modifyUser(const proto::router::User& user,
+                        RouterCallback<proto::router::UserResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandUserModify);
+    request->mutable_user()->CopyFrom(user);
+    keys_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::deleteUser(qint64 entry_id, RouterCallback<proto::router::UserResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandUserDelete);
+    request->mutable_user()->set_entry_id(entry_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::resetUserOtp(qint64 user_id, RouterCallback<proto::router::UserResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandUserResetOtp);
+    request->mutable_user()->set_entry_id(user_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
+                              RouterCallback<proto::router::UserResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandUserRevokeTokens);
+    auto* user = request->mutable_user();
+    user->set_entry_id(user_id);
+    for (qint64 token_id : token_ids)
+        user->add_token()->set_token_id(token_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::disconnectRelay(qint64 session_id, RouterCallback<proto::router::RelayResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_relay_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandRelayDisconnect);
+    request->set_entry_id(session_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::disconnectClient(qint64 session_id,
+                              RouterCallback<proto::router::ClientResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_client_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandClientDisconnect);
+    request->set_entry_id(session_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::disconnectPeer(qint64 relay_id, qint64 peer_id,
+                            RouterCallback<proto::router::PeerResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_peer_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandPeerDisconnect);
+    request->set_relay_id(relay_id);
+    request->set_peer_id(peer_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::disconnectHost(HostId host_id, RouterCallback<proto::router::HostResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandHostDisconnect);
+    request->mutable_host()->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::removeHost(HostId host_id, RouterCallback<proto::router::HostResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandHostRemove);
+    request->mutable_host()->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::approveHost(HostId host_id, RouterCallback<proto::router::HostResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandHostApprove);
+    request->mutable_host()->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::checkHostUpdates(HostId host_id, RouterCallback<proto::router::HostResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandHostUpdate);
+    request->mutable_host()->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback)
+{
+    proto::router::Host serialized;
+    const std::string_view build_error = buildRouterHost(keys_, host, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        // Nothing is sent, so no reply would ever come and the caller would wait forever.
+        proto::router::HostResult result;
+        result.set_error_code(std::string(build_error));
+        callback(result);
+        return;
+    }
+
+    proto::router::ManagerToRouter message;
+    auto* request = message.mutable_host_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandHostModify);
+    request->mutable_host()->Swap(&serialized);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_MANAGER, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::addWorkspace(const RouterWorkspace& workspace,
+                          RouterCallback<proto::router::WorkspaceResult> callback)
+{
+    proto::router::Workspace serialized;
+    const std::string_view build_error = buildRouterWorkspace(keys_, workspace, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        proto::router::WorkspaceResult result;
+        result.set_error_code(std::string(build_error));
+        callback(result);
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_workspace_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandWorkspaceAdd);
+    request->mutable_workspace()->Swap(&serialized);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::modifyWorkspace(const RouterWorkspace& workspace,
+                             RouterCallback<proto::router::WorkspaceResult> callback)
+{
+    proto::router::Workspace serialized;
+    const std::string_view build_error = buildRouterWorkspace(keys_, workspace, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        proto::router::WorkspaceResult result;
+        result.set_error_code(std::string(build_error));
+        callback(result);
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_workspace_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandWorkspaceModify);
+    request->mutable_workspace()->Swap(&serialized);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::deleteWorkspace(qint64 entry_id,
+                             RouterCallback<proto::router::WorkspaceResult> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_workspace_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandWorkspaceDelete);
+    request->mutable_workspace()->set_entry_id(entry_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::addGroup(qint64 workspace_id, const RouterGroup& group,
+                      RouterCallback<proto::router::GroupResult> callback)
+{
+    proto::router::Group serialized;
+    const std::string_view build_error = buildRouterGroup(keys_, workspace_id, group, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        proto::router::GroupResult result;
+        result.set_error_code(std::string(build_error));
+        callback(result);
+        return;
+    }
+
+    proto::router::ManagerToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupAdd);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->Swap(&serialized);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_MANAGER, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::modifyGroup(qint64 workspace_id, const RouterGroup& group,
+                         RouterCallback<proto::router::GroupResult> callback)
+{
+    proto::router::Group serialized;
+    const std::string_view build_error = buildRouterGroup(keys_, workspace_id, group, &serialized);
+    if (build_error != proto::router::kErrorOk)
+    {
+        proto::router::GroupResult result;
+        result.set_error_code(std::string(build_error));
+        callback(result);
+        return;
+    }
+
+    proto::router::ManagerToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupModify);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->Swap(&serialized);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_MANAGER, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::deleteGroup(qint64 workspace_id, qint64 entry_id,
+                         RouterCallback<proto::router::GroupResult> callback)
+{
+    proto::router::ManagerToRouter message;
+    auto* request = message.mutable_group_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_command_name(proto::router::kCommandGroupDelete);
+    request->set_workspace_id(workspace_id);
+    request->mutable_group()->set_entry_id(entry_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_MANAGER, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listWorkspaces(CachePolicy policy, qint64 workspace_id,
+                            RouterCallback<RouterWorkspaceList> callback)
+{
+    if (policy == CachePolicy::USE_CACHE && workspace_id == 0 && cache_.workspacesLoaded())
+    {
+        callback(cache_.workspaceList());
+        return;
+    }
+
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_workspace_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_workspace_id(workspace_id);
+    rpc_.registerPending<proto::router::WorkspaceList>(request, std::move(callback),
+        [this, workspace_id](const proto::router::WorkspaceList& raw)
+    {
+        return applyWorkspaceList(raw, workspace_id);
+    });
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listGroups(CachePolicy policy, qint64 workspace_id,
+                        RouterCallback<RouterGroupList> callback)
+{
+    if (policy == CachePolicy::USE_CACHE)
+    {
+        const RouterGroupList* cached = cache_.groupList(workspace_id);
+        if (cached)
+        {
+            callback(*cached);
+            return;
+        }
+    }
+
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_group_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_workspace_id(workspace_id);
+    rpc_.registerPending<proto::router::GroupList>(request, std::move(callback),
+        [this](const proto::router::GroupList& raw)
+    {
+        return applyGroupList(raw);
+    });
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listHosts(CachePolicy policy, proto::router::HostListRequest request,
+                       RouterCallback<RouterHostList> callback)
+{
+    // Only filtered (per workspace/group) queries are cached. The page is part of the key: two
+    // pages of the same selection are different answers.
+    const bool cacheable = request.mode() == proto::router::HostListRequest::MODE_FILTERED;
+    const RouterCache::HostKey key{ request.workspace_id(), request.group_id(),
+                                    request.offset(), request.count() };
+
+    if (policy == CachePolicy::USE_CACHE && cacheable)
+    {
+        const RouterHostList* cached = cache_.hostList(key);
+        if (cached)
+        {
+            callback(*cached);
+            return;
+        }
+    }
+
+    request.set_request_id(rpc_.nextRequestId());
+    proto::router::ClientToRouter message;
+    message.mutable_host_list_request()->Swap(&request);
+    rpc_.registerPending<proto::router::HostList>(
+        &message.host_list_request(), std::move(callback),
+        [this, cacheable, key](const proto::router::HostList& raw)
+    {
+        return applyHostList(raw, key, cacheable);
+    });
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::searchHosts(const QString& query, qint64 offset, qint64 count,
+                         RouterCallback<RouterHostList> callback)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_host_search_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_query(query.toStdString());
+    request->set_offset(offset);
+    request->set_count(count);
+    rpc_.registerPending<proto::router::HostSearchResult>(request, std::move(callback),
+        [this](const proto::router::HostSearchResult& raw)
+    {
+        return decodeRouterHostSearchResult(keys_, raw);
+    });
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listTempHosts(RouterCallback<RouterTempHostList> callback)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_temp_host_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    rpc_.registerPending<proto::router::TempHostList>(request, std::move(callback),
+        [](const proto::router::TempHostList& raw)
+    {
+        return decodeRouterTempHostList(raw);
+    });
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::checkHostStatus(HostId host_id, RouterCallback<proto::router::HostStatus> callback)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_check_host_status();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::requestConnection(HostId host_id,
+                               RouterCallback<proto::router::ConnectionOffer> callback)
+{
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_connection_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_host_id(host_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::changePassword(const SecureString& new_password,
+                            RouterCallback<proto::router::ChangePasswordResult> callback)
+{
+    RouterUser new_user = RouterUser::create(keys_.userName(), new_password);
+
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_change_password_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_salt(new_user.salt.toStdString());
+    request->set_verifier(new_user.verifier.toStdString());
+    request->set_public_key(new_user.public_key.toStdString());
+    request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
+    request->set_wrap_salt(new_user.wrap_salt.toStdString());
+
+    keys_.resealGroupKeys(new_user.public_key, request);
+
+    // The accepted password becomes the stored one: from now on it is what opens the account.
+    QObject* receiver = callback.receiver();
+    rpc_.registerPending(request, RouterCallback<proto::router::ChangePasswordResult>(receiver,
+        [this, new_password, callback = std::move(callback)](
+            const proto::router::ChangePasswordResult& result)
+    {
+        if (result.error_code() == proto::router::kErrorOk)
+            persistChangedPassword(new_password);
+        callback(result);
+    }));
+
+    send(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,7 +691,7 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
-        if (!state_.routeReply(message))
+        if (!routeReply(message))
             LOG(WARNING) << "Unhandled admin message";
     }
     else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
@@ -191,7 +703,7 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
-        if (!state_.routeReply(message))
+        if (!routeReply(message))
             LOG(WARNING) << "Unhandled manager message";
     }
     else if (channel_id == proto::router::CHANNEL_ID_CLIENT)
@@ -203,8 +715,7 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             return;
         }
 
-        // The session-level messages are ours: they move the status, touch the stored config and
-        // raise the signals the interface listens to. Everything else is a reply to a request.
+        // The session-level messages are read here, everything else answers a request.
         if (message.has_two_factor_challenge())
             readTwoFactorChallenge(message.two_factor_challenge());
         else if (message.has_two_factor_result())
@@ -213,13 +724,206 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             readUserKeys(message.user_keys());
         else if (message.has_notification())
             emitNotificationSignals(message.notification());
-        else if (!state_.routeReply(message))
+        else if (!routeReply(message))
             LOG(WARNING) << "Unhandled client message";
     }
     else
     {
         LOG(WARNING) << "Unexpected message from channel" << channel_id;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::routeReply(const proto::router::RouterToAdmin& message)
+{
+    if (message.has_relay_list())
+    {
+        rpc_.dispatch(message.relay_list().request_id(), message.relay_list());
+    }
+    else if (message.has_client_list())
+    {
+        rpc_.dispatch(message.client_list().request_id(), message.client_list());
+    }
+    else if (message.has_user_list())
+    {
+        rpc_.dispatch(message.user_list().request_id(), message.user_list());
+    }
+    else if (message.has_user_result())
+    {
+        const proto::router::UserResult& result = message.user_result();
+        cache_.onResult(RouterCache::Result::USER, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
+        rpc_.dispatch(result.request_id(), result);
+    }
+    else if (message.has_host_result())
+    {
+        const proto::router::HostResult& result = message.host_result();
+        cache_.onResult(RouterCache::Result::HOST, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
+        rpc_.dispatch(result.request_id(), result);
+    }
+    else if (message.has_relay_result())
+    {
+        rpc_.dispatch(message.relay_result().request_id(), message.relay_result());
+    }
+    else if (message.has_client_result())
+    {
+        rpc_.dispatch(message.client_result().request_id(), message.client_result());
+    }
+    else if (message.has_workspace_result())
+    {
+        const proto::router::WorkspaceResult& result = message.workspace_result();
+        cache_.onResult(RouterCache::Result::WORKSPACE, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
+        rpc_.dispatch(result.request_id(), result);
+    }
+    else if (message.has_peer_result())
+    {
+        rpc_.dispatch(message.peer_result().request_id(), message.peer_result());
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::routeReply(const proto::router::RouterToManager& message)
+{
+    if (message.has_host_result())
+    {
+        const proto::router::HostResult& result = message.host_result();
+        cache_.onResult(RouterCache::Result::HOST, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
+
+        rpc_.dispatch(result.request_id(), result);
+    }
+    else if (message.has_group_result())
+    {
+        const proto::router::GroupResult& result = message.group_result();
+        cache_.onResult(RouterCache::Result::GROUP, result.command_name(),
+                        result.error_code() == proto::router::kErrorOk);
+
+        rpc_.dispatch(result.request_id(), result);
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::routeReply(const proto::router::RouterToClient& message)
+{
+    // Nothing here invalidates a cache: these are read-only queries, and the one write among them
+    // (the password change) re-seals the keys the user already holds without moving any revision.
+    if (message.has_connection_offer())
+        rpc_.dispatch(message.connection_offer().request_id(), message.connection_offer());
+    else if (message.has_host_status())
+        rpc_.dispatch(message.host_status().request_id(), message.host_status());
+    else if (message.has_host_list())
+        rpc_.dispatch(message.host_list().request_id(), message.host_list());
+    else if (message.has_host_search_result())
+        rpc_.dispatch(message.host_search_result().request_id(), message.host_search_result());
+    else if (message.has_temp_host_list())
+        rpc_.dispatch(message.temp_host_list().request_id(), message.temp_host_list());
+    else if (message.has_workspace_list())
+        rpc_.dispatch(message.workspace_list().request_id(), message.workspace_list());
+    else if (message.has_group_list())
+        rpc_.dispatch(message.group_list().request_id(), message.group_list());
+    else if (message.has_change_password_result())
+        rpc_.dispatch(message.change_password_result().request_id(), message.change_password_result());
+    else
+        return false;
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceList& list,
+                                               qint64 requested_workspace_id)
+{
+    RouterWorkspaceList decoded;
+    decoded.error_code = QString::fromStdString(list.error_code());
+    decoded.workspaces.reserve(list.workspace_size());
+
+    // The complete list is the authoritative answer about what we still have access to.
+    const bool full_list = requested_workspace_id == 0 &&
+                           decoded.error_code == proto::router::kErrorOk;
+    std::set<qint64> visible_ids;
+
+    for (int i = 0; i < list.workspace_size(); ++i)
+    {
+        const proto::router::Workspace& src = list.workspace(i);
+
+        RouterWorkspace& dst = decoded.workspaces.emplaceBack();
+        dst.entry_id = src.entry_id();
+        dst.name     = QString::fromStdString(src.name());
+        dst.revision = src.revision();
+        dst.access.reserve(src.access_size());
+
+        visible_ids.insert(src.entry_id());
+
+        QByteArray self_wrapped_gk;
+        for (int j = 0; j < src.access_size(); ++j)
+        {
+            const proto::router::WorkspaceAccess& access = src.access(j);
+            dst.access.emplaceBack().user_id = access.user_id();
+
+            if (access.user_id() == keys_.userId())
+                self_wrapped_gk = QByteArray::fromStdString(access.wrapped_gk());
+        }
+
+        if (self_wrapped_gk.isEmpty())
+            continue;
+
+        SecureByteArray gk = keys_.unwrapGroupKey(self_wrapped_gk);
+        if (gk.isEmpty())
+        {
+            // See RouterKeys::apply: the missing cryptor makes reseal-dependent operations answer
+            // "conflict" for this workspace with no way for a refetch to recover.
+            LOG(ERROR) << "Failed to unwrap GK for workspace" << src.entry_id();
+            continue;
+        }
+
+        DataCryptor cryptor(CipherType::AES256_GCM, gk);
+        if (!src.comment().empty())
+            dst.comment = decryptField(cryptor, src.comment());
+
+        keys_.storeWorkspaceKey(src.entry_id(), std::move(cryptor));
+    }
+
+    if (full_list)
+    {
+        keys_.dropKeysExcept(visible_ids);
+        cache_.storeWorkspaces(decoded);
+    }
+
+    return decoded;
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterHostList Router::applyHostList(const proto::router::HostList& list,
+                                     const RouterCache::HostKey& key, bool cacheable)
+{
+    RouterHostList decoded = decodeRouterHostList(keys_, list);
+
+    if (cacheable)
+        cache_.storeHosts(key, decoded);
+
+    return decoded;
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterGroupList Router::applyGroupList(const proto::router::GroupList& list)
+{
+    RouterGroupList decoded = decodeRouterGroupList(keys_, list);
+    cache_.storeGroups(decoded);
+    return decoded;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -233,8 +937,8 @@ void Router::setStatus(Status status)
     // to be current, and the replies we still wait for will never arrive.
     if (status_ != Status::ONLINE)
     {
-        state_.clearCaches();
-        state_.rpc().clearPending();
+        cache_.clear();
+        rpc_.clearPending();
     }
 
     emit sig_statusChanged(config_.routerId(), status_);
@@ -263,18 +967,15 @@ void Router::disconnectWorker()
 //--------------------------------------------------------------------------------------------------
 void Router::clearSessionState()
 {
-    state_.clearSession();
+    keys_.clear();
+    rpc_.clearPending();
     version_ = QVersionNumber();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::emitSend(quint8 channel_id, const google::protobuf::MessageLite& message)
+void Router::send(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
-    if (!router_worker_)
-        return;
-
-    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
-                              config_.routerId(), channel_id, serialize(message));
+    emit sig_sendMessage(config_.routerId(), channel_id, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,8 +983,7 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 {
     LOG(INFO) << "User keys received (user_id:" << user_keys.user_id() << ")";
 
-    const RouterKeys::Result result =
-        state_.keys().apply(user_keys, SecureString(config_.password()));
+    const RouterKeys::Result result = keys_.apply(user_keys, SecureString(config_.password()));
 
     if (result == RouterKeys::Result::PASSWORD_CHANGE_REQUIRED)
     {
@@ -294,11 +994,9 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 
     if (result == RouterKeys::Result::DECRYPT_FAILED)
     {
-        // Nothing recovers from this. The password opened the account (the handshake passed) but
-        // not the private key stored with it, so every workspace stays locked and even a password
-        // change cannot re-seal the keys we were unable to read. Reconnecting would repeat it
-        // forever, and staying in CONNECTING would leave the user watching a connection the router
-        // considers established - so report it and end the session.
+        // The password opened the account but not the private key stored with it, so every
+        // workspace stays locked and even a password change cannot re-seal keys we cannot read.
+        // Nothing recovers from this and a reconnect would repeat it forever.
         LOG(ERROR) << "Stored private key does not open with our password. Ending session";
         emit sig_errorOccurred(config_.routerId(), TcpChannel::ErrorCode::CRYPTO_ERROR);
         disconnectFromRouter();
@@ -319,12 +1017,9 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 //--------------------------------------------------------------------------------------------------
 void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge)
 {
-    // The router re-opens the two-factor stage of a session that was already up (after our own
-    // password change, which revokes every device token). From that moment it drops everything we
-    // send until the stage completes, so the session must go back to CONNECTING: the replies we
-    // wait for will never arrive, the cached lists are no longer known to be current, and the UI
-    // must stop issuing requests into a window where they are silently discarded. UserKeys puts
-    // the session back to ONLINE.
+    // The two-factor stage can re-open on a session that was already up (our own password change
+    // revokes every device token). Until it completes the router drops everything we send, so the
+    // session goes back to CONNECTING; UserKeys puts it back to ONLINE.
     if (status_ == Status::ONLINE)
         setStatus(Status::CONNECTING);
 
@@ -332,11 +1027,9 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
     {
         case proto::router::TWO_FACTOR_MODE_ACTIVE:
         {
-            // The router can ask twice: once at the start of the 2FA stage, and a second
-            // time when our presented |token| was rejected (revoked, password change,
-            // database wiped). On the latter we must drop the stale local copy and skip
-            // straight to the TOTP prompt; otherwise we would loop, presenting the same
-            // dead token again.
+            // The second ask means the token we presented was rejected (revoked, password
+            // changed, database wiped). Presenting it again would loop forever, so the stale
+            // copy goes and the operator is asked for a code.
             if (challenge.token_rejected())
             {
                 LOG(INFO) << "Router rejected device token - clearing local copy";
@@ -348,15 +1041,14 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
                 return;
             }
 
-            // Token path: if we hold a token from a previous successful TOTP, present it and
-            // skip the prompt entirely. Otherwise ask the UI for a fresh TOTP code.
+            // A token from a previous successful TOTP skips the prompt entirely.
             const QByteArray token = config_.deviceToken();
             if (!token.isEmpty())
             {
                 proto::router::ClientToRouter message;
                 proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
                 response->set_token(token.toStdString());
-                emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+                send(proto::router::CHANNEL_ID_CLIENT, message);
                 return;
             }
 
@@ -369,8 +1061,8 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
         {
             const QString uri = QString::fromStdString(challenge.otpauth_uri());
 
-            // Drop any stale token from a previous account life. Enrollment implies a brand
-            // new TOTP secret, the old token is dead.
+            // Enrollment means a brand new TOTP secret, so a token of the previous account
+            // life is dead.
             config_.clearDeviceToken();
             if (!Database::instance().modifyRouter(config_))
                 LOG(WARNING) << "Failed to clear stale device token";
@@ -418,7 +1110,7 @@ void Router::emitNotificationSignals(const proto::router::Notification& notifica
 {
     const qint64 router_id = config_.routerId();
 
-    state_.cache().onNotification(notification);
+    cache_.onNotification(notification);
 
     if (notification.temp_hosts_dirty())
         emit sig_tempHostsChanged(router_id);

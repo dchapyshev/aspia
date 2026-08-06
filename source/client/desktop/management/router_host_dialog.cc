@@ -66,8 +66,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
             reject();
     });
 
-    router->listGroups(Router::CachePolicy::USE_CACHE, host_.workspace_id, this,
-                       &RouterHostDialog::onGroupListReceived);
+    router->listGroups(Router::CachePolicy::USE_CACHE, host_.workspace_id,
+                       { this, &RouterHostDialog::onGroupListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,5 +146,5 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
-    router->editHost(host_, this, &RouterHostDialog::onHostResultReceived);
+    router->editHost(host_, { this, &RouterHostDialog::onHostResultReceived });
 }

@@ -232,7 +232,7 @@ void MainWindow::connectToUrl(const QString& url)
             HostId host_id = host_url.hostId();
             proto::peer::SessionType session_type = host_url.sessionType();
 
-            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, this,
+            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
                 [this, router_id, host_id, session_type](const Router::HostList& list)
             {
                 HostConfig host;
@@ -252,7 +252,7 @@ void MainWindow::connectToUrl(const QString& url)
                 }
 
                 onConnect(host, session_type);
-            });
+            } });
             return;
         }
 

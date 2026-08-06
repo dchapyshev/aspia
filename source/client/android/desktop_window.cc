@@ -220,7 +220,7 @@ void DesktopWindow::requestConnectionOffer(Router* router)
     session_state_->setRouterVersion(router->version());
     setStatusText(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), this,
+    router->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
@@ -231,7 +231,7 @@ void DesktopWindow::requestConnectionOffer(Router* router)
         }
 
         setStatusText(routerErrorText(offer.error_code()));
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------

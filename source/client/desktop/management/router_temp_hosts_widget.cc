@@ -143,7 +143,7 @@ void RouterTempHostsWidget::onApproveHost()
         return;
 
     LOG(INFO) << "[ACTION] Approve temporary host requested by user";
-    router->approveHost(host->temp_id, this, &RouterTempHostsWidget::onHostResultReceived);
+    router->approveHost(host->temp_id, { this, &RouterTempHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ void RouterTempHostsWidget::fetchTempHosts()
     if (!router)
         return;
 
-    router->listTempHosts(this, &RouterTempHostsWidget::onTempHostListReceived);
+    router->listTempHosts({ this, &RouterTempHostsWidget::onTempHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

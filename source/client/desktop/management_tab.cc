@@ -1263,7 +1263,7 @@ void ManagementTab::onDeleteWorkspaceAction()
         return;
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
-    router->deleteWorkspace(workspace_id, this,
+    router->deleteWorkspace(workspace_id, { this,
         [this, router_id](const proto::router::WorkspaceResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
@@ -1274,7 +1274,7 @@ void ManagementTab::onDeleteWorkspaceAction()
             MsgBox::warning(this, tr("Failed to delete the workspace."));
         }
         ui->sidebar->onRefreshWorkspaces(router_id);
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1377,7 +1377,7 @@ void ManagementTab::onDeleteGroupAction()
     if (!router)
         return;
 
-    router->deleteGroup(group_item->workspaceId(), group_item->groupId(), this,
+    router->deleteGroup(group_item->workspaceId(), group_item->groupId(), { this,
         [this, router_id](const proto::router::GroupResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
@@ -1389,7 +1389,7 @@ void ManagementTab::onDeleteGroupAction()
             return;
         }
         ui->sidebar->onRefreshHostGroups(router_id);
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------

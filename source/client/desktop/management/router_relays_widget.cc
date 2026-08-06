@@ -364,7 +364,8 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    router->disconnectRelay(relay->entry_id(), this, &RouterRelaysWidget::onRelayResultReceived);
+    router->disconnectRelay(relay->entry_id(),
+                            { this, &RouterRelaysWidget::onRelayResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -388,7 +389,7 @@ void RouterRelaysWidget::onDisconnectAllRelays()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    router->disconnectRelay(-1, this, &RouterRelaysWidget::onRelayResultReceived);
+    router->disconnectRelay(-1, { this, &RouterRelaysWidget::onRelayResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -456,7 +457,7 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
         router->disconnectPeer(relay->entry_id(), peer->peer_id(),
-            this, &RouterRelaysWidget::onPeerResultReceived);
+                               { this, &RouterRelaysWidget::onPeerResultReceived });
     }
     else if (selected == copy_row_action)
     {
@@ -557,7 +558,7 @@ void RouterRelaysWidget::fetchRelays()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listRelays(this, &RouterRelaysWidget::onRelayListReceived);
+    router->listRelays({ this, &RouterRelaysWidget::onRelayListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

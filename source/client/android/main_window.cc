@@ -594,7 +594,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         {
             HostId host_id = host_url.hostId();
 
-            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, this,
+            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
                 [this, router_id, host_id, session_type](const Router::HostList& list)
             {
                 HostConfig host;
@@ -614,7 +614,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
                 }
 
                 openSession(host, session_type);
-            });
+            } });
             return;
         }
 

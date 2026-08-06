@@ -351,7 +351,7 @@ void RouterHostsWidget::onDisconnectHost()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    router->disconnectHost(host->host_id, this, &RouterHostsWidget::onHostResultReceived);
+    router->disconnectHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ void RouterHostsWidget::onDisconnectAllHosts()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    router->disconnectHost(kAllHostsId, this, &RouterHostsWidget::onHostResultReceived);
+    router->disconnectHost(kAllHostsId, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -408,7 +408,7 @@ void RouterHostsWidget::onRemoveHost()
         return;
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    router->removeHost(host->host_id, this, &RouterHostsWidget::onHostResultReceived);
+    router->removeHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ void RouterHostsWidget::onCheckHostUpdates()
         return;
 
     LOG(INFO) << "[ACTION] Check host updates requested by user";
-    router->checkHostUpdates(host->host_id, this, &RouterHostsWidget::onHostResultReceived);
+    router->checkHostUpdates(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -601,8 +601,8 @@ void RouterHostsWidget::fetchHosts()
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
     request.set_offset(hosts_page_.offset());
     request.set_count(hosts_page_.pageSize());
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(request), this,
-                      &RouterHostsWidget::onHostListReceived);
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(request),
+                      { this, &RouterHostsWidget::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -615,8 +615,8 @@ void RouterHostsWidget::fetchWorkspaces()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
-                           &RouterHostsWidget::onWorkspaceListReceived);
+    router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
+                           { this, &RouterHostsWidget::onWorkspaceListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

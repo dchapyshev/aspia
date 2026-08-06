@@ -62,8 +62,8 @@ RouterGroupDialog::RouterGroupDialog(
             reject();
     });
 
-    router->listGroups(Router::CachePolicy::USE_CACHE, workspace_id_, this,
-                       &RouterGroupDialog::onGroupListReceived);
+    router->listGroups(Router::CachePolicy::USE_CACHE, workspace_id_,
+                       { this, &RouterGroupDialog::onGroupListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,7 +170,8 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     LOG(INFO) << "[ACTION] Submitting group (entry_id:" << entry_id_
               << ", parent_id:" << group.parent_id << ")";
     if (entry_id_ > 0)
-        router->modifyGroup(workspace_id_, group, this, &RouterGroupDialog::onGroupResultReceived);
+        router->modifyGroup(workspace_id_, group,
+                            { this, &RouterGroupDialog::onGroupResultReceived });
     else
-        router->addGroup(workspace_id_, group, this, &RouterGroupDialog::onGroupResultReceived);
+        router->addGroup(workspace_id_, group, { this, &RouterGroupDialog::onGroupResultReceived });
 }

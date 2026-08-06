@@ -342,7 +342,7 @@ void ChatWindow::requestConnectionOffer(Router* router)
     session_state_->setRouterVersion(router->version());
     setStatusText(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), this,
+    router->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
@@ -353,7 +353,7 @@ void ChatWindow::requestConnectionOffer(Router* router)
         }
 
         setStatusText(tr("Error requesting connection via router."));
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------

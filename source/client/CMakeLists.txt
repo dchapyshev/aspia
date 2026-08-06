@@ -56,8 +56,6 @@ list(APPEND SOURCE_CLIENT_CORE
     router_keys.cc
     router_keys.h
     router_rpc.h
-    router_state.cc
-    router_state.h
     page_model.cc
     page_model.h
     search_page_model.cc
@@ -90,8 +88,8 @@ list(APPEND SOURCE_CLIENT_TESTS
     router_codec_unittest.cc
     router_keys_unittest.cc
     router_rpc_unittest.cc
-    router_state_unittest.cc
     router_test_fixture.h
+    router_unittest.cc
     page_model_unittest.cc
     search_page_model_unittest.cc
     tests_main.cc)

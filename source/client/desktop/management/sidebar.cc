@@ -505,7 +505,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
 
     // On success the router revokes this session's token and re-runs the 2FA stage, so the user
     // will be asked for a code again right after (handled by the existing two-factor plumbing).
-    router->changePassword(dialog.password(), this,
+    router->changePassword(dialog.password(), { this,
         [this, router_id](const proto::router::ChangePasswordResult& result)
     {
         const std::string& error_code = result.error_code();
@@ -523,8 +523,8 @@ void Sidebar::changeRouterPassword(qint64 router_id)
             Router* router = Router::instance(router_id);
             if (router)
             {
-                router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
-                                       [](const Router::WorkspaceList&) {});
+                router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
+                                       { this, [](const Router::WorkspaceList&) {} });
             }
             MsgBox::warning(this, tr("The list of workspaces was changed during the operation. "
                                      "Please try again."));
@@ -532,7 +532,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         }
 
         MsgBox::warning(this, routerErrorText(error_code));
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -555,7 +555,7 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
     if (!router)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
+    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, { this,
         [this, router_id](const Router::WorkspaceList& list)
     {
         if (list.error_code != proto::router::kErrorOk)
@@ -577,7 +577,7 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
         for (const Router::Workspace& workspace : list.workspaces)
         {
             const qint64 workspace_id = workspace.entry_id;
-            router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
+            router->listGroups(Router::CachePolicy::RELOAD, workspace_id, { this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
                 if (result.error_code != proto::router::kErrorOk)
@@ -586,9 +586,9 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
                     return;
                 }
                 setRouterHostGroups(router_id, workspace_id, result.groups);
-            });
+            } });
         }
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -603,7 +603,7 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
     const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
-        router->listGroups(Router::CachePolicy::RELOAD, workspace_id, this,
+        router->listGroups(Router::CachePolicy::RELOAD, workspace_id, { this,
             [this, router_id, workspace_id](const Router::GroupList& result)
         {
             if (result.error_code != proto::router::kErrorOk)
@@ -613,7 +613,7 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
                 return;
             }
             setRouterHostGroups(router_id, workspace_id, result.groups);
-        });
+        } });
     }
 }
 
@@ -1600,7 +1600,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         Router::Group group = source_group->group();
         group.parent_id = target_group_id;
 
-        router->modifyGroup(source_group->workspaceId(), group, this,
+        router->modifyGroup(source_group->workspaceId(), group, { this,
             [this, router_id](const proto::router::GroupResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
@@ -1610,7 +1610,7 @@ bool Sidebar::onDrop(QDropEvent* event)
                 return;
             }
             emit sig_routerGroupMoved(router_id);
-        });
+        } });
 
         event->acceptProposedAction();
         restoreSelection();
@@ -1678,7 +1678,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         host.group_id = target_group_id;
-        router->editHost(host, this, [this, router_id](const proto::router::HostResult& result)
+        router->editHost(host, { this, [this, router_id](const proto::router::HostResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
             {
@@ -1687,7 +1687,7 @@ bool Sidebar::onDrop(QDropEvent* event)
                 return;
             }
             emit sig_routerHostMoved(router_id);
-        });
+        } });
 
         event->acceptProposedAction();
         restoreSelection();

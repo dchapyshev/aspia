@@ -366,7 +366,7 @@ void RemoteWidget::countSearchSources()
 
         // A single record is asked for: what is wanted here is the size of the whole match set,
         // and the page itself is fetched once every router has reported.
-        router->searchHosts(query, 0, 1, this,
+        router->searchHosts(query, 0, 1, { this,
             [this, generation, slot, router_id](const Router::HostList& list)
         {
             if (generation != search_generation_)
@@ -382,7 +382,7 @@ void RemoteWidget::countSearchSources()
             }
 
             onSearchSourceCounted(slot, list.total_count);
-        });
+        } });
     }
 }
 
@@ -455,7 +455,7 @@ void RemoteWidget::fetchSearchPage()
             continue;
         }
 
-        router->searchHosts(query, search_slices_[i].offset, search_slices_[i].count, this,
+        router->searchHosts(query, search_slices_[i].offset, search_slices_[i].count, { this,
             [this, generation, i, router_id](const Router::HostList& list)
         {
             if (generation != search_generation_ || i >= search_slices_.size())
@@ -468,7 +468,7 @@ void RemoteWidget::fetchSearchPage()
 
             search_slices_[i].ready = true;
             showSearchPage();
-        });
+        } });
     }
 
     showSearchPage();
@@ -653,7 +653,8 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
     if (!router || router->status() != Router::Status::ONLINE)
         return;
 
-    router->listWorkspaces(policy, 0, this, [this, router_id, policy](const Router::WorkspaceList& list)
+    router->listWorkspaces(policy, 0,
+        { this, [this, router_id, policy](const Router::WorkspaceList& list)
     {
         // An error reply carries no list; applying it would wipe the workspaces of the router
         // from the tree. Keep what is shown.
@@ -707,7 +708,7 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
                     populateGroups(router_id, parent, result.groups);
             });
         }
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -729,7 +730,7 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy, bool append)
     request.set_offset(offset);
     request.set_count(kHostPageSize);
 
-    router->listHosts(policy, std::move(request), this,
+    router->listHosts(policy, std::move(request), { this,
         [this, router_id, workspace_id, group_id, append](const Router::HostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
@@ -753,7 +754,7 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy, bool append)
 
         hosts_total_count_ = list.total_count;
         rebuildHostRows();
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -789,7 +790,7 @@ void RemoteWidget::fetchTempHosts()
 
     const qint64 router_id = host_router_id_;
 
-    router->listTempHosts(this, [this, router_id](const Router::TempHostList& list)
+    router->listTempHosts({ this, [this, router_id](const Router::TempHostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
         if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
@@ -812,7 +813,7 @@ void RemoteWidget::fetchTempHosts()
             item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
             item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
         }
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------

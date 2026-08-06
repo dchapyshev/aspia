@@ -224,7 +224,7 @@ void RouterUsersWidget::onDeleteUser()
         return;
 
     LOG(INFO) << "[ACTION] Delete user accepted by user";
-    router->deleteUser(entry_id, this, &RouterUsersWidget::onUserResultReceived);
+    router->deleteUser(entry_id, { this, &RouterUsersWidget::onUserResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ void RouterUsersWidget::fetchUsers()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listUsers(this, &RouterUsersWidget::onUserListReceived);
+    router->listUsers({ this, &RouterUsersWidget::onUserListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

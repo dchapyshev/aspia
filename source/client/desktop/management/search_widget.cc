@@ -436,7 +436,7 @@ void SearchWidget::countSources()
 
         // A single record is asked for: what is wanted here is the size of the whole match set,
         // and the page itself is fetched once every source has reported.
-        router->searchHosts(query, 0, 1, this,
+        router->searchHosts(query, 0, 1, { this,
             [this, generation, slot, router_id](const Router::HostList& list)
         {
             if (generation != generation_)
@@ -452,7 +452,7 @@ void SearchWidget::countSources()
             }
 
             onSourceCounted(slot, list.total_count);
-        });
+        } });
     }
 }
 
@@ -536,7 +536,7 @@ void SearchWidget::fetchCurrentPage()
             continue;
         }
 
-        router->searchHosts(query, slice.offset, slice.count, this,
+        router->searchHosts(query, slice.offset, slice.count, { this,
             [this, generation, i, router_id](const Router::HostList& list)
         {
             if (generation != generation_ || i >= page_slices_.size())
@@ -549,7 +549,7 @@ void SearchWidget::fetchCurrentPage()
 
             page_slices_[i].ready = true;
             showCurrentPage();
-        });
+        } });
     }
 
     showCurrentPage();

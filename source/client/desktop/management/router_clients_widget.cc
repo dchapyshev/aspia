@@ -296,7 +296,8 @@ void RouterClientsWidget::onDisconnectClient()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    router->disconnectClient(client->entry_id(), this, &RouterClientsWidget::onClientResultReceived);
+    router->disconnectClient(client->entry_id(),
+                             { this, &RouterClientsWidget::onClientResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -320,7 +321,7 @@ void RouterClientsWidget::onDisconnectAllClients()
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
-    router->disconnectClient(-1, this, &RouterClientsWidget::onClientResultReceived);
+    router->disconnectClient(-1, { this, &RouterClientsWidget::onClientResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,7 +396,7 @@ void RouterClientsWidget::fetchClients()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listClients(this, &RouterClientsWidget::onClientListReceived);
+    router->listClients({ this, &RouterClientsWidget::onClientListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

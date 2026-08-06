@@ -381,7 +381,7 @@ void ClientWindow::fetchConnectionOffer()
     if (!session_state_->isReconnecting())
         status_overlay_->setProgress(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), this,
+    router->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
@@ -406,7 +406,7 @@ void ClientWindow::fetchConnectionOffer()
 
         onErrorOccurred(tr("Error requesting connection via router.") + ' ' +
                         routerErrorText(offer.error_code()));
-    });
+    } });
 }
 
 //--------------------------------------------------------------------------------------------------

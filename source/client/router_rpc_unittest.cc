@@ -39,8 +39,8 @@ TEST_F(RouterRpcTest, DispatchInvokesTheHandlerOnce)
 
     proto::router::UserListRequest request;
     request.set_request_id(rpc_.nextRequestId());
-    rpc_.registerPending<proto::router::UserList>(&request, &receiver,
-        [&calls](const proto::router::UserList&) { ++calls; });
+    rpc_.registerPending<proto::router::UserList>(&request,
+        { &receiver, [&calls](const proto::router::UserList&) { ++calls; } });
 
     EXPECT_EQ(rpc_.pendingCount(), 1);
 
@@ -67,8 +67,8 @@ TEST_F(RouterRpcTest, DispatchSkipsDestroyedReceiver)
 
     {
         QObject receiver;
-        rpc_.registerPending<proto::router::UserList>(&request, &receiver,
-            [&calls](const proto::router::UserList&) { ++calls; });
+        rpc_.registerPending<proto::router::UserList>(&request,
+            { &receiver, [&calls](const proto::router::UserList&) { ++calls; } });
     }
 
     proto::router::UserList response;
@@ -91,8 +91,12 @@ TEST_F(RouterRpcTest, ReplyOfTheWrongKindStillAnswersTheCaller)
     proto::router::UserList delivered;
     bool called = false;
 
-    rpc_.registerPending<proto::router::UserList>(&request, &receiver,
-        [&](const proto::router::UserList& list) { delivered = list; called = true; });
+    rpc_.registerPending<proto::router::UserList>(&request,
+        { &receiver, [&](const proto::router::UserList& list)
+        {
+            delivered = list;
+            called = true;
+        } });
 
     proto::router::HostList wrong_kind;
     wrong_kind.set_request_id(request.request_id());
@@ -125,11 +129,12 @@ TEST_F(RouterRpcTest, DecoderRunsBeforeTheHandlerOnBothPaths)
 
     QObject receiver;
     Decoded delivered;
+    const auto store = [&delivered](const Decoded& decoded) { delivered = decoded; };
 
     proto::router::HostListRequest request;
     request.set_request_id(rpc_.nextRequestId());
-    rpc_.registerPending<proto::router::HostList>(&request, &receiver,
-        [&delivered](const Decoded& decoded) { delivered = decoded; }, decoder);
+    rpc_.registerPending<proto::router::HostList>(&request,
+        RouterCallback<Decoded>(&receiver, store), decoder);
 
     proto::router::HostList response;
     response.set_error_code(proto::router::kErrorOk);
@@ -142,8 +147,8 @@ TEST_F(RouterRpcTest, DecoderRunsBeforeTheHandlerOnBothPaths)
     // And the failure path of the same registration.
     proto::router::HostListRequest failed_request;
     failed_request.set_request_id(rpc_.nextRequestId());
-    rpc_.registerPending<proto::router::HostList>(&failed_request, &receiver,
-        [&delivered](const Decoded& decoded) { delivered = decoded; }, decoder);
+    rpc_.registerPending<proto::router::HostList>(&failed_request,
+        RouterCallback<Decoded>(&receiver, store), decoder);
 
     rpc_.clearPending();
 
@@ -161,14 +166,14 @@ TEST_F(RouterRpcTest, ALostSessionAnswersEveryKindOfCaller)
     proto::router::HostRequest host_request;
     host_request.set_request_id(rpc_.nextRequestId());
     proto::router::HostResult host_result;
-    rpc_.registerPending<proto::router::HostResult>(&host_request, &receiver,
-        [&](const proto::router::HostResult& result) { host_result = result; });
+    rpc_.registerPending<proto::router::HostResult>(&host_request,
+        { &receiver, [&](const proto::router::HostResult& result) { host_result = result; } });
 
     proto::router::ConnectionRequest offer_request;
     offer_request.set_request_id(rpc_.nextRequestId());
     proto::router::ConnectionOffer offer;
-    rpc_.registerPending<proto::router::ConnectionOffer>(&offer_request, &receiver,
-        [&](const proto::router::ConnectionOffer& result) { offer = result; });
+    rpc_.registerPending<proto::router::ConnectionOffer>(&offer_request,
+        { &receiver, [&](const proto::router::ConnectionOffer& result) { offer = result; } });
 
     rpc_.clearPending();
 
@@ -187,16 +192,16 @@ TEST_F(RouterRpcTest, CallerAnsweredByTeardownCanRegisterAgain)
 
     proto::router::UserListRequest request;
     request.set_request_id(rpc_.nextRequestId());
-    rpc_.registerPending<proto::router::UserList>(&request, &receiver,
-        [&](const proto::router::UserList&)
+    rpc_.registerPending<proto::router::UserList>(&request,
+        { &receiver, [&](const proto::router::UserList&)
     {
         ++calls;
 
         proto::router::UserListRequest retry;
         retry.set_request_id(rpc_.nextRequestId());
-        rpc_.registerPending<proto::router::UserList>(&retry, &receiver,
-            [&calls](const proto::router::UserList&) { ++calls; });
-    });
+        rpc_.registerPending<proto::router::UserList>(&retry,
+            { &receiver, [&calls](const proto::router::UserList&) { ++calls; } });
+    } });
 
     rpc_.clearPending();
 

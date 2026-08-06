@@ -426,7 +426,7 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
     request.set_group_id(group_id_);
     request.set_offset(hosts_page_.offset());
     request.set_count(hosts_page_.pageSize());
-    router->listHosts(policy, std::move(request), this, &RouterGroupWidget::onHostListReceived);
+    router->listHosts(policy, std::move(request), { this, &RouterGroupWidget::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

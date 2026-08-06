@@ -23,18 +23,51 @@
 #include <QPointer>
 
 #include <functional>
+#include <type_traits>
 #include <typeinfo>
 
 #include "base/logging.h"
 #include "proto/router_constants.h"
 
-// Correlates the requests sent to a router with the callers waiting for the answers: hands out
-// the request ids, remembers who waits for which id and delivers the parsed reply to it. Knows
-// nothing about what the messages mean - decoding and caching come in with the handler.
+// The answer to a request: what to run and the object it belongs to. Nothing is delivered once
+// that object is gone, so a handler holding a pointer to it is safe to keep here.
+template<typename T>
+class RouterCallback
+{
+public:
+    // A member function of |receiver|, bound here so the call sites do not have to.
+    template<typename ReceiverT, typename ClassT,
+             typename = std::enable_if_t<std::is_base_of_v<ClassT, ReceiverT>>>
+    RouterCallback(ReceiverT* receiver, void (ClassT::*method)(const T&))
+        : receiver_(receiver),
+          handler_(std::bind_front(method, receiver))
+    {
+        // Nothing
+    }
+
+    template<typename CallableT,
+             typename = std::enable_if_t<std::is_invocable_v<CallableT, const T&>>>
+    RouterCallback(QObject* receiver, CallableT callable)
+        : receiver_(receiver),
+          handler_(std::move(callable))
+    {
+        // Nothing
+    }
+
+    QObject* receiver() const { return receiver_; }
+
+    void operator()(const T& value) const { handler_(value); }
+
+private:
+    QPointer<QObject> receiver_;
+    std::function<void(const T&)> handler_;
+};
+
+// Hands out the request ids and remembers who waits for which of them. Knows nothing about what
+// the messages mean - decoding and caching come in with the handler.
 //
-// A caller whose answer can never arrive (the session died, or the router replied with a message
-// of another kind) is given a made-up reply carrying kErrorLostConnection, so a dialog that
-// disabled itself for the round trip always wakes up.
+// A caller whose answer can never arrive is given a made-up reply carrying kErrorLostConnection,
+// so a dialog that disabled itself for the round trip always wakes up.
 class RouterRpc
 {
 public:
@@ -48,8 +81,8 @@ public:
     void clearPending()
     {
         // Taken out first because a caller being answered can start a new request right away.
-        const QHash<qint64, Pending> pending = std::move(pending_);
-        pending_.clear();
+        QHash<qint64, Pending> pending;
+        pending.swap(pending_);
 
         for (const Pending& entry : pending)
         {
@@ -58,71 +91,59 @@ public:
         }
     }
 
-    // Invokes |handler| (either a member-function-pointer of |receiver| or any callable taking
-    // const ArgT&) with |arg|.
-    template<typename HandlerT, typename ArgT>
-    static void invokeHandler(QObject* receiver, HandlerT& handler, const ArgT& arg)
+    // Registers |callback| under the request_id() of |request|. The dispatcher passes the parsed
+    // reply by pointer, so the type it is cast back to comes from the callback.
+    template<typename ResponseT, typename RequestT>
+    void registerPending(const RequestT* request, RouterCallback<ResponseT> callback)
     {
-        if constexpr (kIsMemberFn<HandlerT>)
-            (static_cast<OwnerClass<HandlerT>*>(receiver)->*handler)(arg);
-        else
-            handler(arg);
-    }
+        // Taken out first: as arguments of emplace() the order of evaluation would be unspecified,
+        // and the move would race the copy for the callback.
+        const QPointer<QObject> receiver(callback.receiver());
 
-    // Register a response handler keyed by the request's request_id(). The dispatcher passes the
-    // parsed response submessage by pointer; the lambda casts it back to ResponseT (the explicit
-    // template argument) and invokes |handler|.
-    //
-    // |handler| can be either a member-function-pointer of |receiver| or any callable taking
-    // const ResponseT&. The dispatch branch is selected at compile time via if-constexpr, so
-    // every request method takes a single HandlerT parameter and forwards it through here
-    // without needing per-method overloads.
-    template<typename ResponseT, typename RequestT, typename HandlerT>
-    void registerPending(const RequestT* request, QObject* receiver, HandlerT handler)
-    {
-        pending_.emplace(request->request_id(),
-            QPointer<QObject>(receiver),
-            &typeid(ResponseT),
-            [receiver, handler](const void* parsed)
+        auto invoke = [callback](const void* parsed)
         {
-            invokeHandler(receiver, handler, *static_cast<const ResponseT*>(parsed));
-        },
-            [receiver, handler = std::move(handler)]
+            callback(*static_cast<const ResponseT*>(parsed));
+        };
+
+        auto fail = [callback = std::move(callback)]
         {
-            // The reply made up for a caller whose request died with the session. Every reply
-            // carries its error code as a string; a response that cannot say "no" this way would
-            // be fabricated as a success, so it does not compile instead.
+            // A response with no error code of its own would be fabricated as a success, so it
+            // does not compile instead.
             ResponseT response;
             response.set_error_code(proto::router::kErrorLostConnection);
-            invokeHandler(receiver, handler, response);
-        });
+            callback(response);
+        };
+
+        pending_.emplace(request->request_id(), receiver, &typeid(ResponseT),
+                         std::move(invoke), std::move(fail));
     }
 
-    // Same as above but with a post-processing step: the dispatcher casts the parsed bytes to
-    // RawT, runs them through decoder(), and the result is passed to handler. Used for responses
-    // where the wire-level proto differs from what the consumer expects (e.g. workspace list,
-    // where the encrypted proto is decoded into a plain struct before delivery).
-    template<typename RawT, typename RequestT, typename HandlerT, typename DecoderT>
-    void registerPending(const RequestT* request, QObject* receiver,
-                         HandlerT handler, DecoderT decoder)
+    // Same as above, with |decoder| between the parsed RawT and the callback. For the replies the
+    // caller sees as something else than the wire message (an encrypted list as a plain struct).
+    template<typename RawT, typename ResultT, typename RequestT, typename DecoderT>
+    void registerPending(const RequestT* request, RouterCallback<ResultT> callback,
+                         DecoderT decoder)
     {
-        pending_.emplace(request->request_id(),
-            QPointer<QObject>(receiver),
-            &typeid(RawT),
-            [receiver, handler, decoder](const void* parsed)
+        // See above: sequenced so the moves cannot precede the copies.
+        const QPointer<QObject> receiver(callback.receiver());
+
+        auto invoke = [callback, decoder](const void* parsed)
         {
-            invokeHandler(receiver, handler, decoder(*static_cast<const RawT*>(parsed)));
-        },
-            [receiver, handler = std::move(handler), decoder = std::move(decoder)]
+            callback(decoder(*static_cast<const RawT*>(parsed)));
+        };
+
+        auto fail = [callback = std::move(callback), decoder = std::move(decoder)]
         {
             RawT response;
             response.set_error_code(proto::router::kErrorLostConnection);
-            invokeHandler(receiver, handler, decoder(response));
-        });
+            callback(decoder(response));
+        };
+
+        pending_.emplace(request->request_id(), receiver, &typeid(RawT),
+                         std::move(invoke), std::move(fail));
     }
 
-    // Look up the pending entry for a given request_id and invoke its handler with the parsed
-    // response. Called once per case in the reply dispatcher.
+    // Delivers |response| to whoever waits for |request_id|.
     template<typename ResponseT>
     void dispatch(qint64 request_id, const ResponseT& response)
     {
@@ -132,8 +153,8 @@ public:
 
         if (!pending.response_type || *pending.response_type != typeid(ResponseT))
         {
-            // The router answered with a reply of another kind, so nothing it sends later belongs
-            // to this request either. The caller is told the same way a lost session tells it.
+            // The answer came as a reply of another kind, so nothing later belongs to this
+            // request either. The caller is told as a lost session tells it.
             LOG(ERROR) << "Router response type mismatch for request" << request_id;
 
             if (pending.fail)
@@ -153,36 +174,6 @@ private:
         std::function<void(const void* response)> invoke;
         std::function<void()> fail;
     };
-
-    // Type-trait that yields the class that owns a member-function-pointer. Used by
-    // invokeHandler() above to downcast the type-erased QObject* |receiver| back to the
-    // concrete class before invoking the slot.
-    //
-    //     OwnerClass<decltype(&Foo::bar)> == Foo
-    //
-    // Two specializations cover non-const and const member functions; the using-alias
-    // strips cv-qualifiers off the pointer-to-member itself (added implicitly when the
-    // handler is captured by value in a const lambda).
-    template<typename T>
-    struct OwnerClassImpl;
-
-    template<typename Ret, typename Class, typename... Args>
-    struct OwnerClassImpl<Ret (Class::*)(Args...)>
-    {
-        using type = Class;
-    };
-
-    template<typename Ret, typename Class, typename... Args>
-    struct OwnerClassImpl<Ret (Class::*)(Args...) const>
-    {
-        using type = Class;
-    };
-
-    template<typename T>
-    using OwnerClass = typename OwnerClassImpl<std::remove_cv_t<T>>::type;
-
-    template<typename T>
-    static constexpr bool kIsMemberFn = std::is_member_function_pointer_v<std::remove_cv_t<T>>;
 
     qint64 next_request_id_ = 0;
     QHash<qint64, Pending> pending_;

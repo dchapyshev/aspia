@@ -79,7 +79,7 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     {
         Router* router = Router::instance(router_id_);
         if (router)
-            router->listUsers(this, &RouterWorkspaceDialog::onUserListReceived);
+            router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
     });
 
     // The same for the workspace itself: the save is built on top of the server snapshot (the
@@ -90,8 +90,8 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
         Router* router = Router::instance(router_id_);
         if (router)
         {
-            router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
-                                   &RouterWorkspaceDialog::onWorkspaceListReceived);
+            router->listWorkspaces( Router::CachePolicy::RELOAD, 0,
+                                   { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
         }
     });
 
@@ -105,21 +105,21 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
         {
             proto::router::HostListRequest host_request;
             host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-            router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request), this,
-                              &RouterWorkspaceDialog::onHostListReceived);
+            router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
+                              { this, &RouterWorkspaceDialog::onHostListReceived });
         }
     });
 
     // Always fetch the full list so we have all the other names available for uniqueness
     // validation; in modify mode the entry matching entry_id_ also populates the form.
-    router->listWorkspaces(Router::CachePolicy::USE_CACHE, 0, this,
-                           &RouterWorkspaceDialog::onWorkspaceListReceived);
-    router->listUsers(this, &RouterWorkspaceDialog::onUserListReceived);
+    router->listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
+                           { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
+    router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
 
     proto::router::HostListRequest host_request;
     host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request), this,
-                      &RouterWorkspaceDialog::onHostListReceived);
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
+                      { this, &RouterWorkspaceDialog::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,9 +343,11 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
               << ", access entries:" << workspace_.access.size() << ")";
     if (entry_id_ > 0)
-        router->modifyWorkspace(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+        router->modifyWorkspace( workspace_,
+                                { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
     else
-        router->addWorkspace(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+        router->addWorkspace( workspace_,
+                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -459,14 +461,14 @@ void RouterWorkspaceDialog::refetchLists()
     if (!router)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
-                           &RouterWorkspaceDialog::onWorkspaceListReceived);
-    router->listUsers(this, &RouterWorkspaceDialog::onUserListReceived);
+    router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
+                           { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
+    router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
 
     proto::router::HostListRequest host_request;
     host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request), this,
-                      &RouterWorkspaceDialog::onHostListReceived);
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
+                      { this, &RouterWorkspaceDialog::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

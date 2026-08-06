@@ -118,10 +118,10 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     {
         Router* router = Router::instance(router_id_);
         if (router)
-            router->listUsers(this, &RouterUserDialog::onUserListReceived);
+            router->listUsers({ this, &RouterUserDialog::onUserListReceived });
     });
 
-    router->listUsers(this, &RouterUserDialog::onUserListReceived);
+    router->listUsers({ this, &RouterUserDialog::onUserListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,8 +271,8 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
         Router* router = Router::instance(router_id_);
         if (router)
         {
-            router->listWorkspaces(Router::CachePolicy::RELOAD, 0, this,
-                                   [](const Router::WorkspaceList&) {});
+            router->listWorkspaces(Router::CachePolicy::RELOAD, 0, { this,
+                                   [](const Router::WorkspaceList&) {} });
         }
         setEnabled(true);
         MsgBox::warning(this, tr("The router data was changed from another console. The data "
@@ -307,7 +307,7 @@ void RouterUserDialog::onResetOtpClicked()
 
     ui->button_reset_otp->setEnabled(false);
     LOG(INFO) << "[ACTION] Resetting OTP for user" << entry_id_;
-    router->resetUserOtp(entry_id_, this, &RouterUserDialog::onResetOtpResultReceived);
+    router->resetUserOtp(entry_id_, { this, &RouterUserDialog::onResetOtpResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -357,7 +357,7 @@ void RouterUserDialog::onRevokeTokenClicked()
     ui->tab_sessions->setEnabled(false);
     LOG(INFO) << "[ACTION] Revoking device token" << token_id << "of user" << entry_id_;
     router->revokeUserTokens(entry_id_, pending_revoke_token_ids_,
-                             this, &RouterUserDialog::onRevokeResultReceived);
+                             { this, &RouterUserDialog::onRevokeResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,7 +391,7 @@ void RouterUserDialog::onRevokeAllTokensClicked()
     ui->tab_sessions->setEnabled(false);
     LOG(INFO) << "[ACTION] Revoking all device tokens of user" << entry_id_;
     router->revokeUserTokens(entry_id_, /*token_ids=*/QList<qint64>(),
-                             this, &RouterUserDialog::onRevokeResultReceived);
+                             { this, &RouterUserDialog::onRevokeResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -569,9 +569,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Submitting user (entry_id:" << entry_id_ << ")";
     if (entry_id_ > 0)
-        router->modifyUser(request.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->modifyUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
     else
-        router->addUser(request.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->addUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

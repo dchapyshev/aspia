@@ -105,7 +105,7 @@ void OnlineCheckerRouter::checkNextHost()
         return;
     }
 
-    router->checkHostStatus(host_id, this, &OnlineCheckerRouter::onHostStatusReceived);
+    router->checkHostStatus(host_id, { this, &OnlineCheckerRouter::onHostStatusReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
