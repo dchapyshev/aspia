@@ -70,7 +70,7 @@ if (ANDROID)
     return()
 endif()
 
-list(APPEND SOURCE_HOST
+list(APPEND SOURCE_HOST_CORE
     audio_capturer.cc
     audio_capturer.h
     audio_silence_detector.cc
@@ -110,7 +110,6 @@ list(APPEND SOURCE_HOST
     input_injector.h
     license_reader.cc
     license_reader.h
-    main.cc
     process_monitor.cc
     process_monitor.h
     router_manager.cc
@@ -140,8 +139,17 @@ list(APPEND SOURCE_HOST
     user_settings.cc
     user_settings.h)
 
+list(APPEND SOURCE_HOST
+    main.cc)
+
+list(APPEND SOURCE_HOST_TESTS
+    audio_silence_detector_unittest.cc
+    capture_scheduler_unittest.cc
+    screen_capturer_helper_unittest.cc
+    tests_main.cc)
+
 if (WIN32)
-    list(APPEND SOURCE_HOST
+    list(APPEND SOURCE_HOST_CORE
         audio_capturer_win.cc
         audio_capturer_win.h
         desktop_environment_win.cc
@@ -163,7 +171,7 @@ if (WIN32)
 endif()
 
 if (LINUX)
-    list(APPEND SOURCE_HOST
+    list(APPEND SOURCE_HOST_CORE
         audio_capturer_linux.cc
         audio_capturer_linux.h
         desktop_environment_linux.cc
@@ -193,7 +201,7 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    list(APPEND SOURCE_HOST
+    list(APPEND SOURCE_HOST_CORE
         desktop_environment_mac.mm
         desktop_environment_mac.h
         desktop_resizer_mac.mm
@@ -227,7 +235,7 @@ if (LINUX)
     list(APPEND SOURCE_HOST_RESOURCES resources/scripts/linux.qrc)
 endif()
 
-source_group("" FILES ${SOURCE_HOST})
+source_group("" FILES ${SOURCE_HOST_CORE} ${SOURCE_HOST} ${SOURCE_HOST_TESTS})
 source_group(ui FILES ${SOURCE_HOST_UI})
 source_group(workers FILES ${SOURCE_HOST_WORKERS})
 source_group(resources FILES ${SOURCE_HOST_RESOURCES})
@@ -241,27 +249,21 @@ if (WIN32)
 
     set(HOST_PLATFORM_LIBS
         advapi32 avrt crypt32 dbghelp dxgi d3d11 imm32 iphlpapi netapi32 setupapi shlwapi userenv
-        uxtheme version winmm wtsapi32
-        Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
+        uxtheme version winmm wtsapi32)
 endif()
 
 if (LINUX)
     set(HOST_PLATFORM_LIBS stdc++fs)
 endif()
 
-add_executable(aspia_host
-    ${SOURCE_HOST}
+add_library(aspia_host_core STATIC
+    ${SOURCE_HOST_CORE}
     ${SOURCE_HOST_UI}
     ${SOURCE_HOST_WORKERS}
     ${SOURCE_HOST_WIN}
-    ${SOURCE_HOST_LINUX}
-    ${SOURCE_HOST_RESOURCES}
-    host.rc)
-if (WIN32)
-    set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
-    set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-target_link_libraries(aspia_host PRIVATE
+    ${SOURCE_HOST_LINUX})
+
+target_link_libraries(aspia_host_core
     aspia_base
     aspia_common
     aspia_proto
@@ -269,10 +271,10 @@ target_link_libraries(aspia_host PRIVATE
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS})
-set_property(TARGET aspia_host PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_host PROPERTY AUTOUIC ON)
-set_property(TARGET aspia_host PROPERTY AUTORCC ON)
-qt_import_plugins(aspia_host INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+
+set_property(TARGET aspia_host_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 
 if (LINUX)
     # The screen capturers compile the PipeWire/DRM stubs (host/linux); only their headers are needed
@@ -288,18 +290,18 @@ if (LINUX)
     # stubs used by WaylandOutputLayout are the third_party/wayland-protocols static library.
     find_library(WAYLAND_CLIENT_LIB NAMES libwayland-client.a wayland-client REQUIRED)
     find_library(FFI_LIB NAMES ffi REQUIRED)
-    target_include_directories(aspia_host PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
-    target_link_libraries(aspia_host PRIVATE ${WAYLAND_CLIENT_LIB} ${FFI_LIB} wayland_protocols wlr_protocols)
+    target_include_directories(aspia_host_core PRIVATE ${PIPEWIRE_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS})
+    target_link_libraries(aspia_host_core ${WAYLAND_CLIENT_LIB} ${FFI_LIB} wayland_protocols wlr_protocols)
 endif()
 
 if (LINUX OR APPLE)
     # PAM is used to validate operating system credentials for terminal sessions.
     find_library(PAM_LIB NAMES pam REQUIRED)
-    target_link_libraries(aspia_host PRIVATE ${PAM_LIB})
+    target_link_libraries(aspia_host_core ${PAM_LIB})
 endif()
 
 if (APPLE)
-    target_link_libraries(aspia_host PRIVATE
+    target_link_libraries(aspia_host_core
         ${SCREENCAPTUREKIT_LIB}
         ${COREMEDIA_LIB}
         ${COREVIDEO_LIB}
@@ -312,8 +314,43 @@ endif()
 
 if (LINUX)
     # forkpty() for terminal sessions lives in libutil.
-    target_link_libraries(aspia_host PRIVATE util)
+    target_link_libraries(aspia_host_core util)
 endif()
+
+add_executable(aspia_host ${SOURCE_HOST} ${SOURCE_HOST_RESOURCES} host.rc)
+
+if (WIN32)
+    set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+target_link_libraries(aspia_host PRIVATE
+    aspia_host_core)
+
+if (WIN32)
+    # The WinMain entry point of the GUI executable.
+    target_link_libraries(aspia_host PRIVATE
+        Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
+endif()
+
+set_property(TARGET aspia_host PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_host INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+
+add_executable(aspia_host_tests ${SOURCE_HOST_TESTS})
+
+target_link_libraries(aspia_host_tests
+    aspia_host_core
+    GTest::gtest
+    ${THIRD_PARTY_LIBS})
+
+set_property(TARGET aspia_host_tests PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_host_tests PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_host_tests PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_host_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+
+add_test(NAME aspia_host_tests COMMAND aspia_host_tests)
 
 if (APPLE)
     set(HOST_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia.icns)

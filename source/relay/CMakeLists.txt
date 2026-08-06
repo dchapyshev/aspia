@@ -16,8 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-list(APPEND SOURCE_RELAY
-    main.cc
+list(APPEND SOURCE_RELAY_CORE
     migration_utils.cc
     migration_utils.h
     pending_session.cc
@@ -33,13 +32,21 @@ list(APPEND SOURCE_RELAY
     shared_key_pool.cc
     shared_key_pool.h)
 
+list(APPEND SOURCE_RELAY
+    main.cc)
+
+list(APPEND SOURCE_RELAY_TESTS
+    session_key_unittest.cc
+    shared_key_pool_unittest.cc
+    tests_main.cc)
+
 include(workers/sources.cmake)
 
 if (WIN32)
     list(APPEND SOURCE_RELAY_WIN win/relay.rc)
 endif()
 
-source_group("" FILES ${SOURCE_RELAY})
+source_group("" FILES ${SOURCE_RELAY_CORE} ${SOURCE_RELAY} ${SOURCE_RELAY_TESTS})
 source_group(workers FILES ${SOURCE_RELAY_WORKERS})
 
 if (WIN32)
@@ -55,13 +62,9 @@ if (APPLE)
     set(RELAY_PLATFORM_LIBS ${FOUNDATION_LIB})
 endif()
 
-add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WORKERS} ${SOURCE_RELAY_WIN})
+add_library(aspia_relay_core STATIC ${SOURCE_RELAY_CORE} ${SOURCE_RELAY_WORKERS})
 
-if (WIN32)
-    set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-endif()
-
-target_link_libraries(aspia_relay
+target_link_libraries(aspia_relay_core
     aspia_base
     aspia_proto
     OpenSSL::Crypto
@@ -70,6 +73,33 @@ target_link_libraries(aspia_relay
     ${QT_PLATFORM_LIBS}
     ${RELAY_PLATFORM_LIBS})
 
+set_property(TARGET aspia_relay_core PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_relay_core PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_relay_core PROPERTY AUTORCC ON)
+
+add_executable(aspia_relay ${SOURCE_RELAY} ${SOURCE_RELAY_WIN})
+
+if (WIN32)
+    set_target_properties(aspia_relay PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+endif()
+
+target_link_libraries(aspia_relay
+    aspia_relay_core)
+
 set_property(TARGET aspia_relay PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_relay PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_relay PROPERTY AUTORCC ON)
+
+add_executable(aspia_relay_tests ${SOURCE_RELAY_TESTS})
+
+target_link_libraries(aspia_relay_tests
+    aspia_relay_core
+    GTest::gtest
+    ${THIRD_PARTY_LIBS})
+
+set_property(TARGET aspia_relay_tests PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_relay_tests PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_relay_tests PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_relay_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+
+add_test(NAME aspia_relay_tests COMMAND aspia_relay_tests)
