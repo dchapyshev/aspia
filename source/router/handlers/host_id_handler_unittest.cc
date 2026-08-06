@@ -134,6 +134,20 @@ TEST_F(HostIdHandlerTest, RepeatedRequestIsIgnored)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A host asks for its id once per session and then waits, so a request the router cannot answer
+// must not be left unanswered. The session is closed instead, and the host comes back by itself.
+TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheDatabaseIsUnavailable)
+{
+    Database unavailable;
+    ASSERT_FALSE(unavailable.isValid());
+
+    const HostIdResult result =
+        handleHostIdRequest(unavailable, existingIdRequest("key-1"), peer_, kInvalidHostId);
+
+    EXPECT_EQ(result.action, HostIdResult::Action::CLOSE);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(HostIdHandlerTest, UnknownRequestTypeIsIgnored)
 {
     proto::router::HostIdRequest request = newIdRequest();

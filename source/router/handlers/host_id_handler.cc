@@ -84,8 +84,11 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
 
     if (!database.isValid())
     {
-        LOG(ERROR) << "Failed to connect to database";
-        result.action = Action::IGNORE;
+        // The host asks for its id once per session and then waits for an answer that would never
+        // come, staying connected and unreachable. Closing the session is what makes it try again
+        // later, when the database may be back.
+        LOG(ERROR) << "Failed to connect to database; disconnecting the host";
+        result.action = Action::CLOSE;
         return result;
     }
 
