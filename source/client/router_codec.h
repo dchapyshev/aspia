@@ -41,9 +41,10 @@ class Workspace;
 // an outgoing record is measured against the protocol bounds before it is sent - an oversized reply
 // is not refused by the router, it tears the session down. Nothing here holds state.
 
-// One field, encrypted with the group key of its workspace. An empty value stays empty.
+// One field, encrypted with the group key of its workspace. An empty value stays empty; a failed
+// encryption yields nothing at all, because an empty result would overwrite the stored value.
 QString decryptField(const DataCryptor& cryptor, std::string_view ciphertext);
-QByteArray encryptField(const DataCryptor& cryptor, const QString& plaintext);
+std::optional<QByteArray> encryptField(const DataCryptor& cryptor, const QString& plaintext);
 
 // The encrypted fields of a host stay empty when we hold no key of its workspace; the plain ones
 // are filled either way.

@@ -51,19 +51,16 @@ QString decryptField(const DataCryptor& cryptor, std::string_view ciphertext)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptField(const DataCryptor& cryptor, const QString& plaintext)
+std::optional<QByteArray> encryptField(const DataCryptor& cryptor, const QString& plaintext)
 {
     if (plaintext.isEmpty())
         return QByteArray();
 
     std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toUtf8());
     if (!encrypted.has_value())
-    {
         LOG(ERROR) << "Failed to encrypt with group key";
-        return QByteArray();
-    }
 
-    return *encrypted;
+    return encrypted;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,7 +220,11 @@ std::string_view buildRouterWorkspace(const RouterKeys& keys, const RouterWorksp
     }
 
     const DataCryptor cryptor(CipherType::AES256_GCM, group_key);
-    out->set_comment(encryptField(cryptor, workspace.comment).toStdString());
+    const std::optional<QByteArray> comment = encryptField(cryptor, workspace.comment);
+    if (!comment.has_value())
+        return proto::router::kErrorInternalError;
+
+    out->set_comment(comment->toStdString());
 
     for (const auto& access : workspace.access)
     {
@@ -282,9 +283,16 @@ std::string_view buildRouterHost(const RouterKeys& keys, const RouterHost& host,
     out->set_group_id(host.group_id);
     out->set_display_name(host.display_name.toStdString());
 
-    out->set_comment(encryptField(*cryptor, host.comment).toStdString());
-    out->set_user_name(encryptField(*cryptor, host.user_name).toStdString());
-    out->set_password(encryptField(*cryptor, host.password.toString()).toStdString());
+    const std::optional<QByteArray> comment = encryptField(*cryptor, host.comment);
+    const std::optional<QByteArray> user_name = encryptField(*cryptor, host.user_name);
+    const std::optional<QByteArray> password = encryptField(*cryptor, host.password.toString());
+
+    if (!comment.has_value() || !user_name.has_value() || !password.has_value())
+        return proto::router::kErrorInternalError;
+
+    out->set_comment(comment->toStdString());
+    out->set_user_name(user_name->toStdString());
+    out->set_password(password->toStdString());
 
     // Every field of a host is optional (an empty display name falls back to the computer name),
     // so only the sizes are checked.
@@ -318,7 +326,11 @@ std::string_view buildRouterGroup(const RouterKeys& keys, qint64 workspace_id,
         return proto::router::kErrorInternalError;
     }
 
-    out->set_comment(encryptField(*cryptor, group.comment).toStdString());
+    const std::optional<QByteArray> comment = encryptField(*cryptor, group.comment);
+    if (!comment.has_value())
+        return proto::router::kErrorInternalError;
+
+    out->set_comment(comment->toStdString());
 
     // The name is mandatory.
     if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||

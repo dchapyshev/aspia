@@ -313,3 +313,41 @@ TEST_F(RouterCodecTest, FieldsAtTheBoundsAreSent)
     proto::router::Workspace workspace_out;
     EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out), proto::router::kErrorOk);
 }
+
+//--------------------------------------------------------------------------------------------------
+// A field that fails to encrypt must stop the record: the empty ciphertext left behind is not the
+// value the operator typed, and sending it would store an empty comment over the one that is there
+// - the credentials of a host among them, for every client of the router.
+TEST_F(RouterCodecTest, RecordWhoseFieldFailsToEncryptIsRefused)
+{
+    loadKeys(&keys_, {10});
+
+    // A cryptor that cannot encrypt: the key it was built with is not of the size the cipher needs.
+    keys_.storeWorkspaceKey(10, DataCryptor(CipherType::AES256_GCM, SecureByteArray("short")));
+
+    RouterHost host;
+    host.host_id = HostId(1);
+    host.workspace_id = 10;
+    host.comment = "comment";
+    host.user_name = "user";
+    host.password = SecureString("password");
+
+    proto::router::Host host_out;
+    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInternalError);
+
+    RouterGroup group;
+    group.name = "servers";
+    group.comment = "comment";
+
+    proto::router::Group group_out;
+    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInternalError);
+
+    RouterWorkspace workspace;
+    workspace.entry_id = 10;
+    workspace.name = "workspace";
+    workspace.comment = "comment";
+
+    proto::router::Workspace workspace_out;
+    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
+              proto::router::kErrorInternalError);
+}
