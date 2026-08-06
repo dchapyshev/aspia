@@ -933,13 +933,14 @@ void Router::setStatus(Status status)
         return;
     status_ = status;
 
-    // Anything but ONLINE means the session cannot answer: the lists we hold are no longer known
-    // to be current, and the replies we still wait for will never arrive.
+    // A reply only ever arrives inside the window its request was made in: below ONLINE the router
+    // drops what we send, so the requests issued on the way up are as dead as the ones a lost
+    // session leaves behind. Both are answered here.
+    rpc_.clearPending();
+
+    // And the lists we hold are no longer known to be current.
     if (status_ != Status::ONLINE)
-    {
         cache_.clear();
-        rpc_.clearPending();
-    }
 
     emit sig_statusChanged(config_.routerId(), status_);
 }

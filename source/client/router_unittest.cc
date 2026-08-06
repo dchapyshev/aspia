@@ -45,6 +45,9 @@ public:
     {
         router.onTcpMessageReceived(router.routerId(), channel_id, bytes);
     }
+
+    // ONLINE is reached through the keys of the account, which a test has no password for.
+    static void setStatus(Router& router, Router::Status status) { router.setStatus(status); }
 };
 
 // A session without a worker: what it sends is collected from sig_sendMessage, the replies are
@@ -473,6 +476,28 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
     EXPECT_EQ(calls, 1);
 
     EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(kWorkspaceId));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Until the router accepts our keys it drops everything we send, so a request issued on the way up
+// can never be answered. Reaching ONLINE has to wake its caller: a dialog that disabled itself for
+// the round trip has nothing else to wait for.
+TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
+{
+    int calls = 0;
+    std::string last_error;
+    router_.connectToRouter();
+    router_.listUsers({ &receiver_, [&](const proto::router::UserList& list)
+    {
+        ++calls;
+        last_error = list.error_code();
+    } });
+
+    RouterTestPeer::setStatus(router_, Router::Status::ONLINE);
+
+    EXPECT_EQ(calls, 1);
+    EXPECT_EQ(last_error, proto::router::kErrorLostConnection);
+    EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
