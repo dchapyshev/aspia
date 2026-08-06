@@ -56,6 +56,7 @@ private:
     void readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id);
 
     std::vector<HostId> host_id_list_;
+    int id_request_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(HostLegacy)
 };

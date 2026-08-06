@@ -31,6 +31,7 @@
 namespace {
 
 constexpr size_t kMaxHostIdsPerSession = 32;
+constexpr int kMaxIdRequests = static_cast<int>(kMaxHostIdsPerSession) + 8;
 
 } // namespace
 
@@ -94,6 +95,14 @@ void HostLegacy::onSessionMessage(quint8 /* channel_id */, const QByteArray& buf
 //--------------------------------------------------------------------------------------------------
 void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request)
 {
+    if (++id_request_count_ > kMaxIdRequests)
+    {
+        CLOG(ERROR) << "Too many host id requests in one connection (" << id_request_count_
+                    << "); disconnecting";
+        emit sig_finished(sessionId());
+        return;
+    }
+
     if (host_id_list_.size() >= kMaxHostIdsPerSession)
     {
         CLOG(ERROR) << "Rejecting host id request: per-session limit of" << kMaxHostIdsPerSession
