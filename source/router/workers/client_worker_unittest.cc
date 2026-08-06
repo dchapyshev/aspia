@@ -21,7 +21,7 @@ namespace {
 
 // The live sessions of a router: two ordinary ones and the administrator console that sends the
 // commands (the last id).
-const QList<qint64> kSessions = { 1, 2, 7 };
+const std::vector<qint64> kSessions = { 1, 2, 7 };
 constexpr qint64 kAdminSession = 7;
 constexpr qint64 kAllSessions = -1;
 
@@ -34,38 +34,38 @@ constexpr qint64 kAllSessions = -1;
 // same rule.
 TEST(ClientWorkerTest, DisconnectAllSpareTheRequestingSession)
 {
-    const QList<qint64> targets =
+    const std::vector<qint64> targets =
         ClientWorker::sessionsToStop(kSessions, kAllSessions, kAdminSession);
 
-    EXPECT_EQ(targets, QList<qint64>({ 1, 2 }));
+    EXPECT_EQ(targets, std::vector<qint64>({ 1, 2 }));
 }
 
 //--------------------------------------------------------------------------------------------------
 // Nothing else is connected: the command has nothing to do, which is not a failure.
 TEST(ClientWorkerTest, DisconnectAllWithNobodyElseSelectsNothing)
 {
-    const QList<qint64> targets =
+    const std::vector<qint64> targets =
         ClientWorker::sessionsToStop({ kAdminSession }, kAllSessions, kAdminSession);
 
-    EXPECT_TRUE(targets.isEmpty());
+    EXPECT_TRUE(targets.empty());
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(ClientWorkerTest, DisconnectOneTargetsExactlyThatSession)
 {
-    const QList<qint64> targets = ClientWorker::sessionsToStop(kSessions, 2, kAdminSession);
+    const std::vector<qint64> targets = ClientWorker::sessionsToStop(kSessions, 2, kAdminSession);
 
-    EXPECT_EQ(targets, QList<qint64>({ 2 }));
+    EXPECT_EQ(targets, std::vector<qint64>({ 2 }));
 }
 
 //--------------------------------------------------------------------------------------------------
 // Picking your own session in the list is an explicit decision, so it is carried out.
 TEST(ClientWorkerTest, OwnSessionCanBePickedExplicitly)
 {
-    const QList<qint64> targets =
+    const std::vector<qint64> targets =
         ClientWorker::sessionsToStop(kSessions, kAdminSession, kAdminSession);
 
-    EXPECT_EQ(targets, QList<qint64>({ kAdminSession }));
+    EXPECT_EQ(targets, std::vector<qint64>({ kAdminSession }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,6 +73,6 @@ TEST(ClientWorkerTest, OwnSessionCanBePickedExplicitly)
 // with an invalid entry id instead of silently reporting success.
 TEST(ClientWorkerTest, UnknownSessionSelectsNothing)
 {
-    EXPECT_TRUE(ClientWorker::sessionsToStop(kSessions, 12345, kAdminSession).isEmpty());
-    EXPECT_TRUE(ClientWorker::sessionsToStop({}, 1, kAdminSession).isEmpty());
+    EXPECT_TRUE(ClientWorker::sessionsToStop(kSessions, 12345, kAdminSession).empty());
+    EXPECT_TRUE(ClientWorker::sessionsToStop({}, 1, kAdminSession).empty());
 }

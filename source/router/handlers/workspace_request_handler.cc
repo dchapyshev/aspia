@@ -38,19 +38,19 @@ using Result = RequestResult;
 // The access list of the request. |self_present| tells whether the sender kept its own entry: an
 // administrator has access to every workspace, so a list without the sender is malformed - the
 // group key would be sealed for everyone but the one who has it.
-QList<Workspace::Access> accessList(const proto::router::Workspace& workspace, qint64 caller_user_id,
+std::vector<Workspace::Access> accessList(const proto::router::Workspace& workspace, qint64 caller_user_id,
                                     bool* self_present)
 {
     *self_present = false;
 
-    QList<Workspace::Access> access_list;
-    access_list.reserve(workspace.access_size());
+    std::vector<Workspace::Access> access_list;
+    access_list.reserve(size_t(workspace.access_size()));
 
     for (int i = 0; i < workspace.access_size(); ++i)
     {
         const proto::router::WorkspaceAccess& src = workspace.access(i);
 
-        Workspace::Access& dst = access_list.emplaceBack();
+        Workspace::Access& dst = access_list.emplace_back();
         dst.user_id    = src.user_id();
         dst.wrapped_gk = src.wrapped_gk();
         dst.public_key = src.public_key();
@@ -81,7 +81,7 @@ void handleAdd(Database& database, const RequestCaller& caller,
               << "access entries and" << host_ids.size() << "hosts";
 
     bool self_present = false;
-    const QList<Workspace::Access> initial_access =
+    const std::vector<Workspace::Access> initial_access =
         accessList(workspace, caller.user_id, &self_present);
 
     if (!self_present)
@@ -118,7 +118,7 @@ void handleModify(Database& database, const RequestCaller& caller,
               << host_ids.size() << "hosts";
 
     bool self_present = false;
-    const QList<Workspace::Access> desired_access =
+    const std::vector<Workspace::Access> desired_access =
         accessList(workspace, caller.user_id, &self_present);
 
     if (!self_present)

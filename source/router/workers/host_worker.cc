@@ -216,7 +216,7 @@ void HostWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void HostWorker::onTimer(TimePoint now)
 {
-    QList<Host*> silent;
+    std::vector<Host*> silent;
 
     for (Host* host : std::as_const(hosts_))
     {
@@ -226,13 +226,13 @@ void HostWorker::onTimer(TimePoint now)
         if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
         {
             if (host_ng->hostId() == kInvalidHostId)
-                silent.append(host);
+                silent.emplace_back(host);
             continue;
         }
 
         HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy && host_legacy->hostIdList().isEmpty())
-            silent.append(host);
+        if (host_legacy && host_legacy->hostIdList().empty())
+            silent.emplace_back(host);
     }
 
     for (Host* host : std::as_const(silent))
@@ -303,8 +303,8 @@ void HostWorker::onHostIdAssigned(HostId host_id)
 
     // The holder in the index got the id earlier, so it is the stale one. It is replaced first,
     // and its removal below skips the entry of the newcomer and publishes the newcomer.
-    Host* stale_host = hosts_by_id_.value(host_id);
-    hosts_by_id_.insert(host_id, host);
+    Host* stale_host = hostByHostId(host_id);
+    hosts_by_id_[host_id] = host;
 
     if (stale_host && stale_host != host)
     {
@@ -321,8 +321,8 @@ void HostWorker::onHostIdAssigned(HostId host_id)
 void HostWorker::onHostIdRemoved(HostId host_id)
 {
     // Only the holder of the id gives it up this way, so the entry is its own.
-    if (hosts_by_id_.value(host_id) == sender())
-        hosts_by_id_.remove(host_id);
+    if (hostByHostId(host_id) == sender())
+        hosts_by_id_.erase(host_id);
 
     publishHostState(host_id);
 }
@@ -331,12 +331,12 @@ void HostWorker::onHostIdRemoved(HostId host_id)
 void HostWorker::removeHostSession(Host* host)
 {
     quint32 flags = ClientWorker::NOTIFY_HOSTS;
-    QList<HostId> host_ids;
+    std::vector<HostId> host_ids;
 
     if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
     {
         if (host_ng->hostId() != kInvalidHostId)
-            host_ids.append(host_ng->hostId());
+            host_ids.emplace_back(host_ng->hostId());
 
         if (isTempHostId(host_ng->hostId()))
             flags |= ClientWorker::NOTIFY_TEMP_HOSTS;
@@ -350,15 +350,15 @@ void HostWorker::removeHostSession(Host* host)
     {
         host->disconnect();
         host->deleteLater();
-        hosts_.removeOne(host);
+        std::erase(hosts_, host);
     }
 
     for (HostId host_id : std::as_const(host_ids))
     {
         // The id may already be held by the newcomer that displaced this host. Only the own
         // entries go away, and the publication below then keeps the newcomer announced.
-        if (hosts_by_id_.value(host_id) == host)
-            hosts_by_id_.remove(host_id);
+        if (hostByHostId(host_id) == host)
+            hosts_by_id_.erase(host_id);
 
         publishHostState(host_id);
     }
@@ -369,7 +369,8 @@ void HostWorker::removeHostSession(Host* host)
 //--------------------------------------------------------------------------------------------------
 Host* HostWorker::hostByHostId(HostId host_id)
 {
-    return hosts_by_id_.value(host_id);
+    const auto it = hosts_by_id_.find(host_id);
+    return it != hosts_by_id_.end() ? it->second : nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -419,8 +420,8 @@ bool HostWorker::doDisconnectHost(HostId host_id)
 {
     if (host_id == kAllHostsId)
     {
-        while (!hosts_.isEmpty())
-            removeHostSession(hosts_.first());
+        while (!hosts_.empty())
+            removeHostSession(hosts_.front());
         return true;
     }
 
@@ -478,7 +479,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
                 result.error_code = proto::router::kErrorInternalError;
             }
 
-            if (host_legacy->hostIdList().isEmpty())
+            if (host_legacy->hostIdList().empty())
                 removeHostSession(host_legacy);
         }
     }

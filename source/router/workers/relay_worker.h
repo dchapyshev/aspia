@@ -19,9 +19,8 @@
 #ifndef ROUTER_WORKERS_RELAY_WORKER_H
 #define ROUTER_WORKERS_RELAY_WORKER_H
 
-#include <QList>
-
 #include <functional>
+#include <vector>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
@@ -81,7 +80,7 @@ private:
     bool doStopRelay(qint64 relay_id);
 
     ScopedQPointer<TcpServer> server_;
-    QList<Relay*> relays_;
+    std::vector<Relay*> relays_;
 
     Q_DISABLE_COPY_MOVE(RelayWorker)
 };

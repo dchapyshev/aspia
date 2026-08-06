@@ -148,7 +148,7 @@ TEST_F(UserRequestHandlerTest, DisablingUserStopsItsSessions)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_TRUE(result.stop_token_ids.isEmpty());
+    EXPECT_TRUE(result.stop_token_ids.empty());
     EXPECT_EQ(db_.findUser(user_id).flags, 0u);
 }
 
@@ -274,7 +274,7 @@ TEST_F(UserRequestHandlerTest, ResetOtpRevokesTokensAndStopsSessions)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_TRUE(result.stop_token_ids.isEmpty());
+    EXPECT_TRUE(result.stop_token_ids.empty());
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
     EXPECT_TRUE(db_.findUser(user_id).otp_secret.isEmpty());
     EXPECT_EQ(tokenCount(user_id), 0u);
@@ -317,7 +317,7 @@ TEST_F(UserRequestHandlerTest, RevokeAllTokensStopsEverySession)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_TRUE(result.stop_token_ids.isEmpty());
+    EXPECT_TRUE(result.stop_token_ids.empty());
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
     EXPECT_EQ(tokenCount(user_id), 0u);
 }
@@ -343,7 +343,7 @@ TEST_F(UserRequestHandlerTest, RevokeSelectedTokensStopsOnlyThem)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_EQ(result.stop_token_ids, QList<qint64>({first_token}));
+    EXPECT_EQ(result.stop_token_ids, std::vector<qint64>({first_token}));
     EXPECT_EQ(tokenCount(user_id), 1u);
 }
 

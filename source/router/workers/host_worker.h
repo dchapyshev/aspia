@@ -19,11 +19,10 @@
 #ifndef ROUTER_WORKERS_HOST_WORKER_H
 #define ROUTER_WORKERS_HOST_WORKER_H
 
-#include <QHash>
-#include <QList>
-
 #include <functional>
 #include <string_view>
+#include <unordered_map>
+#include <vector>
 
 #include "base/scoped_qpointer.h"
 #include "base/peer/host_id.h"
@@ -112,12 +111,12 @@ private:
 
     ScopedQPointer<TcpServer> server_;
     ScopedQPointer<TcpServerLegacy> legacy_server_;
-    QList<Host*> hosts_;
+    std::vector<Host*> hosts_;
 
     // The holder of each assigned host id. At most one holder per id at any moment; a reconnecting
     // host displaces its stale predecessor. Kept next to |hosts_| so that lookups and duplicate
     // detection stay O(1) when thousands of hosts reconnect at once.
-    QHash<HostId, Host*> hosts_by_id_;
+    std::unordered_map<HostId, Host*> hosts_by_id_;
 
     // When the queue of unacknowledged removals is swept next. Starts at the epoch, so the first
     // tick after the router comes up does it.

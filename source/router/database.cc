@@ -457,7 +457,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::userList(QList<RouterUser>* users) const
+bool Database::userList(std::vector<RouterUser>* users) const
 {
     CHECK(users);
 
@@ -486,7 +486,7 @@ bool Database::userList(QList<RouterUser>* users) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        users->append(readUser(query));
+        users->emplace_back(readUser(query));
     }
 
     return true;
@@ -1194,7 +1194,7 @@ bool Database::touchClientDeviceToken(std::string_view token, std::string_view a
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::revokeClientDeviceTokens(qint64 user_id, const QList<qint64>& token_ids)
+std::string_view Database::revokeClientDeviceTokens(qint64 user_id, const std::vector<qint64>& token_ids)
 {
     if (!isValid())
     {
@@ -1202,7 +1202,7 @@ std::string_view Database::revokeClientDeviceTokens(qint64 user_id, const QList<
         return proto::router::kErrorInternalError;
     }
 
-    if (token_ids.isEmpty())
+    if (token_ids.empty())
         return proto::router::kErrorOk;
 
     SqlTransaction transaction(db_);
@@ -2293,7 +2293,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::addWorkspace(std::string_view name, std::string_view comment,
-    const QList<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
+    const std::vector<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
     qint64* entry_id)
 {
     CHECK(entry_id);
@@ -2426,7 +2426,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision,
     std::string_view name, std::string_view comment,
-    const QList<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids)
+    const std::vector<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids)
 {
     if (!isValid())
     {
@@ -3511,7 +3511,7 @@ std::string_view Database::syncWorkspaceHosts(qint64 entry_id, const std::set<Ho
 
         const HostId host_id = select_current.columnUInt64(0);
         if (!desired_host_ids.contains(host_id))
-            release_ids.push_back(host_id);
+            release_ids.emplace_back(host_id);
     }
 
     // The encrypted fields are sealed with the workspace group key, so a host outside any

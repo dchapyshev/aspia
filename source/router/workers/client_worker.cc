@@ -20,6 +20,8 @@
 
 #include <QUuid>
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
@@ -226,7 +228,7 @@ void ClientWorker::onTimer(TimePoint now)
 
     // A snapshot: sendMessage() can synchronously finish a failed session, which removes it from
     // |clients_| and would invalidate the iterator.
-    const QList<Client*> client_sessions = clients_;
+    const std::vector<Client*> client_sessions = clients_;
     for (Client* client : client_sessions)
     {
         if (!client->isTwoFactorCompleted())
@@ -316,7 +318,7 @@ void ClientWorker::onSessionFinished()
     CHECK(client);
     client->disconnect();
     client->deleteLater();
-    clients_.removeOne(client);
+    std::erase(clients_, client);
 
     onNotifyChanged(NOTIFY_CLIENTS);
 }
@@ -329,9 +331,10 @@ void ClientWorker::onNotifyChanged(quint32 flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onStopClients(qint64 user_id, const QList<qint64>& token_ids, qint64 except_client_id)
+void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& token_ids,
+                                 qint64 except_client_id)
 {
-    QList<qint64> client_ids;
+    std::vector<qint64> client_ids;
     for (Client* client : std::as_const(clients_))
     {
         if (client->userId() != user_id || client->sessionId() == except_client_id)
@@ -341,10 +344,10 @@ void ClientWorker::onStopClients(qint64 user_id, const QList<qint64>& token_ids,
         // credentials being revoked and need only a TOTP code to become full sessions. A
         // revocation of specific tokens skips them for free - their token id is still 0, and
         // token ids are validated as positive before they reach here.
-        if (!token_ids.isEmpty() && !token_ids.contains(client->tokenId()))
+        if (!token_ids.empty() && std::ranges::find(token_ids, client->tokenId()) == token_ids.end())
             continue;
 
-        client_ids.append(client->sessionId());
+        client_ids.emplace_back(client->sessionId());
     }
 
     for (qint64 id : std::as_const(client_ids))
@@ -396,15 +399,15 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
     {
         const qint64 entry_id = request.entry_id();
 
-        QList<qint64> session_ids;
+        std::vector<qint64> session_ids;
         session_ids.reserve(clients_.size());
         for (const auto& client : std::as_const(clients_))
-            session_ids.append(client->sessionId());
+            session_ids.emplace_back(client->sessionId());
 
-        const QList<qint64> targets =
+        const std::vector<qint64> targets =
             sessionsToStop(session_ids, entry_id, session->sessionId());
 
-        if (targets.isEmpty() && entry_id != -1)
+        if (targets.empty() && entry_id != -1)
         {
             LOG(ERROR) << "Session not found:" << entry_id;
             client_result->set_error_code(proto::router::kErrorInvalidEntryId);
@@ -452,10 +455,10 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QList<qint64> ClientWorker::sessionsToStop(const QList<qint64>& session_ids, qint64 entry_id,
-                                           qint64 requesting_session_id)
+std::vector<qint64> ClientWorker::sessionsToStop(const std::vector<qint64>& session_ids,
+                                                 qint64 entry_id, qint64 requesting_session_id)
 {
-    QList<qint64> targets;
+    std::vector<qint64> targets;
 
     if (entry_id == -1)
     {
@@ -464,14 +467,14 @@ QList<qint64> ClientWorker::sessionsToStop(const QList<qint64>& session_ids, qin
         for (qint64 session_id : session_ids)
         {
             if (session_id != requesting_session_id)
-                targets.append(session_id);
+                targets.emplace_back(session_id);
         }
 
         return targets;
     }
 
-    if (session_ids.contains(entry_id))
-        targets.append(entry_id);
+    if (std::ranges::find(session_ids, entry_id) != session_ids.end())
+        targets.emplace_back(entry_id);
 
     return targets;
 }

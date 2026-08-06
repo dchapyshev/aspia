@@ -158,7 +158,7 @@ void RelayWorker::onNewRelayConnection()
     {
         TcpChannel* channel = server_->nextReadyConnection();
 
-        if (relays_.size() >= kMaxRelays)
+        if (relays_.size() >= size_t(kMaxRelays))
         {
             LOG(ERROR) << "Too many relay sessions. Connection is rejected for" << channel->peerAddress();
             channel->deleteLater();
@@ -192,7 +192,7 @@ void RelayWorker::removeRelay(Relay* relay)
 
     relay->disconnect();
     relay->deleteLater();
-    relays_.removeOne(relay);
+    std::erase(relays_, relay);
 
     SharedKeyPool::instance().remove(session_id);
 
@@ -249,8 +249,8 @@ bool RelayWorker::doStopRelay(qint64 relay_id)
 {
     if (relay_id == -1)
     {
-        while (!relays_.isEmpty())
-            removeRelay(relays_.first());
+        while (!relays_.empty())
+            removeRelay(relays_.front());
         return true;
     }
 

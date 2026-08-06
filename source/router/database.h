@@ -108,7 +108,7 @@ public:
 
     // Fills |users| with every user record. Returns false on a database error - a partial list
     // never passes for a complete one.
-    bool userList(QList<RouterUser>* users) const;
+    bool userList(std::vector<RouterUser>* users) const;
 
     // Adds a user record. An administrator has access to every workspace, so for an administrator
     // an access entry is created for each existing workspace from |wrapped_keys| (for any other
@@ -188,7 +188,7 @@ public:
     // user's row. All deletes run in one transaction: if any token id does not match a row the
     // whole batch is rolled back. Returns kErrorNotFound if a token is missing, kErrorInternalError
     // on database failure, kErrorOk when every token was revoked (or the list was empty).
-    std::string_view revokeClientDeviceTokens(qint64 user_id, const QList<qint64>& token_ids);
+    std::string_view revokeClientDeviceTokens(qint64 user_id, const std::vector<qint64>& token_ids);
 
     // Removes every device token of |user_id| in a single statement. Succeeds for an existing user
     // with no tokens, but returns kErrorNotFound if the user row is absent.
@@ -293,7 +293,7 @@ public:
     // in the same transaction (see syncWorkspaceHosts), so on any error the workspace is not
     // created at all.
     std::string_view addWorkspace(std::string_view name, std::string_view comment,
-        const QList<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
+        const std::vector<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
         qint64* entry_id);
 
     // Updates name/comment and synchronizes access and host assignments in a single
@@ -307,7 +307,7 @@ public:
     // desired_host_ids is the complete final set of the hosts (see syncWorkspaceHosts).
     std::string_view modifyWorkspace(qint64 entry_id, qint64 base_revision,
         std::string_view name, std::string_view comment,
-        const QList<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids);
+        const std::vector<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids);
 
     // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0), and clears
     // host fields encrypted with the workspace GK. Deliberately takes no base_revision: a delete

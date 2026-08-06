@@ -100,7 +100,7 @@ protected:
         return access;
     }
 
-    qint64 addWorkspace(const QString& name, const QList<Workspace::Access>& access,
+    qint64 addWorkspace(const QString& name, const std::vector<Workspace::Access>& access,
                         const std::set<HostId>& hosts = {})
     {
         qint64 entry_id = -1;

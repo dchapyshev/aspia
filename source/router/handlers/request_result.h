@@ -19,9 +19,8 @@
 #ifndef ROUTER_HANDLERS_REQUEST_RESULT_H
 #define ROUTER_HANDLERS_REQUEST_RESULT_H
 
-#include <QList>
-
 #include <string>
+#include <vector>
 
 // The error code of a command reply and everything the session must do after sending it. Shared by
 // every database-backed command handler; the fields a command cannot produce keep their defaults.
@@ -42,7 +41,7 @@ struct RequestResult
 
     // Restricts the drop to the sessions holding these device tokens; empty means every session of
     // |stop_user_id|.
-    QList<qint64> stop_token_ids;
+    std::vector<qint64> stop_token_ids;
 };
 
 #endif // ROUTER_HANDLERS_REQUEST_RESULT_H

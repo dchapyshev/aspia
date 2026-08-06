@@ -19,7 +19,7 @@
 #ifndef ROUTER_WORKERS_CLIENT_WORKER_H
 #define ROUTER_WORKERS_CLIENT_WORKER_H
 
-#include <QList>
+#include <vector>
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
@@ -58,8 +58,8 @@ public:
     // session - including the requesting one, which the administrator can pick explicitly in the
     // list. An id that is not there yields an empty result, which the caller reports as an
     // invalid entry id.
-    static QList<qint64> sessionsToStop(const QList<qint64>& session_ids, qint64 entry_id,
-                                        qint64 requesting_session_id);
+    static std::vector<qint64> sessionsToStop(const std::vector<qint64>& session_ids,
+                                              qint64 entry_id, qint64 requesting_session_id);
 
 protected:
     // Worker implementation.
@@ -78,7 +78,7 @@ private slots:
     // Stops live client sessions (CLIENT/MANAGER/ADMIN) of |user_id|. An empty |token_ids| stops
     // every such session; otherwise only those whose device token id is listed. |except_client_id|
     // is left running (0 keeps all).
-    void onStopClients(qint64 user_id, const QList<qint64>& token_ids, qint64 except_client_id);
+    void onStopClients(qint64 user_id, const std::vector<qint64>& token_ids, qint64 except_client_id);
 
     // Admin requests against the session collection; the response is sent through the requesting
     // session (the signal sender).
@@ -94,7 +94,7 @@ private:
     quint16 stun_port_ = 0;
     QString router_guid_;
 
-    QList<Client*> clients_;
+    std::vector<Client*> clients_;
 
     Q_DISABLE_COPY_MOVE(ClientWorker)
 };

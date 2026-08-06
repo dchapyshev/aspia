@@ -227,7 +227,7 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller, const p
         return;
     }
 
-    QList<qint64> token_ids;
+    std::vector<qint64> token_ids;
     token_ids.reserve(user.token_size());
 
     for (int i = 0; i < user.token_size(); ++i)
@@ -240,7 +240,7 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller, const p
             return;
         }
 
-        token_ids.append(token_id);
+        token_ids.emplace_back(token_id);
     }
 
     // Revoke atomically: either every requested token is removed or nothing is, so a missing token
@@ -306,7 +306,7 @@ void handleUserList(Database& database, proto::router::UserList* out)
         return;
     }
 
-    QList<RouterUser> users;
+    std::vector<RouterUser> users;
     if (!database.userList(&users))
     {
         out->set_error_code(proto::router::kErrorInternalError);
@@ -315,7 +315,7 @@ void handleUserList(Database& database, proto::router::UserList* out)
 
     out->set_error_code(proto::router::kErrorOk);
 
-    for (const auto& user : std::as_const(users))
+    for (const auto& user : users)
     {
         proto::router::User* item = out->add_user();
         item->CopyFrom(user.serialize());

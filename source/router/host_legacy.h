@@ -19,6 +19,8 @@
 #ifndef ROUTER_HOST_LEGACY_H
 #define ROUTER_HOST_LEGACY_H
 
+#include <vector>
+
 #include "base/peer/host_id.h"
 #include "router/host.h"
 
@@ -36,7 +38,7 @@ public:
     HostLegacy(Database& database, TcpChannel* channel, QObject* parent);
     ~HostLegacy() final;
 
-    const QList<HostId>& hostIdList() const { return host_id_list_; }
+    const std::vector<HostId>& hostIdList() const { return host_id_list_; }
     bool removeHostId(HostId host_id);
 
     void sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer);
@@ -53,7 +55,7 @@ private:
     void readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request);
     void readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id);
 
-    QList<HostId> host_id_list_;
+    std::vector<HostId> host_id_list_;
 
     Q_DISABLE_COPY_MOVE(HostLegacy)
 };

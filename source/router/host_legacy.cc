@@ -18,6 +18,8 @@
 
 #include "router/host_legacy.h"
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
@@ -28,7 +30,7 @@
 
 namespace {
 
-constexpr qsizetype kMaxHostIdsPerSession = 32;
+constexpr size_t kMaxHostIdsPerSession = 32;
 
 } // namespace
 
@@ -152,7 +154,7 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
         host_id_response->set_error_code(proto::router::legacy::HostIdResponse::SUCCESS);
         host_id_response->set_host_id(host_id);
 
-        if (!host_id_list_.contains(host_id))
+        if (std::ranges::find(host_id_list_, host_id) == host_id_list_.end())
         {
             host_id_list_.emplace_back(host_id);
             emit sig_hostIdAssigned(host_id);
@@ -181,7 +183,7 @@ void HostLegacy::readResetHostId(const proto::router::legacy::ResetHostId& reset
         return;
     }
 
-    if (host_id_list_.isEmpty())
+    if (host_id_list_.empty())
     {
         CLOG(ERROR) << "Empty host ID list";
         return;
