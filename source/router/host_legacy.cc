@@ -108,7 +108,8 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
     Database& db = database();
     if (!db.isValid())
     {
-        CLOG(ERROR) << "Failed to connect to database";
+        CLOG(ERROR) << "Failed to connect to database; disconnecting the host";
+        emit sig_finished(sessionId());
         return;
     }
 
