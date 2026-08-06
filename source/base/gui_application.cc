@@ -243,7 +243,7 @@ int GuiApplication::exec()
 // static
 GuiApplication* GuiApplication::instance()
 {
-    return static_cast<GuiApplication*>(QApplication::instance());
+    return qobject_cast<GuiApplication*>(QCoreApplication::instance());
 }
 
 //--------------------------------------------------------------------------------------------------

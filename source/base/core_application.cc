@@ -377,7 +377,7 @@ int CoreApplication::exec()
 // static
 CoreApplication* CoreApplication::instance()
 {
-    return static_cast<CoreApplication*>(QCoreApplication::instance());
+    return qobject_cast<CoreApplication*>(QCoreApplication::instance());
 }
 
 //--------------------------------------------------------------------------------------------------
