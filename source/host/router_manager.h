@@ -84,6 +84,7 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
+    void renewOneTimePassword();
     User createOneTimeUser() const;
 
     Database& database_;

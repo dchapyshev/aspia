@@ -38,6 +38,7 @@
 #include "build/build_config.h"
 #include "host/database.h"
 #include "host/host_storage.h"
+#include "proto/peer.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
@@ -443,4 +444,31 @@ TEST_F(RouterManagerTest, OneTimePasswordRotatesWhenItExpires)
     ASSERT_TRUE(waitFor([&]() { return credentials_received_.load() > seen; }));
     EXPECT_FALSE(lastPassword().isEmpty());
     EXPECT_NE(lastPassword(), first_password);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The password the user has already read out keeps working until it expires. Neither a write to
+// the settings the password does not depend on, nor a change of the allowed session types, takes
+// it away from the person it was given to.
+TEST_F(RouterManagerTest, OneTimePasswordSurvivesUnrelatedSettingsChanges)
+{
+    startManager(true);
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
+
+    const SecureString first_password = lastPassword();
+    ASSERT_FALSE(first_password.isEmpty());
+
+    // What the service does when it sees the settings file change.
+    host_worker_->invoke([this]() { manager_->onSettingsChanged(); });
+    EXPECT_EQ(lastPassword(), first_password);
+
+    // What the user interface does when the allowed session types are ticked off.
+    host_worker_->invoke([this]()
+    {
+        manager_->onOneTimeSessionsChanged(proto::peer::SESSION_TYPE_DESKTOP);
+    });
+    EXPECT_EQ(lastPassword(), first_password);
 }

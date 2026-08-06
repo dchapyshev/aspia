@@ -116,19 +116,10 @@ void RouterManager::onSettingsChanged()
     {
         LOG(INFO) << "One-time password is enabled";
 
-        PasswordGenerator generator;
-        generator.setCharacters(database_.oneTimePasswordCharacters());
-        generator.setLength(database_.oneTimePasswordLength());
-
-        one_time_password_ = generator.result();
-
-        MilliSeconds expire_interval = database_.oneTimePasswordExpire();
-        if (expire_interval > MilliSeconds(0))
-            password_expire_time_ = Clock::now() + expire_interval;
+        if (one_time_password_.isEmpty())
+            renewOneTimePassword();
         else
-            password_expire_time_ = TimePoint::max();
-
-        user_list_->setOneTimeUser(createOneTimeUser());
+            user_list_->setOneTimeUser(createOneTimeUser());
     }
 
     emit sig_credentialsChanged(host_id_, one_time_password_);
@@ -342,7 +333,10 @@ void RouterManager::onTimer(TimePoint now)
         tcp_channel_->tick(now);
 
     if (now >= password_expire_time_)
-        onSettingsChanged();
+    {
+        renewOneTimePassword();
+        emit sig_credentialsChanged(host_id_, one_time_password_);
+    }
 
     if (now >= reconnect_time_)
     {
@@ -430,6 +424,24 @@ void RouterManager::hostIdRequest()
     // Send host ID request.
     LOG(INFO) << "Send ID request to router";
     tcp_channel_->send(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::renewOneTimePassword()
+{
+    PasswordGenerator generator;
+    generator.setCharacters(database_.oneTimePasswordCharacters());
+    generator.setLength(database_.oneTimePasswordLength());
+
+    one_time_password_ = generator.result();
+
+    MilliSeconds expire_interval = database_.oneTimePasswordExpire();
+    if (expire_interval > MilliSeconds(0))
+        password_expire_time_ = Clock::now() + expire_interval;
+    else
+        password_expire_time_ = TimePoint::max();
+
+    user_list_->setOneTimeUser(createOneTimeUser());
 }
 
 //--------------------------------------------------------------------------------------------------
