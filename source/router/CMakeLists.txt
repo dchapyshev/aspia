@@ -59,6 +59,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     fake_tcp_channel.h
     host_lifecycle_unittest.cc
     host_ng_unittest.cc
+    relay_unittest.cc
     router_test_base.h
     router_test_worker.h
     shared_state_unittest.cc
