@@ -19,14 +19,16 @@
 #ifndef ROUTER_HANDLERS_REQUEST_CALLER_H
 #define ROUTER_HANDLERS_REQUEST_CALLER_H
 
-#include <QString>
+#include <QtTypes>
+
+#include <string>
 
 // The authenticated session a request came from, as the request handlers see it. The identity is
 // established by the authenticator and is not taken from the request itself.
 struct RequestCaller
 {
     qint64 user_id = 0;
-    QString name; // Audit log only.
+    std::string name; // Audit log only.
 
     // proto::router::SessionType of the session (the one it authenticated as, out of the mask its
     // record allows). Decides what a request is allowed to ask for, e.g. the unfiltered host list.

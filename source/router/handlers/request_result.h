@@ -19,6 +19,8 @@
 #ifndef ROUTER_HANDLERS_REQUEST_RESULT_H
 #define ROUTER_HANDLERS_REQUEST_RESULT_H
 
+#include <QtTypes>
+
 #include <string>
 #include <vector>
 

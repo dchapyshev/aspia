@@ -206,7 +206,7 @@ RequestCaller Client::requestCaller() const
 {
     RequestCaller caller;
     caller.user_id = userId();
-    caller.name = QString::fromStdString(userName());
+    caller.name = userName();
     caller.session_type = sessionType();
     return caller;
 }

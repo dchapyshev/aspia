@@ -19,6 +19,7 @@
 #ifndef ROUTER_WORKERS_CLIENT_WORKER_H
 #define ROUTER_WORKERS_CLIENT_WORKER_H
 
+#include <string>
 #include <vector>
 
 #include "base/scoped_qpointer.h"
@@ -92,7 +93,7 @@ private:
     quint32 dirty_mask_ = 0;
     TimePoint next_notify_time_;
     quint16 stun_port_ = 0;
-    QString router_guid_;
+    std::string router_guid_;
 
     std::vector<Client*> clients_;
 

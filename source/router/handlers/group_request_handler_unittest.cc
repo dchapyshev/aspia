@@ -112,7 +112,7 @@ TEST_F(GroupRequestHandlerTest, NonMemberIsDenied)
     ASSERT_TRUE(client.isValid());
 
     caller_.user_id = client.entry_id;
-    caller_.name = client.name;
+    caller_.name = client.name.toStdString();
 
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupAdd, workspace_id_);

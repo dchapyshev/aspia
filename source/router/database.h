@@ -211,7 +211,7 @@ public:
 
     // Called on every host connection to refresh the host's last-seen metadata.
     bool updateHostInfo(HostId host_id, std::string_view hwid, std::string_view computer_name,
-        std::string_view cpu_arch, const QString& version, std::string_view os_name,
+        std::string_view cpu_arch, std::string_view version, std::string_view os_name,
         std::string_view address);
 
     // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
@@ -251,7 +251,7 @@ public:
     // an empty list yields no results. The page is mandatory and bounded exactly like the one of
     // hosts(). Matches are appended to |out|, its total_count is set to the number of matches in
     // the whole scope and its error_code is set; Host.online is left unset.
-    void searchHosts(const QString& query, const std::set<qint64>& workspace_ids,
+    void searchHosts(std::string_view query, const std::set<qint64>& workspace_ids,
         qint64 offset, qint64 count, proto::router::HostSearchResult* out) const;
 
     // Host removal: hosts_remove queue. Schedule moves the row from hosts to hosts_remove, the

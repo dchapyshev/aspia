@@ -93,7 +93,7 @@ RouterUser readUser(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasColumn(SqlDatabase& db, const QString& table, const QString& column)
+bool hasColumn(SqlDatabase& db, std::string_view table, std::string_view column)
 {
     SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
     query.addText(table);
@@ -1493,7 +1493,7 @@ bool Database::addHost(std::string_view key_hash, std::string_view hwid)
 
 //--------------------------------------------------------------------------------------------------
 bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string_view computer_name,
-    std::string_view cpu_arch, const QString& version, std::string_view os_name,
+    std::string_view cpu_arch, std::string_view version, std::string_view os_name,
     std::string_view address)
 {
     if (!isValid())
@@ -1809,7 +1809,7 @@ qint64 Database::hostCount(qint64 workspace_id, qint64 group_id, bool* ok) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::searchHosts(const QString& query_text, const std::set<qint64>& workspace_ids,
+void Database::searchHosts(std::string_view query_text, const std::set<qint64>& workspace_ids,
     qint64 offset, qint64 count, proto::router::HostSearchResult* out) const
 {
     if (!isValid())
@@ -1826,38 +1826,43 @@ void Database::searchHosts(const QString& query_text, const std::set<qint64>& wo
         return;
     }
 
-    if (workspace_ids.empty() || query_text.isEmpty())
+    if (workspace_ids.empty() || query_text.empty())
     {
         out->set_total_count(0);
         out->set_error_code(proto::router::kErrorOk);
         return;
     }
 
-    // Escape LIKE wildcards so user input is matched literally.
-    QString escaped = query_text;
-    escaped.replace('\\', "\\\\");
-    escaped.replace('%', "\\%");
-    escaped.replace('_', "\\_");
+    // Escape LIKE wildcards so user input is matched literally. The escaped characters are ASCII,
+    // which never occurs inside a UTF-8 multibyte sequence, so the byte-wise walk is safe.
+    std::string pattern;
+    pattern.reserve(query_text.size() + 2);
+    pattern += '%';
+    for (char symbol : query_text)
+    {
+        if (symbol == '\\' || symbol == '%' || symbol == '_')
+            pattern += '\\';
+        pattern += symbol;
+    }
+    pattern += '%';
 
-    const QString pattern = '%' + escaped + '%';
-
-    QStringList placeholders;
-    placeholders.reserve(static_cast<qsizetype>(workspace_ids.size()));
+    std::string placeholders;
+    placeholders.reserve(workspace_ids.size() * 2);
 
     for (size_t i = 0; i < workspace_ids.size(); ++i)
-        placeholders.append("?");
+        placeholders += i ? ",?" : "?";
 
     // The predicate is written once and used by both statements, so the count and the page can
     // never disagree about what a match is.
-    const QString where =
-        " FROM hosts WHERE workspace_id IN (" + placeholders.join(',') + ") "
+    const std::string where =
+        " FROM hosts WHERE workspace_id IN (" + placeholders + ") "
         "AND (casefold(display_name) LIKE casefold(?) ESCAPE '\\' "
         "OR CAST(id AS TEXT) LIKE ? ESCAPE '\\')";
 
     // A zero count from a failed query would make the client truncate its pagination while the
     // page itself arrives non-empty, so a count failure fails the whole request.
-    const QString count_sql = "SELECT COUNT(*)" + where;
-    SqlQuery count_query(db_, count_sql.toStdString());
+    const std::string count_sql = "SELECT COUNT(*)" + where;
+    SqlQuery count_query(db_, count_sql);
     if (!count_query.isValid())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
@@ -1880,12 +1885,12 @@ void Database::searchHosts(const QString& query_text, const std::set<qint64>& wo
 
     out->set_total_count(count_query.columnInt64(0));
 
-    const QString sql =
+    const std::string sql =
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
         "version, os_name, address, comment, user_name, password, last_connect, last_modify" +
         where + " ORDER BY display_name LIMIT ? OFFSET ?";
 
-    SqlQuery query(db_, sql.toStdString());
+    SqlQuery query(db_, sql);
     if (!query.isValid())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();

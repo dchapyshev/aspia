@@ -17,7 +17,6 @@
 #define ROUTER_HANDLERS_HOST_ID_HANDLER_H
 
 #include <QByteArray>
-#include <QString>
 
 #include <string>
 
@@ -41,7 +40,7 @@ struct HostIdPeer
 {
     std::string computer_name;
     std::string architecture;
-    QString version;
+    std::string version;
     std::string os_name;
     std::string address;
 };

@@ -62,7 +62,7 @@ protected:
         ASSERT_EQ(admin_.entry_id, 1);
 
         caller_.user_id = admin_.entry_id;
-        caller_.name = admin_.name;
+        caller_.name = admin_.name.toStdString();
     }
 
     static RouterUser makeUser(const QString& name, quint32 sessions)
@@ -90,7 +90,7 @@ protected:
     void setCaller(const RouterUser& user, proto::router::SessionType session_type)
     {
         caller_.user_id = user.entry_id;
-        caller_.name = user.name;
+        caller_.name = user.name.toStdString();
         caller_.session_type = session_type;
     }
 

@@ -233,7 +233,7 @@ TEST_F(HostRequestHandlerTest, NonMemberCannotEditHost)
     ASSERT_TRUE(client.isValid());
 
     caller_.user_id = client.entry_id;
-    caller_.name = client.name;
+    caller_.name = client.name.toStdString();
 
     const RequestResult result = handle(makeRequest(host_id_, 0, "display"));
 

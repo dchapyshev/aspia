@@ -128,7 +128,7 @@ void ClientWorker::onStart()
         }
     }
 
-    router_guid_ = router_guid;
+    router_guid_ = router_guid.toStdString();
 
     SharedPointer<UserList> user_list = RouterUserList::open();
     if (!user_list)
@@ -301,7 +301,7 @@ void ClientWorker::onNewConnection()
 
         if (stun_port_)
             client->setStunInfo(stun_port_);
-        client->setRouterGuid(router_guid_.toStdString());
+        client->setRouterGuid(router_guid_);
 
         clients_.emplace_back(client);
         connect(client, &Client::sig_finished, this, &ClientWorker::onSessionFinished);

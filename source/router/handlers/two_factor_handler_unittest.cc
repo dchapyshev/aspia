@@ -301,7 +301,7 @@ TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
     ASSERT_TRUE(db_.setUserOtp(client.entry_id, secret, 0));
 
     caller_.user_id = client.entry_id;
-    caller_.name = client.name;
+    caller_.name = client.name.toStdString();
     caller_.session_type = proto::router::SESSION_TYPE_CLIENT;
 
     TwoFactorHandler handler;

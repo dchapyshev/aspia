@@ -209,6 +209,5 @@ void handleHostSearch(Database& database, const RequestCaller& caller,
         return;
     }
 
-    database.searchHosts(QString::fromStdString(request.query()), workspace_ids,
-                         request.offset(), request.count(), out);
+    database.searchHosts(request.query(), workspace_ids, request.offset(), request.count(), out);
 }

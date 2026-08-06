@@ -153,7 +153,7 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     HostIdPeer peer;
     peer.computer_name = computerName();
     peer.architecture = architecture();
-    peer.version = version().toString();
+    peer.version = version().toString().toStdString();
     peer.os_name = osName();
     peer.address = address();
 
