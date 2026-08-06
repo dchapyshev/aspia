@@ -27,6 +27,10 @@ const char kOtpIssuer[] = "Aspia Router";
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+// static
+std::unordered_map<qint64, TwoFactorHandler::Attempts> TwoFactorHandler::attempts_;
+
+//--------------------------------------------------------------------------------------------------
 TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const RequestCaller& caller)
 {
     Result result;
@@ -149,12 +153,23 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         return result;
     }
 
+    // During enrollment the client confirms a secret it has just been handed and there is nothing
+    // to guess, so only the prompt of an enrolled user is bounded.
+    if (!enroll && isBlockedAttempt(caller.user_id, now))
+    {
+        LOG(INFO) << "Too many failed TOTP attempts for user" << caller.name << ". Closing connection";
+        result.action = Action::CLOSE;
+        return result;
+    }
+
     const QString code = QString::fromStdString(response.totp_code());
     quint64 matched_counter = 0;
     if (!Totp::verify(secret, code, now, Totp::kDefaultStepSec, Totp::kDefaultDigits,
                       Totp::kDefaultWindowSteps, &matched_counter))
     {
         LOG(INFO) << "Invalid TOTP code for user" << caller.name << ". Closing connection";
+        if (!enroll)
+            registerFailedAttempt(caller.user_id, now);
         result.action = Action::CLOSE;
         return result;
     }
@@ -164,6 +179,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     if (!enroll && matched_counter <= user_otp_counter_)
     {
         LOG(INFO) << "Replayed TOTP code for user" << caller.name << ". Closing connection";
+        registerFailedAttempt(caller.user_id, now);
         result.action = Action::CLOSE;
         return result;
     }
@@ -193,6 +209,10 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         }
     }
 
+    // A code that came out of the secret proves the peer holds what only the user holds, so the
+    // series of failed attempts ends here.
+    resetAttempts(caller.user_id);
+
     // Any successful TOTP submission produces a fresh bearer token. Failure to persist the token
     // is non-fatal: the user is still let in, they will be prompted for TOTP again next time.
     std::string new_token;
@@ -204,4 +224,39 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     result.new_token = std::move(new_token);
     result.token_id = new_token_id;
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool TwoFactorHandler::isBlockedAttempt(qint64 user_id, qint64 now)
+{
+    const auto it = attempts_.find(user_id);
+    return it != attempts_.end() && now < it->second.blocked_until;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TwoFactorHandler::registerFailedAttempt(qint64 user_id, qint64 now)
+{
+    Attempts& attempts = attempts_[user_id];
+
+    // A block that has run out closes the series it was imposed for. Those attempts are paid for
+    // already and the next one starts counting from scratch.
+    if (attempts.blocked_until && now >= attempts.blocked_until)
+    {
+        attempts.failures = 0;
+        attempts.blocked_until = 0;
+    }
+
+    ++attempts.failures;
+
+    if (attempts.failures >= kMaxFailedAttempts)
+        attempts.blocked_until = now + DurationCast<Seconds>(kFailedAttemptsBlock).count();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TwoFactorHandler::resetAttempts(qint64 user_id)
+{
+    attempts_.erase(user_id);
 }

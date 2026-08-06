@@ -24,6 +24,13 @@
 #include "base/crypto/totp.h"
 #include "router/router_test_base.h"
 
+// The count of failed attempts outlives the sessions on purpose, so it also outlives a test case.
+class TwoFactorHandlerTestPeer
+{
+public:
+    static void forgetFailedAttempts() { TwoFactorHandler::attempts_.clear(); }
+};
+
 // The two-factor stage of a client session against a real database and the real TOTP code, with
 // the clock supplied by the test.
 class TwoFactorHandlerTest : public RouterTestBase
@@ -36,6 +43,8 @@ protected:
         // The stage runs for the session of the built-in administrator; the caller identity comes
         // from the authenticated channel, never from the request.
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+        TwoFactorHandlerTestPeer::forgetFailedAttempts();
     }
 
     TwoFactorHandler::Result start(TwoFactorHandler& handler)
@@ -55,6 +64,22 @@ protected:
         proto::router::TwoFactorResponse response;
         response.set_token(std::string(token));
         return handler.handleResponse(db_, caller_, response, "127.0.0.1", kNow);
+    }
+
+    // A code the secret does not produce anywhere inside the drift window around |at|.
+    QString wrongCode(const QByteArray& secret, qint64 at) const
+    {
+        quint64 matched = 0;
+        for (int value = 0; ; ++value)
+        {
+            const QString candidate = QString("%1").arg(value, Totp::kDefaultDigits, 10,
+                                                        QLatin1Char('0'));
+            if (!Totp::verify(secret, candidate, at, Totp::kDefaultStepSec, Totp::kDefaultDigits,
+                              Totp::kDefaultWindowSteps, &matched))
+            {
+                return candidate;
+            }
+        }
     }
 
     // The secret the client scans out of the enrollment URI.
@@ -215,6 +240,41 @@ TEST_F(TwoFactorHandlerTest, ReplayedCodeIsRefused)
     TwoFactorHandler second;
     ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
     EXPECT_EQ(submitCode(second, code, kNow).action, TwoFactorHandler::Action::CLOSE);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A wrong code takes the session down with it, so guessing means reconnecting for every attempt
+// and no single session sees the series. The router counts the failed attempts of the user across
+// sessions and stops verifying codes for a while.
+TEST_F(TwoFactorHandlerTest, GuessingIsStoppedAfterTooManyFailedAttempts)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString wrong = wrongCode(secret, kNow);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(attempt, wrong, kNow).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    // What is refused now is the user and not the guess. Even the code they really have is no
+    // longer looked at.
+    TwoFactorHandler blocked;
+    ASSERT_EQ(start(blocked).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_EQ(submitCode(blocked, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    // And once it has run out, the owner of the secret gets back in.
+    const qint64 later =
+        kNow + DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count();
+
+    TwoFactorHandler after;
+    ASSERT_EQ(start(after).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_EQ(submitCode(after, Totp::code(secret, later), later).action,
+              TwoFactorHandler::Action::ACCEPT);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,7 +20,9 @@
 
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
+#include "base/time_types.h"
 #include "proto/router_client.h"
 #include "router/handlers/request_caller.h"
 
@@ -34,6 +36,9 @@ class Database;
 class TwoFactorHandler
 {
 public:
+    TwoFactorHandler() = default;
+    ~TwoFactorHandler() = default;
+
     struct Challenge
     {
         proto::router::TwoFactorMode mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
@@ -65,6 +70,11 @@ public:
         qint64 token_id = 0;
     };
 
+    // Failed attempts a user may make before the router stops verifying their codes at all, and
+    // how long that refusal lasts afterwards.
+    static constexpr int kMaxFailedAttempts = 10;
+    static constexpr Minutes kFailedAttemptsBlock { 15 };
+
     // Opens the stage. Called on a fresh connection and again when the session re-authenticates
     // (its own password change revokes every device token, this one included).
     Result start(Database& database, const RequestCaller& caller);
@@ -76,6 +86,24 @@ public:
                           std::string_view address, qint64 now);
 
 private:
+    // Wrong and replayed codes of one user. Either of them takes the session down together with
+    // this object, so whoever guesses just reconnects and no session sees the whole series. Six
+    // digits are few enough to walk through that way.
+    struct Attempts
+    {
+        int failures = 0;
+        qint64 blocked_until = 0;
+    };
+
+    static bool isBlockedAttempt(qint64 user_id, qint64 now);
+    static void registerFailedAttempt(qint64 user_id, qint64 now);
+    static void resetAttempts(qint64 user_id);
+
+    // Keyed by user and not by address. Reaching the code prompt takes a completed SRP exchange,
+    // so nobody can run somebody else's account into the block and nobody shakes off their own
+    // count by changing address. Only the thread of the client worker touches this.
+    static std::unordered_map<qint64, Attempts> attempts_;
+
     // Set while the user is being walked through the enrollment: it reaches the database only
     // once the user confirms it with a valid code, so an abandoned dialog leaves it un-enrolled.
     QByteArray tentative_otp_secret_;
@@ -87,6 +115,9 @@ private:
 
     // The client already presented a token and was told to go to the code prompt instead.
     bool token_rejected_ = false;
+
+    friend class TwoFactorHandlerTestPeer;
+    Q_DISABLE_COPY_MOVE(TwoFactorHandler)
 };
 
 #endif // ROUTER_HANDLERS_TWO_FACTOR_HANDLER_H
