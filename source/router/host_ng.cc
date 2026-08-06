@@ -73,7 +73,7 @@ HostNG::~HostNG()
     if (isTempHostId(host_id_))
         releaseTempHostId(host_id_);
 
-    // If a remove command was sent during this session, the host has either processed it (and
+    // If a remove command was sent over this connection, the host has either processed it (and
     // disconnected/uninstalled) or got dropped before it could; either way the host_id will not
     // resurface, so finalize the hosts_remove row here.
     if (remove_command_sent_ && host_id_ != kInvalidHostId)
@@ -105,7 +105,7 @@ void HostNG::sendRemoveCommand()
     proto::router::RouterToHost message;
     message.mutable_host_command()->set_command_name(proto::router::kCommandHostRemove);
 
-    // Mark the session as "remove sent" only once we actually have a buffer to hand to the channel.
+    // Mark the connection as "remove sent" only once we actually have a buffer to hand to the channel.
     // The destructor treats this flag as proof the host was told, so it must not be set if the
     // command was never serialized. TCP delivery itself is the documented reliability assumption.
     const QByteArray serialized = serialize(message);
@@ -178,8 +178,8 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
 
     if (result.action == HostIdResult::Action::ISSUE_TEMP_ID)
     {
-        // The key and the temporary id belong to this session: the key is random material handed
-        // to the host, and the id is reserved until the session ends.
+        // The key and the temporary id belong to this connection. The key is random material
+        // handed to the host, and the id is reserved until the connection ends.
         std::string key = Random::string(kHostKeySize);
         key_hash_ = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
         host_id_ = reserveTempHostId();
@@ -206,17 +206,17 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
 
     sendMessage(0, serialize(message));
 
-    // Sent before the id is announced, so the worker already sees this session as one that is on
-    // its way out and keeps the host out of the reachable ones. The id is still handed over: the
-    // host needs to know which record the command is about, and the session finalizes the removal
-    // when it ends.
+    // Sent before the id is announced, so the worker already sees this host as one that is on its
+    // way out and keeps it out of the reachable ones. The id is still handed over. The host needs
+    // to know which record the command is about, and the removal is finalized when the connection
+    // ends.
     if (result.removal_pending)
         sendRemoveCommand();
 
     if (host_id_ != kInvalidHostId)
     {
-        // The worker is told about the id even for a host that is leaving, or a stale session of
-        // the same host would not be dropped in favour of this one.
+        // The worker is told about the id even for a host that is leaving, or a stale predecessor
+        // of the same host would not be dropped in favour of this one.
         emit sig_hostIdAssigned(host_id_);
 
         if (!result.removal_pending)

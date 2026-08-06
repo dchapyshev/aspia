@@ -201,8 +201,8 @@ TEST_F(HostNGTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
         ASSERT_TRUE(command.has_host_command());
         EXPECT_EQ(command.host_command().command_name(), proto::router::kCommandHostRemove);
 
-        // The id is reported all the same, so a stale session of the same host is dropped in
-        // favour of this one, and the session carries the mark that keeps it unannounced.
+        // The id is reported all the same, so a stale predecessor of the same host is dropped
+        // in favour of this one, and the connection carries the mark that keeps it unannounced.
         EXPECT_EQ(announced_, QList<HostId>({ host_id }));
         EXPECT_TRUE(host.isRemoveCommandSent());
     });

@@ -40,8 +40,8 @@ namespace {
 // away from the connection storms the worker also serves.
 const Hours kRemovalSweepInterval{ 24 };
 
-// A host asks for its id as soon as it is authenticated, so a session that has not asked serves
-// nobody. Anonymous access means anybody can open one and keep it for as long as it likes.
+// A host asks for its id as soon as it is authenticated, so a connection that has not asked
+// serves nobody. Anonymous access means anybody can open one and keep it for as long as it likes.
 constexpr Seconds kIdentifyTimeout{ 30 };
 
 } // namespace
@@ -209,6 +209,7 @@ void HostWorker::onStop()
     }
 
     hosts_.clear();
+    hosts_by_id_.clear();
     SharedHosts::instance().clear();
 }
 
@@ -236,7 +237,7 @@ void HostWorker::onTimer(TimePoint now)
 
     for (Host* host : std::as_const(silent))
     {
-        LOG(WARNING) << "Session without a host id dropped (session id" << host->sessionId() << ")";
+        LOG(WARNING) << "Connection without a host id dropped (id" << host->sessionId() << ")";
         removeHostSession(host);
     }
 
@@ -297,39 +298,20 @@ void HostWorker::onHostFinished()
 //--------------------------------------------------------------------------------------------------
 void HostWorker::onHostIdAssigned(HostId host_id)
 {
-    QList<Host*> matched_hosts;
+    Host* host = dynamic_cast<Host*>(sender());
+    CHECK(host);
 
-    for (Host* host : std::as_const(hosts_))
+    // The holder in the index got the id earlier, so it is the stale one. It is replaced first,
+    // and its removal below skips the entry of the newcomer and publishes the newcomer.
+    Host* stale_host = hosts_by_id_.value(host_id);
+    hosts_by_id_.insert(host_id, host);
+
+    if (stale_host && stale_host != host)
     {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng)
-        {
-            if (host_ng->hostId() == host_id)
-                matched_hosts.append(host);
-            continue;
-        }
+        LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting stale predecessor (id"
+                  << stale_host->sessionId() << ")";
 
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy)
-        {
-            if (host_legacy->hasHostId(host_id))
-                matched_hosts.append(host);
-        }
-    }
-
-    if (matched_hosts.size() > 1)
-    {
-        Host* oldest_host = matched_hosts.first();
-        for (int i = 1; i < matched_hosts.size(); ++i)
-        {
-            if (matched_hosts[i]->startTime() < oldest_host->startTime())
-                oldest_host = matched_hosts[i];
-        }
-
-        LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
-                  << oldest_host->sessionId() << ")";
-
-        removeHostSession(oldest_host);
+        removeHostSession(stale_host);
     }
 
     publishHostState(host_id);
@@ -338,6 +320,10 @@ void HostWorker::onHostIdAssigned(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 void HostWorker::onHostIdRemoved(HostId host_id)
 {
+    // Only the holder of the id gives it up this way, so the entry is its own.
+    if (hosts_by_id_.value(host_id) == sender())
+        hosts_by_id_.remove(host_id);
+
     publishHostState(host_id);
 }
 
@@ -368,7 +354,14 @@ void HostWorker::removeHostSession(Host* host)
     }
 
     for (HostId host_id : std::as_const(host_ids))
+    {
+        // The id may already be held by the newcomer that displaced this host. Only the own
+        // entries go away, and the publication below then keeps the newcomer announced.
+        if (hosts_by_id_.value(host_id) == host)
+            hosts_by_id_.remove(host_id);
+
         publishHostState(host_id);
+    }
 
     emit sig_notify(flags);
 }
@@ -376,18 +369,7 @@ void HostWorker::removeHostSession(Host* host)
 //--------------------------------------------------------------------------------------------------
 Host* HostWorker::hostByHostId(HostId host_id)
 {
-    for (Host* host : std::as_const(hosts_))
-    {
-        HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (host_ng && host_ng->hostId() == host_id)
-            return host_ng;
-
-        HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host);
-        if (host_legacy && host_legacy->hasHostId(host_id))
-            return host_legacy;
-    }
-
-    return nullptr;
+    return hosts_by_id_.value(host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -471,7 +453,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
 
     // The hosts row is now in hosts_remove; if the host is online send it the remove command and
     // let HostNG finalize the hosts_remove row on disconnect. Legacy hosts have no router->host
-    // remove command, so remove the id from the live legacy session and finalize the pending row
+    // remove command, so remove the id from the live legacy host and finalize the pending row
     // immediately. Offline legacy hosts are handled on the next HostIdRequest.
     Host* host = hostByHostId(host_id);
     result.error_code = proto::router::kErrorOk;
@@ -482,8 +464,8 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
     {
         host_ng->sendRemoveCommand();
 
-        // The session lives on until the host carries the command out, and an announced host is
-        // one a client may be offered a connection to.
+        // The connection lives on until the host carries the command out, and an announced host
+        // is one a client may be offered a connection to.
         publishHostState(host_id);
     }
     else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
@@ -536,7 +518,7 @@ std::string_view HostWorker::doApproveHost(HostId host_id)
         return proto::router::kErrorInternalError;
     }
 
-    // The key is now persistent. Drop the temporary session so the host reconnects and receives
+    // The key is now persistent. Drop the temporary connection so the host reconnects and receives
     // its permanent id via EXISTING_ID. Persist first, then drop: dropping before the row exists
     // would make the reconnect ask for a new temporary id.
     removeHostSession(host);

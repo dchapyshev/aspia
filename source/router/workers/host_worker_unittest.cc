@@ -51,10 +51,10 @@ const Seconds kWaitTimeout{ 30 };
 const char kHostKey[] = "the-key-the-host-presents";
 const char kHardwareId[] = "hw-id-of-the-host";
 
-// How long a session that has not asked for an id is kept.
+// How long a connection that has not asked for an id is kept.
 constexpr Seconds kIdentifyTimeout{ 30 };
 
-// How many id requests one session may make.
+// How many id requests one connection may make.
 constexpr int kMaxIdRequests = 5;
 
 //--------------------------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ protected:
         return GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
     }
 
-    // Connects a peer that behaves like a host: anonymous authentication as a host session, then
+    // Connects a peer that behaves like a host: anonymous authentication as a host, then
     // one request for its existing id. Returns once the router has answered. A peer that does not
     // ask stays silent after the authentication, and the call returns as soon as it is in.
     [[nodiscard]] Peer* connectHost(bool ask_for_id = true)
@@ -281,7 +281,7 @@ protected:
     }
 
     // Fires the timer with the synthetic |now| until the router drops the peer. The polling covers
-    // the gap between the authentication of the peer and the moment the worker picks the session up.
+    // the gap between the authentication of the peer and the moment the worker picks it up.
     [[nodiscard]] bool firedUntilDisconnected(Peer* peer, TimePoint now)
     {
         HostWorkerTestPeer timer(host_worker_);
@@ -338,10 +338,25 @@ TEST_F(HostWorkerTest, ConnectedHostIsAnnounced)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host can have more than one session for a while: the router has not noticed that the old one
-// is dead yet, and the host has already reconnected. Removing the host must not leave a session
-// behind that puts it back among the reachable ones when the other one goes away.
-TEST_F(HostWorkerTest, RemovedHostIsNotAnnouncedByAnotherSession)
+// A host that reconnects while its old connection is still around displaces it. The old connection
+// goes away and the host stays announced through the new one.
+TEST_F(HostWorkerTest, ReconnectedHostDisplacesItsStalePredecessor)
+{
+    Peer* first = connectHost();
+    ASSERT_TRUE(first);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    ASSERT_TRUE(connectHost());
+
+    EXPECT_TRUE(waitFor([first]() { return first->disconnected.load(); }));
+    EXPECT_TRUE(SharedHosts::instance().contains(host_id_));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host can have more than one connection for a while: the router has not noticed that the old
+// one is dead yet, and the host has already reconnected. Removing the host must not leave a
+// connection behind that puts it back among the reachable ones when the other one goes away.
+TEST_F(HostWorkerTest, RemovedHostIsNotAnnouncedByAnotherConnection)
 {
     Peer* first = connectHost();
     ASSERT_TRUE(first);
@@ -351,7 +366,7 @@ TEST_F(HostWorkerTest, RemovedHostIsNotAnnouncedByAnotherSession)
     ASSERT_TRUE(waitFor([this]() { return !SharedHosts::instance().contains(host_id_); }));
 
     // The host reconnects, is recognised by the record on its way out and told to remove itself.
-    // The stale session is dropped in favour of the new one, the same as for any other host.
+    // The stale predecessor is dropped in favour of the new one, the same as for any other host.
     ASSERT_TRUE(connectHost());
     EXPECT_TRUE(waitFor([first]() { return first->disconnected.load(); }));
 
@@ -360,9 +375,9 @@ TEST_F(HostWorkerTest, RemovedHostIsNotAnnouncedByAnotherSession)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host asks for its id as soon as it is authenticated. A session that never asks serves nobody,
-// and anonymous access means anybody can open one, so it is not kept around.
-TEST_F(HostWorkerTest, SilentSessionIsDropped)
+// A host asks for its id as soon as it is authenticated. A connection that never asks serves
+// nobody, and anonymous access means anybody can open one, so it is not kept around.
+TEST_F(HostWorkerTest, SilentConnectionIsDropped)
 {
     Peer* peer = connectHost(false);
     ASSERT_TRUE(peer);
@@ -371,10 +386,10 @@ TEST_F(HostWorkerTest, SilentSessionIsDropped)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A request that finds nothing does not spend the single attempt a session has, or a host told
+// A request that finds nothing does not spend the single attempt a connection has, or a host told
 // "not found" could not ask for a new id. What it must not buy is an endless stream of lookups on
 // a connection that costs the peer nothing.
-TEST_F(HostWorkerTest, TooManyIdRequestsCloseTheSession)
+TEST_F(HostWorkerTest, TooManyIdRequestsCloseTheConnection)
 {
     Peer* peer = connectHost(false);
     ASSERT_TRUE(peer);
@@ -386,7 +401,7 @@ TEST_F(HostWorkerTest, TooManyIdRequestsCloseTheSession)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A removed host stops being reachable at once. Its session lives on until it carries the remove
+// A removed host stops being reachable at once. Its connection lives on until it carries the remove
 // command out, and while it is announced a client that knows the id would be given an offer to a
 // host the administrator has already removed.
 TEST_F(HostWorkerTest, RemovedHostIsNoLongerAnnounced)

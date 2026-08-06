@@ -43,7 +43,7 @@ public:
     const QByteArray& hardwareId() const { return hw_id_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
-    // Sends the "remove" host command and marks the session so that on disconnect the
+    // Sends the "remove" host command and marks the connection so that on disconnect the
     // hosts_remove row for this host_id is finalized. TCP delivers the command reliably; the
     // host's disconnect is treated as a proof of receipt.
     void sendRemoveCommand();

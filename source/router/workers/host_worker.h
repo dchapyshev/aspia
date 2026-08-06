@@ -19,6 +19,7 @@
 #ifndef ROUTER_WORKERS_HOST_WORKER_H
 #define ROUTER_WORKERS_HOST_WORKER_H
 
+#include <QHash>
 #include <QList>
 
 #include <functional>
@@ -62,24 +63,24 @@ public:
     // sessions only).
     void requestTempHostList(bool with_address, QObject* context, TempHostListCallback callback);
 
-    // Disconnects the session serving |host_id|, or every host session if |host_id| is
-    // kAllHostsId. The callback receives false if no session serves |host_id|.
+    // Disconnects the host |host_id|, or every connected host if |host_id| is kAllHostsId. The
+    // callback receives false if |host_id| is not connected.
     void disconnectHost(HostId host_id, QObject* context, ResultCallback callback);
 
-    // Schedules removal of |host_id| and, if the host is online, delivers the remove command to
-    // the live session.
+    // Schedules removal of |host_id| and, if the host is online, delivers the remove command
+    // to it.
     void removeHost(HostId host_id, QObject* context, RemoveHostCallback callback);
 
-    // Asks the online host |host_id| to check for updates. The callback receives false if no
-    // session serves |host_id|.
+    // Asks the online host |host_id| to check for updates. The callback receives false if
+    // |host_id| is not connected.
     void updateHost(HostId host_id, QObject* context, ResultCallback callback);
 
-    // Approves the temporary host |host_id|: persists its key and drops the temporary session so
-    // the host reconnects and receives its permanent id.
+    // Approves the temporary host |host_id|: persists its key and drops the temporary connection
+    // so the host reconnects and receives its permanent id.
     void approveHost(HostId host_id, QObject* context, ErrorCodeCallback callback);
 
-    // Delivers the connection offer to the host session serving |host_id| (converting it for
-    // legacy hosts). Fire-and-forget: if the host has disconnected, the offer is dropped.
+    // Delivers the connection offer to the host |host_id| (converting it for legacy hosts).
+    // Fire-and-forget: if the host has disconnected, the offer is dropped.
     void sendConnectionOffer(HostId host_id, const proto::router::ConnectionOffer& offer);
 
 signals:
@@ -112,6 +113,11 @@ private:
     ScopedQPointer<TcpServer> server_;
     ScopedQPointer<TcpServerLegacy> legacy_server_;
     QList<Host*> hosts_;
+
+    // The holder of each assigned host id. At most one holder per id at any moment; a reconnecting
+    // host displaces its stale predecessor. Kept next to |hosts_| so that lookups and duplicate
+    // detection stay O(1) when thousands of hosts reconnect at once.
+    QHash<HostId, Host*> hosts_by_id_;
 
     // When the queue of unacknowledged removals is swept next. Starts at the epoch, so the first
     // tick after the router comes up does it.

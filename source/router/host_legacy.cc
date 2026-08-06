@@ -46,19 +46,13 @@ HostLegacy::~HostLegacy()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostLegacy::hasHostId(HostId host_id) const
-{
-    return host_id_list_.contains(host_id);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool HostLegacy::removeHostId(HostId host_id)
 {
     for (auto it = host_id_list_.begin(), it_end = host_id_list_.end(); it != it_end; ++it)
     {
         if (*it == host_id)
         {
-            CLOG(INFO) << "Host ID" << host_id << "removed from legacy session list";
+            CLOG(INFO) << "Host ID" << host_id << "removed from the legacy host id list";
             host_id_list_.erase(it);
             emit sig_hostIdRemoved(host_id);
             emit sig_notifyChanged(ClientWorker::NOTIFY_HOSTS);

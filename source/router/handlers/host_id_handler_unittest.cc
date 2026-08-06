@@ -120,7 +120,7 @@ TEST_F(HostIdHandlerTest, OversizedHardwareIdIsDisconnected)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host asks once per session. A repeat would let it swap the id its pending-removal bookkeeping
+// A host asks once per connection. A repeat would let it swap the id its pending-removal bookkeeping
 // is tied to, so it is not answered at all.
 TEST_F(HostIdHandlerTest, RepeatedRequestIsIgnored)
 {
@@ -134,8 +134,8 @@ TEST_F(HostIdHandlerTest, RepeatedRequestIsIgnored)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host asks for its id once per session and then waits, so a request the router cannot answer
-// must not be left unanswered. The session is closed instead, and the host comes back by itself.
+// A host asks for its id once per connection and then waits, so a request the router cannot answer
+// must not be left unanswered. The connection is closed instead, and the host comes back by itself.
 TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheDatabaseIsUnavailable)
 {
     Database unavailable;
@@ -148,7 +148,7 @@ TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheDatabaseIsUnavailable)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A lookup that finds nothing leaves the session free to ask again, and that is what a host told
+// A lookup that finds nothing leaves the connection free to ask again, and that is what a host told
 // "not found" does. A peer that keeps asking is spending the router, not looking for its id.
 TEST_F(HostIdHandlerTest, TooManyRequestsDisconnectTheHost)
 {
@@ -159,8 +159,8 @@ TEST_F(HostIdHandlerTest, TooManyRequestsDisconnectTheHost)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A lookup that fails is not an answer the host can act on, and it asks only once per session. The
-// session is closed, the same way an unavailable database closes it.
+// A lookup that fails is not an answer the host can act on, and it asks only once per connection.
+// The connection is closed, the same way an unavailable database closes it.
 TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheLookupFails)
 {
     ASSERT_TRUE(execRaw("DROP TABLE hosts"));

@@ -28,7 +28,7 @@ namespace {
 // bound: an unauthenticated peer must not be able to push an arbitrary blob into the database.
 constexpr size_t kMaxHardwareIdSize = 64;
 
-// A request that finds nothing leaves the session without an id, so it does not spend the single
+// A request that finds nothing leaves the connection without an id, so it does not spend the single
 // attempt the check below refuses a repeat with. Two requests are all a host ever needs, and the
 // rest is a peer that keeps the router looking things up for free.
 constexpr int kMaxIdRequests = 5;
@@ -45,15 +45,15 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
 
     if (request_count > kMaxIdRequests)
     {
-        LOG(ERROR) << "Too many host id requests in one session (" << request_count
+        LOG(ERROR) << "Too many host id requests in one connection (" << request_count
                    << "); disconnecting";
         result.action = Action::CLOSE;
         return result;
     }
 
-    // A host requests its id exactly once per session. Reject repeats so an untrusted host cannot
-    // overwrite the assigned id and desync the pending-removal finalization the session does when
-    // it ends. A failed request leaves the id unassigned, so a legitimate retry still works.
+    // A host requests its id exactly once per connection. Reject repeats so an untrusted host
+    // cannot overwrite the assigned id and desync the pending-removal finalization done when the
+    // connection ends. A failed request leaves the id unassigned, so a legitimate retry still works.
     if (current_host_id != kInvalidHostId)
     {
         LOG(ERROR) << "Ignoring repeated host id request; host id" << current_host_id
@@ -97,9 +97,9 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
 
     if (!database.isValid())
     {
-        // The host asks for its id once per session and then waits for an answer that would never
-        // come, staying connected and unreachable. Closing the session is what makes it try again
-        // later, when the database may be back.
+        // The host asks for its id once per connection and then waits for an answer that would
+        // never come, staying connected and unreachable. Closing the connection is what makes it
+        // try again later, when the database may be back.
         LOG(ERROR) << "Failed to connect to database; disconnecting the host";
         result.action = Action::CLOSE;
         return result;
@@ -114,7 +114,7 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
     if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorNotFound)
     {
         // The lookup failed, so the answer says nothing about the host. There is nothing it could
-        // do with such an answer anyway, and it asks only once per session, so it would stay
+        // do with such an answer anyway, and it asks only once per connection, so it would stay
         // connected and unreachable.
         LOG(ERROR) << "Host id lookup failed with" << error_code << "; disconnecting the host";
         result.action = Action::CLOSE;

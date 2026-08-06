@@ -37,9 +37,9 @@ class Host : public QObject
     Q_OBJECT
 
 public:
-    // |database| is the connection of the thread the session runs in; it outlives every session
-    // of that thread. Passing it instead of reaching for the per-thread singleton is what lets a
-    // session be driven against a temporary database in a test.
+    // |database| is the connection of the thread the host object runs in; it outlives every host
+    // object of that thread. Passing it instead of reaching for the per-thread singleton is what
+    // lets a host object be driven against a temporary database in a test.
     Host(Database& database, TcpChannel* channel, QObject* parent);
     virtual ~Host() override;
 

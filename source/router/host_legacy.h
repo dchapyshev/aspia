@@ -37,7 +37,6 @@ public:
     ~HostLegacy() final;
 
     const QList<HostId>& hostIdList() const { return host_id_list_; }
-    bool hasHostId(HostId host_id) const;
     bool removeHostId(HostId host_id);
 
     void sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer);
