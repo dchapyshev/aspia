@@ -35,10 +35,21 @@ bool isValidWhiteListEntry(const QString& entry)
     return NetUtils::isValidSubnet(entry);
 }
 
+//--------------------------------------------------------------------------------------------------
+QString configFilePath()
+{
+    // The override lets tests and unusual deployments point the router at their own file.
+    QString file_path = qEnvironmentVariable("ASPIA_ROUTER_CONFIG_FILE");
+    if (!file_path.isEmpty())
+        return file_path;
+
+    return BasePaths::appConfigDir() + "/router.conf";
+}
+
 } // namespace
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(BasePaths::appConfigDir() + "/router.conf", XmlSettings::format())
+    : impl_(configFilePath(), XmlSettings::format())
 {
     // Nothing
 }

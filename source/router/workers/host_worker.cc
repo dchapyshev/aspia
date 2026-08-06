@@ -443,6 +443,10 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
     if (HostNG* host_ng = dynamic_cast<HostNG*>(host))
     {
         host_ng->sendRemoveCommand();
+
+        // The session lives on until the host carries the command out, and an announced host is
+        // one a client may be offered a connection to.
+        SharedHosts::instance().remove(host_id);
     }
     else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
     {

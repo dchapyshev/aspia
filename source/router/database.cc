@@ -378,7 +378,12 @@ Database& Database::instance()
 // static
 QString Database::filePath()
 {
-    QString file_path = databaseDirectory();
+    // The override lets tests and unusual deployments point the router at their own file.
+    QString file_path = qEnvironmentVariable("ASPIA_ROUTER_DB_FILE");
+    if (!file_path.isEmpty())
+        return file_path;
+
+    file_path = databaseDirectory();
     if (file_path.isEmpty())
         return QString();
 
@@ -3180,12 +3185,14 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 bool Database::openDatabase()
 {
-    QString dir_path = databaseDirectory();
-    if (dir_path.isEmpty())
+    const QString file_path = filePath();
+    if (file_path.isEmpty())
     {
-        LOG(ERROR) << "Invalid directory path";
+        LOG(ERROR) << "Invalid file path";
         return false;
     }
+
+    const QString dir_path = QFileInfo(file_path).absolutePath();
 
     // Ensure the directory exists.
     QFileInfo dir_info(dir_path);

@@ -27,4 +27,5 @@ collect_sources(SOURCE_ROUTER_WORKERS
     stun_worker.h)
 
 collect_sources(SOURCE_ROUTER_WORKERS_TESTS
-    client_worker_unittest.cc)
+    client_worker_unittest.cc
+    host_worker_unittest.cc)
