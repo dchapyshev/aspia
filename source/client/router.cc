@@ -933,14 +933,16 @@ void Router::setStatus(Status status)
         return;
     status_ = status;
 
+    // The lists we hold are no longer known to be current. Dropped before the callers below are
+    // answered: one of them can retry from inside its handler, and a retry that accepts a cached
+    // answer must not be served the lists of the session that just died.
+    if (status_ != Status::ONLINE)
+        cache_.clear();
+
     // A reply only ever arrives inside the window its request was made in: below ONLINE the router
     // drops what we send, so the requests issued on the way up are as dead as the ones a lost
     // session leaves behind. Both are answered here.
     rpc_.clearPending();
-
-    // And the lists we hold are no longer known to be current.
-    if (status_ != Status::ONLINE)
-        cache_.clear();
 
     emit sig_statusChanged(config_.routerId(), status_);
 }

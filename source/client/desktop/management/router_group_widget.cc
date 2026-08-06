@@ -42,6 +42,13 @@
 #include "proto/router_constants.h"
 #include "ui_router_group_widget.h"
 
+namespace {
+
+// Upper sanity bound on the router-reported host count, used only for pagination.
+const qint64 kMaxHostCount = 500000;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent),
@@ -326,7 +333,7 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     if (selected_row >= 0)
         ui->tree_host->setCurrentIndex(model_->index(selected_row, 0));
 
-    const bool page_moved = hosts_page_.setTotalCount(list.total_count);
+    const bool page_moved = hosts_page_.setTotalCount(qMin(list.total_count, kMaxHostCount));
     updatePagination();
     updateStatusLabel();
 

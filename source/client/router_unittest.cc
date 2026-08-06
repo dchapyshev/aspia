@@ -479,6 +479,29 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A caller answered by the teardown can retry from inside its handler, and a retry that accepts a
+// cached answer must not be served the lists of the session that just died: the caches have to be
+// gone before the callers are woken.
+TEST_F(RouterTest, CallerAnsweredByTeardownDoesNotSeeTheDeadCaches)
+{
+    fillCaches();
+
+    int wire_requests = 0;
+    router_.listUsers({ &receiver_, [&](const proto::router::UserList&)
+    {
+        const int sent_before = sent_.size();
+        router_.listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
+                               { &receiver_, [](const RouterWorkspaceList&) {} });
+        if (sent_.size() > sent_before)
+            ++wire_requests;
+    } });
+
+    router_.connectToRouter();
+
+    EXPECT_EQ(wire_requests, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Until the router accepts our keys it drops everything we send, so a request issued on the way up
 // can never be answered. Reaching ONLINE has to wake its caller: a dialog that disabled itself for
 // the round trip has nothing else to wait for.
