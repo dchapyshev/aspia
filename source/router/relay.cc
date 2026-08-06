@@ -159,7 +159,18 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 
     for (int i = 0; i < key_pool.key_size(); ++i)
     {
-        SharedKeyPool::instance().add(
-            session_id_, peer_host, static_cast<quint16>(peer_port), key_pool.key(i));
+        const proto::router::RelayKey& key = key_pool.key(i);
+
+        // A key without usable material spends the offer that takes it and then fails at the
+        // relay, which cannot derive a session from it. A key of an unknown type is still passed
+        // on, because understanding the type is the job of the peers.
+        if (key.type() == proto::router::RelayKey::TYPE_UNKNOWN || key.public_key().empty() ||
+            key.iv().empty())
+        {
+            CLOG(ERROR) << "Ignoring malformed key" << key.key_id() << "(type:" << key.type() << ")";
+            continue;
+        }
+
+        SharedKeyPool::instance().add(session_id_, peer_host, static_cast<quint16>(peer_port), key);
     }
 }

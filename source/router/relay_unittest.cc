@@ -32,10 +32,9 @@
 #include "router/router_test_worker.h"
 #include "router/shared_key_pool.h"
 
-// The relay side of the router: the pool of one-time keys a relay announces, the statistics it
-// reports and the commands the router sends back. The session is the real Relay in a real worker
-// thread - only the socket is a stand-in. The key pool is process-wide, so every test starts from
-// an empty one.
+// The relay side of the router. A relay announces one time keys, reports statistics and takes
+// commands back. The session is the real Relay in a real worker thread and only the socket is a
+// stand-in. The key pool is process-wide, so every test starts from an empty one.
 class RelayTest : public RouterTestBase
 {
 protected:
@@ -64,7 +63,7 @@ protected:
         {
             FakeTcpChannel* channel = new FakeTcpChannel();
 
-            // A relay authenticates anonymously: it has no user, only the peer facts the
+            // A relay authenticates anonymously and has no user, only the peer facts the
             // authenticator collected.
             channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
 
@@ -76,7 +75,7 @@ protected:
         });
     }
 
-    // A key as the relay generates it: an X25519 public key and the nonce of the AEAD.
+    // A key as the relay generates it, with an X25519 public key and the nonce of the AEAD.
     static proto::router::RelayKey makeKey(quint32 key_id)
     {
         proto::router::RelayKey key;
@@ -101,7 +100,7 @@ protected:
         return serialize(message);
     }
 
-    // The relay list as RelayWorker::doRelayList builds it: the statistics of every relay travel
+    // The relay list as RelayWorker::doRelayList builds it. The statistics of every relay travel
     // to the administrator inside one message.
     static QByteArray relayList(const std::vector<Relay*>& relays)
     {
@@ -161,6 +160,51 @@ TEST_F(RelayTest, PoolWithAnUnusableEndpointIsIgnored)
         channel->receive(0, keyPool("relay.example", 70000, { makeKey(12) }));
 
         EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 0u);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A key without usable material spends the offer that takes it and then fails at the relay, which
+// cannot derive a session from it. The client sees a broken connection and has nothing better to
+// retry with, because the pool holds more keys like that one.
+TEST_F(RelayTest, KeyWithoutUsableMaterialIsRejected)
+{
+    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    {
+        proto::router::RelayKey without_public_key = makeKey(10);
+        without_public_key.clear_public_key();
+
+        proto::router::RelayKey without_iv = makeKey(11);
+        without_iv.clear_iv();
+
+        proto::router::RelayKey without_type = makeKey(12);
+        without_type.set_type(proto::router::RelayKey::TYPE_UNKNOWN);
+
+        channel->receive(0, keyPool("relay.example", 8080,
+                                    { without_public_key, without_iv, without_type }));
+
+        EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 0u);
+        EXPECT_FALSE(SharedKeyPool::instance().take().has_value());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A malformed key is dropped on its own and the usable keys of the same pool are still announced.
+TEST_F(RelayTest, GoodKeysOfAPartlyMalformedPoolAreKept)
+{
+    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    {
+        proto::router::RelayKey broken = makeKey(10);
+        broken.clear_iv();
+
+        channel->receive(0, keyPool("relay.example", 8080, { broken, makeKey(11) }));
+
+        EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 1u);
+
+        const std::optional<SharedKeyPool::Credentials> credentials =
+            SharedKeyPool::instance().take();
+        ASSERT_TRUE(credentials.has_value());
+        EXPECT_EQ(credentials->key.key_id(), 11u);
     });
 }
 
@@ -236,7 +280,7 @@ TEST_F(RelayTest, KeyUsedIsForwardedToTheRelay)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The administrator drops a peer session of a relay: the command is what carries that decision.
+// The administrator drops a peer session of a relay and this command carries that decision.
 TEST_F(RelayTest, PeerRequestIsForwardedToTheRelay)
 {
     withRelay([](Relay& relay, FakeTcpChannel* channel)
@@ -258,7 +302,7 @@ TEST_F(RelayTest, PeerRequestIsForwardedToTheRelay)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Anything the router cannot make sense of leaves no trace: no keys, no statistics, no answer.
+// Anything the router cannot make sense of leaves no keys, no statistics and no answer behind.
 TEST_F(RelayTest, GarbageFromTheRelayIsIgnored)
 {
     withRelay([](Relay& relay, FakeTcpChannel* channel)
