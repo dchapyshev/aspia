@@ -463,7 +463,7 @@ void RelayWorker::doAccept(RelayWorker* self)
 
         if (!error_code)
         {
-            if (!self->flood_guard_->check(socket, self->pending_sessions_.size()))
+            if (!self->flood_guard_->check(socket, static_cast<int>(self->pending_sessions_.size())))
             {
                 LOG(TRACE) << "Connection rejected by flood guard:" << peerAddress(socket);
                 // |socket| goes out of scope here - asio's destructor closes the descriptor.
@@ -507,7 +507,7 @@ void RelayWorker::removePendingSession(PendingSession* session)
 {
     session->disconnect();
     session->deleteLater();
-    pending_sessions_.removeOne(session);
+    std::erase(pending_sessions_, session);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -515,6 +515,6 @@ void RelayWorker::removeSession(Session* session)
 {
     session->disconnect();
     session->deleteLater();
-    active_sessions_.removeOne(session);
+    std::erase(active_sessions_, session);
     emit sig_sessionFinished();
 }

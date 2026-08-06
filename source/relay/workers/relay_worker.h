@@ -19,11 +19,10 @@
 #ifndef RELAY_WORKERS_RELAY_WORKER_H
 #define RELAY_WORKERS_RELAY_WORKER_H
 
-#include <QList>
-
 #include <asio/ip/tcp.hpp>
 
 #include <memory>
+#include <vector>
 
 #include "base/shared_pointer.h"
 #include "base/threading/worker.h"
@@ -85,8 +84,8 @@ private:
     // Created in the worker thread so the socket binds to its io_context.
     std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
 
-    QList<PendingSession*> pending_sessions_;
-    QList<Session*> active_sessions_;
+    std::vector<PendingSession*> pending_sessions_;
+    std::vector<Session*> active_sessions_;
 
     // Statistics are disabled while |stat_interval_| is zero.
     Seconds stat_interval_ { Seconds::zero() };
