@@ -148,6 +148,18 @@ TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheDatabaseIsUnavailable)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A lookup that fails is not an answer the host can act on, and it asks only once per session. The
+// session is closed, the same way an unavailable database closes it.
+TEST_F(HostIdHandlerTest, HostIsDisconnectedWhenTheLookupFails)
+{
+    ASSERT_TRUE(execRaw("DROP TABLE hosts"));
+
+    const HostIdResult result = handle(existingIdRequest("key-1"));
+
+    EXPECT_EQ(result.action, HostIdResult::Action::CLOSE);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(HostIdHandlerTest, UnknownRequestTypeIsIgnored)
 {
     proto::router::HostIdRequest request = newIdRequest();

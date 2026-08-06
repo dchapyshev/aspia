@@ -98,6 +98,16 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
     HostId host_id = kInvalidHostId;
     const std::string_view error_code = database.hostId(key_hash, &host_id);
 
+    if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorNotFound)
+    {
+        // The lookup failed, so the answer says nothing about the host. There is nothing it could
+        // do with such an answer anyway, and it asks only once per session, so it would stay
+        // connected and unreachable.
+        LOG(ERROR) << "Host id lookup failed with" << error_code << "; disconnecting the host";
+        result.action = Action::CLOSE;
+        return result;
+    }
+
     result.action = Action::SEND_RESPONSE;
     result.error_code = error_code;
 
