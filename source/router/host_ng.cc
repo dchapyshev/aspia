@@ -202,24 +202,24 @@ void HostNG::readHostIdRequest(const proto::router::HostIdRequest& host_id_reque
     host_id_response->set_error_code(result.error_code);
 
     if (host_id_ != kInvalidHostId)
-    {
         host_id_response->set_host_id(host_id_);
-
-        // A host on its way out is not announced as reachable. Publishing it would put it back
-        // among the online hosts, and a client that still knows the id could ask for a connection
-        // offer to a host the administrator has already removed - the record is gone from every
-        // list, so nothing else would tell the client otherwise. The id is still handed over: the
-        // host needs to know which record the remove command is about, and the session finalizes
-        // the removal when it ends.
-        if (!result.removal_pending)
-        {
-            emit sig_hostIdAssigned(host_id_);
-            emit sig_notifyChanged(result.notify_flags);
-        }
-    }
 
     sendMessage(0, serialize(message));
 
+    // Sent before the id is announced, so the worker already sees this session as one that is on
+    // its way out and keeps the host out of the reachable ones. The id is still handed over: the
+    // host needs to know which record the command is about, and the session finalizes the removal
+    // when it ends.
     if (result.removal_pending)
         sendRemoveCommand();
+
+    if (host_id_ != kInvalidHostId)
+    {
+        // The worker is told about the id even for a host that is leaving, or a stale session of
+        // the same host would not be dropped in favour of this one.
+        emit sig_hostIdAssigned(host_id_);
+
+        if (!result.removal_pending)
+            emit sig_notifyChanged(result.notify_flags);
+    }
 }

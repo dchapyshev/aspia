@@ -393,7 +393,16 @@ Host* HostWorker::hostByHostId(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 void HostWorker::publishHostState(HostId host_id)
 {
-    if (Host* host = hostByHostId(host_id))
+    Host* host = hostByHostId(host_id);
+
+    // A host that was told to remove itself is not announced, whatever it does with the command.
+    // An announced host is one a client may be offered a connection to, and its record is already
+    // on its way out of the database.
+    HostNG* host_ng = dynamic_cast<HostNG*>(host);
+    if (host_ng && host_ng->isRemoveCommandSent())
+        host = nullptr;
+
+    if (host)
         SharedHosts::instance().add(host_id, host->version(), host->address());
     else
         SharedHosts::instance().remove(host_id);
@@ -475,7 +484,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
 
         // The session lives on until the host carries the command out, and an announced host is
         // one a client may be offered a connection to.
-        SharedHosts::instance().remove(host_id);
+        publishHostState(host_id);
     }
     else if (HostLegacy* host_legacy = dynamic_cast<HostLegacy*>(host))
     {

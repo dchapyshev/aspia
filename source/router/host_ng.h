@@ -38,6 +38,7 @@ public:
     ~HostNG() final;
 
     HostId hostId() const { return host_id_; }
+    bool isRemoveCommandSent() const { return remove_command_sent_; }
     const QByteArray& keyHash() const { return key_hash_; }
     const QByteArray& hardwareId() const { return hw_id_; }
 

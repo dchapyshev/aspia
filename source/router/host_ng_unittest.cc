@@ -172,9 +172,10 @@ TEST_F(HostNGTest, ApprovedHostGetsItsPermanentIdAndIsAnnounced)
 
 //--------------------------------------------------------------------------------------------------
 // A host whose removal was scheduled while it was offline comes back and is told to remove itself.
-// It must NOT be announced: the record is gone from every list, so nothing else would stop a client
-// that still knows the id from asking for a connection offer to a host the administrator removed.
-TEST_F(HostNGTest, HostWithPendingRemovalIsNotAnnounced)
+// The command goes out before the id is reported to the worker, which is what keeps the host out of
+// the reachable ones - the record is gone from every list, so nothing else would stop a client that
+// still knows the id from asking for a connection offer to a host the administrator removed.
+TEST_F(HostNGTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
@@ -200,7 +201,10 @@ TEST_F(HostNGTest, HostWithPendingRemovalIsNotAnnounced)
         ASSERT_TRUE(command.has_host_command());
         EXPECT_EQ(command.host_command().command_name(), proto::router::kCommandHostRemove);
 
-        EXPECT_TRUE(announced_.isEmpty());
+        // The id is reported all the same, so a stale session of the same host is dropped in
+        // favour of this one, and the session carries the mark that keeps it unannounced.
+        EXPECT_EQ(announced_, QList<HostId>({ host_id }));
+        EXPECT_TRUE(host.isRemoveCommandSent());
     });
 }
 

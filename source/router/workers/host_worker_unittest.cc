@@ -157,17 +157,23 @@ protected:
 
     void TearDown() override
     {
-        // The channel belongs to the thread of the peer worker, and so does its teardown.
-        peer_worker_->invoke([this]()
-        {
-            delete channel_;
-            channel_ = nullptr;
-        });
+        for (const std::unique_ptr<Peer>& peer : peers_)
+            closePeer(peer.get());
+        peers_.clear();
 
         SharedHosts::instance().clear();
         qunsetenv("ASPIA_ROUTER_CONFIG_FILE");
         qunsetenv("ASPIA_ROUTER_DB_FILE");
     }
+
+    // One connected peer of the test and what the router did to it.
+    struct Peer
+    {
+        TcpChannel* channel = nullptr;
+        std::atomic<HostId> assigned_host_id { kInvalidHostId };
+        std::atomic<bool> authenticated { false };
+        std::atomic<bool> disconnected { false };
+    };
 
     // What the router stores for a host is the hash of the key the host presents.
     static QByteArray keyHash(std::string_view key)
@@ -178,29 +184,33 @@ protected:
     // Connects a peer that behaves like a host: anonymous authentication as a host session, then
     // one request for its existing id. Returns once the router has answered. A peer that does not
     // ask stays silent after the authentication, and the call returns as soon as it is in.
-    [[nodiscard]] bool connectHost(bool ask_for_id = true)
+    [[nodiscard]] Peer* connectHost(bool ask_for_id = true)
     {
-        peer_worker_->invoke([this, ask_for_id]()
+        peers_.push_back(std::make_unique<Peer>());
+        Peer* peer = peers_.back().get();
+
+        peer_worker_->invoke([this, peer, ask_for_id]()
         {
             ClientAuthenticator* authenticator = new ClientAuthenticator();
             authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
             authenticator->setPeerPublicKey(router_keys_.publicKey());
             authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
 
-            channel_ = new TcpChannelNG(authenticator, nullptr);
+            peer->channel = new TcpChannelNG(authenticator, nullptr);
 
-            QObject::connect(peer_worker_, &Worker::sig_tick, channel_, &TcpChannel::tick);
+            QObject::connect(peer_worker_, &Worker::sig_tick, peer->channel, &TcpChannel::tick);
 
-            QObject::connect(channel_, &TcpChannel::sig_errorOccurred, channel_,
-                             [this](TcpChannel::ErrorCode /* error_code */)
+            QObject::connect(peer->channel, &TcpChannel::sig_errorOccurred, peer->channel,
+                             [peer](TcpChannel::ErrorCode /* error_code */)
             {
-                disconnected_ = true;
+                peer->disconnected = true;
             });
 
-            QObject::connect(channel_, &TcpChannel::sig_authenticated, channel_, [this, ask_for_id]()
+            QObject::connect(peer->channel, &TcpChannel::sig_authenticated, peer->channel,
+                             [peer, ask_for_id]()
             {
-                channel_->setPaused(false);
-                authenticated_ = true;
+                peer->channel->setPaused(false);
+                peer->authenticated = true;
 
                 if (!ask_for_id)
                     return;
@@ -211,32 +221,44 @@ protected:
                 request->set_key(kHostKey);
                 request->set_hw_id(kHardwareId);
 
-                channel_->send(0, serialize(message));
+                peer->channel->send(0, serialize(message));
             });
 
-            QObject::connect(channel_, &TcpChannel::sig_messageReceived, channel_,
-                             [this](quint8 /* channel_id */, const QByteArray& buffer)
+            QObject::connect(peer->channel, &TcpChannel::sig_messageReceived, peer->channel,
+                             [peer](quint8 /* channel_id */, const QByteArray& buffer)
             {
                 proto::router::RouterToHost message;
                 if (!parse(buffer, &message) || !message.has_host_id_response())
                     return;
 
-                assigned_host_id_ = message.host_id_response().host_id();
+                peer->assigned_host_id = message.host_id_response().host_id();
             });
 
-            channel_->connectTo("127.0.0.1", host_port_);
+            peer->channel->connectTo("127.0.0.1", host_port_);
         });
 
-        if (!ask_for_id)
-            return waitFor([this]() { return authenticated_.load(); });
+        const bool ready = ask_for_id
+            ? waitFor([&]() { return peer->assigned_host_id.load() == host_id_; })
+            : waitFor([&]() { return peer->authenticated.load(); });
 
-        return waitFor([this]() { return assigned_host_id_.load() == host_id_; });
+        return ready ? peer : nullptr;
+    }
+
+    // The peer goes away the way a host whose connection was lost does. The channel belongs to the
+    // thread of the peer worker, and so does its teardown.
+    void closePeer(Peer* peer)
+    {
+        peer_worker_->invoke([peer]()
+        {
+            delete peer->channel;
+            peer->channel = nullptr;
+        });
     }
 
     // One more request for an existing id, the way a host that was told "not found" would repeat.
-    void sendIdRequest(const char* key)
+    void sendIdRequest(Peer* peer, const char* key)
     {
-        peer_worker_->invoke([this, key]()
+        peer_worker_->invoke([peer, key]()
         {
             proto::router::HostToRouter message;
             proto::router::HostIdRequest* request = message.mutable_host_id_request();
@@ -244,13 +266,23 @@ protected:
             request->set_key(key);
             request->set_hw_id(kHardwareId);
 
-            channel_->send(0, serialize(message));
+            peer->channel->send(0, serialize(message));
+        });
+    }
+
+    // Removes the host the way the administrator console does, from another worker thread.
+    void removeHost()
+    {
+        peer_worker_->invoke([this]()
+        {
+            host_worker_->removeHost(host_id_, peer_worker_,
+                                     [](HostWorker::RemoveHostResult&& /* result */) {});
         });
     }
 
     // Fires the timer with the synthetic |now| until the router drops the peer. The polling covers
     // the gap between the authentication of the peer and the moment the worker picks the session up.
-    [[nodiscard]] bool firedUntilDisconnected(TimePoint now)
+    [[nodiscard]] bool firedUntilDisconnected(Peer* peer, TimePoint now)
     {
         HostWorkerTestPeer timer(host_worker_);
 
@@ -258,7 +290,7 @@ protected:
         while (Clock::now() < give_up)
         {
             timer.fireTimer(now);
-            if (disconnected_.load())
+            if (peer->disconnected.load())
                 return true;
 
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -269,9 +301,10 @@ protected:
 
     // Polls |condition| until it holds. The wait bounds a broken test, the condition is what the
     // test is actually about.
-    [[nodiscard]] static bool waitFor(const std::function<bool()>& condition)
+    [[nodiscard]] static bool waitFor(const std::function<bool()>& condition,
+                                      Seconds timeout = kWaitTimeout)
     {
-        const TimePoint give_up = Clock::now() + kWaitTimeout;
+        const TimePoint give_up = Clock::now() + timeout;
         while (Clock::now() < give_up)
         {
             if (condition())
@@ -289,14 +322,11 @@ protected:
     KeyPair router_keys_;
     quint16 host_port_ = 0;
     HostId host_id_ = kInvalidHostId;
-    std::atomic<HostId> assigned_host_id_ { kInvalidHostId };
-    std::atomic<bool> authenticated_ { false };
-    std::atomic<bool> disconnected_ { false };
 
     WorkerManager workers_;
     RouterTestWorker* peer_worker_ = nullptr;
     HostWorker* host_worker_ = nullptr;
-    TcpChannel* channel_ = nullptr;
+    std::vector<std::unique_ptr<Peer>> peers_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -308,13 +338,36 @@ TEST_F(HostWorkerTest, ConnectedHostIsAnnounced)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A host can have more than one session for a while: the router has not noticed that the old one
+// is dead yet, and the host has already reconnected. Removing the host must not leave a session
+// behind that puts it back among the reachable ones when the other one goes away.
+TEST_F(HostWorkerTest, RemovedHostIsNotAnnouncedByAnotherSession)
+{
+    Peer* first = connectHost();
+    ASSERT_TRUE(first);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    removeHost();
+    ASSERT_TRUE(waitFor([this]() { return !SharedHosts::instance().contains(host_id_); }));
+
+    // The host reconnects, is recognised by the record on its way out and told to remove itself.
+    // The stale session is dropped in favour of the new one, the same as for any other host.
+    ASSERT_TRUE(connectHost());
+    EXPECT_TRUE(waitFor([first]() { return first->disconnected.load(); }));
+
+    EXPECT_FALSE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); },
+                         Seconds(2)));
+}
+
+//--------------------------------------------------------------------------------------------------
 // A host asks for its id as soon as it is authenticated. A session that never asks serves nobody,
 // and anonymous access means anybody can open one, so it is not kept around.
 TEST_F(HostWorkerTest, SilentSessionIsDropped)
 {
-    ASSERT_TRUE(connectHost(false));
+    Peer* peer = connectHost(false);
+    ASSERT_TRUE(peer);
 
-    EXPECT_TRUE(firedUntilDisconnected(Clock::now() + kIdentifyTimeout + Seconds(1)));
+    EXPECT_TRUE(firedUntilDisconnected(peer, Clock::now() + kIdentifyTimeout + Seconds(1)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,12 +376,13 @@ TEST_F(HostWorkerTest, SilentSessionIsDropped)
 // a connection that costs the peer nothing.
 TEST_F(HostWorkerTest, TooManyIdRequestsCloseTheSession)
 {
-    ASSERT_TRUE(connectHost(false));
+    Peer* peer = connectHost(false);
+    ASSERT_TRUE(peer);
 
     for (int i = 0; i < kMaxIdRequests + 1; ++i)
-        sendIdRequest("the-key-nobody-knows");
+        sendIdRequest(peer, "the-key-nobody-knows");
 
-    EXPECT_TRUE(waitFor([this]() { return disconnected_.load(); }));
+    EXPECT_TRUE(waitFor([peer]() { return peer->disconnected.load(); }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,12 +394,7 @@ TEST_F(HostWorkerTest, RemovedHostIsNoLongerAnnounced)
     ASSERT_TRUE(connectHost());
     ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
 
-    // The command comes from the administrator console, which lives in another worker thread.
-    peer_worker_->invoke([this]()
-    {
-        host_worker_->removeHost(host_id_, peer_worker_,
-                                 [](HostWorker::RemoveHostResult&& /* result */) {});
-    });
+    removeHost();
 
     EXPECT_TRUE(waitFor([this]() { return !SharedHosts::instance().contains(host_id_); }));
 }
