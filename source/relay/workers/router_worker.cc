@@ -18,8 +18,6 @@
 
 #include "relay/workers/router_worker.h"
 
-#include <QTimer>
-
 #include "base/logging.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
@@ -155,6 +153,26 @@ void RouterWorker::onTimer(TimePoint now)
 {
     if (tcp_channel_)
         tcp_channel_->tick(now);
+
+    for (auto it = key_deadlines_.begin(); it != key_deadlines_.end();)
+    {
+        if (now >= it->second)
+        {
+            const quint32 key_id = it->first;
+            it = key_deadlines_.erase(it);
+            expireKey(key_id);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    if (reconnect_time_.has_value() && now >= *reconnect_time_)
+    {
+        reconnect_time_.reset();
+        onConnectToRouter();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,6 +192,7 @@ void RouterWorker::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 
     // Clearing the key pool.
     SharedKeyPool::instance().clear();
+    key_deadlines_.clear();
 
     if (tcp_channel_)
     {
@@ -198,8 +217,7 @@ void RouterWorker::onTcpMessageReceived(quint8 /* channel_id */, const QByteArra
 
     if (message->has_key_used())
     {
-        const quint32 key_id = message->key_used().key_id();
-        QTimer::singleShot(kKeyUseTimeout, this, [this, key_id]() { expireKey(key_id); });
+        key_deadlines_[message->key_used().key_id()] = Clock::now() + kKeyUseTimeout;
     }
     else if (message->has_peer_request())
     {
@@ -277,7 +295,7 @@ void RouterWorker::onConnectToRouter()
 void RouterWorker::delayedConnectToRouter()
 {
     LOG(INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
-    QTimer::singleShot(kReconnectTimeout, this, &RouterWorker::onConnectToRouter);
+    reconnect_time_ = Clock::now() + kReconnectTimeout;
 }
 
 //--------------------------------------------------------------------------------------------------

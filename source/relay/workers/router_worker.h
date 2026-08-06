@@ -19,6 +19,9 @@
 #ifndef RELAY_WORKERS_ROUTER_WORKER_H
 #define RELAY_WORKERS_ROUTER_WORKER_H
 
+#include <map>
+#include <optional>
+
 #include "base/serialization.h"
 #include "base/scoped_qpointer.h"
 #include "base/net/tcp_channel.h"
@@ -74,6 +77,10 @@ private:
 
     int session_count_ = 0;
 
+    std::map<quint32, TimePoint> key_deadlines_;
+    std::optional<TimePoint> reconnect_time_;
+
+    friend class RouterWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(RouterWorker)
 };
 
