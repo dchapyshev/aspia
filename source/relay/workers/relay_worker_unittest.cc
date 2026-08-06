@@ -26,6 +26,8 @@
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 
+#include <thread>
+
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
@@ -40,6 +42,10 @@ namespace {
 
 // The waits exist to fail a broken test instead of hanging forever, not to measure anything.
 const Seconds kWaitTimeout{ 30 };
+
+constexpr Seconds kPendingHandshakeTimeout{ 5 };  // PendingSession, the budget before the handshake.
+constexpr Seconds kPendingTotalTimeout{ 30 };     // PendingSession, the budget after it.
+constexpr Minutes kIdleTimeout{ 1 };              // What the fixture writes into the settings.
 
 //--------------------------------------------------------------------------------------------------
 // A free loopback port for the acceptor of the worker. The port is released before the worker
@@ -60,6 +66,40 @@ quint16 pickFreePort()
 }
 
 } // namespace
+
+// Fires the timer of the worker with a synthetic clock, in the thread of the worker. In production
+// the timer runs with the real time, and the tests cannot wait the real timeouts out.
+class RelayWorkerTestPeer
+{
+public:
+    explicit RelayWorkerTestPeer(RelayWorker* worker)
+        : worker_(worker)
+    {
+        // Nothing
+    }
+
+    void fireTimer(TimePoint now)
+    {
+        std::mutex lock;
+        std::condition_variable finished;
+        bool done = false;
+
+        worker_->post([&]()
+        {
+            worker_->onTimer(now);
+
+            std::lock_guard guard(lock);
+            done = true;
+            finished.notify_one();
+        });
+
+        std::unique_lock guard(lock);
+        finished.wait(guard, [&]() { return done; });
+    }
+
+private:
+    RelayWorker* worker_;
+};
 
 // The whole peer side of the relay, end to end. A real RelayWorker listens on the loopback
 // interface, and the peers of the test do the real key derivation and encryption, so what is
@@ -86,8 +126,9 @@ protected:
         Settings settings;
         settings.setListenInterface("127.0.0.1");
         settings.setPeerPort(peer_port_);
-        settings.setPeerIdleTimeout(Minutes(1));
-        settings.setStatisticsEnabled(false);
+        settings.setPeerIdleTimeout(kIdleTimeout);
+        settings.setStatisticsEnabled(statistics_enabled_);
+        settings.setStatisticsInterval(Seconds(5));
         ASSERT_TRUE(settings.sync());
 
         std::unique_ptr<RelayWorker> worker = std::make_unique<RelayWorker>();
@@ -99,6 +140,12 @@ protected:
                          [this]() { session_started_.signal(); });
         QObject::connect(worker_, &RelayWorker::sig_sessionFinished, worker_,
                          [this]() { session_finished_.signal(); });
+        QObject::connect(worker_, &RelayWorker::sig_statistics, worker_,
+                         [this](const proto::router::RelayStatistics& statistics)
+        {
+            last_statistics_ = statistics;
+            statistics_received_.signal();
+        });
 
         workers_.add(std::move(worker));
         workers_.start();
@@ -202,6 +249,33 @@ protected:
         return serialize(message);
     }
 
+    // Fires the timer with the synthetic |now| until the relay closes |socket|. The polling covers
+    // the gap between the connect of the peer and the moment the worker picks the connection up.
+    [[nodiscard]] bool firedUntilClosed(asio::ip::tcp::socket& socket, TimePoint now)
+    {
+        RelayWorkerTestPeer timer(worker_);
+
+        std::error_code error_code;
+        socket.non_blocking(true, error_code);
+        CHECK(!error_code);
+
+        const TimePoint give_up = Clock::now() + kWaitTimeout;
+        while (Clock::now() < give_up)
+        {
+            timer.fireTimer(now);
+
+            char byte = 0;
+            std::error_code read_code;
+            socket.read_some(asio::buffer(&byte, 1), read_code);
+            if (read_code && read_code != asio::error::would_block)
+                return true;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
+        return false;
+    }
+
     // Reads |size| bytes. Returns what arrived before the relay closed the connection, so an
     // expected refusal reads back as an empty array.
     static QByteArray receive(asio::ip::tcp::socket& socket, qsizetype size)
@@ -224,15 +298,29 @@ protected:
 
     QTemporaryDir temp_dir_;
     quint16 peer_port_ = 0;
+    bool statistics_enabled_ = false;
 
     WorkerManager workers_;
     RelayWorker* worker_ = nullptr;
 
     asio::io_context io_context_;
 
+    proto::router::RelayStatistics last_statistics_;
     TestLatch ready_;
     TestLatch session_started_;
     TestLatch session_finished_;
+    TestLatch statistics_received_;
+};
+
+// The same stand with the statistics reporting turned on.
+class RelayWorkerStatisticsTest : public RelayWorkerTest
+{
+protected:
+    void SetUp() override
+    {
+        statistics_enabled_ = true;
+        RelayWorkerTest::SetUp();
+    }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -379,4 +467,106 @@ TEST_F(RelayWorkerTest, PeerDisconnectFinishesTheSession)
     client.close(ignored_code);
 
     ASSERT_TRUE(session_finished_.wait(1, kWaitTimeout));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A peer that connected and never presented its credentials is dropped once the handshake budget
+// passes. The slot it occupies is what the flood guard protects.
+TEST_F(RelayWorkerTest, SilentPeerIsDroppedAfterTheHandshakeBudget)
+{
+    asio::ip::tcp::socket peer = connectPeer();
+
+    EXPECT_TRUE(firedUntilClosed(peer, Clock::now() + kPendingHandshakeTimeout + Seconds(1)));
+    EXPECT_EQ(session_started_.count(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A peer that presented its credentials may legitimately wait for its partner well past the
+// handshake budget, and the partner still finds it.
+TEST_F(RelayWorkerTest, HandshakedPeerWaitsBeyondTheHandshakeBudget)
+{
+    const OfferedKey key = announceKey();
+    const QByteArray shared_secret = secret();
+
+    asio::ip::tcp::socket client = connectPeer();
+    sendHandshake(client, key, shared_secret);
+
+    // Ticks past the handshake budget. The handshake is processed well within this loop, so the
+    // later ticks genuinely test a handshaked session against the passed budget.
+    RelayWorkerTestPeer timer(worker_);
+    const TimePoint past_handshake_budget = Clock::now() + kPendingHandshakeTimeout + Seconds(1);
+    for (int i = 0; i < 20; ++i)
+    {
+        timer.fireTimer(past_handshake_budget);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+
+    asio::ip::tcp::socket host = connectPeer();
+    sendHandshake(host, key, shared_secret);
+
+    ASSERT_TRUE(session_started_.wait(1, kWaitTimeout));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The wait for a partner is not open-ended. A handshaked peer nobody came for is dropped once the
+// total budget, measured from connect, runs out.
+TEST_F(RelayWorkerTest, LonePeerIsDroppedAfterTheTotalBudget)
+{
+    const OfferedKey key = announceKey();
+
+    asio::ip::tcp::socket peer = connectPeer();
+    sendHandshake(peer, key, secret());
+
+    EXPECT_TRUE(firedUntilClosed(peer, Clock::now() + kPendingTotalTimeout + Seconds(1)));
+    EXPECT_EQ(session_started_.count(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A session whose peers stopped talking is closed once the idle budget from the settings passes,
+// and the worker announces the finish.
+TEST_F(RelayWorkerTest, IdleSessionIsClosed)
+{
+    const OfferedKey key = announceKey();
+    const QByteArray shared_secret = secret();
+
+    asio::ip::tcp::socket client = connectPeer();
+    sendHandshake(client, key, shared_secret);
+    asio::ip::tcp::socket host = connectPeer();
+    sendHandshake(host, key, shared_secret);
+    ASSERT_TRUE(session_started_.wait(1, kWaitTimeout));
+
+    RelayWorkerTestPeer timer(worker_);
+    timer.fireTimer(Clock::now() + kIdleTimeout + Seconds(2));
+
+    ASSERT_TRUE(session_finished_.wait(1, kWaitTimeout));
+    EXPECT_TRUE(receive(client, 1).isEmpty());
+    EXPECT_TRUE(receive(host, 1).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The report the relay sends to the router carries every active session with the identity from
+// its secret. This is what the administrator sees in the console.
+TEST_F(RelayWorkerStatisticsTest, StatisticsReportTheActiveSessions)
+{
+    const OfferedKey key = announceKey();
+    const QByteArray shared_secret = secret();
+
+    asio::ip::tcp::socket client = connectPeer();
+    sendHandshake(client, key, shared_secret);
+    asio::ip::tcp::socket host = connectPeer();
+    sendHandshake(host, key, shared_secret);
+    ASSERT_TRUE(session_started_.wait(1, kWaitTimeout));
+
+    RelayWorkerTestPeer timer(worker_);
+    timer.fireTimer(Clock::now() + Seconds(6));
+
+    ASSERT_TRUE(statistics_received_.wait(1, kWaitTimeout));
+    ASSERT_EQ(last_statistics_.peer_size(), 1);
+
+    const proto::router::Peer& peer = last_statistics_.peer(0);
+    EXPECT_EQ(peer.status(), proto::router::Peer::STATUS_ACTIVE);
+    EXPECT_EQ(peer.client_address(), "203.0.113.5");
+    EXPECT_EQ(peer.client_user_name(), "operator");
+    EXPECT_EQ(peer.host_address(), "198.51.100.7");
+    EXPECT_EQ(peer.host_id(), 100u);
 }

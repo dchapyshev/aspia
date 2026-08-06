@@ -97,6 +97,7 @@ private:
     // Anti-flood gate: per-address rate limit + global pending cap + rate-limited logging.
     std::unique_ptr<FloodGuard> flood_guard_;
 
+    friend class RelayWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(RelayWorker)
 };
 
