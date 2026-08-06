@@ -66,6 +66,7 @@ private slots:
 
 private:
     void readKeyPool(const proto::router::RelayKeyPool& key_pool);
+    void readStatistics(proto::router::RelayStatistics&& statistics);
 
     const qint64 session_id_;
     time_t start_time_ = 0;

@@ -123,6 +123,15 @@ protected:
         return serialize(message);
     }
 
+    // A report of |size| bytes, as a relay would send it over its own channel.
+    static QByteArray statistics(size_t size)
+    {
+        proto::router::RelayToRouter message;
+        proto::router::Peer* peer = message.mutable_statistics()->add_peer();
+        peer->set_client_user_name(std::string(size, 'x'));
+        return serialize(message);
+    }
+
     WorkerManager workers_;
     RouterTestWorker* worker_ = nullptr;
 };
@@ -229,6 +238,39 @@ TEST_F(RelayTest, StatisticsOfTheRelayIsKept)
         EXPECT_EQ(relay.statistics()->uptime(), 1234);
         ASSERT_EQ(relay.statistics()->peer_size(), 1);
         EXPECT_EQ(relay.statistics()->peer(0).peer_id(), 7);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every relay adds its report to the same message, so the bound has to hold for the whole list and
+// not for one report at a time. Each report here passes through the channel of its own relay, and
+// three of them are already more than the administrator can be sent.
+TEST_F(RelayTest, StatisticsOfSeveralRelaysStayWithinOneMessage)
+{
+    worker_->invoke([]()
+    {
+        constexpr size_t kReportSize = 3 * 1024 * 1024;
+
+        std::vector<std::unique_ptr<Relay>> relays;
+        std::vector<Relay*> reported;
+
+        for (int i = 0; i < 3; ++i)
+        {
+            FakeTcpChannel* channel = new FakeTcpChannel();
+            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
+
+            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel, nullptr);
+            relay->start();
+
+            const QByteArray report = statistics(kReportSize);
+            ASSERT_LE(report.size(), qsizetype(TcpChannel::kMaxMessageSize));
+            channel->receive(0, report);
+
+            reported.push_back(relay.get());
+            relays.push_back(std::move(relay));
+        }
+
+        EXPECT_LE(relayList(reported).size(), qsizetype(TcpChannel::kMaxMessageSize));
     });
 }
 

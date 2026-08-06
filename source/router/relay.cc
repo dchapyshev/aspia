@@ -23,6 +23,8 @@
 
 namespace {
 
+constexpr size_t kMaxStatisticsSize = 256 * 1024;
+
 //--------------------------------------------------------------------------------------------------
 qint64 createRelayId()
 {
@@ -133,7 +135,7 @@ void Relay::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buff
     }
     else if (message->has_statistics())
     {
-        statistics_ = std::move(*message->mutable_statistics());
+        readStatistics(std::move(*message->mutable_statistics()));
     }
     else
     {
@@ -174,4 +176,17 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 
         SharedKeyPool::instance().add(session_id_, peer_host, static_cast<quint16>(peer_port), key);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Relay::readStatistics(proto::router::RelayStatistics&& statistics)
+{
+    const size_t size = statistics.ByteSizeLong();
+    if (size > kMaxStatisticsSize)
+    {
+        CLOG(ERROR) << "Ignoring oversized statistics from relay:" << size;
+        return;
+    }
+
+    statistics_ = std::move(statistics);
 }
