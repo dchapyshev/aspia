@@ -275,6 +275,38 @@ TEST_F(RelayTest, StatisticsOfSeveralRelaysStayWithinOneMessage)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The two bounds that keep the relay list sendable live apart, one in RelayWorker and one in Relay,
+// and they hold only together. Raising either of them alone breaks this.
+TEST_F(RelayTest, TheFullRelayListFitsOneMessage)
+{
+    constexpr int kMaxRelays = 5;                      // RelayWorker::onNewRelayConnection.
+    constexpr size_t kMaxStatisticsSize = 256 * 1024;  // Relay::readStatistics.
+
+    worker_->invoke([]()
+    {
+        std::vector<std::unique_ptr<Relay>> relays;
+        std::vector<Relay*> reported;
+
+        for (int i = 0; i < kMaxRelays; ++i)
+        {
+            FakeTcpChannel* channel = new FakeTcpChannel();
+            channel->setPeer(0, std::string(), proto::router::SESSION_TYPE_RELAY, kVersion_3_0_0);
+
+            std::unique_ptr<Relay> relay = std::make_unique<Relay>(channel, nullptr);
+            relay->start();
+
+            channel->receive(0, statistics(kMaxStatisticsSize - 1024));
+            ASSERT_TRUE(relay->statistics().has_value());
+
+            reported.push_back(relay.get());
+            relays.push_back(std::move(relay));
+        }
+
+        EXPECT_LE(relayList(reported).size(), qsizetype(TcpChannel::kMaxMessageSize));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // The report of a relay working at its capacity is kept whole and still fits the message the
 // administrator is sent.
 TEST_F(RelayTest, StatisticsOfAFullRelayIsKept)

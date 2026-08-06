@@ -151,10 +151,20 @@ void RelayWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void RelayWorker::onNewRelayConnection()
 {
+    static constexpr int kMaxRelays = 5;
+
     CHECK(server_);
     while (server_->hasReadyConnections())
     {
         TcpChannel* channel = server_->nextReadyConnection();
+
+        if (relays_.size() >= kMaxRelays)
+        {
+            LOG(ERROR) << "Too many relay sessions. Connection is rejected for" << channel->peerAddress();
+            channel->deleteLater();
+            continue;
+        }
+
         LOG(INFO) << "New relay session:" << channel->peerAddress();
 
         Relay* relay = new Relay(channel, this);
