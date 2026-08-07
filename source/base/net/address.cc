@@ -314,19 +314,19 @@ bool Address::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Address::isEqual(const Address& other)
+bool Address::isEqual(const Address& other) const
 {
     return host_ == other.host_ && port_ == other.port_;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Address::operator==(const Address& other)
+bool Address::operator==(const Address& other) const
 {
     return isEqual(other);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Address::operator!=(const Address& other)
+bool Address::operator!=(const Address& other) const
 {
     return !isEqual(other);
 }

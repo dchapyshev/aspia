@@ -46,10 +46,10 @@ public:
 
     bool isValid() const;
 
-    bool isEqual(const Address& other);
+    bool isEqual(const Address& other) const;
 
-    bool operator==(const Address& other);
-    bool operator!=(const Address& other);
+    bool operator==(const Address& other) const;
+    bool operator!=(const Address& other) const;
 
 private:
     Address(QString&& host, quint16 port, quint16 default_port);
