@@ -21,6 +21,12 @@
 #include "base/logging.h"
 #include "base/session_id.h"
 
+namespace {
+
+volatile auto g_powerEventType = qRegisterMetaType<CoreApplication::PowerEvent>();
+
+} // namespace
+
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <wtsapi32.h>
@@ -181,15 +187,16 @@ void EventMonitor::powerCallback(
 
         case kIOMessageSystemWillSleep:
             if (application)
-                emit application->sig_powerEvent(kIOMessageSystemWillSleep);
+                emit application->sig_powerEvent(CoreApplication::PowerEvent::SUSPEND);
             // Acknowledge so the system proceeds to sleep without waiting for the timeout.
             IOAllowPowerChange(self->power_root_port_, reinterpret_cast<long>(message_arg));
             break;
 
-        case kIOMessageSystemWillPowerOn:
+        // Only the second one means the system is running again. kIOMessageSystemWillPowerOn
+        // arrives before that and would announce a wake that has not happened yet.
         case kIOMessageSystemHasPoweredOn:
             if (application)
-                emit application->sig_powerEvent(kIOMessageSystemHasPoweredOn);
+                emit application->sig_powerEvent(CoreApplication::PowerEvent::RESUME);
             break;
 
         default:
@@ -233,7 +240,11 @@ CoreApplication::CoreApplication(int& argc, char* argv[])
                 {
                     quint32 event = static_cast<quint32>(wparam);
                     LOG(INFO) << "WM_POWERBROADCAST received (event:" << event << ")";
-                    emit sig_powerEvent(event);
+
+                    if (event == PBT_APMSUSPEND)
+                        emit sig_powerEvent(PowerEvent::SUSPEND);
+                    else if (event == PBT_APMRESUMEAUTOMATIC)
+                        emit sig_powerEvent(PowerEvent::RESUME);
                 }
 
                 result = TRUE;

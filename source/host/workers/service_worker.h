@@ -19,6 +19,7 @@
 #ifndef HOST_WORKERS_SERVICE_WORKER_H
 #define HOST_WORKERS_SERVICE_WORKER_H
 
+#include "base/core_application.h"
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
 #include "host/system_settings.h"
@@ -52,7 +53,7 @@ protected:
     void onTimer(TimePoint now) final;
 
 private slots:
-    void onPowerEvent(quint32 power_event);
+    void onPowerEvent(CoreApplication::PowerEvent power_event);
     void onNewDirectConnection();
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);

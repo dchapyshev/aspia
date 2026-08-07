@@ -322,7 +322,11 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
                 return NO_ERROR;
 
             LOG(INFO) << "Power event detected:" << powerEventToString(event_type);
-            emit self->service_->sig_powerEvent(event_type);
+
+            if (event_type == PBT_APMSUSPEND)
+                emit self->service_->sig_powerEvent(CoreApplication::PowerEvent::SUSPEND);
+            else if (event_type == PBT_APMRESUMEAUTOMATIC)
+                emit self->service_->sig_powerEvent(CoreApplication::PowerEvent::RESUME);
         }
         return NO_ERROR;
 

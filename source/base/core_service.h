@@ -41,7 +41,7 @@ public:
 
 signals:
     void sig_sessionEvent(quint32 event, quint32 session_id);
-    void sig_powerEvent(quint32 event);
+    void sig_powerEvent(CoreApplication::PowerEvent event);
 
 protected:
     friend class ServiceThread;

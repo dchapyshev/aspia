@@ -223,18 +223,17 @@ void ServiceWorker::onTimer(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceWorker::onPowerEvent(quint32 power_event)
+void ServiceWorker::onPowerEvent(CoreApplication::PowerEvent power_event)
 {
-#if defined(Q_OS_WINDOWS)
     LOG(INFO) << "Power event:" << power_event;
 
     switch (power_event)
     {
-        case PBT_APMSUSPEND:
+        case CoreApplication::PowerEvent::SUSPEND:
             disconnectFromRouter(FROM_HERE);
             break;
 
-        case PBT_APMRESUMEAUTOMATIC:
+        case CoreApplication::PowerEvent::RESUME:
         {
             if (!Database::instance().isRouterEnabled())
                 return;
@@ -242,12 +241,7 @@ void ServiceWorker::onPowerEvent(quint32 power_event)
             connectToRouter(FROM_HERE);
         }
         break;
-
-        default:
-            // Ignore other events.
-            break;
     }
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

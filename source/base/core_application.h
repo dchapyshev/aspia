@@ -41,6 +41,13 @@ public:
     CoreApplication(int& argc, char* argv[]);
     ~CoreApplication() final;
 
+    enum class PowerEvent
+    {
+        SUSPEND, // The system is about to sleep.
+        RESUME   // The system has woken up.
+    };
+    Q_ENUM(PowerEvent)
+
     int exec();
 
     static CoreApplication* instance();
@@ -60,7 +67,7 @@ public:
 signals:
     void sig_queryEndSession();
     void sig_sessionEvent(quint32 event, quint32 session_id);
-    void sig_powerEvent(quint32 event);
+    void sig_powerEvent(CoreApplication::PowerEvent event);
 
 private:
     ScopedQPointer<WorkerManager> worker_manager_;
@@ -83,5 +90,7 @@ private:
 
     Q_DISABLE_COPY_MOVE(CoreApplication)
 };
+
+Q_DECLARE_METATYPE(CoreApplication::PowerEvent)
 
 #endif // BASE_CORE_APPLICATION_H
