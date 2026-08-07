@@ -52,8 +52,6 @@ collect_sources(SOURCE_BASE_CODEC
     webm_file_writer.h
     webm_video_encoder.cc
     webm_video_encoder.h
-    yuv_converter.cc
-    yuv_converter.h
     zstd_compress.cc
     zstd_compress.h
     zstd_stream_compressor.cc

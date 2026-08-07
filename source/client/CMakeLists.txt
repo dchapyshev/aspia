@@ -68,7 +68,9 @@ list(APPEND SOURCE_CLIENT_CORE
     settings.cc
     settings.h
     udp_attempt.cc
-    udp_attempt.h)
+    udp_attempt.h
+    yuv_converter.cc
+    yuv_converter.h)
 
 list(APPEND SOURCE_CLIENT
     main.cc)

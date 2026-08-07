@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/yuv_converter.h"
+#include "client/yuv_converter.h"
 
 #include <libyuv/convert_argb.h>
 

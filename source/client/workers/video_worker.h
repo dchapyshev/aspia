@@ -24,10 +24,10 @@
 #include <QSize>
 
 #include "base/serialization.h"
-#include "base/codec/yuv_converter.h"
 #include "base/desktop/shared_frame.h"
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
+#include "client/yuv_converter.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_cursor.h"

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_YUV_CONVERTER_H
-#define BASE_CODEC_YUV_CONVERTER_H
+#ifndef CLIENT_YUV_CONVERTER_H
+#define CLIENT_YUV_CONVERTER_H
 
 #include <QList>
 #include <QRect>
@@ -53,4 +53,4 @@ private:
     Q_DISABLE_COPY_MOVE(YuvConverter)
 };
 
-#endif // BASE_CODEC_YUV_CONVERTER_H
+#endif // CLIENT_YUV_CONVERTER_H
