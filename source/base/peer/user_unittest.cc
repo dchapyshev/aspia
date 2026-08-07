@@ -80,6 +80,20 @@ TEST(user_test, invalid_username_forbidden_chars)
     EXPECT_FALSE(User::isValidUserName("user/name"));  // slash
 }
 
+// A host names its one-time user after the id the router gave it, and the client sends exactly
+// that name. It goes through the same authentication path as any other user name.
+TEST(user_test, valid_username_of_one_time_user)
+{
+    EXPECT_TRUE(User::isValidUserName("#123456"));
+    EXPECT_FALSE(User::isValidUserName("#"));
+}
+
+TEST(user_test, valid_one_time_user)
+{
+    const User user = User::create("#123456", SecureString("one-time"));
+    EXPECT_TRUE(user.isValid());
+}
+
 // ============================================================================
 // isValidPassword
 // ============================================================================

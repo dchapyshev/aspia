@@ -76,6 +76,9 @@ if (APPLE)
     include(mac/sources.cmake)
 endif()
 
+list(APPEND SOURCE_COMMON_TESTS
+    tests_main.cc)
+
 include(desktop/sources.cmake)
 
 if (NOT ANDROID)
@@ -92,7 +95,7 @@ endif()
 
 list(APPEND SOURCE_COMMON_RESOURCES resources/common.qrc)
 
-source_group("" FILES ${SOURCE_COMMON})
+source_group("" FILES ${SOURCE_COMMON} ${SOURCE_COMMON_TESTS})
 source_group(desktop FILES ${SOURCE_COMMON_DESKTOP})
 source_group(sys_info FILES ${SOURCE_COMMON_SYS_INFO})
 source_group(resources FILES ${SOURCE_COMMON_RESOURCES})
@@ -126,3 +129,32 @@ target_link_libraries(aspia_common PRIVATE
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
+
+if (WIN32)
+    set(COMMON_TESTS_PLATFORM_LIBS avrt crypt32 dbghelp iphlpapi ws2_32)
+endif()
+
+if (LINUX)
+    set(COMMON_TESTS_PLATFORM_LIBS stdc++fs)
+endif()
+
+if (APPLE)
+    set(COMMON_TESTS_PLATFORM_LIBS ${FOUNDATION_LIB})
+endif()
+
+add_executable(aspia_common_tests ${SOURCE_COMMON_TESTS})
+target_link_libraries(aspia_common_tests PRIVATE
+    aspia_common
+    aspia_base
+    aspia_proto
+    GTest::gtest
+    ${COMMON_TESTS_PLATFORM_LIBS}
+    ${THIRD_PARTY_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS})
+set_property(TARGET aspia_common_tests PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_common_tests PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_common_tests PROPERTY AUTORCC ON)
+qt_import_plugins(aspia_common_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+
+add_test(NAME aspia_common_tests COMMAND aspia_common_tests)

@@ -60,7 +60,14 @@ bool User::isValidUserName(const QString& username)
     if (!length || length > kMaxUserNameLength)
         return false;
 
-    for (qsizetype i = 0; i < length; ++i)
+    // A host names its one-time user after the id the router gave it and the client sends exactly
+    // that name, so the leading character of such a name is part of the name and not a stray
+    // symbol. There has to be a name behind it.
+    qsizetype first = (username[0] == QLatin1Char('#')) ? 1 : 0;
+    if (first == length)
+        return false;
+
+    for (qsizetype i = first; i < length; ++i)
     {
         if (!isValidUserNameChar(username[i]))
             return false;
