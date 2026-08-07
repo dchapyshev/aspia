@@ -77,6 +77,8 @@ if (APPLE)
 endif()
 
 list(APPEND SOURCE_COMMON_TESTS
+    file_depacketizer_unittest.cc
+    file_packetizer_unittest.cc
     tests_main.cc
     update_info_unittest.cc)
 
