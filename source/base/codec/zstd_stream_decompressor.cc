@@ -20,12 +20,25 @@
 
 #include "base/logging.h"
 
+namespace {
+
+// Upper bound on the match window the incoming stream is allowed to declare. The compressor on the
+// other side runs at its default level, for which zstd uses a 2 MB window; 8 MB leaves room for the
+// higher levels. Without this the limit is 128 MB, which a few bytes from the peer can request.
+constexpr int kMaxWindowLog = 23;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ZstdStreamDecompressor::ZstdStreamDecompressor()
     : stream_(ZSTD_createDStream()),
       buffer_(ZSTD_DStreamOutSize())
 {
     ZSTD_initDStream(stream_.get());
+
+    const size_t ret = ZSTD_DCtx_setParameter(stream_.get(), ZSTD_d_windowLogMax, kMaxWindowLog);
+    if (ZSTD_isError(ret))
+        LOG(ERROR) << "ZSTD_DCtx_setParameter failed:" << ZSTD_getErrorName(ret);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -41,7 +54,12 @@ QByteArray ZstdStreamDecompressor::decompress(std::string_view source, qint64 ma
 
     QByteArray result;
 
-    while (input.pos < input.size)
+    // A compressed chunk expands to far more than one output buffer holds, so the input can be
+    // consumed while zstd still has data to hand over. Looping on the input alone loses that tail,
+    // and a call that leaves room in the output buffer is what proves nothing is held back.
+    bool output_full = false;
+
+    do
     {
         ZSTD_outBuffer output;
         output.dst = buffer_.data();
@@ -63,7 +81,10 @@ QByteArray ZstdStreamDecompressor::decompress(std::string_view source, qint64 ma
                        << "bytes, aborting";
             return QByteArray();
         }
+
+        output_full = (output.pos == output.size);
     }
+    while (input.pos < input.size || output_full);
 
     return result;
 }

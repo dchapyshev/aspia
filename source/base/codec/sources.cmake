@@ -96,4 +96,5 @@ endif()
 collect_sources(SOURCE_BASE_CODEC_TESTS
     cursor_codec_unittest.cc
     scale_reducer_unittest.cc
-    zstd_compress_unittest.cc)
+    zstd_compress_unittest.cc
+    zstd_stream_unittest.cc)
