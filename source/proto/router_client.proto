@@ -124,10 +124,16 @@ message ChangePasswordResult
                            // "not_found" - the user record vanished (concurrent delete).
 }
 
+// The request of a connection to a host, replied with a ConnectionOffer. |client_public_key|
+// is the public half of a one-time X25519 pair generated for this request, so the host accepts
+// the passwordless handshake only from this client. |session_type| carries exactly one bit and
+// the brokered keys are issued for that session kind only. An empty key asks for the password path.
 message ConnectionRequest
 {
-    int64 request_id = 1;
-    uint64 host_id   = 2;
+    int64 request_id        = 1;
+    uint64 host_id          = 2;
+    uint32 session_type     = 3;
+    bytes client_public_key = 4;
 }
 
 message CheckHostStatus
