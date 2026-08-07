@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_SCALE_REDUCER_H
-#define BASE_CODEC_SCALE_REDUCER_H
+#ifndef HOST_SCALE_REDUCER_H
+#define HOST_SCALE_REDUCER_H
 
 #include <QRect>
 
@@ -51,4 +51,4 @@ private:
     Q_DISABLE_COPY_MOVE(ScaleReducer)
 };
 
-#endif // BASE_CODEC_SCALE_REDUCER_H
+#endif // HOST_SCALE_REDUCER_H

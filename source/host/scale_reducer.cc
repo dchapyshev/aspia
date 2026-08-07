@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/scale_reducer.h"
+#include "host/scale_reducer.h"
 
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"

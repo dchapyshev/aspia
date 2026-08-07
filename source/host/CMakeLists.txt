@@ -33,6 +33,8 @@ if (ANDROID)
         input_injector.h
         router_manager.cc
         router_manager.h
+        scale_reducer.cc
+        scale_reducer.h
         screen_capturer.cc
         screen_capturer.h
         settings_util.cc
@@ -114,6 +116,8 @@ list(APPEND SOURCE_HOST_CORE
     process_monitor.h
     router_manager.cc
     router_manager.h
+    scale_reducer.cc
+    scale_reducer.h
     screen_capturer.cc
     screen_capturer.h
     screen_capturer_helper.cc
@@ -148,6 +152,7 @@ list(APPEND SOURCE_HOST_TESTS
     database_unittest.cc
     host_user_list_unittest.cc
     router_manager_unittest.cc
+    scale_reducer_unittest.cc
     screen_capturer_helper_unittest.cc
     tests_main.cc)
 

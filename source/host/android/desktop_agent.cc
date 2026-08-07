@@ -22,11 +22,11 @@
 
 #include "base/logging.h"
 #include "base/time_types.h"
-#include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/region.h"
 #include "common/clipboard.h"
+#include "host/scale_reducer.h"
 #include "host/screen_capturer.h"
 #include "host/android/audio_capturer_android.h"
 #include "host/android/desktop_client.h"

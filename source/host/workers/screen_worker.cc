@@ -25,7 +25,6 @@
 #include "base/logging.h"
 #include "base/power_save_blocker.h"
 #include "base/codec/cursor_encoder.h"
-#include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
@@ -33,6 +32,7 @@
 #include "host/desktop_environment.h"
 #include "host/desktop_resizer.h"
 #include "host/input_injector.h"
+#include "host/scale_reducer.h"
 #include "host/system_settings.h"
 #include "host/workers/desktop_ipc_worker.h"
 

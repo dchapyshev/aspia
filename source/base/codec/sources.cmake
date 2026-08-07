@@ -30,8 +30,6 @@ collect_sources(SOURCE_BASE_CODEC
     cursor_encoder.h
     multi_channel_resampler.cc
     multi_channel_resampler.h
-    scale_reducer.cc
-    scale_reducer.h
     scoped_vpx_codec.cc
     scoped_vpx_codec.h
     scoped_zstd_stream.cc
@@ -95,6 +93,5 @@ endif()
 
 collect_sources(SOURCE_BASE_CODEC_TESTS
     cursor_codec_unittest.cc
-    scale_reducer_unittest.cc
     zstd_compress_unittest.cc
     zstd_stream_unittest.cc)
