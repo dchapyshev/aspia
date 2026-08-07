@@ -21,11 +21,13 @@
 
 #include <QQueue>
 
+#include <map>
 #include <optional>
 
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
 #include "base/time_types.h"
+#include "base/crypto/key_pair.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
@@ -33,6 +35,10 @@
 #include "build/build_config.h"
 #include "host/host_user_list.h"
 #include "proto/user.h"
+
+namespace proto::router {
+class ConnectionKeyRequest;
+} // namespace proto::router
 
 class Database;
 class RelayPeerManager;
@@ -85,8 +91,19 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
+    void readConnectionKeyRequest(const proto::router::ConnectionKeyRequest& request);
     void renewOneTimePassword();
     User createOneTimeUser() const;
+
+    // A one-time key issued for a brokered connection, waiting for its ConnectionOffer.
+    struct PendingConnectionKey
+    {
+        KeyPair key_pair;
+        QString user_name;
+        quint32 session_type = 0;
+        QByteArray client_public_key;
+        TimePoint deadline;
+    };
 
     Database& database_;
 
@@ -107,6 +124,9 @@ private:
     proto::user::RouterState router_state_;
 
     QQueue<ReadyConnection> channels_;
+
+    std::map<quint32, PendingConnectionKey> pending_connection_keys_;
+    quint32 next_connection_key_id_ = 1;
 
     friend class RouterManagerTestPeer;
     Q_DISABLE_COPY_MOVE(RouterManager)

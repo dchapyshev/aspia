@@ -215,6 +215,14 @@ protected:
                         if (!parse(buffer, &message))
                             return;
 
+                        if (message.has_connection_key_response())
+                        {
+                            std::lock_guard guard(key_response_lock_);
+                            last_key_response_ = message.connection_key_response();
+                            ++key_responses_received_;
+                            return;
+                        }
+
                         if (!message.has_host_id_request())
                             return;
 
@@ -266,6 +274,30 @@ protected:
 
             host_channel_->send(0, serialize(message));
         });
+    }
+
+    // Asks the manager for a one-time connection key the way the router does.
+    void sendConnectionKeyRequest(qint64 request_id, std::string_view user_name,
+                                  quint32 session_type, const QByteArray& client_public_key)
+    {
+        stand_worker_->invoke([&]()
+        {
+            proto::router::RouterToHost message;
+            proto::router::ConnectionKeyRequest* request = message.mutable_connection_key_request();
+            request->set_request_id(request_id);
+            request->set_user_name(user_name);
+            request->set_session_type(session_type);
+            request->set_client_public_key(client_public_key.toStdString());
+
+            host_channel_->send(0, serialize(message));
+        });
+    }
+
+    // The key response the stand received last. Guarded: the signal fires in the stand thread.
+    proto::router::ConnectionKeyResponse lastKeyResponse()
+    {
+        std::lock_guard guard(key_response_lock_);
+        return last_key_response_;
     }
 
     // Creates the manager in its worker thread, pointed at the stand, with the one-time password
@@ -340,6 +372,10 @@ protected:
     proto::router::HostIdRequest last_request_;
     std::atomic<int> accepted_ { 0 };
     std::atomic<int> requests_received_ { 0 };
+
+    std::mutex key_response_lock_;
+    proto::router::ConnectionKeyResponse last_key_response_;
+    std::atomic<int> key_responses_received_ { 0 };
 
     QPointer<RouterManager> manager_;
     std::atomic<HostId> credentials_host_id_ { kInvalidHostId };
@@ -494,4 +530,144 @@ TEST_F(RouterManagerTest, ExplicitRequestReplacesTheOneTimePassword)
     EXPECT_GT(credentials_received_.load(), seen);
     EXPECT_FALSE(lastPassword().isEmpty());
     EXPECT_NE(lastPassword(), first_password);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every connection key request produces a fresh pair. The ids count from one and the public
+// halves never repeat.
+TEST_F(RouterManagerTest, IssuesConnectionKeys)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(client_keys.isValid());
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+
+    const proto::router::ConnectionKeyResponse first = lastKeyResponse();
+    EXPECT_EQ(first.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(first.request_id(), 1);
+    EXPECT_EQ(first.key_id(), 1u);
+    EXPECT_EQ(first.host_public_key().size(), 32u);
+
+    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
+
+    const proto::router::ConnectionKeyResponse second = lastKeyResponse();
+    EXPECT_EQ(second.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(second.request_id(), 2);
+    EXPECT_EQ(second.key_id(), 2u);
+    EXPECT_NE(second.host_public_key(), first.host_public_key());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A malformed request is answered with an error instead of a key: a client key of a foreign
+// size, an empty user name, a session type that is not exactly one type.
+TEST_F(RouterManagerTest, RefusesAMalformedConnectionKeyRequest)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(client_keys.isValid());
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP,
+                             QByteArrayLiteral("short"));
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
+    EXPECT_EQ(lastKeyResponse().key_id(), 0u);
+
+    sendConnectionKeyRequest(2, "", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
+
+    sendConnectionKeyRequest(3, "alice",
+                             proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_FILE_TRANSFER,
+                             client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 3; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
+
+    sendConnectionKeyRequest(4, "alice", 0, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 4; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
+
+    // The refusals leave the manager fully working.
+    sendConnectionKeyRequest(5, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 5; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The outstanding keys are capped. A refusal over the cap does not break the channel, and the
+// expiration sweep frees the slots without any offer arriving.
+TEST_F(RouterManagerTest, CapsOutstandingConnectionKeysAndExpiresThem)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(client_keys.isValid());
+
+    for (int i = 1; i <= 16; ++i)
+        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+
+    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 17; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInternalError);
+
+    // The real TTL is a minute; the synthetic clock crosses it at once.
+    RouterManagerTestPeer timer(host_worker_, manager_);
+    timer.fireTimer(Clock::now() + Seconds(61));
+
+    sendConnectionKeyRequest(18, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 18; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The keys issued over a lost channel die with it. After the reconnect the slots are free at
+// once, without waiting the TTL out.
+TEST_F(RouterManagerTest, ReconnectClearsThePendingConnectionKeys)
+{
+    startManager();
+
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
+
+    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(client_keys.isValid());
+
+    for (int i = 1; i <= 16; ++i)
+        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+
+    stopRouterStand();
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kInvalidHostId; }));
+
+    startRouterStand();
+    ASSERT_NE(router_port_, 0);
+
+    // The reconnect pause is ten seconds, far under the TTL of the keys: a key that survived
+    // the reconnect would still hold its slot.
+    RouterManagerTestPeer timer(host_worker_, manager_);
+    const TimePoint after_pause = Clock::now() + kReconnectTimeout + Seconds(1);
+
+    ASSERT_TRUE(waitFor([&]()
+    {
+        timer.fireTimer(after_pause);
+        return requests_received_.load() >= 2;
+    }));
+
+    const int seen = key_responses_received_.load();
+    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    ASSERT_TRUE(waitFor([&]() { return key_responses_received_.load() > seen; }));
+    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
 }

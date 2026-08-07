@@ -18,6 +18,7 @@
 
 #include "host/router_manager.h"
 
+#include "base/bitset.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
@@ -36,6 +37,15 @@
 namespace {
 
 const Seconds kReconnectTimeout{ 10 };
+
+// How long the private half of an issued connection key waits for its offer.
+const Seconds kConnectionKeyTtl{ 60 };
+
+// Outstanding connection keys, requests over that are refused.
+const size_t kMaxPendingConnectionKeys = 16;
+
+// X25519.
+const size_t kPublicKeySize = 32;
 
 } // namespace
 
@@ -99,6 +109,7 @@ void RouterManager::onSettingsChanged()
         {
             tcp_channel_->disconnect(this);
             tcp_channel_.reset();
+            pending_connection_keys_.clear();
         }
 
         connectToRouter();
@@ -176,6 +187,9 @@ void RouterManager::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         tcp_channel_->disconnect();
         tcp_channel_.reset();
     }
+
+    // The offers referencing the issued connection keys can only arrive over the lost channel.
+    pending_connection_keys_.clear();
 
     // The host is not reachable by the assigned ID until the connection is restored and the router
     // re-assigns it, so report the credentials as unavailable.
@@ -271,6 +285,10 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             LOG(ERROR) << "Invalid connection offer";
         }
     }
+    else if (in_message.has_connection_key_request())
+    {
+        readConnectionKeyRequest(in_message.connection_key_request());
+    }
     else if (in_message.has_host_command())
     {
         const proto::router::HostCommand& command = in_message.host_command();
@@ -353,6 +371,19 @@ void RouterManager::onTimer(TimePoint now)
         reconnect_time_ = TimePoint::max();
         connectToRouter();
     }
+
+    for (auto it = pending_connection_keys_.begin(); it != pending_connection_keys_.end();)
+    {
+        if (now >= it->second.deadline)
+        {
+            LOG(INFO) << "Connection key" << it->first << "expired";
+            it = pending_connection_keys_.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -434,6 +465,61 @@ void RouterManager::hostIdRequest()
     // Send host ID request.
     LOG(INFO) << "Send ID request to router";
     tcp_channel_->send(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::readConnectionKeyRequest(const proto::router::ConnectionKeyRequest& request)
+{
+    proto::router::HostToRouter out_message;
+    proto::router::ConnectionKeyResponse* response = out_message.mutable_connection_key_response();
+    response->set_request_id(request.request_id());
+
+    const QString user_name = QString::fromStdString(request.user_name());
+    const BitSet<quint32> session_type(request.session_type());
+
+    if (!User::isValidUserName(user_name) || session_type.count() != 1 ||
+        request.client_public_key().size() != kPublicKeySize)
+    {
+        LOG(ERROR) << "Invalid connection key request from router";
+        response->set_error_code(proto::router::kErrorInvalidData);
+    }
+    else if (pending_connection_keys_.size() >= kMaxPendingConnectionKeys)
+    {
+        LOG(ERROR) << "Too many outstanding connection keys. Refusing the request for"
+                   << user_name;
+        response->set_error_code(proto::router::kErrorInternalError);
+    }
+    else
+    {
+        KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
+        const QByteArray public_key = key_pair.isValid() ? key_pair.publicKey() : QByteArray();
+
+        if (public_key.isEmpty())
+        {
+            LOG(ERROR) << "Failed to generate a connection key";
+            response->set_error_code(proto::router::kErrorInternalError);
+        }
+        else
+        {
+            const quint32 key_id = next_connection_key_id_++;
+
+            PendingConnectionKey& pending = pending_connection_keys_[key_id];
+            pending.key_pair = std::move(key_pair);
+            pending.user_name = user_name;
+            pending.session_type = request.session_type();
+            pending.client_public_key = QByteArray::fromStdString(request.client_public_key());
+            pending.deadline = Clock::now() + kConnectionKeyTtl;
+
+            LOG(INFO) << "Connection key" << key_id << "issued for" << user_name
+                      << "(session type:" << request.session_type() << ")";
+
+            response->set_error_code(proto::router::kErrorOk);
+            response->set_key_id(key_id);
+            response->set_host_public_key(public_key.toStdString());
+        }
+    }
+
+    tcp_channel_->send(0, serialize(out_message));
 }
 
 //--------------------------------------------------------------------------------------------------

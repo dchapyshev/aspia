@@ -70,7 +70,7 @@ message ConnectionKeyRequest
 message ConnectionKeyResponse
 {
     int64 request_id      = 1;
-    string error_code     = 2; // "ok" | "internal_error"
+    string error_code     = 2; // "ok" | "invalid_data" | "internal_error"
     uint32 key_id         = 3;
     bytes host_public_key = 4;
 }
