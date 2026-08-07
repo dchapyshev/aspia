@@ -457,17 +457,24 @@ void Client::selectAttempt(UdpAttempt* attempt, qint64 bandwidth)
     CLOG(INFO) << "Nominating UDP attempt" << id;
 
     // Take the channel from the attempt and drive the session through it directly. Any aux resource
-    // (gateway mapping) is parented to the channel and travels with it; the attempt is then discarded.
+    // (gateway mapping) is parented to the channel and travels with it.
     udp_channel_ = attempt->takeChannel();
-    eraseAttempt(id);
 
     if (!udp_channel_)
     {
         CLOG(ERROR) << "Selected attempt has no channel";
+        clearAttempts();
         return;
     }
 
+    // The channel is still a child of the attempt that created it, so it has to be adopted before
+    // the attempts are dropped.
     udp_channel_->setParent(this);
+
+    // The losing attempts go now. One that gets its own acknowledgement a moment later is refused
+    // the channel but stops timing out, and would hold its socket and its gateway mapping until the
+    // session ends.
+    clearAttempts();
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
 

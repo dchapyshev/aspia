@@ -683,18 +683,21 @@ void NetworkWorker::selectAttempt(UdpAttempt* attempt)
 
     LOG(INFO) << "UDP attempt" << attempt->requestId() << "won";
 
-    // Take the channel from the attempt and drive the session through it directly; tear down the
-    // rest. The probe that selected us was already acknowledged by the attempt.
+    // Take the channel from the attempt and drive the session through it directly. The probe that
+    // selected us was already acknowledged by the attempt.
     udp_channel_ = attempt->takeChannel();
-    clearAttempts();
 
     if (!udp_channel_)
     {
         LOG(ERROR) << "Winning attempt has no channel";
+        clearAttempts();
         return;
     }
 
+    // The channel is still a child of the attempt that created it, so it has to be adopted before
+    // the rest of the attempts are torn down.
     udp_channel_->setParent(this);
+    clearAttempts();
     connect(udp_channel_, &UdpChannel::sig_messageReceived, this, &NetworkWorker::onUdpMessageReceived);
     connect(udp_channel_, &UdpChannel::sig_errorOccurred, this, &NetworkWorker::onUdpErrorOccurred);
 
