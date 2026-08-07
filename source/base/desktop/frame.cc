@@ -119,5 +119,5 @@ quint8* Frame::frameDataAtPos(const QPoint& pos) const
 //--------------------------------------------------------------------------------------------------
 quint8* Frame::frameDataAtPos(int x, int y) const
 {
-    return frameData() + stride() * y + kBytesPerPixel * x;
+    return frameData() + static_cast<qint64>(stride()) * y + static_cast<qint64>(kBytesPerPixel) * x;
 }

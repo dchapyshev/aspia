@@ -24,6 +24,7 @@
 #include <QStorageInfo>
 #include <QStringList>
 
+#include <algorithm>
 #include <atomic>
 #include <utility>
 #include <vector>
@@ -1402,8 +1403,11 @@ void fillEventLogs(proto::system_info::SystemInfo* system_info,
         (data.direction() == proto::system_info::EventLogsData::DIRECTION_NEWER) ?
             EventEnumerator::Direction::NEWER : EventEnumerator::Direction::OLDER;
 
+    static const quint32 kMaxRecords = 1000;
+    const quint32 record_count = std::min(data.record_count(), kMaxRecords);
+
     std::unique_ptr<EventEnumerator> enumerator = EventEnumerator::create(
-        log_name, data.cursor(), direction, data.record_count());
+        log_name, data.cursor(), direction, record_count);
     if (!enumerator)
         return;
 
