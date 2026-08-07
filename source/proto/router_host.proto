@@ -54,14 +54,12 @@ message HostCommand
 // The request of a one-time connection key while the router brokers a client connection,
 // replied with a ConnectionKeyResponse. The host generates an X25519 pair, keeps the private
 // half until the matching ConnectionOffer arrives or a short TTL expires, and logs the issue
-// under |user_name|. The pair serves exactly one handshake from |client_public_key| with the
-// single session type of |session_type|.
+// under |user_name|. The pair serves one handshake of the single session type of |session_type|.
 message ConnectionKeyRequest
 {
-    int64 request_id        = 1;
-    string user_name        = 2;
-    uint32 session_type     = 3;
-    bytes client_public_key = 4;
+    int64 request_id    = 1;
+    string user_name    = 2;
+    uint32 session_type = 3;
 }
 
 // |key_id| identifies the issued pair, counts from 1 and zero means "no key". The router

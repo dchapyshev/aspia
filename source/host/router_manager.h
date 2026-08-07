@@ -101,7 +101,6 @@ private:
         KeyPair key_pair;
         QString user_name;
         quint32 session_type = 0;
-        QByteArray client_public_key;
         TimePoint deadline;
     };
 

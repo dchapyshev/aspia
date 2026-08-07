@@ -44,9 +44,6 @@ const Seconds kConnectionKeyTtl{ 60 };
 // Outstanding connection keys, requests over that are refused.
 const size_t kMaxPendingConnectionKeys = 16;
 
-// X25519.
-const size_t kPublicKeySize = 32;
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -477,8 +474,7 @@ void RouterManager::readConnectionKeyRequest(const proto::router::ConnectionKeyR
     const QString user_name = QString::fromStdString(request.user_name());
     const BitSet<quint32> session_type(request.session_type());
 
-    if (!User::isValidUserName(user_name) || session_type.count() != 1 ||
-        request.client_public_key().size() != kPublicKeySize)
+    if (!User::isValidUserName(user_name) || session_type.count() != 1)
     {
         LOG(ERROR) << "Invalid connection key request from router";
         response->set_error_code(proto::router::kErrorInvalidData);
@@ -507,7 +503,6 @@ void RouterManager::readConnectionKeyRequest(const proto::router::ConnectionKeyR
             pending.key_pair = std::move(key_pair);
             pending.user_name = user_name;
             pending.session_type = request.session_type();
-            pending.client_public_key = QByteArray::fromStdString(request.client_public_key());
             pending.deadline = Clock::now() + kConnectionKeyTtl;
 
             LOG(INFO) << "Connection key" << key_id << "issued for" << user_name

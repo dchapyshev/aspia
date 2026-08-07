@@ -278,7 +278,7 @@ protected:
 
     // Asks the manager for a one-time connection key the way the router does.
     void sendConnectionKeyRequest(qint64 request_id, std::string_view user_name,
-                                  quint32 session_type, const QByteArray& client_public_key)
+                                  quint32 session_type)
     {
         stand_worker_->invoke([&]()
         {
@@ -287,7 +287,6 @@ protected:
             request->set_request_id(request_id);
             request->set_user_name(user_name);
             request->set_session_type(session_type);
-            request->set_client_public_key(client_public_key.toStdString());
 
             host_channel_->send(0, serialize(message));
         });
@@ -540,10 +539,7 @@ TEST_F(RouterManagerTest, IssuesConnectionKeys)
     startManager();
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
-    ASSERT_TRUE(client_keys.isValid());
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
 
     const proto::router::ConnectionKeyResponse first = lastKeyResponse();
@@ -552,7 +548,7 @@ TEST_F(RouterManagerTest, IssuesConnectionKeys)
     EXPECT_EQ(first.key_id(), 1u);
     EXPECT_EQ(first.host_public_key().size(), 32u);
 
-    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
 
     const proto::router::ConnectionKeyResponse second = lastKeyResponse();
@@ -563,39 +559,30 @@ TEST_F(RouterManagerTest, IssuesConnectionKeys)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A malformed request is answered with an error instead of a key: a client key of a foreign
-// size, an empty user name, a session type that is not exactly one type.
+// A malformed request is answered with an error instead of a key: an empty user name, a session
+// type that is not exactly one type.
 TEST_F(RouterManagerTest, RefusesAMalformedConnectionKeyRequest)
 {
     startManager();
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
-    ASSERT_TRUE(client_keys.isValid());
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP,
-                             QByteArrayLiteral("short"));
+    sendConnectionKeyRequest(1, "", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
     EXPECT_EQ(lastKeyResponse().key_id(), 0u);
 
-    sendConnectionKeyRequest(2, "", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(2, "alice",
+                             proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_FILE_TRANSFER);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
 
-    sendConnectionKeyRequest(3, "alice",
-                             proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_FILE_TRANSFER,
-                             client_keys.publicKey());
+    sendConnectionKeyRequest(3, "alice", 0);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 3; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
 
-    sendConnectionKeyRequest(4, "alice", 0, client_keys.publicKey());
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 4; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
-
     // The refusals leave the manager fully working.
-    sendConnectionKeyRequest(5, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 5; }));
+    sendConnectionKeyRequest(4, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 4; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
 }
 
@@ -607,16 +594,13 @@ TEST_F(RouterManagerTest, CapsOutstandingConnectionKeysAndExpiresThem)
     startManager();
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
-    ASSERT_TRUE(client_keys.isValid());
-
     for (int i = 1; i <= 16; ++i)
-        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP);
 
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
 
-    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 17; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInternalError);
 
@@ -624,7 +608,7 @@ TEST_F(RouterManagerTest, CapsOutstandingConnectionKeysAndExpiresThem)
     RouterManagerTestPeer timer(host_worker_, manager_);
     timer.fireTimer(Clock::now() + Seconds(61));
 
-    sendConnectionKeyRequest(18, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(18, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 18; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
 }
@@ -640,11 +624,8 @@ TEST_F(RouterManagerTest, ReconnectClearsThePendingConnectionKeys)
     sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
     ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
 
-    const KeyPair client_keys = KeyPair::create(KeyPair::Type::X25519);
-    ASSERT_TRUE(client_keys.isValid());
-
     for (int i = 1; i <= 16; ++i)
-        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP);
 
     ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
@@ -667,7 +648,7 @@ TEST_F(RouterManagerTest, ReconnectClearsThePendingConnectionKeys)
     }));
 
     const int seen = key_responses_received_.load();
-    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP, client_keys.publicKey());
+    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([&]() { return key_responses_received_.load() > seen; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
 }
