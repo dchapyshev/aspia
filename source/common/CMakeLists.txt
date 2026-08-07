@@ -77,7 +77,8 @@ if (APPLE)
 endif()
 
 list(APPEND SOURCE_COMMON_TESTS
-    tests_main.cc)
+    tests_main.cc
+    update_info_unittest.cc)
 
 include(desktop/sources.cmake)
 

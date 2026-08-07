@@ -78,7 +78,7 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         if (xml.name() == "update")
             continue;
 
-        while (xml.tokenType() != QXmlStreamReader::EndElement)
+        while (xml.tokenType() != QXmlStreamReader::EndElement && !xml.atEnd() && !xml.hasError())
         {
             if (xml.tokenType() == QXmlStreamReader::StartElement)
             {
