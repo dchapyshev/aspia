@@ -48,8 +48,6 @@ collect_sources(SOURCE_BASE_CODEC
     video_encoder.h
     video_encoder_vpx.cc
     video_encoder_vpx.h
-    webm_file_muxer.cc
-    webm_file_muxer.h
     webm_file_writer.cc
     webm_file_writer.h
     webm_video_encoder.cc

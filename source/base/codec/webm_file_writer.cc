@@ -21,8 +21,10 @@
 #include <QDateTime>
 #include <QDir>
 
+#include <mkvmuxer/mkvmuxer.h>
+#include <mkvmuxer/mkvwriter.h>
+
 #include "base/logging.h"
-#include "base/codec/webm_file_muxer.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_video.h"
 
@@ -80,30 +82,28 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
         if (packet.encoding() == proto::video::ENCODING_VP9)
             video_codec_id = mkvmuxer::Tracks::kVp9CodecId;
 
-        if (!muxer_->addVideoTrack(packet.format().video_rect().width(),
-                                   packet.format().video_rect().height(),
-                                   video_codec_id))
+        if (!addVideoTrack(packet.format().video_rect().width(),
+                           packet.format().video_rect().height(),
+                           video_codec_id))
         {
-            LOG(ERROR) << "WebmFileMuxer::addVideoTrack failed";
             return;
         }
 
-        if (!muxer_->addAudioTrack(proto::audio::Packet::SAMPLING_RATE_48000,
-                                   proto::audio::Packet::CHANNELS_STEREO,
-                                   mkvmuxer::Tracks::kOpusCodecId))
+        if (!addAudioTrack(proto::audio::Packet::SAMPLING_RATE_48000,
+                           proto::audio::Packet::CHANNELS_STEREO,
+                           mkvmuxer::Tracks::kOpusCodecId))
         {
-            LOG(ERROR) << "WebmFileMuxer::addAudioTrack failed";
             return;
         }
 
         is_key_frame = true;
     }
 
-    if (!muxer_)
+    if (!segment_)
         return;
 
-    DCHECK(muxer_->hasVideoTrack());
-    DCHECK(muxer_->hasAudioTrack());
+    DCHECK(video_track_num_);
+    DCHECK(audio_track_num_);
 
     TimePoint current = Clock::now();
     NanoSeconds timestamp;
@@ -118,7 +118,7 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
         timestamp = NanoSeconds(0);
     }
 
-    muxer_->writeVideoFrame(packet.data(), timestamp, is_key_frame);
+    writeFrame(packet.data(), timestamp, video_track_num_, is_key_frame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ void WebmFileWriter::addAudioPacket(const proto::audio::Packet& packet)
         return;
     }
 
-    if (!muxer_ || !muxer_->hasAudioTrack())
+    if (!segment_ || !audio_track_num_)
         return;
 
     for (int i = 0; i < packet.data_size(); ++i)
@@ -150,7 +150,7 @@ void WebmFileWriter::addAudioPacket(const proto::audio::Packet& packet)
             timestamp = NanoSeconds(0);
         }
 
-        muxer_->writeAudioFrame(packet.data(i), timestamp);
+        writeFrame(packet.data(i), timestamp, audio_track_num_, false);
     }
 }
 
@@ -195,15 +195,111 @@ bool WebmFileWriter::init()
         return false;
     }
 
-    muxer_ = std::make_unique<WebmFileMuxer>();
-    if (!muxer_->init(file_))
+    mkv_writer_ = std::make_unique<mkvmuxer::MkvWriter>(file_);
+    segment_ = std::make_unique<mkvmuxer::Segment>();
+
+    if (!segment_->Init(mkv_writer_.get()))
     {
-        LOG(ERROR) << "WebmFileMuxer::init failed";
+        LOG(ERROR) << "Cannot init segment";
         close();
         return false;
     }
 
+    segment_->set_mode(mkvmuxer::Segment::kFile);
+
+    mkvmuxer::SegmentInfo* const segment_info = segment_->GetSegmentInfo();
+    if (!segment_info)
+    {
+        LOG(ERROR) << "Segment has no SegmentInfo";
+        close();
+        return false;
+    }
+
+    segment_info->set_writing_app("Aspia");
+
     ++file_counter_;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool WebmFileWriter::addAudioTrack(int sample_rate, int channels, std::string_view codec_id)
+{
+    if (audio_track_num_ != 0)
+    {
+        LOG(ERROR) << "Cannot add audio track: it already exists";
+        return false;
+    }
+
+    if (codec_id.empty())
+    {
+        LOG(ERROR) << "Cannot add audio track with empty codec id";
+        return false;
+    }
+
+    audio_track_num_ = segment_->AddAudioTrack(sample_rate, channels, 0);
+    if (!audio_track_num_)
+    {
+        LOG(ERROR) << "Cannot add audio track on segment";
+        return false;
+    }
+
+    mkvmuxer::AudioTrack* const audio_track = static_cast<mkvmuxer::AudioTrack*>(
+        segment_->GetTrackByNumber(audio_track_num_));
+    if (!audio_track)
+    {
+        LOG(ERROR) << "Unable to set audio codec id: track look up failed";
+        return false;
+    }
+
+    audio_track->set_codec_id(codec_id.data());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool WebmFileWriter::addVideoTrack(int width, int height, std::string_view codec_id)
+{
+    if (video_track_num_ != 0)
+    {
+        LOG(ERROR) << "Cannot add video track: it already exists";
+        return false;
+    }
+
+    if (codec_id.empty())
+    {
+        LOG(ERROR) << "Cannot add video track with empty codec id";
+        return false;
+    }
+
+    video_track_num_ = segment_->AddVideoTrack(width, height, 0);
+    if (!video_track_num_)
+    {
+        LOG(ERROR) << "Cannot add video track on segment";
+        return false;
+    }
+
+    mkvmuxer::VideoTrack* const video_track = static_cast<mkvmuxer::VideoTrack*>(
+        segment_->GetTrackByNumber(video_track_num_));
+    if (!video_track)
+    {
+        LOG(ERROR) << "Unable to set video codec id: track look up failed";
+        return false;
+    }
+
+    video_track->set_codec_id(codec_id.data());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool WebmFileWriter::writeFrame(
+    std::string_view frame, NanoSeconds timestamp, quint64 track_num, bool is_key)
+{
+    if (!segment_->AddFrame(reinterpret_cast<const quint8*>(frame.data()), frame.size(),
+                            track_num, static_cast<quint64>(timestamp.count()), is_key))
+    {
+        LOG(ERROR) << "AddFrame failed";
+        return false;
+    }
+
     return true;
 }
 
@@ -214,16 +310,20 @@ void WebmFileWriter::close()
     video_start_time_.reset();
     audio_start_time_.reset();
 
-    if (muxer_)
+    if (segment_)
     {
-        if (muxer_->initialized() && !muxer_->finalize())
-        {
-            LOG(ERROR) << "WebmFileMuxer::finalize failed";
-        }
+        // Everything libwebm has buffered goes out here, so this must happen before the file is
+        // closed under it.
+        if (!segment_->Finalize())
+            LOG(ERROR) << "Segment finalize failed";
 
-        LOG(INFO) << "Muxer destroyed";
-        muxer_.reset();
+        segment_.reset();
     }
+
+    mkv_writer_.reset();
+
+    audio_track_num_ = 0;
+    video_track_num_ = 0;
 
     if (file_)
     {

@@ -23,10 +23,14 @@
 
 #include <memory>
 #include <optional>
+#include <string_view>
 
 #include "base/time_types.h"
 
-class WebmFileMuxer;
+namespace mkvmuxer {
+class MkvWriter;
+class Segment;
+} // namespace mkvmuxer
 
 namespace proto::audio {
 class Packet;
@@ -47,7 +51,16 @@ public:
     void addAudioPacket(const proto::audio::Packet& packet);
 
 private:
+    // Opens the next file and starts a segment on it, in live mode.
     bool init();
+
+    // Add a track to the open segment. Both refuse a second track of their kind.
+    bool addAudioTrack(int sample_rate, int channels, std::string_view codec_id);
+    bool addVideoTrack(int width, int height, std::string_view codec_id);
+
+    bool writeFrame(std::string_view frame, NanoSeconds timestamp, quint64 track_num, bool is_key);
+
+    // Flushes what libwebm has buffered and closes the file.
     void close();
 
     QString path_;
@@ -55,7 +68,11 @@ private:
     int file_counter_ = 0;
     FILE* file_ = nullptr;
 
-    std::unique_ptr<WebmFileMuxer> muxer_;
+    std::unique_ptr<mkvmuxer::MkvWriter> mkv_writer_;
+    std::unique_ptr<mkvmuxer::Segment> segment_;
+    quint64 audio_track_num_ = 0;
+    quint64 video_track_num_ = 0;
+
     std::optional<TimePoint> video_start_time_;
     std::optional<TimePoint> audio_start_time_;
 
