@@ -170,7 +170,7 @@ void ServiceWorker::onStart()
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
 
     tcp_server_->start(db.tcpPort());
-    tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
+    tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList(db)));
 
     if (db.isRouterEnabled())
         connectToRouter(FROM_HERE);

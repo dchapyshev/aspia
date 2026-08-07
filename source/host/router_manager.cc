@@ -44,7 +44,7 @@ RouterManager::RouterManager(Database& database, QObject* parent)
     : QObject(parent),
       database_(database),
       peer_manager_(new RelayPeerManager(this)),
-      user_list_(new HostUserList())
+      user_list_(new HostUserList(database))
 {
     LOG(INFO) << "Ctor";
 

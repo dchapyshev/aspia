@@ -21,10 +21,13 @@
 
 #include "base/peer/user_list.h"
 
+class Database;
+
 class HostUserList final : public UserList
 {
 public:
-    HostUserList() = default;
+    // |database| belongs to the thread the list is used in and outlives it.
+    explicit HostUserList(Database& database);
     ~HostUserList() final = default;
 
     // UserListBase implementation.
@@ -35,7 +38,9 @@ public:
     void setOneTimeUser(const User& user);
 
 private:
+    Database& database_;
     User one_time_user_;
+
     Q_DISABLE_COPY_MOVE(HostUserList)
 };
 

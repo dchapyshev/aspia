@@ -21,9 +21,16 @@
 #include "host/database.h"
 
 //--------------------------------------------------------------------------------------------------
+HostUserList::HostUserList(Database& database)
+    : database_(database)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
 User HostUserList::find(const QString& username) const
 {
-    User user(Database::instance().findUser(username));
+    User user(database_.findUser(username));
     if (user.isValid())
         return user;
 
@@ -36,13 +43,13 @@ User HostUserList::find(const QString& username) const
 //--------------------------------------------------------------------------------------------------
 QByteArray HostUserList::seedKey() const
 {
-    return Database::instance().seedKey();
+    return database_.seedKey();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostUserList::setSeedKey(const QByteArray& seed_key)
 {
-    Database::instance().setSeedKey(seed_key);
+    database_.setSeedKey(seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------

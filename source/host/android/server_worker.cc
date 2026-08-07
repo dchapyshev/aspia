@@ -131,7 +131,7 @@ void ServerWorker::onStart()
     tcp_server_->setMaxPendingConnections(kMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     tcp_server_->start(db.tcpPort());
-    tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
+    tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList(db)));
 
     LOG(INFO) << "Host server started on port" << db.tcpPort();
 
