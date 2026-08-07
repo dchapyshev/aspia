@@ -542,11 +542,12 @@ void UserSession::onIpcDisconnected()
             ipc_channel_.reset();
         }
     }
-#elif defined(Q_OS_MACOS)
-    // The GUI process exited (the user quit it from its menu, or macOS killed it for a "Quit & Reopen"
-    // after a permission change). The host is controlled through the GUI, so remote access becomes
-    // unavailable: drop the connected clients after the grace period. The GUI is intentionally NOT
-    // relaunched - exiting it is how the user turns the host off.
+#else
+    // The GUI process is gone (the user quit it, the session ended, or it crashed). The host is
+    // controlled through the GUI, so remote access becomes unavailable and the connected clients
+    // are dropped after the grace period. The channel has to go with it, or the GUI that comes back
+    // is turned away as a second one. The GUI is intentionally NOT relaunched from here - quitting
+    // it is how the user turns the host off.
     dettach_deadline_ = Clock::now() + kDettachTimeout;
     ipc_channel_.reset();
 #endif // defined(Q_OS_WINDOWS)
