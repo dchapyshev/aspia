@@ -57,7 +57,8 @@ SharedPointer<RouterUserList> RouterUserList::open()
 //--------------------------------------------------------------------------------------------------
 User RouterUserList::find(const QString& username) const
 {
-    User user = Database::instance().findUser(username);
+    RouterUser user;
+    Database::instance().findUser(username, &user);
     user.sessions = expandSessionTypes(user.sessions);
     return user;
 }

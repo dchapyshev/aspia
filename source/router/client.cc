@@ -311,8 +311,8 @@ void Client::sendUserKeys()
         return;
     }
 
-    RouterUser user = database_.findUser(userId());
-    if (!user.isValid())
+    RouterUser user;
+    if (database_.findUser(userId(), &user) != proto::router::kErrorOk)
     {
         CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId()
                       << "). Closing connection";

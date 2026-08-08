@@ -103,10 +103,12 @@ bool isKeyedConnectionAllowed(Database& database, qint64 user_id, HostId host_id
     if (BitSet<quint32>(session_type).count() != 1)
         return false;
 
-    bool ok = false;
-    const qint64 workspace_id = database.hostWorkspaceId(host_id, &ok);
-    if (!ok || workspace_id <= 0)
+    qint64 workspace_id = 0;
+    if (database.hostWorkspaceId(host_id, &workspace_id) != proto::router::kErrorOk ||
+        workspace_id <= 0)
+    {
         return false;
+    }
 
-    return database.hasWorkspaceAccess(user_id, workspace_id);
+    return database.checkWorkspaceAccess(user_id, workspace_id) == proto::router::kErrorOk;
 }

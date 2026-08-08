@@ -18,6 +18,7 @@
 #include "base/logging.h"
 #include "base/crypto/totp.h"
 #include "base/peer/router_user.h"
+#include "proto/router_constants.h"
 #include "router/database.h"
 
 namespace {
@@ -35,11 +36,11 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
 {
     Result result;
 
-    const RouterUser user = database.findUser(caller.user_id);
-    if (!user.isValid())
+    RouterUser user;
+    if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
     {
         // SRP already validated the user; reaching this branch implies the row vanished between
-        // authentication and this stage.
+        // authentication and this stage (or the database stopped answering).
         LOG(WARNING) << "Authenticated user" << caller.name << "disappeared from database";
         result.action = Action::CLOSE;
         return result;
@@ -131,8 +132,8 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         // The secret and the counter are re-read instead of trusting the copies cached when the
         // challenge was sent: an administrator can reset the OTP or delete the user while the
         // session sits at the prompt, and the verification below must see that.
-        const RouterUser user = database.findUser(caller.user_id);
-        if (!user.isValid())
+        RouterUser user;
+        if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
         {
             LOG(INFO) << "User" << caller.name << "is gone. Closing connection";
             result.action = Action::CLOSE;

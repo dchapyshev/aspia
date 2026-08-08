@@ -56,13 +56,13 @@ constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding wi
 // the host has to be approved again.
 constexpr qint64 kHostRemovalTtlSec = 180 * 24 * 3600;
 
-// Every host query has to name the page it wants. Whatever comes out of one goes into a single
+// Every list query has to name the page it wants. Whatever comes out of one goes into a single
 // reply, and a reply the channel cannot carry is not sent at all but ends the session, so the size
 // of an answer must never follow the size of the database. A request that names no page has a
 // count of zero and is refused along with one that asks for more than the cap.
-bool isHostPageValid(qint64 offset, qint64 count)
+bool isPageValid(qint64 offset, qint64 count, int max_count)
 {
-    return offset >= 0 && count > 0 && count <= proto::router::kMaxHostPageSize;
+    return offset >= 0 && count > 0 && count <= max_count;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -451,7 +451,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::userList(std::vector<RouterUser>* users) const
+std::string_view Database::userList(qint64 offset, qint64 count, std::vector<RouterUser>* users) const
 {
     CHECK(users);
 
@@ -460,21 +460,34 @@ bool Database::userList(std::vector<RouterUser>* users) const
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
+    if (!isPageValid(offset, count, proto::router::kMaxUserPageSize))
+    {
+        LOG(ERROR) << "Invalid user list page: offset" << offset << "count" << count;
+        return proto::router::kErrorInvalidRequest;
+    }
+
+    // The page has to name the same records every time it is asked for, so the order is fixed
+    // here instead of being left to the query planner.
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users";
+        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users "
+        "ORDER BY id LIMIT ? OFFSET ?";
     SqlQuery query(db_, kSql);
+    query.addInt64(count);
+    query.addInt64(offset);
 
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
+            // An error reply must not carry the partial list scanned so far.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            users->clear();
+            return proto::router::kErrorInternalError;
         }
 
         if (step == SqlQuery::StepResult::DONE)
@@ -483,7 +496,33 @@ bool Database::userList(std::vector<RouterUser>* users) const
         users->emplace_back(readUser(query));
     }
 
-    return true;
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::userCount(qint64* count) const
+{
+    CHECK(count);
+
+    *count = 0;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    // COUNT(*) always yields exactly one row, so anything but ROW is a database error - it must
+    // not pass for an empty table.
+    SqlQuery query(db_, "SELECT COUNT(*) FROM users");
+    if (query.next() != SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    *count = query.columnInt64(0);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -783,12 +822,16 @@ std::string_view Database::removeUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterUser Database::findUser(const QString& username) const
+std::string_view Database::findUser(const QString& username, RouterUser* user) const
 {
+    CHECK(user);
+
+    *user = RouterUser();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return RouterUser();
+        return proto::router::kErrorInternalError;
     }
 
     const char kSql[] =
@@ -797,19 +840,34 @@ RouterUser Database::findUser(const QString& username) const
     SqlQuery query(db_, kSql);
     query.addText(username);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return RouterUser();
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        // A failed read must not pass for a missing user: a caller that reports "no such name"
+        // would let a duplicate through, and one that lists a single record would answer an
+        // empty list for a record that is there.
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
-    return readUser(query);
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
+
+    *user = readUser(query);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterUser Database::findUser(qint64 entry_id) const
+std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
 {
+    CHECK(user);
+
+    *user = RouterUser();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return RouterUser();
+        return proto::router::kErrorInternalError;
     }
 
     const char kSql[] =
@@ -818,10 +876,19 @@ RouterUser Database::findUser(qint64 entry_id) const
     SqlQuery query(db_, kSql);
     query.addInt64(entry_id);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return RouterUser();
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        // See the overload above: a failed read is not a missing record.
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
 
-    return readUser(query);
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
+
+    *user = readUser(query);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -945,6 +1012,15 @@ bool Database::issueClientDeviceToken(
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = QDateTime::currentSecsSinceEpoch();
 
+    // The cleanup and the insert are one operation: a user must never be left over the cap, and
+    // the reply carrying its tokens must never grow past what the channel can send.
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return false;
+    }
+
     // A device that is never used again leaves behind a row nobody can ever present. Issuing the
     // next token of the same user is the one moment its rows are guaranteed to be touched, so the
     // dead ones go here; without it the table only grows. Only this user is swept: a single login
@@ -954,7 +1030,28 @@ bool Database::issueClientDeviceToken(
     prune.addInt64(now - kClientDeviceTokenTtlSec);
 
     if (!prune.exec())
-        LOG(WARNING) << "Unable to prune expired client device tokens:" << db_.lastError();
+    {
+        LOG(ERROR) << "Unable to prune expired client device tokens:" << db_.lastError();
+        return false;
+    }
+
+    // The TTL alone bounds nothing: a user that logs in from a new device every day keeps every
+    // token of the last week alive. The oldest ones make room for the new one, so the list stays
+    // within the cap the protocol counts on.
+    const char kTrimSql[] =
+        "DELETE FROM client_device_tokens WHERE user_id=? AND token_id NOT IN "
+        "(SELECT token_id FROM client_device_tokens WHERE user_id=? "
+        "ORDER BY last_used_at DESC LIMIT ?)";
+    SqlQuery trim(db_, kTrimSql);
+    trim.addInt64(user_id);
+    trim.addInt64(user_id);
+    trim.addInt64(proto::router::kMaxDeviceTokensPerUser - 1);
+
+    if (!trim.exec())
+    {
+        LOG(ERROR) << "Unable to trim client device tokens:" << db_.lastError();
+        return false;
+    }
 
     const char kSql[] =
         "INSERT INTO client_device_tokens "
@@ -972,8 +1069,16 @@ bool Database::issueClientDeviceToken(
         return false;
     }
 
+    const qint64 new_token_id = db_.lastInsertRowId();
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return false;
+    }
+
     if (token_id)
-        *token_id = db_.lastInsertRowId();
+        *token_id = new_token_id;
 
     *token = std::move(new_token);
     return true;
@@ -1408,17 +1513,16 @@ bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Database::hostWorkspaceId(HostId host_id, bool* ok) const
+std::string_view Database::hostWorkspaceId(HostId host_id, qint64* workspace_id) const
 {
-    if (ok)
-        *ok = true;
+    CHECK(workspace_id);
+
+    *workspace_id = 0;
 
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        if (ok)
-            *ok = false;
-        return -1;
+        return proto::router::kErrorInternalError;
     }
 
     SqlQuery query(db_, "SELECT workspace_id FROM hosts WHERE id=?");
@@ -1430,50 +1534,115 @@ qint64 Database::hostWorkspaceId(HostId host_id, bool* ok) const
         // A failed read must not pass for a missing host: the caller would answer NotFound for
         // a row that is still there.
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        if (ok)
-            *ok = false;
-        return -1;
+        return proto::router::kErrorInternalError;
     }
 
     if (step != SqlQuery::StepResult::ROW)
-        return -1;
-    return query.columnInt64(0);
+        return proto::router::kErrorNotFound;
+
+    *workspace_id = query.columnInt64(0);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
-    std::string_view comment)
+std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint64 group_id,
+    std::string_view display_name, std::string_view comment)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    if (host_id == kInvalidHostId)
+    if (host_id == kInvalidHostId || workspace_id < 0 || group_id < 0)
     {
-        LOG(ERROR) << "Invalid host id";
-        return false;
+        LOG(ERROR) << "Invalid host edit:" << host_id << workspace_id << group_id;
+        return proto::router::kErrorInvalidData;
     }
 
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    SqlQuery current(db_, "SELECT workspace_id FROM hosts WHERE id=?");
+    current.addUInt64(host_id);
+
+    const SqlQuery::StepResult current_step = current.next();
+    if (current_step == SqlQuery::StepResult::FAILED)
+    {
+        // A failed read must not pass for a missing host.
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (current_step != SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "Host not found:" << host_id;
+        return proto::router::kErrorNotFound;
+    }
+
+    const qint64 current_workspace_id = current.columnInt64(0);
+
+    if (workspace_id > 0 && current_workspace_id != 0 && current_workspace_id != workspace_id)
+    {
+        // The operator saw the host free (or in the workspace it is editing) and another
+        // workspace claimed it meanwhile - a lost race the sender resolves by refetching.
+        LOG(ERROR) << "Host" << host_id << "belongs to another workspace:" << current_workspace_id;
+        return proto::router::kErrorConflict;
+    }
+
+    if (workspace_id > 0 && workspace_id != current_workspace_id)
+    {
+        SqlQuery workspace_check(db_, "SELECT 1 FROM workspaces WHERE id=?");
+        workspace_check.addInt64(workspace_id);
+
+        const SqlQuery::StepResult check_step = workspace_check.next();
+        if (check_step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return proto::router::kErrorInternalError;
+        }
+
+        if (check_step != SqlQuery::StepResult::ROW)
+        {
+            // The workspace of the snapshot is gone - same lost race as above.
+            LOG(ERROR) << "Workspace not found:" << workspace_id;
+            return proto::router::kErrorConflict;
+        }
+    }
+
+    // The place in the tree and the note both belong to the workspace the host is leaving, so
+    // they go with it.
+    const bool released = workspace_id == 0;
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     const char kSql[] =
-        "UPDATE hosts SET display_name=?, group_id=?, comment=?, last_modify=? WHERE id=?";
+        "UPDATE hosts SET workspace_id=?, display_name=?, group_id=?, comment=?, last_modify=? "
+        "WHERE id=?";
     SqlQuery query(db_, kSql);
+    query.addInt64(workspace_id);
     query.addText(display_name);
-    query.addInt64(group_id);
-    query.addText(comment);
+    query.addInt64(released ? 0 : group_id);
+    query.addText(released ? std::string_view() : comment);
     query.addInt64(timestamp);
     query.addUInt64(host_id);
 
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
-    return db_.changes() > 0;
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1486,7 +1655,7 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         return;
     }
 
-    if (!isHostPageValid(offset, count))
+    if (!isPageValid(offset, count, proto::router::kMaxHostPageSize))
     {
         LOG(ERROR) << "Invalid host list page: offset" << offset << "count" << count;
         out->set_error_code(proto::router::kErrorInvalidRequest);
@@ -1552,16 +1721,19 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
         return;
     }
 
-    if (!isHostPageValid(offset, count))
+    if (!isPageValid(offset, count, proto::router::kMaxHostPageSize))
     {
         LOG(ERROR) << "Invalid host list page: offset" << offset << "count" << count;
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }
+    // A negative group_id asks for the hosts of the workspace whatever group they sit in.
+    const bool any_group = group_id < 0;
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
         "os_name, address, comment, last_connect, last_modify "
-        "FROM hosts WHERE workspace_id=? AND group_id=?",
+        "FROM hosts WHERE workspace_id=?",
+        any_group ? "" : " AND group_id=?",
         " LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
@@ -1573,7 +1745,8 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
     }
 
     query.addInt64(workspace_id);
-    query.addInt64(group_id);
+    if (!any_group)
+        query.addInt64(group_id);
     query.addInt64(count);
     query.addInt64(offset);
 
@@ -1611,17 +1784,16 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Database::hostCount(bool* ok) const
+std::string_view Database::hostCount(qint64* count) const
 {
-    if (ok)
-        *ok = true;
+    CHECK(count);
+
+    *count = 0;
 
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        if (ok)
-            *ok = false;
-        return 0;
+        return proto::router::kErrorInternalError;
     }
 
     // COUNT(*) always yields exactly one row, so anything but ROW is a database error - it must
@@ -1630,42 +1802,53 @@ qint64 Database::hostCount(bool* ok) const
     if (query.next() != SqlQuery::StepResult::ROW)
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        if (ok)
-            *ok = false;
-        return 0;
+        return proto::router::kErrorInternalError;
     }
 
-    return query.columnInt64(0);
+    *count = query.columnInt64(0);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Database::hostCount(qint64 workspace_id, qint64 group_id, bool* ok) const
+std::string_view Database::hostCount(qint64 workspace_id, qint64 group_id, qint64* count) const
 {
-    if (ok)
-        *ok = true;
+    CHECK(count);
+
+    *count = 0;
 
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        if (ok)
-            *ok = false;
-        return 0;
+        return proto::router::kErrorInternalError;
     }
 
-    SqlQuery query(db_, "SELECT COUNT(*) FROM hosts WHERE workspace_id=? AND group_id=?");
+    // Same scope as the matching hosts() overload, including the "any group" reading of a
+    // negative group_id.
+    const bool any_group = group_id < 0;
+    const std::string sql = strCat({
+        "SELECT COUNT(*) FROM hosts WHERE workspace_id=?",
+        any_group ? "" : " AND group_id=?"});
+
+    SqlQuery query(db_, sql);
+    if (!query.isValid())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
     query.addInt64(workspace_id);
-    query.addInt64(group_id);
+    if (!any_group)
+        query.addInt64(group_id);
 
     // See the unfiltered overload: a missing row is an error, not an empty scope.
     if (query.next() != SqlQuery::StepResult::ROW)
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        if (ok)
-            *ok = false;
-        return 0;
+        return proto::router::kErrorInternalError;
     }
 
-    return query.columnInt64(0);
+    *count = query.columnInt64(0);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1679,7 +1862,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
         return;
     }
 
-    if (!isHostPageValid(offset, count))
+    if (!isPageValid(offset, count, proto::router::kMaxHostPageSize))
     {
         LOG(ERROR) << "Invalid host search page: offset" << offset << "count" << count;
         out->set_error_code(proto::router::kErrorInvalidRequest);
@@ -2050,7 +2233,7 @@ void Database::workspaceListForAdmin(qint64 workspace_id, proto::router::Workspa
         if (it == by_id.end())
             continue;
 
-        it->second->add_access()->set_user_id(query.columnInt64(1));
+        it->second->add_user_id(query.columnInt64(1));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2142,8 +2325,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::addWorkspace(std::string_view name, std::string_view comment,
-    const std::vector<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
-    qint64* entry_id)
+    const std::vector<qint64>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -2168,21 +2350,21 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     }
 
     std::set<qint64> initial_ids;
-    for (const Workspace::Access& access : initial_access)
+    for (qint64 user_id : initial_access)
     {
-        if (access.user_id <= 0)
+        if (user_id <= 0)
         {
             LOG(ERROR) << "Invalid access record (user_id <= 0)";
             return proto::router::kErrorInvalidData;
         }
 
-        if (initial_ids.contains(access.user_id))
+        if (initial_ids.contains(user_id))
         {
-            LOG(ERROR) << "Duplicate user_id in initial access list:" << access.user_id;
+            LOG(ERROR) << "Duplicate user_id in initial access list:" << user_id;
             return proto::router::kErrorInvalidData;
         }
 
-        initial_ids.insert(access.user_id);
+        initial_ids.insert(user_id);
     }
 
     SqlTransaction transaction(db_);
@@ -2228,15 +2410,15 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     SqlQuery insert_access(db_,
         "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
-    for (const Workspace::Access& access : initial_access)
+    for (qint64 user_id : initial_access)
     {
-        const std::string_view user_error = checkAccessUser(access.user_id);
+        const std::string_view user_error = checkAccessUser(user_id);
         if (user_error != proto::router::kErrorOk)
             return user_error;
 
         insert_access.reset();
         insert_access.addInt64(new_id);
-        insert_access.addInt64(access.user_id);
+        insert_access.addInt64(user_id);
 
         if (!insert_access.exec())
         {
@@ -2244,12 +2426,6 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
             return proto::router::kErrorInternalError;
         }
     }
-
-    // Same transaction as the workspace itself: a failed host assignment must not leave a
-    // created workspace behind a reply that reports an error.
-    const std::string_view host_error = syncWorkspaceHosts(new_id, desired_host_ids);
-    if (host_error != proto::router::kErrorOk)
-        return host_error;
 
     if (!transaction.commit())
     {
@@ -2263,8 +2439,7 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision,
-    std::string_view name, std::string_view comment,
-    const std::vector<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids)
+    std::string_view name, std::string_view comment, const std::vector<qint64>& desired_access)
 {
     if (!isValid())
     {
@@ -2291,21 +2466,21 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
     }
 
     std::set<qint64> desired_ids;
-    for (const Workspace::Access& access : desired_access)
+    for (qint64 user_id : desired_access)
     {
-        if (access.user_id <= 0)
+        if (user_id <= 0)
         {
             LOG(ERROR) << "Invalid access record (user_id <= 0)";
             return proto::router::kErrorInvalidData;
         }
 
-        if (desired_ids.contains(access.user_id))
+        if (desired_ids.contains(user_id))
         {
-            LOG(ERROR) << "Duplicate user_id in desired access list:" << access.user_id;
+            LOG(ERROR) << "Duplicate user_id in desired access list:" << user_id;
             return proto::router::kErrorInvalidData;
         }
 
-        desired_ids.insert(access.user_id);
+        desired_ids.insert(user_id);
     }
 
     SqlTransaction transaction(db_);
@@ -2333,7 +2508,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
     {
         // The edit was based on an older state of the workspace. Applying it would silently
         // overwrite whatever the concurrent change did (revoked access entries would be granted
-        // back, released hosts claimed again), so the client must refetch and retry instead.
+        // back), so the client must refetch and retry instead.
         LOG(ERROR) << "Workspace" << entry_id << "was changed concurrently (stored revision"
                    << exists_check.columnInt64(1) << ", request based on" << base_revision << ")";
         return proto::router::kErrorConflict;
@@ -2420,18 +2595,18 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
     SqlQuery insert_access(db_,
         "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
-    for (const Workspace::Access& access : desired_access)
+    for (qint64 user_id : desired_access)
     {
-        if (current_ids.contains(access.user_id))
+        if (current_ids.contains(user_id))
             continue;
 
-        const std::string_view user_error = checkAccessUser(access.user_id);
+        const std::string_view user_error = checkAccessUser(user_id);
         if (user_error != proto::router::kErrorOk)
             return user_error;
 
         insert_access.reset();
         insert_access.addInt64(entry_id);
-        insert_access.addInt64(access.user_id);
+        insert_access.addInt64(user_id);
 
         if (!insert_access.exec())
         {
@@ -2439,11 +2614,6 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
             return proto::router::kErrorInternalError;
         }
     }
-
-    // Same transaction as the rest of the workspace: either all the changes are applied or none.
-    const std::string_view host_error = syncWorkspaceHosts(entry_id, desired_host_ids);
-    if (host_error != proto::router::kErrorOk)
-        return host_error;
 
     if (!transaction.commit())
     {
@@ -2587,19 +2757,15 @@ bool Database::workspaceAccessIdsForUser(qint64 user_id, std::set<qint64>* works
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id, bool* ok) const
+std::string_view Database::checkWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 {
-    if (ok)
-        *ok = true;
-
     if (user_id <= 0 || workspace_id <= 0)
-        return false;
+        return proto::router::kErrorAccessDenied;
 
     if (!isValid())
     {
-        if (ok)
-            *ok = false;
-        return false;
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
     }
 
     SqlQuery query(db_, "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
@@ -2607,9 +2773,18 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id, bool* ok)
     query.addInt64(user_id);
 
     const SqlQuery::StepResult step = query.next();
-    if (ok)
-        *ok = step != SqlQuery::StepResult::FAILED;
-    return step == SqlQuery::StepResult::ROW;
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        // A failed read must not pass for a denial: an authorization check has to tell "no
+        // access" from "cannot tell".
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorAccessDenied;
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2672,23 +2847,22 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
 }
 
 //--------------------------------------------------------------------------------------------------
-Group Database::findGroup(qint64 workspace_id, qint64 entry_id, bool* ok) const
+std::string_view Database::findGroup(qint64 workspace_id, qint64 entry_id, Group* group) const
 {
-    if (ok)
-        *ok = true;
+    CHECK(group);
+
+    *group = Group();
 
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        if (ok)
-            *ok = false;
-        return Group();
+        return proto::router::kErrorInternalError;
     }
 
     if (workspace_id <= 0 || entry_id <= 0)
     {
         LOG(ERROR) << "Invalid arguments: workspace_id=" << workspace_id << "entry_id=" << entry_id;
-        return Group();
+        return proto::router::kErrorNotFound;
     }
 
     // Look up a single group by its id within this workspace. Same column projection as
@@ -2706,20 +2880,17 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id, bool* ok) const
     {
         // A failed read must not pass for a missing group.
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        if (ok)
-            *ok = false;
-        return Group();
+        return proto::router::kErrorInternalError;
     }
 
     if (step != SqlQuery::StepResult::ROW)
-        return Group();
+        return proto::router::kErrorNotFound;
 
-    Group group;
-    group.entry_id  = query.columnInt64(0);
-    group.parent_id = query.columnInt64(1);
-    group.name      = query.columnTextView(2);
-    group.comment   = query.columnTextView(3);
-    return group;
+    group->entry_id  = query.columnInt64(0);
+    group->parent_id = query.columnInt64(1);
+    group->name      = query.columnTextView(2);
+    group->comment   = query.columnTextView(3);
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3059,125 +3230,6 @@ std::string_view Database::checkAccessUser(qint64 user_id)
     {
         LOG(ERROR) << "Access entry for unknown user:" << user_id;
         return proto::router::kErrorConflict;
-    }
-
-    return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string_view Database::syncWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids)
-{
-    // Both callers validate the id, but this is the one place that releases every host of a
-    // workspace and wipes the notes they carried - with entry_id 0 the release scan would pick
-    // up the whole pool of unassigned hosts, so the guard stays here as well.
-    if (entry_id <= 0)
-    {
-        LOG(ERROR) << "Invalid workspace id:" << entry_id;
-        return proto::router::kErrorInvalidData;
-    }
-
-    for (HostId host_id : desired_host_ids)
-    {
-        if (host_id == kInvalidHostId)
-        {
-            LOG(ERROR) << "Invalid host_id in desired list:" << host_id;
-            return proto::router::kErrorInvalidData;
-        }
-    }
-
-    // Validate desired hosts before releasing anything. The caller supplies the final set, so
-    // success must mean every requested host is actually assignable to this workspace.
-    SqlQuery host_check(db_, "SELECT COUNT(*), IFNULL(MAX(workspace_id), 0) FROM hosts WHERE id=?");
-    for (HostId host_id : desired_host_ids)
-    {
-        host_check.reset();
-        host_check.addUInt64(host_id);
-
-        if (host_check.next() != SqlQuery::StepResult::ROW)
-        {
-            LOG(ERROR) << "Unable to check host existence:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-
-        if (host_check.columnInt64(0) == 0)
-        {
-            // The host was in the snapshot of the sender and is gone now - a concurrent delete.
-            // Reject as a conflict (not "not found", which the sender reads as a missing
-            // workspace): a refetch drops the host from the desired set and the retry passes.
-            LOG(ERROR) << "Host not found:" << host_id;
-            return proto::router::kErrorConflict;
-        }
-
-        const qint64 current_workspace_id = host_check.columnInt64(1);
-        if (current_workspace_id != 0 && current_workspace_id != entry_id)
-        {
-            // The sender saw the host unassigned, another workspace claimed it meanwhile - the
-            // same lost race as above.
-            LOG(ERROR) << "Host" << host_id << "belongs to another workspace:"
-                       << current_workspace_id;
-            return proto::router::kErrorConflict;
-        }
-    }
-
-    // Release: hosts currently in this workspace but no longer wanted. Collect the ids while the
-    // cursor is open and update only afterwards - UPDATE-ing workspace_id (the column the SELECT
-    // filters on) with the cursor still open could skip or revisit rows on an index scan.
-    SqlQuery select_current(db_, "SELECT id FROM hosts WHERE workspace_id=?");
-    select_current.addInt64(entry_id);
-    if (!select_current.isValid())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return proto::router::kErrorInternalError;
-    }
-
-    std::vector<HostId> release_ids;
-    for (;;)
-    {
-        const SqlQuery::StepResult step = select_current.next();
-        if (step == SqlQuery::StepResult::FAILED)
-        {
-            // A partial scan must not pass for the full set: OK means the final set was applied.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-
-        if (step == SqlQuery::StepResult::DONE)
-            break;
-
-        const HostId host_id = select_current.columnUInt64(0);
-        if (!desired_host_ids.contains(host_id))
-            release_ids.emplace_back(host_id);
-    }
-
-    // The note belongs to the workspace the host was in, so it goes together with the assignment.
-    SqlQuery release(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment='' "
-        "WHERE id=?");
-    for (HostId host_id : release_ids)
-    {
-        release.reset();
-        release.addUInt64(host_id);
-        if (!release.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-    }
-
-    // Claim: hosts the operator wants in this workspace. Validation above guarantees every
-    // desired host is unassigned or already in this workspace.
-    SqlQuery claim(db_, "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)");
-    for (HostId host_id : desired_host_ids)
-    {
-        claim.reset();
-        claim.addInt64(entry_id);
-        claim.addUInt64(host_id);
-        claim.addInt64(entry_id);
-        if (!claim.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
     }
 
     return proto::router::kErrorOk;

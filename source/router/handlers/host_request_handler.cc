@@ -53,46 +53,40 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
         return result;
     }
 
-    // "Not found" and "could not check" are different answers - a database error must not be
+    // "Not found" and "could not read" are different answers - a database error must not be
     // reported as a missing host.
-    bool workspace_known = false;
-    const qint64 workspace_id = database.hostWorkspaceId(host_id, &workspace_known);
-    if (!workspace_known)
+    qint64 workspace_id = 0;
+    const std::string_view workspace_code = database.hostWorkspaceId(host_id, &workspace_id);
+    if (workspace_code != proto::router::kErrorOk)
     {
         LOG(ERROR) << "Unable to resolve workspace of host" << host_id;
-        result.error_code = proto::router::kErrorInternalError;
-        return result;
-    }
-
-    if (workspace_id < 0)
-    {
-        LOG(ERROR) << "Host not found:" << host_id;
-        result.error_code = proto::router::kErrorNotFound;
+        result.error_code = workspace_code;
         return result;
     }
 
     // Hosts that are not assigned to a workspace cannot be edited from manager/admin clients.
     // Beyond that the editor must be a member of the host's workspace, which an administrator
-    // does not have to be - it manages every workspace of the router. "No access" and "could not
-    // check" are different answers, so a database error must not be reported as a denial.
+    // does not have to be - it manages every workspace of the router.
     const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
 
-    bool access_known = false;
-    const bool has_access = workspace_id != 0 &&
-        (is_admin || database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known));
-    if (workspace_id != 0 && !is_admin && !access_known)
+    if (workspace_id == 0)
     {
-        LOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        result.error_code = proto::router::kErrorInternalError;
+        LOG(ERROR) << "User" << caller.user_id << "cannot edit unassigned host" << host_id;
+        result.error_code = proto::router::kErrorAccessDenied;
         return result;
     }
 
-    if (!has_access)
+    if (!is_admin)
     {
-        LOG(ERROR) << "User" << caller.user_id << "cannot edit host" << host_id
-                   << "(workspace_id=" << workspace_id << ")";
-        result.error_code = proto::router::kErrorAccessDenied;
-        return result;
+        const std::string_view access_code =
+            database.checkWorkspaceAccess(caller.user_id, workspace_id);
+        if (access_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "User" << caller.user_id << "cannot edit host" << host_id
+                       << "(workspace_id=" << workspace_id << ")";
+            result.error_code = access_code;
+            return result;
+        }
     }
 
     // group_id == 0 keeps the host at the workspace root; any other value must reference a group
@@ -102,26 +96,28 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     const qint64 group_id = host.group_id();
     if (group_id != 0)
     {
-        bool group_known = false;
-        const Group group = database.findGroup(workspace_id, group_id, &group_known);
-        if (!group_known)
-        {
-            LOG(ERROR) << "Unable to check group" << group_id << "in workspace" << workspace_id;
-            result.error_code = proto::router::kErrorInternalError;
-            return result;
-        }
-
-        if (group.entry_id == 0)
+        Group group;
+        const std::string_view group_code = database.findGroup(workspace_id, group_id, &group);
+        if (group_code == proto::router::kErrorNotFound)
         {
             LOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
             result.error_code = proto::router::kErrorInvalidData;
             return result;
         }
+
+        if (group_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to check group" << group_id << "in workspace" << workspace_id;
+            result.error_code = group_code;
+            return result;
+        }
     }
 
-    if (!database.modifyHost(host_id, group_id, host.display_name(), host.comment()))
+    const std::string_view error_code =
+        database.modifyHost(host_id, workspace_id, group_id, host.display_name(), host.comment());
+    if (error_code != proto::router::kErrorOk)
     {
-        result.error_code = proto::router::kErrorInternalError;
+        result.error_code = error_code;
         return result;
     }
 
@@ -170,22 +166,22 @@ void handleHostList(Database& database, const RequestCaller& caller,
 
     // A zero count from a failed query would make the client truncate its pagination while the
     // list itself arrives non-empty - so a count failure fails the whole request.
-    bool count_known = false;
-    if (mode == proto::router::HostListRequest::MODE_ALL)
+    qint64 total_count = 0;
+    const std::string_view count_code = mode == proto::router::HostListRequest::MODE_ALL
+        ? database.hostCount(&total_count)
+        : database.hostCount(workspace_id, group_id, &total_count);
+    if (count_code != proto::router::kErrorOk)
     {
-        out->set_total_count(database.hostCount(&count_known));
-        if (count_known)
-            database.hosts(request.offset(), request.count(), out);
-    }
-    else
-    {
-        out->set_total_count(database.hostCount(workspace_id, group_id, &count_known));
-        if (count_known)
-            database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
+        out->set_error_code(count_code);
+        return;
     }
 
-    if (!count_known)
-        out->set_error_code(proto::router::kErrorInternalError);
+    out->set_total_count(total_count);
+
+    if (mode == proto::router::HostListRequest::MODE_ALL)
+        database.hosts(request.offset(), request.count(), out);
+    else
+        database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
 
     // hosts() drops the partial list from an error reply; the count computed up front must not
     // survive it either.

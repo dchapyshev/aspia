@@ -128,21 +128,11 @@ std::string_view checkWorkspaceAccess(Database& database, const RequestCaller& c
     if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
         return proto::router::kErrorOk;
 
-    bool access_known = false;
-    const bool has_access = database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known);
-    if (!access_known)
-    {
-        LOG(ERROR) << "Unable to check access to workspace" << workspace_id;
-        return proto::router::kErrorInternalError;
-    }
-
-    if (!has_access)
-    {
+    const std::string_view access_code = database.checkWorkspaceAccess(caller.user_id, workspace_id);
+    if (access_code == proto::router::kErrorAccessDenied)
         LOG(ERROR) << "User" << caller.user_id << "has no access to workspace" << workspace_id;
-        return proto::router::kErrorAccessDenied;
-    }
 
-    return proto::router::kErrorOk;
+    return access_code;
 }
 
 //--------------------------------------------------------------------------------------------------

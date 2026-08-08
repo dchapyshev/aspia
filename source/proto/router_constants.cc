@@ -30,11 +30,12 @@ const char* const kCommandRelayDisconnect = "disconnect";
 
 const char* const kCommandClientDisconnect = "disconnect";
 
-const char* const kCommandUserAdd          = "add";
-const char* const kCommandUserModify       = "modify";
-const char* const kCommandUserDelete       = "delete";
-const char* const kCommandUserResetOtp     = "reset_otp";
-const char* const kCommandUserRevokeTokens = "revoke_tokens";
+const char* const kCommandUserAdd      = "add";
+const char* const kCommandUserModify   = "modify";
+const char* const kCommandUserDelete   = "delete";
+const char* const kCommandUserResetOtp = "reset_otp";
+
+const char* const kCommandUserTokenRevoke = "revoke";
 
 const char* const kCommandWorkspaceAdd    = "add";
 const char* const kCommandWorkspaceModify = "modify";

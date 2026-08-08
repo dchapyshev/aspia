@@ -98,9 +98,16 @@ public:
     // Users
     //----------------------------------------------------------------------------------------------
 
-    // Fills |users| with every user record. Returns false on a database error - a partial list
-    // never passes for a complete one.
-    bool userList(std::vector<RouterUser>* users) const;
+    // Fills |users| with the requested page of the user list, ordered by entry id. The page is
+    // mandatory, so a zero count is refused along with a negative offset or a count over the cap.
+    // A database error yields an empty list - a partial one never passes for a complete page.
+    // Returns a proto::router error code.
+    std::string_view userList(qint64 offset, qint64 count, std::vector<RouterUser>* users) const;
+
+    // Reads the total user count into |count|, for the pagination of the caller. Returns
+    // kErrorInternalError when the answer could not be read - a zero count from a failed query
+    // would truncate the pagination.
+    std::string_view userCount(qint64* count) const;
 
     // Adds a user record. Returns a proto::router error code.
     std::string_view addUser(const RouterUser& user);
@@ -118,8 +125,12 @@ public:
     // Removes a user; its workspace_access rows go with it by cascade, and the revision of every
     // affected workspace is bumped in the same transaction (see I4).
     std::string_view removeUser(qint64 entry_id);
-    RouterUser findUser(const QString& username) const;
-    RouterUser findUser(qint64 entry_id) const;
+
+    // Reads a user record into |user|. Returns kErrorNotFound when no such user exists and
+    // kErrorInternalError when the answer could not be read: a failed read must not pass for a
+    // missing record, so the two are separate answers and neither can be dropped by accident.
+    std::string_view findUser(const QString& username, RouterUser* user) const;
+    std::string_view findUser(qint64 entry_id, RouterUser* user) const;
 
     //----------------------------------------------------------------------------------------------
     // TOTP per-user state
@@ -191,17 +202,19 @@ public:
         std::string_view cpu_arch, std::string_view version, std::string_view os_name,
         std::string_view address);
 
-    // Returns the workspace_id of the given host, or 0 if the host is not assigned to a
-    // workspace. Returns -1 if the host_id is unknown. |ok| (optional) is set to false when the
-    // answer could not be determined - a database error must not pass for a missing host.
-    // Used to validate user access before edits.
-    qint64 hostWorkspaceId(HostId host_id, bool* ok = nullptr) const;
+    // Reads the workspace of the given host into |workspace_id| (0 - the host is assigned to no
+    // workspace). Returns kErrorNotFound for an unknown host and kErrorInternalError when the
+    // answer could not be read. Used to validate user access before edits.
+    std::string_view hostWorkspaceId(HostId host_id, qint64* workspace_id) const;
 
-    // Updates the admin/manager-editable fields of a host. group_id == 0 places the host at the
-    // workspace root; > 0 moves it under the given group (caller must validate group ownership).
-    // Also bumps last_modify.
-    bool modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
-        std::string_view comment);
+    // Updates the admin/manager-editable fields of a host. workspace_id is the workspace the host
+    // ends up in: 0 releases it, and the group and the note it carried within the workspace go
+    // with it. A host another workspace holds is refused with kErrorConflict (the caller acted on
+    // a stale snapshot), as is a move into a workspace that is gone. group_id == 0 places the host
+    // at the workspace root; > 0 moves it under the given group (caller must validate group
+    // ownership). Also bumps last_modify. Returns a proto::router error code.
+    std::string_view modifyHost(HostId host_id, qint64 workspace_id, qint64 group_id,
+        std::string_view display_name, std::string_view comment);
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
     // reading rows straight into the protobuf message. |offset| and |count| give the requested
@@ -210,17 +223,19 @@ public:
     // database does not track and is filled by the caller.
     void hosts(qint64 offset, qint64 count, proto::router::HostList* out) const;
 
-    // Appends hosts in the given workspace and group (exact match on both columns) to |out| and
-    // sets its error_code. |offset| and |count| give the page; it is mandatory and bounded the
-    // same way as in the overload above.
+    // Appends hosts in the given workspace and group to |out| and sets its error_code. A negative
+    // group_id takes every group of the workspace; otherwise the match on the column is exact.
+    // |offset| and |count| give the page; it is mandatory and bounded the same way as in the
+    // overload above.
     void hosts(qint64 workspace_id, qint64 group_id, qint64 offset, qint64 count,
         proto::router::HostList* out) const;
 
-    // Total host count in the same scope as the matching hosts() overload. Used by the client
-    // to drive pagination UI without fetching the full list. |ok| (optional) is set to false on
-    // a database error - a zero count from a failed query would truncate the pagination.
-    qint64 hostCount(bool* ok = nullptr) const;
-    qint64 hostCount(qint64 workspace_id, qint64 group_id, bool* ok = nullptr) const;
+    // Reads into |count| the host count in the same scope as the matching hosts() overload. Used
+    // by the client to drive pagination UI without fetching the full list. Returns
+    // kErrorInternalError when the answer could not be read - a zero count from a failed query
+    // would truncate the pagination.
+    std::string_view hostCount(qint64* count) const;
+    std::string_view hostCount(qint64 workspace_id, qint64 group_id, qint64* count) const;
 
     // Substring search over |display_name| (case-insensitive) and the decimal host_id, restricted
     // to the given workspaces. |workspace_ids| must already be the set the user is allowed to see;
@@ -257,24 +272,21 @@ public:
         proto::router::WorkspaceList* out) const;
     Workspace findWorkspace(qint64 entry_id) const;
 
-    // The initial access list holds the members of the workspace; an entry for a user that is
-    // gone is rejected (kErrorConflict - the sender refetches, see checkAccessUser). The host
-    // assignments are applied in the same transaction (see syncWorkspaceHosts), so on any error
-    // the workspace is not created at all.
+    // The initial access list holds the user_ids of the members of the workspace; an entry for a
+    // user that is gone is rejected (kErrorConflict - the sender refetches, see checkAccessUser).
+    // The hosts of a workspace are claimed one by one (see modifyHost), so a creation never
+    // touches them.
     std::string_view addWorkspace(std::string_view name, std::string_view comment,
-        const std::vector<Workspace::Access>& initial_access, const std::set<HostId>& desired_host_ids,
-        qint64* entry_id);
+        const std::vector<qint64>& initial_access, qint64* entry_id);
 
-    // Updates name/comment and synchronizes access and host assignments in a single
-    // transaction. base_revision is the revision the client based its edit on; a mismatch with
-    // the stored value is rejected (kErrorConflict) so a save built from a stale snapshot can
-    // never silently overwrite a concurrent change, and on success the stored revision is
-    // incremented. desired_access is the complete final access list: user_ids missing from it
-    // are revoked and user_ids absent from the current DB record are inserted.
-    // desired_host_ids is the complete final set of the hosts (see syncWorkspaceHosts).
+    // Updates name/comment and synchronizes the access list in a single transaction.
+    // base_revision is the revision the client based its edit on; a mismatch with the stored
+    // value is rejected (kErrorConflict) so a save built from a stale snapshot can never silently
+    // overwrite a concurrent change, and on success the stored revision is incremented.
+    // desired_access is the complete final access list: user_ids missing from it are revoked and
+    // user_ids absent from the current DB record are inserted.
     std::string_view modifyWorkspace(qint64 entry_id, qint64 base_revision,
-        std::string_view name, std::string_view comment,
-        const std::vector<Workspace::Access>& desired_access, const std::set<HostId>& desired_host_ids);
+        std::string_view name, std::string_view comment, const std::vector<qint64>& desired_access);
 
     // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0) and drops the
     // note each of them carried within it. Deliberately takes no base_revision: a delete is an
@@ -290,11 +302,10 @@ public:
     // entry for. Returns false on a database error.
     bool workspaceAccessIdsForUser(qint64 user_id, std::set<qint64>* workspace_ids) const;
 
-    // Returns whether the user has an access entry for the workspace; false also on a database
-    // error (fail-closed for the authorization checks). |ok| (optional) is set to false when
-    // the answer could not be determined - a caller whose skip-or-reject decision depends on
-    // the answer must not mistake an error for "no access".
-    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id, bool* ok = nullptr) const;
+    // Returns kErrorOk when the user has an access entry for the workspace, kErrorAccessDenied
+    // when it has none and kErrorInternalError when the answer could not be read - a caller whose
+    // skip-or-reject decision depends on the answer must not mistake an error for "no access".
+    std::string_view checkWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts Groups
@@ -305,11 +316,11 @@ public:
     // indexing on entry_id and linking via parent_id; display ordering is the client's job.
     void groupList(qint64 workspace_id, proto::router::GroupList* out) const;
 
-    // Returns the group with the given entry_id from workspace_id. Returns an empty Group
-    // (entry_id == 0) if no such row exists in this workspace. |ok| (optional) is set to false
-    // when the answer could not be determined - a database error must not pass for a missing
-    // group.
-    Group findGroup(qint64 workspace_id, qint64 entry_id, bool* ok = nullptr) const;
+    // Reads the group with the given entry_id from workspace_id into |group|. Returns
+    // kErrorNotFound when no such row exists in this workspace (an out of range id included) and
+    // kErrorInternalError when the answer could not be read - a database error must not pass for
+    // a missing group.
+    std::string_view findGroup(qint64 workspace_id, qint64 entry_id, Group* group) const;
 
     // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
     // must reference an existing group within the same workspace. On success *entry_id is set
@@ -335,15 +346,6 @@ private:
     // record was deleted after the sender took its snapshot, so it answers kErrorConflict and the
     // sender refetches. Must be called inside a transaction. Returns a proto::router error code.
     std::string_view checkAccessUser(qint64 user_id);
-
-    // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
-    // currently in this workspace but absent from the set are released (workspace_id <- 0);
-    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id). Every
-    // requested host must exist and be either unassigned or already in this workspace; a host
-    // that is gone or was claimed by another workspace is rejected with kErrorConflict (the
-    // sender lost a race and resolves it by refetching), so OK means the final set was applied.
-    // Must be called inside a transaction. Returns a proto::router error code.
-    std::string_view syncWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids);
 
     mutable SqlDatabase db_;
 

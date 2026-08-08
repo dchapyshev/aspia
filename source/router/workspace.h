@@ -42,12 +42,6 @@ public:
 
     bool isValid() const;
 
-    struct Access
-    {
-        qint64 workspace_id = 0;
-        qint64 user_id = 0;
-    };
-
     qint64 entry_id = 0;
     std::string name;
     std::string comment;

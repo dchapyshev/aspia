@@ -333,8 +333,8 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
     // below is closed only by every users/workspaces write going through the single ClientWorker
     // thread. If client sessions are ever spread over several workers, this must move inside one
     // transaction.
-    RouterUser user = database.findUser(caller.user_id);
-    if (!user.isValid())
+    RouterUser user;
+    if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
     {
         // The same concurrent delete caught a moment later inside modifyUser answers
         // kErrorNotFound - one event, one code.
