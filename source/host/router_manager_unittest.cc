@@ -21,26 +21,35 @@
 #include <QPointer>
 #include <QSettings>
 #include <QTemporaryDir>
+#include <QtEndian>
 
 #include <gtest/gtest.h>
 
 #include <asio/ip/tcp.hpp>
+#include <asio/read.hpp>
+#include <asio/write.hpp>
 
+#include <array>
 #include <atomic>
 #include <condition_variable>
 #include <memory>
 #include <mutex>
 #include <thread>
+#include <vector>
 
 #include "base/serialization.h"
 #include "base/xml_settings.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/random.h"
 #include "base/net/tcp_server.h"
+#include "base/peer/client_authenticator.h"
+#include "base/peer/relay_peer.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
 #include "build/build_config.h"
 #include "host/database.h"
 #include "host/host_storage.h"
+#include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
@@ -202,7 +211,11 @@ protected:
 
         stopRouterStand();
 
-        stand_worker_->invoke([this]() { relay_acceptor_.reset(); });
+        stand_worker_->invoke([this]()
+        {
+            relay_acceptor_.reset();
+            relay_peers_.clear();
+        });
     }
 
     // Starts the stand and leaves the port it listens on in |router_port_|.
@@ -273,10 +286,34 @@ protected:
         });
     }
 
-    // The relay end of the offers. The manager under test only has to reach it, so a raw listener
-    // counts the connections and drops them.
+    // One peer the fake relay accepted: the authentication frame it must send first, then the
+    // socket the bridge pumps. Shared pointers keep a peer alive for its pending handlers.
+    struct RelayPeerSocket
+    {
+        explicit RelayPeerSocket(asio::ip::tcp::socket socket)
+            : socket(std::move(socket))
+        {
+            // Nothing
+        }
+
+        asio::ip::tcp::socket socket;
+        quint8 size_buffer[4];
+        std::vector<char> auth_message;
+        std::array<char, 8192> data;
+        bool ready = false;
+        bool paired = false;
+    };
+    using RelayPeerSocketPtr = std::shared_ptr<RelayPeerSocket>;
+
+    // The relay end of the offers, honest enough for a complete handshake: every peer sends the
+    // authentication frame of the relay protocol, and two ready peers are bridged byte for byte.
     void startFakeRelay()
     {
+        relay_key_pair_ = KeyPair::create(KeyPair::Type::X25519);
+        ASSERT_TRUE(relay_key_pair_.isValid());
+        relay_iv_ = Random::byteArray(12).toStdString();
+        relay_secret_ = Random::byteArray(16).toStdString();
+
         stand_worker_->invoke([this]()
         {
             relay_acceptor_ =
@@ -308,11 +345,93 @@ protected:
 
             ++relay_accepted_;
 
-            std::error_code ignored_code;
-            socket.close(ignored_code);
+            relay_peers_.push_back(std::make_shared<RelayPeerSocket>(std::move(socket)));
+            readPeerAuthentication(relay_peers_.back());
 
             acceptNextRelayConnection();
         });
+    }
+
+    // The size-prefixed frame every peer opens with. The real relay checks the secret inside; the
+    // bridge only needs the frame out of the way of the session bytes.
+    void readPeerAuthentication(const RelayPeerSocketPtr& peer)
+    {
+        asio::async_read(peer->socket, asio::buffer(peer->size_buffer),
+            [this, peer](const std::error_code& error_code, size_t /* bytes */)
+        {
+            if (error_code)
+                return;
+
+            const quint32 size = qFromBigEndian<quint32>(peer->size_buffer);
+            if (!size || size > 64 * 1024)
+                return;
+
+            peer->auth_message.resize(size);
+            asio::async_read(peer->socket, asio::buffer(peer->auth_message),
+                [this, peer](const std::error_code& error_code, size_t /* bytes */)
+            {
+                if (error_code)
+                    return;
+
+                peer->ready = true;
+                pairRelayPeers();
+            });
+        });
+    }
+
+    void pairRelayPeers()
+    {
+        RelayPeerSocketPtr first;
+        for (const RelayPeerSocketPtr& peer : relay_peers_)
+        {
+            if (!peer->ready || peer->paired)
+                continue;
+
+            if (!first)
+            {
+                first = peer;
+                continue;
+            }
+
+            first->paired = peer->paired = true;
+            forwardRelayData(first, peer);
+            forwardRelayData(peer, first);
+            return;
+        }
+    }
+
+    void forwardRelayData(const RelayPeerSocketPtr& from, const RelayPeerSocketPtr& to)
+    {
+        from->socket.async_read_some(asio::buffer(from->data),
+            [this, from, to](const std::error_code& error_code, size_t bytes)
+        {
+            if (error_code)
+                return;
+
+            asio::async_write(to->socket, asio::buffer(from->data.data(), bytes),
+                [this, from, to](const std::error_code& error_code, size_t /* bytes */)
+            {
+                if (error_code)
+                    return;
+
+                forwardRelayData(from, to);
+            });
+        });
+    }
+
+    // The credentials of the fake relay, the same for both peers of a brokered connection.
+    void fillRelayCredentials(proto::router::RelayCredentials* relay)
+    {
+        relay->set_host("127.0.0.1");
+        relay->set_port(relay_port_);
+        relay->set_secret(relay_secret_);
+
+        proto::router::RelayKey* key = relay->mutable_key();
+        key->set_key_id(1);
+        key->set_type(proto::router::RelayKey::TYPE_X25519);
+        key->set_encryption(proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305);
+        key->set_public_key(relay_key_pair_.publicKey().toStdString());
+        key->set_iv(relay_iv_);
     }
 
     // Sends the connection offer the way the router does, pointing the manager at the fake relay.
@@ -327,11 +446,79 @@ protected:
             if (host_key_id)
                 offer->set_host_key_id(host_key_id);
 
-            proto::router::RelayCredentials* relay = offer->mutable_relay();
-            relay->set_host("127.0.0.1");
-            relay->set_port(relay_port_);
+            fillRelayCredentials(offer->mutable_relay());
 
             host_channel_->send(0, serialize(message));
+        });
+    }
+
+    // The client end of a brokered connection: RelayPeer and the anonymous authenticator, built
+    // from the offer the way the network worker of the client builds them.
+    struct ClientPeer
+    {
+        QPointer<RelayPeer> peer;
+        QPointer<TcpChannel> channel;
+        std::atomic<bool> ready { false };
+        std::atomic<bool> failed { false };
+        std::atomic<int> messages_received { 0 };
+        std::mutex lock;
+        QByteArray last_message;
+    };
+
+    // Starts the connection of |client| to the fake relay, authenticating the host by
+    // |host_public_key|. |session_type| is what the client came for.
+    void connectClientPeer(ClientPeer* client, const std::string& host_public_key,
+                           quint32 session_type)
+    {
+        stand_worker_->invoke([&]()
+        {
+            ClientAuthenticator* authenticator = new ClientAuthenticator();
+            authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
+            authenticator->setPeerPublicKey(QByteArray::fromStdString(host_public_key));
+            authenticator->setSessionType(session_type);
+
+            client->peer = new RelayPeer(authenticator, nullptr);
+
+            QObject::connect(client->peer, &RelayPeer::sig_connectionError, client->peer,
+                             [client](std::optional<TcpChannel::ErrorCode> /* error_code */)
+            {
+                client->failed = true;
+            });
+
+            QObject::connect(client->peer, &RelayPeer::sig_connectionReady, client->peer,
+                             [client]()
+            {
+                client->channel = client->peer->takeChannel();
+
+                QObject::connect(client->channel, &TcpChannel::sig_messageReceived,
+                                 client->channel,
+                                 [client](quint8 /* channel_id */, const QByteArray& buffer)
+                {
+                    std::lock_guard guard(client->lock);
+                    client->last_message = buffer;
+                    ++client->messages_received;
+                });
+
+                client->channel->setPaused(false);
+                client->ready = true;
+            });
+
+            proto::router::ConnectionOffer offer;
+            offer.set_error_code(proto::router::kErrorOk);
+            offer.set_host_public_key(host_public_key);
+            fillRelayCredentials(offer.mutable_relay());
+
+            client->peer->start(offer);
+        });
+    }
+
+    // The teardown of the client end, in the thread it lives in.
+    void closeClientPeer(ClientPeer* client)
+    {
+        stand_worker_->invoke([client]()
+        {
+            delete client->channel.data();
+            delete client->peer.data();
         });
     }
 
@@ -444,6 +631,10 @@ protected:
     HostTestWorker* host_worker_ = nullptr;
 
     std::unique_ptr<asio::ip::tcp::acceptor> relay_acceptor_;
+    std::vector<RelayPeerSocketPtr> relay_peers_;
+    KeyPair relay_key_pair_;
+    std::string relay_iv_;
+    std::string relay_secret_;
     quint16 relay_port_ = 0;
     std::atomic<int> relay_accepted_ { 0 };
 
@@ -856,4 +1047,130 @@ TEST_F(RouterManagerTest, KeyIssuedBeforeAReconnectIsDropped)
 
     ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
     EXPECT_EQ(relay_accepted_.load(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The whole path of a brokered connection: the host issues a pair, the offers bring the halves to
+// the two ends, and the anonymous handshake runs through the relay. No password is involved, and
+// the channel that comes out carries the session bytes both ways.
+TEST_F(RouterManagerTest, OneTimeKeyOpensTheChannelWithoutAPassword)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+
+    const proto::router::ConnectionKeyResponse key = lastKeyResponse();
+    ASSERT_EQ(key.error_code(), proto::router::kErrorOk);
+
+    sendConnectionOffer(key.key_id());
+
+    ClientPeer client;
+    connectClientPeer(&client, key.host_public_key(), proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([&]() { return client.ready.load(); }));
+
+    // The host end comes out of the manager the way the host takes it into a session.
+    TcpChannel* host_channel = nullptr;
+    std::atomic<int> host_messages { 0 };
+    std::mutex host_lock;
+    QByteArray host_last_message;
+
+    ASSERT_TRUE(waitFor([&]()
+    {
+        host_worker_->invoke([&]()
+        {
+            if (!manager_->hasReadyConnections())
+                return;
+
+            std::optional<RouterManager::ReadyConnection> ready =
+                manager_->nextReadyConnection();
+            ASSERT_TRUE(ready.has_value());
+
+            host_channel = ready->tcp_channel;
+            QObject::connect(host_channel, &TcpChannel::sig_messageReceived, host_channel,
+                             [&](quint8 /* channel_id */, const QByteArray& buffer)
+            {
+                std::lock_guard guard(host_lock);
+                host_last_message = buffer;
+                ++host_messages;
+            });
+
+            host_channel->setPaused(false);
+        });
+
+        return host_channel != nullptr;
+    }));
+
+    // The session bytes make it through the relay in both directions.
+    stand_worker_->invoke([&]() { client.channel->send(1, QByteArray("hello-from-client")); });
+    ASSERT_TRUE(waitFor([&]() { return host_messages.load() >= 1; }));
+    {
+        std::lock_guard guard(host_lock);
+        EXPECT_EQ(host_last_message, QByteArray("hello-from-client"));
+    }
+
+    host_worker_->invoke([&]() { host_channel->send(1, QByteArray("hello-from-host")); });
+    ASSERT_TRUE(waitFor([&]() { return client.messages_received.load() >= 1; }));
+    {
+        std::lock_guard guard(client.lock);
+        EXPECT_EQ(client.last_message, QByteArray("hello-from-host"));
+    }
+
+    host_worker_->invoke([&]() { delete host_channel; });
+    closeClientPeer(&client);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The public key of the offer is the one anchor the client has. A client that trusts a different
+// key must not end up on the channel of the host: the handshake dies instead.
+TEST_F(RouterManagerTest, WrongHostPublicKeyFailsTheHandshake)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    ASSERT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+
+    sendConnectionOffer(lastKeyResponse().key_id());
+
+    const KeyPair wrong_pair = KeyPair::create(KeyPair::Type::X25519);
+    ASSERT_TRUE(wrong_pair.isValid());
+
+    ClientPeer client;
+    connectClientPeer(&client, wrong_pair.publicKey().toStdString(),
+                      proto::peer::SESSION_TYPE_DESKTOP);
+
+    ASSERT_TRUE(waitFor([&]() { return client.failed.load(); }));
+    EXPECT_FALSE(client.ready.load());
+
+    host_worker_->invoke([this]() { EXPECT_FALSE(manager_->hasReadyConnections()); });
+    closeClientPeer(&client);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The pair opens the one session type it was issued for. A client that arrives with the right key
+// but asks for another type is refused by the host end of the handshake.
+TEST_F(RouterManagerTest, IssuedPairOpensItsSessionTypeOnly)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+
+    const proto::router::ConnectionKeyResponse key = lastKeyResponse();
+    ASSERT_EQ(key.error_code(), proto::router::kErrorOk);
+
+    sendConnectionOffer(key.key_id());
+
+    ClientPeer client;
+    connectClientPeer(&client, key.host_public_key(), proto::peer::SESSION_TYPE_FILE_TRANSFER);
+
+    ASSERT_TRUE(waitFor([&]() { return client.failed.load(); }));
+    EXPECT_FALSE(client.ready.load());
+
+    host_worker_->invoke([this]() { EXPECT_FALSE(manager_->hasReadyConnections()); });
+    closeClientPeer(&client);
 }
