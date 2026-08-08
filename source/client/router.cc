@@ -94,11 +94,8 @@ std::string_view serializeWorkspace(const RouterWorkspace& workspace, proto::rou
     out->set_comment(workspace.comment.toStdString());
     out->set_revision(workspace.revision);
 
-    for (const auto& access : workspace.access)
-        out->add_access()->set_user_id(access.user_id);
-
-    for (HostId host_id : std::as_const(workspace.host_ids))
-        out->add_host_id(host_id);
+    for (qint64 user_id : std::as_const(workspace.user_ids))
+        out->add_user_id(user_id);
 
     // The name is mandatory. Sizes are of the bytes that go out, not of the text the user typed.
     if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
@@ -242,11 +239,48 @@ void Router::listClients(RouterCallback<proto::router::ClientList> callback)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::listUsers(RouterCallback<proto::router::UserList> callback)
+void Router::listUsers(qint64 offset, qint64 count,
+                       RouterCallback<proto::router::UserList> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_list_request();
     request->set_request_id(rpc_.nextRequestId());
+    request->set_offset(offset);
+    request->set_count(count);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::findUser(qint64 entry_id, RouterCallback<proto::router::UserList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_entry_id(entry_id);
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::findUser(const QString& name, RouterCallback<proto::router::UserList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_name(name.toStdString());
+    rpc_.registerPending(request, std::move(callback));
+    send(proto::router::CHANNEL_ID_ADMIN, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::listUserTokens(qint64 user_id,
+                            RouterCallback<proto::router::UserTokenList> callback)
+{
+    proto::router::AdminToRouter message;
+    auto* request = message.mutable_user_token_list_request();
+    request->set_request_id(rpc_.nextRequestId());
+    request->set_user_id(user_id);
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -303,16 +337,15 @@ void Router::resetUserOtp(qint64 user_id, RouterCallback<proto::router::UserResu
 
 //--------------------------------------------------------------------------------------------------
 void Router::revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
-                              RouterCallback<proto::router::UserResult> callback)
+                              RouterCallback<proto::router::UserTokenResult> callback)
 {
     proto::router::AdminToRouter message;
-    auto* request = message.mutable_user_request();
+    auto* request = message.mutable_user_token_request();
     request->set_request_id(rpc_.nextRequestId());
-    request->set_command_name(proto::router::kCommandUserRevokeTokens);
-    auto* user = request->mutable_user();
-    user->set_entry_id(user_id);
+    request->set_command_name(proto::router::kCommandUserTokenRevoke);
+    request->set_user_id(user_id);
     for (qint64 token_id : token_ids)
-        user->add_token()->set_token_id(token_id);
+        request->add_token_id(token_id);
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -409,6 +442,7 @@ void Router::editHost(const RouterHost& host, RouterCallback<proto::router::Host
 {
     proto::router::Host serialized;
     serialized.set_host_id(host.host_id);
+    serialized.set_workspace_id(host.workspace_id);
     serialized.set_group_id(host.group_id);
     serialized.set_display_name(host.display_name.toStdString());
     serialized.set_comment(host.comment.toStdString());
@@ -847,6 +881,15 @@ bool Router::routeReply(const proto::router::RouterToAdmin& message)
     {
         rpc_.dispatch(message.user_list().request_id(), message.user_list());
     }
+    else if (message.has_user_token_list())
+    {
+        rpc_.dispatch(message.user_token_list().request_id(), message.user_token_list());
+    }
+    else if (message.has_user_token_result())
+    {
+        const proto::router::UserTokenResult& result = message.user_token_result();
+        rpc_.dispatch(result.request_id(), result);
+    }
     else if (message.has_user_result())
     {
         const proto::router::UserResult& result = message.user_result();
@@ -959,10 +1002,10 @@ RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceLis
         dst.name     = QString::fromStdString(src.name());
         dst.comment  = QString::fromStdString(src.comment());
         dst.revision = src.revision();
-        dst.access.reserve(src.access_size());
+        dst.user_ids.reserve(src.user_id_size());
 
-        for (int j = 0; j < src.access_size(); ++j)
-            dst.access.emplaceBack().user_id = src.access(j).user_id();
+        for (int j = 0; j < src.user_id_size(); ++j)
+            dst.user_ids.append(src.user_id(j));
     }
 
     // Only the complete list is the authoritative answer about what we can access.

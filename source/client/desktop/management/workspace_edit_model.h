@@ -46,19 +46,6 @@ public:
         QString name;
     };
 
-    struct HostInfo
-    {
-        quint64 host_id      = 0;
-        qint64 workspace_id  = 0; // 0 - unassigned.
-        QString computer_name;
-    };
-
-    struct Host
-    {
-        quint64 host_id = 0;
-        QString computer_name;
-    };
-
     struct WorkspaceInfo
     {
         qint64 entry_id  = 0;
@@ -82,19 +69,23 @@ public:
     // the others for the uniqueness check. Returns false in modify mode when the edited
     // workspace is absent from the list: it was deleted from another console and the dialog
     // must close.
-    //
-    // The revision that arrives here is only parked: it is committed by applyHostList() of the
-    // same refetch cycle (see baseRevision()).
     bool applyWorkspaceList(const QList<WorkspaceInfo>& workspaces);
 
-    void applyUserList(const QList<User>& users);
+    // One page of the user list, the candidates the operator picks from.
+    void applyUserPage(const QList<User>& users);
 
-    // The host list reply. Keeps only the hosts this dialog may manage - the unassigned ones
-    // and the hosts of the edited workspace - and commits the revision parked by the paired
-    // applyWorkspaceList() call.
-    void applyHostList(const QList<HostInfo>& hosts);
+    // The name of one member, looked up one record at a time: the membership of a workspace is
+    // shown whole, and the pages of the user list do not carry every member of it.
+    void applyMemberUser(const User& user);
+
+    // The record of a member is gone. Its entry is dropped, because the router refuses an access
+    // entry for a user it cannot find.
+    void applyMissingUser(qint64 user_id);
 
     bool isLoaded() const;
+
+    // The members whose name is not known yet, for the lookups the dialog issues.
+    QList<qint64> unresolvedMemberIds() const;
 
     // Snapshot values for the form fields.
     const QString& serverName() const { return server_name_; }
@@ -107,35 +98,21 @@ public:
 
     void grantUser(qint64 user_id);
     void revokeUser(qint64 user_id);
-    void claimHost(quint64 host_id);
-    void releaseHost(quint64 host_id);
 
     //----------------------------------------------------------------------------------------------
     // Derived state
     //----------------------------------------------------------------------------------------------
 
-    // The server snapshot plus the edits of the operator. Administrators with a key pair are
-    // always included: the router accepts a workspace only with every one of them present. A
-    // user deleted meanwhile is dropped: the router would reject an entry for a user it cannot
-    // find.
+    // The server snapshot plus the edits of the operator. A user deleted meanwhile is dropped:
+    // the router would reject an entry for a user it cannot find.
     QSet<qint64> effectiveAccessIds() const;
 
-    // Same model. A host that disappeared (deleted, or claimed by another workspace meanwhile)
-    // is dropped: it is not ours to keep or to release.
-    QSet<quint64> effectiveHostIds() const;
-
-    // Users partitioned for display. availableUsers() excludes users without a key pair:
-    // nobody can seal the group key for them, the router would reject the grant.
+    // The membership of the workspace, whole. A member whose name has not arrived yet is listed
+    // by its id alone.
     QList<User> memberUsers() const;
-    QList<User> availableUsers() const;
-    QList<Host> hostsInWorkspace() const;
-    QList<Host> availableHosts() const;
 
-    // An administrator with a key pair cannot be revoked (the router requires every one of
-    // them in the access list).
-    // Whether the release warning applies: releasing a host the server has in this workspace
-    // irreversibly drops the note it carried within it.
-    bool isServerHost(quint64 host_id) const { return server_host_ids_.contains(host_id); }
+    // The candidates of the current page: the users of it that are not members.
+    QList<User> availableUsers() const;
 
     //----------------------------------------------------------------------------------------------
     // Save
@@ -144,39 +121,28 @@ public:
     // The complete membership the workspace is to have.
     QList<qint64> accessUserIdsForSave() const;
 
-    QList<quint64> hostIdsForSave() const;
-
-    // The revision the edit is based on. Committed only together with the host snapshot of the
-    // same refetch cycle: the reply order on the channel guarantees the workspace reply comes
-    // first, so a save issued between the two replies pairs the OLD revision with the OLD host
-    // snapshot - and a stale revision is rejected by the router with "conflict". Without the
-    // pairing that save would combine a fresh revision with a stale host set and silently
-    // release a host granted from another console.
+    // The revision the edit is based on. A save built on a stale one is rejected by the router
+    // with "conflict", so a change made from another console is never silently overwritten.
     qint64 baseRevision() const { return base_revision_; }
 
 private:
     const qint64 entry_id_;
 
-    QHash<qint64, User> users_;
+    QHash<qint64, User> member_users_; // Names of the members, one lookup each.
+    QList<User> page_users_;           // The page of candidates the dialog shows.
     QSet<qint64> server_access_ids_;
     QSet<qint64> added_user_ids_;
     QSet<qint64> removed_user_ids_;
-
-    QHash<quint64, Host> hosts_; // Unassigned hosts and the hosts of this workspace.
-    QSet<quint64> server_host_ids_;
-    QSet<quint64> added_host_ids_;
-    QSet<quint64> removed_host_ids_;
+    QSet<qint64> missing_user_ids_;
 
     QString server_name_;
     QString server_comment_;
     QStringList other_names_;
 
-    qint64 pending_revision_ = 0;
     qint64 base_revision_ = 0;
 
     bool workspaces_loaded_ = false;
     bool users_loaded_ = false;
-    bool hosts_loaded_ = false;
 };
 
 #endif // CLIENT_DESKTOP_MANAGEMENT_WORKSPACE_EDIT_MODEL_H

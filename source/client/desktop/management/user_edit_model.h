@@ -19,8 +19,6 @@
 #ifndef CLIENT_DESKTOP_MANAGEMENT_USER_EDIT_MODEL_H
 #define CLIENT_DESKTOP_MANAGEMENT_USER_EDIT_MODEL_H
 
-#include <QStringList>
-
 #include <optional>
 
 #include "base/peer/router_user.h"
@@ -43,10 +41,9 @@ public:
     //----------------------------------------------------------------------------------------------
 
     // |record| is the parsed record of the edited user (ignored in create mode);
-    // |record_found| tells whether the list contained it at all. |other_names| are the names
-    // of every other user for the uniqueness check. Returns false in modify mode when the
-    // record is gone: it was deleted from another console and the dialog must close.
-    bool applySnapshot(const RouterUser& record, bool record_found, const QStringList& other_names);
+    // |record_found| tells whether the reply contained it at all. Returns false in modify mode
+    // when the record is gone: it was deleted from another console and the dialog must close.
+    bool applySnapshot(const RouterUser& record, bool record_found);
 
     bool isLoaded() const { return loaded_; }
 
@@ -54,7 +51,6 @@ public:
     // key material from here when assembling a flags-only request - into a local copy, never
     // back into the model.
     const RouterUser& snapshot() const { return snapshot_; }
-    const QStringList& otherNames() const { return other_names_; }
 
     bool snapshotEnabled() const;
 
@@ -93,7 +89,6 @@ private:
     const qint64 entry_id_;
 
     RouterUser snapshot_;
-    QStringList other_names_;
     std::optional<bool> enabled_intent_;
     bool account_changed_ = true; // Create mode edits the account by definition.
     bool loaded_ = false;

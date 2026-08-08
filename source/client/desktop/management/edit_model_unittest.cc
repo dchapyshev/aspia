@@ -40,16 +40,6 @@ WorkspaceEditModel::User makeUser(qint64 id)
 }
 
 //--------------------------------------------------------------------------------------------------
-WorkspaceEditModel::HostInfo makeHost(quint64 id, qint64 workspace_id)
-{
-    WorkspaceEditModel::HostInfo host;
-    host.host_id = id;
-    host.workspace_id = workspace_id;
-    host.computer_name = QString("host-%1").arg(id);
-    return host;
-}
-
-//--------------------------------------------------------------------------------------------------
 WorkspaceEditModel::WorkspaceInfo makeWorkspace(
     qint64 id, qint64 revision, const QSet<qint64>& access_ids)
 {
@@ -73,41 +63,28 @@ RouterUser makeRecord(quint32 flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The standard modify-mode fixture state: workspace 7 at revision 1, admin has access, one
-// unassigned host 100 and one owned host 200.
+// The standard modify-mode fixture state: workspace 7 at revision 1 with the admin as its only
+// member, and a page of the user list holding both users.
 void loadDefault(WorkspaceEditModel* model)
 {
     ASSERT_TRUE(model->applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model->applyUserList({makeUser(kAdminId), makeUser(kClientId)});
-    model->applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId)});
+    model->applyUserPage({makeUser(kAdminId), makeUser(kClientId)});
+    model->applyMemberUser(makeUser(kAdminId));
     ASSERT_TRUE(model->isLoaded());
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// The race that motivated the pairing: another console adds a host (bumping the revision), our
-// refetch has already delivered the new revision but not yet the new host list. A save issued
-// in that window must not pair the fresh revision with the stale host set - it would pass the
-// revision check and silently release the new host. With the pairing the save carries the OLD
-// revision, which the router rejects with "conflict".
-TEST(WorkspaceEditModel, RevisionCommittedOnlyTogetherWithHostSnapshot)
+// The revision the save is built on is the one of the last workspace reply.
+TEST(WorkspaceEditModel, RevisionFollowsTheWorkspaceReply)
 {
     WorkspaceEditModel model(kWorkspaceId);
     loadDefault(&model);
     EXPECT_EQ(model.baseRevision(), 1);
 
-    // Refetch cycle: the workspace reply (revision 2) landed, the host reply is still in
-    // flight. The save must still be based on revision 1.
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 2, {kAdminId})}));
-    EXPECT_EQ(model.baseRevision(), 1);
-
-    // The paired host reply lands (with the host 300 the other console added): only now the
-    // revision moves, together with the host snapshot that matches it.
-    model.applyHostList(
-        {makeHost(100, 0), makeHost(200, kWorkspaceId), makeHost(300, kWorkspaceId)});
     EXPECT_EQ(model.baseRevision(), 2);
-    EXPECT_TRUE(model.effectiveHostIds().contains(300));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -117,48 +94,43 @@ TEST(WorkspaceEditModel, IntentsSurviveRefetch)
     loadDefault(&model);
 
     model.grantUser(kClientId);
-    model.claimHost(100);
-    model.releaseHost(200);
 
     // A refetch with identical server state must not disturb the edits.
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId), makeUser(kClientId)});
-    model.applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId)});
+    model.applyUserPage({makeUser(kAdminId), makeUser(kClientId)});
 
     EXPECT_TRUE(model.effectiveAccessIds().contains(kClientId));
-    EXPECT_TRUE(model.effectiveHostIds().contains(100));
-    EXPECT_FALSE(model.effectiveHostIds().contains(200));
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(WorkspaceEditModel, VanishedEntriesAreDropped)
+// The record of a member was deleted from another console. Its entry goes with it, because the
+// router refuses an access entry for a user it cannot find.
+TEST(WorkspaceEditModel, MissingMemberIsDropped)
 {
     WorkspaceEditModel model(kWorkspaceId);
     loadDefault(&model);
 
     model.grantUser(kClientId);
-    model.claimHost(100);
+    EXPECT_TRUE(model.effectiveAccessIds().contains(kClientId));
 
-    // The user and the host were deleted from another console: the refetch no longer lists
-    // them, and the save must not send entries the router cannot resolve.
-    ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 2, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId)});
-    model.applyHostList({makeHost(200, kWorkspaceId)});
-
+    model.applyMissingUser(kClientId);
     EXPECT_FALSE(model.effectiveAccessIds().contains(kClientId));
-    EXPECT_FALSE(model.effectiveHostIds().contains(100));
+
+    // The record is back (a lookup of the next refetch found it): so is the entry.
+    model.applyMemberUser(makeUser(kClientId));
+    EXPECT_TRUE(model.effectiveAccessIds().contains(kClientId));
 }
 
 //--------------------------------------------------------------------------------------------------
-// Every user the console knows and the workspace does not have yet is offered; the members it
-// already has are not offered again.
+// The users of the page that are not members yet are the candidates; the members are not offered
+// again.
 TEST(WorkspaceEditModel, MembersAreNotOfferedAgain)
 {
     WorkspaceEditModel model(kWorkspaceId);
 
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kClientId})}));
-    model.applyUserList({makeUser(kAdminId), makeUser(kClientId), makeUser(kKeylessId)});
-    model.applyHostList({});
+    model.applyUserPage({makeUser(kAdminId), makeUser(kClientId), makeUser(kKeylessId)});
+    model.applyMemberUser(makeUser(kClientId));
 
     QSet<qint64> available_ids;
     for (const WorkspaceEditModel::User& user : model.availableUsers())
@@ -169,6 +141,26 @@ TEST(WorkspaceEditModel, MembersAreNotOfferedAgain)
     for (const WorkspaceEditModel::User& user : model.memberUsers())
         member_ids.insert(user.entry_id);
     EXPECT_EQ(member_ids, QSet<qint64>({kClientId}));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The membership is shown whole, so a member the current page does not carry is listed anyway and
+// its name is asked for separately.
+TEST(WorkspaceEditModel, MemberOutsideThePageIsListedAndLookedUp)
+{
+    WorkspaceEditModel model(kWorkspaceId);
+
+    ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kKeylessId})}));
+    model.applyUserPage({makeUser(kAdminId), makeUser(kClientId)});
+
+    ASSERT_EQ(model.memberUsers().size(), 1);
+    EXPECT_EQ(model.memberUsers().front().entry_id, kKeylessId);
+    EXPECT_TRUE(model.memberUsers().front().name.isEmpty());
+    EXPECT_EQ(model.unresolvedMemberIds(), QList<qint64>({kKeylessId}));
+
+    model.applyMemberUser(makeUser(kKeylessId));
+    EXPECT_EQ(model.memberUsers().front().name, QString("user-%1").arg(kKeylessId));
+    EXPECT_TRUE(model.unresolvedMemberIds().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -211,23 +203,6 @@ TEST(WorkspaceEditModel, DeletedWorkspaceIsDetected)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(WorkspaceEditModel, ForeignHostsAreInvisible)
-{
-    WorkspaceEditModel model(kWorkspaceId);
-    ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId)});
-    model.applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId), makeHost(300, 99)});
-
-    EXPECT_FALSE(model.effectiveHostIds().contains(300));
-    EXPECT_EQ(model.availableHosts().size(), 1);
-    EXPECT_EQ(model.hostsInWorkspace().size(), 1);
-
-    // The release warning applies only to hosts the server has in this workspace.
-    EXPECT_TRUE(model.isServerHost(200));
-    EXPECT_FALSE(model.isServerHost(100));
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST(WorkspaceEditModel, CreateModeCollectsAllNames)
 {
     WorkspaceEditModel model(0);
@@ -250,7 +225,6 @@ TEST(WorkspaceEditModel, SaveAssemblyDoesNotMutateState)
     const qint64 revision_before = model.baseRevision();
 
     (void)model.accessUserIdsForSave();
-    (void)model.hostIdsForSave();
 
     EXPECT_EQ(model.effectiveAccessIds(), access_before);
     EXPECT_EQ(model.baseRevision(), revision_before);
@@ -263,13 +237,13 @@ TEST(WorkspaceEditModel, SaveAssemblyDoesNotMutateState)
 TEST(UserEditModel, UnchangedSaveIsNoOpOverConcurrentChange)
 {
     UserEditModel model(kClientId);
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
     model.setAccountChanged(false);
 
     EXPECT_TRUE(model.isNoOpSave());
 
     // Console B disabled the user; the refetch delivered it. Still nothing edited here.
-    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true));
     EXPECT_FALSE(model.desiredEnabled());
     EXPECT_TRUE(model.isNoOpSave());
 }
@@ -282,7 +256,7 @@ TEST(UserEditModel, UnchangedSaveIsNoOpOverConcurrentChange)
 TEST(UserEditModel, RetryAfterFailedSaveStillSends)
 {
     UserEditModel model(kClientId);
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
     model.setAccountChanged(false);
 
     model.setEnabledIntent(false);
@@ -299,7 +273,7 @@ TEST(UserEditModel, RetryAfterFailedSaveStillSends)
 TEST(UserEditModel, ToggleBackReattachesToRefetches)
 {
     UserEditModel model(kClientId);
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
     model.setAccountChanged(false);
 
     model.setEnabledIntent(false);
@@ -309,7 +283,7 @@ TEST(UserEditModel, ToggleBackReattachesToRefetches)
     model.setEnabledIntent(true);
     EXPECT_FALSE(model.enabledTouched());
 
-    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true));
     EXPECT_FALSE(model.desiredEnabled());
     EXPECT_TRUE(model.isNoOpSave());
 }
@@ -318,19 +292,19 @@ TEST(UserEditModel, ToggleBackReattachesToRefetches)
 TEST(UserEditModel, IntentSurvivesRefetchUntilServerMatches)
 {
     UserEditModel model(kClientId);
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
     model.setAccountChanged(false);
 
     model.setEnabledIntent(false);
 
     // A refetch with the unchanged server state keeps the edit.
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
     EXPECT_FALSE(model.desiredEnabled());
     EXPECT_FALSE(model.isNoOpSave());
 
     // Another console applied the same change: the intent dissolves into the snapshot and the
     // pending OK becomes a no-op instead of a redundant save.
-    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(0), true));
     EXPECT_FALSE(model.enabledTouched());
     EXPECT_FALSE(model.desiredEnabled());
     EXPECT_TRUE(model.isNoOpSave());
@@ -340,21 +314,20 @@ TEST(UserEditModel, IntentSurvivesRefetchUntilServerMatches)
 TEST(UserEditModel, DeletedRecordIsDetected)
 {
     UserEditModel model(kClientId);
-    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true, {}));
-    EXPECT_FALSE(model.applySnapshot(RouterUser(), false, {}));
+    ASSERT_TRUE(model.applySnapshot(makeRecord(User::ENABLED), true));
+    EXPECT_FALSE(model.applySnapshot(RouterUser(), false));
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(UserEditModel, CreateModeDefaults)
 {
     UserEditModel model(0);
-    ASSERT_TRUE(model.applySnapshot(RouterUser(), false, {"admin"}));
+    ASSERT_TRUE(model.applySnapshot(RouterUser(), false));
 
     EXPECT_TRUE(model.accountChanged());
     EXPECT_TRUE(model.desiredEnabled());
     EXPECT_FALSE(model.isNoOpSave());
     EXPECT_EQ(model.flagsForSave(), quint32(User::ENABLED));
-    EXPECT_EQ(model.otherNames().size(), 1);
 
     model.setEnabledIntent(false);
     EXPECT_EQ(model.flagsForSave(), 0u);

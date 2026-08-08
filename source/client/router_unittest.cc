@@ -286,7 +286,8 @@ TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
 TEST_F(RouterTest, ListUsersConversation)
 {
     int calls = 0;
-    router_.listUsers({ &receiver_, [&calls](const proto::router::UserList&) { ++calls; } });
+    router_.listUsers(0, proto::router::kMaxUserPageSize,
+                      { &receiver_, [&calls](const proto::router::UserList&) { ++calls; } });
 
     ASSERT_EQ(sent_.size(), 1);
     EXPECT_EQ(sent_.at(0).first, proto::router::CHANNEL_ID_ADMIN);
@@ -448,7 +449,8 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
 
     int calls = 0;
     std::string last_error;
-    router_.listUsers({ &receiver_, [&](const proto::router::UserList& list)
+    router_.listUsers(0, proto::router::kMaxUserPageSize,
+                      { &receiver_, [&](const proto::router::UserList& list)
     {
         ++calls;
         last_error = list.error_code();
@@ -486,7 +488,8 @@ TEST_F(RouterTest, CallerAnsweredByTeardownDoesNotSeeTheDeadCaches)
     fillCaches();
 
     int wire_requests = 0;
-    router_.listUsers({ &receiver_, [&](const proto::router::UserList&)
+    router_.listUsers(0, proto::router::kMaxUserPageSize,
+                      { &receiver_, [&](const proto::router::UserList&)
     {
         const int sent_before = sent_.size();
         router_.listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
@@ -509,7 +512,8 @@ TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
     int calls = 0;
     std::string last_error;
     router_.connectToRouter();
-    router_.listUsers({ &receiver_, [&](const proto::router::UserList& list)
+    router_.listUsers(0, proto::router::kMaxUserPageSize,
+                      { &receiver_, [&](const proto::router::UserList& list)
     {
         ++calls;
         last_error = list.error_code();

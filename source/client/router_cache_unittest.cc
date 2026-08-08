@@ -196,7 +196,7 @@ TEST_F(RouterCacheTest, GroupResultDropsByTheReachOfItsCommand)
 //--------------------------------------------------------------------------------------------------
 // Adding an administrator grants it an access entry in every workspace and deleting a user drops
 // its entries by cascade - both move the revisions the cached list carries. Resetting the second
-// factor or revoking a token touches nothing but the user itself.
+// factor touches nothing but the user itself.
 TEST_F(RouterCacheTest, UserResultDropsTheWorkspacesForMembershipCommandsOnly)
 {
     for (const char* command : { proto::router::kCommandUserAdd,
@@ -212,8 +212,7 @@ TEST_F(RouterCacheTest, UserResultDropsTheWorkspacesForMembershipCommandsOnly)
         EXPECT_NE(cache_.groupList(kWorkspaceId), nullptr) << "command: " << command;
     }
 
-    for (const char* command : { proto::router::kCommandUserResetOtp,
-                                 proto::router::kCommandUserRevokeTokens })
+    for (const char* command : { proto::router::kCommandUserResetOtp })
     {
         fillAll();
 

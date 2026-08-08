@@ -33,20 +33,15 @@
 // and so on.
 
 // Workspace data shared between the router session and the UI. Outgoing, entry_id == 0 means add
-// and > 0 means modify; the access list is the complete membership the workspace is to have.
+// and > 0 means modify; the user list is the complete membership the workspace is to have. The
+// hosts of a workspace are claimed one by one, through editHost().
 struct RouterWorkspace
 {
-    struct Access
-    {
-        qint64 user_id = 0;
-    };
-
     qint64 entry_id = 0;
     QString name;
     QString comment;
     qint64 revision = 0;
-    QList<Access> access;
-    QList<HostId> host_ids;
+    QList<qint64> user_ids;
 };
 
 struct RouterWorkspaceList

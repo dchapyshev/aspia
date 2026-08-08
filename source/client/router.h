@@ -97,7 +97,16 @@ public:
 
     void listRelays(RouterCallback<proto::router::RelayList> callback);
     void listClients(RouterCallback<proto::router::ClientList> callback);
-    void listUsers(RouterCallback<proto::router::UserList> callback);
+
+    // One page of the user list. The reply carries the total, so the caller can page through it.
+    void listUsers(qint64 offset, qint64 count, RouterCallback<proto::router::UserList> callback);
+
+    // A single record, answered with an empty list when there is no such user.
+    void findUser(qint64 entry_id, RouterCallback<proto::router::UserList> callback);
+    void findUser(const QString& name, RouterCallback<proto::router::UserList> callback);
+
+    // The active device tokens of one user.
+    void listUserTokens(qint64 user_id, RouterCallback<proto::router::UserTokenList> callback);
 
     //----------------------------------------------------------------------------------------------
     // Admin: user operations.
@@ -114,7 +123,7 @@ public:
 
     // An empty |token_ids| revokes every token of the user.
     void revokeUserTokens(qint64 user_id, const QList<qint64>& token_ids,
-                          RouterCallback<proto::router::UserResult> callback);
+                          RouterCallback<proto::router::UserTokenResult> callback);
 
     //----------------------------------------------------------------------------------------------
     // Admin: relay/client/peer disconnect.
@@ -137,6 +146,8 @@ public:
     void checkHostUpdates(HostId host_id, RouterCallback<proto::router::HostResult> callback);
 
     // A record that breaks the protocol bounds is answered with its error code without a request.
+    // |workspace_id| is the workspace the host ends up in (0 releases it), and only an
+    // administrator may change it.
     void editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback);
 
     //----------------------------------------------------------------------------------------------

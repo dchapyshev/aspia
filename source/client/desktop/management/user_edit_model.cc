@@ -28,11 +28,8 @@ UserEditModel::UserEditModel(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UserEditModel::applySnapshot(
-    const RouterUser& record, bool record_found, const QStringList& other_names)
+bool UserEditModel::applySnapshot(const RouterUser& record, bool record_found)
 {
-    other_names_ = other_names;
-
     if (isModifyMode())
     {
         if (!record_found)

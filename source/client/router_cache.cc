@@ -101,7 +101,7 @@ void RouterCache::onResult(Result kind, std::string_view command, bool ok)
         {
             // Adding an administrator grants it an access entry in every workspace and deleting a
             // user drops its entries by cascade; both move the revisions of the workspaces
-            // involved. reset_otp and revoke_tokens touch nothing but the user itself.
+            // involved. An OTP reset touches nothing but the user itself.
             const bool moves_workspaces = command == proto::router::kCommandUserAdd ||
                                           command == proto::router::kCommandUserModify ||
                                           command == proto::router::kCommandUserDelete;
