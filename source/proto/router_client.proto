@@ -38,20 +38,15 @@ message UserKeys
     bytes wrap_salt        = 6;
 }
 
-// Membership of one user in a workspace.
-message WorkspaceAccess
-{
-    int64 user_id = 1;
-}
-
+// The hosts of a workspace are not part of the record: they are claimed and released one by one,
+// through "modify" of HostRequest, and are listed by HostListRequest.
 message Workspace
 {
-    int64 entry_id                  = 1;
-    string name                     = 2;
-    string comment                  = 3;
-    repeated WorkspaceAccess access = 4;
-    repeated uint64 host_id         = 5;
-    int64 revision                  = 6;
+    int64 entry_id         = 1;
+    string name            = 2;
+    string comment         = 3;
+    repeated int64 user_id = 4; // Users the workspace is shared with.
+    int64 revision         = 5;
 }
 
 message WorkspaceListRequest
@@ -145,12 +140,19 @@ message Host
     bool online          = 13; // Live host session currently exists for this host_id.
 }
 
+// A page of hosts. The page is mandatory in both modes: a reply carrying every host of the scope
+// grows past the message limit, and such a reply ends the session instead of being sent.
 message HostListRequest
 {
     enum Mode
     {
         MODE_UNKNOWN  = 0;
+        // Every host of the router, whatever workspace and group it belongs to. Admin only;
+        // |workspace_id| and |group_id| are ignored.
         MODE_ALL      = 1;
+        // The hosts of |workspace_id| (0 - the hosts no workspace claimed) narrowed to
+        // |group_id| (0 - the workspace root, -1 - any group of the workspace, allowed only
+        // with |workspace_id| > 0). The caller must have access to the requested workspace.
         MODE_FILTERED = 2;
     }
 

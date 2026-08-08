@@ -23,7 +23,14 @@
 
 namespace proto::router {
 
+// Page bounds of the list replies. A reply carrying a list of unbounded length grows past the
+// message limit, and such a reply ends the session instead of being sent.
 [[maybe_unused]] constexpr int kMaxHostPageSize = 100;
+[[maybe_unused]] constexpr int kMaxUserPageSize = 100;
+
+// Device tokens one user holds at a time. Issuing a token over the cap drops the least recently
+// used ones, so a client that never comes back cannot grow the list without bound.
+[[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;
 
 // Bounds on the manager-editable fields of a host, a group and a workspace, in UTF-8 bytes.
 // Checked on both sides. An unbounded record grows the list reply that carries it past the message
@@ -49,7 +56,9 @@ extern const char* const kCommandUserAdd;
 extern const char* const kCommandUserModify;
 extern const char* const kCommandUserDelete;
 extern const char* const kCommandUserResetOtp;
-extern const char* const kCommandUserRevokeTokens;
+
+// Command names for UserTokenRequest.
+extern const char* const kCommandUserTokenRevoke;
 
 // Command names for WorkspaceRequest.
 extern const char* const kCommandWorkspaceAdd;

@@ -113,15 +113,6 @@ message ClientList
 
 message User
 {
-    // Active client device token (bearer "remember this device" credential).
-    message Token
-    {
-        int64 token_id     = 1;
-        int64 created_at   = 2;
-        int64 last_used_at = 3;
-        string address     = 4;
-    }
-
     int64 entry_id         = 1;
     string name            = 2;
     string group           = 3;
@@ -133,33 +124,38 @@ message User
     bytes wrap_private_key = 9;
     bytes wrap_salt        = 10;
     bool otp_active        = 11; // Read-only.
-    repeated Token token   = 12;
 }
 
+// Either a page of the user list (|offset| and |count|, a zero count is refused, as is one over
+// the cap) or a point lookup of a single record (|entry_id| or |name|, never both - the page
+// bounds are ignored then). A point lookup that matches nothing answers an empty list.
 message UserListRequest
 {
     int64 request_id = 1;
+    int64 offset     = 2;
+    int64 count      = 3;
+    int64 entry_id   = 4;
+    string name      = 5;
 }
 
+// Only the descriptive fields of a record are filled: the credential material (salt, verifier,
+// key pair) never leaves the router, and the device tokens are a list of their own.
 message UserList
 {
     int64 request_id   = 1;
-    string error_code  = 2; // "ok" | "internal_error"
-    repeated User user = 3;
+    string error_code  = 2; // "ok" | "invalid_request" | "internal_error"
+    int64 total_count  = 3; // Total users. Unset on an error reply and for a point lookup.
+    repeated User user = 4;
 }
 
 message UserRequest
 {
-    // "reset_otp"     - Clear the user's TOTP secret so the next login triggers a fresh
-    //                   self-enrollment. Also revokes every device token of the user
-    //                   (re-enrollment implies a new device key pair anyway).
-    // "revoke_tokens" - Drop device tokens of |user.entry_id|. If |user.token| is non-empty,
-    //                   only the listed tokens (by |token_id|) are dropped and the router
-    //                   verifies each belongs to the user. If |user.token| is empty, every
-    //                   token owned by the user is dropped atomically server-side.
-    // For "reset_otp" only |user.entry_id| is consulted.
+    // "reset_otp" - Clear the user's TOTP secret so the next login triggers a fresh
+    //               self-enrollment. Also revokes every device token of the user
+    //               (re-enrollment implies a new device key pair anyway).
+    //               Only |user.entry_id| is consulted.
     int64 request_id    = 1;
-    string command_name = 2; // "add" | "modify" | "delete" | "reset_otp" | "revoke_tokens"
+    string command_name = 2; // "add" | "modify" | "delete" | "reset_otp"
     User user           = 3;
 }
 
@@ -172,11 +168,54 @@ message UserResult
                              // "access_denied" - the change is refused for the built-in user.
 }
 
+// Active client device token of a user (bearer "remember this device" credential).
+message UserToken
+{
+    int64 token_id     = 1;
+    int64 created_at   = 2;
+    int64 last_used_at = 3;
+    string address     = 4;
+}
+
+message UserTokenListRequest
+{
+    int64 request_id = 1;
+    int64 user_id    = 2;
+}
+
+message UserTokenList
+{
+    int64 request_id         = 1;
+    string error_code        = 2; // "ok" | "invalid_request" | "internal_error"
+    int64 user_id            = 3; // Echo of the request, so the client can route the response.
+    repeated UserToken token = 4;
+}
+
+message UserTokenRequest
+{
+    // "revoke" - Drop device tokens of |user_id|. If |token_id| is non-empty, only the listed
+    //            tokens are dropped and the router verifies each belongs to the user. If
+    //            |token_id| is empty, every token owned by the user is dropped atomically
+    //            server-side.
+    int64 request_id        = 1;
+    string command_name     = 2; // "revoke"
+    int64 user_id           = 3;
+    repeated int64 token_id = 4;
+}
+
+message UserTokenResult
+{
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "not_found"
+}
+
 message WorkspaceRequest
 {
     // "add"    - Workspace with name and the initial access list. "conflict" is the answer when
-    //            a snapshot the request was built from went stale: an entry for a deleted user,
-    //            a host that was deleted or claimed by another workspace meanwhile.
+    //            a snapshot the request was built from went stale: an entry for a user deleted
+    //            meanwhile. The hosts of a workspace are not part of this request: they are
+    //            claimed and released one by one, through "modify" of HostRequest.
     // "modify" - Workspace with entry_id, revision, new name and the full desired access list.
     //            The revision must match the stored one, otherwise the request is rejected
     //            ("conflict") - the edit was based on a stale snapshot; the same stale-snapshot
@@ -200,26 +239,30 @@ message WorkspaceResult
 
 message RouterToAdmin
 {
-    RelayList relay_list             = 1;
-    RelayResult relay_result         = 2;
-    HostResult host_result           = 3;
-    ClientList client_list           = 4;
-    ClientResult client_result       = 5;
-    UserList user_list               = 6;
-    UserResult user_result           = 7;
-    PeerResult peer_result           = 8;
-    WorkspaceResult workspace_result = 9;
+    RelayList relay_list              = 1;
+    RelayResult relay_result          = 2;
+    HostResult host_result            = 3;
+    ClientList client_list            = 4;
+    ClientResult client_result        = 5;
+    UserList user_list                = 6;
+    UserResult user_result            = 7;
+    UserTokenList user_token_list     = 8;
+    UserTokenResult user_token_result = 9;
+    PeerResult peer_result            = 10;
+    WorkspaceResult workspace_result  = 11;
 }
 
 message AdminToRouter
 {
-    RelayListRequest relay_list_request   = 1;
-    RelayRequest relay_request            = 2;
-    HostRequest host_request              = 3;
-    ClientListRequest client_list_request = 4;
-    ClientRequest client_request          = 5;
-    UserListRequest user_list_request     = 6;
-    UserRequest user_request              = 7;
-    PeerRequest peer_request              = 8;
-    WorkspaceRequest workspace_request    = 9;
+    RelayListRequest relay_list_request          = 1;
+    RelayRequest relay_request                   = 2;
+    HostRequest host_request                     = 3;
+    ClientListRequest client_list_request        = 4;
+    ClientRequest client_request                 = 5;
+    UserListRequest user_list_request            = 6;
+    UserRequest user_request                     = 7;
+    UserTokenListRequest user_token_list_request = 8;
+    UserTokenRequest user_token_request          = 9;
+    PeerRequest peer_request                     = 10;
+    WorkspaceRequest workspace_request           = 11;
 }
