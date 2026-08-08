@@ -73,27 +73,51 @@ protected:
         ASSERT_TRUE(admin_.isValid());
         ASSERT_EQ(db_.addUser(admin_), proto::router::kErrorOk);
 
-        admin_ = db_.findUser("admin");
+        ASSERT_EQ(db_.findUser("admin", &admin_), proto::router::kErrorOk);
         ASSERT_EQ(admin_.entry_id, 1);
     }
 
-    // One membership entry.
-    static Workspace::Access accessEntry(qint64 user_id)
+    RouterUser findUser(const QString& name)
     {
-        Workspace::Access access;
-        access.user_id = user_id;
-        return access;
+        RouterUser user;
+        db_.findUser(name, &user);
+        return user;
     }
 
-    qint64 addWorkspace(const QString& name, const std::vector<Workspace::Access>& access,
-                        const std::set<HostId>& hosts = {})
+    RouterUser findUser(qint64 entry_id)
+    {
+        RouterUser user;
+        db_.findUser(entry_id, &user);
+        return user;
+    }
+
+    qint64 addWorkspace(const QString& name, const std::vector<qint64>& access)
     {
         qint64 entry_id = -1;
         const std::string_view error_code =
-            db_.addWorkspace(name.toStdString(), std::string_view(), access, hosts, &entry_id);
+            db_.addWorkspace(name.toStdString(), std::string_view(), access, &entry_id);
         if (error_code != proto::router::kErrorOk)
             return -1;
         return entry_id;
+    }
+
+    HostId addHost(std::string_view key_hash)
+    {
+        if (!db_.addHost(key_hash, "hwid"))
+            return kInvalidHostId;
+
+        HostId host_id = kInvalidHostId;
+        if (db_.hostId(key_hash, &host_id) != proto::router::kErrorOk)
+            return kInvalidHostId;
+        return host_id;
+    }
+
+    // Moves a host to the given workspace and group, keeping the fields an operator edits.
+    std::string_view moveHost(HostId host_id, qint64 workspace_id, qint64 group_id = 0)
+    {
+        const proto::router::Host host = findHost(host_id);
+        return db_.modifyHost(host_id, workspace_id, group_id, host.display_name(),
+                              host.comment());
     }
 
     qint64 workspaceRevision(qint64 workspace_id)
@@ -138,12 +162,120 @@ TEST_F(RouterDatabaseTest, AddUserStoresRecord)
     RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
 
-    const RouterUser stored = db_.findUser("bob");
+    const RouterUser stored = findUser("bob");
     EXPECT_GT(stored.entry_id, 1);
     EXPECT_EQ(stored.sessions, proto::router::SESSION_TYPE_CLIENT);
     EXPECT_EQ(stored.flags, quint32(User::ENABLED));
     EXPECT_EQ(stored.verifier, user.verifier);
     EXPECT_EQ(stored.public_key, user.public_key);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The list is read one page at a time, and the same page holds the same records whatever the
+// query planner does with it.
+TEST_F(RouterDatabaseTest, UserListReturnsRequestedPage)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        ASSERT_EQ(db_.addUser(makeUser(QString("user%1").arg(i),
+                                       proto::router::SESSION_TYPE_CLIENT)),
+                  proto::router::kErrorOk);
+    }
+
+    qint64 count = 0;
+    ASSERT_EQ(db_.userCount(&count), proto::router::kErrorOk);
+    EXPECT_EQ(count, 6);
+
+    std::vector<RouterUser> users;
+    ASSERT_EQ(db_.userList(0, 2, &users), proto::router::kErrorOk);
+    ASSERT_EQ(users.size(), 2u);
+    EXPECT_EQ(users[0].name, "admin");
+    EXPECT_EQ(users[1].name, "user0");
+
+    ASSERT_EQ(db_.userList(4, 10, &users), proto::router::kErrorOk);
+    ASSERT_EQ(users.size(), 2u);
+    EXPECT_EQ(users[0].name, "user3");
+    EXPECT_EQ(users[1].name, "user4");
+
+    ASSERT_EQ(db_.userList(100, 10, &users), proto::router::kErrorOk);
+    EXPECT_TRUE(users.empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request that names no page, or one bigger than the cap, is refused instead of answering the
+// whole table.
+TEST_F(RouterDatabaseTest, UserListRefusesUnboundedPage)
+{
+    std::vector<RouterUser> users;
+    EXPECT_EQ(db_.userList(0, 0, &users), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(db_.userList(-1, 10, &users), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(db_.userList(0, proto::router::kMaxUserPageSize + 1, &users),
+              proto::router::kErrorInvalidRequest);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A name that belongs to nobody is not a failure of the query.
+TEST_F(RouterDatabaseTest, FindUserSeparatesMissAndFailure)
+{
+    RouterUser user;
+    EXPECT_EQ(db_.findUser("nobody", &user), proto::router::kErrorNotFound);
+    EXPECT_EQ(db_.findUser(qint64(4242), &user), proto::router::kErrorNotFound);
+    EXPECT_EQ(db_.findUser("admin", &user), proto::router::kErrorOk);
+    EXPECT_EQ(user.entry_id, admin_.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The tokens of one user are bounded: a device that logs in anew every time cannot grow the list
+// past the cap the protocol counts on. The least recently used ones go first.
+TEST_F(RouterDatabaseTest, DeviceTokensAreCappedPerUser)
+{
+    std::string first_token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &first_token));
+
+    for (int i = 0; i < proto::router::kMaxDeviceTokensPerUser; ++i)
+    {
+        std::string token;
+        ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token));
+    }
+
+    std::vector<DeviceToken> tokens;
+    ASSERT_TRUE(db_.listClientDeviceTokens(admin_.entry_id, &tokens));
+    EXPECT_EQ(tokens.size(), size_t(proto::router::kMaxDeviceTokensPerUser));
+
+    qint64 user_id = 0;
+    EXPECT_FALSE(db_.findClientDeviceToken(first_token, &user_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A negative group_id asks for the hosts of the workspace whatever group they sit in.
+TEST_F(RouterDatabaseTest, HostListTakesEveryGroupOfTheWorkspace)
+{
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
+    ASSERT_GT(workspace_id, 0);
+
+    qint64 group_id = -1;
+    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
+              proto::router::kErrorOk);
+
+    const HostId root_host = addHost("hash-1");
+    const HostId group_host = addHost("hash-2");
+    ASSERT_NE(root_host, kInvalidHostId);
+    ASSERT_NE(group_host, kInvalidHostId);
+
+    ASSERT_EQ(moveHost(root_host, workspace_id), proto::router::kErrorOk);
+    ASSERT_EQ(moveHost(group_host, workspace_id, group_id), proto::router::kErrorOk);
+
+    qint64 count = 0;
+    ASSERT_EQ(db_.hostCount(workspace_id, -1, &count), proto::router::kErrorOk);
+    EXPECT_EQ(count, 2);
+
+    proto::router::HostList list;
+    db_.hosts(workspace_id, -1, 0, proto::router::kMaxHostPageSize, &list);
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(list.host_size(), 2);
+
+    ASSERT_EQ(db_.hostCount(workspace_id, 0, &count), proto::router::kErrorOk);
+    EXPECT_EQ(count, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,13 +285,13 @@ TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
 {
     RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser("bob").entry_id;
+    const qint64 user_id = findUser("bob").entry_id;
 
     RouterUser modified = makeUser("bob", kAllSessions);
     modified.entry_id = user_id;
     ASSERT_EQ(db_.modifyUser(modified), proto::router::kErrorOk);
 
-    EXPECT_EQ(db_.findUser(user_id).sessions, proto::router::SESSION_TYPE_CLIENT);
+    EXPECT_EQ(findUser(user_id).sessions, proto::router::SESSION_TYPE_CLIENT);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,7 +301,7 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
 {
     RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
-    const RouterUser stored = db_.findUser("bob");
+    const RouterUser stored = findUser("bob");
 
     RouterUser request;
     request.entry_id = stored.entry_id;
@@ -182,7 +314,7 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
               proto::router::kErrorOk);
     EXPECT_FALSE(password_changed);
 
-    const RouterUser after = db_.findUser(stored.entry_id);
+    const RouterUser after = findUser(stored.entry_id);
     EXPECT_EQ(after.flags, 0u);
     EXPECT_EQ(after.name, "bob");
     EXPECT_EQ(after.verifier, stored.verifier);
@@ -214,7 +346,7 @@ TEST_F(RouterDatabaseTest, PasswordRotationRevokesDeviceTokens)
     bool password_changed = false;
     ASSERT_EQ(db_.modifyUser(rotated, &password_changed), proto::router::kErrorOk);
     EXPECT_TRUE(password_changed);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, rotated.verifier);
+    EXPECT_EQ(findUser(admin_.entry_id).verifier, rotated.verifier);
 
     qint64 user_id = 0;
     EXPECT_FALSE(db_.findClientDeviceToken(token, &user_id));
@@ -231,7 +363,7 @@ TEST_F(RouterDatabaseTest, PublicKeyChangeAloneIsRotation)
     bool password_changed = false;
     ASSERT_EQ(db_.modifyUser(rotated, &password_changed), proto::router::kErrorOk);
     EXPECT_TRUE(password_changed);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).public_key, rotated.public_key);
+    EXPECT_EQ(findUser(admin_.entry_id).public_key, rotated.public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,24 +372,24 @@ TEST_F(RouterDatabaseTest, PublicKeyChangeAloneIsRotation)
 TEST_F(RouterDatabaseTest, WorkspaceNeedsNoAdminInItsAccessList)
 {
     qint64 entry_id = -1;
-    ASSERT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, {}, &entry_id),
+    ASSERT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, &entry_id),
               proto::router::kErrorOk);
     ASSERT_GT(entry_id, 0);
 
     proto::router::WorkspaceList list;
     db_.workspaceListForAdmin(0, &list);
     ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).access_size(), 0);
+    EXPECT_EQ(list.workspace(0).user_id_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
 // A duplicate name is answered before anything is created.
 TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameIsAlreadyExists)
 {
-    ASSERT_GT(addWorkspace("alpha", {accessEntry(admin_.entry_id)}), 0);
+    ASSERT_GT(addWorkspace("alpha", {admin_.entry_id}), 0);
 
     qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, {}, &entry_id),
+    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, &entry_id),
               proto::router::kErrorAlreadyExists);
 }
 
@@ -266,18 +398,18 @@ TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameIsAlreadyExists)
 // stored revision.
 TEST_F(RouterDatabaseTest, RevisionGuardsConcurrentModification)
 {
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_.entry_id)});
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
     ASSERT_EQ(workspaceRevision(workspace_id), 1);
 
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "beta", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {}),
+                                  {admin_.entry_id}),
               proto::router::kErrorOk);
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 
     // A save built on the old snapshot must not overwrite the change above.
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "gamma", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {}),
+                                  {admin_.entry_id}),
               proto::router::kErrorConflict);
     EXPECT_EQ(db_.findWorkspace(workspace_id).name, "beta");
 }
@@ -287,13 +419,13 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = db_.findUser("client");
+    client = findUser("client");
 
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_.entry_id)});
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_.entry_id), accessEntry(client.entry_id)}, {}),
+                                  {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
     std::set<qint64> workspace_ids;
@@ -301,7 +433,7 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
     EXPECT_TRUE(workspace_ids.contains(workspace_id));
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 2, "alpha", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {}),
+                                  {admin_.entry_id}),
               proto::router::kErrorOk);
 
     ASSERT_TRUE(db_.workspaceAccessIdsForUser(client.entry_id, &workspace_ids));
@@ -309,73 +441,67 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The host assignments live in the same transaction as the workspace: a bad host id rolls the
-// whole creation back, and a claim of another workspace's host rolls the whole modify back.
-TEST_F(RouterDatabaseTest, HostAssignmentsAreAtomic)
+// A host belongs to one workspace at a time. The second claim loses, and the loser is told to
+// refetch instead of being told the host is gone.
+TEST_F(RouterDatabaseTest, HostBelongsToOneWorkspace)
 {
-    ASSERT_TRUE(db_.addHost("hash-1", "hwid-1"));
-    HostId host_id = kInvalidHostId;
-    ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
 
-    // A host that is not there is how a concurrent delete looks - a conflict, not "not found"
-    // (which the sender reads as a missing workspace).
-    qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {accessEntry(admin_.entry_id)},
-                               {HostId(12345)}, &entry_id),
-              proto::router::kErrorConflict);
-
-    // The rollback left the name free; the valid host is claimed with the creation.
-    const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
-    EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
-
-    // A second workspace cannot steal the host, and the failed save must not apply anything -
-    // including the rename that travelled with it.
-    const qint64 other_id = addWorkspace("beta", {accessEntry(admin_.entry_id)});
+    const qint64 other_id = addWorkspace("beta", {admin_.entry_id});
     ASSERT_GT(other_id, 0);
 
-    EXPECT_EQ(db_.modifyWorkspace(other_id, 1, "renamed", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {host_id}),
-              proto::router::kErrorConflict);
-    EXPECT_EQ(db_.findWorkspace(other_id).name, "beta");
+    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
     EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
+
+    EXPECT_EQ(moveHost(host_id, other_id), proto::router::kErrorConflict);
+    EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
+
+    // A workspace that is gone reads the same way: the sender acted on a stale snapshot.
+    EXPECT_EQ(db_.modifyHost(host_id, 12345, 0, "display", std::string_view()),
+              proto::router::kErrorConflict);
+    EXPECT_EQ(db_.modifyHost(HostId(54321), workspace_id, 0, "display", std::string_view()),
+              proto::router::kErrorNotFound);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A released host cannot keep the note it carried inside the workspace it left.
-TEST_F(RouterDatabaseTest, ReleasedHostLosesItsComment)
+// A released host cannot keep the place and the note it had inside the workspace it left.
+TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndComment)
 {
-    ASSERT_TRUE(db_.addHost("hash-1", "hwid-1"));
-    HostId host_id = kInvalidHostId;
-    ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
 
-    const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
 
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "display", "comment"));
+    qint64 group_id = -1;
+    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
+              proto::router::kErrorOk);
+
+    ASSERT_EQ(db_.modifyHost(host_id, workspace_id, group_id, "display", "comment"),
+              proto::router::kErrorOk);
     ASSERT_FALSE(findHost(host_id).comment().empty());
 
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {}),
-              proto::router::kErrorOk);
+    ASSERT_EQ(moveHost(host_id, 0), proto::router::kErrorOk);
 
     const proto::router::Host host = findHost(host_id);
     EXPECT_EQ(host.workspace_id(), 0);
+    EXPECT_EQ(host.group_id(), 0);
     EXPECT_TRUE(host.comment().empty());
+    EXPECT_EQ(host.display_name(), "display");
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, RemoveWorkspaceReleasesHostsAndAccess)
 {
-    ASSERT_TRUE(db_.addHost("hash-1", "hwid-1"));
-    HostId host_id = kInvalidHostId;
-    ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
 
-    const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
 
@@ -390,10 +516,10 @@ TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = db_.findUser("client");
+    client = findUser("client");
 
     const qint64 workspace_id = addWorkspace(
-        "alpha", {accessEntry(admin_.entry_id), accessEntry(client.entry_id)});
+        "alpha", {admin_.entry_id, client.entry_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
@@ -401,7 +527,7 @@ TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
     proto::router::WorkspaceList list;
     db_.workspaceListForAdmin(workspace_id, &list);
     ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).access_size(), 1);
+    EXPECT_EQ(list.workspace(0).user_id_size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -412,10 +538,10 @@ TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = db_.findUser("client");
+    client = findUser("client");
 
     const qint64 workspace_id = addWorkspace(
-        "alpha", {accessEntry(admin_.entry_id), accessEntry(client.entry_id)});
+        "alpha", {admin_.entry_id, client.entry_id});
     ASSERT_GT(workspace_id, 0);
     ASSERT_EQ(workspaceRevision(workspace_id), 1);
 
@@ -423,7 +549,7 @@ TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_.entry_id)}, {}),
+                                  {admin_.entry_id}),
               proto::router::kErrorConflict);
 }
 
@@ -434,16 +560,16 @@ TEST_F(RouterDatabaseTest, EntryForDeletedUserIsConflict)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = db_.findUser("client");
+    client = findUser("client");
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
     qint64 entry_id = -1;
     EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(),
-                               {accessEntry(admin_.entry_id), accessEntry(client.entry_id)}, {}, &entry_id),
+                               {admin_.entry_id, client.entry_id}, &entry_id),
               proto::router::kErrorConflict);
 
     // The transaction rolled back: the name is still free.
-    EXPECT_GT(addWorkspace("alpha", {accessEntry(admin_.entry_id)}), 0);
+    EXPECT_GT(addWorkspace("alpha", {admin_.entry_id}), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -460,9 +586,9 @@ TEST_F(RouterDatabaseTest, DuplicateUserNameIsAlreadyExists)
               proto::router::kErrorOk);
 
     RouterUser renamed = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
-    renamed.entry_id = db_.findUser("alice").entry_id;
+    renamed.entry_id = findUser("alice").entry_id;
     EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
-    EXPECT_TRUE(db_.findUser("alice").isValid());
+    EXPECT_TRUE(findUser("alice").isValid());
 }
 
 //--------------------------------------------------------------------------------------------------

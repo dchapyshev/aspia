@@ -100,7 +100,9 @@ protected:
     static QByteArray userListRequest(qint64 request_id)
     {
         proto::router::AdminToRouter message;
-        message.mutable_user_list_request()->set_request_id(request_id);
+        proto::router::UserListRequest* request = message.mutable_user_list_request();
+        request->set_request_id(request_id);
+        request->set_count(proto::router::kMaxUserPageSize);
         return serialize(message);
     }
 

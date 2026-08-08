@@ -36,8 +36,9 @@ protected:
         host_id_ = addHost("hash-1");
         ASSERT_NE(host_id_, kInvalidHostId);
 
-        workspace_id_ = addWorkspace("alpha", {host_id_});
+        workspace_id_ = addWorkspace("alpha");
         ASSERT_GT(workspace_id_, 0);
+        ASSERT_EQ(moveHost(host_id_, workspace_id_), proto::router::kErrorOk);
     }
 
     RequestResult handle(const proto::router::HostRequest& request)
@@ -45,14 +46,25 @@ protected:
         return handleHostRequest(db_, caller_, request);
     }
 
+    // An edit that keeps the host where it is. The workspace of the request is the workspace the
+    // host ends up in, so a request that names none would release it.
     proto::router::HostRequest makeRequest(HostId host_id, qint64 group_id,
                                            std::string_view display_name)
+    {
+        proto::router::HostRequest request = makeMoveRequest(host_id, 0, group_id, display_name);
+        request.mutable_host()->set_workspace_id(findHost(host_id).workspace_id());
+        return request;
+    }
+
+    proto::router::HostRequest makeMoveRequest(HostId host_id, qint64 workspace_id,
+                                               qint64 group_id, std::string_view display_name)
     {
         proto::router::HostRequest request;
         request.set_command_name(proto::router::kCommandHostModify);
 
         proto::router::Host* host = request.mutable_host();
         host->set_host_id(host_id);
+        host->set_workspace_id(workspace_id);
         host->set_group_id(group_id);
         host->set_display_name(std::string(display_name));
         return request;
@@ -278,6 +290,107 @@ TEST_F(HostRequestHandlerTest, NegativeGroupIsRejected)
     EXPECT_EQ(findHost(host_id_).group_id(), 0);
 }
 
+//--------------------------------------------------------------------------------------------------
+// An administrator claims a free host for a workspace and releases it back.
+TEST_F(HostRequestHandlerTest, AdminMovesHostBetweenWorkspaces)
+{
+    caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+    const HostId free_host = addHost("hash-2");
+    ASSERT_NE(free_host, kInvalidHostId);
+
+    const RequestResult claimed =
+        handle(makeMoveRequest(free_host, workspace_id_, 0, "display"));
+    EXPECT_EQ(claimed.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(claimed.notify_flags, quint32(ClientWorker::NOTIFY_HOSTS));
+    EXPECT_EQ(findHost(free_host).workspace_id(), workspace_id_);
+
+    const RequestResult released = handle(makeMoveRequest(free_host, 0, 0, "display"));
+    EXPECT_EQ(released.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(findHost(free_host).workspace_id(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host another workspace holds is not free to take, and the sender is told to refetch.
+TEST_F(HostRequestHandlerTest, HostOfAnotherWorkspaceIsConflict)
+{
+    caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+    const qint64 other_id = addWorkspace("beta");
+    ASSERT_GT(other_id, 0);
+
+    const RequestResult result = handle(makeMoveRequest(host_id_, other_id, 0, "display"));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
+    EXPECT_EQ(result.notify_flags, 0u);
+    EXPECT_EQ(findHost(host_id_).workspace_id(), workspace_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Which workspace holds a host is an administrator's call. A member of the workspace edits the
+// host but cannot take it out.
+TEST_F(HostRequestHandlerTest, MemberCannotMoveHostBetweenWorkspaces)
+{
+    const RequestResult released = handle(makeMoveRequest(host_id_, 0, 0, "display"));
+
+    EXPECT_EQ(released.error_code, proto::router::kErrorAccessDenied);
+    EXPECT_EQ(findHost(host_id_).workspace_id(), workspace_id_);
+
+    const HostId free_host = addHost("hash-2");
+    ASSERT_NE(free_host, kInvalidHostId);
+
+    const RequestResult claimed =
+        handle(makeMoveRequest(free_host, workspace_id_, 0, "display"));
+
+    EXPECT_EQ(claimed.error_code, proto::router::kErrorAccessDenied);
+    EXPECT_EQ(findHost(free_host).workspace_id(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The group of the request belongs to the workspace the host ends up in, not to the one it is
+// leaving.
+TEST_F(HostRequestHandlerTest, GroupIsCheckedAgainstTheTargetWorkspace)
+{
+    caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+    const qint64 other_id = addWorkspace("beta");
+    ASSERT_GT(other_id, 0);
+    const qint64 other_group = addGroup(other_id, "servers");
+    ASSERT_GT(other_group, 0);
+
+    const HostId free_host = addHost("hash-2");
+    ASSERT_NE(free_host, kInvalidHostId);
+
+    EXPECT_EQ(handle(makeMoveRequest(free_host, other_id, other_group, "display")).error_code,
+              proto::router::kErrorOk);
+    EXPECT_EQ(findHost(free_host).group_id(), other_group);
+
+    EXPECT_EQ(handle(makeMoveRequest(host_id_, workspace_id_, other_group, "display")).error_code,
+              proto::router::kErrorInvalidData);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A released host keeps nothing of the workspace it left.
+TEST_F(HostRequestHandlerTest, ReleasedHostLosesGroupAndComment)
+{
+    caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+    const qint64 group_id = addGroup(workspace_id_, "servers");
+    ASSERT_GT(group_id, 0);
+
+    proto::router::HostRequest request = makeRequest(host_id_, group_id, "display");
+    request.mutable_host()->set_comment("note");
+    ASSERT_EQ(handle(request).error_code, proto::router::kErrorOk);
+
+    ASSERT_EQ(handle(makeMoveRequest(host_id_, 0, group_id, "display")).error_code,
+              proto::router::kErrorOk);
+
+    const proto::router::Host stored = findHost(host_id_);
+    EXPECT_EQ(stored.workspace_id(), 0);
+    EXPECT_EQ(stored.group_id(), 0);
+    EXPECT_TRUE(stored.comment().empty());
+}
+
 // The host lists and the search of the client channel: what every session type is allowed to see.
 class HostListTest : public RouterTestBase
 {
@@ -300,32 +413,8 @@ protected:
         if (host_id == kInvalidHostId)
             return kInvalidHostId;
 
-        // Every host of the workspace, whatever group it sits in: the save carries the complete
-        // final set, and a host missing from it would be released.
-        std::set<HostId> hosts;
-        proto::router::HostList list;
-        db_.hosts(0, proto::router::kMaxHostPageSize, &list);
-        for (int i = 0; i < list.host_size(); ++i)
-        {
-            if (list.host(i).workspace_id() == workspace_id)
-                hosts.insert(list.host(i).host_id());
-        }
-        hosts.insert(host_id);
-
-        // The complete final set of the workspace, as a save from the console would send it.
-        proto::router::WorkspaceList workspaces;
-        db_.workspaceListForAdmin(workspace_id, &workspaces);
-        if (workspaces.workspace_size() != 1)
-            return kInvalidHostId;
-
-        if (db_.modifyWorkspace(workspace_id, workspaces.workspace(0).revision(),
-                                workspaces.workspace(0).name(), std::string_view(),
-                                {accessEntry(admin_)}, hosts) != proto::router::kErrorOk)
-        {
-            return kInvalidHostId;
-        }
-
-        if (!db_.modifyHost(host_id, group_id, display_name, std::string_view()))
+        if (db_.modifyHost(host_id, workspace_id, group_id, display_name, std::string_view()) !=
+            proto::router::kErrorOk)
         {
             return kInvalidHostId;
         }
@@ -447,6 +536,63 @@ TEST_F(HostListTest, FilteredListIsScopedToWorkspaceAndGroup)
     ASSERT_EQ(at_root.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(at_root.host_size(), 1);
     EXPECT_EQ(at_root.host(0).display_name(), "at-root");
+}
+
+//--------------------------------------------------------------------------------------------------
+// A negative group_id takes the whole workspace, groups and root alike.
+TEST_F(HostListTest, FilteredListTakesEveryGroupOfTheWorkspace)
+{
+    qint64 group_id = -1;
+    ASSERT_EQ(db_.addGroup(workspace_id_, 0, "servers", std::string_view(), &group_id),
+              proto::router::kErrorOk);
+
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, group_id, "in-group"), kInvalidHostId);
+    ASSERT_NE(addHostTo("hash-2", workspace_id_, 0, "at-root"), kInvalidHostId);
+    ASSERT_NE(addHost("hash-3"), kInvalidHostId); // Unassigned.
+
+    const proto::router::HostList list = hostList(
+        hostListRequest(proto::router::HostListRequest::MODE_FILTERED, workspace_id_, -1));
+
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(list.host_size(), 2);
+    EXPECT_EQ(list.total_count(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Without a workspace such a request would list every host of the router, which is what MODE_ALL
+// is for and only an administrator may ask.
+TEST_F(HostListTest, AnyGroupWithoutWorkspaceIsRejected)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
+
+    const proto::router::HostList list =
+        hostList(hostListRequest(proto::router::HostListRequest::MODE_FILTERED, 0, -1));
+
+    EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(list.host_size(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The hosts no workspace claimed are the pool an administrator picks from, and nobody else sees it.
+TEST_F(HostListTest, UnassignedHostsAreListedForAdminOnly)
+{
+    ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "assigned"), kInvalidHostId);
+    ASSERT_NE(addHost("hash-2"), kInvalidHostId);
+
+    const proto::router::HostList list =
+        hostList(hostListRequest(proto::router::HostListRequest::MODE_FILTERED, 0, 0));
+
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(list.host_size(), 1);
+    EXPECT_EQ(list.total_count(), 1);
+
+    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_TRUE(client.isValid());
+    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+
+    EXPECT_EQ(hostList(hostListRequest(proto::router::HostListRequest::MODE_FILTERED, 0, 0))
+                  .error_code(),
+              proto::router::kErrorAccessDenied);
 }
 
 //--------------------------------------------------------------------------------------------------

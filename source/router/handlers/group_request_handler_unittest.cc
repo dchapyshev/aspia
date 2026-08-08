@@ -60,7 +60,9 @@ protected:
 
     QString groupName(qint64 workspace_id, qint64 entry_id)
     {
-        return QString::fromStdString(db_.findGroup(workspace_id, entry_id).name);
+        Group group;
+        db_.findGroup(workspace_id, entry_id, &group);
+        return QString::fromStdString(group.name);
     }
 
     int groupCount(qint64 workspace_id)
@@ -229,7 +231,9 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
     EXPECT_EQ(handle(comment_request).error_code, proto::router::kErrorInvalidData);
 
     EXPECT_EQ(groupName(workspace_id_, group_id), "servers");
-    EXPECT_TRUE(db_.findGroup(workspace_id_, group_id).comment.empty());
+    Group stored;
+    ASSERT_EQ(db_.findGroup(workspace_id_, group_id, &stored), proto::router::kErrorOk);
+    EXPECT_TRUE(stored.comment.empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,10 +332,8 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     const qint64 child_id = addGroup(workspace_id_, parent_id, "child");
     ASSERT_GT(child_id, 0);
 
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_)}, {host_id}),
+    ASSERT_EQ(db_.modifyHost(host_id, workspace_id_, child_id, "host", std::string_view()),
               proto::router::kErrorOk);
-    ASSERT_TRUE(db_.modifyHost(host_id, child_id, "host", std::string_view()));
 
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupDelete, workspace_id_);

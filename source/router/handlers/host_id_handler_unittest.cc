@@ -74,9 +74,10 @@ protected:
 
     qint64 hostCount()
     {
-        bool ok = false;
-        const qint64 count = db_.hostCount(&ok);
-        return ok ? count : -1;
+        qint64 count = 0;
+        if (db_.hostCount(&count) != proto::router::kErrorOk)
+            return -1;
+        return count;
     }
 
     HostIdPeer peer_;
@@ -248,7 +249,8 @@ TEST_F(HostIdHandlerTest, ReconnectionKeepsTheAdministratorsLabel)
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_EQ(handle(existingIdRequest("key-1")).error_code, proto::router::kErrorOk);
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view()));
+    ASSERT_EQ(db_.modifyHost(host_id, 0, 0, "Accounting", std::string_view()),
+              proto::router::kErrorOk);
 
     peer_.computer_name = "RENAMED-BY-OS";
     peer_.address = "10.0.0.5";

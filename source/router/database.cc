@@ -1041,7 +1041,7 @@ bool Database::issueClientDeviceToken(
     const char kTrimSql[] =
         "DELETE FROM client_device_tokens WHERE user_id=? AND token_id NOT IN "
         "(SELECT token_id FROM client_device_tokens WHERE user_id=? "
-        "ORDER BY last_used_at DESC LIMIT ?)";
+        "ORDER BY last_used_at DESC, token_id DESC LIMIT ?)";
     SqlQuery trim(db_, kTrimSql);
     trim.addInt64(user_id);
     trim.addInt64(user_id);

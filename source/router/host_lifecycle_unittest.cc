@@ -40,9 +40,10 @@ protected:
 
     qint64 hostCount()
     {
-        bool ok = false;
-        const qint64 count = db_.hostCount(&ok);
-        return ok ? count : -1;
+        qint64 count = 0;
+        if (db_.hostCount(&count) != proto::router::kErrorOk)
+            return -1;
+        return count;
     }
 };
 
@@ -127,7 +128,8 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
     EXPECT_EQ(stored.address(), "192.168.1.10");
     EXPECT_GT(stored.last_connect(), 0);
 
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view()));
+    ASSERT_EQ(db_.modifyHost(host_id, 0, 0, "Accounting", std::string_view()),
+              proto::router::kErrorOk);
 
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
                                    "3.0.1", "Windows", "192.168.1.11"));
@@ -221,33 +223,25 @@ TEST_F(HostLifecycleTest, RemovalAfterReapprovalReplacesTheStaleRow)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host of a workspace that was removed meanwhile is gone from the snapshot the console still
-// holds. Its next save carries the host in the final set and must answer conflict instead of
-// resurrecting a record that no longer exists.
-TEST_F(HostLifecycleTest, RemovedHostMakesAWorkspaceSaveConflict)
+// A host whose removal is queued is out of the hosts table already. Claiming it for a workspace
+// must not resurrect a record that no longer exists.
+TEST_F(HostLifecycleTest, RemovedHostCannotBeClaimed)
 {
     ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const qint64 workspace_id = addWorkspace("alpha", {host_id});
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
 
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_)}, {host_id}),
-              proto::router::kErrorConflict);
-
-    // The same save without the host applies: the console refetched and dropped it.
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_)}, {}),
-              proto::router::kErrorOk);
+    EXPECT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorNotFound);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The identity survives everything the workspace does to it: releasing a host clears the fields
-// encrypted with the group key, but the host itself keeps its id and its telemetry.
+// The identity survives everything the workspace does to it. Releasing a host clears what it
+// carried inside the workspace, but the host keeps its id and its telemetry.
 TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
 {
     ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
@@ -255,9 +249,10 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
                                    "3.0.0", "Windows", "192.168.1.10"));
 
-    const qint64 workspace_id = addWorkspace("alpha", {host_id});
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", "comment"));
+    ASSERT_EQ(db_.modifyHost(host_id, workspace_id, 0, "Accounting", "comment"),
+              proto::router::kErrorOk);
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
 

@@ -39,7 +39,7 @@ protected:
 
         proto::router::Workspace* workspace = request.mutable_workspace();
         workspace->set_name(name.toStdString());
-        workspace->add_access()->set_user_id(admin_.entry_id);
+        workspace->add_user_id(admin_.entry_id);
 
         return request;
     }
@@ -77,27 +77,9 @@ TEST_F(WorkspaceRequestHandlerTest, AddCreatesWorkspaceAndNotifies)
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_GT(result.entry_id, 0);
 
-    // A creation can only claim hosts, so with none requested the host lists stay valid.
+    // The hosts of a workspace are claimed one by one, so a creation leaves the host lists valid.
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_WORKSPACES));
     EXPECT_EQ(workspaceName(result.entry_id), "alpha");
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(WorkspaceRequestHandlerTest, AddWithHostsClaimsThemAndNotifiesHosts)
-{
-    const HostId host_id = addHost("hash-1");
-    ASSERT_NE(host_id, kInvalidHostId);
-
-    proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha");
-    request.mutable_workspace()->add_host_id(host_id);
-
-    const RequestResult result = handle(request);
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.notify_flags,
-              quint32(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS));
-    EXPECT_EQ(findHost(host_id).workspace_id(), result.entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,10 +159,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
 
-    // The host assignments change even when no host is requested (every host of the workspace is
-    // released), so the host lists are always announced as stale.
-    EXPECT_EQ(result.notify_flags,
-              quint32(ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS));
+    EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_WORKSPACES));
     EXPECT_EQ(workspaceName(workspace_id), "beta");
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 }
@@ -197,7 +176,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyCanDropOwnAccess)
         makeRequest(proto::router::kCommandWorkspaceModify, "beta");
     request.mutable_workspace()->set_entry_id(workspace_id);
     request.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
-    request.mutable_workspace()->clear_access();
+    request.mutable_workspace()->clear_user_id();
 
     const RequestResult result = handle(request);
 
@@ -208,7 +187,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyCanDropOwnAccess)
     proto::router::WorkspaceList list;
     db_.workspaceListForAdmin(workspace_id, &list);
     ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).access_size(), 0);
+    EXPECT_EQ(list.workspace(0).user_id_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -246,8 +225,9 @@ TEST_F(WorkspaceRequestHandlerTest, DeleteReleasesHostsAndDropsGroups)
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const qint64 workspace_id = addWorkspace("alpha", {host_id});
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
 
     qint64 group_id = -1;
     ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
@@ -329,14 +309,14 @@ TEST_F(WorkspaceListTest, AdminSeesFullMembership)
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_), accessEntry(client)}, {}),
+                                  {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
     const proto::router::WorkspaceList list = workspaceList(0);
 
     ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).access_size(), 2);
+    EXPECT_EQ(list.workspace(0).user_id_size(), 2);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -348,7 +328,7 @@ TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_), accessEntry(client)}, {}),
+                                  {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
@@ -357,7 +337,7 @@ TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
 
     ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).access_size(), 0);
+    EXPECT_EQ(list.workspace(0).user_id_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -379,7 +359,7 @@ TEST_F(WorkspaceListTest, InvisibleWorkspaceIsNotListed)
 
     // The administrator is not a member of it either, and lists it regardless.
     setCaller(admin_, proto::router::SESSION_TYPE_ADMIN);
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(), {}, {}),
+    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(), {}),
               proto::router::kErrorOk);
     EXPECT_EQ(workspaceList(0).workspace_size(), 1);
 }

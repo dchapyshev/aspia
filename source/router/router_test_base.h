@@ -56,7 +56,7 @@ protected:
 
         ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
                   proto::router::kErrorOk);
-        admin_ = db_.findUser("admin");
+        ASSERT_EQ(db_.findUser("admin", &admin_), proto::router::kErrorOk);
         ASSERT_EQ(admin_.entry_id, 1);
 
         caller_.user_id = admin_.entry_id;
@@ -81,7 +81,22 @@ protected:
     {
         if (db_.addUser(makeUser(name, sessions)) != proto::router::kErrorOk)
             return RouterUser();
-        return db_.findUser(name);
+        return findUser(name);
+    }
+
+    // The stored record of a user, empty when there is none.
+    RouterUser findUser(const QString& name)
+    {
+        RouterUser user;
+        db_.findUser(name, &user);
+        return user;
+    }
+
+    RouterUser findUser(qint64 entry_id)
+    {
+        RouterUser user;
+        db_.findUser(entry_id, &user);
+        return user;
     }
 
     // A session of the given user and type, in place of the built-in administrator.
@@ -92,24 +107,25 @@ protected:
         caller_.session_type = session_type;
     }
 
-    // One membership entry for |user|.
-    static Workspace::Access accessEntry(const RouterUser& user)
-    {
-        Workspace::Access access;
-        access.user_id = user.entry_id;
-        return access;
-    }
-
     // A workspace the built-in administrator is a member of.
-    qint64 addWorkspace(const QString& name, const std::set<HostId>& hosts = {})
+    qint64 addWorkspace(const QString& name)
     {
         qint64 entry_id = -1;
-        if (db_.addWorkspace(name.toStdString(), std::string_view(), {accessEntry(admin_)},
-                             hosts, &entry_id) != proto::router::kErrorOk)
+        if (db_.addWorkspace(name.toStdString(), std::string_view(), {admin_.entry_id},
+                             &entry_id) != proto::router::kErrorOk)
         {
             return -1;
         }
         return entry_id;
+    }
+
+    // Moves a host to the given workspace and group, keeping the fields an operator edits.
+    // workspace_id == 0 releases the host.
+    std::string_view moveHost(HostId host_id, qint64 workspace_id, qint64 group_id = 0)
+    {
+        const proto::router::Host host = findHost(host_id);
+        return db_.modifyHost(host_id, workspace_id, group_id, host.display_name(),
+                              host.comment());
     }
 
     // An approved host, as the host worker creates it at first connection.

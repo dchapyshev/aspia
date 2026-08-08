@@ -130,7 +130,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentStoresSecretOnlyAfterConfirmation)
     ASSERT_FALSE(secret.isEmpty());
 
     // Nothing is stored until the code arrives.
-    EXPECT_TRUE(db_.findUser(admin_.entry_id).otp_secret.isEmpty());
+    EXPECT_TRUE(findUser(admin_.entry_id).otp_secret.isEmpty());
 
     const TwoFactorHandler::Result accepted =
         submitCode(handler, Totp::code(secret, kNow), kNow);
@@ -138,7 +138,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentStoresSecretOnlyAfterConfirmation)
     ASSERT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
     EXPECT_FALSE(accepted.new_token.empty());
     EXPECT_GT(accepted.token_id, 0);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).otp_secret, secret);
+    EXPECT_EQ(findUser(admin_.entry_id).otp_secret, secret);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentRejectsWrongCode)
 
     EXPECT_EQ(submitCode(handler, "000000", kNow).action,
               TwoFactorHandler::Action::CLOSE);
-    EXPECT_TRUE(db_.findUser(admin_.entry_id).otp_secret.isEmpty());
+    EXPECT_TRUE(findUser(admin_.entry_id).otp_secret.isEmpty());
     EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
 }
 
@@ -172,7 +172,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentLosesRaceToAnotherSession)
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).otp_secret, other_secret);
+    EXPECT_EQ(findUser(admin_.entry_id).otp_secret, other_secret);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ TEST_F(TwoFactorHandlerTest, ActiveStageAcceptsCodeAndIssuesToken)
     EXPECT_EQ(tokenCount(admin_.entry_id), 1u);
 
     // The step that was accepted is consumed.
-    EXPECT_EQ(db_.findUser(admin_.entry_id).otp_counter,
+    EXPECT_EQ(findUser(admin_.entry_id).otp_counter,
               static_cast<quint64>(kNow / Totp::kDefaultStepSec));
 }
 
@@ -605,7 +605,7 @@ TEST_F(TwoFactorHandlerTest, TokenIsIgnoredDuringEnrollment)
 
     // The token alone leaves the response without a code: the enrollment cannot be confirmed.
     EXPECT_EQ(submitToken(handler, token).action, TwoFactorHandler::Action::CLOSE);
-    EXPECT_TRUE(db_.findUser(admin_.entry_id).otp_secret.isEmpty());
+    EXPECT_TRUE(findUser(admin_.entry_id).otp_secret.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

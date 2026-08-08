@@ -241,7 +241,9 @@ protected:
 // A member of the workspace the host belongs to gets the keyed path.
 TEST_F(KeyedConnectionTest, MemberOfTheWorkspaceIsAllowed)
 {
-    ASSERT_GT(addWorkspace("workspace", {host_id_}), 0);
+    const qint64 workspace_id = addWorkspace("workspace");
+    ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id_, workspace_id), proto::router::kErrorOk);
     EXPECT_TRUE(allowed(admin_.entry_id));
 }
 
@@ -258,7 +260,9 @@ TEST_F(KeyedConnectionTest, HostOutsideAWorkspaceIsRefused)
 // A user without an access entry is refused, even though the host is in a workspace.
 TEST_F(KeyedConnectionTest, UserWithoutAccessIsRefused)
 {
-    ASSERT_GT(addWorkspace("workspace", {host_id_}), 0);
+    const qint64 workspace_id = addWorkspace("workspace");
+    ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id_, workspace_id), proto::router::kErrorOk);
 
     const RouterUser outsider = addUser("outsider", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_GT(outsider.entry_id, 0);
@@ -271,7 +275,9 @@ TEST_F(KeyedConnectionTest, UserWithoutAccessIsRefused)
 // and does the password handshake.
 TEST_F(KeyedConnectionTest, SessionTypeMustBeExactlyOne)
 {
-    ASSERT_GT(addWorkspace("workspace", {host_id_}), 0);
+    const qint64 workspace_id = addWorkspace("workspace");
+    ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id_, workspace_id), proto::router::kErrorOk);
 
     EXPECT_FALSE(allowed(admin_.entry_id, 0));
     EXPECT_FALSE(allowed(admin_.entry_id, proto::peer::SESSION_TYPE_DESKTOP |
@@ -283,7 +289,9 @@ TEST_F(KeyedConnectionTest, SessionTypeMustBeExactlyOne)
 // An unknown host has no workspace to authorize by.
 TEST_F(KeyedConnectionTest, UnknownHostIsRefused)
 {
-    ASSERT_GT(addWorkspace("workspace", {host_id_}), 0);
+    const qint64 workspace_id = addWorkspace("workspace");
+    ASSERT_GT(workspace_id, 0);
+    ASSERT_EQ(moveHost(host_id_, workspace_id), proto::router::kErrorOk);
     EXPECT_FALSE(isKeyedConnectionAllowed(db_, admin_.entry_id, host_id_ + 1000,
                                           proto::peer::SESSION_TYPE_DESKTOP));
 }
