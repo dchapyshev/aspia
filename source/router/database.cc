@@ -153,10 +153,9 @@ bool ensureSchema(SqlDatabase& db)
     // means the host is shown at the workspace root. No FKs on these columns because 0 is a
     // sentinel value; for any non-zero value the application enforces that it points to an
     // existing row in workspaces/host_groups.
-    // comment is AEAD-encrypted with the workspace GK (only meaningful when
-    // workspace_id != 0). name, computer_name (real OS hostname), cpu_arch, version, os_name,
-    // address and last_connect are plain values; the latter five are updated by the router on
-    // every host connection and reflect the latest connect attempt.
+    // name, computer_name (real OS hostname), cpu_arch, version, os_name, address and
+    // last_connect are updated by the router on every host connection and reflect the latest
+    // connect attempt.
     if (!run("CREATE TABLE IF NOT EXISTS \"hosts\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"key\" BLOB NOT NULL UNIQUE,"
@@ -169,7 +168,7 @@ bool ensureSchema(SqlDatabase& db)
              "\"version\" TEXT NOT NULL DEFAULT '',"
              "\"os_name\" TEXT NOT NULL DEFAULT '',"
              "\"address\" TEXT NOT NULL DEFAULT '',"
-             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "\"comment\" TEXT NOT NULL DEFAULT '',"
              "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
@@ -183,7 +182,7 @@ bool ensureSchema(SqlDatabase& db)
     if (!run("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"name\" TEXT NOT NULL UNIQUE,"
-             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "\"comment\" TEXT NOT NULL DEFAULT '',"
              "\"revision\" INTEGER NOT NULL DEFAULT 1,"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
@@ -203,7 +202,6 @@ bool ensureSchema(SqlDatabase& db)
     if (!run("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
              "\"workspace_id\" INTEGER NOT NULL,"
              "\"user_id\" INTEGER NOT NULL,"
-             "\"wrapped_gk\" BLOB NOT NULL,"
              "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
              "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
              "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
@@ -216,7 +214,7 @@ bool ensureSchema(SqlDatabase& db)
              "\"workspace_id\" INTEGER NOT NULL,"
              "\"parent_id\" INTEGER,"
              "\"name\" TEXT NOT NULL,"
-             "\"comment\" BLOB NOT NULL DEFAULT X'',"
+             "\"comment\" TEXT NOT NULL DEFAULT '',"
              "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
              "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)"))
     {
@@ -328,7 +326,7 @@ bool ensureSchema(SqlDatabase& db)
         { "version",       "TEXT NOT NULL DEFAULT ''"    },
         { "os_name",       "TEXT NOT NULL DEFAULT ''"    },
         { "address",       "TEXT NOT NULL DEFAULT ''"    },
-        { "comment",       "BLOB NOT NULL DEFAULT X''"   },
+        { "comment",       "TEXT NOT NULL DEFAULT ''"    },
         { "last_connect",  "INTEGER NOT NULL DEFAULT 0"  },
         { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  }
     };
@@ -489,9 +487,7 @@ bool Database::userList(std::vector<RouterUser>* users) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addUser(
-    const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys,
-    qint64 grantor_user_id)
+std::string_view Database::addUser(const RouterUser& user)
 {
     if (!isValid())
     {
@@ -503,17 +499,6 @@ std::string_view Database::addUser(
     {
         LOG(ERROR) << "Not valid user";
         return proto::router::kErrorInvalidData;
-    }
-
-    // The whole set, not only the keys that get consumed, so a bad one is answered and not ignored.
-    for (const auto& [workspace_id, wrapped_gk] : wrapped_keys)
-    {
-        if (wrapped_gk.isEmpty() ||
-            wrapped_gk.size() > static_cast<qsizetype>(proto::router::kMaxWrappedKeyLength))
-        {
-            LOG(ERROR) << "Invalid wrapped key for workspace" << workspace_id;
-            return proto::router::kErrorInvalidData;
-        }
     }
 
     SqlTransaction transaction(db_);
@@ -562,16 +547,6 @@ std::string_view Database::addUser(
         return proto::router::kErrorInternalError;
     }
 
-    if (user.sessions & proto::router::SESSION_TYPE_ADMIN)
-    {
-        // The new administrator must see every workspace right away.
-        const qint64 user_id = db_.lastInsertRowId();
-        const std::string_view error_code =
-            grantMissingWorkspaceAccess(user_id, grantor_user_id, wrapped_keys);
-        if (error_code != proto::router::kErrorOk)
-            return error_code;
-    }
-
     if (!transaction.commit())
     {
         LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
@@ -582,9 +557,7 @@ std::string_view Database::addUser(
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyUser(
-    const RouterUser& user, const std::unordered_map<qint64, QByteArray>& wrapped_keys,
-    qint64 grantor_user_id, bool* password_changed)
+std::string_view Database::modifyUser(const RouterUser& user, bool* password_changed)
 {
     if (!isValid())
     {
@@ -601,16 +574,6 @@ std::string_view Database::modifyUser(
     {
         LOG(ERROR) << "Not valid user";
         return proto::router::kErrorInvalidData;
-    }
-
-    for (const auto& [workspace_id, wrapped_gk] : wrapped_keys)
-    {
-        if (wrapped_gk.isEmpty() ||
-            wrapped_gk.size() > static_cast<qsizetype>(proto::router::kMaxWrappedKeyLength))
-        {
-            LOG(ERROR) << "Invalid wrapped key for workspace" << workspace_id;
-            return proto::router::kErrorInvalidData;
-        }
     }
 
     if (user.entry_id == kBuiltInUserId && !(user.flags & User::ENABLED))
@@ -630,16 +593,13 @@ std::string_view Database::modifyUser(
     }
 
     // Read the existing verifier first - a change to salt or verifier means a password rotation,
-    // which must invalidate every device token and re-wrap the workspace keys. The stored session
-    // mask tells whether the user is an administrator: the request is not authoritative about it,
-    // the mask of the record never changes and is not written back here.
+    // which must invalidate every device token.
     QByteArray old_salt;
     QByteArray old_verifier;
     QByteArray old_public_key;
-    quint32 sessions = 0;
     bool user_found = false;
     {
-        SqlQuery select(db_, "SELECT salt, verifier, sessions, public_key FROM users WHERE id=?");
+        SqlQuery select(db_, "SELECT salt, verifier, public_key FROM users WHERE id=?");
         select.addInt64(user.entry_id);
 
         if (!select.isValid())
@@ -662,8 +622,7 @@ std::string_view Database::modifyUser(
             user_found = true;
             old_salt = select.columnBlob(0);
             old_verifier = select.columnBlob(1);
-            sessions = static_cast<quint32>(select.columnInt64(2));
-            old_public_key = select.columnBlob(3);
+            old_public_key = select.columnBlob(2);
         }
     }
 
@@ -671,9 +630,7 @@ std::string_view Database::modifyUser(
         return proto::router::kErrorNotFound;
 
     // The sessions column is absent from the queries: the access level is set when the user is
-    // created and never changes afterwards. A user that was an administrator has the keys of every
-    // workspace, and taking the rights away would leave the access entries behind without a way to
-    // revoke what the user already knows.
+    // created and never changes afterwards (I1).
     if (has_credentials)
     {
         // Same reasoning as in addUser: a rename that lost a race must answer
@@ -731,9 +688,9 @@ std::string_view Database::modifyUser(
         }
     }
 
-    // A changed public key alone is a rotation too: the UPDATE above already stored the new key,
-    // and every wrapped_gk sealed to the old one became undecryptable the same way as after a
-    // password change - so the same complete re-sealed set is required below.
+    // A changed public key alone is a rotation too: the identity the client signs with is a
+    // different one from now on, so the device tokens issued to the old one go the same way as
+    // after a password change.
     const bool rotated = has_credentials &&
         (old_salt != user.salt || old_verifier != user.verifier ||
          old_public_key != user.public_key);
@@ -749,92 +706,6 @@ std::string_view Database::modifyUser(
         {
             LOG(ERROR) << "Unable to revoke device tokens:" << db_.lastError();
             return proto::router::kErrorInternalError;
-        }
-
-        // The rotation invalidated the stored wrapped GKs, so a freshly re-sealed key must be
-        // present for every workspace the user can access. If any is missing, return without
-        // committing - the transaction rolls back and the user keeps access.
-        std::vector<qint64> workspace_ids;
-        {
-            SqlQuery select(db_, "SELECT workspace_id FROM workspace_access WHERE user_id=?");
-            select.addInt64(user.entry_id);
-
-            if (!select.isValid())
-            {
-                LOG(ERROR) << "Unable to read workspace access:" << db_.lastError();
-                return proto::router::kErrorInternalError;
-            }
-
-            for (;;)
-            {
-                const SqlQuery::StepResult step = select.next();
-                if (step == SqlQuery::StepResult::FAILED)
-                {
-                    // A partial scan must not pass for the full set: every entry missed here would
-                    // keep a wrapped GK sealed to the old key pair - unusable after the rotation.
-                    LOG(ERROR) << "Unable to read workspace access:" << db_.lastError();
-                    return proto::router::kErrorInternalError;
-                }
-
-                if (step == SqlQuery::StepResult::DONE)
-                    break;
-
-                workspace_ids.emplace_back(select.columnInt64(0));
-            }
-        }
-
-        for (qint64 workspace_id : std::as_const(workspace_ids))
-        {
-            const auto it = wrapped_keys.find(workspace_id);
-            if (it == wrapped_keys.end() || it->second.isEmpty())
-            {
-                // The sender re-sealed the keys of every workspace it knew about, so a missing
-                // one means its workspace list predates this entry - a conflict the sender
-                // resolves by refetching the list and retrying, not bad data.
-                LOG(ERROR) << "Missing re-sealed key for workspace" << workspace_id
-                           << ". Rejecting to preserve access";
-                return proto::router::kErrorConflict;
-            }
-        }
-
-        const char kSql[] = "UPDATE workspace_access SET wrapped_gk=? WHERE workspace_id=? AND user_id=?";
-        for (qint64 workspace_id : std::as_const(workspace_ids))
-        {
-            SqlQuery query(db_, kSql);
-            query.addBlob(wrapped_keys.at(workspace_id));
-            query.addInt64(workspace_id);
-            query.addInt64(user.entry_id);
-
-            if (!query.exec())
-            {
-                LOG(ERROR) << "Unable to update workspace access:" << db_.lastError();
-                return proto::router::kErrorInternalError;
-            }
-        }
-    }
-
-    if (sessions & proto::router::SESSION_TYPE_ADMIN)
-    {
-        // A workspace could have been created by another administrator at the moment this one was
-        // being created, and then it has no access entry for that workspace. Repaired here. The
-        // keys of |wrapped_keys| are sealed to the public key of the record as the sender saw it,
-        // so a flags-only request can repair only while that snapshot is still true: with no key
-        // pair stored (a pre-upgrade user) there is nothing to seal to at all, and after a
-        // concurrent password rotation the keys target a discarded pair - inserted entries could
-        // never be unsealed, and the broken rows would block the password changes of the user.
-        const bool keys_usable =
-            has_credentials || (!old_public_key.isEmpty() && old_public_key == user.public_key);
-        if (keys_usable)
-        {
-            const std::string_view error_code =
-                grantMissingWorkspaceAccess(user.entry_id, grantor_user_id, wrapped_keys);
-            if (error_code != proto::router::kErrorOk)
-                return error_code;
-        }
-        else
-        {
-            LOG(WARNING) << "Workspace access repair skipped for user" << user.entry_id
-                         << "- the request has no usable public key";
         }
     }
 
@@ -1592,7 +1463,7 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view disp
     SqlQuery query(db_, kSql);
     query.addText(display_name);
     query.addInt64(group_id);
-    query.addBlob(comment);
+    query.addText(comment);
     query.addInt64(timestamp);
     query.addUInt64(host_id);
 
@@ -1662,7 +1533,7 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         host->set_version(query.columnTextView(6));
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnBlobView(9));
+        host->set_comment(query.columnTextView(9));
         host->set_last_connect(query.columnInt64(10));
         host->set_last_modify(query.columnInt64(11));
     }
@@ -1731,7 +1602,7 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
         host->set_version(query.columnTextView(6));
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnBlobView(9));
+        host->set_comment(query.columnTextView(9));
         host->set_last_connect(query.columnInt64(10));
         host->set_last_modify(query.columnInt64(11));
     }
@@ -1922,7 +1793,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
         host->set_version(query.columnTextView(6));
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnBlobView(9));
+        host->set_comment(query.columnTextView(9));
         host->set_last_connect(query.columnInt64(10));
         host->set_last_modify(query.columnInt64(11));
     }
@@ -2077,8 +1948,7 @@ bool Database::pruneExpiredHostRemovals()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
-    proto::router::WorkspaceList* out) const
+void Database::workspaceListForAdmin(qint64 workspace_id, proto::router::WorkspaceList* out) const
 {
     if (!isValid())
     {
@@ -2095,16 +1965,12 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
         return;
     }
 
-    // Visible workspaces: those the admin has an access row for (optionally narrowed to workspace_id).
-    // Indexed by id so the access query below can attach every member's entry.
+    // Indexed by id so the membership query below can attach every member to its workspace.
     std::unordered_map<qint64, proto::router::Workspace*> by_id;
     {
         const std::string sql = strCat({
-            "SELECT workspaces.id, workspaces.name, workspaces.comment, workspaces.revision "
-            "FROM workspaces "
-            "JOIN workspace_access ON workspace_access.workspace_id = workspaces.id "
-            "AND workspace_access.user_id = ?",
-            workspace_id > 0 ? " AND workspaces.id = ?" : ""});
+            "SELECT id, name, comment, revision FROM workspaces",
+            workspace_id > 0 ? " WHERE id = ?" : ""});
 
         SqlQuery query(db_, sql);
         if (!query.isValid())
@@ -2114,7 +1980,6 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
             return;
         }
 
-        query.addInt64(user_id);
         if (workspace_id > 0)
             query.addInt64(workspace_id);
 
@@ -2136,7 +2001,7 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
             proto::router::Workspace* item = out->add_workspace();
             item->set_entry_id(query.columnInt64(0));
             item->set_name(query.columnTextView(1));
-            item->set_comment(query.columnBlobView(2));
+            item->set_comment(query.columnTextView(2));
             item->set_revision(query.columnInt64(3));
             by_id.emplace(item->entry_id(), item);
         }
@@ -2148,10 +2013,9 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
         return;
     }
 
-    // Every member's access entry for the visible workspaces in a single query (no per-workspace
-    // round trip). The by_id lookup discards rows for workspaces the admin cannot see.
+    // Every membership of the listed workspaces in a single query (no per-workspace round trip).
     const std::string sql = strCat({
-        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access",
+        "SELECT workspace_id, user_id FROM workspace_access",
         workspace_id > 0 ? " WHERE workspace_id = ?" : ""});
 
     SqlQuery query(db_, sql);
@@ -2186,16 +2050,14 @@ void Database::workspaceListWithAllAccess(qint64 user_id, qint64 workspace_id,
         if (it == by_id.end())
             continue;
 
-        proto::router::WorkspaceAccess* access = it->second->add_access();
-        access->set_user_id(query.columnInt64(1));
-        access->set_wrapped_gk(query.columnBlobView(2));
+        it->second->add_access()->set_user_id(query.columnInt64(1));
     }
 
     out->set_error_code(proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Database::workspaceListWithOwnAccess(qint64 user_id, qint64 workspace_id,
+void Database::workspaceListForUser(qint64 user_id, qint64 workspace_id,
     proto::router::WorkspaceList* out) const
 {
     if (!isValid())
@@ -2205,11 +2067,10 @@ void Database::workspaceListWithOwnAccess(qint64 user_id, qint64 workspace_id,
         return;
     }
 
-    // The visibility join is on the user's own access row, so the same query already yields the
-    // wrapped_gk it needs - no second query and no per-workspace round trip.
+    // The membership of the others is none of the business of a regular session, so the reply
+    // carries the workspaces alone.
     const std::string sql = strCat({
-        "SELECT workspaces.id, workspaces.name, workspaces.comment, workspaces.revision, "
-        "workspace_access.wrapped_gk "
+        "SELECT workspaces.id, workspaces.name, workspaces.comment, workspaces.revision "
         "FROM workspaces JOIN workspace_access ON workspace_access.workspace_id = workspaces.id "
         "AND workspace_access.user_id = ?",
         workspace_id > 0 ? " AND workspaces.id = ?" : ""});
@@ -2244,12 +2105,8 @@ void Database::workspaceListWithOwnAccess(qint64 user_id, qint64 workspace_id,
         proto::router::Workspace* item = out->add_workspace();
         item->set_entry_id(query.columnInt64(0));
         item->set_name(query.columnTextView(1));
-        item->set_comment(query.columnBlobView(2));
+        item->set_comment(query.columnTextView(2));
         item->set_revision(query.columnInt64(3));
-
-        proto::router::WorkspaceAccess* access = item->add_access();
-        access->set_user_id(user_id);
-        access->set_wrapped_gk(query.columnBlobView(4));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2279,7 +2136,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
     Workspace workspace;
     workspace.entry_id = query.columnInt64(0);
     workspace.name     = query.columnTextView(1);
-    workspace.comment  = query.columnBlobView(2);
+    workspace.comment  = query.columnTextView(2);
     return workspace;
 }
 
@@ -2313,11 +2170,9 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     std::set<qint64> initial_ids;
     for (const Workspace::Access& access : initial_access)
     {
-        if (access.user_id <= 0 || access.public_key.empty() ||
-            access.wrapped_gk.empty() ||
-            access.wrapped_gk.size() > proto::router::kMaxWrappedKeyLength)
+        if (access.user_id <= 0)
         {
-            LOG(ERROR) << "Invalid access record";
+            LOG(ERROR) << "Invalid access record (user_id <= 0)";
             return proto::router::kErrorInvalidData;
         }
 
@@ -2358,15 +2213,9 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
     if (check_step == SqlQuery::StepResult::ROW)
         return proto::router::kErrorAlreadyExists;
 
-    // After the name check: an incomplete access list must not mask the more specific
-    // "already exists" answer.
-    const std::string_view error_code = checkAccessCoversAdmins(initial_ids);
-    if (error_code != proto::router::kErrorOk)
-        return error_code;
-
     SqlQuery insert_workspace(db_, "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
     insert_workspace.addText(name);
-    insert_workspace.addBlob(comment);
+    insert_workspace.addText(comment);
 
     if (!insert_workspace.exec())
     {
@@ -2376,21 +2225,18 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
 
     const qint64 new_id = db_.lastInsertRowId();
 
-    const char kInsertAccessSql[] =
-        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)";
-    SqlQuery insert_access(db_, kInsertAccessSql);
+    SqlQuery insert_access(db_,
+        "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
     for (const Workspace::Access& access : initial_access)
     {
-        const std::string_view seal_error =
-            checkAccessSealTarget(access.user_id, access.public_key);
-        if (seal_error != proto::router::kErrorOk)
-            return seal_error;
+        const std::string_view user_error = checkAccessUser(access.user_id);
+        if (user_error != proto::router::kErrorOk)
+            return user_error;
 
         insert_access.reset();
         insert_access.addInt64(new_id);
         insert_access.addInt64(access.user_id);
-        insert_access.addBlob(access.wrapped_gk);
 
         if (!insert_access.exec())
         {
@@ -2514,16 +2360,10 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
     if (name_step == SqlQuery::StepResult::ROW && name_check.columnInt64(0) != entry_id)
         return proto::router::kErrorAlreadyExists;
 
-    // After the existence and name checks: an incomplete access list must not mask the more
-    // specific "not found" / "already exists" answers.
-    const std::string_view error_code = checkAccessCoversAdmins(desired_ids);
-    if (error_code != proto::router::kErrorOk)
-        return error_code;
-
     SqlQuery update_workspace(db_,
         "UPDATE workspaces SET name=?, comment=?, revision=revision+1 WHERE id=?");
     update_workspace.addText(name);
-    update_workspace.addBlob(comment);
+    update_workspace.addText(comment);
     update_workspace.addInt64(entry_id);
 
     if (!update_workspace.exec())
@@ -2547,8 +2387,8 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         const SqlQuery::StepResult step = select_current.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            // A partial set would make existing entries look new: the inserts below would collide
-            // with them instead of preserving their wrapped_gk.
+            // A partial set would make existing entries look new and the inserts below would
+            // collide with them.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
             return proto::router::kErrorInternalError;
         }
@@ -2577,31 +2417,21 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         }
     }
 
-    const char kInsertAccessSql[] =
-        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)";
-    SqlQuery insert_access(db_, kInsertAccessSql);
+    SqlQuery insert_access(db_,
+        "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
     for (const Workspace::Access& access : desired_access)
     {
         if (current_ids.contains(access.user_id))
             continue;
 
-        if (access.wrapped_gk.empty() ||
-            access.wrapped_gk.size() > proto::router::kMaxWrappedKeyLength)
-        {
-            LOG(ERROR) << "Invalid wrapped_gk for new access entry, user_id:" << access.user_id;
-            return proto::router::kErrorInvalidData;
-        }
-
-        const std::string_view seal_error =
-            checkAccessSealTarget(access.user_id, access.public_key);
-        if (seal_error != proto::router::kErrorOk)
-            return seal_error;
+        const std::string_view user_error = checkAccessUser(access.user_id);
+        if (user_error != proto::router::kErrorOk)
+            return user_error;
 
         insert_access.reset();
         insert_access.addInt64(entry_id);
         insert_access.addInt64(access.user_id);
-        insert_access.addBlob(access.wrapped_gk);
 
         if (!insert_access.exec())
         {
@@ -2661,7 +2491,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorNotFound;
 
     SqlQuery release_hosts(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'' "
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment='' "
         "WHERE workspace_id=?");
     release_hosts.addInt64(entry_id);
 
@@ -2687,6 +2517,39 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
     }
 
     return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::workspaceIds(std::set<qint64>* workspace_ids) const
+{
+    CHECK(workspace_ids);
+
+    workspace_ids->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "SELECT id FROM workspaces");
+
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::DONE)
+            break;
+
+        workspace_ids->insert(query.columnInt64(0));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2718,44 +2581,6 @@ bool Database::workspaceAccessIdsForUser(qint64 user_id, std::set<qint64>* works
             break;
 
         workspace_ids->insert(query.columnInt64(0));
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::workspaceAccessListForUser(qint64 user_id, std::vector<Workspace::Access>* access_list) const
-{
-    CHECK(access_list);
-
-    access_list->clear();
-
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    SqlQuery query(db_, "SELECT workspace_id, wrapped_gk FROM workspace_access WHERE user_id=?");
-    query.addInt64(user_id);
-
-    for (;;)
-    {
-        const SqlQuery::StepResult step = query.next();
-        if (step == SqlQuery::StepResult::FAILED)
-        {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
-        }
-
-        if (step == SqlQuery::StepResult::DONE)
-            break;
-
-        Workspace::Access access;
-        access.workspace_id = query.columnInt64(0);
-        access.user_id      = user_id;
-        access.wrapped_gk   = query.columnBlobView(1);
-        access_list->emplace_back(std::move(access));
     }
 
     return true;
@@ -2840,7 +2665,7 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
         group->set_entry_id(query.columnInt64(0));
         group->set_parent_id(query.columnInt64(1));
         group->set_name(query.columnTextView(2));
-        group->set_comment(query.columnBlobView(3));
+        group->set_comment(query.columnTextView(3));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2893,7 +2718,7 @@ Group Database::findGroup(qint64 workspace_id, qint64 entry_id, bool* ok) const
     group.entry_id  = query.columnInt64(0);
     group.parent_id = query.columnInt64(1);
     group.name      = query.columnTextView(2);
-    group.comment   = query.columnBlobView(3);
+    group.comment   = query.columnTextView(3);
     return group;
 }
 
@@ -2969,7 +2794,7 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
     else
         insert.addInt64(parent_id);
     insert.addText(name);
-    insert.addBlob(comment);
+    insert.addText(comment);
 
     if (!insert.exec())
     {
@@ -3090,7 +2915,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     else
         update_self.addInt64(new_parent_id);
     update_self.addText(name);
-    update_self.addBlob(comment);
+    update_self.addText(comment);
     update_self.addInt64(entry_id);
     update_self.addInt64(workspace_id);
 
@@ -3209,164 +3034,9 @@ bool Database::openDatabase()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::grantMissingWorkspaceAccess(
-    qint64 user_id, qint64 grantor_user_id, const std::unordered_map<qint64, QByteArray>& wrapped_keys)
+std::string_view Database::checkAccessUser(qint64 user_id)
 {
-    if (user_id <= 0)
-    {
-        LOG(ERROR) << "Invalid user id:" << user_id;
-        return proto::router::kErrorInvalidData;
-    }
-
-    // Collect the ids while the cursor is open and insert only afterwards - inserting into
-    // workspace_access with the cursor still open could make the SELECT revisit its own rows.
-    std::vector<qint64> missing_ids;
-    {
-        SqlQuery select(db_,
-            "SELECT id FROM workspaces WHERE NOT EXISTS ("
-            "SELECT 1 FROM workspace_access WHERE workspace_access.workspace_id = workspaces.id "
-            "AND workspace_access.user_id = ?)");
-        select.addInt64(user_id);
-
-        if (!select.isValid())
-        {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-
-        for (;;)
-        {
-            const SqlQuery::StepResult step = select.next();
-            if (step == SqlQuery::StepResult::FAILED)
-            {
-                // A partial scan must not pass for the full set: every workspace missed here would
-                // silently stay inaccessible to the user.
-                LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-                return proto::router::kErrorInternalError;
-            }
-
-            if (step == SqlQuery::StepResult::DONE)
-                break;
-
-            missing_ids.emplace_back(select.columnInt64(0));
-        }
-    }
-
-    SqlQuery insert(db_, "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)");
-    SqlQuery bump(db_, "UPDATE workspaces SET revision=revision+1 WHERE id=?");
-
-    for (qint64 workspace_id : std::as_const(missing_ids))
-    {
-        const auto it = wrapped_keys.find(workspace_id);
-        if (it == wrapped_keys.end() || it->second.isEmpty())
-        {
-            // The skip-or-reject decision below needs the access of the grantor; without a
-            // grantor it cannot be made at all. The callers always pass one when workspaces can
-            // exist - reaching this line is a contract violation, not a data problem.
-            if (grantor_user_id <= 0)
-            {
-                LOG(ERROR) << "No grantor to check access for workspace" << workspace_id;
-                return proto::router::kErrorInternalError;
-            }
-
-            // The grantor can seal the key of every workspace it has access to itself, so a
-            // missing key means it built the request from a list of the workspaces read before
-            // this one appeared. Reject as a conflict: the sender refetches the list and
-            // retries with the key - otherwise the user stays without access to it forever.
-            // The skip-or-reject decision must not be made on an error - "no access" and "could
-            // not check" are different answers.
-            bool access_known = false;
-            const bool grantor_has_access =
-                hasWorkspaceAccess(grantor_user_id, workspace_id, &access_known);
-            if (!access_known)
-            {
-                LOG(ERROR) << "Unable to check grantor access for workspace" << workspace_id;
-                return proto::router::kErrorInternalError;
-            }
-
-            if (grantor_has_access)
-            {
-                LOG(ERROR) << "The request has no key for workspace" << workspace_id;
-                return proto::router::kErrorConflict;
-            }
-
-            LOG(WARNING) << "No sealed key for workspace" << workspace_id << "- user" << user_id
-                         << "will not have access to it";
-            continue;
-        }
-
-        insert.reset();
-        insert.addInt64(workspace_id);
-        insert.addInt64(user_id);
-        insert.addBlob(it->second);
-
-        if (!insert.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-
-        // The membership of the workspace changed: a save built from a member list that misses
-        // the new entry must get kErrorConflict instead of silently revoking it (see I4).
-        bump.reset();
-        bump.addInt64(workspace_id);
-
-        if (!bump.exec())
-        {
-            LOG(ERROR) << "Unable to update workspace revision:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-    }
-
-    return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string_view Database::checkAccessCoversAdmins(const std::set<qint64>& access_user_ids)
-{
-    // An administrator without a public key is not required: nobody can seal the group key for it.
-    // A user upgraded from a database of a previous version has no key pair until it changes its
-    // password, and demanding its entry would make every workspace uneditable meanwhile.
-    SqlQuery select(db_, "SELECT id FROM users WHERE (sessions & ?) != 0 AND length(public_key) != 0");
-    select.addInt64(proto::router::SESSION_TYPE_ADMIN);
-
-    if (!select.isValid())
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return proto::router::kErrorInternalError;
-    }
-
-    for (;;)
-    {
-        const SqlQuery::StepResult step = select.next();
-        if (step == SqlQuery::StepResult::FAILED)
-        {
-            // The loop guards an invariant: a partially checked list must not pass for a complete one.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return proto::router::kErrorInternalError;
-        }
-
-        if (step == SqlQuery::StepResult::DONE)
-            break;
-
-        const qint64 user_id = select.columnInt64(0);
-        if (!access_user_ids.contains(user_id))
-        {
-            // Either the client is broken or (far more likely) the administrator was created
-            // after the client took its user list. Reject as a conflict: refetching the users
-            // auto-includes every administrator, so a retry resolves the race.
-            LOG(ERROR) << "The access list has no administrator" << user_id;
-            return proto::router::kErrorConflict;
-        }
-    }
-
-    return proto::router::kErrorOk;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::string_view Database::checkAccessSealTarget(qint64 user_id, std::string_view public_key)
-{
-    SqlQuery select(db_, "SELECT public_key FROM users WHERE id=?");
+    SqlQuery select(db_, "SELECT 1 FROM users WHERE id=?");
     select.addInt64(user_id);
 
     if (!select.isValid())
@@ -3382,39 +3052,12 @@ std::string_view Database::checkAccessSealTarget(qint64 user_id, std::string_vie
         return proto::router::kErrorInternalError;
     }
 
-    // Checked before the supplied key: an entry for a user that is gone is how a concurrent
-    // delete looks from here (the sender still saw the user in its snapshot), and the recovery
-    // is a refetch - so a conflict, not bad data.
+    // An entry for a user that is gone is how a concurrent delete looks from here (the sender
+    // still saw the user in its snapshot), and the recovery is a refetch - so a conflict, not
+    // bad data.
     if (step != SqlQuery::StepResult::ROW)
     {
         LOG(ERROR) << "Access entry for unknown user:" << user_id;
-        return proto::router::kErrorConflict;
-    }
-
-    if (public_key.empty())
-    {
-        LOG(ERROR) << "Access entry for user" << user_id << "carries no seal target";
-        return proto::router::kErrorInvalidData;
-    }
-
-    const QByteArray stored_key = select.columnBlob(0);
-    const std::string_view stored(stored_key.constData(), static_cast<size_t>(stored_key.size()));
-
-    if (stored.empty())
-    {
-        // Nobody can seal the group key for a user without a key pair, so whatever the entry
-        // was sealed to, the user could never unseal it.
-        LOG(ERROR) << "Access entry for user" << user_id << "without a key pair";
-        return proto::router::kErrorInvalidData;
-    }
-
-    if (stored != public_key)
-    {
-        // The sender sealed to a key the user no longer has (the password was rotated after the
-        // sender took its snapshot). The entry could never be unsealed, and a broken row would
-        // also block the password changes of the user - the rotation re-wrap requires a key for
-        // every stored entry.
-        LOG(ERROR) << "Access entry for user" << user_id << "is sealed to an out of date key";
         return proto::router::kErrorConflict;
     }
 
@@ -3425,7 +3068,7 @@ std::string_view Database::checkAccessSealTarget(qint64 user_id, std::string_vie
 std::string_view Database::syncWorkspaceHosts(qint64 entry_id, const std::set<HostId>& desired_host_ids)
 {
     // Both callers validate the id, but this is the one place that releases every host of a
-    // workspace and wipes their encrypted fields - with entry_id 0 the release scan would pick
+    // workspace and wipes the notes they carried - with entry_id 0 the release scan would pick
     // up the whole pool of unassigned hosts, so the guard stays here as well.
     if (entry_id <= 0)
     {
@@ -3506,10 +3149,9 @@ std::string_view Database::syncWorkspaceHosts(qint64 entry_id, const std::set<Ho
             release_ids.emplace_back(host_id);
     }
 
-    // The encrypted fields are sealed with the workspace group key, so a host outside any
-    // workspace cannot keep them. Clear them together with the workspace assignment.
+    // The note belongs to the workspace the host was in, so it goes together with the assignment.
     SqlQuery release(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'' "
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment='' "
         "WHERE id=?");
     for (HostId host_id : release_ids)
     {

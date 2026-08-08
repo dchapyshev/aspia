@@ -43,9 +43,7 @@ public:
     struct User
     {
         qint64 entry_id = 0;
-        bool is_admin   = false;
         QString name;
-        QByteArray public_key;
     };
 
     struct HostInfo
@@ -68,14 +66,6 @@ public:
         QString name;
         QString comment;
         QSet<qint64> access_ids;
-    };
-
-    // Sealed group key of one access entry in the save request. An empty public_key marks an
-    // already granted user: the router keeps the stored entry.
-    struct AccessEntry
-    {
-        qint64 user_id = 0;
-        QByteArray public_key;
     };
 
     // entry_id == 0 means create mode; > 0 means modify mode.
@@ -143,19 +133,16 @@ public:
 
     // An administrator with a key pair cannot be revoked (the router requires every one of
     // them in the access list).
-    bool canRevokeUser(qint64 user_id) const;
-
     // Whether the release warning applies: releasing a host the server has in this workspace
-    // irreversibly wipes its encrypted fields.
+    // irreversibly drops the note it carried within it.
     bool isServerHost(quint64 host_id) const { return server_host_ids_.contains(host_id); }
 
     //----------------------------------------------------------------------------------------------
     // Save
     //----------------------------------------------------------------------------------------------
 
-    // The full desired access list. public_key is attached only for new grants (users not in
-    // the server snapshot); for already granted users it stays empty - "keep the stored entry".
-    QList<AccessEntry> accessEntriesForSave() const;
+    // The complete membership the workspace is to have.
+    QList<qint64> accessUserIdsForSave() const;
 
     QList<quint64> hostIdsForSave() const;
 

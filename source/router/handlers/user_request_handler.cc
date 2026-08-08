@@ -35,25 +35,7 @@ namespace {
 using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
-// The group keys the sender re-sealed to the key pair of the user. The router can neither unseal
-// nor reseal them, it only stores them as the access entries of the user.
-std::unordered_map<qint64, QByteArray> workspaceKeys(const proto::router::User& user)
-{
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.reserve(user.workspace_key_size());
-
-    for (int i = 0; i < user.workspace_key_size(); ++i)
-    {
-        const proto::router::User::WorkspaceKey& wk = user.workspace_key(i);
-        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-    }
-
-    return wrapped_keys;
-}
-
-//--------------------------------------------------------------------------------------------------
-void handleAdd(Database& database, const RequestCaller& caller, const proto::router::User& user,
-               Result* result)
+void handleAdd(Database& database, const proto::router::User& user, Result* result)
 {
     LOG(INFO) << "User add request:" << user.name();
 
@@ -65,10 +47,7 @@ void handleAdd(Database& database, const RequestCaller& caller, const proto::rou
         return;
     }
 
-    // An administrator has access to every workspace, so the keys of the request become the access
-    // entries of the new user (see Database::addUser).
-    const std::string_view error_code =
-        database.addUser(new_user, workspaceKeys(user), caller.user_id);
+    const std::string_view error_code = database.addUser(new_user);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -77,16 +56,11 @@ void handleAdd(Database& database, const RequestCaller& caller, const proto::rou
         return;
     }
 
-    // An administrator could have received access entries for the workspaces it had none for, so
-    // the clients must refetch the list of the workspaces as well.
     result->notify_flags = ClientWorker::NOTIFY_USERS;
-    if (new_user.sessions & proto::router::SESSION_TYPE_ADMIN)
-        result->notify_flags |= ClientWorker::NOTIFY_WORKSPACES;
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleModify(Database& database, const RequestCaller& caller, const proto::router::User& user,
-                  Result* result)
+void handleModify(Database& database, const proto::router::User& user, Result* result)
 {
     LOG(INFO) << "User modify request:" << user.name();
 
@@ -110,14 +84,10 @@ void handleModify(Database& database, const RequestCaller& caller, const proto::
         return;
     }
 
-    // On a password rotation the stored wrapped GKs must be replaced with the keys re-sealed by
-    // the admin to the new key pair. The user update, token revocation and re-wrap happen in one
-    // transaction inside modifyUser; if the re-sealed set is incomplete the whole change is
-    // rejected, so the user never loses workspace access. The keys are only consumed when the
-    // password actually changes (decided authoritatively inside modifyUser).
+    // The user update and the token revocation of a password rotation happen in one transaction
+    // inside modifyUser, which decides authoritatively whether the rotation happened at all.
     bool password_changed = false;
-    const std::string_view error_code =
-        database.modifyUser(new_user, workspaceKeys(user), caller.user_id, &password_changed);
+    const std::string_view error_code = database.modifyUser(new_user, &password_changed);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -133,10 +103,7 @@ void handleModify(Database& database, const RequestCaller& caller, const proto::
     if (password_changed || disabled)
         result->stop_user_id = new_user.entry_id;
 
-    // The access level of the request is not authoritative, so whether access entries were created
-    // for the workspaces (see Database::modifyUser) is unknown here. The list of the workspaces is
-    // refetched in any case: a user is modified rarely.
-    result->notify_flags = ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES;
+    result->notify_flags = ClientWorker::NOTIFY_USERS;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -269,11 +236,11 @@ RequestResult handleUserRequest(Database& database, const RequestCaller& caller,
 
     if (command_name == proto::router::kCommandUserAdd)
     {
-        handleAdd(database, caller, request.user(), &result);
+        handleAdd(database, request.user(), &result);
     }
     else if (command_name == proto::router::kCommandUserModify)
     {
-        handleModify(database, caller, request.user(), &result);
+        handleModify(database, request.user(), &result);
     }
     else if (command_name == proto::router::kCommandUserDelete)
     {
@@ -390,22 +357,9 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
         return result;
     }
 
-    // The rotation produced a new key pair, so the workspace keys re-sealed by the client to the
-    // new public key must replace the stored ones (now sealed to the old, discarded key).
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.reserve(request.workspace_key_size());
-
-    for (int i = 0; i < request.workspace_key_size(); ++i)
-    {
-        const proto::router::ChangePasswordRequest::WorkspaceKey& wk = request.workspace_key(i);
-        wrapped_keys.emplace(wk.workspace_id(), QByteArray::fromStdString(wk.wrapped_gk()));
-    }
-
-    // Credentials and re-wrapped keys are persisted atomically: the password is rotated only if a
-    // re-sealed key is present for every workspace the user can access, so a partial set can never
-    // leave the user without workspace access. Only the password-derived fields differ here (the
-    // rest were loaded from the database), so reusing modifyUser writes back identical values.
-    const std::string_view error_code = database.modifyUser(user, wrapped_keys, caller.user_id);
+    // Only the password-derived fields differ here (the rest were loaded from the database), so
+    // reusing modifyUser writes back identical values.
+    const std::string_view error_code = database.modifyUser(user);
     result.error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)

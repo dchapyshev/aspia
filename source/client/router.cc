@@ -20,8 +20,6 @@
 
 #include <QHash>
 
-#include <set>
-
 #include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -187,12 +185,6 @@ void Router::addUser(const proto::router::User& user,
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandUserAdd);
     request->mutable_user()->CopyFrom(user);
-
-    // An administrator has access to every workspace, so our workspace keys are sealed to the key
-    // pair of the new user and become its access entries on the router.
-    if (user.sessions() & proto::router::SESSION_TYPE_ADMIN)
-        keys_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
-
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -206,7 +198,6 @@ void Router::modifyUser(const proto::router::User& user,
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandUserModify);
     request->mutable_user()->CopyFrom(user);
-    keys_.resealGroupKeys(QByteArray::fromStdString(user.public_key()), request->mutable_user());
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -342,7 +333,7 @@ void Router::checkHostUpdates(HostId host_id, RouterCallback<proto::router::Host
 void Router::editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback)
 {
     proto::router::Host serialized;
-    const std::string_view build_error = buildRouterHost(keys_, host, &serialized);
+    const std::string_view build_error = buildRouterHost(host, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         // Nothing is sent, so no reply would ever come and the caller would wait forever.
@@ -366,7 +357,7 @@ void Router::addWorkspace(const RouterWorkspace& workspace,
                           RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
-    const std::string_view build_error = buildRouterWorkspace(keys_, workspace, &serialized);
+    const std::string_view build_error = buildRouterWorkspace(workspace, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         proto::router::WorkspaceResult result;
@@ -389,7 +380,7 @@ void Router::modifyWorkspace(const RouterWorkspace& workspace,
                              RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
-    const std::string_view build_error = buildRouterWorkspace(keys_, workspace, &serialized);
+    const std::string_view build_error = buildRouterWorkspace(workspace, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         proto::router::WorkspaceResult result;
@@ -425,7 +416,7 @@ void Router::addGroup(qint64 workspace_id, const RouterGroup& group,
                       RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = buildRouterGroup(keys_, workspace_id, group, &serialized);
+    const std::string_view build_error = buildRouterGroup(group, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         proto::router::GroupResult result;
@@ -449,7 +440,7 @@ void Router::modifyGroup(qint64 workspace_id, const RouterGroup& group,
                          RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = buildRouterGroup(keys_, workspace_id, group, &serialized);
+    const std::string_view build_error = buildRouterGroup(group, &serialized);
     if (build_error != proto::router::kErrorOk)
     {
         proto::router::GroupResult result;
@@ -575,7 +566,7 @@ void Router::searchHosts(const QString& query, qint64 offset, qint64 count,
     rpc_.registerPending<proto::router::HostSearchResult>(request, std::move(callback),
         [this](const proto::router::HostSearchResult& raw)
     {
-        return decodeRouterHostSearchResult(keys_, raw);
+        return decodeRouterHostSearchResult(raw);
     });
     send(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -632,8 +623,6 @@ void Router::changePassword(const SecureString& new_password,
     request->set_public_key(new_user.public_key.toStdString());
     request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
     request->set_wrap_salt(new_user.wrap_salt.toStdString());
-
-    keys_.resealGroupKeys(new_user.public_key, request);
 
     // The accepted password becomes the stored one: from now on it is what opens the account.
     QObject* receiver = callback.receiver();
@@ -852,11 +841,6 @@ RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceLis
     decoded.error_code = QString::fromStdString(list.error_code());
     decoded.workspaces.reserve(list.workspace_size());
 
-    // The complete list is the authoritative answer about what we still have access to.
-    const bool full_list = requested_workspace_id == 0 &&
-                           decoded.error_code == proto::router::kErrorOk;
-    std::set<qint64> visible_ids;
-
     for (int i = 0; i < list.workspace_size(); ++i)
     {
         const proto::router::Workspace& src = list.workspace(i);
@@ -864,45 +848,17 @@ RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceLis
         RouterWorkspace& dst = decoded.workspaces.emplaceBack();
         dst.entry_id = src.entry_id();
         dst.name     = QString::fromStdString(src.name());
+        dst.comment  = QString::fromStdString(src.comment());
         dst.revision = src.revision();
         dst.access.reserve(src.access_size());
 
-        visible_ids.insert(src.entry_id());
-
-        QByteArray self_wrapped_gk;
         for (int j = 0; j < src.access_size(); ++j)
-        {
-            const proto::router::WorkspaceAccess& access = src.access(j);
-            dst.access.emplaceBack().user_id = access.user_id();
-
-            if (access.user_id() == keys_.userId())
-                self_wrapped_gk = QByteArray::fromStdString(access.wrapped_gk());
-        }
-
-        if (self_wrapped_gk.isEmpty())
-            continue;
-
-        SecureByteArray gk = keys_.unwrapGroupKey(self_wrapped_gk);
-        if (gk.isEmpty())
-        {
-            // See RouterKeys::apply: the missing cryptor makes reseal-dependent operations answer
-            // "conflict" for this workspace with no way for a refetch to recover.
-            LOG(ERROR) << "Failed to unwrap GK for workspace" << src.entry_id();
-            continue;
-        }
-
-        DataCryptor cryptor(CipherType::AES256_GCM, gk);
-        if (!src.comment().empty())
-            dst.comment = decryptField(cryptor, src.comment());
-
-        keys_.storeWorkspaceKey(src.entry_id(), std::move(cryptor));
+            dst.access.emplaceBack().user_id = src.access(j).user_id();
     }
 
-    if (full_list)
-    {
-        keys_.dropKeysExcept(visible_ids);
+    // Only the complete list is the authoritative answer about what we can access.
+    if (requested_workspace_id == 0 && decoded.error_code == proto::router::kErrorOk)
         cache_.storeWorkspaces(decoded);
-    }
 
     return decoded;
 }
@@ -911,7 +867,7 @@ RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceLis
 RouterHostList Router::applyHostList(const proto::router::HostList& list,
                                      const RouterCache::HostKey& key, bool cacheable)
 {
-    RouterHostList decoded = decodeRouterHostList(keys_, list);
+    RouterHostList decoded = decodeRouterHostList(list);
 
     if (cacheable)
         cache_.storeHosts(key, decoded);
@@ -922,7 +878,7 @@ RouterHostList Router::applyHostList(const proto::router::HostList& list,
 //--------------------------------------------------------------------------------------------------
 RouterGroupList Router::applyGroupList(const proto::router::GroupList& list)
 {
-    RouterGroupList decoded = decodeRouterGroupList(keys_, list);
+    RouterGroupList decoded = decodeRouterGroupList(list);
     cache_.storeGroups(decoded);
     return decoded;
 }
@@ -998,9 +954,8 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 
     if (result == RouterKeys::Result::DECRYPT_FAILED)
     {
-        // The password opened the account but not the private key stored with it, so every
-        // workspace stays locked and even a password change cannot re-seal keys we cannot read.
-        // Nothing recovers from this and a reconnect would repeat it forever.
+        // The password opened the account but not the private key stored with it. Nothing
+        // recovers from this and a reconnect would repeat it forever.
         LOG(ERROR) << "Stored private key does not open with our password. Ending session";
         emit sig_errorOccurred(config_.routerId(), TcpChannel::ErrorCode::CRYPTO_ERROR);
         disconnectFromRouter();

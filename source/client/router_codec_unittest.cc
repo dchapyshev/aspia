@@ -20,153 +20,55 @@
 
 #include <gtest/gtest.h>
 
-#include "base/crypto/key_pair.h"
-#include "base/crypto/private_key_cryptor.h"
 #include "client/router_test_fixture.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 
 class RouterCodecTest : public RouterKeysFixture
 {
-protected:
-    RouterKeys keys_;
 };
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(RouterCodecTest, HostFieldsAreDecryptedWithTheWorkspaceKey)
+// What the router stores travels back as it is: the decoded record carries every field of the
+// message.
+TEST_F(RouterCodecTest, HostFieldsArriveAsStored)
 {
-    loadKeys(&keys_, {10});
-
     proto::router::HostList list = hostList(10, {HostId(1)}, 1);
-    list.mutable_host(0)->set_comment(encrypt(10, "comment"));
+    list.mutable_host(0)->set_comment("comment");
 
-    const RouterHostList decoded = decodeRouterHostList(keys_, list);
-
-    ASSERT_EQ(decoded.hosts.size(), 1);
-    EXPECT_EQ(decoded.hosts.at(0).comment, "comment");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Without the key the encrypted fields stay empty; the plain ones still arrive, so the host is
-// listed instead of disappearing.
-TEST_F(RouterCodecTest, HostOfUnknownWorkspaceKeepsPlainFieldsOnly)
-{
-    loadKeys(&keys_, {10});
-
-    proto::router::HostList list = hostList(20, {HostId(1)}, 1);
-    list.mutable_host(0)->set_comment(encrypt(20, "comment"));
-
-    const RouterHostList decoded = decodeRouterHostList(keys_, list);
+    const RouterHostList decoded = decodeRouterHostList(list);
 
     ASSERT_EQ(decoded.hosts.size(), 1);
     EXPECT_EQ(decoded.hosts.at(0).display_name, "host");
-    EXPECT_TRUE(decoded.hosts.at(0).comment.isEmpty());
+    EXPECT_EQ(decoded.hosts.at(0).comment, "comment");
+    EXPECT_EQ(decoded.hosts.at(0).workspace_id, 10);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The key travels only for a user that is being granted access; for the others the router keeps
-// the entry it already stores.
-TEST_F(RouterCodecTest, WorkspaceSaveSealsForNewMembersOnly)
+// The save carries the membership and the host set of the workspace as the operator built them.
+TEST_F(RouterCodecTest, WorkspaceSaveCarriesMembershipAndHosts)
 {
-    loadKeys(&keys_, {10});
-
-    const RouterUser other = RouterUser::create("other", SecureString(kPassword));
-
     RouterWorkspace workspace;
     workspace.entry_id = 10;
     workspace.name = "alpha";
     workspace.comment = "comment";
     workspace.revision = 3;
-    workspace.access.append({ kUserId, QByteArray() });          // Already a member.
-    workspace.access.append({ 2, other.public_key });            // Newly granted.
+    workspace.access.append({ kUserId });
+    workspace.access.append({ 2 });
     workspace.host_ids.append(HostId(7));
 
     proto::router::Workspace out;
-    ASSERT_EQ(buildRouterWorkspace(keys_, workspace, &out), proto::router::kErrorOk);
+    ASSERT_EQ(buildRouterWorkspace(workspace, &out), proto::router::kErrorOk);
 
     EXPECT_EQ(out.entry_id(), 10);
+    EXPECT_EQ(out.name(), "alpha");
+    EXPECT_EQ(out.comment(), "comment");
     EXPECT_EQ(out.revision(), 3);
     ASSERT_EQ(out.access_size(), 2);
-    EXPECT_TRUE(out.access(0).wrapped_gk().empty());
-    EXPECT_TRUE(out.access(0).public_key().empty());
-    EXPECT_FALSE(out.access(1).wrapped_gk().empty());
-    EXPECT_EQ(out.access(1).public_key(), other.public_key.toStdString());
+    EXPECT_EQ(out.access(0).user_id(), kUserId);
+    EXPECT_EQ(out.access(1).user_id(), 2);
     ASSERT_EQ(out.host_id_size(), 1);
     EXPECT_EQ(out.host_id(0), 7u);
-
-    // The new member can open exactly the key of this workspace.
-    const SecureByteArray private_key = PrivateKeyCryptor::decrypt(
-        other.wrap_private_key, SecureString(kPassword), other.wrap_salt);
-    ASSERT_FALSE(private_key.isEmpty());
-
-    const std::optional<SecureByteArray> opened = SealedBox::open(
-        QByteArray::fromStdString(out.access(1).wrapped_gk()),
-        KeyPair::fromPrivateKey(private_key));
-    ASSERT_TRUE(opened.has_value());
-    EXPECT_EQ(*opened, groupKey(10));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Without the key of an existing workspace the save would encrypt its comment with a key nobody
-// has, and the entries of the new members would be sealed to it as well.
-TEST_F(RouterCodecTest, WorkspaceSaveWithoutItsKeyIsRefused)
-{
-    loadKeys(&keys_, {10});
-
-    RouterWorkspace workspace;
-    workspace.entry_id = 20;
-    workspace.name = "beta";
-
-    proto::router::Workspace out;
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &out), proto::router::kErrorInternalError);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A workspace being created has no id yet, so its key is generated here - and must not be stored
-// under the id 0, or the next created workspace would silently reuse it.
-TEST_F(RouterCodecTest, NewWorkspaceGetsAFreshKeyThatIsNotKept)
-{
-    loadKeys(&keys_, {});
-
-    RouterWorkspace workspace;
-    workspace.name = "alpha";
-    workspace.comment = "comment";
-
-    proto::router::Workspace first;
-    ASSERT_EQ(buildRouterWorkspace(keys_, workspace, &first), proto::router::kErrorOk);
-    EXPECT_FALSE(keys_.hasWorkspaceKey(0));
-
-    proto::router::Workspace second;
-    ASSERT_EQ(buildRouterWorkspace(keys_, workspace, &second), proto::router::kErrorOk);
-
-    // Two creations of the same workspace data do not produce the same ciphertext: the keys differ.
-    EXPECT_NE(first.comment(), second.comment());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(RouterCodecTest, HostAndGroupSavesRequireTheWorkspaceKey)
-{
-    loadKeys(&keys_, {10});
-
-    RouterHost host;
-    host.host_id = HostId(1);
-    host.workspace_id = 20;
-    host.comment = "comment";
-
-    proto::router::Host host_out;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInternalError);
-
-    host.workspace_id = 10;
-    ASSERT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorOk);
-    EXPECT_FALSE(host_out.comment().empty());
-
-    RouterGroup group;
-    group.name = "servers";
-    group.comment = "comment";
-
-    proto::router::Group group_out;
-    EXPECT_EQ(buildRouterGroup(keys_, 20, group, &group_out), proto::router::kErrorInternalError);
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,11 +76,9 @@ TEST_F(RouterCodecTest, HostAndGroupSavesRequireTheWorkspaceKey)
 // characters is over the bound while the input field that accepted it is not.
 TEST_F(RouterCodecTest, OversizedFieldsAreRefusedBeforeTheRequestIsSent)
 {
-    loadKeys(&keys_, {10});
-
     const QString long_ascii_name(proto::router::kMaxEntryNameLength + 1, QChar('n'));
     const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
-    const QString long_comment(proto::router::kMaxCommentLength, QChar('c'));
+    const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
 
     RouterHost host;
     host.host_id = HostId(1);
@@ -187,36 +87,36 @@ TEST_F(RouterCodecTest, OversizedFieldsAreRefusedBeforeTheRequestIsSent)
     proto::router::Host host_out;
 
     host.display_name = long_ascii_name;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterHost(host, &host_out), proto::router::kErrorInvalidData);
 
     host.display_name = cyrillic_name;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterHost(host, &host_out), proto::router::kErrorInvalidData);
 
     host.display_name = "host";
     host.comment = long_comment;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterHost(host, &host_out), proto::router::kErrorInvalidData);
 
     RouterGroup group;
     group.name = long_ascii_name;
 
     proto::router::Group group_out;
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorInvalidData);
 
     group.name = "servers";
     group.comment = long_comment;
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorInvalidData);
 
     RouterWorkspace workspace;
     workspace.entry_id = 10;
     workspace.name = long_ascii_name;
 
     proto::router::Workspace workspace_out;
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
+    EXPECT_EQ(buildRouterWorkspace(workspace, &workspace_out),
               proto::router::kErrorInvalidData);
 
     workspace.name = "alpha";
     workspace.comment = long_comment;
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
+    EXPECT_EQ(buildRouterWorkspace(workspace, &workspace_out),
               proto::router::kErrorInvalidData);
 }
 
@@ -225,33 +125,31 @@ TEST_F(RouterCodecTest, OversizedFieldsAreRefusedBeforeTheRequestIsSent)
 // the sender, otherwise a name of blanks would pass here and be refused there.
 TEST_F(RouterCodecTest, AnEmptyNameIsRefusedAndTrailingBlanksAreNot)
 {
-    loadKeys(&keys_, {10});
-
     RouterGroup group;
     proto::router::Group group_out;
 
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorInvalidData);
 
     group.name = "   ";
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInvalidData);
+    EXPECT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorInvalidData);
 
     group.name = QString(proto::router::kMaxEntryNameLength, QChar('n')) + "   ";
-    ASSERT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorOk);
+    ASSERT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorOk);
     EXPECT_EQ(group_out.name().size(), proto::router::kMaxEntryNameLength);
 
     RouterWorkspace workspace;
     workspace.entry_id = 10;
     proto::router::Workspace workspace_out;
 
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
+    EXPECT_EQ(buildRouterWorkspace(workspace, &workspace_out),
               proto::router::kErrorInvalidData);
 
     workspace.name = "   ";
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
+    EXPECT_EQ(buildRouterWorkspace(workspace, &workspace_out),
               proto::router::kErrorInvalidData);
 
     workspace.name = "  alpha  ";
-    ASSERT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out), proto::router::kErrorOk);
+    ASSERT_EQ(buildRouterWorkspace(workspace, &workspace_out), proto::router::kErrorOk);
     EXPECT_EQ(workspace_out.name(), "alpha");
 }
 
@@ -260,22 +158,18 @@ TEST_F(RouterCodecTest, AnEmptyNameIsRefusedAndTrailingBlanksAreNot)
 // computer name, so nothing about it is mandatory.
 TEST_F(RouterCodecTest, AnEmptyHostIsSent)
 {
-    loadKeys(&keys_, {10});
-
     RouterHost host;
     host.host_id = HostId(1);
     host.workspace_id = 10;
 
     proto::router::Host host_out;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorOk);
+    EXPECT_EQ(buildRouterHost(host, &host_out), proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
 // A record sitting exactly on the bounds goes out.
 TEST_F(RouterCodecTest, FieldsAtTheBoundsAreSent)
 {
-    loadKeys(&keys_, {10});
-
     const QString name(proto::router::kMaxEntryNameLength, QChar('n'));
 
     RouterHost host;
@@ -284,57 +178,21 @@ TEST_F(RouterCodecTest, FieldsAtTheBoundsAreSent)
     host.display_name = name;
 
     proto::router::Host host_out;
-    ASSERT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorOk);
+    ASSERT_EQ(buildRouterHost(host, &host_out), proto::router::kErrorOk);
     EXPECT_EQ(host_out.display_name().size(), proto::router::kMaxEntryNameLength);
 
     RouterGroup group;
     group.name = name;
 
     proto::router::Group group_out;
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorOk);
+    EXPECT_EQ(buildRouterGroup(group, &group_out), proto::router::kErrorOk);
 
     RouterWorkspace workspace;
     workspace.entry_id = 10;
     workspace.name = name;
 
     proto::router::Workspace workspace_out;
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out), proto::router::kErrorOk);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A field that fails to encrypt must stop the record: the empty ciphertext left behind is not the
-// value the operator typed, and sending it would store an empty comment over the one that is there
-// - the credentials of a host among them, for every client of the router.
-TEST_F(RouterCodecTest, RecordWhoseFieldFailsToEncryptIsRefused)
-{
-    loadKeys(&keys_, {10});
-
-    // A cryptor that cannot encrypt: the key it was built with is not of the size the cipher needs.
-    keys_.storeWorkspaceKey(10, DataCryptor(CipherType::AES256_GCM, SecureByteArray("short")));
-
-    RouterHost host;
-    host.host_id = HostId(1);
-    host.workspace_id = 10;
-    host.comment = "comment";
-
-    proto::router::Host host_out;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInternalError);
-
-    RouterGroup group;
-    group.name = "servers";
-    group.comment = "comment";
-
-    proto::router::Group group_out;
-    EXPECT_EQ(buildRouterGroup(keys_, 10, group, &group_out), proto::router::kErrorInternalError);
-
-    RouterWorkspace workspace;
-    workspace.entry_id = 10;
-    workspace.name = "workspace";
-    workspace.comment = "comment";
-
-    proto::router::Workspace workspace_out;
-    EXPECT_EQ(buildRouterWorkspace(keys_, workspace, &workspace_out),
-              proto::router::kErrorInternalError);
+    EXPECT_EQ(buildRouterWorkspace(workspace, &workspace_out), proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,13 +201,11 @@ TEST_F(RouterCodecTest, RecordWhoseFieldFailsToEncryptIsRefused)
 // the codec is where it stops.
 TEST_F(RouterCodecTest, NegativeTotalCountDoesNotReachTheCallers)
 {
-    loadKeys(&keys_, {10});
-
     proto::router::HostList list = hostList(10, {HostId(1)}, -5);
-    EXPECT_EQ(decodeRouterHostList(keys_, list).total_count, 0);
+    EXPECT_EQ(decodeRouterHostList(list).total_count, 0);
 
     proto::router::HostSearchResult search;
     search.set_error_code(proto::router::kErrorOk);
     search.set_total_count(-5);
-    EXPECT_EQ(decodeRouterHostSearchResult(keys_, search).total_count, 0);
+    EXPECT_EQ(decodeRouterHostSearchResult(search).total_count, 0);
 }

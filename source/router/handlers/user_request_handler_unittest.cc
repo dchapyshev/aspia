@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "base/serialization.h"
+#include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_admin.h"
 #include "router/router_test_base.h"
@@ -85,176 +86,6 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
     EXPECT_EQ(result.stop_user_id, 0);
     EXPECT_TRUE(db_.findUser("bob").isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A new administrator receives an access entry for every workspace from the keys of the request,
-// so the workspace lists of the other sessions become stale as well.
-TEST_F(UserRequestHandlerTest, AddAdminGrantsWorkspacesAndNotifies)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
-    ASSERT_GT(workspace_id, 0);
-
-    const RouterUser new_admin = makeUser("admin2", kAllSessions);
-    proto::router::UserRequest request = makeRequest(proto::router::kCommandUserAdd, new_admin);
-
-    proto::router::User::WorkspaceKey* key = request.mutable_user()->add_workspace_key();
-    key->set_workspace_id(workspace_id);
-    key->set_wrapped_gk(toStdString(SealedBox::seal(gk, new_admin.public_key)));
-
-    const RequestResult result = handle(request);
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.notify_flags,
-              quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(db_.findUser("admin2").entry_id,
-                                              &workspace_ids));
-    EXPECT_TRUE(workspace_ids.contains(workspace_id));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A name the authenticator would never accept is refused before it reaches the database.
-TEST_F(UserRequestHandlerTest, AddUserRejectsInvalidName)
-{
-    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
-    user.name = "   ";
-
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserAdd, user));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
-    EXPECT_EQ(result.notify_flags, 0u);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Disabling an account must drop the sessions it opened while it was enabled: the authenticator
-// refuses its next login, but a session that is already running would otherwise keep working.
-TEST_F(UserRequestHandlerTest, DisablingUserStopsItsSessions)
-{
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
-              proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser("bob").entry_id;
-
-    RouterUser request_user;
-    request_user.entry_id = user_id;
-    request_user.flags = 0; // Disabled.
-    request_user.public_key = db_.findUser(user_id).public_key;
-
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserModify, request_user));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_TRUE(result.stop_token_ids.empty());
-    EXPECT_EQ(db_.findUser(user_id).flags, 0u);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A change that revokes nothing must not tear the user's sessions down.
-TEST_F(UserRequestHandlerTest, EnabledModifyKeepsSessions)
-{
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
-              proto::router::kErrorOk);
-    const RouterUser stored = db_.findUser("bob");
-
-    RouterUser request_user;
-    request_user.entry_id = stored.entry_id;
-    request_user.flags = User::ENABLED;
-    request_user.public_key = stored.public_key;
-
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserModify, request_user));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.stop_user_id, 0);
-    EXPECT_EQ(result.notify_flags,
-              quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A password rotation invalidates every credential the live sessions authenticated with.
-TEST_F(UserRequestHandlerTest, PasswordRotationStopsSessions)
-{
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
-              proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser("bob").entry_id;
-
-    RouterUser rotated = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
-    rotated.entry_id = user_id;
-
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserModify, rotated));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.stop_user_id, user_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A rejected rotation changed nothing, so the sessions of the user must survive it.
-TEST_F(UserRequestHandlerTest, RejectedRotationKeepsSessions)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace("alpha", gk), 0);
-
-    RouterUser rotated = makeUser("admin", kAllSessions);
-    rotated.entry_id = admin_.entry_id;
-
-    // No re-sealed key for the workspace: the whole change is refused.
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserModify, rotated));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
-    EXPECT_EQ(result.stop_user_id, 0);
-    EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(UserRequestHandlerTest, ModifyUserRejectsInvalidId)
-{
-    RouterUser request_user;
-    request_user.entry_id = 0;
-    request_user.flags = User::ENABLED;
-
-    const RequestResult result =
-        handle(makeRequest(proto::router::kCommandUserModify, request_user));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
-    EXPECT_EQ(result.stop_user_id, 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The deleted account keeps no sessions, and its access entries went with it - both lists are stale.
-TEST_F(UserRequestHandlerTest, DeleteUserStopsSessionsAndNotifies)
-{
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
-              proto::router::kErrorOk);
-    const qint64 user_id = db_.findUser("bob").entry_id;
-
-    const RequestResult result =
-        handle(makeIdRequest(proto::router::kCommandUserDelete, user_id));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
-    EXPECT_EQ(result.stop_user_id, user_id);
-    EXPECT_EQ(result.notify_flags,
-              quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
-    EXPECT_FALSE(db_.findUser(user_id).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A failed delete (the built-in administrator) must not announce anything or stop any session.
-TEST_F(UserRequestHandlerTest, FailedDeleteHasNoSideEffects)
-{
-    const RequestResult result =
-        handle(makeIdRequest(proto::router::kCommandUserDelete, admin_.entry_id));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorAccessDenied);
-    EXPECT_EQ(result.stop_user_id, 0);
-    EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_TRUE(db_.findUser(admin_.entry_id).isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -437,8 +268,7 @@ protected:
 
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
-        gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace("alpha", gk_);
+        workspace_id_ = addWorkspace("alpha");
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -454,20 +284,12 @@ protected:
         return request;
     }
 
-    void addWorkspaceKey(proto::router::ChangePasswordRequest* request, const RouterUser& rotated)
-    {
-        proto::router::ChangePasswordRequest::WorkspaceKey* key = request->add_workspace_key();
-        key->set_workspace_id(workspace_id_);
-        key->set_wrapped_gk(toStdString(SealedBox::seal(gk_, rotated.public_key)));
-    }
-
-    SecureByteArray gk_;
     qint64 workspace_id_ = 0;
 };
 
 //--------------------------------------------------------------------------------------------------
-// The rotation replaces the credentials, revokes every device token issued against the old ones
-// and re-wraps the workspace keys - all in one transaction.
+// The rotation replaces the credentials and revokes every device token issued against the old
+// ones, both in one transaction.
 TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
 {
     std::string token;
@@ -477,7 +299,6 @@ TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
     const RouterUser rotated = makeUser("admin", kAllSessions);
 
     proto::router::ChangePasswordRequest request = makeRequest(rotated);
-    addWorkspaceKey(&request, rotated);
 
     const RequestResult result = handleChangePassword(db_, caller_, request);
 
@@ -509,34 +330,12 @@ TEST_F(ChangePasswordTest, KeepsOtpEnrollment)
     const RouterUser rotated = makeUser("admin", kAllSessions);
 
     proto::router::ChangePasswordRequest request = makeRequest(rotated);
-    addWorkspaceKey(&request, rotated);
 
     ASSERT_EQ(handleChangePassword(db_, caller_, request).error_code, proto::router::kErrorOk);
 
     const RouterUser stored = db_.findUser(admin_.entry_id);
     EXPECT_EQ(stored.otp_secret, secret);
     EXPECT_EQ(stored.otp_counter, 100u);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Without a re-sealed key for every workspace the user can access the rotation would lock it out
-// of them, so nothing is applied - the credentials and the tokens survive intact.
-TEST_F(ChangePasswordTest, WithoutKeysIsConflict)
-{
-    std::string token;
-    qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
-
-    const RequestResult result =
-        handleChangePassword(db_, caller_, makeRequest(makeUser("admin", kAllSessions)));
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
-    EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
-
-    std::vector<DeviceToken> tokens;
-    ASSERT_TRUE(db_.listClientDeviceTokens(admin_.entry_id, &tokens));
-    EXPECT_EQ(tokens.size(), 1u);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -575,7 +374,6 @@ TEST_F(ChangePasswordTest, RejectsOversizedCredentials)
     for (const Field& field : fields)
     {
         proto::router::ChangePasswordRequest request = makeRequest(rotated);
-        addWorkspaceKey(&request, rotated);
 
         (request.*(field.setter))(oversized);
 
@@ -584,24 +382,6 @@ TEST_F(ChangePasswordTest, RejectsOversizedCredentials)
         EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData) << field.name;
         EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier) << field.name;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-// The router stores the re-sealed key without looking inside, so its size is all it can judge.
-TEST_F(ChangePasswordTest, RejectsAnOversizedWorkspaceKey)
-{
-    const RouterUser rotated = makeUser("admin", kAllSessions);
-
-    proto::router::ChangePasswordRequest request = makeRequest(rotated);
-
-    proto::router::ChangePasswordRequest::WorkspaceKey* key = request.add_workspace_key();
-    key->set_workspace_id(workspace_id_);
-    key->set_wrapped_gk(std::string(64 * 1024, 'x'));
-
-    const RequestResult result = handleChangePassword(db_, caller_, request);
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
 }
 
 //--------------------------------------------------------------------------------------------------

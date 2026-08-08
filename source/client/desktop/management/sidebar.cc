@@ -512,22 +512,7 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         if (error_code == proto::router::kErrorOk)
         {
             addRouterEvent(Severity::INFO, router_id,
-                           tr("Password updated. Waiting for new encryption keys..."));
-            return;
-        }
-
-        if (error_code == proto::router::kErrorConflict)
-        {
-            // The re-sealed key set was built from a stale workspace list (a workspace appeared
-            // meanwhile). Reloading the list refreshes the cached keys for a retry.
-            Router* router = Router::instance(router_id);
-            if (router)
-            {
-                router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
-                                       { this, [](const Router::WorkspaceList&) {} });
-            }
-            MsgBox::warning(this, tr("The list of workspaces was changed during the operation. "
-                                     "Please try again."));
+                           tr("Password updated. Waiting for the session to sign in again..."));
             return;
         }
 

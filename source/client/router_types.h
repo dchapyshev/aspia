@@ -27,24 +27,18 @@
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 
-// The plain (decrypted) records the router session hands to the UI. They live outside Router so
-// that RouterState - which does the decoding, the caching and the key handling - does not depend
-// on the class that owns the socket. Router aliases every one of them, so the call sites keep
-// using Router::Workspace, Router::Host and so on.
+// The records the router session hands to the UI. They live outside Router so that RouterState -
+// which does the decoding and the caching - does not depend on the class that owns the socket.
+// Router aliases every one of them, so the call sites keep using Router::Workspace, Router::Host
+// and so on.
 
-// Workspace data shared between the router session and the UI.
-//   * incoming: filled from the decoded server list. access entries carry only user_id;
-//     public_key is always empty (UI has no use for it).
-//   * outgoing: a workspace edit. entry_id == 0 means add, > 0 means modify. For each access
-//     entry public_key is non-empty when the user is being newly granted access (the session
-//     will seal the workspace GK with it) and empty when the user already had access (server
-//     preserves their existing wrapped_gk).
+// Workspace data shared between the router session and the UI. Outgoing, entry_id == 0 means add
+// and > 0 means modify; the access list is the complete membership the workspace is to have.
 struct RouterWorkspace
 {
     struct Access
     {
         qint64 user_id = 0;
-        QByteArray public_key;
     };
 
     qint64 entry_id = 0;
@@ -61,9 +55,6 @@ struct RouterWorkspaceList
     QList<RouterWorkspace> workspaces;
 };
 
-// Plain (decrypted) host record. comment is decrypted with the GK of the host's workspace; if
-// the GK for workspace_id is not currently cached (e.g. the workspace list has not been fetched
-// yet), it is left empty.
 struct RouterHost
 {
     HostId host_id = kInvalidHostId;
@@ -105,14 +96,13 @@ struct RouterTempHostList
     QList<RouterTempHost> hosts;
 };
 
-// Plain (decrypted) host group record.
 struct RouterGroup
 {
     qint64 entry_id = 0;
     qint64 workspace_id = 0; // Workspace that owns the group.
     qint64 parent_id = 0;    // 0 means the group sits at the workspace root.
     QString name;
-    QString comment;         // Decrypted with the workspace GK.
+    QString comment;
 };
 
 struct RouterGroupList

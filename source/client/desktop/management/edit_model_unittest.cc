@@ -31,13 +31,11 @@ constexpr qint64 kClientId = 2;
 constexpr qint64 kKeylessId = 3;
 
 //--------------------------------------------------------------------------------------------------
-WorkspaceEditModel::User makeUser(qint64 id, bool is_admin, const char* key = "key")
+WorkspaceEditModel::User makeUser(qint64 id)
 {
     WorkspaceEditModel::User user;
     user.entry_id = id;
-    user.is_admin = is_admin;
     user.name = QString("user-%1").arg(id);
-    user.public_key = QByteArray(key);
     return user;
 }
 
@@ -80,7 +78,7 @@ RouterUser makeRecord(quint32 flags)
 void loadDefault(WorkspaceEditModel* model)
 {
     ASSERT_TRUE(model->applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model->applyUserList({makeUser(kAdminId, true), makeUser(kClientId, false)});
+    model->applyUserList({makeUser(kAdminId), makeUser(kClientId)});
     model->applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId)});
     ASSERT_TRUE(model->isLoaded());
 }
@@ -124,31 +122,12 @@ TEST(WorkspaceEditModel, IntentsSurviveRefetch)
 
     // A refetch with identical server state must not disturb the edits.
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId, true), makeUser(kClientId, false)});
+    model.applyUserList({makeUser(kAdminId), makeUser(kClientId)});
     model.applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId)});
 
     EXPECT_TRUE(model.effectiveAccessIds().contains(kClientId));
     EXPECT_TRUE(model.effectiveHostIds().contains(100));
     EXPECT_FALSE(model.effectiveHostIds().contains(200));
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(WorkspaceEditModel, KeyedAdminsAutoIncludedAndNotRevocable)
-{
-    WorkspaceEditModel model(kWorkspaceId);
-
-    // The admin is not in the server access list (created concurrently) - it must be included
-    // anyway: the router accepts a workspace only with every keyed administrator present.
-    ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {})}));
-    model.applyUserList({makeUser(kAdminId, true)});
-    model.applyHostList({});
-
-    EXPECT_TRUE(model.effectiveAccessIds().contains(kAdminId));
-    EXPECT_FALSE(model.canRevokeUser(kAdminId));
-
-    // Even an explicit revoke cannot drop it.
-    model.revokeUser(kAdminId);
-    EXPECT_TRUE(model.effectiveAccessIds().contains(kAdminId));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,7 +142,7 @@ TEST(WorkspaceEditModel, VanishedEntriesAreDropped)
     // The user and the host were deleted from another console: the refetch no longer lists
     // them, and the save must not send entries the router cannot resolve.
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 2, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId, true)});
+    model.applyUserList({makeUser(kAdminId)});
     model.applyHostList({makeHost(200, kWorkspaceId)});
 
     EXPECT_FALSE(model.effectiveAccessIds().contains(kClientId));
@@ -171,51 +150,39 @@ TEST(WorkspaceEditModel, VanishedEntriesAreDropped)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(WorkspaceEditModel, KeylessUserNotOfferedButKeptAsMember)
+// Every user the console knows and the workspace does not have yet is offered; the members it
+// already has are not offered again.
+TEST(WorkspaceEditModel, MembersAreNotOfferedAgain)
 {
     WorkspaceEditModel model(kWorkspaceId);
 
-    // The keyless client user is a member per the server (grandfathered); the keyless
-    // non-member must not be offered - nobody can seal the group key for it.
-    ASSERT_TRUE(
-        model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId, kClientId})}));
-
-    WorkspaceEditModel::User keyless_member = makeUser(kClientId, false, "");
-    WorkspaceEditModel::User keyless_candidate = makeUser(kKeylessId, false, "");
-    model.applyUserList({makeUser(kAdminId, true), keyless_member, keyless_candidate});
+    ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kClientId})}));
+    model.applyUserList({makeUser(kAdminId), makeUser(kClientId), makeUser(kKeylessId)});
     model.applyHostList({});
 
-    const QList<WorkspaceEditModel::User> available = model.availableUsers();
-    EXPECT_TRUE(available.isEmpty());
+    QSet<qint64> available_ids;
+    for (const WorkspaceEditModel::User& user : model.availableUsers())
+        available_ids.insert(user.entry_id);
+    EXPECT_EQ(available_ids, QSet<qint64>({kAdminId, kKeylessId}));
 
     QSet<qint64> member_ids;
     for (const WorkspaceEditModel::User& user : model.memberUsers())
         member_ids.insert(user.entry_id);
-    EXPECT_TRUE(member_ids.contains(kClientId));
+    EXPECT_EQ(member_ids, QSet<qint64>({kClientId}));
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(WorkspaceEditModel, SaveAttachesKeyOnlyForNewGrants)
+// The save carries the complete membership, the granted user included.
+TEST(WorkspaceEditModel, SaveCarriesTheWholeMembership)
 {
     WorkspaceEditModel model(kWorkspaceId);
     loadDefault(&model);
 
     model.grantUser(kClientId);
 
-    for (const WorkspaceEditModel::AccessEntry& entry : model.accessEntriesForSave())
-    {
-        if (entry.user_id == kAdminId)
-        {
-            // Already granted per the server: the router keeps the stored sealed key.
-            EXPECT_TRUE(entry.public_key.isEmpty());
-        }
-        else
-        {
-            // A new grant carries the seal target.
-            EXPECT_EQ(entry.user_id, kClientId);
-            EXPECT_FALSE(entry.public_key.isEmpty());
-        }
-    }
+    const QList<qint64> user_ids = model.accessUserIdsForSave();
+    EXPECT_EQ(QSet<qint64>(user_ids.begin(), user_ids.end()),
+              QSet<qint64>({kAdminId, kClientId}));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -248,7 +215,7 @@ TEST(WorkspaceEditModel, ForeignHostsAreInvisible)
 {
     WorkspaceEditModel model(kWorkspaceId);
     ASSERT_TRUE(model.applyWorkspaceList({makeWorkspace(kWorkspaceId, 1, {kAdminId})}));
-    model.applyUserList({makeUser(kAdminId, true)});
+    model.applyUserList({makeUser(kAdminId)});
     model.applyHostList({makeHost(100, 0), makeHost(200, kWorkspaceId), makeHost(300, 99)});
 
     EXPECT_FALSE(model.effectiveHostIds().contains(300));
@@ -282,7 +249,7 @@ TEST(WorkspaceEditModel, SaveAssemblyDoesNotMutateState)
     const QSet<qint64> access_before = model.effectiveAccessIds();
     const qint64 revision_before = model.baseRevision();
 
-    (void)model.accessEntriesForSave();
+    (void)model.accessUserIdsForSave();
     (void)model.hostIdsForSave();
 
     EXPECT_EQ(model.effectiveAccessIds(), access_before);

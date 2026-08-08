@@ -230,19 +230,18 @@ TEST_F(HostLifecycleTest, RemovedHostMakesAWorkspaceSaveConflict)
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {host_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
 
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, gk)}, {host_id}),
+                                  {accessEntry(admin_)}, {host_id}),
               proto::router::kErrorConflict);
 
     // The same save without the host applies: the console refetched and dropped it.
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, gk)}, {}),
+                                  {accessEntry(admin_)}, {}),
               proto::router::kErrorOk);
 }
 
@@ -256,8 +255,7 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
                                    "3.0.0", "Windows", "192.168.1.10"));
 
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {host_id});
     ASSERT_GT(workspace_id, 0);
     ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", "comment"));
 

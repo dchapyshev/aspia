@@ -187,16 +187,12 @@ TEST_F(ClientTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A valid code completes the stage: the client gets a device token for the next login and the keys
-// of its workspaces, and only then is the session usable.
+// A valid code completes the stage: the client gets a device token for the next login and the
+// identity of its account, and only then is the session usable.
 TEST_F(ClientTest, ValidCodeDeliversTokenAndUserKeys)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
-    ASSERT_GT(workspace_id, 0);
-
     withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [this, workspace_id](Client& client, FakeTcpChannel* channel)
+                       [this](Client& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -217,8 +213,7 @@ TEST_F(ClientTest, ValidCodeDeliversTokenAndUserKeys)
         ASSERT_TRUE(second.has_user_keys());
         EXPECT_EQ(second.user_keys().user_id(), admin_.entry_id);
         EXPECT_EQ(second.user_keys().name(), admin_.name.toStdString());
-        ASSERT_EQ(second.user_keys().workspace_key_size(), 1);
-        EXPECT_EQ(second.user_keys().workspace_key(0).workspace_id(), workspace_id);
+        EXPECT_FALSE(second.user_keys().wrap_private_key().empty());
     });
 }
 
@@ -248,8 +243,7 @@ TEST_F(ClientTest, WrongCodeEndsTheConnection)
 // client can route it.
 TEST_F(ClientTest, WorkspaceListIsAnsweredAfterTheStage)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace("alpha", gk), 0);
+    ASSERT_GT(addWorkspace("alpha"), 0);
 
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)
@@ -404,12 +398,8 @@ TEST_F(ClientTest, MalformedMessagesAreIgnored)
 // exactly why the client must treat a challenge on a live session as a disconnect.
 TEST_F(ClientTest, PasswordChangeReopensTheTwoFactorStage)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
-    ASSERT_GT(workspace_id, 0);
-
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
-                            [this, &gk, workspace_id](ClientAdmin& client, FakeTcpChannel* channel)
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -423,10 +413,6 @@ TEST_F(ClientTest, PasswordChangeReopensTheTwoFactorStage)
         change->set_public_key(toStdString(rotated.public_key));
         change->set_wrap_private_key(toStdString(rotated.wrap_private_key));
         change->set_wrap_salt(toStdString(rotated.wrap_salt));
-
-        proto::router::ChangePasswordRequest::WorkspaceKey* key = change->add_workspace_key();
-        key->set_workspace_id(workspace_id);
-        key->set_wrapped_gk(toStdString(SealedBox::seal(gk, rotated.public_key)));
 
         channel->receive(proto::router::CHANNEL_ID_CLIENT, serialize(request));
 

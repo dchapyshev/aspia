@@ -46,13 +46,11 @@ public:
     {
         qint64 workspace_id = 0;
         qint64 user_id = 0;
-        std::string wrapped_gk;
-        std::string public_key;
     };
 
     qint64 entry_id = 0;
     std::string name;
-    std::string comment; // AEAD-encrypted with the workspace GK.
+    std::string comment;
 };
 
 #endif // ROUTER_WORKSPACE_H

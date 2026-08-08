@@ -96,8 +96,8 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     });
 
     // And for the hosts: the saved set is final, so a host added to this workspace from another
-    // console while the dialog is open would otherwise be released by our save - wiping its
-    // encrypted fields irreversibly.
+    // console while the dialog is open would otherwise be released by our save - dropping the
+    // note it carried irreversibly.
     connect(router, &Router::sig_hostsChanged, this, [this](qint64 /* router_id */)
     {
         Router* router = Router::instance(router_id_);
@@ -228,10 +228,8 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
         const proto::router::User& user = list.user(i);
 
         WorkspaceEditModel::User& entry = users.emplaceBack();
-        entry.entry_id   = user.entry_id();
-        entry.is_admin   = (user.sessions() & proto::router::SESSION_TYPE_ADMIN) != 0;
-        entry.name       = QString::fromStdString(user.name());
-        entry.public_key = QByteArray::fromStdString(user.public_key());
+        entry.entry_id = user.entry_id();
+        entry.name     = QString::fromStdString(user.name());
     }
 
     model_.applyUserList(users);
@@ -250,7 +248,7 @@ void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
         if (!model_.isLoaded() && !closing_)
         {
             // An empty reply must not pass for the final set of the hosts: the save would release
-            // every host of the workspace and wipe their encrypted fields.
+            // every host of the workspace and drop the notes they carried.
             closing_ = true;
             MsgBox::warning(this, tr("Failed to get list of hosts."));
             reject();
@@ -318,14 +316,10 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     // model pairs it with the host snapshot of the same refetch cycle (see baseRevision()).
     workspace_.revision = model_.baseRevision();
 
-    const QList<WorkspaceEditModel::AccessEntry> entries = model_.accessEntriesForSave();
-    workspace_.access.reserve(entries.size());
-    for (const WorkspaceEditModel::AccessEntry& entry : entries)
-    {
-        Router::Workspace::Access& access = workspace_.access.emplaceBack();
-        access.user_id = entry.user_id;
-        access.public_key = entry.public_key;
-    }
+    const QList<qint64> user_ids = model_.accessUserIdsForSave();
+    workspace_.access.reserve(user_ids.size());
+    for (qint64 user_id : user_ids)
+        workspace_.access.emplaceBack().user_id = user_id;
 
     workspace_.host_ids = model_.hostIdsForSave();
 
@@ -402,14 +396,7 @@ void RouterWorkspaceDialog::onRemoveClicked()
     if (!item)
         return;
 
-    const qint64 user_id = item->data(Qt::UserRole).toLongLong();
-    if (!model_.canRevokeUser(user_id))
-    {
-        MsgBox::warning(this, tr("Administrators cannot be removed from the workspace access list."));
-        return;
-    }
-
-    model_.revokeUser(user_id);
+    model_.revokeUser(item->data(Qt::UserRole).toLongLong());
     rebuildLists();
 }
 
@@ -434,15 +421,14 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
 
     const quint64 host_id = item->data(Qt::UserRole).toULongLong();
 
-    // Only hosts that are already in the workspace on the router carry encrypted fields. A host
-    // outside any workspace cannot keep them: they are sealed with the workspace group key and
-    // are wiped on the router when the host leaves. Warn that this is irreversible; hosts added
-    // during this session have nothing to clear, so they are removed silently.
+    // Only a host that is already in the workspace on the router carries a note of it, and the
+    // note is wiped there when the host leaves. Warn that this is irreversible; a host added
+    // during this session has nothing to clear, so it is removed silently.
     if (model_.isServerHost(host_id))
     {
         const QString message = tr("Removing the host from the workspace will permanently clear "
-                                   "its encrypted fields (comment, user name and password). This "
-                                   "action cannot be undone.\n\nAre you sure you want to continue?");
+                                   "its comment. This action cannot be undone.\n\nAre you sure "
+                                   "you want to continue?");
         if (MsgBox::question(this, message) == MsgBox::No)
         {
             LOG(INFO) << "Action is rejected by user";
@@ -564,12 +550,7 @@ void RouterWorkspaceDialog::rebuildLists()
 void RouterWorkspaceDialog::updateButtonsState()
 {
     ui->button_add->setEnabled(ui->list_available->currentItem() != nullptr);
-
-    bool can_remove = false;
-    if (QListWidgetItem* item = ui->list_with_access->currentItem())
-        can_remove = model_.canRevokeUser(item->data(Qt::UserRole).toLongLong());
-    ui->button_remove->setEnabled(can_remove);
-
+    ui->button_remove->setEnabled(ui->list_with_access->currentItem() != nullptr);
     ui->button_host_add->setEnabled(ui->list_hosts_available->currentItem() != nullptr);
     ui->button_host_remove->setEnabled(ui->list_hosts_in_workspace->currentItem() != nullptr);
 }

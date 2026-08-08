@@ -25,11 +25,8 @@
 
 #include <set>
 #include <string>
-#include <unordered_map>
 
 #include "base/crypto/random.h"
-#include "base/crypto/sealed_box.h"
-#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
@@ -80,20 +77,8 @@ protected:
         ASSERT_EQ(admin_.entry_id, 1);
     }
 
-    // One access entry for |user|, sealed to its current key and carrying the seal target the
-    // router verifies.
-    Workspace::Access accessEntry(const RouterUser& user, const SecureByteArray& gk)
-    {
-        Workspace::Access access;
-        access.user_id = user.entry_id;
-        access.wrapped_gk = toStdString(SealedBox::seal(gk, user.public_key));
-        access.public_key = toStdString(user.public_key);
-        return access;
-    }
-
-    // An entry for a user already present in the workspace: the router preserves the stored
-    // wrapped_gk, so no key material travels with it.
-    Workspace::Access existingEntry(qint64 user_id)
+    // One membership entry.
+    static Workspace::Access accessEntry(qint64 user_id)
     {
         Workspace::Access access;
         access.user_id = user_id;
@@ -114,7 +99,7 @@ protected:
     qint64 workspaceRevision(qint64 workspace_id)
     {
         proto::router::WorkspaceList list;
-        db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &list);
+        db_.workspaceListForAdmin(workspace_id, &list);
         if (list.error_code() != proto::router::kErrorOk || list.workspace_size() != 1)
             return -1;
         return list.workspace(0).revision();
@@ -172,7 +157,7 @@ TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
 
     RouterUser modified = makeUser("bob", kAllSessions);
     modified.entry_id = user_id;
-    ASSERT_EQ(db_.modifyUser(modified, {}, admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(db_.modifyUser(modified), proto::router::kErrorOk);
 
     EXPECT_EQ(db_.findUser(user_id).sessions, proto::router::SESSION_TYPE_CLIENT);
 }
@@ -193,7 +178,7 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
     request.public_key = stored.public_key;
 
     bool password_changed = true;
-    ASSERT_EQ(db_.modifyUser(request, {}, admin_.entry_id, &password_changed),
+    ASSERT_EQ(db_.modifyUser(request, &password_changed),
               proto::router::kErrorOk);
     EXPECT_FALSE(password_changed);
 
@@ -211,121 +196,65 @@ TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledOrRemoved)
     request.flags = 0;
     request.public_key = admin_.public_key;
 
-    EXPECT_EQ(db_.modifyUser(request, {}, admin_.entry_id), proto::router::kErrorAccessDenied);
+    EXPECT_EQ(db_.modifyUser(request), proto::router::kErrorAccessDenied);
     EXPECT_EQ(db_.removeUser(admin_.entry_id), proto::router::kErrorAccessDenied);
 }
 
 //--------------------------------------------------------------------------------------------------
-// I3: a password rotation invalidates the stored wrapped GKs, so the change must arrive with a
-// re-sealed key for every access entry - otherwise nothing is applied.
-TEST_F(RouterDatabaseTest, PasswordRotationRequiresCompleteKeySet)
+// A password rotation revokes every device token of the user: the tokens were issued to the
+// credentials that are gone.
+TEST_F(RouterDatabaseTest, PasswordRotationRevokesDeviceTokens)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
-
     RouterUser rotated = makeUser("admin", kAllSessions);
     rotated.entry_id = admin_.entry_id;
 
-    // A missing key means the sender's workspace list was stale - a conflict, not bad data.
-    EXPECT_EQ(db_.modifyUser(rotated, {}, admin_.entry_id), proto::router::kErrorConflict);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, admin_.verifier);
-
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.emplace(workspace_id, SealedBox::seal(gk, rotated.public_key));
+    std::string token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token));
 
     bool password_changed = false;
-    EXPECT_EQ(db_.modifyUser(rotated, wrapped_keys, admin_.entry_id, &password_changed),
-              proto::router::kErrorOk);
+    ASSERT_EQ(db_.modifyUser(rotated, &password_changed), proto::router::kErrorOk);
     EXPECT_TRUE(password_changed);
     EXPECT_EQ(db_.findUser(admin_.entry_id).verifier, rotated.verifier);
 
+    qint64 user_id = 0;
+    EXPECT_FALSE(db_.findClientDeviceToken(token, &user_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A new public key with the old salt and verifier is a rotation too - the identity the client
+// signs with is a different one from now on.
+TEST_F(RouterDatabaseTest, PublicKeyChangeAloneIsRotation)
+{
+    RouterUser rotated = admin_;
+    rotated.public_key = Random::byteArray(32);
+
+    bool password_changed = false;
+    ASSERT_EQ(db_.modifyUser(rotated, &password_changed), proto::router::kErrorOk);
+    EXPECT_TRUE(password_changed);
+    EXPECT_EQ(db_.findUser(admin_.entry_id).public_key, rotated.public_key);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An administrator sees every workspace by its session type, so a workspace can be created
+// without one - and without any member at all.
+TEST_F(RouterDatabaseTest, WorkspaceNeedsNoAdminInItsAccessList)
+{
+    qint64 entry_id = -1;
+    ASSERT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, {}, &entry_id),
+              proto::router::kErrorOk);
+    ASSERT_GT(entry_id, 0);
+
     proto::router::WorkspaceList list;
-    db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &list);
+    db_.workspaceListForAdmin(0, &list);
     ASSERT_EQ(list.workspace_size(), 1);
-    ASSERT_EQ(list.workspace(0).access_size(), 1);
-    EXPECT_EQ(list.workspace(0).access(0).wrapped_gk(),
-              toStdString(wrapped_keys[workspace_id]));
+    EXPECT_EQ(list.workspace(0).access_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
-// I2: an administrator created after the workspaces receives an access entry for each of them
-// from the wrapped keys of the request.
-TEST_F(RouterDatabaseTest, NewAdminIsGrantedEveryWorkspace)
+// A duplicate name is answered before anything is created.
+TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameIsAlreadyExists)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
-
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.emplace(workspace_id, SealedBox::seal(gk, admin2.public_key));
-
-    ASSERT_EQ(db_.addUser(admin2, wrapped_keys, admin_.entry_id), proto::router::kErrorOk);
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(db_.findUser("admin2").entry_id,
-                                              &workspace_ids));
-    EXPECT_TRUE(workspace_ids.contains(workspace_id));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The grantor has access to the workspace, so a request without its key was built from a stale
-// list - the whole insert must be rejected and rolled back.
-TEST_F(RouterDatabaseTest, NewAdminRejectedWhenKeyMissing)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
-
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    EXPECT_EQ(db_.addUser(admin2, {}, admin_.entry_id), proto::router::kErrorConflict);
-
-    // The transaction rolled back: the user does not exist.
-    EXPECT_FALSE(db_.findUser("admin2").isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A workspace the grantor cannot see is skipped (nobody can seal its key), not rejected.
-TEST_F(RouterDatabaseTest, NewAdminSkipsWorkspaceGrantorCannotSee)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
-
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
-    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    const qint64 client_id = db_.findUser("client").entry_id;
-
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    ASSERT_EQ(db_.addUser(admin2, {}, client_id), proto::router::kErrorOk);
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(db_.findUser("admin2").entry_id,
-                                              &workspace_ids));
-    EXPECT_TRUE(workspace_ids.empty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// I2 from the workspace side: the initial access list must contain every administrator that has
-// a key pair.
-TEST_F(RouterDatabaseTest, AddWorkspaceRequiresEveryKeyedAdmin)
-{
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    ASSERT_EQ(db_.addUser(admin2, {}, admin_.entry_id), proto::router::kErrorOk);
-    admin2 = db_.findUser("admin2");
-
-    const SecureByteArray gk(Random::byteArray(32));
-    EXPECT_EQ(addWorkspace("alpha", {accessEntry(admin_, gk)}), -1);
-    EXPECT_GT(addWorkspace("alpha",
-                           {accessEntry(admin_, gk), accessEntry(admin2, gk)}), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A duplicate name must answer kErrorAlreadyExists even when the access list is incomplete: the
-// more specific error is not masked by the admin coverage check.
-TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameBeatsAdminCoverage)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    ASSERT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
+    ASSERT_GT(addWorkspace("alpha", {accessEntry(admin_.entry_id)}), 0);
 
     qint64 entry_id = -1;
     EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, {}, &entry_id),
@@ -333,89 +262,24 @@ TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameBeatsAdminCoverage)
 }
 
 //--------------------------------------------------------------------------------------------------
-// I3: an access entry sealed to a key the user no longer has is rejected with kErrorConflict
-// and nothing is created.
-TEST_F(RouterDatabaseTest, StaleSealTargetRejected)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-
-    Workspace::Access stale = accessEntry(admin_, gk);
-    stale.public_key = toStdString(Random::byteArray(32));
-
-    qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {stale}, {}, &entry_id),
-              proto::router::kErrorConflict);
-
-    // The transaction rolled back: the name is still free.
-    EXPECT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A keyless administrator (pre-upgrade record) is not required in the access list, but an entry
-// for it is rejected: nobody can seal the group key to a key pair that does not exist.
-TEST_F(RouterDatabaseTest, KeylessAdminNotRequiredButNotInsertable)
-{
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    ASSERT_EQ(db_.addUser(admin2, {}, admin_.entry_id), proto::router::kErrorOk);
-    admin2 = db_.findUser("admin2");
-
-    ASSERT_TRUE(execRaw(QString("UPDATE users SET public_key=X'' WHERE id=%1")
-                            .arg(admin2.entry_id)));
-
-    const SecureByteArray gk(Random::byteArray(32));
-    EXPECT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
-
-    qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("beta", std::string_view(),
-                               {accessEntry(admin_, gk), accessEntry(admin2, gk)}, {}, &entry_id),
-              proto::router::kErrorInvalidData);
-}
-
-//--------------------------------------------------------------------------------------------------
 // I4: a modification based on a stale revision is rejected; a successful one increments the
 // stored revision.
 TEST_F(RouterDatabaseTest, RevisionGuardsConcurrentModification)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
+    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_.entry_id)});
     ASSERT_GT(workspace_id, 0);
     ASSERT_EQ(workspaceRevision(workspace_id), 1);
 
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "beta", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {}),
+                                  {accessEntry(admin_.entry_id)}, {}),
               proto::router::kErrorOk);
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 
     // A save built on the old snapshot must not overwrite the change above.
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "gamma", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {}),
+                                  {accessEntry(admin_.entry_id)}, {}),
               proto::router::kErrorConflict);
     EXPECT_EQ(db_.findWorkspace(workspace_id).name, "beta");
-}
-
-//--------------------------------------------------------------------------------------------------
-// The wrapped_gk of an already granted user is preserved: whatever the request carries for it
-// is ignored.
-TEST_F(RouterDatabaseTest, ModifyWorkspacePreservesExistingWrappedGk)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
-
-    proto::router::WorkspaceList before;
-    db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &before);
-    ASSERT_EQ(before.workspace(0).access_size(), 1);
-    const std::string original_gk = before.workspace(0).access(0).wrapped_gk();
-
-    const SecureByteArray other_gk(Random::byteArray(32));
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, other_gk)}, {}),
-              proto::router::kErrorOk);
-
-    proto::router::WorkspaceList after;
-    db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &after);
-    ASSERT_EQ(after.workspace(0).access_size(), 1);
-    EXPECT_EQ(after.workspace(0).access(0).wrapped_gk(), original_gk);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -425,12 +289,11 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = db_.findUser("client");
 
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
+    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_.entry_id)});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {existingEntry(admin_.entry_id), accessEntry(client, gk)}, {}),
+                                  {accessEntry(admin_.entry_id), accessEntry(client.entry_id)}, {}),
               proto::router::kErrorOk);
 
     std::set<qint64> workspace_ids;
@@ -438,25 +301,11 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
     EXPECT_TRUE(workspace_ids.contains(workspace_id));
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 2, "alpha", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {}),
+                                  {accessEntry(admin_.entry_id)}, {}),
               proto::router::kErrorOk);
 
     ASSERT_TRUE(db_.workspaceAccessIdsForUser(client.entry_id, &workspace_ids));
     EXPECT_TRUE(workspace_ids.empty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// I2: an administrator with a key pair cannot be dropped from the access list.
-TEST_F(RouterDatabaseTest, ModifyWorkspaceCannotDropKeyedAdmin)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
-
-    // The usual cause of a missing administrator is a stale user list, so the answer is a
-    // conflict: a refetch auto-includes every administrator and the retry passes.
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(), {}, {}),
-              proto::router::kErrorConflict);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -468,51 +317,48 @@ TEST_F(RouterDatabaseTest, HostAssignmentsAreAtomic)
     HostId host_id = kInvalidHostId;
     ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
 
-    const SecureByteArray gk(Random::byteArray(32));
-
     // A host that is not there is how a concurrent delete looks - a conflict, not "not found"
     // (which the sender reads as a missing workspace).
     qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {accessEntry(admin_, gk)},
+    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {accessEntry(admin_.entry_id)},
                                {HostId(12345)}, &entry_id),
               proto::router::kErrorConflict);
 
     // The rollback left the name free; the valid host is claimed with the creation.
     const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_, gk)}, {host_id});
+        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
     ASSERT_GT(workspace_id, 0);
     EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
 
     // A second workspace cannot steal the host, and the failed save must not apply anything -
     // including the rename that travelled with it.
-    const qint64 other_id = addWorkspace("beta", {accessEntry(admin_, gk)});
+    const qint64 other_id = addWorkspace("beta", {accessEntry(admin_.entry_id)});
     ASSERT_GT(other_id, 0);
 
     EXPECT_EQ(db_.modifyWorkspace(other_id, 1, "renamed", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {host_id}),
+                                  {accessEntry(admin_.entry_id)}, {host_id}),
               proto::router::kErrorConflict);
     EXPECT_EQ(db_.findWorkspace(other_id).name, "beta");
     EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A released host cannot keep fields encrypted with the group key of the workspace it left.
-TEST_F(RouterDatabaseTest, ReleasedHostLosesEncryptedFields)
+// A released host cannot keep the note it carried inside the workspace it left.
+TEST_F(RouterDatabaseTest, ReleasedHostLosesItsComment)
 {
     ASSERT_TRUE(db_.addHost("hash-1", "hwid-1"));
     HostId host_id = kInvalidHostId;
     ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
 
-    const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_, gk)}, {host_id});
+        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_TRUE(db_.modifyHost(host_id, 0, "display", "comment"));
     ASSERT_FALSE(findHost(host_id).comment().empty());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {}),
+                                  {accessEntry(admin_.entry_id)}, {}),
               proto::router::kErrorOk);
 
     const proto::router::Host host = findHost(host_id);
@@ -527,9 +373,8 @@ TEST_F(RouterDatabaseTest, RemoveWorkspaceReleasesHostsAndAccess)
     HostId host_id = kInvalidHostId;
     ASSERT_EQ(db_.hostId("hash-1", &host_id), proto::router::kErrorOk);
 
-    const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id =
-        addWorkspace("alpha", {accessEntry(admin_, gk)}, {host_id});
+        addWorkspace("alpha", {accessEntry(admin_.entry_id)}, {host_id});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
@@ -547,124 +392,39 @@ TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = db_.findUser("client");
 
-    const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id = addWorkspace(
-        "alpha", {accessEntry(admin_, gk), accessEntry(client, gk)});
+        "alpha", {accessEntry(admin_.entry_id), accessEntry(client.entry_id)});
     ASSERT_GT(workspace_id, 0);
 
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
     proto::router::WorkspaceList list;
-    db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &list);
+    db_.workspaceListForAdmin(workspace_id, &list);
     ASSERT_EQ(list.workspace_size(), 1);
     EXPECT_EQ(list.workspace(0).access_size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The repair path must not store keys sealed to a snapshot that no longer matches the stored
-// key of the user: such an entry could never be unsealed and would block the user's own
-// password changes forever.
-TEST_F(RouterDatabaseTest, RepairSkipsStaleSnapshotAndAppliesFreshOne)
+// I3: the membership of a workspace changes on the user paths too - removing a user moves the
+// revision, so a workspace save built from the old member list conflicts instead of silently
+// granting the access back.
+TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
+    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
+    client = db_.findUser("client");
 
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.emplace(workspace_id, SealedBox::seal(gk, admin2.public_key));
-    ASSERT_EQ(db_.addUser(admin2, wrapped_keys, admin_.entry_id), proto::router::kErrorOk);
-    admin2 = db_.findUser("admin2");
-
-    // Induce the hole the repair path exists for.
-    ASSERT_TRUE(execRaw(QString("DELETE FROM workspace_access WHERE user_id=%1")
-                            .arg(admin2.entry_id)));
-
-    // A flags-only request built from a stale key snapshot: the flags apply, the repair is
-    // skipped - inserting the keys would store material sealed to the wrong pair.
-    RouterUser stale;
-    stale.entry_id = admin2.entry_id;
-    stale.flags = User::ENABLED;
-    stale.public_key = Random::byteArray(32);
-
-    ASSERT_EQ(db_.modifyUser(stale, wrapped_keys, admin_.entry_id), proto::router::kErrorOk);
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(admin2.entry_id, &workspace_ids));
-    EXPECT_TRUE(workspace_ids.empty());
-
-    // The same request with the current snapshot repairs the access.
-    RouterUser fresh;
-    fresh.entry_id = admin2.entry_id;
-    fresh.flags = User::ENABLED;
-    fresh.public_key = admin2.public_key;
-
-    ASSERT_EQ(db_.modifyUser(fresh, wrapped_keys, admin_.entry_id), proto::router::kErrorOk);
-
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(admin2.entry_id, &workspace_ids));
-    EXPECT_TRUE(workspace_ids.contains(workspace_id));
-}
-
-//--------------------------------------------------------------------------------------------------
-// I3: a new public key with the old salt and verifier is a rotation too - the stored wrapped
-// GKs are sealed to the old pair, so the same complete re-sealed set is required, and without
-// it nothing (including the new key) may be stored.
-TEST_F(RouterDatabaseTest, PublicKeyChangeAloneIsRotation)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
-    ASSERT_GT(workspace_id, 0);
-
-    RouterUser swapped = admin_;
-    const RouterUser fresh = makeUser("admin", kAllSessions);
-    swapped.public_key = fresh.public_key;
-    swapped.wrap_private_key = fresh.wrap_private_key;
-    swapped.wrap_salt = fresh.wrap_salt;
-
-    EXPECT_EQ(db_.modifyUser(swapped, {}, admin_.entry_id), proto::router::kErrorConflict);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).public_key, admin_.public_key);
-
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.emplace(workspace_id, SealedBox::seal(gk, swapped.public_key));
-
-    bool password_changed = false;
-    EXPECT_EQ(db_.modifyUser(swapped, wrapped_keys, admin_.entry_id, &password_changed),
-              proto::router::kErrorOk);
-    EXPECT_TRUE(password_changed);
-    EXPECT_EQ(db_.findUser(admin_.entry_id).public_key, swapped.public_key);
-
-    proto::router::WorkspaceList list;
-    db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &list);
-    ASSERT_EQ(list.workspace_size(), 1);
-    ASSERT_EQ(list.workspace(0).access_size(), 1);
-    EXPECT_EQ(list.workspace(0).access(0).wrapped_gk(),
-              toStdString(wrapped_keys[workspace_id]));
-}
-
-//--------------------------------------------------------------------------------------------------
-// I4: the membership of a workspace changes on the user paths too - granting a new
-// administrator and removing a user both move the revision, so a workspace save built from the
-// old member list conflicts instead of silently undoing the change.
-TEST_F(RouterDatabaseTest, AccessChangesBumpRevision)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", {accessEntry(admin_, gk)});
+    const qint64 workspace_id = addWorkspace(
+        "alpha", {accessEntry(admin_.entry_id), accessEntry(client.entry_id)});
     ASSERT_GT(workspace_id, 0);
     ASSERT_EQ(workspaceRevision(workspace_id), 1);
 
-    RouterUser admin2 = makeUser("admin2", kAllSessions);
-    std::unordered_map<qint64, QByteArray> wrapped_keys;
-    wrapped_keys.emplace(workspace_id, SealedBox::seal(gk, admin2.public_key));
-    ASSERT_EQ(db_.addUser(admin2, wrapped_keys, admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 
     EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {existingEntry(admin_.entry_id)}, {}),
+                                  {accessEntry(admin_.entry_id)}, {}),
               proto::router::kErrorConflict);
-
-    ASSERT_EQ(db_.removeUser(db_.findUser("admin2").entry_id),
-              proto::router::kErrorOk);
-    EXPECT_EQ(workspaceRevision(workspace_id), 3);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -677,14 +437,13 @@ TEST_F(RouterDatabaseTest, EntryForDeletedUserIsConflict)
     client = db_.findUser("client");
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
-    const SecureByteArray gk(Random::byteArray(32));
     qint64 entry_id = -1;
     EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(),
-                               {accessEntry(admin_, gk), accessEntry(client, gk)}, {}, &entry_id),
+                               {accessEntry(admin_.entry_id), accessEntry(client.entry_id)}, {}, &entry_id),
               proto::router::kErrorConflict);
 
     // The transaction rolled back: the name is still free.
-    EXPECT_GT(addWorkspace("alpha", {accessEntry(admin_, gk)}), 0);
+    EXPECT_GT(addWorkspace("alpha", {accessEntry(admin_.entry_id)}), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -702,7 +461,7 @@ TEST_F(RouterDatabaseTest, DuplicateUserNameIsAlreadyExists)
 
     RouterUser renamed = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
     renamed.entry_id = db_.findUser("alice").entry_id;
-    EXPECT_EQ(db_.modifyUser(renamed, {}, admin_.entry_id), proto::router::kErrorAlreadyExists);
+    EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
     EXPECT_TRUE(db_.findUser("alice").isValid());
 }
 

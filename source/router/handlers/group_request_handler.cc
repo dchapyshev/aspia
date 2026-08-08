@@ -48,9 +48,8 @@ RequestResult handleGroupRequest(Database& database, const RequestCaller& caller
         return result;
     }
 
-    // Caller must be a member of the target workspace to manage its groups. Non-members do not see
-    // the workspace's wrapped_gk and cannot meaningfully add or edit AEAD-encrypted group fields
-    // anyway.
+    // The caller must reach the target workspace to manage its groups: be a member of it, or
+    // manage every workspace of the router as an administrator.
     const std::string_view access_code = checkWorkspaceAccess(database, caller, workspace_id);
     if (access_code != proto::router::kErrorOk)
     {

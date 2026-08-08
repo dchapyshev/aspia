@@ -36,8 +36,7 @@ protected:
         host_id_ = addHost("hash-1");
         ASSERT_NE(host_id_, kInvalidHostId);
 
-        gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace("alpha", gk_, {host_id_});
+        workspace_id_ = addWorkspace("alpha", {host_id_});
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -70,7 +69,6 @@ protected:
         return entry_id;
     }
 
-    SecureByteArray gk_;
     HostId host_id_ = kInvalidHostId;
     qint64 workspace_id_ = 0;
 };
@@ -247,7 +245,7 @@ TEST_F(HostRequestHandlerTest, HostIsMovedIntoGroupOfItsWorkspace)
 // host in a tree it does not belong to.
 TEST_F(HostRequestHandlerTest, GroupOfAnotherWorkspaceIsRejected)
 {
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     const qint64 foreign_group = addGroup(other_id, "foreign");
@@ -290,8 +288,7 @@ protected:
 
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
-        gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace("alpha", gk_);
+        workspace_id_ = addWorkspace("alpha");
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -317,13 +314,13 @@ protected:
 
         // The complete final set of the workspace, as a save from the console would send it.
         proto::router::WorkspaceList workspaces;
-        db_.workspaceListWithAllAccess(admin_.entry_id, workspace_id, &workspaces);
+        db_.workspaceListForAdmin(workspace_id, &workspaces);
         if (workspaces.workspace_size() != 1)
             return kInvalidHostId;
 
         if (db_.modifyWorkspace(workspace_id, workspaces.workspace(0).revision(),
                                 workspaces.workspace(0).name(), std::string_view(),
-                                {accessEntry(admin_, gk_)}, hosts) != proto::router::kErrorOk)
+                                {accessEntry(admin_)}, hosts) != proto::router::kErrorOk)
         {
             return kInvalidHostId;
         }
@@ -369,7 +366,6 @@ protected:
         return out;
     }
 
-    SecureByteArray gk_;
     qint64 workspace_id_ = 0;
 };
 
@@ -575,7 +571,7 @@ TEST_F(HostListTest, SearchIsScopedToAccessibleWorkspaces)
                                       proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "alpha-host"), kInvalidHostId);

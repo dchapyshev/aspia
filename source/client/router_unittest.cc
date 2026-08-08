@@ -73,10 +73,10 @@ protected:
         return config;
     }
 
-    // Loads the identity and the keys of the given workspaces into the session.
-    void loadKeys(const QList<qint64>& workspace_ids)
+    // Loads the identity of the session.
+    void loadKeys()
     {
-        RouterKeysFixture::loadKeys(&RouterTestPeer::keys(router_), workspace_ids);
+        RouterKeysFixture::loadKeys(&RouterTestPeer::keys(router_));
     }
 
     // Hands a message to the session the way the worker does.
@@ -100,10 +100,10 @@ protected:
         return message;
     }
 
-    // A workspace list as the router builds it for an admin session: our own access entry carries
-    // the sealed group key.
-    proto::router::WorkspaceList workspaceList(const QList<qint64>& workspace_ids,
-                                               const QString& comment = QString())
+    // A workspace list as the router builds it for an admin session: every workspace carries its
+    // membership.
+    static proto::router::WorkspaceList workspaceList(const QList<qint64>& workspace_ids,
+                                                      const QString& comment = QString())
     {
         proto::router::WorkspaceList list;
         list.set_error_code(proto::router::kErrorOk);
@@ -114,13 +114,8 @@ protected:
             workspace->set_entry_id(workspace_id);
             workspace->set_name("workspace");
             workspace->set_revision(1);
-            if (!comment.isEmpty())
-                workspace->set_comment(encrypt(workspace_id, comment));
-
-            proto::router::WorkspaceAccess* access = workspace->add_access();
-            access->set_user_id(kUserId);
-            access->set_wrapped_gk(
-                SealedBox::seal(groupKey(workspace_id), user_.public_key).toStdString());
+            workspace->set_comment(comment.toStdString());
+            workspace->add_access()->set_user_id(kUserId);
         }
 
         return list;
@@ -217,7 +212,7 @@ protected:
     // Puts one entry in every cache, so what a reply drops can be seen by what is left.
     void fillCaches()
     {
-        loadKeys({ kWorkspaceId });
+        loadKeys();
         fetchWorkspaces(0, workspaceList({ kWorkspaceId }));
 
         proto::router::GroupList groups;
@@ -257,58 +252,31 @@ protected:
 };
 
 //--------------------------------------------------------------------------------------------------
-// The list carries the key of every workspace of ours, so a session can open one it learned
-// about after the UserKeys message.
-TEST_F(RouterTest, WorkspaceListDecryptsCommentAndAddsKey)
+// The list arrives as the router stored it, membership included.
+TEST_F(RouterTest, WorkspaceListIsDecoded)
 {
-    loadKeys({});
+    loadKeys();
 
-    const RouterWorkspaceList decoded = fetchWorkspaces(0, workspaceList({10}, "secret"));
+    const RouterWorkspaceList decoded = fetchWorkspaces(0, workspaceList({10}, "note"));
 
     ASSERT_EQ(decoded.error_code, QString::fromStdString(proto::router::kErrorOk));
     ASSERT_EQ(decoded.workspaces.size(), 1);
-    EXPECT_EQ(decoded.workspaces.at(0).comment, "secret");
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(10));
+    EXPECT_EQ(decoded.workspaces.at(0).comment, "note");
+    ASSERT_EQ(decoded.workspaces.at(0).access.size(), 1);
+    EXPECT_EQ(decoded.workspaces.at(0).access.at(0).user_id, kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------
-// Lost access must take the group key with it: a kept key still decrypts the records and, worse,
-// would be handed to a user this session grants access to.
-TEST_F(RouterTest, CompleteListDropsKeysOfLostWorkspaces)
-{
-    loadKeys({10, 20});
-
-    fetchWorkspaces(0, workspaceList({10}));
-
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(10));
-    EXPECT_FALSE(RouterTestPeer::keys(router_).hasWorkspaceKey(20));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A reply about one workspace says nothing about the others, so it must not drop their keys.
-TEST_F(RouterTest, SingleWorkspaceReplyKeepsOtherKeys)
-{
-    loadKeys({10, 20});
-
-    fetchWorkspaces(10, workspaceList({10}));
-
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(10));
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(20));
-}
-
-//--------------------------------------------------------------------------------------------------
-// An error reply carries no list at all - read as "everything is gone" it would drop every key
-// on a transient failure.
+// An error reply carries no list at all, so it must not be cached as the answer about what we
+// can access.
 TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
 {
-    loadKeys({10, 20});
+    loadKeys();
 
     proto::router::WorkspaceList failed;
     failed.set_error_code(proto::router::kErrorInternalError);
     fetchWorkspaces(0, failed);
 
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(10));
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(20));
     EXPECT_FALSE(workspacesServedFromCache());
 }
 
@@ -339,7 +307,7 @@ TEST_F(RouterTest, ListUsersConversation)
 // The same conversation on the manager channel, which carries the records of a workspace.
 TEST_F(RouterTest, GroupConversationUsesTheManagerChannel)
 {
-    loadKeys({ kWorkspaceId });
+    loadKeys();
 
     RouterGroup group;
     group.name = "servers";
@@ -420,10 +388,10 @@ TEST_F(RouterTest, ConnectionRequestCarriesTheSessionType)
 // without a request.
 TEST_F(RouterTest, HostListIsDecodedAndCached)
 {
-    loadKeys({ kWorkspaceId });
+    loadKeys();
 
     proto::router::HostList list = hostList(kWorkspaceId, { HostId(1) }, 25);
-    list.mutable_host(0)->set_comment(encrypt(kWorkspaceId, "comment"));
+    list.mutable_host(0)->set_comment("comment");
 
     const RouterHostList delivered = fetchHosts(list);
 
@@ -449,7 +417,7 @@ TEST_F(RouterTest, HostListIsDecodedAndCached)
 // The groups of a workspace are decrypted with its key and cached per workspace.
 TEST_F(RouterTest, GroupListIsDecryptedAndCached)
 {
-    loadKeys({ kWorkspaceId });
+    loadKeys();
 
     proto::router::GroupList list;
     list.set_error_code(proto::router::kErrorOk);
@@ -458,7 +426,7 @@ TEST_F(RouterTest, GroupListIsDecryptedAndCached)
     proto::router::Group* group = list.add_group();
     group->set_entry_id(5);
     group->set_name("servers");
-    group->set_comment(encrypt(kWorkspaceId, "group comment"));
+    group->set_comment("group comment");
 
     const RouterGroupList decoded = fetchGroups(kWorkspaceId, list);
 
@@ -505,7 +473,8 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
     deliver(proto::router::CHANNEL_ID_ADMIN, reply);
     EXPECT_EQ(calls, 1);
 
-    EXPECT_TRUE(RouterTestPeer::keys(router_).hasWorkspaceKey(kWorkspaceId));
+    // The identity survives a lost connection: only disconnectFromRouter() drops it.
+    EXPECT_EQ(RouterTestPeer::keys(router_).userId(), kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -554,15 +523,15 @@ TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A session that ends keeps nothing: the identity and the keys go with it.
+// A session that ends keeps nothing: the identity goes with it.
 TEST_F(RouterTest, ClearedSessionKeepsNoKeys)
 {
-    loadKeys({ kWorkspaceId });
+    loadKeys();
 
     router_.disconnectFromRouter();
 
     EXPECT_EQ(RouterTestPeer::keys(router_).userId(), 0);
-    EXPECT_FALSE(RouterTestPeer::keys(router_).hasWorkspaceKey(kWorkspaceId));
+    EXPECT_FALSE(RouterTestPeer::keys(router_).hasPrivateKey());
     EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
 }
 
@@ -608,7 +577,7 @@ TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
 // An unsendable request must not leave a caller waiting.
 TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 {
-    loadKeys({ kWorkspaceId });
+    loadKeys();
 
     RouterHost host;
     host.host_id = HostId(1);

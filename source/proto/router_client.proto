@@ -26,37 +26,29 @@ import "peer.proto";
 package proto.router;
 
 // Credentials of the authenticated user, pushed by the router right after the session is
-// established so the client can derive its private key (via password + wrap_salt) and perform
-// workspace-scoped crypto operations without having to retrieve the admin user list.
+// established so the client can derive its private key (via password + wrap_salt) without
+// having to retrieve the admin user list.
 message UserKeys
 {
-    message WorkspaceKey
-    {
-        int64 workspace_id = 1;
-        bytes wrapped_gk   = 2;
-    }
-
-    string router_guid                  = 1;
-    int64 user_id                       = 2;
-    string name                         = 3;
-    bytes public_key                    = 4;
-    bytes wrap_private_key              = 5;
-    bytes wrap_salt                     = 6;
-    repeated WorkspaceKey workspace_key = 7;
+    string router_guid     = 1;
+    int64 user_id          = 2;
+    string name            = 3;
+    bytes public_key       = 4;
+    bytes wrap_private_key = 5;
+    bytes wrap_salt        = 6;
 }
 
+// Membership of one user in a workspace.
 message WorkspaceAccess
 {
-    int64 user_id    = 1;
-    bytes wrapped_gk = 2;
-    bytes public_key = 3;
+    int64 user_id = 1;
 }
 
 message Workspace
 {
     int64 entry_id                  = 1;
     string name                     = 2;
-    bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
+    string comment                  = 3;
     repeated WorkspaceAccess access = 4;
     repeated uint64 host_id         = 5;
     int64 revision                  = 6;
@@ -79,8 +71,8 @@ message Group
 {
     int64 entry_id  = 1; // groups_<workspace_id>.id
     int64 parent_id = 2; // 0 means the group sits at the workspace root.
-    string name     = 3; // Plain text.
-    bytes comment   = 4; // AEAD-encrypted with the workspace GK.
+    string name     = 3;
+    string comment  = 4;
 }
 
 message GroupListRequest
@@ -99,28 +91,18 @@ message GroupList
 
 message ChangePasswordRequest
 {
-    message WorkspaceKey
-    {
-        int64 workspace_id = 1;
-        bytes wrapped_gk   = 2;
-    }
-
     int64 request_id       = 1;
     bytes salt             = 2;
     bytes verifier         = 3;
     bytes public_key       = 4;
     bytes wrap_private_key = 5;
     bytes wrap_salt        = 6;
-    repeated WorkspaceKey workspace_key = 7;
 }
 
 message ChangePasswordResult
 {
     int64 request_id  = 1;
-    string error_code = 2; // "ok" | "invalid_data" | "internal_error" | "conflict" | "not_found"
-                           // "conflict"  - the request lacks a re-sealed key for a workspace that
-                           //               appeared after the sender took its list; refetch the
-                           //               workspaces and retry.
+    string error_code = 2; // "ok" | "invalid_data" | "internal_error" | "not_found"
                            // "not_found" - the user record vanished (concurrent delete).
 }
 
@@ -157,7 +139,7 @@ message Host
     string version       = 7;  // Aspia version reported by the host.
     string os_name       = 8;  // Operating system name reported by the host.
     string address       = 9;  // Last seen peer address.
-    bytes comment        = 10; // AEAD-encrypted with workspace GK.
+    string comment       = 10; // Note, editable from a manager or admin session.
     int64 last_connect   = 11; // Unix timestamp of the last connection.
     int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
     bool online          = 13; // Live host session currently exists for this host_id.

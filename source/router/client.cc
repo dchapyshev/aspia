@@ -20,9 +20,6 @@
 
 #include <QDateTime>
 
-#include <set>
-#include <unordered_map>
-
 #include "base/core_application.h"
 #include "base/serialization.h"
 #include "base/threading/worker.h"
@@ -331,24 +328,6 @@ void Client::sendUserKeys()
     user_keys->set_public_key(user.public_key.toStdString());
     user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
     user_keys->set_wrap_salt(user.wrap_salt.toStdString());
-
-    // Better no UserKeys at all than a silently partial set: the client would treat a missing
-    // workspace key as revoked access.
-    std::vector<Workspace::Access> keys;
-    if (!database_.workspaceAccessListForUser(user.entry_id, &keys))
-    {
-        CLOG(ERROR) << "Failed to read workspace keys for user" << user.entry_id
-                    << ". Closing connection";
-        emit sig_finished(session_id_);
-        return;
-    }
-
-    for (Workspace::Access& access : keys)
-    {
-        proto::router::UserKeys::WorkspaceKey* dst = user_keys->add_workspace_key();
-        dst->set_workspace_id(access.workspace_id);
-        dst->set_wrapped_gk(std::move(access.wrapped_gk));
-    }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }

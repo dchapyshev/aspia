@@ -35,29 +35,13 @@ namespace {
 using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
-// The access list of the request. |self_present| tells whether the sender kept its own entry: an
-// administrator has access to every workspace, so a list without the sender is malformed - the
-// group key would be sealed for everyone but the one who has it.
-std::vector<Workspace::Access> accessList(const proto::router::Workspace& workspace, qint64 caller_user_id,
-                                    bool* self_present)
+std::vector<Workspace::Access> accessList(const proto::router::Workspace& workspace)
 {
-    *self_present = false;
-
     std::vector<Workspace::Access> access_list;
     access_list.reserve(size_t(workspace.access_size()));
 
     for (int i = 0; i < workspace.access_size(); ++i)
-    {
-        const proto::router::WorkspaceAccess& src = workspace.access(i);
-
-        Workspace::Access& dst = access_list.emplace_back();
-        dst.user_id    = src.user_id();
-        dst.wrapped_gk = src.wrapped_gk();
-        dst.public_key = src.public_key();
-
-        if (dst.user_id == caller_user_id)
-            *self_present = true;
-    }
+        access_list.emplace_back().user_id = workspace.access(i).user_id();
 
     return access_list;
 }
@@ -72,28 +56,16 @@ std::set<HostId> desiredHostIds(const proto::router::Workspace& workspace)
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleAdd(Database& database, const RequestCaller& caller,
-               const proto::router::Workspace& workspace, Result* result)
+void handleAdd(Database& database, const proto::router::Workspace& workspace, Result* result)
 {
     const std::set<HostId> host_ids = desiredHostIds(workspace);
 
     LOG(INFO) << "Workspace add request:" << workspace.name() << "with" << workspace.access_size()
               << "access entries and" << host_ids.size() << "hosts";
 
-    bool self_present = false;
-    const std::vector<Workspace::Access> initial_access =
-        accessList(workspace, caller.user_id, &self_present);
-
-    if (!self_present)
-    {
-        LOG(ERROR) << "Admin" << caller.name << "tried to create workspace without own access";
-        result->error_code = proto::router::kErrorInvalidData;
-        return;
-    }
-
     qint64 new_id = -1;
     const std::string_view error_code = database.addWorkspace(
-        strTrimmed(workspace.name()), workspace.comment(), initial_access, host_ids, &new_id);
+        strTrimmed(workspace.name()), workspace.comment(), accessList(workspace), host_ids, &new_id);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -108,8 +80,7 @@ void handleAdd(Database& database, const RequestCaller& caller,
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleModify(Database& database, const RequestCaller& caller,
-                  const proto::router::Workspace& workspace, Result* result)
+void handleModify(Database& database, const proto::router::Workspace& workspace, Result* result)
 {
     const std::set<HostId> host_ids = desiredHostIds(workspace);
 
@@ -117,21 +88,9 @@ void handleModify(Database& database, const RequestCaller& caller,
               << "with" << workspace.access_size() << "access entries and"
               << host_ids.size() << "hosts";
 
-    bool self_present = false;
-    const std::vector<Workspace::Access> desired_access =
-        accessList(workspace, caller.user_id, &self_present);
-
-    if (!self_present)
-    {
-        LOG(ERROR) << "Admin" << caller.name << "tried to revoke own access to workspace"
-                   << workspace.entry_id();
-        result->error_code = proto::router::kErrorInvalidData;
-        return;
-    }
-
     const std::string_view error_code = database.modifyWorkspace(
         workspace.entry_id(), workspace.revision(), strTrimmed(workspace.name()),
-        workspace.comment(), desired_access, host_ids);
+        workspace.comment(), accessList(workspace), host_ids);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -165,6 +124,10 @@ void handleDelete(Database& database, qint64 entry_id, Result* result)
 std::string_view checkWorkspaceAccess(Database& database, const RequestCaller& caller,
                                       qint64 workspace_id)
 {
+    // An administrator manages every workspace of the router, membership or not.
+    if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
+        return proto::router::kErrorOk;
+
     bool access_known = false;
     const bool has_access = database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known);
     if (!access_known)
@@ -191,11 +154,11 @@ RequestResult handleWorkspaceRequest(Database& database, const RequestCaller& ca
 
     if (command_name == proto::router::kCommandWorkspaceAdd)
     {
-        handleAdd(database, caller, request.workspace(), &result);
+        handleAdd(database, request.workspace(), &result);
     }
     else if (command_name == proto::router::kCommandWorkspaceModify)
     {
-        handleModify(database, caller, request.workspace(), &result);
+        handleModify(database, request.workspace(), &result);
     }
     else if (command_name == proto::router::kCommandWorkspaceDelete)
     {
@@ -215,12 +178,12 @@ void handleWorkspaceList(Database& database, const RequestCaller& caller,
                          const proto::router::WorkspaceListRequest& request,
                          proto::router::WorkspaceList* out)
 {
-    // Each session sees only the workspaces it has a workspace_access entry for. Admins get the
-    // full access list per workspace (needed to manage membership); other sessions get only their
-    // own entry - the membership of a workspace is not theirs to see. workspace_id == 0 means all
-    // visible workspaces; > 0 narrows to a single entry.
+    // An administrator manages every workspace of the router and needs the membership of each;
+    // any other session sees the workspaces it is a member of, and the membership of a workspace
+    // is not theirs to see. workspace_id == 0 means every workspace of that scope; > 0 narrows to
+    // a single entry.
     if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
-        database.workspaceListWithAllAccess(caller.user_id, request.workspace_id(), out);
+        database.workspaceListForAdmin(request.workspace_id(), out);
     else
-        database.workspaceListWithOwnAccess(caller.user_id, request.workspace_id(), out);
+        database.workspaceListForUser(caller.user_id, request.workspace_id(), out);
 }

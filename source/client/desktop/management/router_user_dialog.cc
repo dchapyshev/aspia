@@ -262,24 +262,6 @@ void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& res
         return;
     }
 
-    if (error_code == proto::router::kErrorConflict)
-    {
-        // The workspace keys of the request were sealed from a stale list - a workspace appeared
-        // (or its key changed) after this console read it. Reloading the list refreshes the
-        // cached keys, so the operator can simply submit again.
-        LOG(ERROR) << "User save rejected: concurrent change";
-        Router* router = Router::instance(router_id_);
-        if (router)
-        {
-            router->listWorkspaces(Router::CachePolicy::RELOAD, 0, { this,
-                                   [](const Router::WorkspaceList&) {} });
-        }
-        setEnabled(true);
-        MsgBox::warning(this, tr("The router data was changed from another console. The data "
-                                 "is being refreshed - please try again."));
-        return;
-    }
-
     LOG(ERROR) << "User save failed:" << error_code;
     setEnabled(true);
     MsgBox::warning(this, routerErrorText(error_code));
@@ -546,7 +528,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         // The credentials were not changed - do not echo the snapshot back. It could be out of
         // date (the user rotated the password after this dialog was opened), and the router would
         // treat the stale salt/verifier as a password change and revert the rotation. Empty
-        // fields keep the stored values; public_key stays for the workspace keys to be sealed.
+        // fields keep the stored values.
         request = model_.snapshot();
         request.salt.clear();
         request.verifier.clear();

@@ -31,21 +31,15 @@ protected:
         return handleWorkspaceRequest(db_, caller_, request);
     }
 
-    // A request with the access entry of the sender attached: an administrator has access to every
-    // workspace, so this is what a well-formed save looks like.
-    proto::router::WorkspaceRequest makeRequest(std::string_view command, const QString& name,
-                                                const SecureByteArray& gk)
+    // A save with the sender among the members of the workspace.
+    proto::router::WorkspaceRequest makeRequest(std::string_view command, const QString& name)
     {
         proto::router::WorkspaceRequest request;
         request.set_command_name(std::string(command));
 
         proto::router::Workspace* workspace = request.mutable_workspace();
         workspace->set_name(name.toStdString());
-
-        proto::router::WorkspaceAccess* access = workspace->add_access();
-        access->set_user_id(admin_.entry_id);
-        access->set_wrapped_gk(toStdString(SealedBox::seal(gk, admin_.public_key)));
-        access->set_public_key(toStdString(admin_.public_key));
+        workspace->add_access()->set_user_id(admin_.entry_id);
 
         return request;
     }
@@ -58,7 +52,7 @@ protected:
     qint64 workspaceRevision(qint64 entry_id)
     {
         proto::router::WorkspaceList list;
-        db_.workspaceListWithAllAccess(admin_.entry_id, entry_id, &list);
+        db_.workspaceListForAdmin(entry_id, &list);
         if (list.error_code() != proto::router::kErrorOk || list.workspace_size() != 1)
             return -1;
         return list.workspace(0).revision();
@@ -77,9 +71,8 @@ protected:
 //--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceRequestHandlerTest, AddCreatesWorkspaceAndNotifies)
 {
-    const SecureByteArray gk(Random::byteArray(32));
     const RequestResult result = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha"));
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_GT(result.entry_id, 0);
@@ -90,31 +83,13 @@ TEST_F(WorkspaceRequestHandlerTest, AddCreatesWorkspaceAndNotifies)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The group key is sealed by the sender, so a list without the sender's own entry would create a
-// workspace nobody can open.
-TEST_F(WorkspaceRequestHandlerTest, AddWithoutOwnAccessIsRejected)
-{
-    const SecureByteArray gk(Random::byteArray(32));
-    proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
-    request.mutable_workspace()->clear_access();
-
-    const RequestResult result = handle(request);
-
-    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
-    EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(result.entry_id, 0);
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceRequestHandlerTest, AddWithHostsClaimsThemAndNotifiesHosts)
 {
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha");
     request.mutable_workspace()->add_host_id(host_id);
 
     const RequestResult result = handle(request);
@@ -129,10 +104,9 @@ TEST_F(WorkspaceRequestHandlerTest, AddWithHostsClaimsThemAndNotifiesHosts)
 // A workspace must be named, and blanks alone are not a name.
 TEST_F(WorkspaceRequestHandlerTest, AddRejectsEmptyName)
 {
-    const SecureByteArray gk(Random::byteArray(32));
 
     const RequestResult result = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, "   ", gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "   "));
 
     EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
     EXPECT_EQ(result.notify_flags, 0u);
@@ -144,15 +118,14 @@ TEST_F(WorkspaceRequestHandlerTest, AddRejectsEmptyName)
 // so " alpha " and "alpha" cannot coexist.
 TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 {
-    const SecureByteArray gk(Random::byteArray(32));
     const RequestResult first = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, "  alpha  ", gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "  alpha  "));
 
     ASSERT_EQ(first.error_code, proto::router::kErrorOk);
     EXPECT_EQ(workspaceName(first.entry_id), "alpha");
 
     const RequestResult second = handle(
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk));
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha"));
 
     EXPECT_EQ(second.error_code, proto::router::kErrorAlreadyExists);
     EXPECT_EQ(second.notify_flags, 0u);
@@ -165,9 +138,8 @@ TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 // already bounded by Workspace::isValidName.
 TEST_F(WorkspaceRequestHandlerTest, OversizedCommentIsRejected)
 {
-    const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha");
     request.mutable_workspace()->set_comment(std::string(proto::router::kMaxCommentLength + 1, 'c'));
 
     const RequestResult result = handle(request);
@@ -180,9 +152,8 @@ TEST_F(WorkspaceRequestHandlerTest, OversizedCommentIsRejected)
 //--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceRequestHandlerTest, CommentAtTheLimitIsAccepted)
 {
-    const SecureByteArray gk(Random::byteArray(32));
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha", gk);
+        makeRequest(proto::router::kCommandWorkspaceAdd, "alpha");
     request.mutable_workspace()->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
 
     const RequestResult result = handle(request);
@@ -194,12 +165,11 @@ TEST_F(WorkspaceRequestHandlerTest, CommentAtTheLimitIsAccepted)
 //--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta");
     request.mutable_workspace()->set_entry_id(workspace_id);
     request.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
 
@@ -216,25 +186,29 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyAppliesAndNotifies)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An administrator has access to every workspace, so a save that drops the sender is malformed -
-// and it must not apply the rest of the change either.
-TEST_F(WorkspaceRequestHandlerTest, ModifyWithoutOwnAccessIsRejected)
+// An administrator manages every workspace of the router, membership or not, so a save that
+// drops its own entry is an ordinary membership change.
+TEST_F(WorkspaceRequestHandlerTest, ModifyCanDropOwnAccess)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest request =
-        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta");
     request.mutable_workspace()->set_entry_id(workspace_id);
     request.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
     request.mutable_workspace()->clear_access();
 
     const RequestResult result = handle(request);
 
-    EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData);
-    EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(workspaceName(workspace_id), "alpha");
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(workspaceName(workspace_id), "beta");
+
+    // The workspace is still listed for the administrator that left it.
+    proto::router::WorkspaceList list;
+    db_.workspaceListForAdmin(workspace_id, &list);
+    ASSERT_EQ(list.workspace_size(), 1);
+    EXPECT_EQ(list.workspace(0).access_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,19 +216,18 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyWithoutOwnAccessIsRejected)
 // and retries instead of overwriting the concurrent change.
 TEST_F(WorkspaceRequestHandlerTest, StaleRevisionIsConflict)
 {
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk);
+    const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
 
     proto::router::WorkspaceRequest first =
-        makeRequest(proto::router::kCommandWorkspaceModify, "beta", gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "beta");
     first.mutable_workspace()->set_entry_id(workspace_id);
     first.mutable_workspace()->set_revision(workspaceRevision(workspace_id));
     ASSERT_EQ(handle(first).error_code, proto::router::kErrorOk);
 
     // The same request again - its revision is the one the first save consumed.
     proto::router::WorkspaceRequest stale =
-        makeRequest(proto::router::kCommandWorkspaceModify, "gamma", gk);
+        makeRequest(proto::router::kCommandWorkspaceModify, "gamma");
     stale.mutable_workspace()->set_entry_id(workspace_id);
     stale.mutable_workspace()->set_revision(1);
 
@@ -273,8 +246,7 @@ TEST_F(WorkspaceRequestHandlerTest, DeleteReleasesHostsAndDropsGroups)
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    const SecureByteArray gk(Random::byteArray(32));
-    const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
+    const qint64 workspace_id = addWorkspace("alpha", {host_id});
     ASSERT_GT(workspace_id, 0);
 
     qint64 group_id = -1;
@@ -332,8 +304,7 @@ protected:
 
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
-        gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace("alpha", gk_);
+        workspace_id_ = addWorkspace("alpha");
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -347,7 +318,6 @@ protected:
         return out;
     }
 
-    SecureByteArray gk_;
     qint64 workspace_id_ = 0;
 };
 
@@ -359,7 +329,7 @@ TEST_F(WorkspaceListTest, AdminSeesFullMembership)
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, gk_), accessEntry(client, gk_)}, {}),
+                                  {accessEntry(admin_), accessEntry(client)}, {}),
               proto::router::kErrorOk);
 
     const proto::router::WorkspaceList list = workspaceList(0);
@@ -370,15 +340,15 @@ TEST_F(WorkspaceListTest, AdminSeesFullMembership)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A session that does not manage membership gets only its own entry: the wrapped group keys of the
-// other members are not its business.
-TEST_F(WorkspaceListTest, NonAdminSeesOnlyOwnAccessEntry)
+// A session that does not manage membership gets no membership at all: who else is in the
+// workspace is not its business.
+TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
 {
     RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, gk_), accessEntry(client, gk_)}, {}),
+                                  {accessEntry(admin_), accessEntry(client)}, {}),
               proto::router::kErrorOk);
 
     setCaller(client, proto::router::SESSION_TYPE_CLIENT);
@@ -387,14 +357,12 @@ TEST_F(WorkspaceListTest, NonAdminSeesOnlyOwnAccessEntry)
 
     ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
     ASSERT_EQ(list.workspace_size(), 1);
-    ASSERT_EQ(list.workspace(0).access_size(), 1);
-    EXPECT_EQ(list.workspace(0).access(0).user_id(), client.entry_id);
-    EXPECT_FALSE(list.workspace(0).access(0).wrapped_gk().empty());
+    EXPECT_EQ(list.workspace(0).access_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A workspace the session is not a member of is not in the list at all - neither in the full list
-// nor when asked for by id.
+// A workspace a regular session is not a member of is not in its list at all - neither in the
+// full list nor when asked for by id. An administrator sees it either way.
 TEST_F(WorkspaceListTest, InvisibleWorkspaceIsNotListed)
 {
     RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
@@ -408,12 +376,18 @@ TEST_F(WorkspaceListTest, InvisibleWorkspaceIsNotListed)
     const proto::router::WorkspaceList single = workspaceList(workspace_id_);
     EXPECT_EQ(single.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(single.workspace_size(), 0);
+
+    // The administrator is not a member of it either, and lists it regardless.
+    setCaller(admin_, proto::router::SESSION_TYPE_ADMIN);
+    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(), {}, {}),
+              proto::router::kErrorOk);
+    EXPECT_EQ(workspaceList(0).workspace_size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(WorkspaceListTest, WorkspaceListNarrowsToRequestedId)
 {
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     EXPECT_EQ(workspaceList(0).workspace_size(), 2);

@@ -19,22 +19,16 @@
 #ifndef CLIENT_ROUTER_TEST_FIXTURE_H
 #define CLIENT_ROUTER_TEST_FIXTURE_H
 
-#include <QHash>
-
 #include <gtest/gtest.h>
 
-#include "base/crypto/data_cryptor.h"
-#include "base/crypto/random.h"
-#include "base/crypto/sealed_box.h"
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
 #include "client/router_keys.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
-// The account and the group keys a router session runs on, built for real: the crypto is part of
-// the contract under test, so nothing is stubbed. Shared by the tests of the keys, of the codec
-// and of the session state.
+// The account a router session runs on, built for real: the crypto is part of the contract under
+// test, so nothing is stubbed. Shared by the tests of the keys and of the session state.
 class RouterKeysFixture : public testing::Test
 {
 protected:
@@ -48,16 +42,8 @@ protected:
         ASSERT_TRUE(user_.isValid());
     }
 
-    // The group key of a workspace, invented on first use so every test shares one per id.
-    const SecureByteArray& groupKey(qint64 workspace_id)
-    {
-        if (!group_keys_.contains(workspace_id))
-            group_keys_.insert(workspace_id, SecureByteArray(Random::byteArray(32)));
-        return group_keys_[workspace_id];
-    }
-
     // The UserKeys message the router sends right after the two-factor stage.
-    proto::router::UserKeys userKeys(const QList<qint64>& workspace_ids)
+    proto::router::UserKeys userKeys()
     {
         proto::router::UserKeys keys;
         keys.set_user_id(kUserId);
@@ -65,32 +51,13 @@ protected:
         keys.set_public_key(user_.public_key.toStdString());
         keys.set_wrap_private_key(user_.wrap_private_key.toStdString());
         keys.set_wrap_salt(user_.wrap_salt.toStdString());
-
-        for (qint64 workspace_id : workspace_ids)
-        {
-            proto::router::UserKeys::WorkspaceKey* key = keys.add_workspace_key();
-            key->set_workspace_id(workspace_id);
-            key->set_wrapped_gk(
-                SealedBox::seal(groupKey(workspace_id), user_.public_key).toStdString());
-        }
-
         return keys;
     }
 
-    // Loads the identity and the keys of the given workspaces into |keys|.
-    void loadKeys(RouterKeys* keys, const QList<qint64>& workspace_ids)
+    // Loads the identity into |keys|.
+    void loadKeys(RouterKeys* keys)
     {
-        ASSERT_EQ(keys->apply(userKeys(workspace_ids), SecureString(kPassword)),
-                  RouterKeys::Result::OK);
-    }
-
-    std::string encrypt(qint64 workspace_id, const QString& plaintext)
-    {
-        const DataCryptor cryptor(CipherType::AES256_GCM, groupKey(workspace_id));
-        std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toUtf8());
-        if (!encrypted.has_value())
-            return std::string();
-        return encrypted->toStdString();
+        ASSERT_EQ(keys->apply(userKeys(), SecureString(kPassword)), RouterKeys::Result::OK);
     }
 
     proto::router::HostList hostList(qint64 workspace_id, const QList<HostId>& host_ids,
@@ -113,7 +80,6 @@ protected:
     }
 
     RouterUser user_;
-    QHash<qint64, SecureByteArray> group_keys_;
 };
 
 #endif // CLIENT_ROUTER_TEST_FIXTURE_H

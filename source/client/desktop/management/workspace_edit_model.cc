@@ -107,12 +107,6 @@ void WorkspaceEditModel::grantUser(qint64 user_id)
 //--------------------------------------------------------------------------------------------------
 void WorkspaceEditModel::revokeUser(qint64 user_id)
 {
-    // The router accepts a workspace only with every keyed administrator present, so the
-    // intent is refused here and not only in the UI - a revoke that can never be saved must
-    // not enter the state.
-    if (!canRevokeUser(user_id))
-        return;
-
     added_user_ids_.remove(user_id);
     removed_user_ids_.insert(user_id);
 }
@@ -135,12 +129,6 @@ void WorkspaceEditModel::releaseHost(quint64 host_id)
 QSet<qint64> WorkspaceEditModel::effectiveAccessIds() const
 {
     QSet<qint64> ids = server_access_ids_;
-
-    for (const User& user : users_)
-    {
-        if (user.is_admin && !user.public_key.isEmpty())
-            ids.insert(user.entry_id);
-    }
 
     ids.unite(added_user_ids_);
     ids.subtract(removed_user_ids_);
@@ -184,16 +172,8 @@ QList<WorkspaceEditModel::User> WorkspaceEditModel::availableUsers() const
     QList<User> available;
     for (const User& user : users_)
     {
-        if (access_ids.contains(user.entry_id))
-            continue;
-
-        // A user without a key pair cannot be granted access - nobody can seal the group key
-        // for it (the pair appears at its first password change), and the router rejects such
-        // an entry. Not offered at all instead of failing the save with a cryptic error.
-        if (user.public_key.isEmpty())
-            continue;
-
-        available.append(user);
+        if (!access_ids.contains(user.entry_id))
+            available.append(user);
     }
     return available;
 }
@@ -227,38 +207,10 @@ QList<WorkspaceEditModel::Host> WorkspaceEditModel::availableHosts() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool WorkspaceEditModel::canRevokeUser(qint64 user_id) const
-{
-    const auto it = users_.constFind(user_id);
-    if (it == users_.constEnd())
-        return true;
-    return !(it->is_admin && !it->public_key.isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-QList<WorkspaceEditModel::AccessEntry> WorkspaceEditModel::accessEntriesForSave() const
+QList<qint64> WorkspaceEditModel::accessUserIdsForSave() const
 {
     const QSet<qint64> access_ids = effectiveAccessIds();
-
-    QList<AccessEntry> entries;
-    entries.reserve(access_ids.size());
-
-    for (qint64 user_id : access_ids)
-    {
-        AccessEntry& entry = entries.emplaceBack();
-        entry.user_id = user_id;
-
-        // Newly granted users need a sealed GK; the public key is the seal target the router
-        // verifies. For already granted users it stays empty - "keep the stored entry".
-        if (!server_access_ids_.contains(user_id))
-        {
-            const auto it = users_.constFind(user_id);
-            if (it != users_.constEnd())
-                entry.public_key = it->public_key;
-        }
-    }
-
-    return entries;
+    return QList<qint64>(access_ids.begin(), access_ids.end());
 }
 
 //--------------------------------------------------------------------------------------------------

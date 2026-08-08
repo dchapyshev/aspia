@@ -26,8 +26,6 @@
 #include <set>
 #include <string>
 
-#include "base/crypto/random.h"
-#include "base/crypto/sealed_box.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
@@ -94,23 +92,19 @@ protected:
         caller_.session_type = session_type;
     }
 
-    // One access entry for |user|, sealed to its current key and carrying the seal target the
-    // router verifies.
-    Workspace::Access accessEntry(const RouterUser& user, const SecureByteArray& gk)
+    // One membership entry for |user|.
+    static Workspace::Access accessEntry(const RouterUser& user)
     {
         Workspace::Access access;
         access.user_id = user.entry_id;
-        access.wrapped_gk = toStdString(SealedBox::seal(gk, user.public_key));
-        access.public_key = toStdString(user.public_key);
         return access;
     }
 
-    // A workspace whose group key is sealed for the built-in administrator.
-    qint64 addWorkspace(const QString& name, const SecureByteArray& gk,
-                        const std::set<HostId>& hosts = {})
+    // A workspace the built-in administrator is a member of.
+    qint64 addWorkspace(const QString& name, const std::set<HostId>& hosts = {})
     {
         qint64 entry_id = -1;
-        if (db_.addWorkspace(name.toStdString(), std::string_view(), {accessEntry(admin_, gk)},
+        if (db_.addWorkspace(name.toStdString(), std::string_view(), {accessEntry(admin_)},
                              hosts, &entry_id) != proto::router::kErrorOk)
         {
             return -1;

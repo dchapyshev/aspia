@@ -72,13 +72,15 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     }
 
     // Hosts that are not assigned to a workspace cannot be edited from manager/admin clients.
-    // Editor must also be a member of the host's workspace; admins are auto-included by design.
-    // "No access" and "could not check" are different answers - a database error must not be
-    // reported as a denial.
+    // Beyond that the editor must be a member of the host's workspace, which an administrator
+    // does not have to be - it manages every workspace of the router. "No access" and "could not
+    // check" are different answers, so a database error must not be reported as a denial.
+    const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
+
     bool access_known = false;
-    const bool has_access =
-        workspace_id != 0 && database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known);
-    if (workspace_id != 0 && !access_known)
+    const bool has_access = workspace_id != 0 &&
+        (is_admin || database.hasWorkspaceAccess(caller.user_id, workspace_id, &access_known));
+    if (workspace_id != 0 && !is_admin && !access_known)
     {
         LOG(ERROR) << "Unable to check access to workspace" << workspace_id;
         result.error_code = proto::router::kErrorInternalError;
@@ -196,12 +198,16 @@ void handleHostSearch(Database& database, const RequestCaller& caller,
                       const proto::router::HostSearchRequest& request,
                       proto::router::HostSearchResult* out)
 {
-    // Search is always scoped to every workspace the user can access, regardless of session type.
-    // Only the ids are needed here, so avoid pulling each membership's wrapped_gk blob.
+    // Search is scoped to the workspaces the caller can reach: every one of them for an
+    // administrator, the ones it is a member of for anybody else.
+    const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
+
     std::set<qint64> workspace_ids;
-    if (!database.workspaceAccessIdsForUser(caller.user_id, &workspace_ids))
+    const bool ids_known = is_admin ? database.workspaceIds(&workspace_ids)
+                                    : database.workspaceAccessIdsForUser(caller.user_id, &workspace_ids);
+    if (!ids_known)
     {
-        LOG(ERROR) << "Failed to read workspace access list for user" << caller.user_id;
+        LOG(ERROR) << "Failed to read the workspace scope of user" << caller.user_id;
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }

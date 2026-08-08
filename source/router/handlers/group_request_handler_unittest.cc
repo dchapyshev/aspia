@@ -30,8 +30,7 @@ protected:
     {
         RouterTestBase::SetUp();
 
-        gk_ = SecureByteArray(Random::byteArray(32));
-        workspace_id_ = addWorkspace("alpha", gk_);
+        workspace_id_ = addWorkspace("alpha");
         ASSERT_GT(workspace_id_, 0);
     }
 
@@ -83,7 +82,6 @@ protected:
         return out;
     }
 
-    SecureByteArray gk_;
     qint64 workspace_id_ = 0;
 };
 
@@ -239,7 +237,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
 // a tree encrypted with a different group key.
 TEST_F(GroupRequestHandlerTest, AddRejectsParentFromAnotherWorkspace)
 {
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     const qint64 foreign_group = addGroup(other_id, 0, "foreign");
@@ -300,7 +298,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsCycle)
 // there, even for an administrator that has access to both.
 TEST_F(GroupRequestHandlerTest, ModifyOfForeignGroupIsNotFound)
 {
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     const qint64 foreign_group = addGroup(other_id, 0, "foreign");
@@ -331,7 +329,7 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     ASSERT_GT(child_id, 0);
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {accessEntry(admin_, gk_)}, {host_id}),
+                                  {accessEntry(admin_)}, {host_id}),
               proto::router::kErrorOk);
     ASSERT_TRUE(db_.modifyHost(host_id, child_id, "host", std::string_view()));
 
@@ -377,7 +375,7 @@ TEST_F(GroupRequestHandlerTest, UnknownCommandIsInvalidRequest)
 //--------------------------------------------------------------------------------------------------
 TEST_F(GroupRequestHandlerTest, GroupListIsScopedToItsWorkspace)
 {
-    const qint64 other_id = addWorkspace("beta", gk_);
+    const qint64 other_id = addWorkspace("beta");
     ASSERT_GT(other_id, 0);
 
     ASSERT_GT(addGroup(workspace_id_, 0, "servers"), 0);
