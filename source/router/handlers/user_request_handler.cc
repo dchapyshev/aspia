@@ -18,7 +18,6 @@
 
 #include "router/handlers/user_request_handler.h"
 
-#include <unordered_map>
 #include <vector>
 
 #include "base/logging.h"
@@ -167,19 +166,19 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleRevokeTokens(Database& database, const RequestCaller& caller, const proto::router::User& user,
-                        Result* result)
+void handleRevokeTokens(Database& database, const RequestCaller& caller,
+                        const proto::router::UserTokenRequest& request, Result* result)
 {
-    const qint64 user_id = user.entry_id();
+    const qint64 user_id = request.user_id();
 
     if (user_id <= 0)
     {
-        LOG(ERROR) << "Invalid revoke_tokens request: user_id=" << user_id;
+        LOG(ERROR) << "Invalid token revoke request: user_id=" << user_id;
         result->error_code = proto::router::kErrorInvalidRequest;
         return;
     }
 
-    if (user.token_size() == 0)
+    if (request.token_id_size() == 0)
     {
         // Empty list - drop every token of the user atomically.
         const std::string_view error_code = database.revokeUserClientDeviceTokens(user_id);
@@ -195,14 +194,14 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller, const p
     }
 
     std::vector<qint64> token_ids;
-    token_ids.reserve(user.token_size());
+    token_ids.reserve(request.token_id_size());
 
-    for (int i = 0; i < user.token_size(); ++i)
+    for (int i = 0; i < request.token_id_size(); ++i)
     {
-        const qint64 token_id = user.token(i).token_id();
+        const qint64 token_id = request.token_id(i);
         if (token_id <= 0)
         {
-            LOG(ERROR) << "Invalid token_id in revoke_tokens request";
+            LOG(ERROR) << "Invalid token_id in token revoke request";
             result->error_code = proto::router::kErrorInvalidRequest;
             return;
         }
@@ -223,6 +222,21 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller, const p
     result->stop_user_id = user_id;
     result->stop_token_ids = std::move(token_ids);
     result->notify_flags = ClientWorker::NOTIFY_USERS;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Only the descriptive fields of a record are listed. The credential material never leaves the
+// router and the device tokens are a list of their own.
+void serializeUser(const RouterUser& user, proto::router::User* out)
+{
+    out->set_entry_id(user.entry_id);
+    out->set_name(user.name.toStdString());
+    out->set_group(user.group.toStdString());
+    out->set_sessions(user.sessions);
+    out->set_flags(user.flags);
+
+    // A presentation-only flag derived from whether the user has a confirmed TOTP secret on file.
+    out->set_otp_active(!user.otp_secret.isEmpty());
 }
 
 } // namespace
@@ -250,10 +264,6 @@ RequestResult handleUserRequest(Database& database, const RequestCaller& caller,
     {
         handleResetOtp(database, caller, request.user().entry_id(), &result);
     }
-    else if (command_name == proto::router::kCommandUserRevokeTokens)
-    {
-        handleRevokeTokens(database, caller, request.user(), &result);
-    }
     else
     {
         LOG(ERROR) << "Unknown user request command:" << command_name;
@@ -264,54 +274,117 @@ RequestResult handleUserRequest(Database& database, const RequestCaller& caller,
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleUserList(Database& database, proto::router::UserList* out)
+void handleUserList(Database& database, const proto::router::UserListRequest& request,
+                    proto::router::UserList* out)
 {
-    if (!database.isValid())
+    const qint64 entry_id = request.entry_id();
+    const std::string& name = request.name();
+
+    if (entry_id != 0 && !name.empty())
     {
-        LOG(ERROR) << "Failed to connect to database";
-        out->set_error_code(proto::router::kErrorInternalError);
+        LOG(ERROR) << "Ambiguous user lookup: both entry_id and name are set";
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    if (entry_id != 0 || !name.empty())
+    {
+        RouterUser user;
+        const std::string_view error_code = entry_id != 0 ?
+            database.findUser(entry_id, &user) : database.findUser(QString::fromStdString(name), &user);
+
+        // A lookup asks whether the record is there, so a miss is an empty list and not an error.
+        // total_count stays unset, because a lookup says nothing about the size of the list.
+        if (error_code == proto::router::kErrorOk)
+            serializeUser(user, out->add_user());
+        else if (error_code != proto::router::kErrorNotFound)
+        {
+            out->set_error_code(error_code);
+            return;
+        }
+
+        out->set_error_code(proto::router::kErrorOk);
+        return;
+    }
+
+    // A zero count from a failed query would make the client truncate its pagination while the
+    // page itself arrives non-empty, so a count failure fails the whole request.
+    qint64 total_count = 0;
+    const std::string_view count_code = database.userCount(&total_count);
+    if (count_code != proto::router::kErrorOk)
+    {
+        out->set_error_code(count_code);
         return;
     }
 
     std::vector<RouterUser> users;
-    if (!database.userList(&users))
+    const std::string_view list_code = database.userList(request.offset(), request.count(), &users);
+    if (list_code != proto::router::kErrorOk)
+    {
+        out->set_error_code(list_code);
+        return;
+    }
+
+    out->set_total_count(total_count);
+
+    for (const RouterUser& user : users)
+        serializeUser(user, out->add_user());
+
+    out->set_error_code(proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+void handleUserTokenList(Database& database, const proto::router::UserTokenListRequest& request,
+                         proto::router::UserTokenList* out)
+{
+    const qint64 user_id = request.user_id();
+    out->set_user_id(user_id);
+
+    if (user_id <= 0)
+    {
+        LOG(ERROR) << "Invalid user id in token list request:" << user_id;
+        out->set_error_code(proto::router::kErrorInvalidRequest);
+        return;
+    }
+
+    // The router exposes the opaque numeric id and the timestamp metadata. The token hash and
+    // anything else that could identify the token outside the router stay here.
+    std::vector<DeviceToken> tokens;
+    if (!database.listClientDeviceTokens(user_id, &tokens))
     {
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
 
-    out->set_error_code(proto::router::kErrorOk);
-
-    for (const auto& user : users)
+    for (DeviceToken& src : tokens)
     {
-        proto::router::User* item = out->add_user();
-        item->CopyFrom(user.serialize());
-
-        // |otp_active| is a presentation-only flag derived from whether the user has a confirmed
-        // TOTP secret on file.
-        item->set_otp_active(!user.otp_secret.isEmpty());
-
-        // Attach the user's active device tokens. The router only ever exposes the opaque numeric
-        // id and timestamp metadata - never the token hash or any other material that could
-        // identify the token outside of the router.
-        std::vector<DeviceToken> tokens;
-        if (!database.listClientDeviceTokens(user.entry_id, &tokens))
-        {
-            // A partially built reply must not pass for a complete one.
-            out->clear_user();
-            out->set_error_code(proto::router::kErrorInternalError);
-            return;
-        }
-
-        for (DeviceToken& src : tokens)
-        {
-            proto::router::User::Token* token = item->add_token();
-            token->set_token_id(src.token_id);
-            token->set_created_at(src.created_at);
-            token->set_last_used_at(src.last_used_at);
-            token->set_address(std::move(src.address));
-        }
+        proto::router::UserToken* token = out->add_token();
+        token->set_token_id(src.token_id);
+        token->set_created_at(src.created_at);
+        token->set_last_used_at(src.last_used_at);
+        token->set_address(std::move(src.address));
     }
+
+    out->set_error_code(proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+RequestResult handleUserTokenRequest(Database& database, const RequestCaller& caller,
+                                     const proto::router::UserTokenRequest& request)
+{
+    RequestResult result;
+
+    if (request.command_name() == proto::router::kCommandUserTokenRevoke)
+    {
+        handleRevokeTokens(database, caller, request, &result);
+    }
+    else
+    {
+        LOG(ERROR) << "Unknown user token request command:" << request.command_name();
+        result.error_code = proto::router::kErrorInvalidRequest;
+    }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,11 +18,10 @@
 
 #include "router/handlers/workspace_request_handler.h"
 
-#include <set>
+#include <vector>
 
 #include "base/logging.h"
 #include "base/string_util.h"
-#include "base/peer/host_id.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -35,37 +34,26 @@ namespace {
 using Result = RequestResult;
 
 //--------------------------------------------------------------------------------------------------
-std::vector<Workspace::Access> accessList(const proto::router::Workspace& workspace)
+std::vector<qint64> accessList(const proto::router::Workspace& workspace)
 {
-    std::vector<Workspace::Access> access_list;
-    access_list.reserve(size_t(workspace.access_size()));
+    std::vector<qint64> access_list;
+    access_list.reserve(size_t(workspace.user_id_size()));
 
-    for (int i = 0; i < workspace.access_size(); ++i)
-        access_list.emplace_back().user_id = workspace.access(i).user_id();
+    for (int i = 0; i < workspace.user_id_size(); ++i)
+        access_list.emplace_back(workspace.user_id(i));
 
     return access_list;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::set<HostId> desiredHostIds(const proto::router::Workspace& workspace)
-{
-    std::set<HostId> host_ids;
-    for (int i = 0; i < workspace.host_id_size(); ++i)
-        host_ids.insert(workspace.host_id(i));
-    return host_ids;
-}
-
-//--------------------------------------------------------------------------------------------------
 void handleAdd(Database& database, const proto::router::Workspace& workspace, Result* result)
 {
-    const std::set<HostId> host_ids = desiredHostIds(workspace);
-
-    LOG(INFO) << "Workspace add request:" << workspace.name() << "with" << workspace.access_size()
-              << "access entries and" << host_ids.size() << "hosts";
+    LOG(INFO) << "Workspace add request:" << workspace.name() << "with" << workspace.user_id_size()
+              << "access entries";
 
     qint64 new_id = -1;
     const std::string_view error_code = database.addWorkspace(
-        strTrimmed(workspace.name()), workspace.comment(), accessList(workspace), host_ids, &new_id);
+        strTrimmed(workspace.name()), workspace.comment(), accessList(workspace), &new_id);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -73,32 +61,23 @@ void handleAdd(Database& database, const proto::router::Workspace& workspace, Re
 
     result->entry_id = new_id;
     result->notify_flags = ClientWorker::NOTIFY_WORKSPACES;
-
-    // A creation can only claim hosts, so the host lists are stale only when it did.
-    if (!host_ids.empty())
-        result->notify_flags |= ClientWorker::NOTIFY_HOSTS;
 }
 
 //--------------------------------------------------------------------------------------------------
 void handleModify(Database& database, const proto::router::Workspace& workspace, Result* result)
 {
-    const std::set<HostId> host_ids = desiredHostIds(workspace);
-
     LOG(INFO) << "Workspace modify request:" << workspace.entry_id() << workspace.name()
-              << "with" << workspace.access_size() << "access entries and"
-              << host_ids.size() << "hosts";
+              << "with" << workspace.user_id_size() << "access entries";
 
     const std::string_view error_code = database.modifyWorkspace(
         workspace.entry_id(), workspace.revision(), strTrimmed(workspace.name()),
-        workspace.comment(), accessList(workspace), host_ids);
+        workspace.comment(), accessList(workspace));
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
         return;
 
-    // The host assignments can change even when the desired set is empty (all the hosts of the
-    // workspace released), so the hosts are refetched in any case.
-    result->notify_flags = ClientWorker::NOTIFY_WORKSPACES | ClientWorker::NOTIFY_HOSTS;
+    result->notify_flags = ClientWorker::NOTIFY_WORKSPACES;
 }
 
 //--------------------------------------------------------------------------------------------------

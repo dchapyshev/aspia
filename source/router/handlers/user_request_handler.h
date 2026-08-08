@@ -25,7 +25,11 @@
 namespace proto::router {
 class ChangePasswordRequest;
 class UserList;
+class UserListRequest;
 class UserRequest;
+class UserTokenList;
+class UserTokenListRequest;
+class UserTokenRequest;
 } // namespace proto::router
 
 class Database;
@@ -36,13 +40,22 @@ class Database;
 // Queries fill the reply message (that is their whole result); commands return the RequestResult
 // the session applies after the reply is sent.
 
-// The user commands of the admin channel (add, modify, delete, OTP reset, token revocation).
+// The user commands of the admin channel (add, modify, delete, OTP reset).
 RequestResult handleUserRequest(Database& database, const RequestCaller& caller,
                                 const proto::router::UserRequest& request);
 
-// The user list of the admin channel, with the active device tokens of every user. Fills |out|
-// completely except for request_id (session framing).
-void handleUserList(Database& database, proto::router::UserList* out);
+// A page of the user list, or the single record a point lookup names. Fills |out| completely
+// except for request_id (session framing).
+void handleUserList(Database& database, const proto::router::UserListRequest& request,
+                    proto::router::UserList* out);
+
+// The active device tokens of one user. Fills |out| completely except for request_id.
+void handleUserTokenList(Database& database, const proto::router::UserTokenListRequest& request,
+                         proto::router::UserTokenList* out);
+
+// The device token commands of the admin channel (revocation).
+RequestResult handleUserTokenRequest(Database& database, const RequestCaller& caller,
+                                     const proto::router::UserTokenRequest& request);
 
 // The rotation of the caller's own password over the client channel.
 RequestResult handleChangePassword(Database& database, const RequestCaller& caller,

@@ -64,20 +64,36 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
         return result;
     }
 
-    // Hosts that are not assigned to a workspace cannot be edited from manager/admin clients.
-    // Beyond that the editor must be a member of the host's workspace, which an administrator
-    // does not have to be - it manages every workspace of the router.
+    // Only an administrator moves a host between workspaces. Anybody else edits the host inside
+    // the workspace it already sits in and must be a member of that workspace. An administrator
+    // manages every workspace of the router and needs no membership.
     const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
+    const qint64 target_workspace_id = host.workspace_id();
 
-    if (workspace_id == 0)
+    if (target_workspace_id < 0)
     {
-        LOG(ERROR) << "User" << caller.user_id << "cannot edit unassigned host" << host_id;
-        result.error_code = proto::router::kErrorAccessDenied;
+        LOG(ERROR) << "Invalid workspace id in host edit request:" << target_workspace_id;
+        result.error_code = proto::router::kErrorInvalidData;
         return result;
     }
 
     if (!is_admin)
     {
+        if (target_workspace_id != workspace_id)
+        {
+            LOG(ERROR) << "User" << caller.user_id << "cannot move host" << host_id
+                       << "from workspace" << workspace_id << "to" << target_workspace_id;
+            result.error_code = proto::router::kErrorAccessDenied;
+            return result;
+        }
+
+        if (workspace_id == 0)
+        {
+            LOG(ERROR) << "User" << caller.user_id << "cannot edit unassigned host" << host_id;
+            result.error_code = proto::router::kErrorAccessDenied;
+            return result;
+        }
+
         const std::string_view access_code =
             database.checkWorkspaceAccess(caller.user_id, workspace_id);
         if (access_code != proto::router::kErrorOk)
@@ -90,31 +106,31 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     }
 
     // group_id == 0 keeps the host at the workspace root; any other value must reference a group
-    // in the host's current workspace. A negative or unknown id is rejected here (the hosts table
-    // has no foreign key on group_id, so an unchecked value would orphan the host). Cross-workspace
-    // moves are not allowed.
+    // in the workspace the host ends up in. A negative or unknown id is rejected here (the hosts
+    // table has no foreign key on group_id, so an unchecked value would orphan the host). A
+    // released host keeps no group, so there is nothing to check.
     const qint64 group_id = host.group_id();
-    if (group_id != 0)
+    if (group_id != 0 && target_workspace_id != 0)
     {
         Group group;
-        const std::string_view group_code = database.findGroup(workspace_id, group_id, &group);
+        const std::string_view group_code = database.findGroup(target_workspace_id, group_id, &group);
         if (group_code == proto::router::kErrorNotFound)
         {
-            LOG(ERROR) << "Group" << group_id << "not found in workspace" << workspace_id;
+            LOG(ERROR) << "Group" << group_id << "not found in workspace" << target_workspace_id;
             result.error_code = proto::router::kErrorInvalidData;
             return result;
         }
 
         if (group_code != proto::router::kErrorOk)
         {
-            LOG(ERROR) << "Unable to check group" << group_id << "in workspace" << workspace_id;
+            LOG(ERROR) << "Unable to check group" << group_id << "in workspace" << target_workspace_id;
             result.error_code = group_code;
             return result;
         }
     }
 
-    const std::string_view error_code =
-        database.modifyHost(host_id, workspace_id, group_id, host.display_name(), host.comment());
+    const std::string_view error_code = database.modifyHost(
+        host_id, target_workspace_id, group_id, host.display_name(), host.comment());
     if (error_code != proto::router::kErrorOk)
     {
         result.error_code = error_code;
@@ -156,6 +172,15 @@ void handleHostList(Database& database, const RequestCaller& caller,
 
     if (mode == proto::router::HostListRequest::MODE_FILTERED)
     {
+        // "Any group" narrows nothing without a workspace. Such a request would list every host
+        // of the router, which only MODE_ALL does and only for an administrator.
+        if (group_id < 0 && workspace_id <= 0)
+        {
+            LOG(ERROR) << "Any-group host list without a workspace";
+            out->set_error_code(proto::router::kErrorInvalidRequest);
+            return;
+        }
+
         const std::string_view access_code = checkWorkspaceAccess(database, caller, workspace_id);
         if (access_code != proto::router::kErrorOk)
         {
