@@ -24,6 +24,8 @@
 
 #include <gtest/gtest.h>
 
+#include <asio/ip/tcp.hpp>
+
 #include <atomic>
 #include <condition_variable>
 #include <memory>
@@ -34,6 +36,7 @@
 #include "base/xml_settings.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_server.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
 #include "build/build_config.h"
 #include "host/database.h"
@@ -126,8 +129,8 @@ private:
     Q_DISABLE_COPY_MOVE(HostTestWorker)
 };
 
-// Drives the timer of the manager with a synthetic clock, in the thread of the manager. In
-// production the timer runs with the real time, and the tests cannot wait the real timeouts out.
+// Reaches into the manager from its own thread: drives the timer with a synthetic clock (the
+// tests cannot wait the real timeouts out) and counts the held pairs, which nothing else exposes.
 class RouterManagerTestPeer
 {
 public:
@@ -141,6 +144,13 @@ public:
     void fireTimer(TimePoint now)
     {
         worker_->invoke([&]() { manager_->onTimer(now); });
+    }
+
+    size_t pendingConnectionKeyCount()
+    {
+        size_t count = 0;
+        worker_->invoke([&]() { count = manager_->pending_connection_keys_.size(); });
+        return count;
     }
 
 private:
@@ -181,6 +191,9 @@ protected:
 
         startRouterStand();
         ASSERT_NE(router_port_, 0);
+
+        startFakeRelay();
+        ASSERT_NE(relay_port_, 0);
     }
 
     void TearDown() override
@@ -188,6 +201,8 @@ protected:
         host_worker_->invoke([this]() { delete manager_.data(); });
 
         stopRouterStand();
+
+        stand_worker_->invoke([this]() { relay_acceptor_.reset(); });
     }
 
     // Starts the stand and leaves the port it listens on in |router_port_|.
@@ -255,6 +270,68 @@ protected:
         {
             delete host_channel_.data();
             delete server_.data();
+        });
+    }
+
+    // The relay end of the offers. The manager under test only has to reach it, so a raw listener
+    // counts the connections and drops them.
+    void startFakeRelay()
+    {
+        stand_worker_->invoke([this]()
+        {
+            relay_acceptor_ =
+                std::make_unique<asio::ip::tcp::acceptor>(AsioEventDispatcher::ioContext());
+
+            const asio::ip::tcp::endpoint endpoint(asio::ip::make_address("127.0.0.1"), 0);
+            std::error_code error_code;
+
+            relay_acceptor_->open(endpoint.protocol(), error_code);
+            ASSERT_FALSE(error_code) << error_code.message();
+            relay_acceptor_->bind(endpoint, error_code);
+            ASSERT_FALSE(error_code) << error_code.message();
+            relay_acceptor_->listen(asio::socket_base::max_listen_connections, error_code);
+            ASSERT_FALSE(error_code) << error_code.message();
+
+            relay_port_ = relay_acceptor_->local_endpoint().port();
+            acceptNextRelayConnection();
+        });
+    }
+
+    // Keeps one accept in flight. Runs in the stand thread.
+    void acceptNextRelayConnection()
+    {
+        relay_acceptor_->async_accept(
+            [this](const std::error_code& error_code, asio::ip::tcp::socket socket)
+        {
+            if (error_code)
+                return;
+
+            ++relay_accepted_;
+
+            std::error_code ignored_code;
+            socket.close(ignored_code);
+
+            acceptNextRelayConnection();
+        });
+    }
+
+    // Sends the connection offer the way the router does, pointing the manager at the fake relay.
+    // A zero |host_key_id| makes the offer of the password path.
+    void sendConnectionOffer(quint32 host_key_id)
+    {
+        stand_worker_->invoke([&]()
+        {
+            proto::router::RouterToHost message;
+            proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+            offer->set_error_code(proto::router::kErrorOk);
+            if (host_key_id)
+                offer->set_host_key_id(host_key_id);
+
+            proto::router::RelayCredentials* relay = offer->mutable_relay();
+            relay->set_host("127.0.0.1");
+            relay->set_port(relay_port_);
+
+            host_channel_->send(0, serialize(message));
         });
     }
 
@@ -365,6 +442,10 @@ protected:
     WorkerManager workers_;
     HostTestWorker* stand_worker_ = nullptr;
     HostTestWorker* host_worker_ = nullptr;
+
+    std::unique_ptr<asio::ip::tcp::acceptor> relay_acceptor_;
+    quint16 relay_port_ = 0;
+    std::atomic<int> relay_accepted_ { 0 };
 
     QPointer<TcpServer> server_;
     QPointer<TcpChannel> host_channel_;
@@ -651,4 +732,128 @@ TEST_F(RouterManagerTest, ReconnectClearsThePendingConnectionKeys)
     sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([&]() { return key_responses_received_.load() > seen; }));
     EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The offer that carries a key id takes the issued pair: the connection to the relay starts, and
+// the pair never serves anything again.
+TEST_F(RouterManagerTest, KeyedOfferTakesTheIssuedPair)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    const quint32 key_id = lastKeyResponse().key_id();
+    ASSERT_NE(key_id, 0u);
+
+    sendConnectionOffer(key_id);
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
+
+    RouterManagerTestPeer peer(host_worker_, manager_);
+    EXPECT_EQ(peer.pendingConnectionKeyCount(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The offer without a key id runs the password path and leaves the issued pairs alone.
+TEST_F(RouterManagerTest, OfferWithoutAKeyLeavesTheIssuedPairsAlone)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+
+    sendConnectionOffer(0);
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
+
+    RouterManagerTestPeer peer(host_worker_, manager_);
+    EXPECT_EQ(peer.pendingConnectionKeyCount(), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An offer with a key the host never issued, or one already swept out by the TTL, starts no
+// connection: there is no pair to authenticate with, and the password path was not offered either.
+TEST_F(RouterManagerTest, OfferWithAnUnknownOrExpiredKeyIsDropped)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    const quint32 expired_key_id = lastKeyResponse().key_id();
+
+    // The real TTL is a minute; the synthetic clock crosses it at once.
+    RouterManagerTestPeer peer(host_worker_, manager_);
+    peer.fireTimer(Clock::now() + Seconds(61));
+    ASSERT_EQ(peer.pendingConnectionKeyCount(), 0u);
+
+    sendConnectionOffer(expired_key_id);
+    sendConnectionOffer(12345);
+
+    // The dropped offers started nothing, so the accepted control offer connects first and alone.
+    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
+    sendConnectionOffer(lastKeyResponse().key_id());
+
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
+    EXPECT_EQ(relay_accepted_.load(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The pair is single-use. The second offer with the same key id finds nothing and is dropped.
+TEST_F(RouterManagerTest, ReplayedKeyIdIsDropped)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    const quint32 key_id = lastKeyResponse().key_id();
+
+    sendConnectionOffer(key_id);
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
+
+    sendConnectionOffer(key_id);
+
+    // A control offer that must go through. The offers run over one ordered channel, so if the
+    // replay had gone through too, its connection would have been counted no later than this one.
+    sendConnectionOffer(0);
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 2; }));
+    EXPECT_EQ(relay_accepted_.load(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A key issued over the previous channel opens nothing after the reconnect.
+TEST_F(RouterManagerTest, KeyIssuedBeforeAReconnectIsDropped)
+{
+    startManager();
+    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
+
+    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    const quint32 key_id = lastKeyResponse().key_id();
+
+    stopRouterStand();
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kInvalidHostId; }));
+
+    startRouterStand();
+    ASSERT_NE(router_port_, 0);
+
+    RouterManagerTestPeer peer(host_worker_, manager_);
+    const TimePoint after_pause = Clock::now() + kReconnectTimeout + Seconds(1);
+
+    ASSERT_TRUE(waitFor([&]()
+    {
+        peer.fireTimer(after_pause);
+        return requests_received_.load() >= 2;
+    }));
+
+    sendConnectionOffer(key_id);
+    sendConnectionOffer(0);
+
+    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
+    EXPECT_EQ(relay_accepted_.load(), 1);
 }

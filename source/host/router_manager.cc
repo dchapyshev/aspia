@@ -267,20 +267,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
     }
     else if (in_message.has_connection_offer())
     {
-        LOG(INFO) << "New connection offer";
-
-        const proto::router::ConnectionOffer& connection_offer = in_message.connection_offer();
-
-        if (connection_offer.error_code() == proto::router::kErrorOk)
-        {
-            ServerAuthenticator* authenticator = new ServerAuthenticator();
-            authenticator->setUserList(user_list_);
-            peer_manager_->addConnectionOffer(connection_offer, authenticator);
-        }
-        else
-        {
-            LOG(ERROR) << "Invalid connection offer";
-        }
+        readConnectionOffer(in_message.connection_offer());
     }
     else if (in_message.has_connection_key_request())
     {
@@ -515,6 +502,55 @@ void RouterManager::readConnectionKeyRequest(const proto::router::ConnectionKeyR
     }
 
     tcp_channel_->send(0, serialize(out_message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::readConnectionOffer(const proto::router::ConnectionOffer& offer)
+{
+    LOG(INFO) << "New connection offer";
+
+    if (offer.error_code() != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Invalid connection offer";
+        return;
+    }
+
+    ScopedQPointer<ServerAuthenticator> authenticator(new ServerAuthenticator());
+
+    if (!offer.host_key_id())
+    {
+        // An offer without a key runs the password handshake.
+        authenticator->setUserList(user_list_);
+    }
+    else
+    {
+        const auto it = pending_connection_keys_.find(offer.host_key_id());
+        if (it == pending_connection_keys_.end())
+        {
+            // Spent, expired or issued over a previous channel. Without the pair the client
+            // cannot be authenticated, and the password path was not offered to it either.
+            LOG(ERROR) << "No pair for connection key" << offer.host_key_id()
+                       << ". The offer is dropped";
+            return;
+        }
+
+        const PendingConnectionKey pending = std::move(it->second);
+        pending_connection_keys_.erase(it);
+
+        if (!authenticator->setPrivateKey(pending.key_pair.privateKey()) ||
+            !authenticator->setAnonymousAccess(ServerAuthenticator::AnonymousAccess::ENABLE,
+                                               pending.session_type))
+        {
+            LOG(ERROR) << "Failed to load connection key" << offer.host_key_id()
+                       << "into the authenticator. The offer is dropped";
+            return;
+        }
+
+        LOG(INFO) << "Connection key" << offer.host_key_id() << "is taken by a connection of"
+                  << pending.user_name;
+    }
+
+    peer_manager_->addConnectionOffer(offer, authenticator.release());
 }
 
 //--------------------------------------------------------------------------------------------------

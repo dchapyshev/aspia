@@ -38,6 +38,7 @@
 
 namespace proto::router {
 class ConnectionKeyRequest;
+class ConnectionOffer;
 } // namespace proto::router
 
 class Database;
@@ -92,6 +93,7 @@ private:
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
     void readConnectionKeyRequest(const proto::router::ConnectionKeyRequest& request);
+    void readConnectionOffer(const proto::router::ConnectionOffer& offer);
     void renewOneTimePassword();
     User createOneTimeUser() const;
 
