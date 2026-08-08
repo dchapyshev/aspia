@@ -29,7 +29,7 @@ namespace proto::router {
 class Notification;
 } // namespace proto::router
 
-// The decoded lists of a router session, served to the callers that accept a cached answer, and
+// The lists of a router session, served to the callers that accept a cached answer, and
 // the rules of when they go stale. The rules have two feeds: the replies to what this client wrote
 // (they arrive at once) and the notifications about what somebody else wrote (they are batched and
 // come seconds later). Both feeds are here, side by side, because they must agree with the same

@@ -51,8 +51,8 @@ public:
 };
 
 // A session without a worker: what it sends is collected from sig_sendMessage, the replies are
-// handed to it as the worker would. The keys, the codec, the cache and the rpc have tests of
-// their own; here the conversation is under test.
+// handed to it as the worker would. The keys, the cache and the rpc have tests of their own; here
+// the conversation is under test.
 class RouterTest : public RouterKeysFixture
 {
 protected:
@@ -253,17 +253,17 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 // The list arrives as the router stored it, membership included.
-TEST_F(RouterTest, WorkspaceListIsDecoded)
+TEST_F(RouterTest, WorkspaceListIsParsed)
 {
     loadKeys();
 
-    const RouterWorkspaceList decoded = fetchWorkspaces(0, workspaceList({10}, "note"));
+    const RouterWorkspaceList workspaces = fetchWorkspaces(0, workspaceList({10}, "note"));
 
-    ASSERT_EQ(decoded.error_code, QString::fromStdString(proto::router::kErrorOk));
-    ASSERT_EQ(decoded.workspaces.size(), 1);
-    EXPECT_EQ(decoded.workspaces.at(0).comment, "note");
-    ASSERT_EQ(decoded.workspaces.at(0).access.size(), 1);
-    EXPECT_EQ(decoded.workspaces.at(0).access.at(0).user_id, kUserId);
+    ASSERT_EQ(workspaces.error_code, QString::fromStdString(proto::router::kErrorOk));
+    ASSERT_EQ(workspaces.workspaces.size(), 1);
+    EXPECT_EQ(workspaces.workspaces.at(0).comment, "note");
+    ASSERT_EQ(workspaces.workspaces.at(0).access.size(), 1);
+    EXPECT_EQ(workspaces.workspaces.at(0).access.at(0).user_id, kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -384,9 +384,9 @@ TEST_F(RouterTest, ConnectionRequestCarriesTheSessionType)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The caller receives the decoded rows, and the next one that accepts a cached answer is served
+// The caller receives the rows of the reply, and the next one that accepts a cached answer is
 // without a request.
-TEST_F(RouterTest, HostListIsDecodedAndCached)
+TEST_F(RouterTest, HostListIsParsedAndCached)
 {
     loadKeys();
 
@@ -414,8 +414,8 @@ TEST_F(RouterTest, HostListIsDecodedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The groups of a workspace are decrypted with its key and cached per workspace.
-TEST_F(RouterTest, GroupListIsDecryptedAndCached)
+// The groups arrive with the workspace they belong to and are cached per workspace.
+TEST_F(RouterTest, GroupListIsParsedAndCached)
 {
     loadKeys();
 
@@ -428,11 +428,11 @@ TEST_F(RouterTest, GroupListIsDecryptedAndCached)
     group->set_name("servers");
     group->set_comment("group comment");
 
-    const RouterGroupList decoded = fetchGroups(kWorkspaceId, list);
+    const RouterGroupList groups = fetchGroups(kWorkspaceId, list);
 
-    ASSERT_EQ(decoded.groups.size(), 1);
-    EXPECT_EQ(decoded.groups.at(0).comment, "group comment");
-    EXPECT_EQ(decoded.groups.at(0).workspace_id, kWorkspaceId);
+    ASSERT_EQ(groups.groups.size(), 1);
+    EXPECT_EQ(groups.groups.at(0).comment, "group comment");
+    EXPECT_EQ(groups.groups.at(0).workspace_id, kWorkspaceId);
 
     EXPECT_TRUE(groupsServedFromCache());
     EXPECT_FALSE(groupsServedFromCache(20));
@@ -574,21 +574,111 @@ TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An unsendable request must not leave a caller waiting.
+// An unsendable record is refused before the wire, in the same terms the router would answer with,
+// so the caller is not left waiting. The bounds count UTF-8 bytes, so a name of 64 non-ASCII
+// characters is over the bound while the input field that accepted it is not; the name of a group
+// or a workspace is also mandatory and judged after trimming, the way the router judges it.
 TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 {
     loadKeys();
+
+    const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
+    const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
 
     RouterHost host;
     host.host_id = HostId(1);
     host.workspace_id = kWorkspaceId;
     host.display_name = QString(proto::router::kMaxEntryNameLength + 1, QChar('n'));
 
-    proto::router::HostResult result;
-    auto store = [&result](const proto::router::HostResult& reply) { result = reply; };
-    router_.editHost(host, { &receiver_, store });
+    proto::router::HostResult host_result;
+    auto store_host = [&host_result](const proto::router::HostResult& reply) { host_result = reply; };
+    router_.editHost(host, { &receiver_, store_host });
+    EXPECT_EQ(host_result.error_code(), proto::router::kErrorInvalidData);
+
+    host.display_name = cyrillic_name;
+    host_result.Clear();
+    router_.editHost(host, { &receiver_, store_host });
+    EXPECT_EQ(host_result.error_code(), proto::router::kErrorInvalidData);
+
+    RouterWorkspace workspace;
+    workspace.entry_id = kWorkspaceId;
+    workspace.name = "   ";
+
+    proto::router::WorkspaceResult workspace_result;
+    auto store_workspace = [&workspace_result](const proto::router::WorkspaceResult& reply)
+    {
+        workspace_result = reply;
+    };
+    router_.modifyWorkspace(workspace, { &receiver_, store_workspace });
+    EXPECT_EQ(workspace_result.error_code(), proto::router::kErrorInvalidData);
+
+    workspace.name = "alpha";
+    workspace.comment = long_comment;
+    workspace_result.Clear();
+    router_.modifyWorkspace(workspace, { &receiver_, store_workspace });
+    EXPECT_EQ(workspace_result.error_code(), proto::router::kErrorInvalidData);
+
+    RouterGroup group; // The name is empty.
+
+    proto::router::GroupResult group_result;
+    auto store_group = [&group_result](const proto::router::GroupResult& reply)
+    {
+        group_result = reply;
+    };
+    router_.addGroup(kWorkspaceId, group, { &receiver_, store_group });
+    EXPECT_EQ(group_result.error_code(), proto::router::kErrorInvalidData);
 
     EXPECT_TRUE(sent_.isEmpty());
-    EXPECT_EQ(result.error_code(), proto::router::kErrorInvalidData);
     EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record sitting exactly on the bounds goes out, and its name goes out trimmed - that is the
+// value the router stores and measures, otherwise a name of blanks would pass here and be refused
+// there.
+TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
+{
+    loadKeys();
+
+    RouterWorkspace workspace;
+    workspace.entry_id = kWorkspaceId;
+    workspace.name = "  " + QString(proto::router::kMaxEntryNameLength, QChar('n')) + "  ";
+
+    router_.modifyWorkspace(workspace,
+                            { &receiver_, [](const proto::router::WorkspaceResult&) {} });
+
+    ASSERT_EQ(sent_.size(), 1);
+    const auto request = lastRequest<proto::router::AdminToRouter>();
+    ASSERT_TRUE(request.has_workspace_request());
+    EXPECT_EQ(request.workspace_request().workspace().name().size(),
+              proto::router::kMaxEntryNameLength);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The count of a scope is never negative. One that arrives so is not data the pagination can work
+// with - it takes a non-negative count as its contract and ends the process on anything else - so
+// the parsing of the reply is where it stops.
+TEST_F(RouterTest, NegativeTotalCountDoesNotReachTheCallers)
+{
+    loadKeys();
+
+    const RouterHostList delivered = fetchHosts(hostList(kWorkspaceId, { HostId(1) }, -5));
+    EXPECT_EQ(delivered.total_count, 0);
+
+    RouterHostList found;
+    router_.searchHosts("host", 0, 25,
+                        { &receiver_, [&found](const RouterHostList& value) { found = value; } });
+
+    const auto request = lastRequest<proto::router::ClientToRouter>();
+    ASSERT_TRUE(request.has_host_search_request());
+
+    proto::router::RouterToClient reply;
+    auto* result = reply.mutable_host_search_result();
+    result->set_request_id(request.host_search_request().request_id());
+    result->set_error_code(proto::router::kErrorOk);
+    result->set_total_count(-5);
+    deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+
+    EXPECT_EQ(found.error_code, QString::fromStdString(proto::router::kErrorOk));
+    EXPECT_EQ(found.total_count, 0);
 }

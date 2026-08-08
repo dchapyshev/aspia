@@ -27,7 +27,6 @@
 #include "base/serialization.h"
 #include "build/build_config.h"
 #include "client/database.h"
-#include "client/router_codec.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 
@@ -56,6 +55,82 @@ QHash<qint64, Router*>& instances()
 {
     static thread_local QHash<qint64, Router*> g_instances;
     return g_instances;
+}
+
+//--------------------------------------------------------------------------------------------------
+// One host record, as both the list and the search reply carry it.
+RouterHost parseHost(const proto::router::Host& src)
+{
+    RouterHost dst;
+    dst.host_id       = src.host_id();
+    dst.workspace_id  = src.workspace_id();
+    dst.group_id      = src.group_id();
+    dst.display_name  = QString::fromStdString(src.display_name());
+    dst.computer_name = QString::fromStdString(src.computer_name());
+    dst.cpu_arch      = QString::fromStdString(src.cpu_arch());
+    dst.version       = QString::fromStdString(src.version());
+    dst.os_name       = QString::fromStdString(src.os_name());
+    dst.address       = QString::fromStdString(src.address());
+    dst.comment       = QString::fromStdString(src.comment());
+    dst.last_connect  = src.last_connect();
+    dst.last_modify   = src.last_modify();
+    dst.online        = src.online();
+
+    return dst;
+}
+
+// The serialize* functions fill an outgoing record and check the protocol bounds. An oversized
+// request is not refused by the router, it tears the session down.
+
+//--------------------------------------------------------------------------------------------------
+std::string_view serializeWorkspace(const RouterWorkspace& workspace, proto::router::Workspace* out)
+{
+    CHECK(out);
+
+    if (workspace.entry_id > 0)
+        out->set_entry_id(workspace.entry_id);
+    // Trimmed here because that is the value the router stores and measures.
+    out->set_name(workspace.name.trimmed().toStdString());
+    out->set_comment(workspace.comment.toStdString());
+    out->set_revision(workspace.revision);
+
+    for (const auto& access : workspace.access)
+        out->add_access()->set_user_id(access.user_id);
+
+    for (HostId host_id : std::as_const(workspace.host_ids))
+        out->add_host_id(host_id);
+
+    // The name is mandatory. Sizes are of the bytes that go out, not of the text the user typed.
+    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
+        out->comment().size() > proto::router::kMaxCommentLength)
+    {
+        LOG(ERROR) << "Invalid field in workspace" << workspace.entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view serializeGroup(const RouterGroup& group, proto::router::Group* out)
+{
+    CHECK(out);
+
+    if (group.entry_id > 0)
+        out->set_entry_id(group.entry_id);
+    out->set_parent_id(group.parent_id);
+    out->set_name(group.name.trimmed().toStdString());
+    out->set_comment(group.comment.toStdString());
+
+    // The name is mandatory.
+    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
+        out->comment().size() > proto::router::kMaxCommentLength)
+    {
+        LOG(ERROR) << "Invalid field in group" << group.entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    return proto::router::kErrorOk;
 }
 
 } // namespace
@@ -333,12 +408,21 @@ void Router::checkHostUpdates(HostId host_id, RouterCallback<proto::router::Host
 void Router::editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback)
 {
     proto::router::Host serialized;
-    const std::string_view build_error = buildRouterHost(host, &serialized);
-    if (build_error != proto::router::kErrorOk)
+    serialized.set_host_id(host.host_id);
+    serialized.set_group_id(host.group_id);
+    serialized.set_display_name(host.display_name.toStdString());
+    serialized.set_comment(host.comment.toStdString());
+
+    // Every field of a host is optional (an empty display name falls back to the computer name),
+    // so only the sizes are checked. They count the bytes that go out, not the characters typed.
+    if (serialized.display_name().size() > proto::router::kMaxEntryNameLength ||
+        serialized.comment().size() > proto::router::kMaxCommentLength)
     {
         // Nothing is sent, so no reply would ever come and the caller would wait forever.
+        LOG(ERROR) << "Oversized field in host" << host.host_id;
+
         proto::router::HostResult result;
-        result.set_error_code(std::string(build_error));
+        result.set_error_code(std::string(proto::router::kErrorInvalidData));
         callback(result);
         return;
     }
@@ -357,11 +441,11 @@ void Router::addWorkspace(const RouterWorkspace& workspace,
                           RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
-    const std::string_view build_error = buildRouterWorkspace(workspace, &serialized);
-    if (build_error != proto::router::kErrorOk)
+    const std::string_view error_code = serializeWorkspace(workspace, &serialized);
+    if (error_code != proto::router::kErrorOk)
     {
         proto::router::WorkspaceResult result;
-        result.set_error_code(std::string(build_error));
+        result.set_error_code(std::string(error_code));
         callback(result);
         return;
     }
@@ -380,11 +464,11 @@ void Router::modifyWorkspace(const RouterWorkspace& workspace,
                              RouterCallback<proto::router::WorkspaceResult> callback)
 {
     proto::router::Workspace serialized;
-    const std::string_view build_error = buildRouterWorkspace(workspace, &serialized);
-    if (build_error != proto::router::kErrorOk)
+    const std::string_view error_code = serializeWorkspace(workspace, &serialized);
+    if (error_code != proto::router::kErrorOk)
     {
         proto::router::WorkspaceResult result;
-        result.set_error_code(std::string(build_error));
+        result.set_error_code(std::string(error_code));
         callback(result);
         return;
     }
@@ -416,11 +500,11 @@ void Router::addGroup(qint64 workspace_id, const RouterGroup& group,
                       RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = buildRouterGroup(group, &serialized);
-    if (build_error != proto::router::kErrorOk)
+    const std::string_view error_code = serializeGroup(group, &serialized);
+    if (error_code != proto::router::kErrorOk)
     {
         proto::router::GroupResult result;
-        result.set_error_code(std::string(build_error));
+        result.set_error_code(std::string(error_code));
         callback(result);
         return;
     }
@@ -440,11 +524,11 @@ void Router::modifyGroup(qint64 workspace_id, const RouterGroup& group,
                          RouterCallback<proto::router::GroupResult> callback)
 {
     proto::router::Group serialized;
-    const std::string_view build_error = buildRouterGroup(group, &serialized);
-    if (build_error != proto::router::kErrorOk)
+    const std::string_view error_code = serializeGroup(group, &serialized);
+    if (error_code != proto::router::kErrorOk)
     {
         proto::router::GroupResult result;
-        result.set_error_code(std::string(build_error));
+        result.set_error_code(std::string(error_code));
         callback(result);
         return;
     }
@@ -564,9 +648,18 @@ void Router::searchHosts(const QString& query, qint64 offset, qint64 count,
     request->set_offset(offset);
     request->set_count(count);
     rpc_.registerPending<proto::router::HostSearchResult>(request, std::move(callback),
-        [this](const proto::router::HostSearchResult& raw)
+        [](const proto::router::HostSearchResult& raw)
     {
-        return decodeRouterHostSearchResult(raw);
+        RouterHostList matches;
+        matches.error_code = QString::fromStdString(raw.error_code());
+        // The pagination takes a non-negative count as its contract, so a negative one stops here.
+        matches.total_count = qMax<qint64>(0, raw.total_count());
+        matches.hosts.reserve(raw.host_size());
+
+        for (int i = 0; i < raw.host_size(); ++i)
+            matches.hosts.append(parseHost(raw.host(i)));
+
+        return matches;
     });
     send(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -580,7 +673,23 @@ void Router::listTempHosts(RouterCallback<RouterTempHostList> callback)
     rpc_.registerPending<proto::router::TempHostList>(request, std::move(callback),
         [](const proto::router::TempHostList& raw)
     {
-        return decodeRouterTempHostList(raw);
+        RouterTempHostList temp_hosts;
+        temp_hosts.error_code = QString::fromStdString(raw.error_code());
+        temp_hosts.hosts.reserve(raw.host_size());
+
+        for (int i = 0; i < raw.host_size(); ++i)
+        {
+            const proto::router::TempHost& src = raw.host(i);
+
+            RouterTempHost& dst = temp_hosts.hosts.emplaceBack();
+            dst.temp_id       = src.temp_id();
+            dst.computer_name = QString::fromStdString(src.computer_name());
+            dst.version       = QString::fromStdString(src.version());
+            dst.os_name       = QString::fromStdString(src.os_name());
+            dst.address       = QString::fromStdString(src.address());
+        }
+
+        return temp_hosts;
     });
     send(proto::router::CHANNEL_ID_CLIENT, message);
 }
@@ -837,15 +946,15 @@ bool Router::routeReply(const proto::router::RouterToClient& message)
 RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceList& list,
                                                qint64 requested_workspace_id)
 {
-    RouterWorkspaceList decoded;
-    decoded.error_code = QString::fromStdString(list.error_code());
-    decoded.workspaces.reserve(list.workspace_size());
+    RouterWorkspaceList result;
+    result.error_code = QString::fromStdString(list.error_code());
+    result.workspaces.reserve(list.workspace_size());
 
     for (int i = 0; i < list.workspace_size(); ++i)
     {
         const proto::router::Workspace& src = list.workspace(i);
 
-        RouterWorkspace& dst = decoded.workspaces.emplaceBack();
+        RouterWorkspace& dst = result.workspaces.emplaceBack();
         dst.entry_id = src.entry_id();
         dst.name     = QString::fromStdString(src.name());
         dst.comment  = QString::fromStdString(src.comment());
@@ -857,30 +966,57 @@ RouterWorkspaceList Router::applyWorkspaceList(const proto::router::WorkspaceLis
     }
 
     // Only the complete list is the authoritative answer about what we can access.
-    if (requested_workspace_id == 0 && decoded.error_code == proto::router::kErrorOk)
-        cache_.storeWorkspaces(decoded);
+    if (requested_workspace_id == 0 && result.error_code == proto::router::kErrorOk)
+        cache_.storeWorkspaces(result);
 
-    return decoded;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterHostList Router::applyHostList(const proto::router::HostList& list,
                                      const RouterCache::HostKey& key, bool cacheable)
 {
-    RouterHostList decoded = decodeRouterHostList(list);
+    RouterHostList result;
+    result.error_code   = QString::fromStdString(list.error_code());
+    result.workspace_id = list.workspace_id();
+    result.group_id     = list.group_id();
+    // The pagination takes a non-negative count as its contract, so a negative one stops here.
+    result.total_count  = qMax<qint64>(0, list.total_count());
+    result.hosts.reserve(list.host_size());
+
+    for (int i = 0; i < list.host_size(); ++i)
+        result.hosts.append(parseHost(list.host(i)));
 
     if (cacheable)
-        cache_.storeHosts(key, decoded);
+        cache_.storeHosts(key, result);
 
-    return decoded;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterGroupList Router::applyGroupList(const proto::router::GroupList& list)
 {
-    RouterGroupList decoded = decodeRouterGroupList(list);
-    cache_.storeGroups(decoded);
-    return decoded;
+    const qint64 workspace_id = list.workspace_id();
+
+    RouterGroupList result;
+    result.error_code   = QString::fromStdString(list.error_code());
+    result.workspace_id = workspace_id;
+    result.groups.reserve(list.group_size());
+
+    for (int i = 0; i < list.group_size(); ++i)
+    {
+        const proto::router::Group& src = list.group(i);
+
+        RouterGroup& dst = result.groups.emplaceBack();
+        dst.entry_id     = src.entry_id();
+        dst.workspace_id = workspace_id;
+        dst.parent_id    = src.parent_id();
+        dst.name         = QString::fromStdString(src.name());
+        dst.comment      = QString::fromStdString(src.comment());
+    }
+
+    cache_.storeGroups(result);
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

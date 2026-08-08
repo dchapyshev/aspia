@@ -61,8 +61,8 @@ public:
         RELOAD     // Always fetch from the server and refresh the cache.
     };
 
-    // The plain (decrypted) records the session works with. Declared in router_types.h so the
-    // codec and the cache can produce them without depending on this class.
+    // The plain records the session works with. Declared in router_types.h so the cache and the
+    // widgets can hold them without depending on this class.
     using Workspace     = RouterWorkspace;
     using WorkspaceList = RouterWorkspaceList;
     using Host          = RouterHost;
@@ -136,7 +136,7 @@ public:
     void approveHost(HostId host_id, RouterCallback<proto::router::HostResult> callback);
     void checkHostUpdates(HostId host_id, RouterCallback<proto::router::HostResult> callback);
 
-    // A record the codec refuses to build is answered with its error code without a request.
+    // A record that breaks the protocol bounds is answered with its error code without a request.
     void editHost(const RouterHost& host, RouterCallback<proto::router::HostResult> callback);
 
     //----------------------------------------------------------------------------------------------

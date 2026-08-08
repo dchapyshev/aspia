@@ -51,8 +51,6 @@ list(APPEND SOURCE_CLIENT_CORE
     router.h
     router_cache.cc
     router_cache.h
-    router_codec.cc
-    router_codec.h
     router_keys.cc
     router_keys.h
     router_rpc.h
@@ -87,7 +85,6 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/user_list_model_unittest.cc
     json_backup_unittest.cc
     router_cache_unittest.cc
-    router_codec_unittest.cc
     router_keys_unittest.cc
     router_rpc_unittest.cc
     router_test_fixture.h
