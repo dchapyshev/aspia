@@ -248,8 +248,7 @@ TEST_F(HostIdHandlerTest, ReconnectionKeepsTheAdministratorsLabel)
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_EQ(handle(existingIdRequest("key-1")).error_code, proto::router::kErrorOk);
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view(), std::string_view(),
-                               std::string_view()));
+    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view()));
 
     peer_.computer_name = "RENAMED-BY-OS";
     peer_.address = "10.0.0.5";

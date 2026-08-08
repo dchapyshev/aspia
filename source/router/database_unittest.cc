@@ -508,7 +508,7 @@ TEST_F(RouterDatabaseTest, ReleasedHostLosesEncryptedFields)
         addWorkspace("alpha", {accessEntry(admin_, gk)}, {host_id});
     ASSERT_GT(workspace_id, 0);
 
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "display", "comment", "user", "password"));
+    ASSERT_TRUE(db_.modifyHost(host_id, 0, "display", "comment"));
     ASSERT_FALSE(findHost(host_id).comment().empty());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
@@ -518,8 +518,6 @@ TEST_F(RouterDatabaseTest, ReleasedHostLosesEncryptedFields)
     const proto::router::Host host = findHost(host_id);
     EXPECT_EQ(host.workspace_id(), 0);
     EXPECT_TRUE(host.comment().empty());
-    EXPECT_TRUE(host.user_name().empty());
-    EXPECT_TRUE(host.password().empty());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -220,12 +220,12 @@ public:
     // Used to validate user access before edits.
     qint64 hostWorkspaceId(HostId host_id, bool* ok = nullptr) const;
 
-    // Updates the admin/manager-editable fields of a host (display_name plain, the other three
+    // Updates the admin/manager-editable fields of a host (display_name plain, comment
     // AEAD-encrypted with the workspace GK by the caller). group_id == 0 places the host at the
     // workspace root; > 0 moves it under the given group (caller must validate group ownership).
     // Also bumps last_modify.
     bool modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
-        std::string_view comment, std::string_view user_name, std::string_view password);
+        std::string_view comment);
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
     // reading rows straight into the protobuf message. |offset| and |count| give the requested

@@ -46,11 +46,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
     ui->setupUi(this);
 
     ui->edit_display_name->setText(host_.display_name);
-    ui->edit_user_name->setText(host_.user_name);
-    ui->edit_password->setPassword(host_.password);
     ui->edit_comment->setPlainText(host_.comment);
 
-    ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
     // The group combo is populated asynchronously from listGroups(); disable Ok until the
@@ -139,8 +136,6 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     host_.display_name = ui->edit_display_name->text();
-    host_.user_name    = ui->edit_user_name->text();
-    host_.password     = ui->edit_password->password();
     host_.comment      = ui->edit_comment->toPlainText();
     host_.group_id     = ui->combo_group->currentGroupId();
 

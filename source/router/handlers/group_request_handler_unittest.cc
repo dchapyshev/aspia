@@ -333,8 +333,7 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
                                   {accessEntry(admin_, gk_)}, {host_id}),
               proto::router::kErrorOk);
-    ASSERT_TRUE(db_.modifyHost(host_id, child_id, "host", std::string_view(), std::string_view(),
-                               std::string_view()));
+    ASSERT_TRUE(db_.modifyHost(host_id, child_id, "host", std::string_view()));
 
     proto::router::GroupRequest request =
         makeRequest(proto::router::kCommandGroupDelete, workspace_id_);

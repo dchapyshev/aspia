@@ -246,8 +246,6 @@ void MainWindow::connectToUrl(const QString& url)
 
                     host.setName(entry.display_name.isEmpty() ? entry.computer_name :
                                                                 entry.display_name);
-                    host.setUsername(entry.user_name);
-                    host.setPassword(entry.password);
                     break;
                 }
 

@@ -39,15 +39,11 @@ TEST_F(RouterCodecTest, HostFieldsAreDecryptedWithTheWorkspaceKey)
 
     proto::router::HostList list = hostList(10, {HostId(1)}, 1);
     list.mutable_host(0)->set_comment(encrypt(10, "comment"));
-    list.mutable_host(0)->set_user_name(encrypt(10, "user"));
-    list.mutable_host(0)->set_password(encrypt(10, "password"));
 
     const RouterHostList decoded = decodeRouterHostList(keys_, list);
 
     ASSERT_EQ(decoded.hosts.size(), 1);
     EXPECT_EQ(decoded.hosts.at(0).comment, "comment");
-    EXPECT_EQ(decoded.hosts.at(0).user_name, "user");
-    EXPECT_EQ(decoded.hosts.at(0).password.toString(), "password");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,7 +179,6 @@ TEST_F(RouterCodecTest, OversizedFieldsAreRefusedBeforeTheRequestIsSent)
     const QString long_ascii_name(proto::router::kMaxEntryNameLength + 1, QChar('n'));
     const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
     const QString long_comment(proto::router::kMaxCommentLength, QChar('c'));
-    const QString long_credential(proto::router::kMaxCredentialLength, QChar('u'));
 
     RouterHost host;
     host.host_id = HostId(1);
@@ -199,14 +194,6 @@ TEST_F(RouterCodecTest, OversizedFieldsAreRefusedBeforeTheRequestIsSent)
 
     host.display_name = "host";
     host.comment = long_comment;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
-
-    host.comment.clear();
-    host.user_name = long_credential;
-    EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
-
-    host.user_name.clear();
-    host.password = SecureString(long_credential);
     EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInvalidData);
 
     RouterGroup group;
@@ -329,8 +316,6 @@ TEST_F(RouterCodecTest, RecordWhoseFieldFailsToEncryptIsRefused)
     host.host_id = HostId(1);
     host.workspace_id = 10;
     host.comment = "comment";
-    host.user_name = "user";
-    host.password = SecureString("password");
 
     proto::router::Host host_out;
     EXPECT_EQ(buildRouterHost(keys_, host, &host_out), proto::router::kErrorInternalError);

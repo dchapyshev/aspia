@@ -234,8 +234,6 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         config.setRouterId(match.router_id);
         config.setAddress(hostIdToString(match.host.host_id));
         config.setName(name);
-        config.setUsername(match.host.user_name);
-        config.setPassword(match.host.password);
 
         showSessionMenu(config);
     });
@@ -848,8 +846,6 @@ bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) 
         config->setRouterId(host_router_id_);
         config->setAddress(hostIdToString(host.host_id));
         config->setName(name);
-        config->setUsername(host.user_name);
-        config->setPassword(host.password);
         return true;
     }
 

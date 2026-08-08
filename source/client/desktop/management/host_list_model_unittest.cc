@@ -31,14 +31,14 @@ using Column = HostListModel::Column;
 
 // The layout of the host list of an administrator.
 const QList<Column> kHostsLayout = { Column::HOST_ID, Column::DISPLAY_NAME, Column::COMPUTER_NAME,
-                                     Column::ADDRESS, Column::USER_NAME, Column::COMMENT,
+                                     Column::ADDRESS, Column::COMMENT,
                                      Column::WORKSPACE, Column::OS, Column::VERSION, Column::ARCH,
                                      Column::LAST_CONNECT, Column::LAST_MODIFY, Column::STATUS };
 
 // The layout of the host list of a group. Its first two columns are the other way round and it has
 // no workspace of its own to name.
 const QList<Column> kGroupLayout = { Column::DISPLAY_NAME, Column::HOST_ID, Column::COMPUTER_NAME,
-                                     Column::ADDRESS, Column::USER_NAME, Column::COMMENT,
+                                     Column::ADDRESS, Column::COMMENT,
                                      Column::OS, Column::VERSION, Column::ARCH,
                                      Column::LAST_CONNECT, Column::LAST_MODIFY, Column::STATUS };
 
@@ -121,7 +121,6 @@ protected:
         first.os_name = "Windows 11";
         first.version = "2.7.0";
         first.cpu_arch = "x86_64";
-        first.user_name = "operator";
         first.comment = "spare";
         first.workspace_id = 10;
         first.last_connect = 1000;
@@ -213,7 +212,6 @@ TEST_F(HostListModelTest, RowShowsTheFieldsOfItsHost)
     EXPECT_EQ(textAt(model, 0, Column::DISPLAY_NAME), QString("host9"));
     EXPECT_EQ(textAt(model, 0, Column::COMPUTER_NAME), QString("alpha"));
     EXPECT_EQ(textAt(model, 0, Column::ADDRESS), QString("192.168.0.9"));
-    EXPECT_EQ(textAt(model, 0, Column::USER_NAME), QString("operator"));
     EXPECT_EQ(textAt(model, 0, Column::COMMENT), QString("spare"));
     EXPECT_EQ(textAt(model, 0, Column::OS), QString("Windows 11"));
     EXPECT_EQ(textAt(model, 0, Column::VERSION), QString("2.7.0"));

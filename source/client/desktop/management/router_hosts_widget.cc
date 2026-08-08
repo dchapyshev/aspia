@@ -71,7 +71,6 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
                                  HostListModel::Column::DISPLAY_NAME,
                                  HostListModel::Column::COMPUTER_NAME,
                                  HostListModel::Column::ADDRESS,
-                                 HostListModel::Column::USER_NAME,
                                  HostListModel::Column::COMMENT,
                                  HostListModel::Column::WORKSPACE,
                                  HostListModel::Column::OS,
@@ -96,7 +95,6 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
             this, &RouterHostsWidget::onHostContextMenu);
 
     ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tree_hosts->header()->setSectionHidden(model_->sectionOf(HostListModel::Column::USER_NAME), true);
     ui->tree_hosts->header()->setSectionHidden(model_->sectionOf(HostListModel::Column::COMMENT), true);
     connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterHostsWidget::onHeaderContextMenu);
@@ -192,8 +190,6 @@ HostConfig RouterHostsWidget::selectedHostConfig() const
     config.setRouterId(router_id_);
     config.setAddress(hostIdToString(host->host_id));
     config.setName(name);
-    config.setUsername(host->user_name);
-    config.setPassword(host->password);
     return config;
 }
 
@@ -690,7 +686,6 @@ void RouterHostsWidget::saveHostsToFile()
         host_object.insert("computer_name", info.computer_name);
         host_object.insert("operating_system", info.os_name);
         host_object.insert("ip_address", info.address);
-        host_object.insert("user_name", info.user_name);
         host_object.insert("comment", info.comment);
         host_object.insert("workspace", workspaceNameById(info.workspace_id));
         host_object.insert("architecture", info.cpu_arch);

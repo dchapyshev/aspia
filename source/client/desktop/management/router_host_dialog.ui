@@ -39,26 +39,6 @@
      <item row="1" column="1">
       <widget class="QLineEdit" name="edit_display_name"/>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_user_name">
-       <property name="text">
-        <string>User Name:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="edit_user_name"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_password">
-       <property name="text">
-        <string>Password:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="PasswordEdit" name="edit_password"/>
-     </item>
     </layout>
    </item>
    <item>
@@ -90,11 +70,6 @@
    <class>GroupComboBox</class>
    <extends>QComboBox</extends>
    <header>client/desktop/management/group_combo_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PasswordEdit</class>
-   <extends>QLineEdit</extends>
-   <header>common/desktop/password_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

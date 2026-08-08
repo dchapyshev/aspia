@@ -101,9 +101,7 @@ TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
 {
     const struct { const char* what; size_t size; } kCases[] = {
         { "display_name", proto::router::kMaxEntryNameLength + 1 },
-        { "comment",      proto::router::kMaxCommentLength + 1 },
-        { "user_name",    proto::router::kMaxCredentialLength + 1 },
-        { "password",     proto::router::kMaxCredentialLength + 1 }
+        { "comment",      proto::router::kMaxCommentLength + 1 }
     };
 
     for (const auto& test_case : kCases)
@@ -114,12 +112,8 @@ TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
 
         if (test_case.what == std::string_view("display_name"))
             host->set_display_name(oversized);
-        else if (test_case.what == std::string_view("comment"))
-            host->set_comment(oversized);
-        else if (test_case.what == std::string_view("user_name"))
-            host->set_user_name(oversized);
         else
-            host->set_password(oversized);
+            host->set_comment(oversized);
 
         EXPECT_EQ(handle(request).error_code, proto::router::kErrorInvalidData) << test_case.what;
     }
@@ -128,8 +122,6 @@ TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
     const proto::router::Host stored = findHost(host_id_);
     EXPECT_TRUE(stored.display_name().empty());
     EXPECT_TRUE(stored.comment().empty());
-    EXPECT_TRUE(stored.user_name().empty());
-    EXPECT_TRUE(stored.password().empty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,16 +133,12 @@ TEST_F(HostRequestHandlerTest, FieldsAtTheLimitAreAccepted)
     proto::router::Host* host = request.mutable_host();
     host->set_display_name(std::string(proto::router::kMaxEntryNameLength, 'n'));
     host->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
-    host->set_user_name(std::string(proto::router::kMaxCredentialLength, 'u'));
-    host->set_password(std::string(proto::router::kMaxCredentialLength, 'p'));
 
     EXPECT_EQ(handle(request).error_code, proto::router::kErrorOk);
 
     const proto::router::Host stored = findHost(host_id_);
     EXPECT_EQ(stored.display_name().size(), proto::router::kMaxEntryNameLength);
     EXPECT_EQ(stored.comment().size(), proto::router::kMaxCommentLength);
-    EXPECT_EQ(stored.user_name().size(), proto::router::kMaxCredentialLength);
-    EXPECT_EQ(stored.password().size(), proto::router::kMaxCredentialLength);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,8 +328,7 @@ protected:
             return kInvalidHostId;
         }
 
-        if (!db_.modifyHost(host_id, group_id, display_name, std::string_view(),
-                            std::string_view(), std::string_view()))
+        if (!db_.modifyHost(host_id, group_id, display_name, std::string_view()))
         {
             return kInvalidHostId;
         }
@@ -555,14 +542,14 @@ TEST_F(HostListTest, FullPageOfLargestHostsFitsTheChannel)
     // took to get there.
     const QString sql = QString(
         "INSERT INTO hosts (id, key, hwid, workspace_id, group_id, display_name, computer_name, "
-        "cpu_arch, version, os_name, address, comment, user_name, password) "
+        "cpu_arch, version, os_name, address, comment) "
         "WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n < %1) "
         "SELECT NULL, randomblob(64), 'hwid', %2, 0, "
         "substr(hex(zeroblob(64)),1,%3), substr(hex(zeroblob(64)),1,64), "
         "substr(hex(zeroblob(32)),1,32), '3.0.0.0', substr(hex(zeroblob(64)),1,64), "
-        "'255.255.255.255', zeroblob(%4), zeroblob(%5), zeroblob(%5) FROM seq")
+        "'255.255.255.255', zeroblob(%4) FROM seq")
         .arg(proto::router::kMaxHostPageSize).arg(workspace_id_)
-        .arg(proto::router::kMaxEntryNameLength).arg(proto::router::kMaxCommentLength).arg(proto::router::kMaxCredentialLength);
+        .arg(proto::router::kMaxEntryNameLength).arg(proto::router::kMaxCommentLength);
 
     ASSERT_TRUE(execRaw(sql));
 

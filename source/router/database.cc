@@ -153,10 +153,10 @@ bool ensureSchema(SqlDatabase& db)
     // means the host is shown at the workspace root. No FKs on these columns because 0 is a
     // sentinel value; for any non-zero value the application enforces that it points to an
     // existing row in workspaces/host_groups.
-    // comment, user_name and password are AEAD-encrypted with the workspace GK (only
-    // meaningful when workspace_id != 0). name, computer_name (real OS hostname), cpu_arch,
-    // version, os_name, address and last_connect are plain values; the latter five are
-    // updated by the router on every host connection and reflect the latest connect attempt.
+    // comment is AEAD-encrypted with the workspace GK (only meaningful when
+    // workspace_id != 0). name, computer_name (real OS hostname), cpu_arch, version, os_name,
+    // address and last_connect are plain values; the latter five are updated by the router on
+    // every host connection and reflect the latest connect attempt.
     if (!run("CREATE TABLE IF NOT EXISTS \"hosts\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"key\" BLOB NOT NULL UNIQUE,"
@@ -170,8 +170,6 @@ bool ensureSchema(SqlDatabase& db)
              "\"os_name\" TEXT NOT NULL DEFAULT '',"
              "\"address\" TEXT NOT NULL DEFAULT '',"
              "\"comment\" BLOB NOT NULL DEFAULT X'',"
-             "\"user_name\" BLOB NOT NULL DEFAULT X'',"
-             "\"password\" BLOB NOT NULL DEFAULT X'',"
              "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
              "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
@@ -331,8 +329,6 @@ bool ensureSchema(SqlDatabase& db)
         { "os_name",       "TEXT NOT NULL DEFAULT ''"    },
         { "address",       "TEXT NOT NULL DEFAULT ''"    },
         { "comment",       "BLOB NOT NULL DEFAULT X''"   },
-        { "user_name",     "BLOB NOT NULL DEFAULT X''"   },
-        { "password",      "BLOB NOT NULL DEFAULT X''"   },
         { "last_connect",  "INTEGER NOT NULL DEFAULT 0"  },
         { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  }
     };
@@ -1575,7 +1571,7 @@ qint64 Database::hostWorkspaceId(HostId host_id, bool* ok) const
 
 //--------------------------------------------------------------------------------------------------
 bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view display_name,
-    std::string_view comment, std::string_view user_name, std::string_view password)
+    std::string_view comment)
 {
     if (!isValid())
     {
@@ -1592,14 +1588,11 @@ bool Database::modifyHost(HostId host_id, qint64 group_id, std::string_view disp
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     const char kSql[] =
-        "UPDATE hosts SET display_name=?, group_id=?, comment=?, user_name=?, password=?, "
-        "last_modify=? WHERE id=?";
+        "UPDATE hosts SET display_name=?, group_id=?, comment=?, last_modify=? WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addText(display_name);
     query.addInt64(group_id);
     query.addBlob(comment);
-    query.addBlob(user_name);
-    query.addBlob(password);
     query.addInt64(timestamp);
     query.addUInt64(host_id);
 
@@ -1630,7 +1623,7 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
     }
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
-        "os_name, address, comment, user_name, password, last_connect, last_modify FROM hosts",
+        "os_name, address, comment, last_connect, last_modify FROM hosts",
         " LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
@@ -1670,10 +1663,8 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
         host->set_comment(query.columnBlobView(9));
-        host->set_user_name(query.columnBlobView(10));
-        host->set_password(query.columnBlobView(11));
-        host->set_last_connect(query.columnInt64(12));
-        host->set_last_modify(query.columnInt64(13));
+        host->set_last_connect(query.columnInt64(10));
+        host->set_last_modify(query.columnInt64(11));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -1698,7 +1689,7 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
     }
     const std::string sql = strCat({
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
-        "os_name, address, comment, user_name, password, last_connect, last_modify "
+        "os_name, address, comment, last_connect, last_modify "
         "FROM hosts WHERE workspace_id=? AND group_id=?",
         " LIMIT ? OFFSET ?"});
 
@@ -1741,10 +1732,8 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
         host->set_comment(query.columnBlobView(9));
-        host->set_user_name(query.columnBlobView(10));
-        host->set_password(query.columnBlobView(11));
-        host->set_last_connect(query.columnInt64(12));
-        host->set_last_modify(query.columnInt64(13));
+        host->set_last_connect(query.columnInt64(10));
+        host->set_last_modify(query.columnInt64(11));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -1887,7 +1876,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
 
     const std::string sql =
         "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-        "version, os_name, address, comment, user_name, password, last_connect, last_modify" +
+        "version, os_name, address, comment, last_connect, last_modify" +
         where + " ORDER BY display_name LIMIT ? OFFSET ?";
 
     SqlQuery query(db_, sql);
@@ -1934,10 +1923,8 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
         host->set_os_name(query.columnTextView(7));
         host->set_address(query.columnTextView(8));
         host->set_comment(query.columnBlobView(9));
-        host->set_user_name(query.columnBlobView(10));
-        host->set_password(query.columnBlobView(11));
-        host->set_last_connect(query.columnInt64(12));
-        host->set_last_modify(query.columnInt64(13));
+        host->set_last_connect(query.columnInt64(10));
+        host->set_last_modify(query.columnInt64(11));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2674,7 +2661,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorNotFound;
 
     SqlQuery release_hosts(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'', user_name=X'', password=X'' "
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'' "
         "WHERE workspace_id=?");
     release_hosts.addInt64(entry_id);
 
@@ -3522,7 +3509,7 @@ std::string_view Database::syncWorkspaceHosts(qint64 entry_id, const std::set<Ho
     // The encrypted fields are sealed with the workspace group key, so a host outside any
     // workspace cannot keep them. Clear them together with the workspace assignment.
     SqlQuery release(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'', user_name=X'', password=X'' "
+        "UPDATE hosts SET workspace_id=0, group_id=0, comment=X'' "
         "WHERE id=?");
     for (HostId host_id : release_ids)
     {

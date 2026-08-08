@@ -41,7 +41,6 @@ public:
         DISPLAY_NAME,
         COMPUTER_NAME,
         ADDRESS,
-        USER_NAME,
         COMMENT,
         WORKSPACE,
         OS,

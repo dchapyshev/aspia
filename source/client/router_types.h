@@ -61,9 +61,9 @@ struct RouterWorkspaceList
     QList<RouterWorkspace> workspaces;
 };
 
-// Plain (decrypted) host record. comment/user_name/password are decrypted with the GK of the
-// host's workspace; if the GK for workspace_id is not currently cached (e.g. the workspace list
-// has not been fetched yet), they are left empty.
+// Plain (decrypted) host record. comment is decrypted with the GK of the host's workspace; if
+// the GK for workspace_id is not currently cached (e.g. the workspace list has not been fetched
+// yet), it is left empty.
 struct RouterHost
 {
     HostId host_id = kInvalidHostId;
@@ -76,8 +76,6 @@ struct RouterHost
     QString os_name;
     QString address;
     QString comment;
-    QString user_name;
-    SecureString password;
     qint64 last_connect = 0;
     qint64 last_modify = 0;
     bool online = false;

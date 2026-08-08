@@ -127,8 +127,7 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
     EXPECT_EQ(stored.address(), "192.168.1.10");
     EXPECT_GT(stored.last_connect(), 0);
 
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view(), std::string_view(),
-                               std::string_view()));
+    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", std::string_view()));
 
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
                                    "3.0.1", "Windows", "192.168.1.11"));
@@ -260,7 +259,7 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     const SecureByteArray gk(Random::byteArray(32));
     const qint64 workspace_id = addWorkspace("alpha", gk, {host_id});
     ASSERT_GT(workspace_id, 0);
-    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", "comment", "user", "password"));
+    ASSERT_TRUE(db_.modifyHost(host_id, 0, "Accounting", "comment"));
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
 
@@ -270,8 +269,6 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     EXPECT_EQ(stored.computer_name(), "COMPUTER");
     EXPECT_EQ(stored.display_name(), "Accounting");
     EXPECT_TRUE(stored.comment().empty());
-    EXPECT_TRUE(stored.user_name().empty());
-    EXPECT_TRUE(stored.password().empty());
 }
 
 //--------------------------------------------------------------------------------------------------

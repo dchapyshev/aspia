@@ -146,8 +146,6 @@ SearchResultModel::Row makeRouterRow(qint64 router_id, const Router::Host& host,
     row.host.setRouterId(router_id);
     row.host.setAddress(hostIdToString(host.host_id));
     row.host.setName(name);
-    row.host.setUsername(host.user_name);
-    row.host.setPassword(host.password);
     row.host.setComment(host.comment);
 
     return row;

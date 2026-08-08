@@ -65,7 +65,6 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
                                  HostListModel::Column::HOST_ID,
                                  HostListModel::Column::COMPUTER_NAME,
                                  HostListModel::Column::ADDRESS,
-                                 HostListModel::Column::USER_NAME,
                                  HostListModel::Column::COMMENT,
                                  HostListModel::Column::OS,
                                  HostListModel::Column::VERSION,
@@ -80,8 +79,6 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_host->setSortingEnabled(true);
 
     ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tree_host->header()->setSectionHidden(
-        model_->sectionOf(HostListModel::Column::USER_NAME), true);
     ui->tree_host->header()->setSectionHidden(
         model_->sectionOf(HostListModel::Column::ARCH), true);
     ui->tree_host->header()->setSectionHidden(
@@ -192,8 +189,6 @@ HostConfig RouterGroupWidget::selectedHostConfig() const
         name = selected.computer_name;
     config.setName(name);
 
-    config.setUsername(selected.user_name);
-    config.setPassword(selected.password);
     return config;
 }
 

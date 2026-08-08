@@ -191,9 +191,6 @@ QVariant HostListModel::headerData(int section, Qt::Orientation orientation, int
         case Column::ADDRESS:
             return tr("Address");
 
-        case Column::USER_NAME:
-            return tr("User Name");
-
         case Column::COMMENT:
             return tr("Comment");
 
@@ -278,9 +275,6 @@ QString HostListModel::textAt(const RouterHost& host, Column column) const
 
         case Column::ADDRESS:
             return host.address;
-
-        case Column::USER_NAME:
-            return host.user_name;
 
         case Column::COMMENT:
             return host.comment;

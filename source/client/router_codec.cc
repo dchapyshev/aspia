@@ -89,10 +89,6 @@ RouterHost decodeRouterHost(const RouterKeys& keys, const proto::router::Host& s
 
     if (!src.comment().empty())
         dst.comment = decryptField(*cryptor, src.comment());
-    if (!src.user_name().empty())
-        dst.user_name = decryptField(*cryptor, src.user_name());
-    if (!src.password().empty())
-        dst.password = SecureString(decryptField(*cryptor, src.password()));
 
     return dst;
 }
@@ -284,22 +280,15 @@ std::string_view buildRouterHost(const RouterKeys& keys, const RouterHost& host,
     out->set_display_name(host.display_name.toStdString());
 
     const std::optional<QByteArray> comment = encryptField(*cryptor, host.comment);
-    const std::optional<QByteArray> user_name = encryptField(*cryptor, host.user_name);
-    const std::optional<QByteArray> password = encryptField(*cryptor, host.password.toString());
-
-    if (!comment.has_value() || !user_name.has_value() || !password.has_value())
+    if (!comment.has_value())
         return proto::router::kErrorInternalError;
 
     out->set_comment(comment->toStdString());
-    out->set_user_name(user_name->toStdString());
-    out->set_password(password->toStdString());
 
     // Every field of a host is optional (an empty display name falls back to the computer name),
     // so only the sizes are checked.
     if (out->display_name().size() > proto::router::kMaxEntryNameLength ||
-        out->comment().size() > proto::router::kMaxCommentLength ||
-        out->user_name().size() > proto::router::kMaxCredentialLength ||
-        out->password().size() > proto::router::kMaxCredentialLength)
+        out->comment().size() > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Oversized field in host" << host.host_id;
         return proto::router::kErrorInvalidData;

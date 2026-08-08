@@ -26,12 +26,11 @@ namespace proto::router {
 [[maybe_unused]] constexpr int kMaxHostPageSize = 100;
 
 // Bounds on the manager-editable fields of a host, a group and a workspace, in bytes (a name is
-// UTF-8, a comment and the credentials are ciphertext). Checked on both sides. An unbounded record
-// grows the list reply that carries it past the message limit, and such a reply ends the session
-// instead of being sent, on every reconnect.
+// UTF-8, a comment is ciphertext). Checked on both sides. An unbounded record grows the list reply
+// that carries it past the message limit, and such a reply ends the session instead of being sent,
+// on every reconnect.
 [[maybe_unused]] constexpr size_t kMaxEntryNameLength = 64;
 [[maybe_unused]] constexpr size_t kMaxCommentLength = 8 * 1024;
-[[maybe_unused]] constexpr size_t kMaxCredentialLength = 1024;
 [[maybe_unused]] constexpr size_t kMaxWrappedKeyLength = 256;
 
 // Command names for HostRequest.

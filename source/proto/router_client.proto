@@ -158,11 +158,9 @@ message Host
     string os_name       = 8;  // Operating system name reported by the host.
     string address       = 9;  // Last seen peer address.
     bytes comment        = 10; // AEAD-encrypted with workspace GK.
-    bytes user_name      = 11; // AEAD-encrypted with workspace GK.
-    bytes password       = 12; // AEAD-encrypted with workspace GK.
-    int64 last_connect   = 13; // Unix timestamp of the last connection.
-    int64 last_modify    = 14; // Unix timestamp of the last edit by the admin.
-    bool online          = 15; // Live host session currently exists for this host_id.
+    int64 last_connect   = 11; // Unix timestamp of the last connection.
+    int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
+    bool online          = 13; // Live host session currently exists for this host_id.
 }
 
 message HostListRequest
