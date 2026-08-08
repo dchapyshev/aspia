@@ -49,8 +49,11 @@ public:
     HostId hostId() const;
     QString hostAddress() const;
     quint16 hostPort() const;
-    QString hostUserName() const { return host_.username(); }
-    SecureString hostPassword() const { return host_.password(); }
+    QString hostUserName() const;
+    SecureString hostPassword() const;
+
+    // The credentials entered when the connection offer selected the password path.
+    void setHostCredentials(const QString& username, const SecureString& password);
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;
@@ -68,7 +71,7 @@ public:
     bool isReconnecting() const;
 
 private:
-    const HostConfig host_;
+    HostConfig host_;
     const proto::peer::SessionType session_type_;
     const QString display_name_;
 

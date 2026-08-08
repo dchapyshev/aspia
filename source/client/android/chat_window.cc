@@ -45,6 +45,7 @@
 #include "client/session_keeper.h"
 #include "client/session_state.h"
 #include "client/workers/network_worker.h"
+#include "client/android/authorization_dialog.h"
 #include "client/android/chat_view.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -175,22 +176,39 @@ void ChatWindow::resizeEvent(QResizeEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::updateKeyboardInset()
+void ChatWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
 {
-    const QInputMethod* input_method = QGuiApplication::inputMethod();
+    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
+        session_keeper_->release();
 
-    int inset = 0;
-    if (input_method->isVisible())
+    onStatusChanged(status, data);
+
+    // HOST_CONNECTED means the handshake passed and the (still paused) channel is ready.
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    // Now the session can receive incoming messages.
+    emit sig_sessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onChannelMessage(const QByteArray& buffer)
+{
+    proto::chat::Chat chat;
+    if (!parse(buffer, &chat))
     {
-        // How far the window extends past the top of the keyboard (0 when Android already resized
-        // the window to sit above it). The window rect is in logical pixels while the keyboard
-        // rectangle is in physical pixels, so scale the latter down.
-        const QRect window_rect(mapToGlobal(QPoint(0, 0)), size());
-        const int keyboard_top = qRound(input_method->keyboardRectangle().top() / devicePixelRatioF());
-        inset = qMax(0, window_rect.bottom() - keyboard_top);
+        LOG(ERROR) << "Unable to parse text chat message";
+        return;
     }
 
-    layout()->setContentsMargins(0, 0, 0, inset);
+    onChatMessage(chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -260,30 +278,98 @@ void ChatWindow::onChatMessage(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::onSendText(const QString& text)
+void ChatWindow::updateKeyboardInset()
 {
-    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+    const QInputMethod* input_method = QGuiApplication::inputMethod();
+
+    int inset = 0;
+    if (input_method->isVisible())
+    {
+        // How far the window extends past the top of the keyboard (0 when Android already resized
+        // the window to sit above it). The window rect is in logical pixels while the keyboard
+        // rectangle is in physical pixels, so scale the latter down.
+        const QRect window_rect(mapToGlobal(QPoint(0, 0)), size());
+        const int keyboard_top = qRound(input_method->keyboardRectangle().top() / devicePixelRatioF());
+        inset = qMax(0, window_rect.bottom() - keyboard_top);
+    }
+
+    layout()->setContentsMargins(0, 0, 0, inset);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onSaveChat()
+{
+    if (history_messages_.isEmpty())
+        return;
+
+    const QString default_name =
+        (host_.name().isEmpty() ? host_.address() : host_.name()) + u".txt";
+    const QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save Chat"), default_name, tr("Text files (*.txt)"));
+    if (file_path.isEmpty())
+        return;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        MessageDialog::info(this, tr("Chat"), tr("Could not open the file for writing."));
+        return;
+    }
+
+    QTextStream stream(&file);
+    for (const HistoryMessage& message : std::as_const(history_messages_))
+    {
+        if (message.status)
+        {
+            stream << message.text << Qt::endl;
+        }
+        else
+        {
+            const QString time =
+                QDateTime::fromSecsSinceEpoch(message.timestamp).toString("yyyy-MM-dd HH:mm");
+            stream << "[" << time << "] " << message.source << ": " << message.text << Qt::endl;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onClearChat()
+{
+    if (!MessageDialog::confirm(this, tr("Clear Chat"), tr("Clear the chat history?"), tr("Clear")))
+        return;
+
+    view_->clear();
+    history_messages_.clear();
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onTyping()
+{
+    // Throttle: at most one typing status per interval while the user keeps editing.
+    if (typing_throttle_->isActive())
+        return;
 
     proto::chat::Chat chat;
-    proto::chat::Message* message = chat.mutable_chat_message();
-    message->set_timestamp(timestamp);
-    message->set_source(display_name_.toStdString());
-    message->set_text(text.toStdString());
-
-    // Show our own message at once; the host relays it to the other participants, not back to us.
-    view_->addMessage(display_name_, text, true, timestamp);
-    appendHistory({ timestamp, display_name_, text, true, false });
+    proto::chat::Status* status = chat.mutable_chat_status();
+    status->set_timestamp(QDateTime::currentSecsSinceEpoch());
+    status->set_source(display_name_.toStdString());
+    status->set_code(proto::chat::Status::CODE_TYPING);
 
     sendChatMessage(chat);
+
+    typing_throttle_->start(kTypingThrottle);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::clearTypingStatus()
+{
+    view_->setStatusText(QString());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ChatWindow::start()
 {
-    // An empty user name means a connection by ID with a one-time password (#host_id).
-    if (host_.username().isEmpty())
-        host_.setUsername(u"#" + host_.address());
-
     session_state_ = std::make_shared<SessionState>(
         host_, proto::peer::SESSION_TYPE_CHAT, Database::instance().displayName());
 
@@ -342,11 +428,19 @@ void ChatWindow::requestConnectionOffer(Router* router)
     session_state_->setRouterVersion(router->version());
     setStatusText(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), { this,
+    router->requestConnection(session_state_->hostId(),
+                              static_cast<quint32>(session_state_->sessionType()), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
         {
+            // An offer without the key of the host runs the password handshake.
+            if (offer.host_public_key().empty() && !askHostCredentials())
+            {
+                emit sig_closed();
+                return;
+            }
+
             session_state_->setConnectionOffer(offer);
             startNewSession();
             return;
@@ -354,6 +448,28 @@ void ChatWindow::requestConnectionOffer(Router* router)
 
         setStatusText(tr("Error requesting connection via router."));
     } });
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ChatWindow::askHostCredentials()
+{
+    if (!session_state_->hostUserName().isEmpty() && !session_state_->hostPassword().isEmpty())
+        return true;
+
+    AuthorizationDialog dialog(true, this);
+    dialog.setUserName(session_state_->hostUserName());
+
+    if (dialog.exec() != QDialog::Accepted)
+        return false;
+
+    QString username = dialog.userName();
+
+    // An empty user name means a connection by ID with a one-time password (#host_id).
+    if (username.isEmpty())
+        username = u"#" + session_state_->host().address();
+
+    session_state_->setHostCredentials(username, dialog.password());
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -388,45 +504,27 @@ void ChatWindow::startNewSession()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
-{
-    if (status == NetworkWorker::Status::HOST_DISCONNECTED && session_keeper_)
-        session_keeper_->release();
-
-    onStatusChanged(status, data);
-
-    // HOST_CONNECTED means the handshake passed and the (still paused) channel is ready.
-    if (status == NetworkWorker::Status::HOST_CONNECTED)
-        onNetworkConnected();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onNetworkConnected()
-{
-    if (session_keeper_)
-        session_keeper_->acquire();
-
-    // Now the session can receive incoming messages.
-    emit sig_sessionReady();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onChannelMessage(const QByteArray& buffer)
-{
-    proto::chat::Chat chat;
-    if (!parse(buffer, &chat))
-    {
-        LOG(ERROR) << "Unable to parse text chat message";
-        return;
-    }
-
-    onChatMessage(chat);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ChatWindow::sendChatMessage(const proto::chat::Chat& chat)
 {
     emit sig_sendMessage(proto::peer::CHANNEL_ID_0, serialize(chat));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::onSendText(const QString& text)
+{
+    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    proto::chat::Chat chat;
+    proto::chat::Message* message = chat.mutable_chat_message();
+    message->set_timestamp(timestamp);
+    message->set_source(display_name_.toStdString());
+    message->set_text(text.toStdString());
+
+    // Show our own message at once; the host relays it to the other participants, not back to us.
+    view_->addMessage(display_name_, text, true, timestamp);
+    appendHistory({ timestamp, display_name_, text, true, false });
+
+    sendChatMessage(chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,75 +630,4 @@ void ChatWindow::appendHistory(const HistoryMessage& message)
         history_messages_.removeFirst();
 
     saveHistory();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onSaveChat()
-{
-    if (history_messages_.isEmpty())
-        return;
-
-    const QString default_name =
-        (host_.name().isEmpty() ? host_.address() : host_.name()) + u".txt";
-    const QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Save Chat"), default_name, tr("Text files (*.txt)"));
-    if (file_path.isEmpty())
-        return;
-
-    QFile file(file_path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        MessageDialog::info(this, tr("Chat"), tr("Could not open the file for writing."));
-        return;
-    }
-
-    QTextStream stream(&file);
-    for (const HistoryMessage& message : std::as_const(history_messages_))
-    {
-        if (message.status)
-        {
-            stream << message.text << Qt::endl;
-        }
-        else
-        {
-            const QString time =
-                QDateTime::fromSecsSinceEpoch(message.timestamp).toString("yyyy-MM-dd HH:mm");
-            stream << "[" << time << "] " << message.source << ": " << message.text << Qt::endl;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onClearChat()
-{
-    if (!MessageDialog::confirm(this, tr("Clear Chat"), tr("Clear the chat history?"), tr("Clear")))
-        return;
-
-    view_->clear();
-    history_messages_.clear();
-    saveHistory();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::onTyping()
-{
-    // Throttle: at most one typing status per interval while the user keeps editing.
-    if (typing_throttle_->isActive())
-        return;
-
-    proto::chat::Chat chat;
-    proto::chat::Status* status = chat.mutable_chat_status();
-    status->set_timestamp(QDateTime::currentSecsSinceEpoch());
-    status->set_source(display_name_.toStdString());
-    status->set_code(proto::chat::Status::CODE_TYPING);
-
-    sendChatMessage(chat);
-
-    typing_throttle_->start(kTypingThrottle);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWindow::clearTypingStatus()
-{
-    view_->setStatusText(QString());
 }

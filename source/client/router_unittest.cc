@@ -386,6 +386,36 @@ TEST_F(RouterTest, HostStatusConversationUsesTheClientChannel)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The connection request carries the session type, and the offer comes back with the key of the
+// host intact: it is what the network worker anchors the anonymous handshake with.
+TEST_F(RouterTest, ConnectionRequestCarriesTheSessionType)
+{
+    const quint32 kSessionType = 1;
+    const std::string kHostPublicKey(32, 'k');
+
+    std::string received_key;
+    router_.requestConnection(HostId(7), kSessionType,
+        { &receiver_, [&received_key](const proto::router::ConnectionOffer& offer)
+    {
+        received_key = offer.host_public_key();
+    } });
+
+    const auto request = lastRequest<proto::router::ClientToRouter>();
+    ASSERT_TRUE(request.has_connection_request());
+    EXPECT_EQ(request.connection_request().host_id(), 7u);
+    EXPECT_EQ(request.connection_request().session_type(), kSessionType);
+
+    proto::router::RouterToClient reply;
+    proto::router::ConnectionOffer* offer = reply.mutable_connection_offer();
+    offer->set_request_id(request.connection_request().request_id());
+    offer->set_error_code(proto::router::kErrorOk);
+    offer->set_host_public_key(kHostPublicKey);
+    deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+
+    EXPECT_EQ(received_key, kHostPublicKey);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The caller receives the decoded rows, and the next one that accepts a cached answer is served
 // without a request.
 TEST_F(RouterTest, HostListIsDecodedAndCached)

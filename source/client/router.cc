@@ -606,13 +606,14 @@ void Router::checkHostStatus(HostId host_id, RouterCallback<proto::router::HostS
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::requestConnection(HostId host_id,
+void Router::requestConnection(HostId host_id, quint32 session_type,
                                RouterCallback<proto::router::ConnectionOffer> callback)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_connection_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_host_id(host_id);
+    request->set_session_type(session_type);
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_CLIENT, message);
 }

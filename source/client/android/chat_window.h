@@ -92,6 +92,7 @@ private:
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
+    bool askHostCredentials();
     void startNewSession();
     void sendChatMessage(const proto::chat::Chat& chat);
     void onSendText(const QString& text);

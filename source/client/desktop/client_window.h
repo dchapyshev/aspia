@@ -47,8 +47,8 @@ public:
     virtual ~ClientWindow() override;
 
     // Connects to a host.
-    // If the username and/or password are not specified in the connection parameters, the
-    // authorization dialog will be displayed.
+    // A direct connection asks for the missing credentials before the attempt; a connection by
+    // host id asks for them only if the connection offer selects the password handshake.
     bool connectToHost(HostConfig host, const QString& display_name);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
@@ -150,10 +150,8 @@ private slots:
 private:
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
-    // For relay-path sessions: fetches a ConnectionOffer from the router (via Router) and
-    // handles the response inline. Called both for the initial connect and for every reconnect
-    // attempt after host disconnects.
     void fetchConnectionOffer();
+    bool askHostCredentials();
     void startNewSession();
 
     // Builds session_connect_actions_ for every session type except session_type_.

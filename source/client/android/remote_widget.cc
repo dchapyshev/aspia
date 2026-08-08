@@ -703,7 +703,7 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
                 continue;
 
             const qint64 workspace_id = workspace.entry_id;
-            session->listGroups(policy, workspace_id, this,
+            session->listGroups(policy, workspace_id, { this,
                 [this, router_id, workspace_id](const Router::GroupList& result)
             {
                 if (result.error_code != proto::router::kErrorOk)
@@ -713,7 +713,7 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
                 }
                 if (QTreeWidgetItem* parent = workspaceItem(router_id, workspace_id))
                     populateGroups(router_id, parent, result.groups);
-            });
+            } });
         }
     } });
 }

@@ -454,7 +454,21 @@ void NetworkWorker::startConnection()
         // non-legacy variant here. When the non-legacy handshake diverges, this will need to
         // be revisited together with RelayPeer.
         auto* relay_authenticator = new ClientAuthenticator();
-        setupAuthenticator(relay_authenticator);
+
+        if (!offer.host_public_key().empty())
+        {
+            // The offer carries the public half of the one-time pair of the host: it anchors the
+            // anonymous handshake, and no credentials take part in it.
+            relay_authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
+            relay_authenticator->setPeerPublicKey(QByteArray::fromStdString(offer.host_public_key()));
+            relay_authenticator->setSessionType(static_cast<quint32>(session_state_->sessionType()));
+            relay_authenticator->setDisplayName(session_state_->displayName());
+        }
+        else
+        {
+            setupAuthenticator(relay_authenticator);
+        }
+
         relay_peer_ = new RelayPeer(relay_authenticator, this);
 
         connect(relay_peer_, &RelayPeer::sig_connectionError,

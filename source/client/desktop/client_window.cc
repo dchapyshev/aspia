@@ -27,6 +27,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/peer/host_id.h"
 #include "base/threading/worker.h"
 #include "client/router.h"
 #include "client/session_keeper.h"
@@ -93,6 +94,15 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     // Set the window title.
     setClientTitle(host, session_type_);
 
+    if (isHostId(host.address()))
+    {
+        // Relay path: fetch the ConnectionOffer first; the session starts once we have it. The
+        // offer also tells whether the credentials are needed at all, so they are asked there.
+        session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
+        fetchConnectionOffer();
+        return true;
+    }
+
     if (host.username().isEmpty() || host.password().isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
@@ -124,15 +134,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     session_state_ = std::make_shared<SessionState>(host, session_type_, display_name);
 
     LOG(INFO) << "Start client";
-    if (session_state_->isConnectionByHostId())
-    {
-        // Relay path: fetch the ConnectionOffer first; the session starts once we have it.
-        fetchConnectionOffer();
-    }
-    else
-    {
-        startNewSession();
-    }
+    startNewSession();
     return true;
 }
 
@@ -146,31 +148,6 @@ void ClientWindow::setTabbedMode(bool /* tabbed */)
 QList<QPair<Tab::ActionRole, QList<QAction*>>> ClientWindow::tabActionGroups() const
 {
     return {{ Tab::ActionRole::ACTION, session_connect_actions_ }};
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::createSessionConnectActions()
-{
-    static const proto::peer::SessionType kOrder[] = {
-        proto::peer::SESSION_TYPE_DESKTOP,
-        proto::peer::SESSION_TYPE_TERMINAL,
-        proto::peer::SESSION_TYPE_FILE_TRANSFER,
-        proto::peer::SESSION_TYPE_SYSTEM_INFO,
-        proto::peer::SESSION_TYPE_CHAT
-    };
-
-    for (proto::peer::SessionType type : kOrder)
-    {
-        if (type == session_type_)
-            continue;
-
-        QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
-        connect(action, &QAction::triggered, this, [this, type]()
-        {
-            emit sig_connectRequested(sessionState()->host(), type);
-        });
-        session_connect_actions_.append(action);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,6 +318,38 @@ void ClientWindow::onDragPoll()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+{
+    if (status == NetworkWorker::Status::LEGACY_HOST)
+    {
+        is_legacy_mode_ = true;
+    }
+    else if (status == NetworkWorker::Status::HOST_DISCONNECTED)
+    {
+        if (session_keeper_)
+            session_keeper_->release();
+    }
+
+    onStatusChanged(status, data);
+
+    if (status == NetworkWorker::Status::HOST_CONNECTED)
+        onNetworkConnected();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onNetworkConnected()
+{
+    if (session_keeper_)
+        session_keeper_->acquire();
+
+    // Set up the session and show the window.
+    onSessionStarted();
+
+    // Now the session will receive incoming messages.
+    emit sig_sessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::setClientTitle(const HostConfig& host, proto::peer::SessionType session_type)
 {
     QString session_name = sessionName(session_type);
@@ -381,13 +390,22 @@ void ClientWindow::fetchConnectionOffer()
     if (!session_state_->isReconnecting())
         status_overlay_->setProgress(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), { this,
+    router->requestConnection(session_state_->hostId(),
+                              static_cast<quint32>(session_state_->sessionType()), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
         {
             if (!session_state_->isReconnecting())
                 status_overlay_->setProgress(tr("Connection offer received."));
+
+            // An offer without the key of the host runs the password handshake.
+            if (offer.host_public_key().empty() && !askHostCredentials())
+            {
+                LOG(INFO) << "Authorization rejected by user";
+                close();
+                return;
+            }
 
             session_state_->setConnectionOffer(offer);
             startNewSession();
@@ -407,6 +425,34 @@ void ClientWindow::fetchConnectionOffer()
         onErrorOccurred(tr("Error requesting connection via router.") + ' ' +
                         routerErrorText(offer.error_code()));
     } });
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientWindow::askHostCredentials()
+{
+    if (!session_state_->hostUserName().isEmpty() && !session_state_->hostPassword().isEmpty())
+        return true;
+
+    LOG(INFO) << "Empty user name or password";
+
+    AuthorizationDialog auth_dialog(this);
+
+    auth_dialog.setOneTimePasswordEnabled(true);
+    auth_dialog.setUserName(session_state_->hostUserName());
+    auth_dialog.setPassword(session_state_->hostPassword());
+
+    if (auth_dialog.exec() == AuthorizationDialog::Rejected)
+        return false;
+
+    QString username = auth_dialog.userName();
+
+    // When connecting with a one-time password, the username must be in the following format:
+    // #host_id.
+    if (username.isEmpty())
+        username = u"#" + session_state_->host().address();
+
+    session_state_->setHostCredentials(username, auth_dialog.password());
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -440,33 +486,26 @@ void ClientWindow::startNewSession()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QVariant& data)
+void ClientWindow::createSessionConnectActions()
 {
-    if (status == NetworkWorker::Status::LEGACY_HOST)
+    static const proto::peer::SessionType kOrder[] = {
+        proto::peer::SESSION_TYPE_DESKTOP,
+        proto::peer::SESSION_TYPE_TERMINAL,
+        proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        proto::peer::SESSION_TYPE_SYSTEM_INFO,
+        proto::peer::SESSION_TYPE_CHAT
+    };
+
+    for (proto::peer::SessionType type : kOrder)
     {
-        is_legacy_mode_ = true;
+        if (type == session_type_)
+            continue;
+
+        QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
+        connect(action, &QAction::triggered, this, [this, type]()
+        {
+            emit sig_connectRequested(sessionState()->host(), type);
+        });
+        session_connect_actions_.append(action);
     }
-    else if (status == NetworkWorker::Status::HOST_DISCONNECTED)
-    {
-        if (session_keeper_)
-            session_keeper_->release();
-    }
-
-    onStatusChanged(status, data);
-
-    if (status == NetworkWorker::Status::HOST_CONNECTED)
-        onNetworkConnected();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::onNetworkConnected()
-{
-    if (session_keeper_)
-        session_keeper_->acquire();
-
-    // Set up the session and show the window.
-    onSessionStarted();
-
-    // Now the session will receive incoming messages.
-    emit sig_sessionReady();
 }
