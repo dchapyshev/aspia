@@ -18,8 +18,11 @@
 #include <gtest/gtest.h>
 
 #include "base/version_constants.h"
+#include "base/crypto/random.h"
+#include "proto/peer.h"
 #include "proto/relay_peer.h"
 #include "proto/router_constants.h"
+#include "router/router_test_base.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 
@@ -211,4 +214,78 @@ TEST_F(ConnectionRequestHandlerTest, StunInfoIsAttachedOnlyWhenTheServerRuns)
 
     // An empty host means "the address of this router" - the client already knows it.
     EXPECT_TRUE(result.offer.stun_info().host().empty());
+}
+
+// The rule that decides whether the host is asked for a one-time key at all. It reads the
+// database, so it gets the fixture that carries one.
+class KeyedConnectionTest : public RouterTestBase
+{
+protected:
+    void SetUp() override
+    {
+        RouterTestBase::SetUp();
+
+        gk_ = SecureByteArray(Random::byteArray(32));
+        host_id_ = addHost("key-hash-of-the-host");
+        ASSERT_NE(host_id_, kInvalidHostId);
+    }
+
+    bool allowed(qint64 user_id, quint32 session_type = proto::peer::SESSION_TYPE_DESKTOP)
+    {
+        return isKeyedConnectionAllowed(db_, user_id, host_id_, session_type);
+    }
+
+    SecureByteArray gk_;
+    HostId host_id_ = kInvalidHostId;
+};
+
+//--------------------------------------------------------------------------------------------------
+// A member of the workspace the host belongs to gets the keyed path.
+TEST_F(KeyedConnectionTest, MemberOfTheWorkspaceIsAllowed)
+{
+    ASSERT_GT(addWorkspace("workspace", gk_, {host_id_}), 0);
+    EXPECT_TRUE(allowed(admin_.entry_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host outside of any workspace is reached by a password: there is no membership to authorize
+// the connection with.
+TEST_F(KeyedConnectionTest, HostOutsideAWorkspaceIsRefused)
+{
+    ASSERT_GT(addWorkspace("workspace", gk_), 0);
+    EXPECT_FALSE(allowed(admin_.entry_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A user without an access entry is refused, even though the host is in a workspace.
+TEST_F(KeyedConnectionTest, UserWithoutAccessIsRefused)
+{
+    ASSERT_GT(addWorkspace("workspace", gk_, {host_id_}), 0);
+
+    const RouterUser outsider = addUser("outsider", proto::router::SESSION_TYPE_CLIENT);
+    ASSERT_GT(outsider.entry_id, 0);
+
+    EXPECT_FALSE(allowed(outsider.entry_id));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A key is issued for one session type, so a client that names none or names several is refused
+// and does the password handshake.
+TEST_F(KeyedConnectionTest, SessionTypeMustBeExactlyOne)
+{
+    ASSERT_GT(addWorkspace("workspace", gk_, {host_id_}), 0);
+
+    EXPECT_FALSE(allowed(admin_.entry_id, 0));
+    EXPECT_FALSE(allowed(admin_.entry_id, proto::peer::SESSION_TYPE_DESKTOP |
+                                          proto::peer::SESSION_TYPE_FILE_TRANSFER));
+    EXPECT_TRUE(allowed(admin_.entry_id, proto::peer::SESSION_TYPE_FILE_TRANSFER));
+}
+
+//--------------------------------------------------------------------------------------------------
+// An unknown host has no workspace to authorize by.
+TEST_F(KeyedConnectionTest, UnknownHostIsRefused)
+{
+    ASSERT_GT(addWorkspace("workspace", gk_, {host_id_}), 0);
+    EXPECT_FALSE(isKeyedConnectionAllowed(db_, admin_.entry_id, host_id_ + 1000,
+                                          proto::peer::SESSION_TYPE_DESKTOP));
 }

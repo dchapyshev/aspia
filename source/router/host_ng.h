@@ -21,10 +21,13 @@
 
 #include <QByteArray>
 
+#include <string_view>
+
 #include "base/peer/host_id.h"
 #include "router/host.h"
 
 namespace proto::router {
+class ConnectionKeyResponse;
 class ConnectionOffer;
 class HostIdRequest;
 } // namespace proto::router
@@ -43,6 +46,7 @@ public:
     const QByteArray& hardwareId() const { return hw_id_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
+    void sendConnectionKeyRequest(qint64 request_id, std::string_view user_name, quint32 session_type);
     // Sends the "remove" host command and marks the connection so that on disconnect the
     // hosts_remove row for this host_id is finalized. TCP delivers the command reliably; the
     // host's disconnect is treated as a proof of receipt.
@@ -52,6 +56,7 @@ public:
 
 signals:
     void sig_hostIdAssigned(HostId host_id);
+    void sig_connectionKeyResponse(const proto::router::ConnectionKeyResponse& response);
 
 protected:
     // Host implementation.

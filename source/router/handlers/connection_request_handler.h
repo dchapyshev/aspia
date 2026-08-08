@@ -23,6 +23,7 @@
 #include "base/peer/host_id.h"
 #include "proto/router_client.h"
 
+class Database;
 class SharedHosts;
 class SharedKeyPool;
 
@@ -60,5 +61,10 @@ struct ConnectionRequestResult
 
 ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPool& key_pool,
                                                 const ConnectionRequestClient& client);
+
+// Whether the connection may be brokered with a one-time key of the host instead of a password:
+// the client asks for a single session type, the host belongs to a workspace, and the user is a
+// member of it. Fails closed, so a database error leaves the peers the password they always had.
+bool isKeyedConnectionAllowed(Database& database, qint64 user_id, HostId host_id, quint32 session_type);
 
 #endif // ROUTER_HANDLERS_CONNECTION_REQUEST_HANDLER_H

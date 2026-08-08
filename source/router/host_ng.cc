@@ -120,6 +120,18 @@ void HostNG::sendRemoveCommand()
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostNG::sendConnectionKeyRequest(qint64 request_id, std::string_view user_name, quint32 session_type)
+{
+    proto::router::RouterToHost message;
+    proto::router::ConnectionKeyRequest* request = message.mutable_connection_key_request();
+    request->set_request_id(request_id);
+    request->set_user_name(user_name);
+    request->set_session_type(session_type);
+
+    sendMessage(0, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostNG::sendUpdateCommand()
 {
     proto::router::RouterToHost message;
@@ -140,6 +152,10 @@ void HostNG::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     if (message.has_host_id_request())
     {
         readHostIdRequest(message.host_id_request());
+    }
+    else if (message.has_connection_key_response())
+    {
+        emit sig_connectionKeyResponse(message.connection_key_response());
     }
     else
     {

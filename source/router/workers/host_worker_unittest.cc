@@ -57,6 +57,13 @@ constexpr Seconds kIdentifyTimeout{ 30 };
 // How many id requests one connection may make.
 constexpr int kMaxIdRequests = 5;
 
+// How long the router waits for the host to answer with a connection key.
+constexpr Seconds kConnectionKeyTimeout{ 10 };
+
+// What the peer of the test answers a connection key request with.
+constexpr quint32 kIssuedKeyId = 7;
+const char kIssuedPublicKey[] = "the-public-half-of-the-issued-pair";
+
 //--------------------------------------------------------------------------------------------------
 // A free loopback port for the listener of the worker. The port is released before the worker
 // starts, and the worker binds with reuse_address, so the window between the two is harmless.
@@ -173,6 +180,14 @@ protected:
         std::atomic<HostId> assigned_host_id { kInvalidHostId };
         std::atomic<bool> authenticated { false };
         std::atomic<bool> disconnected { false };
+
+        // How the peer answers a connection key request, and what it was asked for.
+        std::atomic<bool> answer_key_requests { true };
+        std::atomic<bool> refuse_key_requests { false };
+        std::atomic<int> key_requests_received { 0 };
+        std::atomic<quint32> last_key_session_type { 0 };
+        std::string last_key_user_name;
+        std::mutex key_lock;
     };
 
     // What the router stores for a host is the hash of the key the host presents.
@@ -228,10 +243,46 @@ protected:
                              [peer](quint8 /* channel_id */, const QByteArray& buffer)
             {
                 proto::router::RouterToHost message;
-                if (!parse(buffer, &message) || !message.has_host_id_response())
+                if (!parse(buffer, &message))
                     return;
 
-                peer->assigned_host_id = message.host_id_response().host_id();
+                if (message.has_host_id_response())
+                {
+                    peer->assigned_host_id = message.host_id_response().host_id();
+                    return;
+                }
+
+                if (!message.has_connection_key_request())
+                    return;
+
+                const proto::router::ConnectionKeyRequest& request = message.connection_key_request();
+                {
+                    std::lock_guard guard(peer->key_lock);
+                    peer->last_key_user_name = request.user_name();
+                }
+                peer->last_key_session_type = request.session_type();
+                ++peer->key_requests_received;
+
+                if (!peer->answer_key_requests.load())
+                    return;
+
+                proto::router::HostToRouter answer;
+                proto::router::ConnectionKeyResponse* response =
+                    answer.mutable_connection_key_response();
+                response->set_request_id(request.request_id());
+
+                if (peer->refuse_key_requests.load())
+                {
+                    response->set_error_code(proto::router::kErrorInternalError);
+                }
+                else
+                {
+                    response->set_error_code(proto::router::kErrorOk);
+                    response->set_key_id(kIssuedKeyId);
+                    response->set_host_public_key(kIssuedPublicKey);
+                }
+
+                peer->channel->send(0, serialize(answer));
             });
 
             peer->channel->connectTo("127.0.0.1", host_port_);
@@ -268,6 +319,28 @@ protected:
 
             peer->channel->send(0, serialize(message));
         });
+    }
+
+    // Asks for a connection key the way a client session does, from another worker thread, and
+    // hands over what came back.
+    void requestConnectionKey(HostId host_id, quint32 session_type)
+    {
+        peer_worker_->invoke([this, host_id, session_type]()
+        {
+            host_worker_->requestConnectionKey(host_id, "alice", session_type, peer_worker_,
+                                               [this](proto::router::ConnectionKeyResponse&& response)
+            {
+                std::lock_guard guard(response_lock_);
+                last_response_ = std::move(response);
+                ++responses_received_;
+            });
+        });
+    }
+
+    proto::router::ConnectionKeyResponse lastResponse()
+    {
+        std::lock_guard guard(response_lock_);
+        return last_response_;
     }
 
     // Removes the host the way the administrator console does, from another worker thread.
@@ -327,6 +400,10 @@ protected:
     RouterTestWorker* peer_worker_ = nullptr;
     HostWorker* host_worker_ = nullptr;
     std::vector<std::unique_ptr<Peer>> peers_;
+
+    std::mutex response_lock_;
+    proto::router::ConnectionKeyResponse last_response_;
+    std::atomic<int> responses_received_ { 0 };
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -412,4 +489,104 @@ TEST_F(HostWorkerTest, RemovedHostIsNoLongerAnnounced)
     removeHost();
 
     EXPECT_TRUE(waitFor([this]() { return !SharedHosts::instance().contains(host_id_); }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The key request reaches the host with what it was asked for, and the answer of the host comes
+// back to the session that asked.
+TEST_F(HostWorkerTest, ConnectionKeyIsBrokered)
+{
+    Peer* peer = connectHost();
+    ASSERT_TRUE(peer);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    requestConnectionKey(host_id_, proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return responses_received_.load() >= 1; }));
+
+    const proto::router::ConnectionKeyResponse response = lastResponse();
+    EXPECT_EQ(response.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(response.key_id(), kIssuedKeyId);
+    EXPECT_EQ(response.host_public_key(), kIssuedPublicKey);
+
+    EXPECT_EQ(peer->last_key_session_type.load(),
+              static_cast<quint32>(proto::peer::SESSION_TYPE_DESKTOP));
+
+    std::lock_guard guard(peer->key_lock);
+    EXPECT_EQ(peer->last_key_user_name, "alice");
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host that is not connected has nothing to issue, and the answer says so instead of leaving the
+// client session waiting for an offer that never comes.
+TEST_F(HostWorkerTest, ConnectionKeyOfAnOfflineHostFails)
+{
+    requestConnectionKey(host_id_, proto::peer::SESSION_TYPE_DESKTOP);
+
+    ASSERT_TRUE(waitFor([this]() { return responses_received_.load() >= 1; }));
+    EXPECT_EQ(lastResponse().error_code(), proto::router::kErrorHostOffline);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host may refuse to issue a key. The refusal is passed on as it is, so the connection falls
+// back to the password path instead of failing.
+TEST_F(HostWorkerTest, RefusedConnectionKeyIsPassedOn)
+{
+    Peer* peer = connectHost();
+    ASSERT_TRUE(peer);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    peer->refuse_key_requests = true;
+
+    requestConnectionKey(host_id_, proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([this]() { return responses_received_.load() >= 1; }));
+
+    EXPECT_EQ(lastResponse().error_code(), proto::router::kErrorInternalError);
+    EXPECT_EQ(lastResponse().key_id(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host that stays silent must not hold the client session waiting forever: the request is given
+// up on when its deadline passes.
+TEST_F(HostWorkerTest, SilentHostTimesTheKeyRequestOut)
+{
+    Peer* peer = connectHost();
+    ASSERT_TRUE(peer);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    peer->answer_key_requests = false;
+
+    requestConnectionKey(host_id_, proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([peer]() { return peer->key_requests_received.load() >= 1; }));
+
+    // The real deadline is ten seconds; the synthetic clock crosses it at once.
+    HostWorkerTestPeer timer(host_worker_);
+    const TimePoint after_deadline = Clock::now() + kConnectionKeyTimeout + Seconds(1);
+
+    ASSERT_TRUE(waitFor([&]()
+    {
+        timer.fireTimer(after_deadline);
+        return responses_received_.load() >= 1;
+    }));
+
+    EXPECT_EQ(lastResponse().error_code(), proto::router::kErrorLostConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host that disconnects with a request in flight would issue nothing. The waiting session is
+// told at once instead of waiting the deadline out.
+TEST_F(HostWorkerTest, LostHostFailsTheKeyRequest)
+{
+    Peer* peer = connectHost();
+    ASSERT_TRUE(peer);
+    ASSERT_TRUE(waitFor([this]() { return SharedHosts::instance().contains(host_id_); }));
+
+    peer->answer_key_requests = false;
+
+    requestConnectionKey(host_id_, proto::peer::SESSION_TYPE_DESKTOP);
+    ASSERT_TRUE(waitFor([peer]() { return peer->key_requests_received.load() >= 1; }));
+
+    closePeer(peer);
+
+    ASSERT_TRUE(waitFor([this]() { return responses_received_.load() >= 1; }));
+    EXPECT_EQ(lastResponse().error_code(), proto::router::kErrorHostOffline);
 }
