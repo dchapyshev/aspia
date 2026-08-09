@@ -85,6 +85,28 @@ TEST_F(HostDatabaseTest, UserNameIsTaken)
 }
 
 //--------------------------------------------------------------------------------------------------
+// SRP folds the user name to lower case before it derives the verifier, so records differing only
+// in case would be one identity with two passwords. The database refuses the second one and finds
+// the first whatever case the peer connects with.
+TEST_F(HostDatabaseTest, UserNamesAreCaseFolded)
+{
+    ASSERT_TRUE(db_->addUser(user("john")));
+    EXPECT_FALSE(db_->addUser(user("JoHn")));
+
+    const User found = db_->findUser(QString("JOHN"));
+    ASSERT_TRUE(found.isValid());
+    EXPECT_EQ(found.name, "john");
+
+    // A rename cannot take the folded name of somebody else either.
+    ASSERT_TRUE(db_->addUser(user("mary")));
+
+    User mary = db_->findUser(QString("mary"));
+    ASSERT_TRUE(mary.isValid());
+    mary.name = "JOHN";
+    EXPECT_FALSE(db_->modifyUser(mary));
+}
+
+//--------------------------------------------------------------------------------------------------
 // A user without a name or without a verifier is not a user, and the storage refuses it instead of
 // keeping a record nobody can authenticate against.
 TEST_F(HostDatabaseTest, IncompleteUserIsRefused)

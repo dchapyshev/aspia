@@ -173,7 +173,8 @@ User Database::findUser(const QString& username) const
     }
 
     SqlQuery query(db_,
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE name=?");
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users "
+        "WHERE casefold(name)=casefold(?)");
     query.addText(username);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -216,6 +217,25 @@ bool Database::addUser(const User& user)
         return false;
     }
 
+    // SRP folds the name to lower case before it derives the verifier, so bob and Bob are the
+    // same identity to it. The UNIQUE constraint of the column compares bytes and would let both
+    // records live, each with its own password and rights.
+    SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?)");
+    name_check.addText(user.name);
+
+    const SqlQuery::StepResult name_step = name_check.next();
+    if (name_step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    if (name_step == SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "User name already exists:" << user.name;
+        return false;
+    }
+
     SqlQuery query(db_, "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
                         "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addText(user.name);
@@ -246,6 +266,25 @@ bool Database::modifyUser(const User& user)
     if (!user.isValid())
     {
         LOG(ERROR) << "Not valid user";
+        return false;
+    }
+
+    // Same reasoning as in addUser. A rename must not take the name of another record, whatever
+    // the case it is written in.
+    SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?) AND id!=?");
+    name_check.addText(user.name);
+    name_check.addInt64(user.entry_id);
+
+    const SqlQuery::StepResult name_step = name_check.next();
+    if (name_step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    if (name_step == SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "User name already exists:" << user.name;
         return false;
     }
 
