@@ -144,6 +144,23 @@ TEST(WorkspaceEditModel, MembersAreNotOfferedAgain)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A user granted from the page of candidates is known by name already: it must not turn into a
+// bare id while a lookup that would answer what is on the screen is in flight.
+TEST(WorkspaceEditModel, GrantedUserKeepsTheNameOfThePage)
+{
+    WorkspaceEditModel model(kWorkspaceId);
+    loadDefault(&model);
+
+    model.grantUser(kClientId);
+
+    ASSERT_EQ(model.memberUsers().size(), 2);
+    for (const WorkspaceEditModel::User& user : model.memberUsers())
+        EXPECT_FALSE(user.name.isEmpty());
+
+    EXPECT_TRUE(model.unresolvedMemberIds().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // The membership is shown whole, so a member the current page does not carry is listed anyway and
 // its name is asked for separately.
 TEST(WorkspaceEditModel, MemberOutsideThePageIsListedAndLookedUp)

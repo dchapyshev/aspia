@@ -126,6 +126,9 @@ public:
     qint64 baseRevision() const { return base_revision_; }
 
 private:
+    // The record of a user the dialog has seen, from a lookup or from the current page.
+    const User* knownUser(qint64 user_id) const;
+
     const qint64 entry_id_;
 
     QHash<qint64, User> member_users_; // Names of the members, one lookup each.

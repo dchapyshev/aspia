@@ -71,8 +71,11 @@ private:
     // one and apply right away, so a host operation needs a workspace to move the host into. In
     // create mode the first one creates the workspace from the name of the form and runs after
     // the reply.
-    void moveHost(quint64 host_id, qint64 workspace_id);
+    void moveHost(const Router::Host& host, qint64 workspace_id);
     void runPendingHostMove();
+
+    // The record of the host of a list, empty when the pages no longer carry it.
+    Router::Host hostById(quint64 host_id) const;
 
     void fetchUsers();
     void fetchMemberNames();
@@ -95,8 +98,9 @@ private:
 
     // The whole edit state machine (server snapshot, operator intents, effective membership,
     // the revision the save is based on) lives in the model, where it is unit-tested; the dialog
-    // only feeds replies in and mirrors the state to the widgets.
-    WorkspaceEditModel model_;
+    // only feeds replies in and mirrors the state to the widgets. It is bound to the workspace it
+    // edits, so a dialog that created one for a host operation continues on a new model.
+    std::unique_ptr<WorkspaceEditModel> model_;
 
     PageModel users_page_;
     PageModel hosts_in_page_;
@@ -108,8 +112,9 @@ private:
     QList<Router::Host> hosts_free_;
 
     // The host operation waiting for the workspace of a create-mode dialog to be created.
-    quint64 pending_host_id_ = 0;
+    Router::Host pending_host_;
     qint64 pending_host_workspace_id_ = 0;
+    bool pending_host_move_ = false;
 
     bool closing_ = false;
 

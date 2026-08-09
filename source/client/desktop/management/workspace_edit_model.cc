@@ -85,10 +85,28 @@ QList<qint64> WorkspaceEditModel::unresolvedMemberIds() const
     QList<qint64> ids;
     for (qint64 user_id : effectiveAccessIds())
     {
-        if (!member_users_.contains(user_id))
+        if (!knownUser(user_id))
             ids.append(user_id);
     }
     return ids;
+}
+
+//--------------------------------------------------------------------------------------------------
+const WorkspaceEditModel::User* WorkspaceEditModel::knownUser(qint64 user_id) const
+{
+    const auto it = member_users_.constFind(user_id);
+    if (it != member_users_.constEnd())
+        return &(*it);
+
+    // A user granted from the page of candidates is known by name already, so it is shown by it
+    // right away instead of waiting for a lookup that would answer what is on the screen.
+    for (const User& user : page_users_)
+    {
+        if (user.entry_id == user_id)
+            return &user;
+    }
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,10 +140,9 @@ QList<WorkspaceEditModel::User> WorkspaceEditModel::memberUsers() const
     QList<User> members;
     for (qint64 user_id : effectiveAccessIds())
     {
-        const auto it = member_users_.constFind(user_id);
-        if (it != member_users_.constEnd())
+        if (const User* known = knownUser(user_id))
         {
-            members.append(*it);
+            members.append(*known);
         }
         else
         {
