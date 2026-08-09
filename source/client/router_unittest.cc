@@ -578,6 +578,73 @@ TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A lookup names the record it wants and asks for no page; the paged call is the other one.
+TEST_F(RouterTest, UserLookupNamesTheRecord)
+{
+    loadKeys();
+
+    router_.findUser(qint64(42), { &receiver_, [](const proto::router::UserList&) {} });
+
+    auto request = lastRequest<proto::router::AdminToRouter>();
+    ASSERT_TRUE(request.has_user_list_request());
+    EXPECT_EQ(request.user_list_request().entry_id(), 42);
+    EXPECT_EQ(request.user_list_request().count(), 0);
+
+    router_.findUser(QString("bob"), { &receiver_, [](const proto::router::UserList&) {} });
+
+    request = lastRequest<proto::router::AdminToRouter>();
+    ASSERT_TRUE(request.has_user_list_request());
+    EXPECT_EQ(request.user_list_request().name(), "bob");
+    EXPECT_EQ(request.user_list_request().entry_id(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The device tokens are a domain of their own: they are listed and revoked by their own messages.
+TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
+{
+    loadKeys();
+
+    router_.listUserTokens(7, { &receiver_, [](const proto::router::UserTokenList&) {} });
+
+    auto request = lastRequest<proto::router::AdminToRouter>();
+    ASSERT_TRUE(request.has_user_token_list_request());
+    EXPECT_EQ(request.user_token_list_request().user_id(), 7);
+
+    router_.revokeUserTokens(7, { 100, 101 },
+                             { &receiver_, [](const proto::router::UserTokenResult&) {} });
+
+    request = lastRequest<proto::router::AdminToRouter>();
+    ASSERT_TRUE(request.has_user_token_request());
+    EXPECT_EQ(request.user_token_request().command_name(),
+              proto::router::kCommandUserTokenRevoke);
+    EXPECT_EQ(request.user_token_request().user_id(), 7);
+    ASSERT_EQ(request.user_token_request().token_id_size(), 2);
+    EXPECT_EQ(request.user_token_request().token_id(0), 100);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit carries the workspace the host is to end up in. An ordinary edit repeats the workspace
+// the host is already in, so editing a host never releases it by omission.
+TEST_F(RouterTest, HostEditCarriesTheWorkspace)
+{
+    loadKeys();
+
+    RouterHost host;
+    host.host_id = HostId(1);
+    host.workspace_id = kWorkspaceId;
+    host.group_id = 5;
+    host.display_name = "display";
+
+    router_.editHost(host, { &receiver_, [](const proto::router::HostResult&) {} });
+
+    const auto request = lastRequest<proto::router::ManagerToRouter>();
+    ASSERT_TRUE(request.has_host_request());
+    EXPECT_EQ(request.host_request().command_name(), proto::router::kCommandHostModify);
+    EXPECT_EQ(request.host_request().host().workspace_id(), kWorkspaceId);
+    EXPECT_EQ(request.host_request().host().group_id(), 5);
+}
+
+//--------------------------------------------------------------------------------------------------
 // An unsendable record is refused before the wire, in the same terms the router would answer with,
 // so the caller is not left waiting. The bounds count UTF-8 bytes, so a name of 64 non-ASCII
 // characters is over the bound while the input field that accepted it is not; the name of a group
