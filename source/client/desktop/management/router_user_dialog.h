@@ -35,6 +35,8 @@ class RouterUserDialog;
 namespace proto::router {
 class UserList;
 class UserResult;
+class UserTokenList;
+class UserTokenResult;
 enum SessionType : int;
 } // namespace proto::router
 
@@ -53,13 +55,15 @@ protected:
 
 private slots:
     void onUserListReceived(const proto::router::UserList& list);
+    void onTokenListReceived(const proto::router::UserTokenList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
     void onResetOtpClicked();
     void onResetOtpResultReceived(const proto::router::UserResult& result);
     void onRevokeTokenClicked();
     void onRevokeAllTokensClicked();
-    void onRevokeResultReceived(const proto::router::UserResult& result);
+    void onRevokeResultReceived(const proto::router::UserTokenResult& result);
     void onTokenSelectionChanged();
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     struct Token
@@ -70,7 +74,9 @@ private:
         QString address;
     };
 
-    void onButtonBoxClicked(QAbstractButton* button);
+    void fetchUser();
+    void submitWithNameCheck(const RouterUser& request, const QString& username);
+    void submitUser(const RouterUser& request);
     void setAccountChanged(bool changed);
     void updateLoadingState();
     void updateTokenTree();

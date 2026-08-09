@@ -122,6 +122,46 @@
          <item>
           <widget class="QListWidget" name="list_available"/>
          </item>
+         <item>
+          <layout class="QHBoxLayout" name="layout_users_pagination">
+           <item>
+            <widget class="QToolButton" name="button_users_prev">
+             <property name="text">
+              <string>&lt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combo_users_page"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="button_users_next">
+             <property name="text">
+              <string>&gt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="spacer_users_pagination">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
         </layout>
        </item>
       </layout>
@@ -142,6 +182,46 @@
          </item>
          <item>
           <widget class="QListWidget" name="list_hosts_in_workspace"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layout_hosts_in_pagination">
+           <item>
+            <widget class="QToolButton" name="button_hosts_in_prev">
+             <property name="text">
+              <string>&lt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combo_hosts_in_page"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="button_hosts_in_next">
+             <property name="text">
+              <string>&gt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="spacer_hosts_in_pagination">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -194,6 +274,46 @@
          </item>
          <item>
           <widget class="QListWidget" name="list_hosts_available"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layout_hosts_free_pagination">
+           <item>
+            <widget class="QToolButton" name="button_hosts_free_prev">
+             <property name="text">
+              <string>&lt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combo_hosts_free_page"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="button_hosts_free_next">
+             <property name="text">
+              <string>&gt;</string>
+             </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="spacer_hosts_free_pagination">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>

@@ -21,6 +21,7 @@
 #include <QDataStream>
 #include <QEvent>
 #include <QHeaderView>
+#include <QSignalBlocker>
 #include <QIODevice>
 #include <QKeyEvent>
 #include <QLabel>
@@ -66,6 +67,23 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     connect(ui->tree_users, &QAbstractItemView::activated,
             this, [this](const QModelIndex&) { onModifyUser(); });
 
+    ui->combo_users_page_size->addItem("25", QVariant::fromValue<qint64>(25));
+    ui->combo_users_page_size->addItem("50", QVariant::fromValue<qint64>(50));
+    ui->combo_users_page_size->addItem("100", QVariant::fromValue<qint64>(100));
+    ui->combo_users_page_size->setCurrentIndex(1);
+    users_page_.setPageSize(ui->combo_users_page_size->currentData().toLongLong());
+
+    connect(ui->combo_users_page_size, &QComboBox::currentIndexChanged,
+            this, &RouterUsersWidget::onUsersPageSizeChanged);
+    connect(ui->combo_users_page, &QComboBox::currentIndexChanged,
+            this, &RouterUsersWidget::onUsersPageChanged);
+    connect(ui->button_users_prev, &QAbstractButton::clicked,
+            this, &RouterUsersWidget::onUsersPrevClicked);
+    connect(ui->button_users_next, &QAbstractButton::clicked,
+            this, &RouterUsersWidget::onUsersNextClicked);
+
+    updateUsersPagination();
+
     ui->tree_users->installEventFilter(this);
 }
 
@@ -91,6 +109,8 @@ void RouterUsersWidget::showRouter(qint64 router_id)
                 if (status != Router::Status::ONLINE)
                 {
                     model_->clear();
+                    users_page_.clear();
+                    updateUsersPagination();
                     updateStatusLabel();
                 }
             });
@@ -100,6 +120,8 @@ void RouterUsersWidget::showRouter(qint64 router_id)
     router_id_ = router_id;
 
     model_->clear();
+    users_page_.clear();
+    updateUsersPagination();
     updateStatusLabel();
     fetchUsers();
 }
@@ -278,11 +300,19 @@ void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
 
     model_->setUsers(list);
 
-    // The list is replaced whole, so the row the user was on has to be found again by the record it
+    // The page is replaced whole, so the row the user was on has to be found again by the record it
     // was showing.
     const int selected_row = model_->rowOf(selected_entry_id);
     if (selected_row >= 0)
         ui->tree_users->setCurrentIndex(model_->index(selected_row, 0));
+
+    const bool page_moved = users_page_.setTotalCount(list.total_count());
+    updateUsersPagination();
+
+    // The page the list was fetched for is gone, so the tree was just emptied. Nothing else asks
+    // for the page it was moved to, and the user would be left looking at nothing.
+    if (page_moved)
+        fetchUsers();
 
     emit sig_currentChanged();
     updateStatusLabel();
@@ -336,6 +366,44 @@ void RouterUsersWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterUsersWidget::onUsersPageSizeChanged(int /* index */)
+{
+    users_page_.setPageSize(ui->combo_users_page_size->currentData().toLongLong());
+    users_page_.setCurrentPage(0);
+    fetchUsers();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUsersWidget::onUsersPageChanged(int index)
+{
+    if (index < 0 || index == users_page_.currentPage())
+        return;
+
+    users_page_.setCurrentPage(index);
+    fetchUsers();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUsersWidget::onUsersPrevClicked()
+{
+    if (users_page_.currentPage() <= 0)
+        return;
+
+    users_page_.setCurrentPage(users_page_.currentPage() - 1);
+    fetchUsers();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUsersWidget::onUsersNextClicked()
+{
+    if (users_page_.currentPage() >= users_page_.pageCount() - 1)
+        return;
+
+    users_page_.setCurrentPage(users_page_.currentPage() + 1);
+    fetchUsers();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::fetchUsers()
 {
     Router* router = Router::instance(router_id_);
@@ -345,7 +413,24 @@ void RouterUsersWidget::fetchUsers()
     if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listUsers({ this, &RouterUsersWidget::onUserListReceived });
+    router->listUsers(users_page_.offset(), users_page_.pageSize(),
+                      { this, &RouterUsersWidget::onUserListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUsersWidget::updateUsersPagination()
+{
+    const qint64 total_pages = users_page_.pageCount();
+
+    QSignalBlocker blocker(ui->combo_users_page);
+    ui->combo_users_page->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        ui->combo_users_page->addItem(QString::number(i));
+    ui->combo_users_page->setCurrentIndex(static_cast<int>(users_page_.currentPage()));
+
+    ui->combo_users_page->setEnabled(total_pages > 1);
+    ui->button_users_prev->setEnabled(users_page_.currentPage() > 0);
+    ui->button_users_next->setEnabled(users_page_.currentPage() < total_pages - 1);
 }
 
 //--------------------------------------------------------------------------------------------------

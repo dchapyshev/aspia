@@ -116,12 +116,19 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     // undo that. The fields the operator has touched keep their edits (see onUserListReceived).
     connect(router, &Router::sig_usersChanged, this, [this](qint64 /* router_id */)
     {
-        Router* router = Router::instance(router_id_);
-        if (router)
-            router->listUsers({ this, &RouterUserDialog::onUserListReceived });
+        fetchUser();
     });
 
-    router->listUsers({ this, &RouterUserDialog::onUserListReceived });
+    if (entry_id_ > 0)
+    {
+        fetchUser();
+    }
+    else
+    {
+        // A record that does not exist yet has nothing to fetch, and the form starts empty.
+        model_.applySnapshot(RouterUser(), false);
+        updateLoadingState();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,44 +180,21 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
     const bool initial_load = !model_.isLoaded();
 
-    // Split the reply into what the model owns (the record, the names) and what stays display
-    // only (tokens, OTP state).
+    // A lookup answers the one record it named, or nothing when it is gone. The OTP state stays
+    // display only.
     RouterUser record;
     bool record_found = false;
     bool otp_active = false;
-    QStringList other_names;
-    tokens_.clear();
 
-    for (int i = 0; i < list.user_size(); ++i)
+    if (list.user_size() > 0)
     {
-        const proto::router::User& user = list.user(i);
-
-        if (entry_id_ > 0 && user.entry_id() == entry_id_)
-        {
-            record_found = true;
-            record = RouterUser::parseFrom(user);
-            otp_active = user.otp_active();
-
-            tokens_.reserve(user.token_size());
-            for (int j = 0; j < user.token_size(); ++j)
-            {
-                const proto::router::User::Token& src = user.token(j);
-                Token token;
-                token.token_id     = src.token_id();
-                token.created_at   = src.created_at();
-                token.last_used_at = src.last_used_at();
-                token.address      = QString::fromStdString(src.address());
-                tokens_.append(token);
-            }
-        }
-        else
-        {
-            // The own name is excluded so the uniqueness check does not flag the unchanged name.
-            other_names.append(QString::fromStdString(user.name()));
-        }
+        const proto::router::User& user = list.user(0);
+        record_found = true;
+        record = RouterUser::parseFrom(user);
+        otp_active = user.otp_active();
     }
 
-    if (!model_.applySnapshot(record, record_found, other_names))
+    if (!model_.applySnapshot(record, record_found))
     {
         // The record being edited is gone (deleted from another console). Every further action
         // would fail with NotFound - or worse, close as a no-op over a nonexistent record - so
@@ -241,8 +225,34 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
         }
     }
 
-    updateTokenTree();
     updateLoadingState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onTokenListReceived(const proto::router::UserTokenList& list)
+{
+    if (list.error_code() != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Unable to get the device tokens:" << list.error_code();
+        return;
+    }
+
+    tokens_.clear();
+    tokens_.reserve(list.token_size());
+
+    for (int i = 0; i < list.token_size(); ++i)
+    {
+        const proto::router::UserToken& src = list.token(i);
+
+        Token token;
+        token.token_id     = src.token_id();
+        token.created_at   = src.created_at();
+        token.last_used_at = src.last_used_at();
+        token.address      = QString::fromStdString(src.address());
+        tokens_.append(token);
+    }
+
+    updateTokenTree();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,7 +387,7 @@ void RouterUserDialog::onRevokeAllTokensClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterUserDialog::onRevokeResultReceived(const proto::router::UserResult& result)
+void RouterUserDialog::onRevokeResultReceived(const proto::router::UserTokenResult& result)
 {
     const QList<qint64> targets = std::move(pending_revoke_token_ids_);
     pending_revoke_token_ids_.clear();
@@ -454,19 +464,6 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        const QStringList& existing_names = model_.otherNames();
-        for (QStringList::size_type i = 0; i < existing_names.size(); ++i)
-        {
-            if (username.compare(existing_names.at(i), Qt::CaseInsensitive) == 0)
-            {
-                LOG(ERROR) << "User name already exists:" << username;
-                MsgBox::warning(this, tr("The username you entered already exists."));
-                ui->edit_username->selectAll();
-                ui->edit_username->setFocus();
-                return;
-            }
-        }
-
         SecureString password = ui->edit_password->password();
 
         if (password != ui->edit_password_retry->password())
@@ -522,6 +519,12 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
             return;
         }
+
+        request.sessions = ui->combo_access_level->currentData().toUInt();
+        request.flags = model_.flagsForSave();
+
+        submitWithNameCheck(request, username);
+        return;
     }
     else
     {
@@ -540,6 +543,59 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     request.sessions = ui->combo_access_level->currentData().toUInt();
     request.flags = model_.flagsForSave();
 
+    submitUser(request);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::fetchUser()
+{
+    Router* router = Router::instance(router_id_);
+    if (!router || entry_id_ <= 0)
+        return;
+
+    router->findUser(entry_id_, { this, &RouterUserDialog::onUserListReceived });
+    router->listUserTokens(entry_id_, { this, &RouterUserDialog::onTokenListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QString& username)
+{
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    setEnabled(false);
+
+    router->findUser(username, { this, [this, request](const proto::router::UserList& list)
+    {
+        if (list.error_code() != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to check the user name:" << list.error_code();
+            setEnabled(true);
+            MsgBox::warning(this, routerErrorText(list.error_code()));
+            return;
+        }
+
+        if (list.user_size() > 0 && list.user(0).entry_id() != entry_id_)
+        {
+            LOG(ERROR) << "User name already exists";
+            setEnabled(true);
+            MsgBox::warning(this, tr("The username you entered already exists."));
+            ui->edit_username->selectAll();
+            ui->edit_username->setFocus();
+            return;
+        }
+
+        submitUser(request);
+    } });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::submitUser(const RouterUser& request)
+{
     Router* router = Router::instance(router_id_);
     if (!router)
     {

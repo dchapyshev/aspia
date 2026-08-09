@@ -19,10 +19,13 @@
 #include "client/desktop/management/router_workspace_dialog.h"
 
 #include <QAbstractButton>
+#include <QComboBox>
 #include <QIcon>
 #include <QListWidgetItem>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QSignalBlocker>
+#include <QToolButton>
 
 #include "base/logging.h"
 #include "common/desktop/msg_box.h"
@@ -31,6 +34,14 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "ui_router_workspace_dialog.h"
+
+namespace {
+
+constexpr qint64 kPageSize = 50;
+constexpr qint64 kAnyGroup = -1;
+constexpr qint64 kNoWorkspace = 0;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceDialog::RouterWorkspaceDialog(
@@ -47,6 +58,10 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
     ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
 
+    users_page_.setPageSize(kPageSize);
+    hosts_in_page_.setPageSize(kPageSize);
+    hosts_free_page_.setPageSize(kPageSize);
+
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
     connect(ui->button_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
@@ -61,10 +76,69 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     connect(ui->list_hosts_in_workspace, &QListWidget::itemSelectionChanged,
             this, &RouterWorkspaceDialog::updateButtonsState);
 
-    updateLoadingState();
+    connect(ui->combo_users_page, &QComboBox::currentIndexChanged, this, [this](int index)
+    {
+        if (index < 0 || index == users_page_.currentPage())
+            return;
+        users_page_.setCurrentPage(index);
+        fetchUsers();
+    });
+    connect(ui->button_users_prev, &QToolButton::clicked, this, [this]()
+    {
+        users_page_.setCurrentPage(users_page_.currentPage() - 1);
+        fetchUsers();
+    });
+    connect(ui->button_users_next, &QToolButton::clicked, this, [this]()
+    {
+        users_page_.setCurrentPage(users_page_.currentPage() + 1);
+        fetchUsers();
+    });
+
+    connect(ui->combo_hosts_in_page, &QComboBox::currentIndexChanged, this, [this](int index)
+    {
+        if (index < 0 || index == hosts_in_page_.currentPage())
+            return;
+        hosts_in_page_.setCurrentPage(index);
+        fetchHosts();
+    });
+    connect(ui->button_hosts_in_prev, &QToolButton::clicked, this, [this]()
+    {
+        hosts_in_page_.setCurrentPage(hosts_in_page_.currentPage() - 1);
+        fetchHosts();
+    });
+    connect(ui->button_hosts_in_next, &QToolButton::clicked, this, [this]()
+    {
+        hosts_in_page_.setCurrentPage(hosts_in_page_.currentPage() + 1);
+        fetchHosts();
+    });
+
+    connect(ui->combo_hosts_free_page, &QComboBox::currentIndexChanged, this, [this](int index)
+    {
+        if (index < 0 || index == hosts_free_page_.currentPage())
+            return;
+        hosts_free_page_.setCurrentPage(index);
+        fetchHosts();
+    });
+    connect(ui->button_hosts_free_prev, &QToolButton::clicked, this, [this]()
+    {
+        hosts_free_page_.setCurrentPage(hosts_free_page_.currentPage() - 1);
+        fetchHosts();
+    });
+    connect(ui->button_hosts_free_next, &QToolButton::clicked, this, [this]()
+    {
+        hosts_free_page_.setCurrentPage(hosts_free_page_.currentPage() + 1);
+        fetchHosts();
+    });
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
+
+    // Which workspace holds a host is an administrator's call, so anybody else does not get the
+    // tab at all: the lists it shows are refused for such a session anyway.
+    is_admin_ = router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    ui->tab_widget->setTabVisible(ui->tab_widget->indexOf(ui->tab_hosts), is_admin_);
+
+    updateLoadingState();
 
     connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
     {
@@ -72,54 +146,38 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
             reject();
     });
 
-    // The dialog can stay open for a long time, and the router accepts a workspace only with every
-    // administrator in its access list. Without this an administrator created meanwhile from
-    // another console would make the dialog unsaveable.
+    // The dialog can stay open for a long time, so the snapshots it edits on top of track the
+    // changes made from other consoles.
     connect(router, &Router::sig_usersChanged, this, [this](qint64 /* router_id */)
     {
-        Router* router = Router::instance(router_id_);
-        if (router)
-            router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
+        fetchUsers();
+        fetchMemberNames();
     });
 
-    // The same for the workspace itself: the save is built on top of the server snapshot (the
-    // access list and the revision inside the model), so the snapshot must track concurrent
-    // changes. RELOAD, because the signal arrives before the cache is refreshed.
+    // The save is built on top of the server snapshot (the membership and the revision inside the
+    // model), so the snapshot must follow concurrent changes. RELOAD, because the signal arrives
+    // before the cache is refreshed.
     connect(router, &Router::sig_workspacesChanged, this, [this](qint64 /* router_id */)
     {
         Router* router = Router::instance(router_id_);
         if (router)
         {
-            router->listWorkspaces( Router::CachePolicy::RELOAD, 0,
+            router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
                                    { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
         }
     });
 
-    // And for the hosts: the saved set is final, so a host added to this workspace from another
-    // console while the dialog is open would otherwise be released by our save - dropping the
-    // note it carried irreversibly.
     connect(router, &Router::sig_hostsChanged, this, [this](qint64 /* router_id */)
     {
-        Router* router = Router::instance(router_id_);
-        if (router)
-        {
-            proto::router::HostListRequest host_request;
-            host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-            router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
-                              { this, &RouterWorkspaceDialog::onHostListReceived });
-        }
+        fetchHosts();
     });
 
-    // Always fetch the full list so we have all the other names available for uniqueness
-    // validation; in modify mode the entry matching entry_id_ also populates the form.
+    // The whole list is fetched so the other names are available for the uniqueness check; in
+    // modify mode the entry matching entry_id_ also populates the form.
     router->listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
                            { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
-    router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
-
-    proto::router::HostListRequest host_request;
-    host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
-                      { this, &RouterWorkspaceDialog::onHostListReceived });
+    fetchUsers();
+    fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,7 +190,7 @@ RouterWorkspaceDialog::~RouterWorkspaceDialog()
 void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList& list)
 {
     // A reply arriving while the dialog is already going away must not repopulate it (or stack
-    // another message box) - same guard in all three list handlers and in the result handler.
+    // another message box) - same guard in the other handlers.
     if (closing_)
         return;
 
@@ -143,8 +201,8 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList&
         {
             // Without the first list the dialog never leaves the loading state and every control
             // stays disabled, so tell the operator and close instead of hanging silently. A failed
-            // refetch keeps the lists fetched before. |closing_| collapses the errors of the three
-            // list requests into a single message.
+            // refetch keeps the lists fetched before. |closing_| collapses the errors of the list
+            // requests into a single message.
             closing_ = true;
             MsgBox::warning(this, tr("Failed to get list of workspaces."));
             reject();
@@ -163,8 +221,8 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList&
         info.revision = workspace.revision;
         info.name = workspace.name;
         info.comment = workspace.comment;
-        for (const Router::Workspace::Access& access : std::as_const(workspace.access))
-            info.access_ids.insert(access.user_id);
+        for (qint64 user_id : std::as_const(workspace.user_ids))
+            info.access_ids.insert(user_id);
     }
 
     if (!model_.applyWorkspaceList(workspaces))
@@ -197,6 +255,7 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList&
         }
     }
 
+    fetchMemberNames();
     updateLoadingState();
 }
 
@@ -216,8 +275,7 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
             MsgBox::warning(this, tr("Failed to get list of users."));
             reject();
         }
-        // On a refetch keep what we already have: an empty answer would drop the access
-        // entries of the workspace, and the router would reject the save.
+        // On a refetch keep the page we already have.
         return;
     }
 
@@ -232,7 +290,12 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
         entry.name     = QString::fromStdString(user.name());
     }
 
-    model_.applyUserList(users);
+    model_.applyUserPage(users);
+
+    const bool page_moved = users_page_.setTotalCount(list.total_count());
+    if (page_moved)
+        fetchUsers();
+
     updateLoadingState();
 }
 
@@ -245,103 +308,44 @@ void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
     if (list.error_code != proto::router::kErrorOk)
     {
         LOG(ERROR) << "Unable to get the list of the hosts:" << list.error_code;
-        if (!model_.isLoaded() && !closing_)
-        {
-            // An empty reply must not pass for the final set of the hosts: the save would release
-            // every host of the workspace and drop the notes they carried.
-            closing_ = true;
-            MsgBox::warning(this, tr("Failed to get list of hosts."));
-            reject();
-        }
         return;
     }
 
-    QList<WorkspaceEditModel::HostInfo> hosts;
-    hosts.reserve(list.hosts.size());
-    for (const Router::Host& host : std::as_const(list.hosts))
+    // The two lists are told apart by the scope they were asked for.
+    if (list.workspace_id == kNoWorkspace)
     {
-        WorkspaceEditModel::HostInfo& entry = hosts.emplaceBack();
-        entry.host_id = host.host_id;
-        entry.workspace_id = host.workspace_id;
-        entry.computer_name = host.computer_name;
+        hosts_free_ = list.hosts;
+        if (hosts_free_page_.setTotalCount(list.total_count))
+            fetchHosts();
+    }
+    else
+    {
+        hosts_in_ = list.hosts;
+        if (hosts_in_page_.setTotalCount(list.total_count))
+            fetchHosts();
     }
 
-    model_.applyHostList(hosts);
-    updateLoadingState();
+    rebuildHostLists();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
+void RouterWorkspaceDialog::onHostResultReceived(const proto::router::HostResult& result)
 {
-    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
-    if (standard_button != QDialogButtonBox::Ok)
-    {
-        LOG(INFO) << "[ACTION] Action rejected";
-        reject();
-        close();
+    if (closing_)
         return;
-    }
 
-    const QString new_name = ui->edit_name->text().trimmed();
+    ui->tab_hosts->setEnabled(true);
 
-    if (new_name.isEmpty())
+    const std::string& error_code = result.error_code();
+    if (error_code != proto::router::kErrorOk)
     {
-        LOG(ERROR) << "Empty workspace name";
-        MsgBox::warning(this, tr("Workspace name cannot be empty."));
-        ui->edit_name->setFocus();
-        return;
+        LOG(ERROR) << "Host move failed:" << error_code;
+        MsgBox::warning(this, routerErrorText(error_code));
     }
 
-    for (const QString& existing : model_.otherNames())
-    {
-        if (new_name.compare(existing, Qt::CaseInsensitive) == 0)
-        {
-            LOG(ERROR) << "Workspace name already exists:" << new_name;
-            MsgBox::warning(this, tr("A workspace with the specified name already exists."));
-            ui->edit_name->selectAll();
-            ui->edit_name->setFocus();
-            return;
-        }
-    }
-
-    // The request is assembled from the model without mutating it: a failed save retries
-    // against the same state.
-    workspace_ = Router::Workspace();
-    workspace_.entry_id = entry_id_;
-    workspace_.name = new_name;
-    workspace_.comment = ui->edit_comment->toPlainText();
-
-    // The revision the edit was based on: the router rejects the save with "conflict" when the
-    // workspace changed meanwhile, instead of silently overwriting the concurrent change. The
-    // model pairs it with the host snapshot of the same refetch cycle (see baseRevision()).
-    workspace_.revision = model_.baseRevision();
-
-    const QList<qint64> user_ids = model_.accessUserIdsForSave();
-    workspace_.access.reserve(user_ids.size());
-    for (qint64 user_id : user_ids)
-        workspace_.access.emplaceBack().user_id = user_id;
-
-    workspace_.host_ids = model_.hostIdsForSave();
-
-    Router* router = Router::instance(router_id_);
-    if (!router)
-    {
-        LOG(ERROR) << "Router instance is gone";
-        return;
-    }
-
-    // Disable the dialog while waiting for the server response so the operator cannot submit
-    // again or close-and-resubmit; re-enabled by onWorkspaceResultReceived on error.
-    setEnabled(false);
-
-    LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
-              << ", access entries:" << workspace_.access.size() << ")";
-    if (entry_id_ > 0)
-        router->modifyWorkspace( workspace_,
-                                { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
-    else
-        router->addWorkspace( workspace_,
-                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+    // Both lists change with a move, and a refetch is the only thing that tells which page the
+    // host ended up on.
+    fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -351,19 +355,36 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
         return;
 
     const std::string& error_code = result.error_code();
+
     if (error_code == proto::router::kErrorOk)
     {
+        // A creation made for a host operation: the dialog stays open on the workspace it just
+        // created, and the host move that asked for it runs now.
+        if (pending_host_id_ != 0 && entry_id_ == 0)
+        {
+            entry_id_ = result.entry_id();
+            LOG(INFO) << "[ACTION] Workspace created for a host operation (entry_id:"
+                      << entry_id_ << ")";
+
+            setEnabled(true);
+            runPendingHostMove();
+            return;
+        }
+
         LOG(INFO) << "[ACTION] Workspace saved";
         accept();
         close();
         return;
     }
 
+    pending_host_id_ = 0;
+    pending_host_workspace_id_ = 0;
+
     if (error_code == proto::router::kErrorConflict)
     {
-        // The workspace (or the key pair of a user in its access list) changed concurrently.
-        // The snapshots are refetched; the edits of the operator are kept by construction (see
-        // WorkspaceEditModel), so after a review the save can simply be repeated.
+        // The workspace changed concurrently. The snapshots are refetched; the edits of the
+        // operator are kept by construction (see WorkspaceEditModel), so after a review the save
+        // can simply be repeated.
         LOG(ERROR) << "Workspace save rejected: concurrent change";
         setEnabled(true);
         refetchLists();
@@ -378,6 +399,59 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
+{
+    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
+    if (standard_button != QDialogButtonBox::Ok)
+    {
+        LOG(INFO) << "[ACTION] Action rejected";
+        reject();
+        close();
+        return;
+    }
+
+    const QString new_name = validatedName();
+    if (new_name.isEmpty())
+        return;
+
+    // The request is assembled from the model without mutating it: a failed save retries
+    // against the same state.
+    Router::Workspace workspace;
+    workspace.entry_id = entry_id_;
+    workspace.name = new_name;
+    workspace.comment = ui->edit_comment->toPlainText();
+
+    // The revision the edit was based on: the router rejects the save with "conflict" when the
+    // workspace changed meanwhile, instead of silently overwriting the concurrent change.
+    workspace.revision = model_.baseRevision();
+    workspace.user_ids = model_.accessUserIdsForSave();
+
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    // Disable the dialog while waiting for the server response so the operator cannot submit
+    // again or close-and-resubmit; re-enabled by onWorkspaceResultReceived on error.
+    setEnabled(false);
+
+    LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
+              << ", access entries:" << workspace.user_ids.size() << ")";
+    if (entry_id_ > 0)
+    {
+        router->modifyWorkspace(workspace,
+                                { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+    }
+    else
+    {
+        router->addWorkspace(workspace,
+                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::onAddClicked()
 {
     QListWidgetItem* item = ui->list_available->currentItem();
@@ -386,6 +460,7 @@ void RouterWorkspaceDialog::onAddClicked()
 
     const qint64 user_id = item->data(Qt::UserRole).toLongLong();
     model_.grantUser(user_id);
+    fetchMemberNames();
     rebuildLists();
 }
 
@@ -407,9 +482,7 @@ void RouterWorkspaceDialog::onHostAddClicked()
     if (!item)
         return;
 
-    const quint64 host_id = item->data(Qt::UserRole).toULongLong();
-    model_.claimHost(host_id);
-    rebuildLists();
+    moveHost(item->data(Qt::UserRole).toULongLong(), entry_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -419,25 +492,178 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
     if (!item)
         return;
 
-    const quint64 host_id = item->data(Qt::UserRole).toULongLong();
-
-    // Only a host that is already in the workspace on the router carries a note of it, and the
-    // note is wiped there when the host leaves. Warn that this is irreversible; a host added
-    // during this session has nothing to clear, so it is removed silently.
-    if (model_.isServerHost(host_id))
+    // The note a host carries belongs to the workspace it is in and is wiped when it leaves.
+    const QString message = tr("Removing the host from the workspace will permanently clear "
+                               "its comment. This action cannot be undone.\n\nAre you sure "
+                               "you want to continue?");
+    if (MsgBox::question(this, message) == MsgBox::No)
     {
-        const QString message = tr("Removing the host from the workspace will permanently clear "
-                                   "its comment. This action cannot be undone.\n\nAre you sure "
-                                   "you want to continue?");
-        if (MsgBox::question(this, message) == MsgBox::No)
-        {
-            LOG(INFO) << "Action is rejected by user";
-            return;
-        }
+        LOG(INFO) << "Action is rejected by user";
+        return;
     }
 
-    model_.releaseHost(host_id);
-    rebuildLists();
+    moveHost(item->data(Qt::UserRole).toULongLong(), kNoWorkspace);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::applyMemberLookup(const proto::router::UserList& list, qint64 user_id)
+{
+    if (closing_)
+        return;
+
+    if (list.error_code() != proto::router::kErrorOk)
+    {
+        // The name of a member is a display detail: without it the entry is shown by its id and
+        // the next refetch asks again.
+        LOG(ERROR) << "Unable to look up user" << user_id << ":" << list.error_code();
+        return;
+    }
+
+    if (list.user_size() == 0)
+    {
+        model_.applyMissingUser(user_id);
+    }
+    else
+    {
+        WorkspaceEditModel::User user;
+        user.entry_id = list.user(0).entry_id();
+        user.name     = QString::fromStdString(list.user(0).name());
+        model_.applyMemberUser(user);
+    }
+
+    if (model_.isLoaded())
+        rebuildLists();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::moveHost(quint64 host_id, qint64 workspace_id)
+{
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    pending_host_id_ = host_id;
+    pending_host_workspace_id_ = workspace_id;
+
+    // A host cannot be claimed for a workspace that does not exist yet, so the creation runs
+    // first and the move follows its reply.
+    if (entry_id_ == 0)
+    {
+        const QString new_name = validatedName();
+        if (new_name.isEmpty())
+        {
+            pending_host_id_ = 0;
+            pending_host_workspace_id_ = 0;
+            return;
+        }
+
+        Router::Workspace workspace;
+        workspace.name = new_name;
+        workspace.comment = ui->edit_comment->toPlainText();
+        workspace.user_ids = model_.accessUserIdsForSave();
+
+        setEnabled(false);
+
+        LOG(INFO) << "[ACTION] Creating workspace for a host operation";
+        router->addWorkspace(workspace,
+                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+        return;
+    }
+
+    runPendingHostMove();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::runPendingHostMove()
+{
+    Router* router = Router::instance(router_id_);
+    if (!router || pending_host_id_ == 0)
+        return;
+
+    Router::Host host;
+    host.host_id = pending_host_id_;
+    // A claim puts the host at the root of the workspace; a release takes its group with it.
+    host.workspace_id = pending_host_workspace_id_ == kNoWorkspace ? kNoWorkspace : entry_id_;
+
+    for (const Router::Host& known : std::as_const(hosts_in_))
+    {
+        if (known.host_id == pending_host_id_)
+            host.display_name = known.display_name;
+    }
+    for (const Router::Host& known : std::as_const(hosts_free_))
+    {
+        if (known.host_id == pending_host_id_)
+            host.display_name = known.display_name;
+    }
+
+    pending_host_id_ = 0;
+    pending_host_workspace_id_ = 0;
+
+    ui->tab_hosts->setEnabled(false);
+
+    LOG(INFO) << "[ACTION] Moving host" << host.host_id << "to workspace" << host.workspace_id;
+    router->editHost(host, { this, &RouterWorkspaceDialog::onHostResultReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::fetchUsers()
+{
+    Router* router = Router::instance(router_id_);
+    if (!router)
+        return;
+
+    router->listUsers(users_page_.offset(), users_page_.pageSize(),
+                      { this, &RouterWorkspaceDialog::onUserListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::fetchMemberNames()
+{
+    Router* router = Router::instance(router_id_);
+    if (!router)
+        return;
+
+    for (qint64 user_id : model_.unresolvedMemberIds())
+    {
+        router->findUser(user_id, { this, [this, user_id](const proto::router::UserList& list)
+        {
+            applyMemberLookup(list, user_id);
+        } });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::fetchHosts()
+{
+    Router* router = Router::instance(router_id_);
+    if (!router || !is_admin_)
+        return;
+
+    // The hosts of a workspace that does not exist yet are an empty list, and the free ones
+    // cannot be claimed before it is created.
+    if (entry_id_ > 0)
+    {
+        proto::router::HostListRequest request;
+        request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
+        request.set_workspace_id(entry_id_);
+        request.set_group_id(kAnyGroup);
+        request.set_offset(hosts_in_page_.offset());
+        request.set_count(hosts_in_page_.pageSize());
+        router->listHosts(Router::CachePolicy::RELOAD, std::move(request),
+                          { this, &RouterWorkspaceDialog::onHostListReceived });
+    }
+
+    proto::router::HostListRequest free_request;
+    free_request.set_mode(proto::router::HostListRequest::MODE_FILTERED);
+    free_request.set_workspace_id(kNoWorkspace);
+    free_request.set_group_id(0);
+    free_request.set_offset(hosts_free_page_.offset());
+    free_request.set_count(hosts_free_page_.pageSize());
+    router->listHosts(Router::CachePolicy::RELOAD, std::move(free_request),
+                      { this, &RouterWorkspaceDialog::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,12 +675,9 @@ void RouterWorkspaceDialog::refetchLists()
 
     router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
                            { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
-    router->listUsers({ this, &RouterWorkspaceDialog::onUserListReceived });
-
-    proto::router::HostListRequest host_request;
-    host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(host_request),
-                      { this, &RouterWorkspaceDialog::onHostListReceived });
+    fetchUsers();
+    fetchMemberNames();
+    fetchHosts();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -497,7 +720,10 @@ void RouterWorkspaceDialog::rebuildLists()
 
     const auto add_user_item = [](QListWidget* list, const WorkspaceEditModel::User& user)
     {
-        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/user.svg"), user.name);
+        // A member whose name has not arrived yet is shown by its id.
+        const QString text = user.name.isEmpty() ? QString::number(user.entry_id) : user.name;
+
+        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/user.svg"), text);
         item->setData(Qt::UserRole, user.entry_id);
         list->addItem(item);
     };
@@ -513,37 +739,77 @@ void RouterWorkspaceDialog::rebuildLists()
     restoreState(ui->list_with_access, selected_with_access, scroll_with_access);
     restoreState(ui->list_available, selected_available, scroll_available);
 
-    QVariant selected_hosts_in, selected_hosts_available;
-    int scroll_hosts_in = 0, scroll_hosts_available = 0;
-    captureState(ui->list_hosts_in_workspace, &selected_hosts_in, &scroll_hosts_in);
-    captureState(ui->list_hosts_available, &selected_hosts_available, &scroll_hosts_available);
+    updatePagination(ui->combo_users_page, ui->button_users_prev, ui->button_users_next,
+                     users_page_);
 
-    ui->list_hosts_available->clear();
-    ui->list_hosts_in_workspace->clear();
+    rebuildHostLists();
+}
 
-    const auto add_host_item = [](QListWidget* list, const WorkspaceEditModel::Host& host)
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::rebuildHostLists()
+{
+    const auto fill = [](QListWidget* list, const QList<Router::Host>& hosts)
     {
-        const QString name = host.computer_name.isEmpty()
-            ? QString::number(host.host_id)
-            : QString("%1 (%2)").arg(host.host_id).arg(host.computer_name);
+        QVariant selected;
+        if (QListWidgetItem* item = list->currentItem())
+            selected = item->data(Qt::UserRole);
+        const int scroll = list->verticalScrollBar()->value();
 
-        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), name);
-        item->setData(Qt::UserRole, host.host_id);
-        list->addItem(item);
+        list->clear();
+
+        for (const Router::Host& host : hosts)
+        {
+            const QString name = host.computer_name.isEmpty()
+                ? QString::number(host.host_id)
+                : QString("%1 (%2)").arg(host.host_id).arg(host.computer_name);
+
+            QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), name);
+            item->setData(Qt::UserRole, host.host_id);
+            list->addItem(item);
+        }
+
+        list->sortItems();
+
+        if (selected.isValid())
+        {
+            for (int i = 0; i < list->count(); ++i)
+            {
+                if (list->item(i)->data(Qt::UserRole) == selected)
+                {
+                    list->setCurrentItem(list->item(i));
+                    break;
+                }
+            }
+        }
+        list->verticalScrollBar()->setValue(scroll);
     };
 
-    for (const WorkspaceEditModel::Host& host : model_.hostsInWorkspace())
-        add_host_item(ui->list_hosts_in_workspace, host);
-    for (const WorkspaceEditModel::Host& host : model_.availableHosts())
-        add_host_item(ui->list_hosts_available, host);
+    fill(ui->list_hosts_in_workspace, hosts_in_);
+    fill(ui->list_hosts_available, hosts_free_);
 
-    ui->list_hosts_available->sortItems();
-    ui->list_hosts_in_workspace->sortItems();
-
-    restoreState(ui->list_hosts_in_workspace, selected_hosts_in, scroll_hosts_in);
-    restoreState(ui->list_hosts_available, selected_hosts_available, scroll_hosts_available);
+    updatePagination(ui->combo_hosts_in_page, ui->button_hosts_in_prev, ui->button_hosts_in_next,
+                     hosts_in_page_);
+    updatePagination(ui->combo_hosts_free_page, ui->button_hosts_free_prev,
+                     ui->button_hosts_free_next, hosts_free_page_);
 
     updateButtonsState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::updatePagination(QComboBox* combo, QToolButton* prev, QToolButton* next,
+                                             const PageModel& page)
+{
+    const qint64 total_pages = page.pageCount();
+
+    QSignalBlocker blocker(combo);
+    combo->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        combo->addItem(QString::number(i));
+    combo->setCurrentIndex(static_cast<int>(page.currentPage()));
+
+    combo->setEnabled(total_pages > 1);
+    prev->setEnabled(page.currentPage() > 0);
+    next->setEnabled(page.currentPage() < total_pages - 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -581,4 +847,34 @@ void RouterWorkspaceDialog::updateLoadingState()
         ui->button_host_add->setEnabled(false);
         ui->button_host_remove->setEnabled(false);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterWorkspaceDialog::validatedName()
+{
+    const QString new_name = ui->edit_name->text().trimmed();
+
+    if (new_name.isEmpty())
+    {
+        LOG(ERROR) << "Empty workspace name";
+        MsgBox::warning(this, tr("Workspace name cannot be empty."));
+        ui->tab_widget->setCurrentWidget(ui->tab_general);
+        ui->edit_name->setFocus();
+        return QString();
+    }
+
+    for (const QString& existing : model_.otherNames())
+    {
+        if (new_name.compare(existing, Qt::CaseInsensitive) == 0)
+        {
+            LOG(ERROR) << "Workspace name already exists:" << new_name;
+            MsgBox::warning(this, tr("A workspace with the specified name already exists."));
+            ui->tab_widget->setCurrentWidget(ui->tab_general);
+            ui->edit_name->selectAll();
+            ui->edit_name->setFocus();
+            return QString();
+        }
+    }
+
+    return new_name;
 }

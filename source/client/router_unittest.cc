@@ -115,7 +115,7 @@ protected:
             workspace->set_name("workspace");
             workspace->set_revision(1);
             workspace->set_comment(comment.toStdString());
-            workspace->add_access()->set_user_id(kUserId);
+            workspace->add_user_id(kUserId);
         }
 
         return list;
@@ -262,8 +262,8 @@ TEST_F(RouterTest, WorkspaceListIsParsed)
     ASSERT_EQ(workspaces.error_code, QString::fromStdString(proto::router::kErrorOk));
     ASSERT_EQ(workspaces.workspaces.size(), 1);
     EXPECT_EQ(workspaces.workspaces.at(0).comment, "note");
-    ASSERT_EQ(workspaces.workspaces.at(0).access.size(), 1);
-    EXPECT_EQ(workspaces.workspaces.at(0).access.at(0).user_id, kUserId);
+    ASSERT_EQ(workspaces.workspaces.at(0).user_ids.size(), 1);
+    EXPECT_EQ(workspaces.workspaces.at(0).user_ids.at(0), kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------

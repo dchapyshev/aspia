@@ -23,6 +23,7 @@
 
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/user_list_model.h"
+#include "client/page_model.h"
 
 namespace Ui {
 class RouterUsersWidget;
@@ -75,9 +76,14 @@ private slots:
     void onUserResultReceived(const proto::router::UserResult& result);
     void onUserContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);
+    void onUsersPageSizeChanged(int index);
+    void onUsersPageChanged(int index);
+    void onUsersPrevClicked();
+    void onUsersNextClicked();
 
 private:
     void fetchUsers();
+    void updateUsersPagination();
     void updateStatusLabel();
 
     // The user of the row the user of the application is on, or null when the list is empty.
@@ -87,6 +93,7 @@ private:
     qint64 router_id_ = 0;
     UserListModel* model_ = nullptr;
     QLabel* status_users_label_ = nullptr;
+    PageModel users_page_;
     // Guards the one-time warning about a failed initial load: the list is refetched on every
     // batched notification, and a repeating transient error must not turn into a message storm.
     bool load_error_shown_ = false;
