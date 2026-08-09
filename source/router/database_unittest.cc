@@ -214,6 +214,27 @@ TEST_F(RouterDatabaseTest, UserListRefusesUnboundedPage)
 }
 
 //--------------------------------------------------------------------------------------------------
+// SRP folds the user name to lower case before it derives the verifier, so records differing only
+// in case would be one identity with two passwords. The database refuses the second one and finds
+// the first whatever case the client types.
+TEST_F(RouterDatabaseTest, UserNamesAreCaseFolded)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+              proto::router::kErrorOk);
+    EXPECT_EQ(db_.addUser(makeUser("BoB", proto::router::SESSION_TYPE_CLIENT)),
+              proto::router::kErrorAlreadyExists);
+
+    RouterUser user;
+    ASSERT_EQ(db_.findUser("BOB", &user), proto::router::kErrorOk);
+    EXPECT_EQ(user.name, "bob");
+
+    // A rename cannot take the folded name of somebody else either.
+    RouterUser renamed = makeUser("BOB", proto::router::SESSION_TYPE_CLIENT);
+    renamed.entry_id = admin_.entry_id;
+    EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A name that belongs to nobody is not a failure of the query.
 TEST_F(RouterDatabaseTest, FindUserSeparatesMissAndFailure)
 {

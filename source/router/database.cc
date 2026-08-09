@@ -550,7 +550,7 @@ std::string_view Database::addUser(const RouterUser& user)
     // Checked here instead of relying on the UNIQUE constraint: the INSERT failure below cannot
     // be told apart from a real database error, so a lost create race would answer with a
     // misleading internal error.
-    SqlQuery name_check(db_, "SELECT 1 FROM users WHERE name=?");
+    SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?)");
     name_check.addText(user.name);
 
     const SqlQuery::StepResult name_step = name_check.next();
@@ -674,7 +674,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     {
         // Same reasoning as in addUser: a rename that lost a race must answer
         // kErrorAlreadyExists, not the internal error of the UNIQUE constraint.
-        SqlQuery name_check(db_, "SELECT 1 FROM users WHERE name=? AND id!=?");
+        SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?) AND id!=?");
         name_check.addText(user.name);
         name_check.addInt64(user.entry_id);
 
@@ -836,7 +836,8 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
 
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users WHERE name=?";
+        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users "
+        "WHERE casefold(name)=casefold(?)";
     SqlQuery query(db_, kSql);
     query.addText(username);
 
