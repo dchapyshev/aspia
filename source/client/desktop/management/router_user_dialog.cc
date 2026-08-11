@@ -26,6 +26,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "base/peer/user.h"
 #include "client/router.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -41,6 +42,25 @@ namespace {
 // disable it, because it is the only guaranteed way into the admin channel. Mirrored here so the
 // dialog does not offer a change that will be rejected.
 constexpr qint64 kBuiltInUserId = 1;
+
+//--------------------------------------------------------------------------------------------------
+// A leading '#' and an all-digit name are reserved for the names the program builds itself.
+bool isNameAllowed(const QString& username)
+{
+    if (!User::isValidUserName(username) || username.length() >= User::kMaxUserNameLength)
+        return false;
+
+    if (username.startsWith('#'))
+        return false;
+
+    for (QChar character : username)
+    {
+        if (!character.isDigit())
+            return true;
+    }
+
+    return false;
+}
 
 } // namespace
 
@@ -454,11 +474,12 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         QString username = ui->edit_username->text();
 
-        if (!User::isValidUserName(username))
+        if (!isNameAllowed(username))
         {
             LOG(ERROR) << "Invalid user name:" << username;
             MsgBox::warning(this, tr("The user name can not be empty and can contain only "
-                "alphabet characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
+                "alphabet characters, numbers and ""_"", ""-"", ""."", ""@"" characters. It can "
+                "not consist of digits only."));
             ui->edit_username->selectAll();
             ui->edit_username->setFocus();
             return;

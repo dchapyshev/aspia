@@ -34,6 +34,25 @@ namespace {
 
 const int kSeedKeySize = 64;
 
+//--------------------------------------------------------------------------------------------------
+// A leading '#' and an all-digit name are reserved for the names the program builds itself.
+bool isNameAllowed(const QString& username)
+{
+    if (!User::isValidUserName(username) || username.length() >= User::kMaxUserNameLength)
+        return false;
+
+    if (username.startsWith('#'))
+        return false;
+
+    for (QChar character : username)
+    {
+        if (!character.isDigit())
+            return true;
+    }
+
+    return false;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -155,12 +174,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             SecureString password = ui->edit_password->password();
             SecureString password_repeat = ui->edit_password_repeat->password();
 
-            if (!User::isValidUserName(username))
+            if (!isNameAllowed(username))
             {
                 LOG(ERROR) << "Invalid user name:" << username;
                 MsgBox::warning(this,
                     tr("The user name can not be empty and can contain only alphabet"
-                       " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
+                       " characters, numbers and ""_"", ""-"", ""."", ""@"" characters. It can"
+                       " not consist of digits only."));
                 ui->edit_username->selectAll();
                 ui->edit_username->setFocus();
                 return;

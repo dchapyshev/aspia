@@ -42,6 +42,25 @@ constexpr int kRowSpacing = 8;
 constexpr int kSectionSpacing = 24;
 constexpr int kSeedKeySize = 64;
 
+//--------------------------------------------------------------------------------------------------
+// A leading '#' and an all-digit name are reserved for the names the program builds itself.
+bool isNameAllowed(const QString& username)
+{
+    if (!User::isValidUserName(username) || username.length() >= User::kMaxUserNameLength)
+        return false;
+
+    if (username.startsWith('#'))
+        return false;
+
+    for (QChar character : username)
+    {
+        if (!character.isDigit())
+            return true;
+    }
+
+    return false;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -145,11 +164,11 @@ void UserEditorWidget::save()
 
     const QString username = username_->text().trimmed();
 
-    if (!User::isValidUserName(username))
+    if (!isNameAllowed(username))
     {
         MessageDialog::info(this, tr("Error"),
             tr("The user name can not be empty and can contain only alphabet characters, numbers "
-               "and \"_\", \"-\", \".\", \"@\" characters."));
+               "and \"_\", \"-\", \".\", \"@\" characters. It can not consist of digits only."));
         username_->setFocus();
         return;
     }
