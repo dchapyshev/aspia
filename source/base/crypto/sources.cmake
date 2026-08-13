@@ -46,8 +46,6 @@ collect_sources(SOURCE_BASE_CRYPTO
     password_hash.h
     random.cc
     random.h
-    sealed_box.cc
-    sealed_box.h
     secure_byte_array.cc
     secure_byte_array.h
     secure_memory.cc
@@ -82,6 +80,5 @@ collect_sources(SOURCE_BASE_CRYPTO_TESTS
     large_number_increment_unittest.cc
     password_generator_unittest.cc
     password_hash_unittest.cc
-    sealed_box_unittest.cc
     srp_math_unittest.cc
     totp_unittest.cc)
