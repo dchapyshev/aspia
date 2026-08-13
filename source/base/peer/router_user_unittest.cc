@@ -20,8 +20,6 @@
 
 #include <gtest/gtest.h>
 
-#include "base/crypto/private_key_cryptor.h"
-#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "proto/router_admin.h"
 
@@ -29,14 +27,13 @@
 // create / isValid
 // ============================================================================
 
-TEST(router_user_test, create_generates_keypair)
+TEST(router_user_test, create_produces_srp_material)
 {
     RouterUser user = RouterUser::create("testuser", SecureString("password123"));
     ASSERT_TRUE(user.isValid());
 
-    EXPECT_EQ(user.public_key.size(), 32);
-    EXPECT_FALSE(user.wrap_private_key.isEmpty());
-    EXPECT_EQ(user.wrap_salt.size(), PrivateKeyCryptor::kSaltSize);
+    EXPECT_FALSE(user.salt.isEmpty());
+    EXPECT_FALSE(user.verifier.isEmpty());
 }
 
 TEST(router_user_test, create_with_empty_name)
@@ -51,45 +48,10 @@ TEST(router_user_test, create_with_empty_password)
     EXPECT_FALSE(user.isValid());
 }
 
-TEST(router_user_test, create_two_users_different_keypairs)
-{
-    RouterUser u1 = RouterUser::create("user1", SecureString("password"));
-    RouterUser u2 = RouterUser::create("user2", SecureString("password"));
-    ASSERT_TRUE(u1.isValid());
-    ASSERT_TRUE(u2.isValid());
-
-    EXPECT_NE(u1.public_key, u2.public_key);
-    EXPECT_NE(u1.wrap_private_key, u2.wrap_private_key);
-    EXPECT_NE(u1.wrap_salt, u2.wrap_salt);
-}
-
 TEST(router_user_test, default_router_user_is_invalid)
 {
     RouterUser user;
     EXPECT_FALSE(user.isValid());
-}
-
-TEST(router_user_test, is_valid_requires_all_fields)
-{
-    RouterUser user = RouterUser::create("testuser", SecureString("password"));
-    ASSERT_TRUE(user.isValid());
-
-    RouterUser u_no_pk = user;
-    u_no_pk.public_key.clear();
-    EXPECT_FALSE(u_no_pk.isValid());
-
-    RouterUser u_no_wsk = user;
-    u_no_wsk.wrap_private_key.clear();
-    EXPECT_FALSE(u_no_wsk.isValid());
-
-    RouterUser u_no_salt = user;
-    u_no_salt.wrap_salt.clear();
-    EXPECT_FALSE(u_no_salt.isValid());
-
-    // Base User validity still required.
-    RouterUser u_no_name = user;
-    u_no_name.name.clear();
-    EXPECT_FALSE(u_no_name.isValid());
 }
 
 // A record is valid only if it can actually be used. A name the authenticator would refuse and an
@@ -117,32 +79,6 @@ TEST(router_user_test, is_valid_rejects_an_unusable_name_or_group)
 }
 
 // ============================================================================
-// Private key encryption roundtrip
-// ============================================================================
-
-TEST(router_user_test, wrap_private_key_decryptable_with_password)
-{
-    const SecureString password("Str0ngPass");
-    RouterUser user = RouterUser::create("alice", password);
-    ASSERT_TRUE(user.isValid());
-
-    SecureByteArray sk = PrivateKeyCryptor::decrypt(
-        user.wrap_private_key, password, user.wrap_salt);
-    ASSERT_FALSE(sk.isEmpty());
-    EXPECT_EQ(sk.size(), 32);
-}
-
-TEST(router_user_test, wrap_private_key_not_decryptable_with_wrong_password)
-{
-    RouterUser user = RouterUser::create("alice", SecureString("correct"));
-    ASSERT_TRUE(user.isValid());
-
-    SecureByteArray sk = PrivateKeyCryptor::decrypt(
-        user.wrap_private_key, SecureString("incorrect"), user.wrap_salt);
-    EXPECT_TRUE(sk.isEmpty());
-}
-
-// ============================================================================
 // serialize / parseFrom roundtrip
 // ============================================================================
 
@@ -165,9 +101,6 @@ TEST(router_user_test, serialize_parseFrom_roundtrip)
     EXPECT_EQ(restored.verifier, original.verifier);
     EXPECT_EQ(restored.sessions, original.sessions);
     EXPECT_EQ(restored.flags, original.flags);
-    EXPECT_EQ(restored.public_key, original.public_key);
-    EXPECT_EQ(restored.wrap_private_key, original.wrap_private_key);
-    EXPECT_EQ(restored.wrap_salt, original.wrap_salt);
 }
 
 TEST(router_user_test, serialize_default_router_user)
@@ -182,9 +115,6 @@ TEST(router_user_test, serialize_default_router_user)
     EXPECT_TRUE(proto_user.verifier().empty());
     EXPECT_EQ(proto_user.sessions(), 0u);
     EXPECT_EQ(proto_user.flags(), 0u);
-    EXPECT_TRUE(proto_user.public_key().empty());
-    EXPECT_TRUE(proto_user.wrap_private_key().empty());
-    EXPECT_TRUE(proto_user.wrap_salt().empty());
 }
 
 TEST(router_user_test, parseFrom_preserves_all_fields)
@@ -197,9 +127,6 @@ TEST(router_user_test, parseFrom_preserves_all_fields)
     proto_user.set_verifier("verifier_data");
     proto_user.set_sessions(3);
     proto_user.set_flags(User::ENABLED);
-    proto_user.set_public_key("pk_data");
-    proto_user.set_wrap_private_key("wpk_data");
-    proto_user.set_wrap_salt("ws_data");
 
     RouterUser user = RouterUser::parseFrom(proto_user);
 
@@ -210,9 +137,6 @@ TEST(router_user_test, parseFrom_preserves_all_fields)
     EXPECT_EQ(user.verifier, QByteArray("verifier_data"));
     EXPECT_EQ(user.sessions, 3u);
     EXPECT_EQ(user.flags, static_cast<quint32>(User::ENABLED));
-    EXPECT_EQ(user.public_key, QByteArray("pk_data"));
-    EXPECT_EQ(user.wrap_private_key, QByteArray("wpk_data"));
-    EXPECT_EQ(user.wrap_salt, QByteArray("ws_data"));
 }
 
 // ============================================================================

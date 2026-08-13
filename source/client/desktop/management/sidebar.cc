@@ -976,14 +976,6 @@ void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode erro
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterPasswordChangeRequired(qint64 router_id)
-{
-    MsgBox::information(this,
-        tr("To complete the migration from a previous version, you need to change your password."));
-    changeRouterPassword(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Sidebar::onRouterTwoFactorCodeRequired(qint64 router_id)
 {
     Router* router = routers_.value(router_id);
@@ -1025,7 +1017,6 @@ void Sidebar::createRouterSession(const RouterConfig& config)
 
     connect(router, &Router::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
     connect(router, &Router::sig_errorOccurred, this, &Sidebar::onRouterErrorOccurred);
-    connect(router, &Router::sig_passwordChangeRequired, this, &Sidebar::onRouterPasswordChangeRequired);
     connect(router, &Router::sig_twoFactorCodeRequired, this, &Sidebar::onRouterTwoFactorCodeRequired);
     connect(router, &Router::sig_twoFactorEnrollment, this, &Sidebar::onRouterTwoFactorEnrollment);
     connect(router, &Router::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);

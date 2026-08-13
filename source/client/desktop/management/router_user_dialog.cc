@@ -530,7 +530,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        // Create new user (regenerates keys). entry_id is preserved for modify mode.
+        // Create new user (regenerates the SRP material). entry_id is preserved for modify mode.
         request = RouterUser::create(username, password);
         request.entry_id = entry_id_;
 
@@ -556,8 +556,6 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         request = model_.snapshot();
         request.salt.clear();
         request.verifier.clear();
-        request.wrap_private_key.clear();
-        request.wrap_salt.clear();
     }
 
     // Only the selected level is stored; the router expands it to the implied lower levels.

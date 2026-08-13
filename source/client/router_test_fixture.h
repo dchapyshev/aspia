@@ -22,42 +22,24 @@
 #include <gtest/gtest.h>
 
 #include "base/peer/host_id.h"
-#include "base/peer/router_user.h"
-#include "client/router_keys.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
-// The account a router session runs on, built for real: the crypto is part of the contract under
-// test, so nothing is stubbed. Shared by the tests of the keys and of the session state.
-class RouterKeysFixture : public testing::Test
+// The account a router session runs on and the canned replies of the router.
+class RouterTestFixture : public testing::Test
 {
 protected:
     static constexpr char kUserName[] = "admin";
     static constexpr char kPassword[] = "Password1234!";
     static constexpr qint64 kUserId = 1;
 
-    void SetUp() override
+    // The UserInfo message the router sends right after the two-factor stage.
+    proto::router::UserInfo userInfo()
     {
-        user_ = RouterUser::create(QString::fromUtf8(kUserName), SecureString(kPassword));
-        ASSERT_TRUE(user_.isValid());
-    }
-
-    // The UserKeys message the router sends right after the two-factor stage.
-    proto::router::UserKeys userKeys()
-    {
-        proto::router::UserKeys keys;
-        keys.set_user_id(kUserId);
-        keys.set_name(kUserName);
-        keys.set_public_key(user_.public_key.toStdString());
-        keys.set_wrap_private_key(user_.wrap_private_key.toStdString());
-        keys.set_wrap_salt(user_.wrap_salt.toStdString());
-        return keys;
-    }
-
-    // Loads the identity into |keys|.
-    void loadKeys(RouterKeys* keys)
-    {
-        ASSERT_EQ(keys->apply(userKeys(), SecureString(kPassword)), RouterKeys::Result::OK);
+        proto::router::UserInfo info;
+        info.set_user_id(kUserId);
+        info.set_name(kUserName);
+        return info;
     }
 
     proto::router::HostList hostList(qint64 workspace_id, const QList<HostId>& host_ids,
@@ -78,8 +60,6 @@ protected:
 
         return list;
     }
-
-    RouterUser user_;
 };
 
 #endif // CLIENT_ROUTER_TEST_FIXTURE_H

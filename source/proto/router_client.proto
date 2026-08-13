@@ -25,17 +25,13 @@ import "peer.proto";
 
 package proto.router;
 
-// Credentials of the authenticated user, pushed by the router right after the session is
-// established so the client can derive its private key (via password + wrap_salt) without
-// having to retrieve the admin user list.
-message UserKeys
+// The identity of the authenticated user, pushed by the router right after the session is
+// established. Receiving it is what marks the login complete on the client side.
+message UserInfo
 {
-    string router_guid     = 1;
-    int64 user_id          = 2;
-    string name            = 3;
-    bytes public_key       = 4;
-    bytes wrap_private_key = 5;
-    bytes wrap_salt        = 6;
+    string router_guid = 1;
+    int64 user_id      = 2;
+    string name        = 3;
 }
 
 // The hosts of a workspace are not part of the record: they are claimed and released one by one,
@@ -86,12 +82,9 @@ message GroupList
 
 message ChangePasswordRequest
 {
-    int64 request_id       = 1;
-    bytes salt             = 2;
-    bytes verifier         = 3;
-    bytes public_key       = 4;
-    bytes wrap_private_key = 5;
-    bytes wrap_salt        = 6;
+    int64 request_id = 1;
+    bytes salt       = 2;
+    bytes verifier   = 3;
 }
 
 message ChangePasswordResult
@@ -225,8 +218,8 @@ message Notification
     bool groups_dirty     = 7;
 }
 
-// 2FA stage that runs between successful SRP authentication and the first UserKeys delivery.
-// The router opens it from Client::onStarted() and gates UserKeys behind a successful
+// 2FA stage that runs between successful SRP authentication and the first UserInfo delivery.
+// The router opens it from Client::onStarted() and gates UserInfo behind a successful
 // TwoFactorResult. Because the SRP handshake is already complete, identity is confirmed and
 // the stage cannot leak user existence: an attacker who failed SRP never reaches here. 2FA
 // is mandatory: every user must either prove possession of an enrolled TOTP secret (or a
@@ -242,7 +235,7 @@ message Notification
 //      drops the connection with no reply; the client cannot retry on the same session, it
 //      reconnects and runs the whole stage again. On success the router sends a TwoFactorResult
 //      only when a TOTP submission produced a fresh |new_token|; the token-path success skips it.
-//   4. On success the router proceeds to send UserKeys, which is what marks the stage complete.
+//   4. On success the router proceeds to send UserInfo, which is what marks the stage complete.
 
 enum TwoFactorMode
 {
@@ -289,7 +282,7 @@ message TwoFactorResponse
 // Router to client. Carries a freshly issued device token after a successful TOTP submission
 // (any successful TOTP, including enrollment, produces a new token). It is sent only when such
 // a token exists: the token-path success has nothing to deliver here, so it is acknowledged by
-// UserKeys alone. Failures never send this message - they drop the connection.
+// UserInfo alone. Failures never send this message - they drop the connection.
 message TwoFactorResult
 {
     bytes new_token = 1;
@@ -299,7 +292,7 @@ message RouterToClient
 {
     TwoFactorChallenge two_factor_challenge       = 1;
     TwoFactorResult two_factor_result             = 2;
-    UserKeys user_keys                            = 3;
+    UserInfo user_info                            = 3;
     Notification notification                     = 4;
     ChangePasswordResult change_password_result   = 5;
     ConnectionOffer connection_offer              = 6;

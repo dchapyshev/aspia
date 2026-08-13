@@ -422,9 +422,6 @@ TEST_F(UserListTest, RecordsCarryNoCredentials)
     EXPECT_EQ(user.name(), "admin");
     EXPECT_TRUE(user.salt().empty());
     EXPECT_TRUE(user.verifier().empty());
-    EXPECT_TRUE(user.public_key().empty());
-    EXPECT_TRUE(user.wrap_private_key().empty());
-    EXPECT_TRUE(user.wrap_salt().empty());
 }
 
 // The rotation of a session's own password over the client channel.
@@ -447,9 +444,6 @@ protected:
         proto::router::ChangePasswordRequest request;
         request.set_salt(toStdString(rotated.salt));
         request.set_verifier(toStdString(rotated.verifier));
-        request.set_public_key(toStdString(rotated.public_key));
-        request.set_wrap_private_key(toStdString(rotated.wrap_private_key));
-        request.set_wrap_salt(toStdString(rotated.wrap_salt));
         return request;
     }
 
@@ -476,7 +470,6 @@ TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
 
     const RouterUser stored = findUser(admin_.entry_id);
     EXPECT_EQ(stored.verifier, rotated.verifier);
-    EXPECT_EQ(stored.public_key, rotated.public_key);
 
     // The name, the session mask and the flags of the record are not the caller's to change here.
     EXPECT_EQ(stored.name, admin_.name);
@@ -533,11 +526,8 @@ TEST_F(ChangePasswordTest, RejectsOversizedCredentials)
 
     const Field fields[] =
     {
-        { "salt",             &proto::router::ChangePasswordRequest::set_salt },
-        { "verifier",         &proto::router::ChangePasswordRequest::set_verifier },
-        { "public_key",       &proto::router::ChangePasswordRequest::set_public_key },
-        { "wrap_private_key", &proto::router::ChangePasswordRequest::set_wrap_private_key },
-        { "wrap_salt",        &proto::router::ChangePasswordRequest::set_wrap_salt },
+        { "salt",     &proto::router::ChangePasswordRequest::set_salt },
+        { "verifier", &proto::router::ChangePasswordRequest::set_verifier },
     };
 
     for (const Field& field : fields)
@@ -568,9 +558,6 @@ TEST_F(ChangePasswordTest, UserListStaysSendableAfterACredentialRotation)
     proto::router::ChangePasswordRequest request;
     request.set_salt(oversized);
     request.set_verifier(oversized);
-    request.set_public_key(oversized);
-    request.set_wrap_private_key(oversized);
-    request.set_wrap_salt(oversized);
 
     handleChangePassword(db_, caller_, request);
 

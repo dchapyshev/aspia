@@ -58,7 +58,6 @@ RouterUser makeRecord(quint32 flags)
     user.entry_id = kClientId;
     user.name = "bob";
     user.flags = flags;
-    user.public_key = QByteArray("key");
     return user;
 }
 

@@ -417,11 +417,8 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
     }
 
     // Replace only the password-derived fields; keep name, group, sessions, flags intact.
-    user.salt             = QByteArray::fromStdString(request.salt());
-    user.verifier         = QByteArray::fromStdString(request.verifier());
-    user.public_key       = QByteArray::fromStdString(request.public_key());
-    user.wrap_private_key = QByteArray::fromStdString(request.wrap_private_key());
-    user.wrap_salt        = QByteArray::fromStdString(request.wrap_salt());
+    user.salt     = QByteArray::fromStdString(request.salt());
+    user.verifier = QByteArray::fromStdString(request.verifier());
 
     if (!user.isValid())
     {

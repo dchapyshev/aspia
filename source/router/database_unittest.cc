@@ -167,7 +167,6 @@ TEST_F(RouterDatabaseTest, AddUserStoresRecord)
     EXPECT_EQ(stored.sessions, proto::router::SESSION_TYPE_CLIENT);
     EXPECT_EQ(stored.flags, quint32(User::ENABLED));
     EXPECT_EQ(stored.verifier, user.verifier);
-    EXPECT_EQ(stored.public_key, user.public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -328,7 +327,6 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
     request.entry_id = stored.entry_id;
     request.name = "renamed";
     request.flags = 0; // Disabled.
-    request.public_key = stored.public_key;
 
     bool password_changed = true;
     ASSERT_EQ(db_.modifyUser(request, &password_changed),
@@ -347,7 +345,6 @@ TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledOrRemoved)
     RouterUser request;
     request.entry_id = admin_.entry_id;
     request.flags = 0;
-    request.public_key = admin_.public_key;
 
     EXPECT_EQ(db_.modifyUser(request), proto::router::kErrorAccessDenied);
     EXPECT_EQ(db_.removeUser(admin_.entry_id), proto::router::kErrorAccessDenied);
@@ -371,20 +368,6 @@ TEST_F(RouterDatabaseTest, PasswordRotationRevokesDeviceTokens)
 
     qint64 user_id = 0;
     EXPECT_FALSE(db_.findClientDeviceToken(token, &user_id));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A new public key with the old salt and verifier is a rotation too - the identity the client
-// signs with is a different one from now on.
-TEST_F(RouterDatabaseTest, PublicKeyChangeAloneIsRotation)
-{
-    RouterUser rotated = admin_;
-    rotated.public_key = Random::byteArray(32);
-
-    bool password_changed = false;
-    ASSERT_EQ(db_.modifyUser(rotated, &password_changed), proto::router::kErrorOk);
-    EXPECT_TRUE(password_changed);
-    EXPECT_EQ(findUser(admin_.entry_id).public_key, rotated.public_key);
 }
 
 //--------------------------------------------------------------------------------------------------

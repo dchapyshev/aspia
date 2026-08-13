@@ -77,18 +77,15 @@ QString databaseDirectory()
 RouterUser readUser(const SqlQuery& query)
 {
     RouterUser user;
-    user.entry_id         = query.columnInt64(0);
-    user.name             = query.columnText(1);
-    user.group            = query.columnText(2);
-    user.salt             = query.columnBlob(3);
-    user.verifier         = query.columnBlob(4);
-    user.sessions         = static_cast<quint32>(query.columnInt64(5));
-    user.flags            = static_cast<quint32>(query.columnInt64(6));
-    user.public_key       = query.columnBlob(7);
-    user.wrap_private_key = query.columnBlob(8);
-    user.wrap_salt        = query.columnBlob(9);
-    user.otp_secret       = query.columnBlob(10);
-    user.otp_counter      = query.columnUInt64(11);
+    user.entry_id    = query.columnInt64(0);
+    user.name        = query.columnText(1);
+    user.group       = query.columnText(2);
+    user.salt        = query.columnBlob(3);
+    user.verifier    = query.columnBlob(4);
+    user.sessions    = static_cast<quint32>(query.columnInt64(5));
+    user.flags       = static_cast<quint32>(query.columnInt64(6));
+    user.otp_secret  = query.columnBlob(7);
+    user.otp_counter = query.columnUInt64(8);
     return user;
 }
 
@@ -141,9 +138,6 @@ bool ensureSchema(SqlDatabase& db)
              "\"verifier\" BLOB NOT NULL,"
              "\"sessions\" INTEGER DEFAULT 0,"
              "\"flags\" INTEGER DEFAULT 0,"
-             "\"public_key\" BLOB NOT NULL DEFAULT X'',"
-             "\"wrap_private_key\" BLOB NOT NULL DEFAULT X'',"
-             "\"wrap_salt\" BLOB NOT NULL DEFAULT X'',"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         return false;
@@ -266,11 +260,8 @@ bool ensureSchema(SqlDatabase& db)
     // subsequent code whose step is less-than-or-equal to it (replay protection, per RFC 6238
     // section 5.2).
     static const struct { const char* name; const char* definition; } kUserColumns[] = {
-        { "public_key",       "BLOB NOT NULL DEFAULT X''" },
-        { "wrap_private_key", "BLOB NOT NULL DEFAULT X''" },
-        { "wrap_salt",        "BLOB NOT NULL DEFAULT X''" },
-        { "otp_secret",       "BLOB NOT NULL DEFAULT X''" },
-        { "otp_counter",      "INTEGER NOT NULL DEFAULT 0" }
+        { "otp_secret",  "BLOB NOT NULL DEFAULT X''" },
+        { "otp_counter", "INTEGER NOT NULL DEFAULT 0" }
     };
 
     for (const auto& column : kUserColumns)
@@ -472,9 +463,8 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
     // The page has to name the same records every time it is asked for, so the order is fixed
     // here instead of being left to the query planner.
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users "
-        "ORDER BY id LIMIT ? OFFSET ?";
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "FROM users ORDER BY id LIMIT ? OFFSET ?";
     SqlQuery query(db_, kSql);
     query.addInt64(count);
     query.addInt64(offset);
@@ -567,8 +557,8 @@ std::string_view Database::addUser(const RouterUser& user)
     }
 
     const char kSql[] =
-        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
     SqlQuery query(db_, kSql);
     query.addText(user.name);
     query.addText(user.group);
@@ -576,9 +566,6 @@ std::string_view Database::addUser(const RouterUser& user)
     query.addBlob(user.verifier);
     query.addInt64(user.sessions);
     query.addInt64(user.flags);
-    query.addBlob(user.public_key);
-    query.addBlob(user.wrap_private_key);
-    query.addBlob(user.wrap_salt);
 
     if (!query.exec())
     {
@@ -635,10 +622,9 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     // which must invalidate every device token.
     QByteArray old_salt;
     QByteArray old_verifier;
-    QByteArray old_public_key;
     bool user_found = false;
     {
-        SqlQuery select(db_, "SELECT salt, verifier, public_key FROM users WHERE id=?");
+        SqlQuery select(db_, "SELECT salt, verifier FROM users WHERE id=?");
         select.addInt64(user.entry_id);
 
         if (!select.isValid())
@@ -661,7 +647,6 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
             user_found = true;
             old_salt = select.columnBlob(0);
             old_verifier = select.columnBlob(1);
-            old_public_key = select.columnBlob(2);
         }
     }
 
@@ -692,17 +677,13 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         }
 
         const char kSql[] =
-            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, flags=?, "
-            "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?";
+            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, flags=? WHERE id=?";
         SqlQuery query(db_, kSql);
         query.addText(user.name);
         query.addText(user.group);
         query.addBlob(user.salt);
         query.addBlob(user.verifier);
         query.addInt64(user.flags);
-        query.addBlob(user.public_key);
-        query.addBlob(user.wrap_private_key);
-        query.addBlob(user.wrap_salt);
         query.addInt64(user.entry_id);
 
         if (!query.exec())
@@ -727,12 +708,8 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         }
     }
 
-    // A changed public key alone is a rotation too: the identity the client signs with is a
-    // different one from now on, so the device tokens issued to the old one go the same way as
-    // after a password change.
     const bool rotated = has_credentials &&
-        (old_salt != user.salt || old_verifier != user.verifier ||
-         old_public_key != user.public_key);
+        (old_salt != user.salt || old_verifier != user.verifier);
     if (password_changed)
         *password_changed = rotated;
 
@@ -835,9 +812,8 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users "
-        "WHERE casefold(name)=casefold(?)";
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "FROM users WHERE casefold(name)=casefold(?)";
     SqlQuery query(db_, kSql);
     query.addText(username);
 
@@ -872,8 +848,8 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, public_key, "
-        "wrap_private_key, wrap_salt, otp_secret, otp_counter FROM users WHERE id=?";
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter "
+        "FROM users WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addInt64(entry_id);
 

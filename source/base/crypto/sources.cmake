@@ -44,8 +44,6 @@ collect_sources(SOURCE_BASE_CRYPTO
     password_generator.h
     password_hash.cc
     password_hash.h
-    private_key_cryptor.cc
-    private_key_cryptor.h
     random.cc
     random.h
     sealed_box.cc
@@ -84,7 +82,6 @@ collect_sources(SOURCE_BASE_CRYPTO_TESTS
     large_number_increment_unittest.cc
     password_generator_unittest.cc
     password_hash_unittest.cc
-    private_key_cryptor_unittest.cc
     sealed_box_unittest.cc
     srp_math_unittest.cc
     totp_unittest.cc)

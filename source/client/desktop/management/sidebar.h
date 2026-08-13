@@ -94,7 +94,6 @@ private slots:
     void onItemCollapsed(QTreeWidgetItem* item);
     void onRouterStatusChanged(qint64 router_id, Router::Status status);
     void onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void onRouterPasswordChangeRequired(qint64 router_id);
     void onRouterTwoFactorCodeRequired(qint64 router_id);
     void onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
 

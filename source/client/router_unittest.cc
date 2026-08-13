@@ -34,26 +34,32 @@ constexpr qint64 kWorkspaceId = 10;
 
 } // namespace
 
-// Test-only access to the keys, the pending replies and the incoming messages.
+// Test-only access to the identity, the pending replies and the incoming messages.
 class RouterTestPeer
 {
 public:
-    static RouterKeys& keys(Router& router) { return router.keys_; }
+    static qint64 userId(Router& router) { return router.user_id_; }
     static RouterRpc& rpc(Router& router) { return router.rpc_; }
+
+    static void setIdentity(Router& router, qint64 user_id, const QString& user_name)
+    {
+        router.user_id_ = user_id;
+        router.user_name_ = user_name;
+    }
 
     static void receive(Router& router, quint8 channel_id, const QByteArray& bytes)
     {
         router.onTcpMessageReceived(router.routerId(), channel_id, bytes);
     }
 
-    // ONLINE is reached through the keys of the account, which a test has no password for.
+    // ONLINE is reached through the login conversation, which a test does not run.
     static void setStatus(Router& router, Router::Status status) { router.setStatus(status); }
 };
 
 // A session without a worker: what it sends is collected from sig_sendMessage, the replies are
-// handed to it as the worker would. The keys, the cache and the rpc have tests of their own; here
-// the conversation is under test.
-class RouterTest : public RouterKeysFixture
+// handed to it as the worker would. The cache and the rpc have tests of their own; here the
+// conversation is under test.
+class RouterTest : public RouterTestFixture
 {
 protected:
     RouterTest()
@@ -74,9 +80,9 @@ protected:
     }
 
     // Loads the identity of the session.
-    void loadKeys()
+    void loadIdentity()
     {
-        RouterKeysFixture::loadKeys(&RouterTestPeer::keys(router_));
+        RouterTestPeer::setIdentity(router_, kUserId, QString::fromUtf8(kUserName));
     }
 
     // Hands a message to the session the way the worker does.
@@ -212,7 +218,7 @@ protected:
     // Puts one entry in every cache, so what a reply drops can be seen by what is left.
     void fillCaches()
     {
-        loadKeys();
+        loadIdentity();
         fetchWorkspaces(0, workspaceList({ kWorkspaceId }));
 
         proto::router::GroupList groups;
@@ -255,7 +261,7 @@ protected:
 // The list arrives as the router stored it, membership included.
 TEST_F(RouterTest, WorkspaceListIsParsed)
 {
-    loadKeys();
+    loadIdentity();
 
     const RouterWorkspaceList workspaces = fetchWorkspaces(0, workspaceList({10}, "note"));
 
@@ -271,7 +277,7 @@ TEST_F(RouterTest, WorkspaceListIsParsed)
 // can access.
 TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
 {
-    loadKeys();
+    loadIdentity();
 
     proto::router::WorkspaceList failed;
     failed.set_error_code(proto::router::kErrorInternalError);
@@ -308,7 +314,7 @@ TEST_F(RouterTest, ListUsersConversation)
 // The same conversation on the manager channel, which carries the records of a workspace.
 TEST_F(RouterTest, GroupConversationUsesTheManagerChannel)
 {
-    loadKeys();
+    loadIdentity();
 
     RouterGroup group;
     group.name = "servers";
@@ -383,7 +389,7 @@ TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
 // without a request.
 TEST_F(RouterTest, HostListIsParsedAndCached)
 {
-    loadKeys();
+    loadIdentity();
 
     proto::router::HostList list = hostList(kWorkspaceId, { HostId(1) }, 25);
     list.mutable_host(0)->set_comment("comment");
@@ -412,7 +418,7 @@ TEST_F(RouterTest, HostListIsParsedAndCached)
 // The groups arrive with the workspace they belong to and are cached per workspace.
 TEST_F(RouterTest, GroupListIsParsedAndCached)
 {
-    loadKeys();
+    loadIdentity();
 
     proto::router::GroupList list;
     list.set_error_code(proto::router::kErrorOk);
@@ -470,7 +476,7 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
     EXPECT_EQ(calls, 1);
 
     // The identity survives a lost connection: only disconnectFromRouter() drops it.
-    EXPECT_EQ(RouterTestPeer::keys(router_).userId(), kUserId);
+    EXPECT_EQ(RouterTestPeer::userId(router_), kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -522,14 +528,13 @@ TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
 
 //--------------------------------------------------------------------------------------------------
 // A session that ends keeps nothing: the identity goes with it.
-TEST_F(RouterTest, ClearedSessionKeepsNoKeys)
+TEST_F(RouterTest, ClearedSessionKeepsNoIdentity)
 {
-    loadKeys();
+    loadIdentity();
 
     router_.disconnectFromRouter();
 
-    EXPECT_EQ(RouterTestPeer::keys(router_).userId(), 0);
-    EXPECT_FALSE(RouterTestPeer::keys(router_).hasPrivateKey());
+    EXPECT_EQ(RouterTestPeer::userId(router_), 0);
     EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
 }
 
@@ -575,7 +580,7 @@ TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
 // A lookup names the record it wants and asks for no page; the paged call is the other one.
 TEST_F(RouterTest, UserLookupNamesTheRecord)
 {
-    loadKeys();
+    loadIdentity();
 
     router_.findUser(qint64(42), { &receiver_, [](const proto::router::UserList&) {} });
 
@@ -596,7 +601,7 @@ TEST_F(RouterTest, UserLookupNamesTheRecord)
 // The device tokens are a domain of their own: they are listed and revoked by their own messages.
 TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
 {
-    loadKeys();
+    loadIdentity();
 
     router_.listUserTokens(7, { &receiver_, [](const proto::router::UserTokenList&) {} });
 
@@ -621,7 +626,7 @@ TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
 // the host is already in, so editing a host never releases it by omission.
 TEST_F(RouterTest, HostEditCarriesTheWorkspace)
 {
-    loadKeys();
+    loadIdentity();
 
     RouterHost host;
     host.host_id = HostId(1);
@@ -645,7 +650,7 @@ TEST_F(RouterTest, HostEditCarriesTheWorkspace)
 // or a workspace is also mandatory and judged after trimming, the way the router judges it.
 TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 {
-    loadKeys();
+    loadIdentity();
 
     const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
     const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
@@ -703,7 +708,7 @@ TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 // there.
 TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
 {
-    loadKeys();
+    loadIdentity();
 
     RouterWorkspace workspace;
     workspace.entry_id = kWorkspaceId;
@@ -725,7 +730,7 @@ TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
 // the parsing of the reply is where it stops.
 TEST_F(RouterTest, NegativeTotalCountDoesNotReachTheCallers)
 {
-    loadKeys();
+    loadIdentity();
 
     const RouterHostList delivered = fetchHosts(hostList(kWorkspaceId, { HostId(1) }, -5));
     EXPECT_EQ(delivered.total_count, 0);

@@ -286,7 +286,7 @@ void Client::completeTwoFactor(std::string&& new_token)
 {
     // 2FA passed. A TwoFactorResult is sent only to hand over a freshly issued device token;
     // the token-path success carries no token, and an empty message cannot be sent over the
-    // wire, so in that case success is signalled by UserKeys alone.
+    // wire, so in that case success is signalled by UserInfo alone.
     if (!new_token.empty())
     {
         proto::router::RouterToClient envelope;
@@ -295,13 +295,13 @@ void Client::completeTwoFactor(std::string&& new_token)
     }
 
     two_factor_completed_ = true;
-    sendUserKeys();
+    sendUserInfo();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendUserKeys()
+void Client::sendUserInfo()
 {
-    // Every early return below tears the session down: a client that never receives UserKeys
+    // Every early return below tears the session down: a client that never receives UserInfo
     // would otherwise hang in the connecting state with no error, and nothing retries the send.
     if (!database_.isValid())
     {
@@ -320,13 +320,10 @@ void Client::sendUserKeys()
     }
 
     proto::router::RouterToClient message;
-    proto::router::UserKeys* user_keys = message.mutable_user_keys();
-    user_keys->set_router_guid(router_guid_);
-    user_keys->set_user_id(user.entry_id);
-    user_keys->set_name(user.name.toStdString());
-    user_keys->set_public_key(user.public_key.toStdString());
-    user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
-    user_keys->set_wrap_salt(user.wrap_salt.toStdString());
+    proto::router::UserInfo* user_info = message.mutable_user_info();
+    user_info->set_router_guid(router_guid_);
+    user_info->set_user_id(user.entry_id);
+    user_info->set_name(user.name.toStdString());
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
@@ -504,7 +501,7 @@ void Client::readChangePasswordRequest(const proto::router::ChangePasswordReques
 
     // The rotation revoked every device token, including this session's. Re-run the 2FA stage
     // exactly as on a fresh connection: clear the completion flag and re-challenge. The client
-    // must pass 2FA again before it gets the new UserKeys (sent by completeTwoFactor); a failed
+    // must pass 2FA again before it gets the new UserInfo (sent by completeTwoFactor); a failed
     // attempt tears the session down inside readTwoFactorResponse.
     two_factor_completed_ = false;
     token_id_ = 0;

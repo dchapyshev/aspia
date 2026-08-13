@@ -31,7 +31,6 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/router_cache.h"
-#include "client/router_keys.h"
 #include "client/router_rpc.h"
 #include "client/router_types.h"
 #include "proto/router_admin.h"
@@ -200,15 +199,14 @@ public:
     // Asks for a relay connection offer to the given host.
     void requestConnection(HostId host_id, RouterCallback<proto::router::ConnectionOffer> callback);
 
-    // Re-keys the account under |new_password| and hands over every workspace key re-sealed to the
-    // new key pair. The router re-runs the 2FA stage afterwards, so a code will be asked again.
+    // Rotates the SRP credentials of the account under |new_password|. The router re-runs the
+    // 2FA stage afterwards, so a code will be asked again.
     void changePassword(const SecureString& new_password,
                         RouterCallback<proto::router::ChangePasswordResult> callback);
 
 signals:
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void sig_passwordChangeRequired(qint64 router_id);
     void sig_twoFactorCodeRequired(qint64 router_id);
     void sig_twoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
 
@@ -240,7 +238,7 @@ private:
     void disconnectWorker();
     void clearSessionState();
     void send(quint8 channel_id, const google::protobuf::MessageLite& message);
-    void readUserKeys(const proto::router::UserKeys& user_keys);
+    void readUserInfo(const proto::router::UserInfo& user_info);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
     void readTwoFactorResult(const proto::router::TwoFactorResult& result);
     void persistChangedPassword(const SecureString& new_password);
@@ -266,8 +264,11 @@ private:
     Status status_ = Status::OFFLINE;
 
     RouterCache cache_;
-    RouterKeys keys_;
     RouterRpc rpc_;
+
+    // The identity of the authenticated session, from the UserInfo message.
+    qint64 user_id_ = 0;
+    QString user_name_;
 
     Q_DISABLE_COPY_MOVE(Router)
 };

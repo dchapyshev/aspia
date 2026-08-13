@@ -115,7 +115,7 @@ private:
     // teardown of the session.
     void applyTwoFactorResult(TwoFactorHandler::Result&& result);
     void completeTwoFactor(std::string&& new_token = std::string());
-    void sendUserKeys();
+    void sendUserInfo();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void sendConnectionOffer(qint64 request_id, HostId host_id);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);

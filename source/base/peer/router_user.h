@@ -37,21 +37,11 @@ public:
     RouterUser(RouterUser&& other) noexcept = default;
     RouterUser& operator=(RouterUser&& other) noexcept = default;
 
-    // X25519 public key is 32 bytes, the private key under AES256 GCM is 60, the derivation salt is
-    // 16. Bounded for the reason the base class bounds the SRP material.
-    static const size_t kMaxPublicKeySize = 64;
-    static const size_t kMaxWrapPrivateKeySize = 128;
-    static const size_t kMaxWrapSaltSize = 64;
-
     static RouterUser create(const QString& name, const SecureString& password);
-    bool isValid() const;
 
     static RouterUser parseFrom(const proto::router::User& serialized_user);
     proto::router::User serialize() const;
 
-    QByteArray public_key;
-    QByteArray wrap_private_key;
-    QByteArray wrap_salt;
     QByteArray otp_secret;
     quint64 otp_counter = 0;
 };

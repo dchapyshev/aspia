@@ -367,12 +367,6 @@ void RoutersWidget::createRouterSession(const RouterConfig& config)
         requestTwoFactorCode(id, otpauth_uri);
     });
 
-    connect(router, &Router::sig_passwordChangeRequired, this, [this](qint64 id)
-    {
-        addRouterEvent(id, RouterEvent::Severity::CRITICAL,
-                       tr("The router requires a password change, which is not supported here yet."));
-    });
-
     router->connectToRouter();
 }
 

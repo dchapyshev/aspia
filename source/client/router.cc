@@ -754,16 +754,13 @@ void Router::requestConnection(HostId host_id, RouterCallback<proto::router::Con
 void Router::changePassword(const SecureString& new_password,
                             RouterCallback<proto::router::ChangePasswordResult> callback)
 {
-    RouterUser new_user = RouterUser::create(keys_.userName(), new_password);
+    RouterUser new_user = RouterUser::create(user_name_, new_password);
 
     proto::router::ClientToRouter message;
     auto* request = message.mutable_change_password_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_salt(new_user.salt.toStdString());
     request->set_verifier(new_user.verifier.toStdString());
-    request->set_public_key(new_user.public_key.toStdString());
-    request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
-    request->set_wrap_salt(new_user.wrap_salt.toStdString());
 
     // The accepted password becomes the stored one: from now on it is what opens the account.
     QObject* receiver = callback.receiver();
@@ -788,7 +785,7 @@ void Router::onTcpAuthenticated(qint64 router_id, const QVersionNumber& peer_ver
     LOG(INFO) << "Connected to router" << config_.address();
     version_ = peer_version;
     // The worker already unpaused the channel. Stay in CONNECTING; the transition to ONLINE happens
-    // when UserKeys arrives.
+    // when UserInfo arrives.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -851,8 +848,8 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
             readTwoFactorChallenge(message.two_factor_challenge());
         else if (message.has_two_factor_result())
             readTwoFactorResult(message.two_factor_result());
-        else if (message.has_user_keys())
-            readUserKeys(message.user_keys());
+        else if (message.has_user_info())
+            readUserInfo(message.user_info());
         else if (message.has_notification())
             emitNotificationSignals(message.notification());
         else if (!routeReply(message))
@@ -1104,7 +1101,8 @@ void Router::disconnectWorker()
 //--------------------------------------------------------------------------------------------------
 void Router::clearSessionState()
 {
-    keys_.clear();
+    user_id_ = 0;
+    user_name_.clear();
     rpc_.clearPending();
     version_ = QVersionNumber();
 }
@@ -1116,30 +1114,14 @@ void Router::send(quint8 channel_id, const google::protobuf::MessageLite& messag
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::readUserKeys(const proto::router::UserKeys& user_keys)
+void Router::readUserInfo(const proto::router::UserInfo& user_info)
 {
-    LOG(INFO) << "User keys received (user_id:" << user_keys.user_id() << ")";
+    LOG(INFO) << "User info received (user_id:" << user_info.user_id() << ")";
 
-    const RouterKeys::Result result = keys_.apply(user_keys, SecureString(config_.password()));
+    user_id_ = user_info.user_id();
+    user_name_ = QString::fromStdString(user_info.name());
 
-    if (result == RouterKeys::Result::PASSWORD_CHANGE_REQUIRED)
-    {
-        LOG(WARNING) << "User has no wrap key/salt; prompting password change";
-        emit sig_passwordChangeRequired(config_.routerId());
-        return;
-    }
-
-    if (result == RouterKeys::Result::DECRYPT_FAILED)
-    {
-        // The password opened the account but not the private key stored with it. Nothing
-        // recovers from this and a reconnect would repeat it forever.
-        LOG(ERROR) << "Stored private key does not open with our password. Ending session";
-        emit sig_errorOccurred(config_.routerId(), TcpChannel::ErrorCode::CRYPTO_ERROR);
-        disconnectFromRouter();
-        return;
-    }
-
-    const QString router_guid = QString::fromStdString(user_keys.router_guid());
+    const QString router_guid = QString::fromStdString(user_info.router_guid());
     if (!router_guid.isEmpty() && router_guid != config_.guid())
     {
         config_.setGuid(router_guid);
@@ -1155,7 +1137,7 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
 {
     // The two-factor stage can re-open on a session that was already up (our own password change
     // revokes every device token). Until it completes the router drops everything we send, so the
-    // session goes back to CONNECTING; UserKeys puts it back to ONLINE.
+    // session goes back to CONNECTING; UserInfo puts it back to ONLINE.
     if (status_ == Status::ONLINE)
         setStatus(Status::CONNECTING);
 
@@ -1219,7 +1201,7 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
 void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
 {
     // The router sends this only to deliver a freshly issued device token; failures drop the
-    // connection instead. Persist the token. Final success is marked separately by UserKeys.
+    // connection instead. Persist the token. Final success is marked separately by UserInfo.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
     if (!new_token.isEmpty())
     {

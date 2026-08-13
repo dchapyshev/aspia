@@ -113,17 +113,14 @@ message ClientList
 
 message User
 {
-    int64 entry_id         = 1;
-    string name            = 2;
-    string group           = 3;
-    bytes salt             = 4;
-    bytes verifier         = 5;
-    uint32 sessions        = 6;
-    uint32 flags           = 7;
-    bytes public_key       = 8;
-    bytes wrap_private_key = 9;
-    bytes wrap_salt        = 10;
-    bool otp_active        = 11; // Read-only.
+    int64 entry_id  = 1;
+    string name     = 2;
+    string group    = 3;
+    bytes salt      = 4;
+    bytes verifier  = 5;
+    uint32 sessions = 6;
+    uint32 flags    = 7;
+    bool otp_active = 8; // Read-only.
 }
 
 // Either a page of the user list (|offset| and |count|, a zero count is refused, as is one over

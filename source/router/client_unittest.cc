@@ -121,10 +121,10 @@ protected:
         channel->receive(proto::router::CHANNEL_ID_CLIENT,
                          totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
 
-        const std::optional<proto::router::RouterToClient> keys =
+        const std::optional<proto::router::RouterToClient> info =
             lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
-        ASSERT_TRUE(keys.has_value());
-        ASSERT_TRUE(keys->has_user_keys());
+        ASSERT_TRUE(info.has_value());
+        ASSERT_TRUE(info->has_user_info());
 
         channel->clearSent();
     }
@@ -191,7 +191,7 @@ TEST_F(ClientTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 //--------------------------------------------------------------------------------------------------
 // A valid code completes the stage: the client gets a device token for the next login and the
 // identity of its account, and only then is the session usable.
-TEST_F(ClientTest, ValidCodeDeliversTokenAndUserKeys)
+TEST_F(ClientTest, ValidCodeDeliversTokenAndUserInfo)
 {
     withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
                        [this](Client& client, FakeTcpChannel* channel)
@@ -212,10 +212,9 @@ TEST_F(ClientTest, ValidCodeDeliversTokenAndUserKeys)
 
         proto::router::RouterToClient second;
         ASSERT_TRUE(parse(channel->sent().at(1).buffer, &second));
-        ASSERT_TRUE(second.has_user_keys());
-        EXPECT_EQ(second.user_keys().user_id(), admin_.entry_id);
-        EXPECT_EQ(second.user_keys().name(), admin_.name.toStdString());
-        EXPECT_FALSE(second.user_keys().wrap_private_key().empty());
+        ASSERT_TRUE(second.has_user_info());
+        EXPECT_EQ(second.user_info().user_id(), admin_.entry_id);
+        EXPECT_EQ(second.user_info().name(), admin_.name.toStdString());
     });
 }
 
@@ -412,9 +411,6 @@ TEST_F(ClientTest, PasswordChangeReopensTheTwoFactorStage)
         change->set_request_id(11);
         change->set_salt(toStdString(rotated.salt));
         change->set_verifier(toStdString(rotated.verifier));
-        change->set_public_key(toStdString(rotated.public_key));
-        change->set_wrap_private_key(toStdString(rotated.wrap_private_key));
-        change->set_wrap_salt(toStdString(rotated.wrap_salt));
 
         channel->receive(proto::router::CHANNEL_ID_CLIENT, serialize(request));
 
