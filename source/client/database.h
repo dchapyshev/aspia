@@ -91,7 +91,6 @@ public:
     // updates the master password verifier. Either all changes are applied or none of them are, so
     // the address book can never be left with records under two different keys.
     bool reencryptAll(const QList<HostConfig>& hosts,
-                      const QList<GroupConfig>& groups,
                       const QList<RouterConfig>& routers,
                       const QByteArray& salt,
                       const QByteArray& verifier,

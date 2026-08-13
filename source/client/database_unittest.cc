@@ -196,8 +196,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     // one that left it alone.
     QThread::msleep(1100);
 
-    ASSERT_TRUE(db_.reencryptAll(db_.allHosts(), db_.allGroups(), db_.routerList(),
-                                 "salt", "verifier", 1));
+    ASSERT_TRUE(db_.reencryptAll(db_.allHosts(), db_.routerList(), "salt", "verifier", 1));
 
     EXPECT_EQ(db_.findHost(entry_id)->modifyTime(), modify_time);
 }

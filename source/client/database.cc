@@ -46,8 +46,8 @@ HostConfig readHost(const SqlQuery& query)
     host.setId(query.columnInt64(0));
     host.setGroupId(query.columnInt64(1));
     host.setRouterId(query.columnInt64(2));
-    host.setEncryptedName(query.columnBlob(3));
-    host.setEncryptedComment(query.columnBlob(4));
+    host.setName(query.columnText(3));
+    host.setComment(query.columnText(4));
     host.setEncryptedAddress(query.columnBlob(5));
     host.setEncryptedUsername(query.columnBlob(6));
     host.setEncryptedPassword(query.columnBlob(7));
@@ -64,8 +64,8 @@ GroupConfig readGroup(const SqlQuery& query)
     GroupConfig group;
     group.setId(query.columnInt64(0));
     group.setParentId(query.columnInt64(1));
-    group.setEncryptedName(query.columnBlob(2));
-    group.setEncryptedComment(query.columnBlob(3));
+    group.setName(query.columnText(2));
+    group.setComment(query.columnText(3));
     return group;
 }
 
@@ -74,7 +74,7 @@ RouterConfig readRouter(const SqlQuery& query)
 {
     RouterConfig router;
     router.setRouterId(query.columnInt64(0));
-    router.setEncryptedDisplayName(query.columnBlob(1));
+    router.setDisplayName(query.columnText(1));
     router.setEncryptedAddress(query.columnBlob(2));
     router.setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(3)));
     router.setEncryptedUsername(query.columnBlob(4));
@@ -92,8 +92,8 @@ bool createTables(SqlDatabase& db)
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
                  "\"id\" INTEGER UNIQUE,"
                  "\"parent_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE CASCADE,"
-                 "\"name\" BLOB DEFAULT X'',"
-                 "\"comment\" BLOB DEFAULT X'',"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"comment\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create groups table:" << db.lastError();
@@ -104,8 +104,8 @@ bool createTables(SqlDatabase& db)
                  "\"id\" INTEGER UNIQUE,"
                  "\"group_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE SET NULL,"
                  "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"name\" BLOB DEFAULT X'',"
-                 "\"comment\" BLOB DEFAULT X'',"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"comment\" TEXT NOT NULL DEFAULT '',"
                  "\"address\" BLOB DEFAULT X'',"
                  "\"username\" BLOB DEFAULT X'',"
                  "\"password\" BLOB DEFAULT X'',"
@@ -121,7 +121,7 @@ bool createTables(SqlDatabase& db)
 
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
                  "\"id\" INTEGER UNIQUE,"
-                 "\"name\" BLOB DEFAULT X'',"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"address\" BLOB DEFAULT X'',"
                  "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                  "\"username\" BLOB DEFAULT X'',"
@@ -291,7 +291,7 @@ bool Database::addHost(HostConfig& host)
         return false;
     }
 
-    if (host.encryptedName().isEmpty() || host.encryptedAddress().isEmpty() || host.groupId() < 0)
+    if (host.name().isEmpty() || host.encryptedAddress().isEmpty() || host.groupId() < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
@@ -310,8 +310,8 @@ bool Database::addHost(HostConfig& host)
                         "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
-    query.addBlob(host.encryptedName());
-    query.addBlob(host.encryptedComment());
+    query.addText(host.name());
+    query.addText(host.comment());
     query.addBlob(host.encryptedAddress());
     query.addBlob(host.encryptedUsername());
     query.addBlob(host.encryptedPassword());
@@ -345,8 +345,8 @@ bool Database::modifyHost(HostConfig& host)
                         "address=?, username=?, password=?, modify_time=? WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
-    query.addBlob(host.encryptedName());
-    query.addBlob(host.encryptedComment());
+    query.addText(host.name());
+    query.addText(host.comment());
     query.addBlob(host.encryptedAddress());
     query.addBlob(host.encryptedUsername());
     query.addBlob(host.encryptedPassword());
@@ -527,8 +527,8 @@ bool Database::addGroup(GroupConfig& group)
     SqlQuery query(db_, "INSERT INTO groups (id, parent_id, name, comment) "
                         "VALUES (NULL, NULLIF(?, 0), ?, ?)");
     query.addInt64(group.parentId());
-    query.addBlob(group.encryptedName());
-    query.addBlob(group.encryptedComment());
+    query.addText(group.name());
+    query.addText(group.comment());
 
     if (!query.exec())
     {
@@ -557,8 +557,8 @@ bool Database::modifyGroup(const GroupConfig& group)
 
     SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
     query.addInt64(group.parentId());
-    query.addBlob(group.encryptedName());
-    query.addBlob(group.encryptedComment());
+    query.addText(group.name());
+    query.addText(group.comment());
     query.addInt64(group.id());
 
     if (!query.exec())
@@ -684,7 +684,7 @@ bool Database::addRouter(RouterConfig& router)
     SqlQuery query(db_, "INSERT INTO routers (id, name, address, session_type, username, password, "
                         "device_token, guid) "
                         "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBlob(router.encryptedDisplayName());
+    query.addText(router.displayName());
     query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
     query.addBlob(router.encryptedUsername());
@@ -713,7 +713,7 @@ bool Database::modifyRouter(const RouterConfig& router)
 
     SqlQuery query(db_, "UPDATE routers SET name=?, address=?, session_type=?, username=?, "
                         "password=?, device_token=?, guid=? WHERE id=?");
-    query.addBlob(router.encryptedDisplayName());
+    query.addText(router.displayName());
     query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
     query.addBlob(router.encryptedUsername());
@@ -828,7 +828,6 @@ bool Database::isMasterPasswordSet() const
 
 //--------------------------------------------------------------------------------------------------
 bool Database::reencryptAll(const QList<HostConfig>& hosts,
-                            const QList<GroupConfig>& groups,
                             const QList<RouterConfig>& routers,
                             const QByteArray& salt,
                             const QByteArray& verifier,
@@ -851,13 +850,11 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
     // the address book stays fully readable with the old master password.
     //
     // Only the ciphertext is written. Going through modifyHost() would stamp every host as edited
-    // now, and the moment a host was last edited is a column of the list the user reads.
+    // now, and the moment a host was last edited is a column of the list the user reads. Names and
+    // comments are plain text, so a change of key leaves them alone.
     for (const HostConfig& host : hosts)
     {
-        SqlQuery query(db_, "UPDATE hosts SET name=?, comment=?, address=?, username=?, password=? "
-                            "WHERE id=?");
-        query.addBlob(host.encryptedName());
-        query.addBlob(host.encryptedComment());
+        SqlQuery query(db_, "UPDATE hosts SET address=?, username=?, password=? WHERE id=?");
         query.addBlob(host.encryptedAddress());
         query.addBlob(host.encryptedUsername());
         query.addBlob(host.encryptedPassword());
@@ -866,15 +863,6 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
         if (!query.exec())
         {
             LOG(ERROR) << "Unable to re-encrypt host" << host.id() << ":" << db_.lastError();
-            return false;
-        }
-    }
-
-    for (const GroupConfig& group : groups)
-    {
-        if (!modifyGroup(group))
-        {
-            LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
             return false;
         }
     }

@@ -152,18 +152,6 @@ QString RouterConfig::displayLabel() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString RouterConfig::displayName() const
-{
-    return decryptString(encrypted_display_name_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterConfig::setDisplayName(const QString& value)
-{
-    encrypted_display_name_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
 QString RouterConfig::address() const
 {
     return decryptString(encrypted_address_);
@@ -218,30 +206,6 @@ void RouterConfig::clearDeviceToken()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString HostConfig::name() const
-{
-    return decryptString(encrypted_name_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setName(const QString& value)
-{
-    encrypted_name_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString HostConfig::comment() const
-{
-    return decryptString(encrypted_comment_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setComment(const QString& value)
-{
-    encrypted_comment_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
 QString HostConfig::address() const
 {
     return decryptString(encrypted_address_);
@@ -275,30 +239,6 @@ SecureString HostConfig::password() const
 void HostConfig::setPassword(const SecureString& value)
 {
     encrypted_password_ = encryptSecureString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString GroupConfig::name() const
-{
-    return decryptString(encrypted_name_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void GroupConfig::setName(const QString& value)
-{
-    encrypted_name_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString GroupConfig::comment() const
-{
-    return decryptString(encrypted_comment_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void GroupConfig::setComment(const QString& value)
-{
-    encrypted_comment_ = encryptString(value);
 }
 
 //--------------------------------------------------------------------------------------------------
