@@ -116,7 +116,7 @@ bool DataCryptor::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
+std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in, QByteArrayView aad) const
 {
     std::scoped_lock lock(mutex_);
 
@@ -150,6 +150,16 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 
     int length;
 
+    // GCM takes the associated data before the plaintext, with a null output buffer.
+    if (!aad.isEmpty() &&
+        EVP_EncryptUpdate(encrypt_ctx_.get(), nullptr, &length,
+                          reinterpret_cast<const quint8*>(aad.data()),
+                          static_cast<int>(aad.size())) != 1)
+    {
+        LOG(ERROR) << "EVP_EncryptUpdate failed for AAD";
+        return std::nullopt;
+    }
+
     if (EVP_EncryptUpdate(encrypt_ctx_.get(),
                           reinterpret_cast<quint8*>(out.data()) + kHeaderSize,
                           &length,
@@ -181,7 +191,7 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
+std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in, QByteArrayView aad) const
 {
     std::scoped_lock lock(mutex_);
 
@@ -208,6 +218,15 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
     out.resize(in.size() - kHeaderSize);
 
     int length;
+
+    if (!aad.isEmpty() &&
+        EVP_DecryptUpdate(decrypt_ctx_.get(), nullptr, &length,
+                          reinterpret_cast<const quint8*>(aad.data()),
+                          static_cast<int>(aad.size())) != 1)
+    {
+        LOG(ERROR) << "EVP_DecryptUpdate failed for AAD";
+        return std::nullopt;
+    }
 
     if (EVP_DecryptUpdate(decrypt_ctx_.get(),
                           reinterpret_cast<quint8*>(out.data()),

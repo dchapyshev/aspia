@@ -45,8 +45,11 @@ public:
 
     bool isValid() const;
 
-    std::optional<QByteArray> encrypt(QByteArrayView in) const;
-    std::optional<QByteArray> decrypt(QByteArrayView in) const;
+    // |aad| is authenticated but not stored: decrypt() succeeds only when handed the same value
+    // encrypt() was given. Callers pass the place the ciphertext belongs to, so a blob moved
+    // somewhere else no longer opens.
+    std::optional<QByteArray> encrypt(QByteArrayView in, QByteArrayView aad = {}) const;
+    std::optional<QByteArray> decrypt(QByteArrayView in, QByteArrayView aad = {}) const;
 
     static DataCryptor& instance();
 

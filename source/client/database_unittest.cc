@@ -244,6 +244,29 @@ TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A host and a router number their fields the same way, so a router column would parse as a host one
+// and hand out an address that was never a host. The seal names the table it was made for, and a
+// column carried across tables does not open.
+TEST_F(DatabaseTest, RouterDataDoesNotOpenAsHostData)
+{
+    RouterConfig router;
+    router.setDisplayName("router");
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString("router-secret"));
+
+    std::optional<QByteArray> sealed = router.encryptedData();
+    ASSERT_TRUE(sealed.has_value());
+
+    HostConfig host;
+    EXPECT_FALSE(host.setEncryptedData(*sealed));
+
+    EXPECT_TRUE(host.address().isEmpty());
+    EXPECT_TRUE(host.username().isEmpty());
+    EXPECT_TRUE(host.password().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
 // A column rewritten by anyone without the key does not turn into different fields, it stops being
 // readable at all.
 TEST_F(DatabaseTest, TamperedDataDoesNotOpen)

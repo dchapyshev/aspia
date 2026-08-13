@@ -30,6 +30,11 @@
 
 namespace {
 
+// Names the table a column was sealed for. A host and a router number their fields the same way, so
+// without this a router column moved into a host row would parse as a host one and open.
+const char kHostsAad[] = "hosts";
+const char kRoutersAad[] = "routers";
+
 SecureString toSecureString(const std::string& value)
 {
     return SecureString::fromUtf8(
@@ -37,14 +42,14 @@ SecureString toSecureString(const std::string& value)
 }
 
 template <class Message>
-std::optional<QByteArray> sealMessage(const Message& message)
+std::optional<QByteArray> sealMessage(const Message& message, const char* aad)
 {
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
 
     const SecureByteArray buffer(serialize(message));
 
-    std::optional<QByteArray> sealed = cryptor.encrypt(buffer.toByteArray());
+    std::optional<QByteArray> sealed = cryptor.encrypt(buffer.toByteArray(), aad);
     if (!sealed.has_value())
         LOG(ERROR) << "Unable to encrypt record data";
 
@@ -52,12 +57,12 @@ std::optional<QByteArray> sealMessage(const Message& message)
 }
 
 template <class Message>
-bool unsealMessage(const QByteArray& blob, Message* message)
+bool unsealMessage(const QByteArray& blob, const char* aad, Message* message)
 {
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
 
-    std::optional<QByteArray> decrypted = cryptor.decrypt(blob);
+    std::optional<QByteArray> decrypted = cryptor.decrypt(blob, aad);
     if (!decrypted.has_value())
     {
         LOG(ERROR) << "Unable to decrypt record data";
@@ -128,7 +133,7 @@ std::optional<QByteArray> RouterConfig::encryptedData() const
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
-    std::optional<QByteArray> sealed = sealMessage(data);
+    std::optional<QByteArray> sealed = sealMessage(data, kRoutersAad);
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
@@ -149,7 +154,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
         return true;
 
     proto::client_storage::RouterData data;
-    if (!unsealMessage(blob, &data))
+    if (!unsealMessage(blob, kRoutersAad, &data))
         return false;
 
     address_ = QString::fromStdString(data.address());
@@ -184,7 +189,7 @@ std::optional<QByteArray> HostConfig::encryptedData() const
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
-    std::optional<QByteArray> sealed = sealMessage(data);
+    std::optional<QByteArray> sealed = sealMessage(data, kHostsAad);
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
@@ -204,7 +209,7 @@ bool HostConfig::setEncryptedData(const QByteArray& blob)
         return true;
 
     proto::client_storage::HostData data;
-    if (!unsealMessage(blob, &data))
+    if (!unsealMessage(blob, kHostsAad, &data))
         return false;
 
     address_ = QString::fromStdString(data.address());

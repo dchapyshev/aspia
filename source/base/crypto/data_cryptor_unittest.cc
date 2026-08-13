@@ -59,3 +59,50 @@ TEST(DataCryptorTest, WrongKey)
     std::optional<QByteArray> decrypted_message = cryptor2.decrypt(*encrypted_message);
     ASSERT_FALSE(decrypted_message.has_value());
 }
+
+TEST(DataCryptorTest, AssociatedData)
+{
+    const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
+    const QByteArray aad("hosts");
+
+    DataCryptor cryptor(CipherType::AES256_GCM, key);
+
+    std::optional<QByteArray> encrypted_message = cryptor.encrypt(message, aad);
+    ASSERT_TRUE(encrypted_message.has_value());
+
+    // Associated data is authenticated, not stored: it does not grow the ciphertext.
+    ASSERT_EQ(encrypted_message->size(), message.size() + 28);
+
+    std::optional<QByteArray> decrypted_message = cryptor.decrypt(*encrypted_message, aad);
+    ASSERT_TRUE(decrypted_message.has_value());
+    ASSERT_EQ(*decrypted_message, message);
+}
+
+TEST(DataCryptorTest, WrongAssociatedData)
+{
+    const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
+
+    DataCryptor cryptor(CipherType::AES256_GCM, key);
+
+    std::optional<QByteArray> encrypted_message = cryptor.encrypt(message, QByteArray("hosts"));
+    ASSERT_TRUE(encrypted_message.has_value());
+
+    // A blob put where something else belongs, or read as if it belonged nowhere.
+    ASSERT_FALSE(cryptor.decrypt(*encrypted_message, QByteArray("routers")).has_value());
+    ASSERT_FALSE(cryptor.decrypt(*encrypted_message).has_value());
+}
+
+TEST(DataCryptorTest, AssociatedDataExpected)
+{
+    const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384");
+
+    DataCryptor cryptor(CipherType::AES256_GCM, key);
+
+    std::optional<QByteArray> encrypted_message = cryptor.encrypt(message);
+    ASSERT_TRUE(encrypted_message.has_value());
+
+    ASSERT_FALSE(cryptor.decrypt(*encrypted_message, QByteArray("hosts")).has_value());
+}
