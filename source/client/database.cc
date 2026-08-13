@@ -48,13 +48,14 @@ HostConfig readHost(const SqlQuery& query)
     host.setRouterId(query.columnInt64(2));
     host.setName(query.columnText(3));
     host.setComment(query.columnText(4));
-    host.setEncryptedAddress(query.columnBlob(5));
-    host.setEncryptedUsername(query.columnBlob(6));
-    host.setEncryptedPassword(query.columnBlob(7));
-    host.setCreateTime(query.columnInt64(8));
-    host.setModifyTime(query.columnInt64(9));
-    host.setConnectTime(query.columnInt64(10));
-    host.setGuid(query.columnText(11));
+    host.setCreateTime(query.columnInt64(6));
+    host.setModifyTime(query.columnInt64(7));
+    host.setConnectTime(query.columnInt64(8));
+    host.setGuid(query.columnText(9));
+
+    if (!host.setEncryptedData(query.columnBlob(5)))
+        LOG(ERROR) << "Unable to read encrypted data of host" << host.id();
+
     return host;
 }
 
@@ -75,12 +76,12 @@ RouterConfig readRouter(const SqlQuery& query)
     RouterConfig router;
     router.setRouterId(query.columnInt64(0));
     router.setDisplayName(query.columnText(1));
-    router.setEncryptedAddress(query.columnBlob(2));
-    router.setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(3)));
-    router.setEncryptedUsername(query.columnBlob(4));
-    router.setEncryptedPassword(query.columnBlob(5));
-    router.setEncryptedDeviceToken(query.columnBlob(6));
-    router.setGuid(query.columnText(7));
+    router.setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
+    router.setGuid(query.columnText(4));
+
+    if (!router.setEncryptedData(query.columnBlob(3)))
+        LOG(ERROR) << "Unable to read encrypted data of router" << router.routerId();
+
     return router;
 }
 
@@ -106,9 +107,7 @@ bool createTables(SqlDatabase& db)
                  "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"comment\" TEXT NOT NULL DEFAULT '',"
-                 "\"address\" BLOB DEFAULT X'',"
-                 "\"username\" BLOB DEFAULT X'',"
-                 "\"password\" BLOB DEFAULT X'',"
+                 "\"data\" BLOB DEFAULT X'',"
                  "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
@@ -122,11 +121,8 @@ bool createTables(SqlDatabase& db)
     if (!db.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
                  "\"id\" INTEGER UNIQUE,"
                  "\"name\" TEXT NOT NULL DEFAULT '',"
-                 "\"address\" BLOB DEFAULT X'',"
                  "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"username\" BLOB DEFAULT X'',"
-                 "\"password\" BLOB DEFAULT X'',"
-                 "\"device_token\" BLOB DEFAULT X'',"
+                 "\"data\" BLOB DEFAULT X'',"
                  "\"guid\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
@@ -249,8 +245,8 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
-                        "username, password, create_time, modify_time, connect_time, guid "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
+                        "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
 
@@ -270,8 +266,7 @@ QList<HostConfig> Database::allHosts() const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
-                        "username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts");
 
@@ -291,11 +286,15 @@ bool Database::addHost(HostConfig& host)
         return false;
     }
 
-    if (host.name().isEmpty() || host.encryptedAddress().isEmpty() || host.groupId() < 0)
+    if (host.name().isEmpty() || host.address().isEmpty() || host.groupId() < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
+
+    std::optional<QByteArray> encrypted_data = host.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
 
     const qint64 current_time = QDateTime::currentSecsSinceEpoch();
     host.setCreateTime(current_time);
@@ -305,16 +304,14 @@ bool Database::addHost(HostConfig& host)
     if (host.guid().isEmpty())
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, address, "
-                        "username, password, create_time, modify_time, connect_time, guid) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, data, "
+                        "create_time, modify_time, connect_time, guid) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
     query.addText(host.comment());
-    query.addBlob(host.encryptedAddress());
-    query.addBlob(host.encryptedUsername());
-    query.addBlob(host.encryptedPassword());
+    query.addBlob(*encrypted_data);
     query.addInt64(host.createTime());
     query.addInt64(host.modifyTime());
     query.addInt64(host.connectTime());
@@ -339,17 +336,19 @@ bool Database::modifyHost(HostConfig& host)
         return false;
     }
 
+    std::optional<QByteArray> encrypted_data = host.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     SqlQuery query(db_, "UPDATE hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
-                        "address=?, username=?, password=?, modify_time=? WHERE id=?");
+                        "data=?, modify_time=? WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
     query.addText(host.comment());
-    query.addBlob(host.encryptedAddress());
-    query.addBlob(host.encryptedUsername());
-    query.addBlob(host.encryptedPassword());
+    query.addBlob(*encrypted_data);
     query.addInt64(host.modifyTime());
     query.addInt64(host.id());
 
@@ -414,8 +413,7 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
-                        "username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE id=?");
     query.addInt64(entry_id);
@@ -438,8 +436,7 @@ std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
     if (guid.isEmpty())
         return std::nullopt;
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
-                        "username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM hosts WHERE guid=?");
     query.addText(guid);
@@ -459,8 +456,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, address, "
-                        "username, password, "
+    SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid FROM hosts");
 
     QList<HostConfig> hosts;
@@ -656,8 +652,7 @@ QList<RouterConfig> Database::routerList() const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, "
-                        "device_token, guid FROM routers");
+    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
 
     QList<RouterConfig> routers;
     while (query.next() == SqlQuery::StepResult::ROW)
@@ -675,21 +670,21 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    if (router.encryptedAddress().isEmpty() || router.encryptedUsername().isEmpty())
+    if (router.address().isEmpty() || router.username().isEmpty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
-    SqlQuery query(db_, "INSERT INTO routers (id, name, address, session_type, username, password, "
-                        "device_token, guid) "
-                        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+    std::optional<QByteArray> encrypted_data = router.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(db_, "INSERT INTO routers (id, name, session_type, data, guid) "
+                        "VALUES (NULL, ?, ?, ?, ?)");
     query.addText(router.displayName());
-    query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
-    query.addBlob(router.encryptedUsername());
-    query.addBlob(router.encryptedPassword());
-    query.addBlob(router.encryptedDeviceToken());
+    query.addBlob(*encrypted_data);
     query.addText(router.guid());
 
     if (!query.exec())
@@ -711,14 +706,15 @@ bool Database::modifyRouter(const RouterConfig& router)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE routers SET name=?, address=?, session_type=?, username=?, "
-                        "password=?, device_token=?, guid=? WHERE id=?");
+    std::optional<QByteArray> encrypted_data = router.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(db_, "UPDATE routers SET name=?, session_type=?, data=?, guid=? "
+                        "WHERE id=?");
     query.addText(router.displayName());
-    query.addBlob(router.encryptedAddress());
     query.addInt64(static_cast<quint32>(router.sessionType()));
-    query.addBlob(router.encryptedUsername());
-    query.addBlob(router.encryptedPassword());
-    query.addBlob(router.encryptedDeviceToken());
+    query.addBlob(*encrypted_data);
     query.addText(router.guid());
     query.addInt64(router.routerId());
 
@@ -761,8 +757,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, name, address, session_type, username, password, device_token, "
-                        "guid FROM routers WHERE id=?");
+    SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers WHERE id=?");
     query.addInt64(router_id);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -854,10 +849,12 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
     // comments are plain text, so a change of key leaves them alone.
     for (const HostConfig& host : hosts)
     {
-        SqlQuery query(db_, "UPDATE hosts SET address=?, username=?, password=? WHERE id=?");
-        query.addBlob(host.encryptedAddress());
-        query.addBlob(host.encryptedUsername());
-        query.addBlob(host.encryptedPassword());
+        std::optional<QByteArray> encrypted_data = host.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE hosts SET data=? WHERE id=?");
+        query.addBlob(*encrypted_data);
         query.addInt64(host.id());
 
         if (!query.exec())

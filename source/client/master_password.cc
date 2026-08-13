@@ -55,22 +55,6 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> decryptField(DataCryptor& cryptor, const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return QByteArray();
-    return cryptor.decrypt(blob);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> encryptField(DataCryptor& cryptor, const QByteArray& plain)
-{
-    if (plain.isEmpty())
-        return QByteArray();
-    return cryptor.encrypt(plain);
-}
-
-//--------------------------------------------------------------------------------------------------
 bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new_salt,
                            const QByteArray& new_verifier)
 {
@@ -84,114 +68,41 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     DataCryptor& cryptor = DataCryptor::instance();
     const SecureByteArray old_key = cryptor.key();
 
+    // Reading opens the sealed column of every record with the current key, so from here on the
+    // records carry their credentials in the clear and the key can be changed under them. Groups are
+    // not here: a group holds a name and a comment, and neither is encrypted.
     QList<HostConfig> hosts = db.allHosts();
     QList<RouterConfig> routers = db.routerList();
 
-    // The configs hold the fields still encrypted with the current key, so they are decrypted to
-    // plaintext before the key is switched. Rewriting the stored blobs as-is would leave them
-    // readable only with the old key. Groups are not here: a group holds a name and a comment, and
-    // neither is encrypted.
-    struct HostFields { QByteArray address, username, password; };
-    struct RouterFields { QByteArray address, username, password, device_token; };
-
-    QList<HostFields> host_fields;
-    QList<RouterFields> router_fields;
-
+    // A record whose column refused to open comes back with its credentials empty, and writing it
+    // out again would make that emptiness permanent. A stored record always has these fields - both
+    // addHost() and addRouter() refuse a record without them - so empty here can only mean the
+    // column did not open.
     for (const HostConfig& host : std::as_const(hosts))
     {
-        std::optional<QByteArray> address = decryptField(cryptor, host.encryptedAddress());
-        std::optional<QByteArray> username = decryptField(cryptor, host.encryptedUsername());
-        std::optional<QByteArray> password = decryptField(cryptor, host.encryptedPassword());
-
-        if (!address || !username || !password)
+        if (host.address().isEmpty())
         {
-            LOG(ERROR) << "Unable to decrypt host:" << host.id();
+            LOG(ERROR) << "Unable to read credentials of host:" << host.id();
             return false;
         }
-
-        host_fields.append({ *address, *username, *password });
     }
 
     for (const RouterConfig& router : std::as_const(routers))
     {
-        std::optional<QByteArray> address = decryptField(cryptor, router.encryptedAddress());
-        std::optional<QByteArray> username = decryptField(cryptor, router.encryptedUsername());
-        std::optional<QByteArray> password = decryptField(cryptor, router.encryptedPassword());
-        std::optional<QByteArray> device_token =
-            decryptField(cryptor, router.encryptedDeviceToken());
-
-        if (!address || !username || !password || !device_token)
+        if (router.address().isEmpty() || router.username().isEmpty())
         {
-            LOG(ERROR) << "Unable to decrypt router:" << router.routerId();
+            LOG(ERROR) << "Unable to read credentials of router:" << router.routerId();
             return false;
         }
-
-        router_fields.append({ *address, *username, *password, *device_token });
     }
 
-    // Switch the cryptor to the new key so the fields below are re-encrypted with it.
+    // Everything below is sealed with the new key: the records seal themselves on the way into the
+    // database, and they take the key from the cryptor at that moment.
     cryptor.setKey(new_key);
-
-    QList<HostConfig> new_hosts;
-    new_hosts.reserve(hosts.size());
-
-    // A field that fails to encrypt would otherwise be stored empty, and the plaintext it held is
-    // gone with the old key. Nothing has been written yet, so the old key goes back and the change
-    // is refused.
-    for (int i = 0; i < hosts.size(); ++i)
-    {
-        HostConfig host = hosts[i];
-        const HostFields& fields = host_fields[i];
-
-        std::optional<QByteArray> address = encryptField(cryptor, fields.address);
-        std::optional<QByteArray> username = encryptField(cryptor, fields.username);
-        std::optional<QByteArray> password = encryptField(cryptor, fields.password);
-
-        if (!address || !username || !password)
-        {
-            LOG(ERROR) << "Unable to re-encrypt host:" << host.id();
-            cryptor.setKey(old_key);
-            return false;
-        }
-
-        host.setEncryptedAddress(*address);
-        host.setEncryptedUsername(*username);
-        host.setEncryptedPassword(*password);
-
-        new_hosts.append(host);
-    }
-
-    QList<RouterConfig> new_routers;
-    new_routers.reserve(routers.size());
-
-    for (int i = 0; i < routers.size(); ++i)
-    {
-        RouterConfig router = routers[i];
-        const RouterFields& fields = router_fields[i];
-
-        std::optional<QByteArray> address = encryptField(cryptor, fields.address);
-        std::optional<QByteArray> username = encryptField(cryptor, fields.username);
-        std::optional<QByteArray> password = encryptField(cryptor, fields.password);
-        std::optional<QByteArray> device_token = encryptField(cryptor, fields.device_token);
-
-        if (!address || !username || !password || !device_token)
-        {
-            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
-            cryptor.setKey(old_key);
-            return false;
-        }
-
-        router.setEncryptedAddress(*address);
-        router.setEncryptedUsername(*username);
-        router.setEncryptedPassword(*password);
-        router.setEncryptedDeviceToken(*device_token);
-
-        new_routers.append(router);
-    }
 
     // Persisting all records together with the new verifier is atomic, so a failure cannot leave the
     // address book with some records under the old key and others under the new one.
-    if (!db.reencryptAll(new_hosts, new_routers, new_salt, new_verifier, kCurrentVersion))
+    if (!db.reencryptAll(hosts, routers, new_salt, new_verifier, kCurrentVersion))
     {
         // Nothing was written, so restore the in-memory key to keep it consistent with the database.
         cryptor.setKey(old_key);

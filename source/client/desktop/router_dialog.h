@@ -46,7 +46,7 @@ private:
 
     std::unique_ptr<Ui::RouterDialog> ui;
     qint64 router_id_ = -1;
-    QByteArray encrypted_device_token_;
+    QByteArray device_token_;
 };
 
 #endif // CLIENT_DESKTOP_ROUTER_DIALOG_H

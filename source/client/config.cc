@@ -19,104 +19,60 @@
 #include "client/config.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/crypto/secure_memory.h"
+#include "proto/client_storage.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
 
 namespace {
 
-QByteArray encryptBytes(const QByteArray& plain)
+SecureString toSecureString(const std::string& value)
 {
-    if (plain.isEmpty())
-        return QByteArray();
+    return SecureString::fromUtf8(
+        SecureByteArray(value.data(), static_cast<qsizetype>(value.size())));
+}
+
+template <class Message>
+std::optional<QByteArray> sealMessage(const Message& message)
+{
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
-    return cryptor.encrypt(plain).value_or(QByteArray());
+
+    const SecureByteArray buffer(serialize(message));
+
+    std::optional<QByteArray> sealed = cryptor.encrypt(buffer.toByteArray());
+    if (!sealed.has_value())
+        LOG(ERROR) << "Unable to encrypt record data";
+
+    return sealed;
 }
 
-QByteArray decryptBytes(const QByteArray& blob)
+template <class Message>
+bool unsealMessage(const QByteArray& blob, Message* message)
 {
-    if (blob.isEmpty())
-        return QByteArray();
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
-    return cryptor.decrypt(blob).value_or(QByteArray());
-}
 
-QByteArray encryptString(const QString& value)
-{
-    return encryptBytes(value.toUtf8());
-}
-
-QString decryptString(const QByteArray& blob)
-{
-    return QString::fromUtf8(decryptBytes(blob));
-}
-
-QByteArray encryptSecureString(const SecureString& value)
-{
-    return encryptBytes(SecureByteArray(value.toUtf8()).toByteArray());
-}
-
-SecureString decryptSecureString(const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return SecureString();
-    return SecureString::fromUtf8(SecureByteArray(decryptBytes(blob)));
-}
-
-QByteArray encryptSecureBytes(const SecureByteArray& value)
-{
-    return encryptBytes(value.toByteArray());
-}
-
-SecureByteArray decryptSecureBytes(const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return SecureByteArray();
-    return SecureByteArray(decryptBytes(blob));
-}
-
-// Double-wrap helpers for the bearer device token: the bytes are first sealed by the OS
-// keystore (DPAPI on Windows; identity on platforms without a backing store) and only then
-// encrypted with the master-password-derived key like every other field. The OS layer binds
-// the secret to the user (and on Windows, optionally to the machine), so a copy of
-// |client.db3| moved to another user account cannot present a usable token even when the
-// master password is known - the attacker still needs an active session of the original
-// user.
-QByteArray encryptDeviceToken(const QByteArray& plaintext)
-{
-    if (plaintext.isEmpty())
-        return QByteArray();
-
-    QByteArray os_wrapped;
-    if (!OSCrypt::encryptBytes(plaintext, &os_wrapped) || os_wrapped.isEmpty())
+    std::optional<QByteArray> decrypted = cryptor.decrypt(blob);
+    if (!decrypted.has_value())
     {
-        LOG(ERROR) << "OSCrypt::encryptBytes failed for device token";
-        return QByteArray();
+        LOG(ERROR) << "Unable to decrypt record data";
+        return false;
     }
 
-    return encryptBytes(os_wrapped);
-}
+    const SecureByteArray plain(std::move(*decrypted));
 
-QByteArray decryptDeviceToken(const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return QByteArray();
-
-    const QByteArray os_wrapped = decryptBytes(blob);
-    if (os_wrapped.isEmpty())
-        return QByteArray();
-
-    QByteArray plaintext;
-    if (!OSCrypt::decryptBytes(os_wrapped, &plaintext))
+    if (!parse(plain.toByteArray(), message))
     {
-        LOG(ERROR) << "OSCrypt::decryptBytes failed for device token";
-        return QByteArray();
+        LOG(ERROR) << "Unable to parse record data";
+        return false;
     }
-    return plaintext;
+
+    return true;
 }
 
 } // namespace
@@ -131,114 +87,135 @@ RouterConfig::RouterConfig()
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
-    return !encrypted_address_.isEmpty() && !encrypted_username_.isEmpty() &&
-           !encrypted_password_.isEmpty();
+    return !address_.isEmpty() && !username_.isEmpty() && !password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::hasSameParams(const RouterConfig& other) const
 {
-    return address() == other.address() && session_type_ == other.session_type_ &&
-           username() == other.username() && password() == other.password();
+    return address_ == other.address_ && session_type_ == other.session_type_ &&
+           username_ == other.username_ && password_ == other.password_;
 }
 
 //--------------------------------------------------------------------------------------------------
 QString RouterConfig::displayLabel() const
 {
-    QString name = displayName();
-    if (!name.isEmpty())
-        return name;
-    return address();
+    if (!display_name_.isEmpty())
+        return display_name_;
+    return address_;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString RouterConfig::address() const
+std::optional<QByteArray> RouterConfig::encryptedData() const
 {
-    return decryptString(encrypted_address_);
+    // The token goes under the keystore of the user first. A token that cannot be wrapped must not
+    // be stored bare, and the record is refused rather than written without it.
+    QByteArray wrapped_token;
+    if (!device_token_.isEmpty())
+    {
+        if (!OSCrypt::encryptBytes(device_token_, &wrapped_token) || wrapped_token.isEmpty())
+        {
+            LOG(ERROR) << "OSCrypt::encryptBytes failed for device token";
+            return std::nullopt;
+        }
+    }
+
+    proto::client_storage::RouterData data;
+    data.set_address(address_.toUtf8().toStdString());
+    data.set_username(username_.toUtf8().toStdString());
+    data.set_device_token(wrapped_token.toStdString());
+
+    const SecureByteArray password = password_.toUtf8();
+    data.set_password(password.constData(), static_cast<size_t>(password.size()));
+
+    std::optional<QByteArray> sealed = sealMessage(data);
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return sealed;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConfig::setAddress(const QString& value)
+bool RouterConfig::setEncryptedData(const QByteArray& blob)
 {
-    encrypted_address_ = encryptString(value);
+    address_.clear();
+    username_.clear();
+    password_.clear();
+    device_token_.clear();
+
+    if (blob.isEmpty())
+        return true;
+
+    proto::client_storage::RouterData data;
+    if (!unsealMessage(blob, &data))
+        return false;
+
+    address_ = QString::fromStdString(data.address());
+    username_ = QString::fromStdString(data.username());
+    password_ = toSecureString(data.password());
+
+    // A token wrapped for another user of another machine is not an error of the record: the router
+    // will ask for a TOTP code again and a new one will be issued.
+    if (!data.device_token().empty())
+    {
+        QByteArray token;
+        if (OSCrypt::decryptBytes(QByteArray::fromStdString(data.device_token()), &token))
+            device_token_ = token;
+        else
+            LOG(ERROR) << "OSCrypt::decryptBytes failed for device token";
+    }
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-QString RouterConfig::username() const
+std::optional<QByteArray> HostConfig::encryptedData() const
 {
-    return decryptString(encrypted_username_);
+    proto::client_storage::HostData data;
+    data.set_address(address_.toUtf8().toStdString());
+    data.set_username(username_.toUtf8().toStdString());
+
+    const SecureByteArray password = password_.toUtf8();
+    data.set_password(password.constData(), static_cast<size_t>(password.size()));
+
+    std::optional<QByteArray> sealed = sealMessage(data);
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return sealed;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConfig::setUsername(const QString& value)
+bool HostConfig::setEncryptedData(const QByteArray& blob)
 {
-    encrypted_username_ = encryptString(value);
-}
+    address_.clear();
+    username_.clear();
+    password_.clear();
 
-//--------------------------------------------------------------------------------------------------
-SecureString RouterConfig::password() const
-{
-    return decryptSecureString(encrypted_password_);
-}
+    if (blob.isEmpty())
+        return true;
 
-//--------------------------------------------------------------------------------------------------
-void RouterConfig::setPassword(const SecureString& value)
-{
-    encrypted_password_ = encryptSecureString(value);
-}
+    proto::client_storage::HostData data;
+    if (!unsealMessage(blob, &data))
+        return false;
 
-//--------------------------------------------------------------------------------------------------
-QByteArray RouterConfig::deviceToken() const
-{
-    return decryptDeviceToken(encrypted_device_token_);
-}
+    address_ = QString::fromStdString(data.address());
+    username_ = QString::fromStdString(data.username());
+    password_ = toSecureString(data.password());
 
-//--------------------------------------------------------------------------------------------------
-void RouterConfig::setDeviceToken(const QByteArray& value)
-{
-    encrypted_device_token_ = encryptDeviceToken(value);
-}
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
 
-//--------------------------------------------------------------------------------------------------
-void RouterConfig::clearDeviceToken()
-{
-    encrypted_device_token_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString HostConfig::address() const
-{
-    return decryptString(encrypted_address_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setAddress(const QString& value)
-{
-    encrypted_address_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString HostConfig::username() const
-{
-    return decryptString(encrypted_username_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setUsername(const QString& value)
-{
-    encrypted_username_ = encryptString(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-SecureString HostConfig::password() const
-{
-    return decryptSecureString(encrypted_password_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostConfig::setPassword(const SecureString& value)
-{
-    encrypted_password_ = encryptSecureString(value);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

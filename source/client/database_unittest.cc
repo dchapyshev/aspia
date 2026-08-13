@@ -219,3 +219,75 @@ TEST_F(DatabaseTest, RemovedGroupLeavesItsNeighbourAlone)
     EXPECT_EQ(hostNamesOfGroup(second), QStringList({ "host-of-second" }));
     EXPECT_EQ(hostNamesOfGroup(0), QStringList({ "host-of-first" }));
 }
+
+//--------------------------------------------------------------------------------------------------
+// The secret part of a record goes to the database as one encrypted column. What comes back out has
+// to be what went in, every field of it.
+TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
+{
+    const qint64 group = addGroup("group", 0);
+
+    HostConfig host;
+    host.setName("host");
+    host.setGroupId(group);
+    host.setAddress("192.168.0.1");
+    host.setUsername("user");
+    host.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db_.addHost(host));
+
+    std::optional<HostConfig> stored = db_.findHost(host.id());
+    ASSERT_TRUE(stored.has_value());
+
+    EXPECT_EQ(stored->address(), QString("192.168.0.1"));
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A column rewritten by anyone without the key does not turn into different fields, it stops being
+// readable at all.
+TEST_F(DatabaseTest, TamperedDataDoesNotOpen)
+{
+    HostConfig host;
+    host.setAddress("192.168.0.1");
+    host.setUsername("user");
+    host.setPassword(SecureString("secret"));
+
+    std::optional<QByteArray> sealed = host.encryptedData();
+    ASSERT_TRUE(sealed.has_value());
+
+    QByteArray tampered = *sealed;
+    tampered[tampered.size() - 1] = static_cast<char>(tampered[tampered.size() - 1] ^ 0x01);
+
+    HostConfig target;
+    EXPECT_FALSE(target.setEncryptedData(tampered));
+    EXPECT_TRUE(target.address().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Changing the master password reseals every record. The fields must read the same afterwards,
+// under the key the new password derives.
+TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
+{
+    const qint64 group = addGroup("group", 0);
+
+    HostConfig host;
+    host.setName("host");
+    host.setGroupId(group);
+    host.setAddress("192.168.0.1");
+    host.setUsername("user");
+    host.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db_.addHost(host));
+
+    QList<HostConfig> hosts = db_.allHosts();
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    ASSERT_TRUE(db_.reencryptAll(hosts, db_.routerList(), "salt", "verifier", 1));
+
+    std::optional<HostConfig> stored = db_.findHost(host.id());
+    ASSERT_TRUE(stored.has_value());
+
+    EXPECT_EQ(stored->address(), QString("192.168.0.1"));
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+}

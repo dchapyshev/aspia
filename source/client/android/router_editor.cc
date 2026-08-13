@@ -104,7 +104,7 @@ RouterEditor::~RouterEditor() = default;
 void RouterEditor::prepareForAdd()
 {
     router_id_ = -1;
-    encrypted_device_token_.clear();
+    device_token_.clear();
 
     name_->clear();
     address_->clear();
@@ -127,7 +127,7 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
     }
 
     router_id_ = router_id;
-    encrypted_device_token_ = router->encryptedDeviceToken();
+    device_token_ = router->deviceToken();
 
     name_->setText(router->displayName());
     address_->setText(router->address());
@@ -179,7 +179,7 @@ void RouterEditor::onSaveClicked()
     data.setSessionType(proto::router::SESSION_TYPE_CLIENT);
     data.setUsername(username);
     data.setPassword(password);
-    data.setEncryptedDeviceToken(encrypted_device_token_);
+    data.setDeviceToken(device_token_);
 
     Database& db = Database::instance();
     const bool saved = (router_id_ < 0) ? db.addRouter(data) : db.modifyRouter(data);

@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include <optional>
+
 #include "base/crypto/secure_string.h"
 
 namespace proto::router {
@@ -32,10 +34,13 @@ namespace proto::control {
 class Config;
 } // namespace proto::control
 
-// Credentials are stored as ciphertext (QByteArray) and only decrypted on access through the
-// public getters. Database I/O goes through the encryptedXxx() accessors to avoid a redundant
-// decrypt+encrypt roundtrip. What the user reads off the list - names and comments - is kept as
-// plain text: it is what every row of the list is drawn from, and the secrets are the credentials.
+// Every field is held as plain text: the key that would decrypt them sits in memory anyway for as
+// long as the address book is unlocked, so keeping the ciphertext next to it protects nothing.
+//
+// What reaches the database is another matter. Whatever of a record has to be kept secret goes
+// there as one column - serialized together, then encrypted - so no single field can be lifted out
+// of it and stored where it would be read as something else. encryptedData() and its setter are
+// that boundary, and they are the only place in the class that touches the cipher.
 class RouterConfig final
 {
 public:
@@ -59,50 +64,42 @@ public:
     const QString& displayName() const { return display_name_; }
     void setDisplayName(const QString& value) { display_name_ = value; }
 
-    QString address() const;
-    void setAddress(const QString& value);
+    const QString& address() const { return address_; }
+    void setAddress(const QString& value) { address_ = value; }
 
-    QString username() const;
-    void setUsername(const QString& value);
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
 
-    SecureString password() const;
-    void setPassword(const SecureString& value);
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
 
     // Bearer "remember this device" token issued by the router after a successful TOTP
-    // submission. Empty until the user enrolls or enters a TOTP code at least once. The
-    // value is stored under a double wrap (OS keystore + master-password-derived key) so a
-    // copy of |client.db3| moved to another machine cannot present a usable token even if
-    // the master password is known.
-    QByteArray deviceToken() const;
-    void setDeviceToken(const QByteArray& value);
+    // submission. Empty until the user enrolls or enters a TOTP code at least once. On the way to
+    // the database it is wrapped by the OS keystore before being sealed with everything else, so a
+    // copy of |client.db3| moved to another machine cannot present a usable token even if the
+    // master password is known.
+    const QByteArray& deviceToken() const { return device_token_; }
+    void setDeviceToken(const QByteArray& value) { device_token_ = value; }
 
     // Clears the stored token. Called when the router rejects it (revoked remotely, password
     // changed elsewhere) so the next login walks the TOTP path again.
-    void clearDeviceToken();
+    void clearDeviceToken() { device_token_.clear(); }
 
-    // Direct access to ciphertext for database I/O.
-    const QByteArray& encryptedAddress() const { return encrypted_address_; }
-    void setEncryptedAddress(const QByteArray& blob) { encrypted_address_ = blob; }
-
-    const QByteArray& encryptedUsername() const { return encrypted_username_; }
-    void setEncryptedUsername(const QByteArray& blob) { encrypted_username_ = blob; }
-
-    const QByteArray& encryptedPassword() const { return encrypted_password_; }
-    void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
-
-    const QByteArray& encryptedDeviceToken() const { return encrypted_device_token_; }
-    void setEncryptedDeviceToken(const QByteArray& blob)
-        { encrypted_device_token_ = blob; }
+    // The encrypted column for database I/O. Returns nothing when the record cannot be sealed, so a
+    // failure is never written as a record that simply holds nothing. The setter answers whether the
+    // column opened; on a refusal the fields it carries are left empty.
+    std::optional<QByteArray> encryptedData() const;
+    bool setEncryptedData(const QByteArray& blob);
 
 private:
     qint64 router_id_ = -1;
     proto::router::SessionType session_type_;
     QString guid_;
     QString display_name_;
-    QByteArray encrypted_address_;
-    QByteArray encrypted_username_;
-    QByteArray encrypted_password_;
-    QByteArray encrypted_device_token_;
+    QString address_;
+    QString username_;
+    SecureString password_;
+    QByteArray device_token_;
 };
 
 class HostConfig final
@@ -137,24 +134,18 @@ public:
     const QString& comment() const { return comment_; }
     void setComment(const QString& value) { comment_ = value; }
 
-    QString address() const;
-    void setAddress(const QString& value);
+    const QString& address() const { return address_; }
+    void setAddress(const QString& value) { address_ = value; }
 
-    QString username() const;
-    void setUsername(const QString& value);
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
 
-    SecureString password() const;
-    void setPassword(const SecureString& value);
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
 
-    // Direct access to ciphertext for database I/O.
-    const QByteArray& encryptedAddress() const { return encrypted_address_; }
-    void setEncryptedAddress(const QByteArray& blob) { encrypted_address_ = blob; }
-
-    const QByteArray& encryptedUsername() const { return encrypted_username_; }
-    void setEncryptedUsername(const QByteArray& blob) { encrypted_username_ = blob; }
-
-    const QByteArray& encryptedPassword() const { return encrypted_password_; }
-    void setEncryptedPassword(const QByteArray& blob) { encrypted_password_ = blob; }
+    // The sealed column for database I/O. See RouterConfig for what the two answer.
+    std::optional<QByteArray> encryptedData() const;
+    bool setEncryptedData(const QByteArray& blob);
 
 private:
     qint64 id_ = -1;
@@ -166,9 +157,9 @@ private:
     qint64 connect_time_ = 0;
     QString name_;
     QString comment_;
-    QByteArray encrypted_address_;
-    QByteArray encrypted_username_;
-    QByteArray encrypted_password_;
+    QString address_;
+    QString username_;
+    SecureString password_;
 };
 
 class GroupConfig final

@@ -1,0 +1,47 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.client_storage;
+
+// The local storage format of the client address book. Nothing here is a protocol: these messages
+// never leave the machine, they say what the encrypted column of a record in |client.db3| holds.
+// Whatever of a record has to be kept secret goes here, so the set grows over time and is not
+// limited to credentials.
+
+// The part of a host record that is stored encrypted. Everything in it travels as one column, so
+// nothing can be lifted out of it and put where it would be read as something else.
+message HostData
+{
+    string address  = 1;
+    string username = 2;
+    string password = 3;
+}
+
+// The same for a router. |device_token| carries the bytes already wrapped by the OS keystore, so
+// the column holds it under two seals rather than one.
+message RouterData
+{
+    string address     = 1;
+    string username    = 2;
+    string password    = 3;
+    bytes device_token = 4;
+}

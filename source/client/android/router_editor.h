@@ -61,7 +61,7 @@ private:
     Label* error_ = nullptr;
     Button* delete_button_ = nullptr;
     qint64 router_id_ = -1;
-    QByteArray encrypted_device_token_;
+    QByteArray device_token_;
 
     Q_DISABLE_COPY_MOVE(RouterEditor)
 };
