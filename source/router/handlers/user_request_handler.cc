@@ -150,8 +150,7 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
     result->stop_user_id = user_id;
     result->notify_flags = ClientWorker::NOTIFY_USERS;
 
-    // Re-enrollment implies a new device key pair; existing device tokens must die with the
-    // secret they were issued against.
+    // The existing device tokens must die with the secret they were issued against.
     const std::string_view revoke_code = database.revokeUserClientDeviceTokens(user_id);
     if (revoke_code != proto::router::kErrorOk)
     {

@@ -135,8 +135,8 @@ message UserListRequest
     string name      = 5;
 }
 
-// Only the descriptive fields of a record are filled: the credential material (salt, verifier,
-// key pair) never leaves the router, and the device tokens are a list of their own.
+// Only the descriptive fields of a record are filled: the credential material (salt, verifier)
+// never leaves the router, and the device tokens are a list of their own.
 message UserList
 {
     int64 request_id   = 1;
@@ -149,7 +149,7 @@ message UserRequest
 {
     // "reset_otp" - Clear the user's TOTP secret so the next login triggers a fresh
     //               self-enrollment. Also revokes every device token of the user
-    //               (re-enrollment implies a new device key pair anyway).
+    //               (the tokens were issued against the secret being cleared).
     //               Only |user.entry_id| is consulted.
     int64 request_id    = 1;
     string command_name = 2; // "add" | "modify" | "delete" | "reset_otp"
