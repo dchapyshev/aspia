@@ -36,9 +36,9 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/aab_importer.h"
+#include "client/backup.h"
 #include "client/database.h"
 #include "client/host_url.h"
-#include "client/json_backup.h"
 #include "client/master_password.h"
 #include "client/settings.h"
 #include "client/desktop/management/content_widget.h"
@@ -1458,7 +1458,7 @@ void ManagementTab::onExportBookAction()
         this,
         tr("Export Address Book"),
         QString(),
-        tr("Address Book (*.json);;All files (*)"));
+        tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())
     {
@@ -1496,11 +1496,11 @@ void ManagementTab::onExportBookAction()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    JsonBackup::ExportCounts counts;
-    const JsonBackup::Result result =
-        JsonBackup::exportToFile(Database::instance(), file_path, dialog.password(), &counts);
+    Backup::ExportCounts counts;
+    const Backup::Result result =
+        Backup::exportToFile(Database::instance(), file_path, dialog.password(), &counts);
 
-    if (result != JsonBackup::Result::SUCCESS)
+    if (result != Backup::Result::SUCCESS)
     {
         MsgBox::warning(this, tr("Failed to export the address book."));
         return;
@@ -1530,7 +1530,7 @@ void ManagementTab::onImportBookAction()
         this,
         tr("Import Address Book"),
         QString(),
-        tr("Address Book (*.json);;All files (*)"));
+        tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())
     {
@@ -1547,24 +1547,24 @@ void ManagementTab::onImportBookAction()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    JsonBackup::ImportCounts counts;
-    const JsonBackup::Result result =
-        JsonBackup::importFromFile(Database::instance(), file_path, dialog.password(), &counts);
+    Backup::ImportCounts counts;
+    const Backup::Result result =
+        Backup::importFromFile(Database::instance(), file_path, dialog.password(), &counts);
 
     switch (result)
     {
-        case JsonBackup::Result::SUCCESS:
+        case Backup::Result::SUCCESS:
             break;
 
-        case JsonBackup::Result::WRONG_PASSWORD:
+        case Backup::Result::WRONG_PASSWORD:
             MsgBox::warning(this, tr("Unable to decrypt the file with the specified password."));
             return;
 
-        case JsonBackup::Result::UNSUPPORTED_VERSION:
+        case Backup::Result::UNSUPPORTED_VERSION:
             MsgBox::warning(this, tr("Unsupported file format version."));
             return;
 
-        case JsonBackup::Result::NOTHING_IMPORTED:
+        case Backup::Result::NOTHING_IMPORTED:
             MsgBox::information(this, tr("Nothing was imported."));
             return;
 

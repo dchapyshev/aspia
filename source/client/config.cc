@@ -24,9 +24,9 @@
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
-#include "proto/client_storage.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
+#include "proto/storage.h"
 
 namespace {
 
@@ -113,8 +113,9 @@ QString RouterConfig::displayLabel() const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterConfig::encryptedData() const
 {
-    // The token goes under the keystore of the user first. A token that cannot be wrapped must not
-    // be stored bare, and the record is refused rather than written without it.
+    // OSCrypt binds the token to the user on Windows and passes it through everywhere else. A
+    // failure is refused rather than written, so a wrap that was asked for never silently goes
+    // missing.
     QByteArray wrapped_token;
     if (!device_token_.isEmpty())
     {
@@ -125,7 +126,7 @@ std::optional<QByteArray> RouterConfig::encryptedData() const
         }
     }
 
-    proto::client_storage::RouterData data;
+    proto::storage::RouterBlob data;
     data.set_address(address_.toUtf8().toStdString());
     data.set_username(username_.toUtf8().toStdString());
     data.set_device_token(wrapped_token.toStdString());
@@ -153,7 +154,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     if (blob.isEmpty())
         return true;
 
-    proto::client_storage::RouterData data;
+    proto::storage::RouterBlob data;
     if (!unsealMessage(blob, kRoutersAad, &data))
         return false;
 
@@ -182,7 +183,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> HostConfig::encryptedData() const
 {
-    proto::client_storage::HostData data;
+    proto::storage::HostBlob data;
     data.set_address(address_.toUtf8().toStdString());
     data.set_username(username_.toUtf8().toStdString());
 
@@ -208,7 +209,7 @@ bool HostConfig::setEncryptedData(const QByteArray& blob)
     if (blob.isEmpty())
         return true;
 
-    proto::client_storage::HostData data;
+    proto::storage::HostBlob data;
     if (!unsealMessage(blob, kHostsAad, &data))
         return false;
 

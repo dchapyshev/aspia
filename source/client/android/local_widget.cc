@@ -24,14 +24,14 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
-#include "base/crypto/data_cryptor.h"
 #include "base/gui_application.h"
+#include "base/crypto/data_cryptor.h"
+#include "client/backup.h"
+#include "client/config.h"
+#include "client/database.h"
 #include "client/android/local_group_editor.h"
 #include "client/android/local_host_editor.h"
 #include "client/android/password_dialog.h"
-#include "client/config.h"
-#include "client/database.h"
-#include "client/json_backup.h"
 #include "client/android/search_widget.h"
 #include "client/online_checker/online_checker.h"
 #include "common/android/bottom_sheet.h"
@@ -296,7 +296,7 @@ void LocalWidget::onShowMenu()
 void LocalWidget::onImport()
 {
     const QString path = QFileDialog::getOpenFileName(
-        this, tr("Import Address Book"), QString(), tr("Address book (*.json)"));
+        this, tr("Import Address Book"), QString(), tr("Aspia Backup (*.aspia-backup)"));
     if (path.isEmpty())
         return;
 
@@ -304,10 +304,10 @@ void LocalWidget::onImport()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    JsonBackup::ImportCounts counts;
-    switch (JsonBackup::importFromFile(Database::instance(), path, dialog.password(), &counts))
+    Backup::ImportCounts counts;
+    switch (Backup::importFromFile(Database::instance(), path, dialog.password(), &counts))
     {
-        case JsonBackup::Result::SUCCESS:
+        case Backup::Result::SUCCESS:
             reload();
             MessageDialog::info(this, tr("Import"),
                 tr("Imported %n router(s), ", nullptr, counts.routers) +
@@ -315,16 +315,16 @@ void LocalWidget::onImport()
                 tr("%n host(s).", nullptr, counts.hosts));
             break;
 
-        case JsonBackup::Result::WRONG_PASSWORD:
+        case Backup::Result::WRONG_PASSWORD:
             MessageDialog::info(this, tr("Import"), tr("Invalid password."));
             break;
 
-        case JsonBackup::Result::UNSUPPORTED_VERSION:
+        case Backup::Result::UNSUPPORTED_VERSION:
             MessageDialog::info(this, tr("Import"),
                 tr("The file was created by a newer version and cannot be imported."));
             break;
 
-        case JsonBackup::Result::NOTHING_IMPORTED:
+        case Backup::Result::NOTHING_IMPORTED:
             MessageDialog::info(this, tr("Import"), tr("The address book is already up to date."));
             break;
 
@@ -338,7 +338,8 @@ void LocalWidget::onImport()
 void LocalWidget::onExport()
 {
     const QString path = QFileDialog::getSaveFileName(
-        this, tr("Export Address Book"), "aspia.json", tr("Address book (*.json)"));
+        this, tr("Export Address Book"), "address_book.aspia-backup",
+        tr("Aspia Backup (*.aspia-backup)"));
     if (path.isEmpty())
         return;
 
@@ -346,9 +347,9 @@ void LocalWidget::onExport()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    JsonBackup::ExportCounts counts;
-    if (JsonBackup::exportToFile(Database::instance(), path, dialog.password(), &counts) ==
-        JsonBackup::Result::SUCCESS)
+    Backup::ExportCounts counts;
+    if (Backup::exportToFile(Database::instance(), path, dialog.password(), &counts) ==
+        Backup::Result::SUCCESS)
     {
         MessageDialog::info(this, tr("Export"),
             tr("Exported %n router(s), ", nullptr, counts.routers) +

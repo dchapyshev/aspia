@@ -19,7 +19,6 @@
 list(APPEND SOURCE_PROTO
     address_book.proto
     chat.proto
-    client_storage.proto
     desktop_audio.proto
     desktop_channel.proto
     desktop_clipboard.proto
@@ -46,6 +45,7 @@ list(APPEND SOURCE_PROTO
     router_host.proto
     router_peer.proto
     router_relay.proto
+    storage.proto
     stun.proto
     system_info.proto
     task_manager.proto

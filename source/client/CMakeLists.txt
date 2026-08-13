@@ -27,6 +27,8 @@ list(APPEND SOURCE_CLIENT_CORE
     audio_output.h
     audio_player.cc
     audio_player.h
+    backup.cc
+    backup.h
     database.cc
     database.h
     config.cc
@@ -43,8 +45,6 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer_queue_builder.h
     host_url.cc
     host_url.h
-    json_backup.cc
-    json_backup.h
     master_password.cc
     master_password.h
     router.cc
@@ -72,6 +72,7 @@ list(APPEND SOURCE_CLIENT
     main.cc)
 
 list(APPEND SOURCE_CLIENT_TESTS
+    backup_unittest.cc
     database_unittest.cc
     desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
@@ -81,7 +82,6 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/search_result_model_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
-    json_backup_unittest.cc
     router_cache_unittest.cc
     router_rpc_unittest.cc
     router_test_fixture.h

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_JSON_BACKUP_H
-#define CLIENT_JSON_BACKUP_H
+#ifndef CLIENT_BACKUP_H
+#define CLIENT_BACKUP_H
 
 #include <QString>
 
@@ -25,7 +25,9 @@
 
 class Database;
 
-class JsonBackup
+// Export and import of the address book as a single sealed file. The password of the backup is its
+// own and has nothing to do with the master password.
+class Backup
 {
 public:
     enum class Result
@@ -70,7 +72,7 @@ public:
                                  const SecureString& password, ImportCounts* counts = nullptr);
 
 private:
-    Q_DISABLE_COPY_MOVE(JsonBackup)
+    Q_DISABLE_COPY_MOVE(Backup)
 };
 
-#endif // CLIENT_JSON_BACKUP_H
+#endif // CLIENT_BACKUP_H

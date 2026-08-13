@@ -1,0 +1,92 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.storage;
+
+// The encrypted column of a host record.
+message HostBlob
+{
+    string address  = 1;
+    string username = 2;
+    string password = 3;
+}
+
+// The encrypted column of a router record.
+message RouterBlob
+{
+    string address     = 1;
+    string username    = 2;
+    string password    = 3;
+    bytes device_token = 4;
+}
+
+// The exported backup. |data| and |verifier| are sealed with a key derived from |salt| and the
+// password of the backup. |verifier| tells a wrong password from a damaged file.
+message BackupFile
+{
+    // The identifiers are the ones of the source database. The import uses them only to rebuild
+    // the tree and the links, and gives every record an id of its own.
+    message Router
+    {
+        int64 id            = 1;
+        string display_name = 2;
+        string address      = 3;
+        uint32 session_type = 4;
+        string username     = 5;
+        string password     = 6;
+    }
+
+    message Group
+    {
+        int64 id        = 1;
+        int64 parent_id = 2;
+        string name     = 3;
+        string comment  = 4;
+    }
+
+    message Host
+    {
+        int64 id        = 1;
+        int64 group_id  = 2;
+        int64 router_id = 3;
+        string guid     = 4;
+        string name     = 5;
+        string comment  = 6;
+        string address  = 7;
+        string username = 8;
+        string password = 9;
+    }
+
+    // What |data| holds once opened. The device token is not exported: it is bound to the user and
+    // the machine that got it.
+    message Content
+    {
+        repeated Router routers = 1;
+        repeated Group groups   = 2;
+        repeated Host hosts     = 3;
+    }
+
+    uint32 version = 1;
+    bytes salt     = 2;
+    bytes verifier = 3;
+    bytes data     = 4;
+}

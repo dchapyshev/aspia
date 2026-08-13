@@ -16,22 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/json_backup.h"
+#include "client/backup.h"
 
 #include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QTemporaryDir>
 
 #include <gtest/gtest.h>
 
+#include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "client/database.h"
+#include "proto/storage.h"
 
-class JsonBackupTest : public testing::Test
+class BackupTest : public testing::Test
 {
 protected:
     void SetUp() override
@@ -45,7 +45,7 @@ protected:
 
     static SecureString password() { return SecureString(QString("Password123")); }
 
-    QString backupPath() const { return dir_.filePath("book.json"); }
+    QString backupPath() const { return dir_.filePath("book.aspia-backup"); }
 
     static qint64 addGroup(Database& db, const QString& name, qint64 parent_id)
     {
@@ -89,34 +89,50 @@ protected:
         return std::nullopt;
     }
 
-    // The ids of the file are in the clear, so a book can be handed to the import with a link that
-    // names a group the file does not carry.
+    // Hands the import a book with a link that names a group the file does not carry. The whole
+    // address book is sealed, so getting at that link means opening the file with the password of
+    // the backup, the same way the import does.
     void repointGroupParent(qint64 group_id, qint64 new_parent_id)
     {
-        QFile file(backupPath());
-        ASSERT_TRUE(file.open(QIODevice::ReadOnly));
-        QJsonObject root = QJsonDocument::fromJson(file.readAll()).object();
-        file.close();
+        proto::storage::BackupFile file_message;
 
-        QJsonArray groups = root.value("groups").toArray();
-        bool found = false;
-
-        for (QJsonValueRef value : groups)
         {
-            QJsonObject group = value.toObject();
-            if (group.value("id").toInteger() != group_id)
-                continue;
-
-            group.insert("parent_id", new_parent_id);
-            value = group;
-            found = true;
+            QFile file(backupPath());
+            ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+            ASSERT_TRUE(parse(file.readAll(), &file_message));
         }
 
-        ASSERT_TRUE(found);
-        root.insert("groups", groups);
+        SecureByteArray key(PasswordHash::hash(
+            PasswordHash::ARGON2ID, password(),
+            QByteArray::fromStdString(file_message.salt())));
+        DataCryptor cryptor(CipherType::AES256_GCM, key);
 
+        std::optional<QByteArray> decrypted =
+            cryptor.decrypt(QByteArray::fromStdString(file_message.data()));
+        ASSERT_TRUE(decrypted.has_value());
+
+        proto::storage::BackupFile::Content data;
+        ASSERT_TRUE(parse(*decrypted, &data));
+
+        bool found = false;
+        for (proto::storage::BackupFile::Group& group : *data.mutable_groups())
+        {
+            if (group.id() != group_id)
+                continue;
+
+            group.set_parent_id(new_parent_id);
+            found = true;
+        }
+        ASSERT_TRUE(found);
+
+        std::optional<QByteArray> sealed = cryptor.encrypt(serialize(data));
+        ASSERT_TRUE(sealed.has_value());
+
+        file_message.set_data(sealed->toStdString());
+
+        QFile file(backupPath());
         ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
-        file.write(QJsonDocument(root).toJson());
+        file.write(serialize(file_message));
     }
 
     Database source_;
@@ -128,18 +144,18 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 // What was exported is what comes back, with the tree it was written in.
-TEST_F(JsonBackupTest, ExportedBookIsImportedBackWithItsTree)
+TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
 {
     const qint64 parent = addGroup(source_, "parent", 0);
     const qint64 child = addGroup(source_, "child", parent);
     addHost(source_, "host", child);
 
-    ASSERT_EQ(JsonBackup::exportToFile(source_, backupPath(), password()),
-              JsonBackup::Result::SUCCESS);
+    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
+              Backup::Result::SUCCESS);
 
-    JsonBackup::ImportCounts counts;
-    ASSERT_EQ(JsonBackup::importFromFile(target_, backupPath(), password(), &counts),
-              JsonBackup::Result::SUCCESS);
+    Backup::ImportCounts counts;
+    ASSERT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
+              Backup::Result::SUCCESS);
 
     EXPECT_EQ(groupNames(target_), QStringList({ "child", "parent" }));
     EXPECT_EQ(counts.groups, 2);
@@ -158,20 +174,20 @@ TEST_F(JsonBackupTest, ExportedBookIsImportedBackWithItsTree)
 // A host whose group the file does not carry is kept, at the root. A group whose parent the file
 // does not carry has to be kept the same way: dropping it takes everything below it as well, and
 // the tally the user is shown says nothing about it.
-TEST_F(JsonBackupTest, GroupWhoseParentIsMissingFromTheFileGoesToTheRoot)
+TEST_F(BackupTest, GroupWhoseParentIsMissingFromTheFileGoesToTheRoot)
 {
     const qint64 parent = addGroup(source_, "parent", 0);
     const qint64 child = addGroup(source_, "child", parent);
     addHost(source_, "host", child);
 
-    ASSERT_EQ(JsonBackup::exportToFile(source_, backupPath(), password()),
-              JsonBackup::Result::SUCCESS);
+    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
+              Backup::Result::SUCCESS);
 
     repointGroupParent(parent, 99999);
 
-    JsonBackup::ImportCounts counts;
-    ASSERT_EQ(JsonBackup::importFromFile(target_, backupPath(), password(), &counts),
-              JsonBackup::Result::SUCCESS);
+    Backup::ImportCounts counts;
+    ASSERT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
+              Backup::Result::SUCCESS);
 
     EXPECT_EQ(groupNames(target_), QStringList({ "child", "parent" }));
     EXPECT_EQ(counts.groups, 2);
@@ -189,19 +205,19 @@ TEST_F(JsonBackupTest, GroupWhoseParentIsMissingFromTheFileGoesToTheRoot)
 //--------------------------------------------------------------------------------------------------
 // Groups that name each other cannot be a tree, so they are not imported - and the tally says so
 // instead of leaving the user to count the rows.
-TEST_F(JsonBackupTest, GroupsThatNameEachOtherAreCountedAsSkipped)
+TEST_F(BackupTest, GroupsThatNameEachOtherAreCountedAsSkipped)
 {
     const qint64 first = addGroup(source_, "first", 0);
     const qint64 second = addGroup(source_, "second", first);
 
-    ASSERT_EQ(JsonBackup::exportToFile(source_, backupPath(), password()),
-              JsonBackup::Result::SUCCESS);
+    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
+              Backup::Result::SUCCESS);
 
     repointGroupParent(first, second);
 
-    JsonBackup::ImportCounts counts;
-    EXPECT_EQ(JsonBackup::importFromFile(target_, backupPath(), password(), &counts),
-              JsonBackup::Result::NOTHING_IMPORTED);
+    Backup::ImportCounts counts;
+    EXPECT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
+              Backup::Result::NOTHING_IMPORTED);
 
     EXPECT_EQ(counts.groups, 0);
     EXPECT_EQ(counts.groups_skipped, 2);
@@ -209,15 +225,37 @@ TEST_F(JsonBackupTest, GroupsThatNameEachOtherAreCountedAsSkipped)
 
 //--------------------------------------------------------------------------------------------------
 // The password is what the file is locked with, and nothing is written without it.
-TEST_F(JsonBackupTest, BookIsNotImportedWithAnotherPassword)
+TEST_F(BackupTest, BookIsNotImportedWithAnotherPassword)
 {
     addGroup(source_, "group", 0);
 
-    ASSERT_EQ(JsonBackup::exportToFile(source_, backupPath(), password()),
-              JsonBackup::Result::SUCCESS);
+    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
+              Backup::Result::SUCCESS);
 
-    EXPECT_EQ(JsonBackup::importFromFile(target_, backupPath(), SecureString(QString("Other123"))),
-              JsonBackup::Result::WRONG_PASSWORD);
+    EXPECT_EQ(Backup::importFromFile(target_, backupPath(), SecureString(QString("Other123"))),
+              Backup::Result::WRONG_PASSWORD);
 
     EXPECT_TRUE(groupNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// What the format is for: the book is sealed whole. Neither a name the user gave a record nor the
+// address it points at is anywhere in the bytes of the file.
+TEST_F(BackupTest, NothingOfTheBookIsReadableInTheFile)
+{
+    const qint64 group = addGroup(source_, "accounting-department", 0);
+    addHost(source_, "prod-database-server", group);
+
+    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
+              Backup::Result::SUCCESS);
+
+    QFile file(backupPath());
+    ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+
+    const QByteArray bytes = file.readAll();
+    ASSERT_FALSE(bytes.isEmpty());
+
+    EXPECT_FALSE(bytes.contains("accounting-department"));
+    EXPECT_FALSE(bytes.contains("prod-database-server"));
+    EXPECT_FALSE(bytes.contains("192.168.0.1"));
 }

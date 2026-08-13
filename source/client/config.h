@@ -74,10 +74,7 @@ public:
     void setPassword(const SecureString& value) { password_ = value; }
 
     // Bearer "remember this device" token issued by the router after a successful TOTP
-    // submission. Empty until the user enrolls or enters a TOTP code at least once. On the way to
-    // the database it is wrapped by the OS keystore before being sealed with everything else, so a
-    // copy of |client.db3| moved to another machine cannot present a usable token even if the
-    // master password is known.
+    // submission. Empty until the user enrolls or enters a TOTP code at least once.
     const QByteArray& deviceToken() const { return device_token_; }
     void setDeviceToken(const QByteArray& value) { device_token_ = value; }
 
