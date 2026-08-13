@@ -128,7 +128,8 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
     EXPECT_EQ(stored.address(), "192.168.1.10");
     EXPECT_GT(stored.last_connect(), 0);
 
-    ASSERT_EQ(db_.modifyHost(host_id, 0, 0, "Accounting", std::string_view()),
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), 0, 0, "Accounting",
+                             std::string_view()),
               proto::router::kErrorOk);
 
     ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
@@ -251,7 +252,8 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
 
     const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(db_.modifyHost(host_id, workspace_id, 0, "Accounting", "comment"),
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, 0,
+                             "Accounting", "comment"),
               proto::router::kErrorOk);
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);

@@ -130,7 +130,7 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     }
 
     const std::string_view error_code = database.modifyHost(
-        host_id, target_workspace_id, group_id, host.display_name(), host.comment());
+        host_id, host.revision(), target_workspace_id, group_id, host.display_name(), host.comment());
     if (error_code != proto::router::kErrorOk)
     {
         result.error_code = error_code;

@@ -37,10 +37,10 @@
 // hosts of a workspace are claimed one by one, through editHost().
 struct RouterWorkspace
 {
+    qint64 revision = 0;
     qint64 entry_id = 0;
     QString name;
     QString comment;
-    qint64 revision = 0;
     QList<qint64> user_ids;
 };
 
@@ -52,6 +52,7 @@ struct RouterWorkspaceList
 
 struct RouterHost
 {
+    qint64 revision = 0;
     HostId host_id = kInvalidHostId;
     qint64 workspace_id = 0;
     qint64 group_id = 0;
@@ -93,6 +94,7 @@ struct RouterTempHostList
 
 struct RouterGroup
 {
+    qint64 revision = 0;
     qint64 entry_id = 0;
     qint64 workspace_id = 0; // Workspace that owns the group.
     qint64 parent_id = 0;    // 0 means the group sits at the workspace root.

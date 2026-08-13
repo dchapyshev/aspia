@@ -102,6 +102,7 @@ void RouterGroupDialog::onGroupListReceived(const Router::GroupList& list)
             ui->edit_name->setText(group.name);
             ui->edit_comment->setPlainText(group.comment);
             selected_parent = group.parent_id;
+            base_revision_ = group.revision;
         }
     }
 
@@ -155,6 +156,7 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     group.parent_id = ui->combo_parent->currentGroupId();
     group.name      = name;
     group.comment   = ui->edit_comment->toPlainText();
+    group.revision  = base_revision_;
 
     Router* router = Router::instance(router_id_);
     if (!router)

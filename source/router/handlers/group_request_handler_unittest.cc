@@ -65,6 +65,13 @@ protected:
         return QString::fromStdString(group.name);
     }
 
+    qint64 groupRevision(qint64 workspace_id, qint64 entry_id)
+    {
+        Group group;
+        db_.findGroup(workspace_id, entry_id, &group);
+        return group.revision;
+    }
+
     int groupCount(qint64 workspace_id)
     {
         proto::router::GroupList list;
@@ -268,12 +275,38 @@ TEST_F(GroupRequestHandlerTest, ModifyRenamesAndNotifies)
         makeRequest(proto::router::kCommandGroupModify, workspace_id_);
     request.mutable_group()->set_entry_id(group_id);
     request.mutable_group()->set_name("workstations");
+    request.mutable_group()->set_revision(groupRevision(workspace_id_, group_id));
 
     const RequestResult result = handle(request);
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_GROUPS));
     EXPECT_EQ(groupName(workspace_id_, group_id), "workstations");
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit built on a stale revision is refused: the loser of two concurrent edits is told to
+// refetch instead of silently undoing the rename of the winner.
+TEST_F(GroupRequestHandlerTest, StaleGroupEditIsConflict)
+{
+    const qint64 group_id = addGroup(workspace_id_, 0, "servers");
+    ASSERT_GT(group_id, 0);
+
+    proto::router::GroupRequest stale =
+        makeRequest(proto::router::kCommandGroupModify, workspace_id_);
+    stale.mutable_group()->set_entry_id(group_id);
+    stale.mutable_group()->set_name("loser");
+    stale.mutable_group()->set_revision(groupRevision(workspace_id_, group_id));
+
+    proto::router::GroupRequest winner = stale;
+    winner.mutable_group()->set_name("winner");
+    ASSERT_EQ(handle(winner).error_code, proto::router::kErrorOk);
+
+    const RequestResult result = handle(stale);
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
+    EXPECT_EQ(result.notify_flags, 0u);
+    EXPECT_EQ(groupName(workspace_id_, group_id), "winner");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -290,6 +323,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsCycle)
     request.mutable_group()->set_entry_id(parent_id);
     request.mutable_group()->set_parent_id(child_id);
     request.mutable_group()->set_name("parent");
+    request.mutable_group()->set_revision(groupRevision(workspace_id_, parent_id));
 
     const RequestResult result = handle(request);
 
@@ -332,7 +366,8 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     const qint64 child_id = addGroup(workspace_id_, parent_id, "child");
     ASSERT_GT(child_id, 0);
 
-    ASSERT_EQ(db_.modifyHost(host_id, workspace_id_, child_id, "host", std::string_view()),
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id_, child_id,
+                             "host", std::string_view()),
               proto::router::kErrorOk);
 
     proto::router::GroupRequest request =

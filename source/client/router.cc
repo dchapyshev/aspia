@@ -75,6 +75,7 @@ RouterHost parseHost(const proto::router::Host& src)
     dst.last_connect  = src.last_connect();
     dst.last_modify   = src.last_modify();
     dst.online        = src.online();
+    dst.revision      = src.revision();
 
     return dst;
 }
@@ -118,6 +119,7 @@ std::string_view serializeGroup(const RouterGroup& group, proto::router::Group* 
     out->set_parent_id(group.parent_id);
     out->set_name(group.name.trimmed().toStdString());
     out->set_comment(group.comment.toStdString());
+    out->set_revision(group.revision);
 
     // The name is mandatory.
     if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
@@ -446,6 +448,7 @@ void Router::editHost(const RouterHost& host, RouterCallback<proto::router::Host
     serialized.set_group_id(host.group_id);
     serialized.set_display_name(host.display_name.toStdString());
     serialized.set_comment(host.comment.toStdString());
+    serialized.set_revision(host.revision);
 
     // Every field of a host is optional (an empty display name falls back to the computer name),
     // so only the sizes are checked. They count the bytes that go out, not the characters typed.
@@ -1051,6 +1054,7 @@ RouterGroupList Router::applyGroupList(const proto::router::GroupList& list)
         dst.parent_id    = src.parent_id();
         dst.name         = QString::fromStdString(src.name());
         dst.comment      = QString::fromStdString(src.comment());
+        dst.revision     = src.revision();
     }
 
     cache_.storeGroups(result);

@@ -622,9 +622,10 @@ TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An edit carries the workspace the host is to end up in. An ordinary edit repeats the workspace
-// the host is already in, so editing a host never releases it by omission.
-TEST_F(RouterTest, HostEditCarriesTheWorkspace)
+// An edit carries the workspace the host is to end up in and the revision it was built on. An
+// ordinary edit repeats the workspace the host is already in, so editing a host never releases
+// it by omission.
+TEST_F(RouterTest, HostEditCarriesTheWorkspaceAndTheRevision)
 {
     loadIdentity();
 
@@ -633,6 +634,7 @@ TEST_F(RouterTest, HostEditCarriesTheWorkspace)
     host.workspace_id = kWorkspaceId;
     host.group_id = 5;
     host.display_name = "display";
+    host.revision = 3;
 
     router_.editHost(host, { &receiver_, [](const proto::router::HostResult&) {} });
 
@@ -641,6 +643,7 @@ TEST_F(RouterTest, HostEditCarriesTheWorkspace)
     EXPECT_EQ(request.host_request().command_name(), proto::router::kCommandHostModify);
     EXPECT_EQ(request.host_request().host().workspace_id(), kWorkspaceId);
     EXPECT_EQ(request.host_request().host().group_id(), 5);
+    EXPECT_EQ(request.host_request().host().revision(), 3);
 }
 
 //--------------------------------------------------------------------------------------------------

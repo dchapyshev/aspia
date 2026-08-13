@@ -116,8 +116,8 @@ protected:
     std::string_view moveHost(HostId host_id, qint64 workspace_id, qint64 group_id = 0)
     {
         const proto::router::Host host = findHost(host_id);
-        return db_.modifyHost(host_id, workspace_id, group_id, host.display_name(),
-                              host.comment());
+        return db_.modifyHost(host_id, host.revision(), workspace_id, group_id,
+                              host.display_name(), host.comment());
     }
 
     qint64 workspaceRevision(qint64 workspace_id)
@@ -445,9 +445,10 @@ TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host belongs to one workspace at a time. The second claim loses, and the loser is told to
-// refetch instead of being told the host is gone.
-TEST_F(RouterDatabaseTest, HostBelongsToOneWorkspace)
+// A host edit is applied only when it was built on the current state of the host. Two operators
+// claim the same free host: the second claim was built on the state the first one already changed,
+// so it loses and is told to refetch instead of silently stealing the host.
+TEST_F(RouterDatabaseTest, StaleHostEditIsRefused)
 {
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
@@ -457,17 +458,97 @@ TEST_F(RouterDatabaseTest, HostBelongsToOneWorkspace)
     const qint64 other_id = addWorkspace("beta", {admin_.entry_id});
     ASSERT_GT(other_id, 0);
 
-    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
+    const qint64 seen_revision = findHost(host_id).revision();
+
+    ASSERT_EQ(db_.modifyHost(host_id, seen_revision, workspace_id, 0, "display",
+                             std::string_view()),
+              proto::router::kErrorOk);
     EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
 
-    EXPECT_EQ(moveHost(host_id, other_id), proto::router::kErrorConflict);
+    EXPECT_EQ(db_.modifyHost(host_id, seen_revision, other_id, 0, "display", std::string_view()),
+              proto::router::kErrorConflict);
     EXPECT_EQ(findHost(host_id).workspace_id(), workspace_id);
 
     // A workspace that is gone reads the same way: the sender acted on a stale snapshot.
-    EXPECT_EQ(db_.modifyHost(host_id, 12345, 0, "display", std::string_view()),
-              proto::router::kErrorConflict);
-    EXPECT_EQ(db_.modifyHost(HostId(54321), workspace_id, 0, "display", std::string_view()),
+    EXPECT_EQ(moveHost(host_id, 12345), proto::router::kErrorConflict);
+    EXPECT_EQ(db_.modifyHost(HostId(54321), 1, workspace_id, 0, "display", std::string_view()),
               proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The race that must never lose data silently: one operator releases the host, another saves an
+// edit built while the host was still in the workspace. The stale save must not claim the host
+// back into the workspace it was just taken from.
+TEST_F(RouterDatabaseTest, ReleasedHostIsNotClaimedBackByAStaleEdit)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
+    ASSERT_GT(workspace_id, 0);
+
+    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
+    const proto::router::Host snapshot = findHost(host_id);
+
+    ASSERT_EQ(moveHost(host_id, 0), proto::router::kErrorOk);
+
+    EXPECT_EQ(db_.modifyHost(host_id, snapshot.revision(), snapshot.workspace_id(),
+                             snapshot.group_id(), "renamed", "note"),
+              proto::router::kErrorConflict);
+
+    const proto::router::Host after = findHost(host_id);
+    EXPECT_EQ(after.workspace_id(), 0);
+    EXPECT_TRUE(after.comment().empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The cascades that touch the operator-edited fields move the revision too: an edit built before
+// the workspace (or the group) of the host was removed is as stale as one built before a direct
+// edit.
+TEST_F(RouterDatabaseTest, CascadesMoveTheHostRevision)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
+    ASSERT_GT(workspace_id, 0);
+
+    qint64 group_id = -1;
+    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
+              proto::router::kErrorOk);
+    ASSERT_EQ(moveHost(host_id, workspace_id, group_id), proto::router::kErrorOk);
+
+    // The group of the host goes away: the host drops to the workspace root and the edit built
+    // while it was still in the group is stale.
+    proto::router::Host snapshot = findHost(host_id);
+    ASSERT_EQ(db_.removeGroup(workspace_id, group_id), proto::router::kErrorOk);
+    EXPECT_GT(findHost(host_id).revision(), snapshot.revision());
+    EXPECT_EQ(db_.modifyHost(host_id, snapshot.revision(), workspace_id, 0, "renamed",
+                             std::string_view()),
+              proto::router::kErrorConflict);
+
+    // The workspace goes away: the host is released and the pre-removal edit must not claim it
+    // back.
+    snapshot = findHost(host_id);
+    ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
+    EXPECT_GT(findHost(host_id).revision(), snapshot.revision());
+    EXPECT_EQ(findHost(host_id).workspace_id(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// What the host reports about itself on connect does not move the revision: a reconnecting host
+// must not fail the edit dialog an operator has open.
+TEST_F(RouterDatabaseTest, HostConnectDoesNotMoveTheRevision)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    const qint64 seen_revision = findHost(host_id).revision();
+
+    ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
+                                   "3.0.1", "Windows", "192.168.1.11"));
+
+    EXPECT_EQ(findHost(host_id).revision(), seen_revision);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -484,7 +565,8 @@ TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndComment)
     ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
               proto::router::kErrorOk);
 
-    ASSERT_EQ(db_.modifyHost(host_id, workspace_id, group_id, "display", "comment"),
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, group_id,
+                             "display", "comment"),
               proto::router::kErrorOk);
     ASSERT_FALSE(findHost(host_id).comment().empty());
 
@@ -613,32 +695,3 @@ TEST(RouterDatabaseFreshTest, AddHostBeforeAnyAutoincrementInsert)
     EXPECT_EQ(host_id, HostId(1));
 }
 
-//--------------------------------------------------------------------------------------------------
-// A database created before the revision column existed gets it backfilled on open, with the
-// default every pre-existing row starts from.
-TEST(RouterDatabaseMigrationTest, RevisionColumnBackfilled)
-{
-    QTemporaryDir temp_dir;
-    ASSERT_TRUE(temp_dir.isValid());
-    const QString file_path = temp_dir.path() + "/router.db3";
-
-    {
-        SqlDatabase legacy;
-        ASSERT_TRUE(legacy.open(file_path));
-        ASSERT_TRUE(legacy.exec("CREATE TABLE \"workspaces\" ("
-                                "\"id\" INTEGER UNIQUE,"
-                                "\"name\" TEXT NOT NULL UNIQUE,"
-                                "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                                "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
-        ASSERT_TRUE(legacy.exec("INSERT INTO workspaces (id, name) VALUES (NULL, 'legacy')"));
-    }
-
-    Database db;
-    ASSERT_TRUE(db.open(file_path));
-
-    SqlDatabase raw;
-    ASSERT_TRUE(raw.open(file_path));
-    SqlQuery query(raw, "SELECT revision FROM workspaces WHERE name='legacy'");
-    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
-    EXPECT_EQ(query.columnInt64(0), 1);
-}

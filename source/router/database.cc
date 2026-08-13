@@ -150,10 +150,15 @@ bool ensureSchema(SqlDatabase& db)
     // name, computer_name (real OS hostname), cpu_arch, version, os_name, address and
     // last_connect are updated by the router on every host connection and reflect the latest
     // connect attempt.
+    // revision is the optimistic-concurrency counter of the operator-edited fields
+    // (workspace_id, group_id, display_name, comment): moved by operator edits and by the
+    // cascades that touch those fields, never by what the host reports about itself, so a
+    // reconnecting host cannot fail an open edit dialog.
     if (!run("CREATE TABLE IF NOT EXISTS \"hosts\" ("
              "\"id\" INTEGER UNIQUE,"
              "\"key\" BLOB NOT NULL UNIQUE,"
              "\"hwid\" BLOB NOT NULL DEFAULT X'',"
+             "\"revision\" INTEGER NOT NULL DEFAULT 1,"
              "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
              "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
              "\"display_name\" TEXT NOT NULL DEFAULT '',"
@@ -175,22 +180,12 @@ bool ensureSchema(SqlDatabase& db)
     // rejected instead of silently overwriting a concurrent change.
     if (!run("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
              "\"id\" INTEGER UNIQUE,"
+             "\"revision\" INTEGER NOT NULL DEFAULT 1,"
              "\"name\" TEXT NOT NULL UNIQUE,"
              "\"comment\" TEXT NOT NULL DEFAULT '',"
-             "\"revision\" INTEGER NOT NULL DEFAULT 1,"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         return false;
-    }
-
-    // The revision column was added later; backfill it on upgraded databases.
-    if (!hasColumn(db, "workspaces", "revision"))
-    {
-        if (!db.exec("ALTER TABLE \"workspaces\" ADD COLUMN \"revision\" INTEGER NOT NULL DEFAULT 1"))
-        {
-            LOG(ERROR) << "Unable to add column revision:" << db.lastError();
-            return false;
-        }
     }
 
     if (!run("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
@@ -205,6 +200,7 @@ bool ensureSchema(SqlDatabase& db)
 
     if (!run("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
              "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT,"
+             "\"revision\" INTEGER NOT NULL DEFAULT 1,"
              "\"workspace_id\" INTEGER NOT NULL,"
              "\"parent_id\" INTEGER,"
              "\"name\" TEXT NOT NULL,"
@@ -309,6 +305,7 @@ bool ensureSchema(SqlDatabase& db)
     // databases.
     static const struct { const char* name; const char* definition; } kHostColumns[] = {
         { "hwid",          "BLOB NOT NULL DEFAULT X''"   },
+        { "revision",      "INTEGER NOT NULL DEFAULT 1"  },
         { "workspace_id",  "INTEGER NOT NULL DEFAULT 0"  },
         { "group_id",      "INTEGER NOT NULL DEFAULT 0"  },
         { "display_name",  "TEXT NOT NULL DEFAULT ''"    },
@@ -1522,8 +1519,8 @@ std::string_view Database::hostWorkspaceId(HostId host_id, qint64* workspace_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint64 group_id,
-    std::string_view display_name, std::string_view comment)
+std::string_view Database::modifyHost(HostId host_id, qint64 base_revision, qint64 workspace_id,
+    qint64 group_id, std::string_view display_name, std::string_view comment)
 {
     if (!isValid())
     {
@@ -1544,7 +1541,7 @@ std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint6
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery current(db_, "SELECT workspace_id FROM hosts WHERE id=?");
+    SqlQuery current(db_, "SELECT revision FROM hosts WHERE id=?");
     current.addUInt64(host_id);
 
     const SqlQuery::StepResult current_step = current.next();
@@ -1561,17 +1558,17 @@ std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint6
         return proto::router::kErrorNotFound;
     }
 
-    const qint64 current_workspace_id = current.columnInt64(0);
-
-    if (workspace_id > 0 && current_workspace_id != 0 && current_workspace_id != workspace_id)
+    if (current.columnInt64(0) != base_revision)
     {
-        // The operator saw the host free (or in the workspace it is editing) and another
-        // workspace claimed it meanwhile - a lost race the sender resolves by refetching.
-        LOG(ERROR) << "Host" << host_id << "belongs to another workspace:" << current_workspace_id;
+        // The edit was based on an older state of the host. Applying it would silently overwrite
+        // whatever the concurrent edit did (a released host would be claimed back, a rename or a
+        // move would be undone), so the client must refetch and retry instead.
+        LOG(ERROR) << "Host" << host_id << "was changed concurrently (stored revision"
+                   << current.columnInt64(0) << ", request based on" << base_revision << ")";
         return proto::router::kErrorConflict;
     }
 
-    if (workspace_id > 0 && workspace_id != current_workspace_id)
+    if (workspace_id > 0)
     {
         SqlQuery workspace_check(db_, "SELECT 1 FROM workspaces WHERE id=?");
         workspace_check.addInt64(workspace_id);
@@ -1585,7 +1582,7 @@ std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint6
 
         if (check_step != SqlQuery::StepResult::ROW)
         {
-            // The workspace of the snapshot is gone - same lost race as above.
+            // The workspace of the snapshot is gone - the same stale-snapshot race as above.
             LOG(ERROR) << "Workspace not found:" << workspace_id;
             return proto::router::kErrorConflict;
         }
@@ -1597,8 +1594,8 @@ std::string_view Database::modifyHost(HostId host_id, qint64 workspace_id, qint6
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     const char kSql[] =
-        "UPDATE hosts SET workspace_id=?, display_name=?, group_id=?, comment=?, last_modify=? "
-        "WHERE id=?";
+        "UPDATE hosts SET revision=revision+1, workspace_id=?, display_name=?, group_id=?, "
+        "comment=?, last_modify=? WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addInt64(workspace_id);
     query.addText(display_name);
@@ -1639,8 +1636,8 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         return;
     }
     const std::string sql = strCat({
-        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
-        "os_name, address, comment, last_connect, last_modify FROM hosts",
+        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "version, os_name, address, comment, last_connect, last_modify FROM hosts",
         " LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
@@ -1671,17 +1668,18 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
 
         proto::router::Host* host = out->add_host();
         host->set_host_id(query.columnUInt64(0));
-        host->set_workspace_id(query.columnInt64(1));
-        host->set_group_id(query.columnInt64(2));
-        host->set_display_name(query.columnTextView(3));
-        host->set_computer_name(query.columnTextView(4));
-        host->set_cpu_arch(query.columnTextView(5));
-        host->set_version(query.columnTextView(6));
-        host->set_os_name(query.columnTextView(7));
-        host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnTextView(9));
-        host->set_last_connect(query.columnInt64(10));
-        host->set_last_modify(query.columnInt64(11));
+        host->set_revision(query.columnInt64(1));
+        host->set_workspace_id(query.columnInt64(2));
+        host->set_group_id(query.columnInt64(3));
+        host->set_display_name(query.columnTextView(4));
+        host->set_computer_name(query.columnTextView(5));
+        host->set_cpu_arch(query.columnTextView(6));
+        host->set_version(query.columnTextView(7));
+        host->set_os_name(query.columnTextView(8));
+        host->set_address(query.columnTextView(9));
+        host->set_comment(query.columnTextView(10));
+        host->set_last_connect(query.columnInt64(11));
+        host->set_last_modify(query.columnInt64(12));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -1707,8 +1705,8 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
     // A negative group_id asks for the hosts of the workspace whatever group they sit in.
     const bool any_group = group_id < 0;
     const std::string sql = strCat({
-        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, version, "
-        "os_name, address, comment, last_connect, last_modify "
+        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "version, os_name, address, comment, last_connect, last_modify "
         "FROM hosts WHERE workspace_id=?",
         any_group ? "" : " AND group_id=?",
         " LIMIT ? OFFSET ?"});
@@ -1744,17 +1742,18 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
 
         proto::router::Host* host = out->add_host();
         host->set_host_id(query.columnUInt64(0));
-        host->set_workspace_id(query.columnInt64(1));
-        host->set_group_id(query.columnInt64(2));
-        host->set_display_name(query.columnTextView(3));
-        host->set_computer_name(query.columnTextView(4));
-        host->set_cpu_arch(query.columnTextView(5));
-        host->set_version(query.columnTextView(6));
-        host->set_os_name(query.columnTextView(7));
-        host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnTextView(9));
-        host->set_last_connect(query.columnInt64(10));
-        host->set_last_modify(query.columnInt64(11));
+        host->set_revision(query.columnInt64(1));
+        host->set_workspace_id(query.columnInt64(2));
+        host->set_group_id(query.columnInt64(3));
+        host->set_display_name(query.columnTextView(4));
+        host->set_computer_name(query.columnTextView(5));
+        host->set_cpu_arch(query.columnTextView(6));
+        host->set_version(query.columnTextView(7));
+        host->set_os_name(query.columnTextView(8));
+        host->set_address(query.columnTextView(9));
+        host->set_comment(query.columnTextView(10));
+        host->set_last_connect(query.columnInt64(11));
+        host->set_last_modify(query.columnInt64(12));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -1906,7 +1905,7 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
     out->set_total_count(count_query.columnInt64(0));
 
     const std::string sql =
-        "SELECT id, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
         "version, os_name, address, comment, last_connect, last_modify" +
         where + " ORDER BY display_name LIMIT ? OFFSET ?";
 
@@ -1945,17 +1944,18 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
 
         proto::router::Host* host = out->add_host();
         host->set_host_id(query.columnUInt64(0));
-        host->set_workspace_id(query.columnInt64(1));
-        host->set_group_id(query.columnInt64(2));
-        host->set_display_name(query.columnTextView(3));
-        host->set_computer_name(query.columnTextView(4));
-        host->set_cpu_arch(query.columnTextView(5));
-        host->set_version(query.columnTextView(6));
-        host->set_os_name(query.columnTextView(7));
-        host->set_address(query.columnTextView(8));
-        host->set_comment(query.columnTextView(9));
-        host->set_last_connect(query.columnInt64(10));
-        host->set_last_modify(query.columnInt64(11));
+        host->set_revision(query.columnInt64(1));
+        host->set_workspace_id(query.columnInt64(2));
+        host->set_group_id(query.columnInt64(3));
+        host->set_display_name(query.columnTextView(4));
+        host->set_computer_name(query.columnTextView(5));
+        host->set_cpu_arch(query.columnTextView(6));
+        host->set_version(query.columnTextView(7));
+        host->set_os_name(query.columnTextView(8));
+        host->set_address(query.columnTextView(9));
+        host->set_comment(query.columnTextView(10));
+        host->set_last_connect(query.columnInt64(11));
+        host->set_last_modify(query.columnInt64(12));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2129,7 +2129,7 @@ void Database::workspaceListForAdmin(qint64 workspace_id, proto::router::Workspa
     std::unordered_map<qint64, proto::router::Workspace*> by_id;
     {
         const std::string sql = strCat({
-            "SELECT id, name, comment, revision FROM workspaces",
+            "SELECT id, revision, name, comment FROM workspaces",
             workspace_id > 0 ? " WHERE id = ?" : ""});
 
         SqlQuery query(db_, sql);
@@ -2160,9 +2160,9 @@ void Database::workspaceListForAdmin(qint64 workspace_id, proto::router::Workspa
 
             proto::router::Workspace* item = out->add_workspace();
             item->set_entry_id(query.columnInt64(0));
-            item->set_name(query.columnTextView(1));
-            item->set_comment(query.columnTextView(2));
-            item->set_revision(query.columnInt64(3));
+            item->set_revision(query.columnInt64(1));
+            item->set_name(query.columnTextView(2));
+            item->set_comment(query.columnTextView(3));
             by_id.emplace(item->entry_id(), item);
         }
     }
@@ -2230,7 +2230,7 @@ void Database::workspaceListForUser(qint64 user_id, qint64 workspace_id,
     // The membership of the others is none of the business of a regular session, so the reply
     // carries the workspaces alone.
     const std::string sql = strCat({
-        "SELECT workspaces.id, workspaces.name, workspaces.comment, workspaces.revision "
+        "SELECT workspaces.id, workspaces.revision, workspaces.name, workspaces.comment "
         "FROM workspaces JOIN workspace_access ON workspace_access.workspace_id = workspaces.id "
         "AND workspace_access.user_id = ?",
         workspace_id > 0 ? " AND workspaces.id = ?" : ""});
@@ -2264,9 +2264,9 @@ void Database::workspaceListForUser(qint64 user_id, qint64 workspace_id,
 
         proto::router::Workspace* item = out->add_workspace();
         item->set_entry_id(query.columnInt64(0));
-        item->set_name(query.columnTextView(1));
-        item->set_comment(query.columnTextView(2));
-        item->set_revision(query.columnInt64(3));
+        item->set_revision(query.columnInt64(1));
+        item->set_name(query.columnTextView(2));
+        item->set_comment(query.columnTextView(3));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2513,7 +2513,7 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         return proto::router::kErrorAlreadyExists;
 
     SqlQuery update_workspace(db_,
-        "UPDATE workspaces SET name=?, comment=?, revision=revision+1 WHERE id=?");
+        "UPDATE workspaces SET revision=revision+1, name=?, comment=? WHERE id=?");
     update_workspace.addText(name);
     update_workspace.addText(comment);
     update_workspace.addInt64(entry_id);
@@ -2638,7 +2638,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorNotFound;
 
     SqlQuery release_hosts(db_,
-        "UPDATE hosts SET workspace_id=0, group_id=0, comment='' "
+        "UPDATE hosts SET revision=revision+1, workspace_id=0, group_id=0, comment='' "
         "WHERE workspace_id=?");
     release_hosts.addInt64(entry_id);
 
@@ -2787,7 +2787,8 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
     // is the client's job. Building a tree from this result does not require any particular order:
     // index nodes by id, then link children to parents.
     const char kSql[] =
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups WHERE workspace_id=?";
+        "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
+        "WHERE workspace_id=?";
     SqlQuery query(db_, kSql);
     if (!query.isValid())
     {
@@ -2815,9 +2816,10 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
 
         proto::router::Group* group = out->add_group();
         group->set_entry_id(query.columnInt64(0));
-        group->set_parent_id(query.columnInt64(1));
-        group->set_name(query.columnTextView(2));
-        group->set_comment(query.columnTextView(3));
+        group->set_revision(query.columnInt64(1));
+        group->set_parent_id(query.columnInt64(2));
+        group->set_name(query.columnTextView(3));
+        group->set_comment(query.columnTextView(4));
     }
 
     out->set_error_code(proto::router::kErrorOk);
@@ -2846,7 +2848,7 @@ std::string_view Database::findGroup(qint64 workspace_id, qint64 entry_id, Group
     // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
     // part of the filter so a stale id from another workspace cannot leak through.
     const char kSql[] =
-        "SELECT id, IFNULL(parent_id, 0), name, comment FROM host_groups "
+        "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE id=? AND workspace_id=?";
     SqlQuery query(db_, kSql);
     query.addInt64(entry_id);
@@ -2864,9 +2866,10 @@ std::string_view Database::findGroup(qint64 workspace_id, qint64 entry_id, Group
         return proto::router::kErrorNotFound;
 
     group->entry_id  = query.columnInt64(0);
-    group->parent_id = query.columnInt64(1);
-    group->name      = query.columnTextView(2);
-    group->comment   = query.columnTextView(3);
+    group->revision  = query.columnInt64(1);
+    group->parent_id = query.columnInt64(2);
+    group->name      = query.columnTextView(3);
+    group->comment   = query.columnTextView(4);
     return proto::router::kErrorOk;
 }
 
@@ -2963,8 +2966,8 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
-    std::string_view name, std::string_view comment)
+std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 base_revision,
+    qint64 new_parent_id, std::string_view name, std::string_view comment)
 {
     if (!isValid())
     {
@@ -2999,7 +3002,7 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     }
 
     // Verify the group being modified exists in this workspace.
-    SqlQuery select_self(db_, "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+    SqlQuery select_self(db_, "SELECT revision FROM host_groups WHERE id=? AND workspace_id=?");
     select_self.addInt64(entry_id);
     select_self.addInt64(workspace_id);
 
@@ -3011,6 +3014,16 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
 
     if (select_self.next() != SqlQuery::StepResult::ROW)
         return proto::router::kErrorNotFound;
+
+    if (select_self.columnInt64(0) != base_revision)
+    {
+        // The edit was based on an older state of the group. Applying it would silently
+        // overwrite the concurrent edit (a rename would be undone, a moved subtree would be
+        // moved back), so the client must refetch and retry instead.
+        LOG(ERROR) << "Group" << entry_id << "was changed concurrently (stored revision"
+                   << select_self.columnInt64(0) << ", request based on" << base_revision << ")";
+        return proto::router::kErrorConflict;
+    }
 
     if (new_parent_id != 0)
     {
@@ -3056,7 +3069,8 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
     }
 
     const char kSql[] =
-        "UPDATE host_groups SET parent_id=?, name=?, comment=? WHERE id=? AND workspace_id=?";
+        "UPDATE host_groups SET revision=revision+1, parent_id=?, name=?, comment=? "
+        "WHERE id=? AND workspace_id=?";
     SqlQuery update_self(db_, kSql);
     if (new_parent_id == 0)
         update_self.addNull();
@@ -3111,7 +3125,7 @@ std::string_view Database::removeGroup(qint64 workspace_id, qint64 entry_id)
         "    SELECT child.id FROM host_groups child "
         "    JOIN deleted_groups parent ON child.parent_id = parent.id "
         "    WHERE child.workspace_id=?"
-        ") UPDATE hosts SET group_id=0 WHERE workspace_id=? "
+        ") UPDATE hosts SET revision=revision+1, group_id=0 WHERE workspace_id=? "
         "AND group_id IN (SELECT id FROM deleted_groups)";
     SqlQuery release_hosts(db_, kReleaseHostsSql);
     release_hosts.addInt64(entry_id);

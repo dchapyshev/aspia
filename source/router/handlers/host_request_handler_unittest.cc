@@ -67,6 +67,7 @@ protected:
         host->set_workspace_id(workspace_id);
         host->set_group_id(group_id);
         host->set_display_name(std::string(display_name));
+        host->set_revision(findHost(host_id).revision());
         return request;
     }
 
@@ -311,8 +312,9 @@ TEST_F(HostRequestHandlerTest, AdminMovesHostBetweenWorkspaces)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host another workspace holds is not free to take, and the sender is told to refetch.
-TEST_F(HostRequestHandlerTest, HostOfAnotherWorkspaceIsConflict)
+// An administrator that acts on the current state of the host moves it between workspaces
+// directly.
+TEST_F(HostRequestHandlerTest, AdminMovesHostDirectlyToAnotherWorkspace)
 {
     caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
@@ -321,9 +323,27 @@ TEST_F(HostRequestHandlerTest, HostOfAnotherWorkspaceIsConflict)
 
     const RequestResult result = handle(makeMoveRequest(host_id_, other_id, 0, "display"));
 
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(findHost(host_id_).workspace_id(), other_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit built on a stale revision is refused, and the sender is told to refetch. The revision
+// of the request is what carries the base state to the check.
+TEST_F(HostRequestHandlerTest, StaleHostEditIsConflict)
+{
+    caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
+
+    proto::router::HostRequest stale = makeRequest(host_id_, 0, "loser");
+
+    // A concurrent edit moves the revision after the snapshot of |stale| was taken.
+    ASSERT_EQ(handle(makeRequest(host_id_, 0, "winner")).error_code, proto::router::kErrorOk);
+
+    const RequestResult result = handle(stale);
+
     EXPECT_EQ(result.error_code, proto::router::kErrorConflict);
     EXPECT_EQ(result.notify_flags, 0u);
-    EXPECT_EQ(findHost(host_id_).workspace_id(), workspace_id_);
+    EXPECT_EQ(findHost(host_id_).display_name(), "winner");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -413,8 +433,8 @@ protected:
         if (host_id == kInvalidHostId)
             return kInvalidHostId;
 
-        if (db_.modifyHost(host_id, workspace_id, group_id, display_name, std::string_view()) !=
-            proto::router::kErrorOk)
+        if (db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, group_id,
+                           display_name, std::string_view()) != proto::router::kErrorOk)
         {
             return kInvalidHostId;
         }

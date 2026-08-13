@@ -80,7 +80,7 @@ RequestResult handleGroupRequest(Database& database, const RequestCaller& caller
                   << "name=" << name;
 
         const std::string_view error_code =
-            database.modifyGroup(workspace_id, entry_id, parent_id, name, comment);
+            database.modifyGroup(workspace_id, entry_id, group.revision(), parent_id, name, comment);
         result.error_code = error_code;
 
         if (error_code == proto::router::kErrorOk)

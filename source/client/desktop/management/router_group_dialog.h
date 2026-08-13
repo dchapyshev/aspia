@@ -60,6 +60,7 @@ private:
     QString workspace_name_;
     qint64 entry_id_ = 0;
     qint64 default_parent_id_ = 0;
+    qint64 base_revision_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterGroupDialog)
 };

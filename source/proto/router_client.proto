@@ -38,11 +38,11 @@ message UserInfo
 // through "modify" of HostRequest, and are listed by HostListRequest.
 message Workspace
 {
-    int64 entry_id         = 1;
-    string name            = 2;
-    string comment         = 3;
-    repeated int64 user_id = 4; // Users the workspace is shared with.
-    int64 revision         = 5;
+    int64 revision         = 1;
+    int64 entry_id         = 2;
+    string name            = 3;
+    string comment         = 4;
+    repeated int64 user_id = 5; // Users the workspace is shared with.
 }
 
 message WorkspaceListRequest
@@ -60,10 +60,11 @@ message WorkspaceList
 
 message Group
 {
-    int64 entry_id  = 1; // groups_<workspace_id>.id
-    int64 parent_id = 2; // 0 means the group sits at the workspace root.
-    string name     = 3;
-    string comment  = 4;
+    int64 revision  = 1;
+    int64 entry_id  = 2; // groups_<workspace_id>.id
+    int64 parent_id = 3; // 0 means the group sits at the workspace root.
+    string name     = 4;
+    string comment  = 5;
 }
 
 message GroupListRequest
@@ -116,19 +117,20 @@ message HostStatus
 
 message Host
 {
-    uint64 host_id       = 1;  // hosts.id - the dialable host identifier.
-    int64 workspace_id   = 2;  // 0 means the host is not assigned to any workspace.
-    int64 group_id       = 3;  // 0 means the host is at the workspace root.
-    string display_name  = 4;  // Admin-editable display label (plain).
-    string computer_name = 5;  // Plain OS hostname reported by the host.
-    string cpu_arch      = 6;  // CPU architecture reported by the host.
-    string version       = 7;  // Aspia version reported by the host.
-    string os_name       = 8;  // Operating system name reported by the host.
-    string address       = 9;  // Last seen peer address.
-    string comment       = 10; // Note, editable from a manager or admin session.
-    int64 last_connect   = 11; // Unix timestamp of the last connection.
-    int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
-    bool online          = 13; // Live host session currently exists for this host_id.
+    int64 revision       = 1;
+    uint64 host_id       = 2;  // hosts.id - the dialable host identifier.
+    int64 workspace_id   = 3;  // 0 means the host is not assigned to any workspace.
+    int64 group_id       = 4;  // 0 means the host is at the workspace root.
+    string display_name  = 5;  // Display label, editable from a manager or admin session.
+    string computer_name = 6;  // Plain OS hostname reported by the host.
+    string cpu_arch      = 7;  // CPU architecture reported by the host.
+    string version       = 8;  // Aspia version reported by the host.
+    string os_name       = 9;  // Operating system name reported by the host.
+    string address       = 10; // Last seen peer address.
+    string comment       = 11; // Note, editable from a manager or admin session.
+    int64 last_connect   = 12; // Unix timestamp of the last connection.
+    int64 last_modify    = 13; // Unix timestamp of the last operator edit.
+    bool online          = 14; // Live host session currently exists for this host_id.
 }
 
 // A page of hosts. The page is mandatory in both modes: a reply carrying every host of the scope

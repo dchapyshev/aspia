@@ -45,6 +45,7 @@ class WorkspaceList;
 // from the proposed new parent and refuses the move if it reaches the node being moved.
 struct Group
 {
+    qint64 revision  = 0;
     qint64 entry_id  = 0;
     qint64 parent_id = 0; // 0 means the group sits at the workspace root.
     std::string name;
@@ -212,9 +213,11 @@ public:
     // with it. A host another workspace holds is refused with kErrorConflict (the caller acted on
     // a stale snapshot), as is a move into a workspace that is gone. group_id == 0 places the host
     // at the workspace root; > 0 moves it under the given group (caller must validate group
-    // ownership). Also bumps last_modify. Returns a proto::router error code.
-    std::string_view modifyHost(HostId host_id, qint64 workspace_id, qint64 group_id,
-        std::string_view display_name, std::string_view comment);
+    // ownership). Also bumps last_modify. |base_revision| is the revision the edit was built on:
+    // a stale one answers kErrorConflict instead of silently overwriting a concurrent edit.
+    // Returns a proto::router error code.
+    std::string_view modifyHost(HostId host_id, qint64 base_revision, qint64 workspace_id,
+        qint64 group_id, std::string_view display_name, std::string_view comment);
 
     // Appends every host in the database (admin-only call site) to |out| and sets its error_code,
     // reading rows straight into the protobuf message. |offset| and |count| give the requested
@@ -331,9 +334,10 @@ public:
     // Renames and/or re-parents a group. new_parent_id must point to a group in the same
     // workspace and must not be the group itself or one of its descendants. The cycle check
     // runs a recursive CTE that walks parent links upward from new_parent_id; if entry_id
-    // appears anywhere in that chain the move is refused.
-    std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 new_parent_id,
-        std::string_view name, std::string_view comment);
+    // appears anywhere in that chain the move is refused. |base_revision| is the revision the
+    // edit was built on: a stale one answers kErrorConflict.
+    std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 base_revision,
+        qint64 new_parent_id, std::string_view name, std::string_view comment);
 
     // Deletes the group and all its descendants, moving hosts from that subtree to the
     // workspace root (group_id <- 0).

@@ -124,8 +124,8 @@ protected:
     std::string_view moveHost(HostId host_id, qint64 workspace_id, qint64 group_id = 0)
     {
         const proto::router::Host host = findHost(host_id);
-        return db_.modifyHost(host_id, workspace_id, group_id, host.display_name(),
-                              host.comment());
+        return db_.modifyHost(host_id, host.revision(), workspace_id, group_id,
+                              host.display_name(), host.comment());
     }
 
     // An approved host, as the host worker creates it at first connection.
