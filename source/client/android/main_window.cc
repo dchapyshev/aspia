@@ -422,9 +422,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (desktop_ || file_transfer_ || chat_)
         return;
 
-    // A connection by host id is asked for the credentials by the session window itself, and only
-    // if the connection offer selects the password handshake.
-    if (!isHostId(host.address()) && (host.username().isEmpty() || host.password().isEmpty()))
+    if (host.username().isEmpty() || host.password().isEmpty())
     {
         AuthorizationDialog dialog(host.routerId() > 0, this);
         dialog.setUserName(host.username());

@@ -44,6 +44,4 @@ message ConnectionOffer
     RelayCredentials relay   = 3;
     StunServerInfo stun_info = 4;
     PeerInfo peer_info       = 5;
-    bytes host_public_key    = 6; // Only in the offer to the client, empty selects the password path.
-    uint32 host_key_id       = 7; // Only in the offer to the host, the pair issued with this id.
 }

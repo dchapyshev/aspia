@@ -101,13 +101,11 @@ message ChangePasswordResult
                            // "not_found" - the user record vanished (concurrent delete).
 }
 
-// The request of a connection to a host, replied with a ConnectionOffer. |session_type| carries
-// exactly one bit and the host is asked for a key that opens that session kind only.
+// The request of a connection to a host, replied with a ConnectionOffer.
 message ConnectionRequest
 {
-    int64 request_id    = 1;
-    uint64 host_id      = 2;
-    uint32 session_type = 3;
+    int64 request_id = 1;
+    uint64 host_id   = 2;
 }
 
 message CheckHostStatus

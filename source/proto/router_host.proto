@@ -51,38 +51,14 @@ message HostCommand
     string params       = 2;
 }
 
-// The request of a one-time connection key while the router brokers a client connection,
-// replied with a ConnectionKeyResponse. The host generates an X25519 pair, keeps the private
-// half until the matching ConnectionOffer arrives or a short TTL expires, and logs the issue
-// under |user_name|. The pair serves one handshake of the single session type of |session_type|.
-message ConnectionKeyRequest
-{
-    int64 request_id    = 1;
-    string user_name    = 2;
-    uint32 session_type = 3;
-}
-
-// |key_id| identifies the issued pair, counts from 1 and zero means "no key". The router
-// returns it to the host inside the ConnectionOffer, and |host_public_key| travels to the
-// client the same way to authenticate the host. A failure degrades to the password path.
-message ConnectionKeyResponse
-{
-    int64 request_id      = 1;
-    string error_code     = 2; // "ok" | "invalid_data" | "internal_error"
-    uint32 key_id         = 3;
-    bytes host_public_key = 4;
-}
-
 message RouterToHost
 {
-    HostIdResponse host_id_response             = 1;
-    ConnectionOffer connection_offer            = 2;
-    HostCommand host_command                    = 3;
-    ConnectionKeyRequest connection_key_request = 4;
+    HostIdResponse host_id_response  = 1;
+    ConnectionOffer connection_offer = 2;
+    HostCommand host_command         = 3;
 }
 
 message HostToRouter
 {
-    HostIdRequest host_id_request                 = 1;
-    ConnectionKeyResponse connection_key_response = 2;
+    HostIdRequest host_id_request = 1;
 }

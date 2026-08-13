@@ -20,7 +20,6 @@
 #define ROUTER_WORKERS_HOST_WORKER_H
 
 #include <functional>
-#include <string>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
@@ -55,7 +54,6 @@ public:
     using ResultCallback = std::function<void(bool)>;
     using RemoveHostCallback = std::function<void(RemoveHostResult&&)>;
     using ErrorCodeCallback = std::function<void(std::string_view)>;
-    using ConnectionKeyCallback = std::function<void(proto::router::ConnectionKeyResponse&&)>;
 
     // Asynchronous request-response API. May be called from any thread: the request is processed
     // in the worker thread and |callback| runs in the caller thread. The callback is dropped if
@@ -85,12 +83,6 @@ public:
     // Fire-and-forget: if the host has disconnected, the offer is dropped.
     void sendConnectionOffer(HostId host_id, const proto::router::ConnectionOffer& offer);
 
-    // Asks the host |host_id| for a one-time connection key for |user_name|. Unlike the calls
-    // above, the answer comes from the host itself, so the callback receives an error code when
-    // the host is offline, legacy, refuses the request or stops answering.
-    void requestConnectionKey(HostId host_id, const std::string& user_name, quint32 session_type,
-                              QObject* context, ConnectionKeyCallback callback);
-
 signals:
     // Emitted from the worker thread when host state changes; |flags| are ClientWorker NOTIFY_* bits.
     void sig_notify(quint32 flags);
@@ -107,23 +99,8 @@ private slots:
     void onHostFinished();
     void onHostIdAssigned(HostId host_id);
     void onHostIdRemoved(HostId host_id);
-    void onConnectionKeyResponse(const proto::router::ConnectionKeyResponse& response);
 
 private:
-    // A connection key request waiting for the answer of the host.
-    struct PendingConnectionKey
-    {
-        Worker* caller = nullptr;
-        QPointer<QObject> context;
-        ConnectionKeyCallback callback;
-        HostId host_id = kInvalidHostId;
-        TimePoint deadline;
-    };
-
-    // Refuses the requests to |host_id| and the ones that ran out of time by |now|, and drops
-    // them. A kInvalidHostId sweeps the expired ones alone.
-    void cancelConnectionKeyRequests(HostId host_id, TimePoint now);
-
     void removeHostSession(Host* host);
     Host* hostByHostId(HostId host_id);
     void publishHostState(HostId host_id);
@@ -145,9 +122,6 @@ private:
     // When the queue of unacknowledged removals is swept next. Starts at the epoch, so the first
     // tick after the router comes up does it.
     TimePoint next_removal_sweep_;
-
-    std::unordered_map<qint64, PendingConnectionKey> pending_connection_keys_;
-    qint64 next_connection_key_request_id_ = 1;
 
     friend class HostWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(HostWorker)

@@ -117,13 +117,7 @@ private:
     void completeTwoFactor(std::string&& new_token = std::string());
     void sendUserKeys();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
-
-    // Builds the offer and sends it to both peers. An issued key goes into the offers per side:
-    // its public half to the client, its id back to the host. A zero id means the peers do the
-    // password handshake.
-    void sendConnectionOffer(qint64 request_id, HostId host_id, quint32 host_key_id,
-                             const std::string& host_public_key);
-
+    void sendConnectionOffer(qint64 request_id, HostId host_id);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readHostSearchRequest(const proto::router::HostSearchRequest& request);

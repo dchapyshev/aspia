@@ -61,28 +61,6 @@ quint16 SessionState::hostPort() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SessionState::hostUserName() const
-{
-    std::scoped_lock lock(lock_);
-    return host_.username();
-}
-
-//--------------------------------------------------------------------------------------------------
-SecureString SessionState::hostPassword() const
-{
-    std::scoped_lock lock(lock_);
-    return host_.password();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionState::setHostCredentials(const QString& username, const SecureString& password)
-{
-    std::scoped_lock lock(lock_);
-    host_.setUsername(username);
-    host_.setPassword(password);
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionState::setRouterVersion(const QVersionNumber& router_version)
 {
     std::scoped_lock lock(lock_);

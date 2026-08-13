@@ -114,7 +114,6 @@ private:
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
-    bool askHostCredentials();
     void startNewSession();
     void reconnect();
     void showPowerActions();

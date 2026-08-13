@@ -26,7 +26,6 @@
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "proto/router_host.h"
 #include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
@@ -336,36 +335,11 @@ void Client::sendUserKeys()
 void Client::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
-
-    if (!isKeyedConnectionAllowed(database_, userId(), request.host_id(), request.session_type()))
-    {
-        sendConnectionOffer(request.request_id(), request.host_id(), 0, std::string());
-        return;
-    }
-
-    HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
-    CHECK(host_worker);
-
-    host_worker->requestConnectionKey(request.host_id(), userName(), request.session_type(), this,
-        [this, request_id = request.request_id(), host_id = request.host_id()]
-        (proto::router::ConnectionKeyResponse&& response)
-    {
-        if (response.error_code() != proto::router::kErrorOk || !response.key_id() ||
-            response.host_public_key().empty())
-        {
-            CLOG(INFO) << "Host" << host_id << "issued no connection key ("
-                       << response.error_code() << "). The peers will use a password";
-            sendConnectionOffer(request_id, host_id, 0, std::string());
-            return;
-        }
-
-        sendConnectionOffer(request_id, host_id, response.key_id(), response.host_public_key());
-    });
+    sendConnectionOffer(request.request_id(), request.host_id());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendConnectionOffer(qint64 request_id, HostId host_id, quint32 host_key_id,
-                                 const std::string& host_public_key)
+void Client::sendConnectionOffer(qint64 request_id, HostId host_id)
 {
     ConnectionRequestClient client;
     client.host_id = host_id;
@@ -393,20 +367,14 @@ void Client::sendConnectionOffer(qint64 request_id, HostId host_id, quint32 host
     CHECK(relay_worker);
     relay_worker->notifyKeyUsed(built.relay_session_id, built.relay_key_id);
 
-    // Each side is told only what it needs: the host takes the private half of the key it issued
-    // with this id, and the client authenticates the host by the public half.
-    proto::router::ConnectionOffer host_offer(*offer);
-    host_offer.set_host_key_id(host_key_id);
-    offer->set_host_public_key(host_public_key);
-
     // The host could disconnect before the offer reaches its worker; the offer is then dropped
-    // there and the consumed one-time key is lost, which is acceptable - relays replenish the
+    // there and the consumed relay key is lost, which is acceptable - relays replenish the
     // pool continuously.
     HostWorker* host_worker = CoreApplication::findWorker<HostWorker>();
     CHECK(host_worker);
 
     CLOG(INFO) << "Sending connection offer to host";
-    host_worker->sendConnectionOffer(host_id, host_offer);
+    host_worker->sendConnectionOffer(host_id, *offer);
 
     CLOG(INFO) << "Sending connection offer to client";
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

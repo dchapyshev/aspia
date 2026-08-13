@@ -15,13 +15,11 @@
 
 #include "router/handlers/connection_request_handler.h"
 
-#include "base/bitset.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 
@@ -93,22 +91,4 @@ ConnectionRequestResult handleConnectionRequest(SharedHosts& hosts, SharedKeyPoo
     offer_credentials->set_secret(secret.SerializeAsString());
 
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool isKeyedConnectionAllowed(Database& database, qint64 user_id, HostId host_id,
-                              quint32 session_type)
-{
-    // A key is issued for one session type. A client that names none asks for the password path.
-    if (BitSet<quint32>(session_type).count() != 1)
-        return false;
-
-    qint64 workspace_id = 0;
-    if (database.hostWorkspaceId(host_id, &workspace_id) != proto::router::kErrorOk ||
-        workspace_id <= 0)
-    {
-        return false;
-    }
-
-    return database.checkWorkspaceAccess(user_id, workspace_id) == proto::router::kErrorOk;
 }

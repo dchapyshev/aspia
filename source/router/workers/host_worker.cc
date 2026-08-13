@@ -44,10 +44,6 @@ const Hours kRemovalSweepInterval{ 24 };
 // serves nobody. Anonymous access means anybody can open one and keep it for as long as it likes.
 constexpr Seconds kIdentifyTimeout{ 30 };
 
-// A client waits for its offer meanwhile, so a host that does not answer with a key is given up
-// on quickly and the connection falls back to the password path.
-constexpr Seconds kConnectionKeyTimeout{ 10 };
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -120,39 +116,6 @@ void HostWorker::sendConnectionOffer(HostId host_id, const proto::router::Connec
         legacy_offer.mutable_host_data()->set_host_id(host_id);
 
         host_legacy->sendConnectionOffer(legacy_offer);
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::requestConnectionKey(HostId host_id, const std::string& user_name,
-                                      quint32 session_type, QObject* context,
-                                      ConnectionKeyCallback callback)
-{
-    Worker* caller = Worker::current();
-    CHECK(caller);
-
-    QPointer<QObject> ctx(context);
-
-    post([this, host_id, user_name, session_type, caller, ctx, callback = std::move(callback)]() mutable
-    {
-        PendingConnectionKey pending;
-        pending.caller = caller;
-        pending.context = ctx;
-        pending.callback = std::move(callback);
-        pending.host_id = host_id;
-        pending.deadline = Clock::now() + kConnectionKeyTimeout;
-
-        const qint64 request_id = next_connection_key_request_id_++;
-        pending_connection_keys_.emplace(request_id, std::move(pending));
-
-        HostNG* host = dynamic_cast<HostNG*>(hostByHostId(host_id));
-        if (host)
-        {
-            host->sendConnectionKeyRequest(request_id, user_name, session_type);
-            return;
-        }
-
-        cancelConnectionKeyRequests(host_id, Clock::now());
     });
 }
 
@@ -247,15 +210,12 @@ void HostWorker::onStop()
 
     hosts_.clear();
     hosts_by_id_.clear();
-    pending_connection_keys_.clear();
     SharedHosts::instance().clear();
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostWorker::onTimer(TimePoint now)
 {
-    cancelConnectionKeyRequests(kInvalidHostId, now);
-
     std::vector<Host*> silent;
 
     for (Host* host : std::as_const(hosts_))
@@ -302,7 +262,6 @@ void HostWorker::onNewHostConnection()
         HostNG* host = new HostNG(Database::instance(), channel, this);
         hosts_.emplace_back(host);
         connect(host, &HostNG::sig_hostIdAssigned, this, &HostWorker::onHostIdAssigned);
-        connect(host, &HostNG::sig_connectionKeyResponse, this, &HostWorker::onConnectionKeyResponse);
         connect(host, &Host::sig_finished, this, &HostWorker::onHostFinished);
         connect(host, &Host::sig_notifyChanged, this, &HostWorker::sig_notify);
         host->start();
@@ -369,69 +328,6 @@ void HostWorker::onHostIdRemoved(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWorker::onConnectionKeyResponse(const proto::router::ConnectionKeyResponse& response)
-{
-    auto it = pending_connection_keys_.find(response.request_id());
-    if (it == pending_connection_keys_.end())
-    {
-        LOG(ERROR) << "Connection key response with an unknown request id" << response.request_id();
-        return;
-    }
-
-    PendingConnectionKey pending = std::move(it->second);
-    pending_connection_keys_.erase(it);
-
-    proto::router::ConnectionKeyResponse result = response;
-
-    // The reply is never posted to the context directly: the check of the context and the call
-    // must run in the thread the context lives in (see Worker::request).
-    QMetaObject::invokeMethod(pending.caller,
-        [ctx = pending.context, callback = std::move(pending.callback),
-         result = std::move(result)]() mutable
-    {
-        if (ctx)
-            callback(std::move(result));
-    },
-    Qt::QueuedConnection);
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostWorker::cancelConnectionKeyRequests(HostId host_id, TimePoint now)
-{
-    for (auto it = pending_connection_keys_.begin(); it != pending_connection_keys_.end();)
-    {
-        PendingConnectionKey& pending = it->second;
-        const bool expired = now >= pending.deadline;
-
-        if (pending.host_id != host_id && !expired)
-        {
-            ++it;
-            continue;
-        }
-
-        LOG(ERROR) << "Host" << pending.host_id << "issues no connection key (expired:"
-                   << expired << ")";
-
-        proto::router::ConnectionKeyResponse response;
-        response.set_error_code(expired ?
-            proto::router::kErrorLostConnection : proto::router::kErrorHostOffline);
-
-        // The reply is never posted to the context directly: the check of the context and the
-        // call must run in the thread the context lives in (see Worker::request).
-        QMetaObject::invokeMethod(pending.caller,
-            [ctx = pending.context, callback = std::move(pending.callback),
-             response = std::move(response)]() mutable
-        {
-            if (ctx)
-                callback(std::move(response));
-        },
-        Qt::QueuedConnection);
-
-        it = pending_connection_keys_.erase(it);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void HostWorker::removeHostSession(Host* host)
 {
     quint32 flags = ClientWorker::NOTIFY_HOSTS;
@@ -462,10 +358,7 @@ void HostWorker::removeHostSession(Host* host)
         // The id may already be held by the newcomer that displaced this host. Only the own
         // entries go away, and the publication below then keeps the newcomer announced.
         if (hostByHostId(host_id) == host)
-        {
             hosts_by_id_.erase(host_id);
-            cancelConnectionKeyRequests(host_id, Clock::now());
-        }
 
         publishHostState(host_id);
     }

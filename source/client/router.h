@@ -197,10 +197,8 @@ public:
 
     void checkHostStatus(HostId host_id, RouterCallback<proto::router::HostStatus> callback);
 
-    // Asks for a relay connection offer to the given host. |session_type| is the single session
-    // type the connection is opened for; the router asks the host for a one-time key of that type.
-    void requestConnection(HostId host_id, quint32 session_type,
-                           RouterCallback<proto::router::ConnectionOffer> callback);
+    // Asks for a relay connection offer to the given host.
+    void requestConnection(HostId host_id, RouterCallback<proto::router::ConnectionOffer> callback);
 
     // Re-keys the account under |new_password| and hands over every workspace key re-sealed to the
     // new key pair. The router re-runs the 2FA stage afterwards, so a code will be asked again.

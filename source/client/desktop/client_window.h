@@ -151,7 +151,6 @@ private:
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
     void fetchConnectionOffer();
-    bool askHostCredentials();
     void startNewSession();
 
     // Builds session_connect_actions_ for every session type except session_type_.

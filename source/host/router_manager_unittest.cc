@@ -139,7 +139,7 @@ private:
 };
 
 // Reaches into the manager from its own thread: drives the timer with a synthetic clock (the
-// tests cannot wait the real timeouts out) and counts the held pairs, which nothing else exposes.
+// tests cannot wait the real timeouts out).
 class RouterManagerTestPeer
 {
 public:
@@ -153,13 +153,6 @@ public:
     void fireTimer(TimePoint now)
     {
         worker_->invoke([&]() { manager_->onTimer(now); });
-    }
-
-    size_t pendingConnectionKeyCount()
-    {
-        size_t count = 0;
-        worker_->invoke([&]() { count = manager_->pending_connection_keys_.size(); });
-        return count;
     }
 
 private:
@@ -242,14 +235,6 @@ protected:
                         proto::router::HostToRouter message;
                         if (!parse(buffer, &message))
                             return;
-
-                        if (message.has_connection_key_response())
-                        {
-                            std::lock_guard guard(key_response_lock_);
-                            last_key_response_ = message.connection_key_response();
-                            ++key_responses_received_;
-                            return;
-                        }
 
                         if (!message.has_host_id_request())
                             return;
@@ -435,16 +420,13 @@ protected:
     }
 
     // Sends the connection offer the way the router does, pointing the manager at the fake relay.
-    // A zero |host_key_id| makes the offer of the password path.
-    void sendConnectionOffer(quint32 host_key_id)
+    void sendConnectionOffer()
     {
         stand_worker_->invoke([&]()
         {
             proto::router::RouterToHost message;
             proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
             offer->set_error_code(proto::router::kErrorOk);
-            if (host_key_id)
-                offer->set_host_key_id(host_key_id);
 
             fillRelayCredentials(offer->mutable_relay());
 
@@ -465,16 +447,17 @@ protected:
         QByteArray last_message;
     };
 
-    // Starts the connection of |client| to the fake relay, authenticating the host by
-    // |host_public_key|. |session_type| is what the client came for.
-    void connectClientPeer(ClientPeer* client, const std::string& host_public_key,
+    // Starts the connection of |client| to the fake relay, authenticating against the host by
+    // |user_name| and |password| over SRP. |session_type| is what the client came for.
+    void connectClientPeer(ClientPeer* client, const QString& user_name, const SecureString& password,
                            quint32 session_type)
     {
         stand_worker_->invoke([&]()
         {
             ClientAuthenticator* authenticator = new ClientAuthenticator();
-            authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
-            authenticator->setPeerPublicKey(QByteArray::fromStdString(host_public_key));
+            authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+            authenticator->setUserName(user_name);
+            authenticator->setPassword(password);
             authenticator->setSessionType(session_type);
 
             client->peer = new RelayPeer(authenticator, nullptr);
@@ -505,7 +488,6 @@ protected:
 
             proto::router::ConnectionOffer offer;
             offer.set_error_code(proto::router::kErrorOk);
-            offer.set_host_public_key(host_public_key);
             fillRelayCredentials(offer.mutable_relay());
 
             client->peer->start(offer);
@@ -538,29 +520,6 @@ protected:
 
             host_channel_->send(0, serialize(message));
         });
-    }
-
-    // Asks the manager for a one-time connection key the way the router does.
-    void sendConnectionKeyRequest(qint64 request_id, std::string_view user_name,
-                                  quint32 session_type)
-    {
-        stand_worker_->invoke([&]()
-        {
-            proto::router::RouterToHost message;
-            proto::router::ConnectionKeyRequest* request = message.mutable_connection_key_request();
-            request->set_request_id(request_id);
-            request->set_user_name(user_name);
-            request->set_session_type(session_type);
-
-            host_channel_->send(0, serialize(message));
-        });
-    }
-
-    // The key response the stand received last. Guarded: the signal fires in the stand thread.
-    proto::router::ConnectionKeyResponse lastKeyResponse()
-    {
-        std::lock_guard guard(key_response_lock_);
-        return last_key_response_;
     }
 
     // Creates the manager in its worker thread, pointed at the stand, with the one-time password
@@ -643,10 +602,6 @@ protected:
     proto::router::HostIdRequest last_request_;
     std::atomic<int> accepted_ { 0 };
     std::atomic<int> requests_received_ { 0 };
-
-    std::mutex key_response_lock_;
-    proto::router::ConnectionKeyResponse last_key_response_;
-    std::atomic<int> key_responses_received_ { 0 };
 
     QPointer<RouterManager> manager_;
     std::atomic<HostId> credentials_host_id_ { kInvalidHostId };
@@ -804,270 +759,30 @@ TEST_F(RouterManagerTest, ExplicitRequestReplacesTheOneTimePassword)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Every connection key request produces a fresh pair. The ids count from one and the public
-// halves never repeat.
-TEST_F(RouterManagerTest, IssuesConnectionKeys)
+// The whole path of a brokered connection: the offer brings the relay credentials to both ends and
+// the SRP handshake against the one-time user runs through the relay. The channel that comes out
+// carries the session bytes both ways.
+TEST_F(RouterManagerTest, PasswordOpensTheChannel)
 {
-    startManager();
+    startManager(true);
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    host_worker_->invoke([this]()
+    {
+        manager_->onOneTimeSessionsChanged(proto::peer::SESSION_TYPE_DESKTOP);
+    });
 
-    const proto::router::ConnectionKeyResponse first = lastKeyResponse();
-    EXPECT_EQ(first.error_code(), proto::router::kErrorOk);
-    EXPECT_EQ(first.request_id(), 1);
-    EXPECT_EQ(first.key_id(), 1u);
-    EXPECT_EQ(first.host_public_key().size(), 32u);
-
-    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
-
-    const proto::router::ConnectionKeyResponse second = lastKeyResponse();
-    EXPECT_EQ(second.error_code(), proto::router::kErrorOk);
-    EXPECT_EQ(second.request_id(), 2);
-    EXPECT_EQ(second.key_id(), 2u);
-    EXPECT_NE(second.host_public_key(), first.host_public_key());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A malformed request is answered with an error instead of a key: an empty user name, a session
-// type that is not exactly one type.
-TEST_F(RouterManagerTest, RefusesAMalformedConnectionKeyRequest)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
-    EXPECT_EQ(lastKeyResponse().key_id(), 0u);
-
-    sendConnectionKeyRequest(2, "alice",
-                             proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
-
-    sendConnectionKeyRequest(3, "alice", 0);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 3; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInvalidData);
-
-    // The refusals leave the manager fully working.
-    sendConnectionKeyRequest(4, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 4; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The outstanding keys are capped. A refusal over the cap does not break the channel, and the
-// expiration sweep frees the slots without any offer arriving.
-TEST_F(RouterManagerTest, CapsOutstandingConnectionKeysAndExpiresThem)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    for (int i = 1; i <= 16; ++i)
-        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
-
-    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 17; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorInternalError);
-
-    // The real TTL is a minute; the synthetic clock crosses it at once.
-    RouterManagerTestPeer timer(host_worker_, manager_);
-    timer.fireTimer(Clock::now() + Seconds(61));
-
-    sendConnectionKeyRequest(18, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 18; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The keys issued over a lost channel die with it. After the reconnect the slots are free at
-// once, without waiting the TTL out.
-TEST_F(RouterManagerTest, ReconnectClearsThePendingConnectionKeys)
-{
-    startManager();
-
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
     sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
     ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
 
-    for (int i = 1; i <= 16; ++i)
-        sendConnectionKeyRequest(i, "alice", proto::peer::SESSION_TYPE_DESKTOP);
+    const SecureString password = lastPassword();
+    ASSERT_FALSE(password.isEmpty());
 
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 16; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
-
-    stopRouterStand();
-    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kInvalidHostId; }));
-
-    startRouterStand();
-    ASSERT_NE(router_port_, 0);
-
-    // The reconnect pause is ten seconds, far under the TTL of the keys: a key that survived
-    // the reconnect would still hold its slot.
-    RouterManagerTestPeer timer(host_worker_, manager_);
-    const TimePoint after_pause = Clock::now() + kReconnectTimeout + Seconds(1);
-
-    ASSERT_TRUE(waitFor([&]()
-    {
-        timer.fireTimer(after_pause);
-        return requests_received_.load() >= 2;
-    }));
-
-    const int seen = key_responses_received_.load();
-    sendConnectionKeyRequest(17, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([&]() { return key_responses_received_.load() > seen; }));
-    EXPECT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The offer that carries a key id takes the issued pair: the connection to the relay starts, and
-// the pair never serves anything again.
-TEST_F(RouterManagerTest, KeyedOfferTakesTheIssuedPair)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    const quint32 key_id = lastKeyResponse().key_id();
-    ASSERT_NE(key_id, 0u);
-
-    sendConnectionOffer(key_id);
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
-
-    RouterManagerTestPeer peer(host_worker_, manager_);
-    EXPECT_EQ(peer.pendingConnectionKeyCount(), 0u);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The offer without a key id runs the password path and leaves the issued pairs alone.
-TEST_F(RouterManagerTest, OfferWithoutAKeyLeavesTheIssuedPairsAlone)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-
-    sendConnectionOffer(0);
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
-
-    RouterManagerTestPeer peer(host_worker_, manager_);
-    EXPECT_EQ(peer.pendingConnectionKeyCount(), 1u);
-}
-
-//--------------------------------------------------------------------------------------------------
-// An offer with a key the host never issued, or one already swept out by the TTL, starts no
-// connection: there is no pair to authenticate with, and the password path was not offered either.
-TEST_F(RouterManagerTest, OfferWithAnUnknownOrExpiredKeyIsDropped)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    const quint32 expired_key_id = lastKeyResponse().key_id();
-
-    // The real TTL is a minute; the synthetic clock crosses it at once.
-    RouterManagerTestPeer peer(host_worker_, manager_);
-    peer.fireTimer(Clock::now() + Seconds(61));
-    ASSERT_EQ(peer.pendingConnectionKeyCount(), 0u);
-
-    sendConnectionOffer(expired_key_id);
-    sendConnectionOffer(12345);
-
-    // The dropped offers started nothing, so the accepted control offer connects first and alone.
-    sendConnectionKeyRequest(2, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 2; }));
-    sendConnectionOffer(lastKeyResponse().key_id());
-
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
-    EXPECT_EQ(relay_accepted_.load(), 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The pair is single-use. The second offer with the same key id finds nothing and is dropped.
-TEST_F(RouterManagerTest, ReplayedKeyIdIsDropped)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    const quint32 key_id = lastKeyResponse().key_id();
-
-    sendConnectionOffer(key_id);
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
-
-    sendConnectionOffer(key_id);
-
-    // A control offer that must go through. The offers run over one ordered channel, so if the
-    // replay had gone through too, its connection would have been counted no later than this one.
-    sendConnectionOffer(0);
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 2; }));
-    EXPECT_EQ(relay_accepted_.load(), 2);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A key issued over the previous channel opens nothing after the reconnect.
-TEST_F(RouterManagerTest, KeyIssuedBeforeAReconnectIsDropped)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
-    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    const quint32 key_id = lastKeyResponse().key_id();
-
-    stopRouterStand();
-    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kInvalidHostId; }));
-
-    startRouterStand();
-    ASSERT_NE(router_port_, 0);
-
-    RouterManagerTestPeer peer(host_worker_, manager_);
-    const TimePoint after_pause = Clock::now() + kReconnectTimeout + Seconds(1);
-
-    ASSERT_TRUE(waitFor([&]()
-    {
-        peer.fireTimer(after_pause);
-        return requests_received_.load() >= 2;
-    }));
-
-    sendConnectionOffer(key_id);
-    sendConnectionOffer(0);
-
-    ASSERT_TRUE(waitFor([this]() { return relay_accepted_.load() >= 1; }));
-    EXPECT_EQ(relay_accepted_.load(), 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The whole path of a brokered connection: the host issues a pair, the offers bring the halves to
-// the two ends, and the anonymous handshake runs through the relay. No password is involved, and
-// the channel that comes out carries the session bytes both ways.
-TEST_F(RouterManagerTest, OneTimeKeyOpensTheChannelWithoutAPassword)
-{
-    startManager();
-    ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
-
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-
-    const proto::router::ConnectionKeyResponse key = lastKeyResponse();
-    ASSERT_EQ(key.error_code(), proto::router::kErrorOk);
-
-    sendConnectionOffer(key.key_id());
+    sendConnectionOffer();
 
     ClientPeer client;
-    connectClientPeer(&client, key.host_public_key(), proto::peer::SESSION_TYPE_DESKTOP);
+    connectClientPeer(&client, '#' + hostIdToString(kHostId), password,
+                      proto::peer::SESSION_TYPE_DESKTOP);
     ASSERT_TRUE(waitFor([&]() { return client.ready.load(); }));
 
     // The host end comes out of the manager the way the host takes it into a session.
@@ -1122,24 +837,25 @@ TEST_F(RouterManagerTest, OneTimeKeyOpensTheChannelWithoutAPassword)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The public key of the offer is the one anchor the client has. A client that trusts a different
-// key must not end up on the channel of the host: the handshake dies instead.
-TEST_F(RouterManagerTest, WrongHostPublicKeyFailsTheHandshake)
+// The password is the one anchor the client has. A client that presents a different one must not
+// end up on the channel of the host: the handshake dies instead.
+TEST_F(RouterManagerTest, WrongPasswordFailsTheHandshake)
 {
-    startManager();
+    startManager(true);
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
-    ASSERT_EQ(lastKeyResponse().error_code(), proto::router::kErrorOk);
+    host_worker_->invoke([this]()
+    {
+        manager_->onOneTimeSessionsChanged(proto::peer::SESSION_TYPE_DESKTOP);
+    });
 
-    sendConnectionOffer(lastKeyResponse().key_id());
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
 
-    const KeyPair wrong_pair = KeyPair::create(KeyPair::Type::X25519);
-    ASSERT_TRUE(wrong_pair.isValid());
+    sendConnectionOffer();
 
     ClientPeer client;
-    connectClientPeer(&client, wrong_pair.publicKey().toStdString(),
+    connectClientPeer(&client, '#' + hostIdToString(kHostId), SecureString(QString("wrong")),
                       proto::peer::SESSION_TYPE_DESKTOP);
 
     ASSERT_TRUE(waitFor([&]() { return client.failed.load(); }));
@@ -1150,23 +866,29 @@ TEST_F(RouterManagerTest, WrongHostPublicKeyFailsTheHandshake)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The pair opens the one session type it was issued for. A client that arrives with the right key
-// but asks for another type is refused by the host end of the handshake.
-TEST_F(RouterManagerTest, IssuedPairOpensItsSessionTypeOnly)
+// The one-time user opens the session types ticked in the settings and nothing else. A client
+// with the right password but another type is refused by the host end of the handshake.
+TEST_F(RouterManagerTest, PasswordOpensTheAllowedSessionTypesOnly)
 {
-    startManager();
+    startManager(true);
     ASSERT_TRUE(waitFor([this]() { return requests_received_.load() >= 1; }));
 
-    sendConnectionKeyRequest(1, "alice", proto::peer::SESSION_TYPE_DESKTOP);
-    ASSERT_TRUE(waitFor([this]() { return key_responses_received_.load() >= 1; }));
+    host_worker_->invoke([this]()
+    {
+        manager_->onOneTimeSessionsChanged(proto::peer::SESSION_TYPE_DESKTOP);
+    });
 
-    const proto::router::ConnectionKeyResponse key = lastKeyResponse();
-    ASSERT_EQ(key.error_code(), proto::router::kErrorOk);
+    sendIdResponse(proto::router::kErrorOk, kHostId, kHostKey);
+    ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
 
-    sendConnectionOffer(key.key_id());
+    const SecureString password = lastPassword();
+    ASSERT_FALSE(password.isEmpty());
+
+    sendConnectionOffer();
 
     ClientPeer client;
-    connectClientPeer(&client, key.host_public_key(), proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    connectClientPeer(&client, '#' + hostIdToString(kHostId), password,
+                      proto::peer::SESSION_TYPE_FILE_TRANSFER);
 
     ASSERT_TRUE(waitFor([&]() { return client.failed.load(); }));
     EXPECT_FALSE(client.ready.load());

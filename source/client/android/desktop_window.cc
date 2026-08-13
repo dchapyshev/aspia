@@ -33,7 +33,6 @@
 #include "client/session_keeper.h"
 #include "client/session_state.h"
 #include "client/settings.h"
-#include "client/android/authorization_dialog.h"
 #include "client/android/desktop_view.h"
 #include "client/android/key_bar.h"
 #include "client/android/statistics_dialog.h"
@@ -467,6 +466,11 @@ void DesktopWindow::onApplicationStateChanged(Qt::ApplicationState state)
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::start()
 {
+    // When connecting with a one-time password the authorization dialog leaves the user name
+    // empty, and the host registers that password under the special user "#<host_id>".
+    if (host_.username().isEmpty())
+        host_.setUsername(u"#" + host_.address());
+
     session_state_ = std::make_shared<SessionState>(
         host_, proto::peer::SESSION_TYPE_DESKTOP, Database::instance().displayName());
 
@@ -523,19 +527,11 @@ void DesktopWindow::requestConnectionOffer(Router* router)
     session_state_->setRouterVersion(router->version());
     setStatusText(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(),
-                              static_cast<quint32>(session_state_->sessionType()), { this,
+    router->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)
         {
-            // An offer without the key of the host runs the password handshake.
-            if (offer.host_public_key().empty() && !askHostCredentials())
-            {
-                emit sig_closed();
-                return;
-            }
-
             session_state_->setConnectionOffer(offer);
             startNewSession();
             return;
@@ -545,27 +541,6 @@ void DesktopWindow::requestConnectionOffer(Router* router)
     } });
 }
 
-//--------------------------------------------------------------------------------------------------
-bool DesktopWindow::askHostCredentials()
-{
-    if (!session_state_->hostUserName().isEmpty() && !session_state_->hostPassword().isEmpty())
-        return true;
-
-    AuthorizationDialog dialog(true, this);
-    dialog.setUserName(session_state_->hostUserName());
-
-    if (dialog.exec() != QDialog::Accepted)
-        return false;
-
-    QString username = dialog.userName();
-
-    // An empty user name means a connection by ID with a one-time password (#host_id).
-    if (username.isEmpty())
-        username = u"#" + session_state_->host().address();
-
-    session_state_->setHostCredentials(username, dialog.password());
-    return true;
-}
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::startNewSession()

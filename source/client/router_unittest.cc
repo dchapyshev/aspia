@@ -355,33 +355,27 @@ TEST_F(RouterTest, HostStatusConversationUsesTheClientChannel)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The connection request carries the session type, and the offer comes back with the key of the
-// host intact: it is what the network worker anchors the anonymous handshake with.
-TEST_F(RouterTest, ConnectionRequestCarriesTheSessionType)
+// The connection request names the host, and the offer of the router comes back to the caller.
+TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
 {
-    const quint32 kSessionType = 1;
-    const std::string kHostPublicKey(32, 'k');
-
-    std::string received_key;
-    router_.requestConnection(HostId(7), kSessionType,
-        { &receiver_, [&received_key](const proto::router::ConnectionOffer& offer)
+    std::string received_error;
+    router_.requestConnection(HostId(7),
+        { &receiver_, [&received_error](const proto::router::ConnectionOffer& offer)
     {
-        received_key = offer.host_public_key();
+        received_error = offer.error_code();
     } });
 
     const auto request = lastRequest<proto::router::ClientToRouter>();
     ASSERT_TRUE(request.has_connection_request());
     EXPECT_EQ(request.connection_request().host_id(), 7u);
-    EXPECT_EQ(request.connection_request().session_type(), kSessionType);
 
     proto::router::RouterToClient reply;
     proto::router::ConnectionOffer* offer = reply.mutable_connection_offer();
     offer->set_request_id(request.connection_request().request_id());
     offer->set_error_code(proto::router::kErrorOk);
-    offer->set_host_public_key(kHostPublicKey);
     deliver(proto::router::CHANNEL_ID_CLIENT, reply);
 
-    EXPECT_EQ(received_key, kHostPublicKey);
+    EXPECT_EQ(received_error, proto::router::kErrorOk);
 }
 
 //--------------------------------------------------------------------------------------------------
