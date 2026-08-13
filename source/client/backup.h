@@ -35,7 +35,7 @@ public:
         SUCCESS,
         DATABASE_UNAVAILABLE,
         FILE_ERROR,           // The file could not be opened, read or written.
-        INVALID_FORMAT,       // Not a valid/recognized address book file.
+        INVALID_FORMAT,       // Not a valid/recognized backup file.
         UNSUPPORTED_VERSION,
         WRONG_PASSWORD,
         NOTHING_IMPORTED,

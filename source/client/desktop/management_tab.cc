@@ -1420,7 +1420,7 @@ void ManagementTab::onClearRouterEvents()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onImportOldBookAction()
 {
-    LOG(INFO) << "[ACTION] Import address book";
+    LOG(INFO) << "[ACTION] Import old address book";
 
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::LOCAL_GROUP)
@@ -1517,7 +1517,7 @@ void ManagementTab::onExportBookAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onImportBookAction()
 {
-    LOG(INFO) << "[ACTION] Import address book (json)";
+    LOG(INFO) << "[ACTION] Import address book";
 
     SidebarItem* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != SidebarItem::LOCAL_GROUP)
@@ -1541,7 +1541,7 @@ void ManagementTab::onImportBookAction()
     CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
     dialog.setWindowTitle(tr("Unlock"));
     dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("Address book is encrypted. To open, you must enter a password."));
+    dialog.setHeaderText(tr("The file is encrypted. To open, you must enter a password."));
     dialog.setShowPasswordButtonVisible(true);
 
     if (dialog.exec() != QDialog::Accepted)
