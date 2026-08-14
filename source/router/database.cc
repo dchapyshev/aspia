@@ -250,8 +250,10 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     }
 
-    // |otp_secret| is the AEAD-encrypted shared secret (empty until self-enrollment completes;
-    // non-empty implies 2FA is active for the user).
+    // |otp_secret| is the shared secret, stored as generated (empty until self-enrollment
+    // completes; non-empty implies 2FA is active for the user). TOTP requires the verifying
+    // side to hold the secret itself, so the column cannot keep a hash the way
+    // client_device_tokens does.
     // |otp_counter| is the highest TOTP step already consumed; the server refuses any
     // subsequent code whose step is less-than-or-equal to it (replay protection, per RFC 6238
     // section 5.2).
@@ -866,7 +868,7 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, quint64 counter)
+bool Database::setUserOtp(qint64 user_id, const QByteArray& secret, quint64 counter)
 {
     if (!isValid())
     {
@@ -875,7 +877,7 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& encrypted_secret, qu
     }
 
     SqlQuery query(db_, "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=? AND otp_secret=X''");
-    query.addBlob(encrypted_secret);
+    query.addBlob(secret);
     query.addUInt64(counter);
     query.addInt64(user_id);
 
