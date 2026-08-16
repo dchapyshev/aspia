@@ -379,6 +379,30 @@ TEST_F(RelayTest, KeyUsedIsForwardedToTheRelay)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The relay reports its sessions only when it is asked to, so the request is what starts every
+// report the administrator console shows.
+TEST_F(RelayTest, StatisticsRequestIsForwardedToTheRelay)
+{
+    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    {
+        relay.sendStatisticsRequest();
+        relay.sendStatisticsRequest();
+
+        ASSERT_EQ(channel->sent().size(), 2);
+
+        proto::router::RouterToRelay message;
+        ASSERT_TRUE(parse(channel->sent().front().buffer, &message));
+        ASSERT_TRUE(message.has_statistics_request());
+        EXPECT_EQ(message.statistics_request().request_id(), 1);
+
+        // Every request of the session has an identifier of its own.
+        ASSERT_TRUE(parse(channel->sent().back().buffer, &message));
+        ASSERT_TRUE(message.has_statistics_request());
+        EXPECT_EQ(message.statistics_request().request_id(), 2);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // The administrator drops a peer session of a relay and this command carries that decision.
 TEST_F(RelayTest, PeerRequestIsForwardedToTheRelay)
 {

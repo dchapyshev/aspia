@@ -53,6 +53,7 @@ public:
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
     const std::optional<proto::router::RelayStatistics>& statistics() const { return statistics_; }
+    void sendStatisticsRequest();
     void sendKeyUsed(quint32 key_id);
     void disconnectPeerSession(const proto::router::PeerRequest& request);
 
@@ -70,6 +71,7 @@ private:
 
     const qint64 session_id_;
     time_t start_time_ = 0;
+    qint64 last_statistics_request_id_ = 0;
 
     TcpChannel* tcp_channel_ = nullptr;
 

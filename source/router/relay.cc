@@ -99,6 +99,14 @@ void Relay::sendMessage(quint8 channel_id, const QByteArray& message)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Relay::sendStatisticsRequest()
+{
+    outgoing_message_.newMessage<proto::router::RouterToRelay>()
+        .mutable_statistics_request()->set_request_id(++last_statistics_request_id_);
+    sendMessage(0, outgoing_message_.serialize<proto::router::RouterToRelay>());
+}
+
+//--------------------------------------------------------------------------------------------------
 void Relay::sendKeyUsed(quint32 key_id)
 {
     outgoing_message_.newMessage<proto::router::RouterToRelay>().mutable_key_used()->set_key_id(key_id);

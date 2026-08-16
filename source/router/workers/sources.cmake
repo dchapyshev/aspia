@@ -28,4 +28,5 @@ collect_sources(SOURCE_ROUTER_WORKERS
 
 collect_sources(SOURCE_ROUTER_WORKERS_TESTS
     client_worker_unittest.cc
-    host_worker_unittest.cc)
+    host_worker_unittest.cc
+    relay_worker_unittest.cc)

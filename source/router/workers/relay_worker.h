@@ -68,6 +68,7 @@ protected:
     // Worker implementation.
     void onStart() final;
     void onStop() final;
+    void onTimer(TimePoint now) final;
 
 private slots:
     void onNewRelayConnection();
@@ -82,6 +83,11 @@ private:
     ScopedQPointer<TcpServer> server_;
     std::vector<Relay*> relays_;
 
+    // The relays report only what they are asked for, so the interval of the polling is the age
+    // the statistics of the administrator console may have.
+    TimePoint next_statistics_time_;
+
+    friend class RelayWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(RelayWorker)
 };
 

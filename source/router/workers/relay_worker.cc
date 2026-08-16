@@ -28,6 +28,15 @@
 #include "router/settings.h"
 #include "router/shared_key_pool.h"
 
+namespace {
+
+// How often the router asks its relays about their sessions. The statistics are shown in the
+// administrator console, so the interval is a compromise between a fresh list and the traffic of
+// the polling itself.
+constexpr Seconds kStatisticsInterval { 5 };
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RelayWorker::RelayWorker()
     : Worker(Thread::AsioDispatcher, Seconds(1))
@@ -146,6 +155,18 @@ void RelayWorker::onStop()
 
     relays_.clear();
     SharedKeyPool::instance().clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onTimer(TimePoint now)
+{
+    if (now < next_statistics_time_)
+        return;
+
+    next_statistics_time_ = now + kStatisticsInterval;
+
+    for (auto* relay : std::as_const(relays_))
+        relay->sendStatisticsRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
