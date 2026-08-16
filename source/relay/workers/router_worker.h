@@ -41,6 +41,9 @@ signals:
     // Asks the relay side to disconnect the peer session |session_id|.
     void sig_disconnectSession(qint64 session_id);
 
+    // Asks the relay side for a report about its sessions.
+    void sig_statisticsRequested();
+
 protected:
     // Worker implementation.
     void onStart() final;

@@ -28,7 +28,6 @@ using namespace Qt::StringLiterals;
 // The literals hold their bytes statically, so naming a section costs no allocation.
 const QByteArray kPeerSection = "peer"_ba;
 const QByteArray kRouterSection = "router"_ba;
-const QByteArray kStatisticsSection = "statistics"_ba;
 
 //--------------------------------------------------------------------------------------------------
 QString configFilePath()
@@ -83,8 +82,6 @@ void Settings::reset()
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(Minutes(5));
     setMaxPeerCount(100);
-    setStatisticsEnabled(false);
-    setStatisticsInterval(Seconds(5));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -187,28 +184,4 @@ void Settings::setMaxPeerCount(quint32 count)
 quint32 Settings::maxPeerCount() const
 {
     return ini_.uint32Value(kPeerSection, "max_count", 100);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setStatisticsEnabled(bool enable)
-{
-    ini_.setBooleanValue(kStatisticsSection, "enabled", enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Settings::isStatisticsEnabled() const
-{
-    return ini_.booleanValue(kStatisticsSection, "enabled", false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setStatisticsInterval(Seconds interval)
-{
-    ini_.setInt64Value(kStatisticsSection, "interval", interval.count());
-}
-
-//--------------------------------------------------------------------------------------------------
-Seconds Settings::statisticsInterval() const
-{
-    return Seconds(ini_.int64Value(kStatisticsSection, "interval", 5));
 }

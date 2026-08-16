@@ -144,6 +144,31 @@ void RelayWorker::onDisconnectSession(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RelayWorker::onStatisticsRequest()
+{
+    const TimePoint now = Clock::now();
+
+    proto::router::RelayStatistics statistics;
+    statistics.set_uptime(DurationCast<Seconds>(now - start_time_).count());
+
+    for (const auto& session : std::as_const(active_sessions_))
+    {
+        proto::router::Peer* peer = statistics.add_peer();
+        peer->set_peer_id(session->sessionId());
+        peer->set_status(proto::router::Peer::STATUS_ACTIVE);
+        peer->set_client_address(session->clientAddress());
+        peer->set_client_user_name(session->clientUserName());
+        peer->set_host_address(session->hostAddress());
+        peer->set_host_id(session->hostId());
+        peer->set_bytes_transferred(session->bytesTransferred());
+        peer->set_idle_time(session->idleTime(now).count());
+        peer->set_duration(session->duration(now).count());
+    }
+
+    emit sig_statistics(statistics);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RelayWorker::onStart()
 {
     Settings settings;
@@ -153,8 +178,6 @@ void RelayWorker::onStart()
 
     LOG(INFO) << "Peer port:" << peer_port;
     LOG(INFO) << "Peer idle timeout:" << idle_timeout.count();
-    LOG(INFO) << "Statistics enabled:" << settings.isStatisticsEnabled();
-    LOG(INFO) << "Statistics interval:" << settings.statisticsInterval().count();
 
     if (peer_port == 0)
     {
@@ -166,16 +189,6 @@ void RelayWorker::onStart()
     {
         LOG(ERROR) << "Invalid peer idle specified";
         return;
-    }
-
-    if (settings.isStatisticsEnabled())
-    {
-        Seconds interval = settings.statisticsInterval();
-        if (interval < Seconds(1) || interval > Minutes(60))
-        {
-            LOG(ERROR) << "Invalid statistics interval";
-            return;
-        }
     }
 
     QString iface = settings.listenInterface();
@@ -242,12 +255,6 @@ void RelayWorker::onStart()
 
     start_time_ = Clock::now();
     next_idle_check_ = start_time_ + kIdleCheckInterval;
-
-    if (settings.isStatisticsEnabled())
-    {
-        stat_interval_ = settings.statisticsInterval();
-        next_stat_time_ = start_time_ + stat_interval_;
-    }
 
     RelayWorker::doAccept(this);
     emit sig_ready();
@@ -336,30 +343,6 @@ void RelayWorker::onTimer(TimePoint now)
 
         if (count > 0)
             LOG(INFO) << "Sessions ended by timeout:" << count;
-    }
-
-    if (stat_interval_ > Seconds::zero() && now >= next_stat_time_)
-    {
-        next_stat_time_ = now + stat_interval_;
-
-        proto::router::RelayStatistics statistics;
-        statistics.set_uptime(DurationCast<Seconds>(now - start_time_).count());
-
-        for (const auto& session : std::as_const(active_sessions_))
-        {
-            proto::router::Peer* peer = statistics.add_peer();
-            peer->set_peer_id(session->sessionId());
-            peer->set_status(proto::router::Peer::STATUS_ACTIVE);
-            peer->set_client_address(session->clientAddress());
-            peer->set_client_user_name(session->clientUserName());
-            peer->set_host_address(session->hostAddress());
-            peer->set_host_id(session->hostId());
-            peer->set_bytes_transferred(session->bytesTransferred());
-            peer->set_idle_time(session->idleTime(now).count());
-            peer->set_duration(session->duration(now).count());
-        }
-
-        emit sig_statistics(statistics);
     }
 }
 

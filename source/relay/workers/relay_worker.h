@@ -48,6 +48,9 @@ public slots:
     // Disconnects the peer session |session_id|.
     void onDisconnectSession(qint64 session_id);
 
+    // Reports the state of every session with sig_statistics.
+    void onStatisticsRequest();
+
 signals:
     // Emitted from the worker thread once the acceptor is listening for peers.
     void sig_ready();
@@ -58,7 +61,7 @@ signals:
     // Emitted from the worker thread when an active peer session has finished.
     void sig_sessionFinished();
 
-    // Emitted from the worker thread at the configured interval with session statistics.
+    // Emitted from the worker thread in answer to onStatisticsRequest().
     void sig_statistics(const proto::router::RelayStatistics& statistics);
 
 protected:
@@ -87,10 +90,7 @@ private:
     std::vector<PendingSession*> pending_sessions_;
     std::vector<Session*> active_sessions_;
 
-    // Statistics are disabled while |stat_interval_| is zero.
-    Seconds stat_interval_ { Seconds::zero() };
     TimePoint next_idle_check_;
-    TimePoint next_stat_time_;
     TimePoint start_time_;
 
     // Anti-flood gate: per-address rate limit + global pending cap + rate-limited logging.

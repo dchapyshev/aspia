@@ -63,12 +63,6 @@ public:
     void setMaxPeerCount(quint32 count);
     quint32 maxPeerCount() const;
 
-    void setStatisticsEnabled(bool enable);
-    bool isStatisticsEnabled() const;
-
-    void setStatisticsInterval(Seconds interval);
-    Seconds statisticsInterval() const;
-
 private:
     IniFile ini_;
 };

@@ -140,6 +140,8 @@ void RouterWorker::onStart()
             this, &RouterWorker::onSessionStatistics, Qt::QueuedConnection);
     connect(this, &RouterWorker::sig_disconnectSession,
             relay_worker, &RelayWorker::onDisconnectSession, Qt::QueuedConnection);
+    connect(this, &RouterWorker::sig_statisticsRequested,
+            relay_worker, &RelayWorker::onStatisticsRequest, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -218,6 +220,10 @@ void RouterWorker::onTcpMessageReceived(quint8 /* channel_id */, const QByteArra
     if (message->has_key_used())
     {
         key_deadlines_[message->key_used().key_id()] = Clock::now() + kKeyUseTimeout;
+    }
+    else if (message->has_statistics_request())
+    {
+        emit sig_statisticsRequested();
     }
     else if (message->has_peer_request())
     {

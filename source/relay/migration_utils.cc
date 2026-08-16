@@ -111,20 +111,6 @@ bool doConfigMigrate(const QJsonDocument& doc)
         settings.setMaxPeerCount(value);
     }
 
-    if (root_object.contains("StatisticsEnabled"))
-    {
-        bool value = root_object["StatisticsEnabled"].toString() == "true";
-        LOG(INFO) << "StatisticsEnabled:" << value;
-        settings.setStatisticsEnabled(value);
-    }
-
-    if (root_object.contains("StatisticsInterval"))
-    {
-        qint64 value = std::clamp<qint64>(root_object["StatisticsInterval"].toString().toLongLong(), 1, 3600);
-        LOG(INFO) << "StatisticsInterval:" << value;
-        settings.setStatisticsInterval(Seconds(value));
-    }
-
     if (!settings.sync())
     {
         LOG(ERROR) << "Unable to write configuration file" << settings.filePath();

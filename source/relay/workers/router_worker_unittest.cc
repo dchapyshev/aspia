@@ -134,7 +134,6 @@ protected:
         settings.setPeerPort(pickFreePort());
         settings.setPeerIdleTimeout(Minutes(1));
         settings.setMaxPeerCount(kMaxPeerCount);
-        settings.setStatisticsEnabled(false);
         ASSERT_TRUE(settings.sync());
 
         std::unique_ptr<RouterWorker> router_worker = std::make_unique<RouterWorker>();
@@ -181,6 +180,11 @@ protected:
                             last_key_pool_ = message.key_pool();
                             key_pool_received_.signal();
                         }
+                        else if (message.has_statistics())
+                        {
+                            last_statistics_ = message.statistics();
+                            statistics_received_.signal();
+                        }
                     });
 
                     relay_channel_->setPaused(false);
@@ -222,6 +226,17 @@ protected:
         });
     }
 
+    // Asks the relay about its sessions, the way the router does.
+    void sendStatisticsRequest(qint64 request_id)
+    {
+        stand_worker_->invoke([&]()
+        {
+            proto::router::RouterToRelay message;
+            message.mutable_statistics_request()->set_request_id(request_id);
+            relay_channel_->send(0, serialize(message));
+        });
+    }
+
     // Fires the timer of the worker with a synthetic clock until |condition| holds. The
     // wait bounds a broken test, the condition is what the test is actually about.
     [[nodiscard]] bool fireTimerUntil(TimePoint now, const std::function<bool()>& condition)
@@ -256,8 +271,10 @@ protected:
     QPointer<TcpChannel> relay_channel_;
 
     proto::router::RelayKeyPool last_key_pool_;
+    proto::router::RelayStatistics last_statistics_;
     TestLatch accepted_;
     TestLatch key_pool_received_;
+    TestLatch statistics_received_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -278,6 +295,20 @@ TEST_F(RouterWorkerTest, RelayConnectsAndAnnouncesItsCapacity)
         EXPECT_FALSE(last_key_pool_.key(i).public_key().empty());
         EXPECT_FALSE(last_key_pool_.key(i).iv().empty());
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// The relay keeps no schedule of its own: it reports its sessions when the router asks and stays
+// quiet otherwise, so the router alone decides how often the statistics travel.
+TEST_F(RouterWorkerTest, StatisticsAreReportedOnlyOnRequest)
+{
+    ASSERT_TRUE(key_pool_received_.wait(1, kWaitTimeout));
+    EXPECT_EQ(statistics_received_.count(), 0);
+
+    sendStatisticsRequest(1);
+
+    ASSERT_TRUE(statistics_received_.wait(1, kWaitTimeout));
+    EXPECT_EQ(last_statistics_.peer_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

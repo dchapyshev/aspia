@@ -43,6 +43,12 @@ message RelayStatistics
     int64 uptime = 2;
 }
 
+// Sent from router to relay.
+message RelayStatisticsRequest
+{
+    int64 request_id = 1;
+}
+
 // Sent from relay to router.
 message RelayToRouter
 {
@@ -55,4 +61,5 @@ message RouterToRelay
 {
     RelayKeyUsed key_used = 1;
     PeerRequest peer_request = 2;
+    RelayStatisticsRequest statistics_request = 3;
 }

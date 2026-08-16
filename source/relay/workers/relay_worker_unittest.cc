@@ -67,8 +67,9 @@ quint16 pickFreePort()
 
 } // namespace
 
-// Fires the timer of the worker with a synthetic clock, in the thread of the worker. In production
-// the timer runs with the real time, and the tests cannot wait the real timeouts out.
+// Drives the worker from the thread of the worker itself. In production the timer runs with the
+// real time, and the tests cannot wait the real timeouts out; the statistics come from the router,
+// which the stand of this file does not have.
 class RelayWorkerTestPeer
 {
 public:
@@ -80,13 +81,24 @@ public:
 
     void fireTimer(TimePoint now)
     {
+        runInWorker([&]() { worker_->onTimer(now); });
+    }
+
+    void requestStatistics()
+    {
+        runInWorker([&]() { worker_->onStatisticsRequest(); });
+    }
+
+private:
+    void runInWorker(const std::function<void()>& body)
+    {
         std::mutex lock;
         std::condition_variable finished;
         bool done = false;
 
         worker_->post([&]()
         {
-            worker_->onTimer(now);
+            body();
 
             std::lock_guard guard(lock);
             done = true;
@@ -97,7 +109,6 @@ public:
         finished.wait(guard, [&]() { return done; });
     }
 
-private:
     RelayWorker* worker_;
 };
 
@@ -127,8 +138,6 @@ protected:
         settings.setListenInterface("127.0.0.1");
         settings.setPeerPort(peer_port_);
         settings.setPeerIdleTimeout(kIdleTimeout);
-        settings.setStatisticsEnabled(statistics_enabled_);
-        settings.setStatisticsInterval(Seconds(5));
         ASSERT_TRUE(settings.sync());
 
         std::unique_ptr<RelayWorker> worker = std::make_unique<RelayWorker>();
@@ -298,7 +307,6 @@ protected:
 
     QTemporaryDir temp_dir_;
     quint16 peer_port_ = 0;
-    bool statistics_enabled_ = false;
 
     WorkerManager workers_;
     RelayWorker* worker_ = nullptr;
@@ -310,17 +318,6 @@ protected:
     TestLatch session_started_;
     TestLatch session_finished_;
     TestLatch statistics_received_;
-};
-
-// The same stand with the statistics reporting turned on.
-class RelayWorkerStatisticsTest : public RelayWorkerTest
-{
-protected:
-    void SetUp() override
-    {
-        statistics_enabled_ = true;
-        RelayWorkerTest::SetUp();
-    }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -548,9 +545,9 @@ TEST_F(RelayWorkerTest, IdleSessionIsClosed)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The report the relay sends to the router carries every active session with the identity from
+// The report the relay answers the router with carries every active session with the identity from
 // its secret. This is what the administrator sees in the console.
-TEST_F(RelayWorkerStatisticsTest, StatisticsReportTheActiveSessions)
+TEST_F(RelayWorkerTest, StatisticsReportTheActiveSessions)
 {
     const OfferedKey key = announceKey();
     const QByteArray shared_secret = secret();
@@ -561,8 +558,8 @@ TEST_F(RelayWorkerStatisticsTest, StatisticsReportTheActiveSessions)
     sendHandshake(host, key, shared_secret);
     ASSERT_TRUE(session_started_.wait(1, kWaitTimeout));
 
-    RelayWorkerTestPeer timer(worker_);
-    timer.fireTimer(Clock::now() + Seconds(6));
+    RelayWorkerTestPeer peer_driver(worker_);
+    peer_driver.requestStatistics();
 
     ASSERT_TRUE(statistics_received_.wait(1, kWaitTimeout));
     ASSERT_EQ(last_statistics_.peer_size(), 1);
