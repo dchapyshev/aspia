@@ -19,8 +19,10 @@
 #ifndef ROUTER_SETTINGS_H
 #define ROUTER_SETTINGS_H
 
-#include <QSettings>
+#include <QByteArray>
 #include <QStringList>
+
+#include "base/ini_file.h"
 
 class SecureByteArray;
 
@@ -33,8 +35,9 @@ public:
     QString filePath();
 
     bool isEmpty() const;
+    bool hasError() const;
     void reset();
-    void sync();
+    bool sync();
 
     void setListenInterface(const QString& iface);
     QString listenInterface() const;
@@ -81,10 +84,10 @@ public:
     quint16 stunPort() const;
 
 private:
-    void setWhiteList(const QString& key, const WhiteList& value);
-    WhiteList whiteList(const QString& key) const;
+    void setWhiteList(const QByteArray& section, const WhiteList& value);
+    WhiteList whiteList(const QByteArray& section) const;
 
-    QSettings impl_;
+    IniFile ini_;
 };
 
 #endif // ROUTER_SETTINGS_H

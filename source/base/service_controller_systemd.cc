@@ -25,16 +25,19 @@
 
 #include <pwd.h>
 
-#include <sstream>
-#include <inipp.h>
-
-#include "base/files/file_util.h"
+#include "base/ini_file.h"
 #include "base/logging.h"
 
 namespace {
 
+using namespace Qt::StringLiterals;
+
 const char kSystemdPath[] = "/etc/systemd/system";
-using IniFile = inipp::Ini<char>;
+
+// The names come from systemd.unit(5) as they are, mixed case included.
+const QByteArray kUnitSection = "Unit"_ba;
+const QByteArray kServiceSection = "Service"_ba;
+const QByteArray kInstallSection = "Install"_ba;
 
 // Sandboxing directives applied together with the low-privilege account. See systemd.exec(5). Both
 // the router and the relay are network daemons that only need their own directories, so the same
@@ -142,66 +145,20 @@ bool reloadSystemd()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool readUnitFile(const QString& path, IniFile* ini)
-{
-    QByteArray buffer;
-    if (!readFile(path, &buffer))
-        return false;
-
-    std::istringstream stream(buffer.toStdString());
-    ini->clear();
-    ini->parse(stream);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool writeUnitFile(const QString& path, IniFile ini)
-{
-    std::ostringstream stream;
-    ini.generate(stream);
-
-    const std::string content = stream.str();
-    return writeFile(path, content);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString readKeyValue(const IniFile& ini, const QString& section, const QString& key)
-{
-    auto section_it = ini.sections.find(section.toStdString());
-    if (section_it == ini.sections.end())
-        return QString();
-
-    auto key_it = section_it->second.find(key.toStdString());
-    if (key_it == section_it->second.end())
-        return QString();
-
-    return QString::fromStdString(key_it->second);
-}
-
-//--------------------------------------------------------------------------------------------------
-void setKeyValue(IniFile* ini, const QString& section, const QString& key, const QString& value)
-{
-    ini->sections[section.toStdString()][key.toStdString()] = value.toStdString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void removeKey(IniFile* ini, const QString& section, const QString& key)
-{
-    auto section_it = ini->sections.find(section.toStdString());
-    if (section_it == ini->sections.end())
-        return;
-
-    section_it->second.erase(key.toStdString());
-}
-
-//--------------------------------------------------------------------------------------------------
 template <typename Updater>
 bool updateUnitFile(const QString& unit_name, Updater&& updater)
 {
     const QString path = unitFilePath(unit_name);
 
-    IniFile ini;
-    if (!readUnitFile(path, &ini))
+    // A unit that is not there must not spring into existence as a bare fragment.
+    if (!QFileInfo::exists(path))
+    {
+        LOG(ERROR) << "Unit file does not exist:" << path;
+        return false;
+    }
+
+    IniFile ini(path);
+    if (ini.hasErrors())
     {
         LOG(ERROR) << "Failed to read unit file:" << path;
         return false;
@@ -209,7 +166,7 @@ bool updateUnitFile(const QString& unit_name, Updater&& updater)
 
     updater(&ini);
 
-    if (!writeUnitFile(path, std::move(ini)))
+    if (!ini.sync())
     {
         LOG(ERROR) << "Failed to write unit file:" << path;
         return false;
@@ -299,18 +256,25 @@ std::unique_ptr<ServiceController> ServiceControllerSystemd::install(
     if (!arguments.isEmpty())
         exec_start += ' ' + arguments.join(' ');
 
-    IniFile ini;
-    setKeyValue(&ini, "Unit", "Description", display_name);
-    setKeyValue(&ini, "Unit", "After", "network-online.target");
-    setKeyValue(&ini, "Unit", "Wants", "network-online.target");
-    setKeyValue(&ini, "Service", "WorkingDirectory", file_info.absolutePath());
-    setKeyValue(&ini, "Service", "Environment", "ASPIA_LOG_LEVEL=2");
-    setKeyValue(&ini, "Service", "ExecStart", exec_start);
-    setKeyValue(&ini, "Service", "Restart", "always");
-    setKeyValue(&ini, "Service", "RestartSec", "5s");
-    setKeyValue(&ini, "Install", "WantedBy", "multi-user.target");
+    // The installation writes the unit anew, so nothing of an older unit may seep into it.
+    if (QFileInfo::exists(unit_file_path) && !QFile::remove(unit_file_path))
+    {
+        LOG(ERROR) << "Failed to remove unit file:" << unit_file_path;
+        return nullptr;
+    }
 
-    if (!writeUnitFile(unit_file_path, std::move(ini)))
+    IniFile ini(unit_file_path);
+    ini.setStringValue(kUnitSection, "Description", display_name);
+    ini.setStringValue(kUnitSection, "After", "network-online.target");
+    ini.setStringValue(kUnitSection, "Wants", "network-online.target");
+    ini.setStringValue(kServiceSection, "WorkingDirectory", file_info.absolutePath());
+    ini.setStringValue(kServiceSection, "Environment", "ASPIA_LOG_LEVEL=2");
+    ini.setStringValue(kServiceSection, "ExecStart", exec_start);
+    ini.setStringValue(kServiceSection, "Restart", "always");
+    ini.setStringValue(kServiceSection, "RestartSec", "5s");
+    ini.setStringValue(kInstallSection, "WantedBy", "multi-user.target");
+
+    if (!ini.sync())
     {
         LOG(ERROR) << "Failed to write unit file:" << unit_file_path;
         return nullptr;
@@ -445,36 +409,33 @@ bool ServiceControllerSystemd::setAccount(const QString& username, const QString
         if (username.isEmpty())
         {
             // Restore the default account and drop the sandboxing along with it.
-            removeKey(ini, "Service", "User");
-            removeKey(ini, "Service", "Group");
-            removeKey(ini, "Service", "ReadWritePaths");
+            ini->removeValue(kServiceSection, "User");
+            ini->removeValue(kServiceSection, "Group");
+            ini->removeValue(kServiceSection, "ReadWritePaths");
 
             for (const auto& directive : kSandboxing)
-                removeKey(ini, "Service", directive.key);
+                ini->removeValue(kServiceSection, directive.key);
             return;
         }
 
-        setKeyValue(ini, "Service", "User", username);
-        setKeyValue(ini, "Service", "Group", username);
+        ini->setStringValue(kServiceSection, "User", username);
+        ini->setStringValue(kServiceSection, "Group", username);
 
         // Allow writes only to the service directories; the rest of the file system is read-only
         // under ProtectSystem=strict.
         if (!paths.isEmpty())
-            setKeyValue(ini, "Service", "ReadWritePaths", paths.join(' '));
+            ini->setStringValue(kServiceSection, "ReadWritePaths", paths.join(' '));
 
         for (const auto& directive : kSandboxing)
-            setKeyValue(ini, "Service", directive.key, directive.value);
+            ini->setStringValue(kServiceSection, directive.key, directive.value);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
 QString ServiceControllerSystemd::filePath() const
 {
-    IniFile ini;
-    if (!readUnitFile(unitFilePath(unit_name_), &ini))
-        return QString();
-
-    return readKeyValue(ini, "Service", "ExecStart");
+    const IniFile ini(unitFilePath(unit_name_));
+    return ini.stringValue(kServiceSection, "ExecStart");
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,8 +19,10 @@
 #ifndef RELAY_SETTINGS_H
 #define RELAY_SETTINGS_H
 
-#include <QSettings>
+#include <QByteArray>
+#include <QString>
 
+#include "base/ini_file.h"
 #include "base/time_types.h"
 
 class Settings
@@ -68,7 +70,7 @@ public:
     Seconds statisticsInterval() const;
 
 private:
-    QSettings impl_;
+    IniFile ini_;
 };
 
 #endif // RELAY_SETTINGS_H

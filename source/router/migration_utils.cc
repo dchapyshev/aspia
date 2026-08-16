@@ -54,7 +54,7 @@ QByteArray decodeHexKey(const QString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void doConfigMigrate(const QJsonDocument& doc)
+bool doConfigMigrate(const QJsonDocument& doc)
 {
     Settings settings;
     LOG(INFO) << "New config file:" << settings.filePath();
@@ -66,7 +66,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     if (root_object.isEmpty())
     {
         LOG(INFO) << "Root object is empty";
-        return;
+        return true;
     }
 
     if (root_object.contains("ClientWhiteList"))
@@ -140,6 +140,14 @@ void doConfigMigrate(const QJsonDocument& doc)
     if (settings.seedKey().isEmpty())
         settings.setSeedKey(Random::byteArray(64));
     settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
+
+    if (!settings.sync())
+    {
+        LOG(ERROR) << "Unable to write configuration file" << settings.filePath();
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace
@@ -188,10 +196,8 @@ void doMigration()
                 LOG(ERROR) << "JSON parse error at" << parse_error.offset << ":"
                            << parse_error.errorString();
             }
-            else
+            else if (doConfigMigrate(doc))
             {
-                doConfigMigrate(doc);
-
                 QString new_file_name = old_config_file + ".bak";
 
                 if (QFile::rename(old_config_file, new_file_name))

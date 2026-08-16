@@ -39,7 +39,7 @@ QString oldConfigFilePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-void doConfigMigrate(const QJsonDocument& doc)
+bool doConfigMigrate(const QJsonDocument& doc)
 {
     Settings settings;
     LOG(INFO) << "New settings file:" << settings.filePath();
@@ -51,7 +51,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     if (root_object.isEmpty())
     {
         LOG(INFO) << "Root object is empty";
-        return;
+        return true;
     }
 
     if (root_object.contains("RouterAddress"))
@@ -124,6 +124,14 @@ void doConfigMigrate(const QJsonDocument& doc)
         LOG(INFO) << "StatisticsInterval:" << value;
         settings.setStatisticsInterval(Seconds(value));
     }
+
+    if (!settings.sync())
+    {
+        LOG(ERROR) << "Unable to write configuration file" << settings.filePath();
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace
@@ -174,10 +182,8 @@ void doMigration()
                 LOG(ERROR) << "JSON parse error at" << parse_error.offset << ":"
                            << parse_error.errorString();
             }
-            else
+            else if (doConfigMigrate(doc))
             {
-                doConfigMigrate(doc);
-
                 QString new_file_name = old_config_file + ".bak";
 
                 if (QFileInfo::exists(new_file_name) && !QFile::remove(new_file_name))

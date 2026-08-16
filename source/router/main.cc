@@ -94,6 +94,13 @@ int installService(QTextStream& out)
     // first and runs --install afterwards. On an upgrade the existing configuration is present, so
     // the service is reinstalled and its parameters refreshed.
     Settings settings;
+    if (settings.hasError())
+    {
+        out << "Configuration exists but cannot be read (corrupt or access denied). "
+               "Fix it before installing the service." << Qt::endl;
+        return 1;
+    }
+
     if (settings.isEmpty())
     {
         out << "Configuration does not exist; the service was not installed. Create it with "
@@ -114,7 +121,13 @@ int installService(QTextStream& out)
         out << "Router GUID is missing, generating a new one." << Qt::endl;
         settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
     }
-    settings.sync();
+
+    if (!settings.sync())
+    {
+        out << "Failed to write the configuration (check permissions on the config directory)."
+            << Qt::endl;
+        return 1;
+    }
 
     std::unique_ptr<ServiceController> controller = ServiceController::install(
         Service::kName, Service::kDisplayName, QCoreApplication::applicationFilePath());
@@ -216,6 +229,13 @@ int createConfig(QTextStream& out)
     if (!settings.isEmpty())
     {
         out << "Settings file already exists. Continuation is impossible." << Qt::endl;
+        return 1;
+    }
+
+    if (settings.hasError())
+    {
+        out << "Existing configuration cannot be read (corrupt or access denied). Not modifying it."
+            << Qt::endl;
         return 1;
     }
 
@@ -348,7 +368,13 @@ int createConfig(QTextStream& out)
     settings.setRelayPrivateKey(relay_private_key);
     settings.setSeedKey(seed_key);
     settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
-    settings.sync();
+
+    if (!settings.sync())
+    {
+        out << "Failed to write the configuration (check permissions on the config directory)."
+            << Qt::endl;
+        return 1;
+    }
 
     out << "Configuration successfully created. Don't forget to change your password!" << Qt::endl;
     out << "User name: " << kUserName << Qt::endl;

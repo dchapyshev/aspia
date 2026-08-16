@@ -92,7 +92,6 @@ find_package(unofficial-enet CONFIG REQUIRED)
 find_package(unofficial-nayuki-qr-code-generator CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
-find_path(INIPP_INCLUDE_DIRS "inipp.h")
 find_path(OPENH264_INCLUDE_DIR "wels/codec_api.h" REQUIRED)
 find_library(OPENH264_LIBRARY NAMES openh264 REQUIRED)
 

@@ -10,7 +10,6 @@
       "name": "icu",
       "platform": "linux | osx"
     },
-    "inipp",
     "libvpx",
     "libwebm",
     "libjpeg-turbo",

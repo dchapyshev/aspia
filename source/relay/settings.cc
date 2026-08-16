@@ -18,11 +18,17 @@
 
 #include "relay/settings.h"
 
-#include "base/xml_settings.h"
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
 
 namespace {
+
+using namespace Qt::StringLiterals;
+
+// The literals hold their bytes statically, so naming a section costs no allocation.
+const QByteArray kPeerSection = "peer"_ba;
+const QByteArray kRouterSection = "router"_ba;
+const QByteArray kStatisticsSection = "statistics"_ba;
 
 //--------------------------------------------------------------------------------------------------
 QString configFilePath()
@@ -39,7 +45,8 @@ QString configFilePath()
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : impl_(configFilePath(), XmlSettings::format())
+    // Only the owner of the file may read and change it, as with the router configuration.
+    : ini_(configFilePath(), QFileDevice::ReadOwner | QFileDevice::WriteOwner)
 {
     // Nothing
 }
@@ -50,19 +57,19 @@ Settings::~Settings() = default;
 //--------------------------------------------------------------------------------------------------
 QString Settings::filePath()
 {
-    return impl_.fileName();
+    return ini_.filePath();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Settings::isEmpty() const
 {
-    return impl_.allKeys().isEmpty();
+    return ini_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Settings::hasError() const
 {
-    return impl_.status() != QSettings::NoError;
+    return ini_.hasErrors();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,6 +78,7 @@ void Settings::reset()
     setRouterAddress("127.0.0.1");
     setRouterPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
     setRouterPublicKey(QByteArray());
+    setListenInterface(QString());
     setPeerAddress(QString());
     setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
     setPeerIdleTimeout(Minutes(5));
@@ -82,126 +90,125 @@ void Settings::reset()
 //--------------------------------------------------------------------------------------------------
 bool Settings::sync()
 {
-    impl_.sync();
-    return impl_.status() == QSettings::NoError;
+    return ini_.sync();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterAddress(const QString& address)
 {
-    impl_.setValue("router_address", address);
+    ini_.setStringValue(kRouterSection, "address", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::routerAddress() const
 {
-    return impl_.value("router_address").toString();
+    return ini_.stringValue(kRouterSection, "address");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPort(quint16 port)
 {
-    impl_.setValue("router_port", port);
+    ini_.setUInt16Value(kRouterSection, "port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::routerPort() const
 {
-    return impl_.value("router_port", DEFAULT_ROUTER_RELAY_TCP_PORT).toUInt();
+    return ini_.uint16Value(kRouterSection, "port", DEFAULT_ROUTER_RELAY_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setRouterPublicKey(const QByteArray& public_key)
 {
-    impl_.setValue("router_public_key", public_key);
+    ini_.setBinaryValue(kRouterSection, "public_key", public_key);
 }
 
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::routerPublicKey() const
 {
-    return impl_.value("router_public_key").toByteArray();
+    return ini_.binaryValue(kRouterSection, "public_key");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setListenInterface(const QString& iface)
 {
-    impl_.setValue("listen_interface", iface);
+    ini_.setStringValue(kPeerSection, "listen_interface", iface);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::listenInterface() const
 {
-    return impl_.value("listen_interface").toString();
+    return ini_.stringValue(kPeerSection, "listen_interface");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerAddress(const QString& address)
 {
-    impl_.setValue("peer_address", address);
+    ini_.setStringValue(kPeerSection, "public_address", address);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString Settings::peerAddress() const
 {
-    return impl_.value("peer_address").toString();
+    return ini_.stringValue(kPeerSection, "public_address");
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerPort(quint16 port)
 {
-    impl_.setValue("peer_port", port);
+    ini_.setUInt16Value(kPeerSection, "port", port);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::peerPort() const
 {
-    return impl_.value("peer_port", DEFAULT_RELAY_PEER_TCP_PORT).toUInt();
+    return ini_.uint16Value(kPeerSection, "port", DEFAULT_RELAY_PEER_TCP_PORT);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerIdleTimeout(Minutes timeout)
 {
-    impl_.setValue("peer_idle_timeout", static_cast<qint64>(timeout.count()));
+    ini_.setInt64Value(kPeerSection, "idle_timeout", timeout.count());
 }
 
 //--------------------------------------------------------------------------------------------------
 Minutes Settings::peerIdleTimeout() const
 {
-    return Minutes(impl_.value("peer_idle_timeout", 5).toInt());
+    return Minutes(ini_.int64Value(kPeerSection, "idle_timeout", 5));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setMaxPeerCount(quint32 count)
 {
-    impl_.setValue("max_peer_count", count);
+    ini_.setUInt32Value(kPeerSection, "max_count", count);
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 Settings::maxPeerCount() const
 {
-    return impl_.value("max_peer_count", 100).toUInt();
+    return ini_.uint32Value(kPeerSection, "max_count", 100);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsEnabled(bool enable)
 {
-    impl_.setValue("statistics_enabled", enable);
+    ini_.setBooleanValue(kStatisticsSection, "enabled", enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Settings::isStatisticsEnabled() const
 {
-    return impl_.value("statistics_enabled", false).toBool();
+    return ini_.booleanValue(kStatisticsSection, "enabled", false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setStatisticsInterval(Seconds interval)
 {
-    impl_.setValue("statistics_interval", static_cast<int>(interval.count()));
+    ini_.setInt64Value(kStatisticsSection, "interval", interval.count());
 }
 
 //--------------------------------------------------------------------------------------------------
 Seconds Settings::statisticsInterval() const
 {
-    return Seconds(impl_.value("statistics_interval", 5).toInt());
+    return Seconds(ini_.int64Value(kStatisticsSection, "interval", 5));
 }
