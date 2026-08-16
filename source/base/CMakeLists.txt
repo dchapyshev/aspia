@@ -37,6 +37,8 @@ list(APPEND SOURCE_BASE
     event_enumerator.h
     gui_application.cc
     gui_application.h
+    ini_file.cc
+    ini_file.h
     location.cc
     location.h
     logging.cc
@@ -129,6 +131,7 @@ list(APPEND SOURCE_BASE_TESTS
     bucket_pool_unittest.cc
     drive_smart_unittest.cc
     edid_unittest.cc
+    ini_file_unittest.cc
     numeric_utils_unittest.cc
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
