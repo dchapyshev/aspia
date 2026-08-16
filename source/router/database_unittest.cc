@@ -39,7 +39,7 @@
 namespace {
 
 constexpr quint32 kAllSessions = proto::router::SESSION_TYPE_ADMIN |
-    proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_CLIENT;
+    proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
 
 //--------------------------------------------------------------------------------------------------
 RouterUser makeUser(const QString& name, quint32 sessions)
@@ -159,12 +159,12 @@ protected:
 //--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, AddUserStoresRecord)
 {
-    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
 
     const RouterUser stored = findUser("bob");
     EXPECT_GT(stored.entry_id, 1);
-    EXPECT_EQ(stored.sessions, proto::router::SESSION_TYPE_CLIENT);
+    EXPECT_EQ(stored.sessions, proto::router::SESSION_TYPE_OPERATOR);
     EXPECT_EQ(stored.flags, quint32(User::ENABLED));
     EXPECT_EQ(stored.verifier, user.verifier);
 }
@@ -177,7 +177,7 @@ TEST_F(RouterDatabaseTest, UserListReturnsRequestedPage)
     for (int i = 0; i < 5; ++i)
     {
         ASSERT_EQ(db_.addUser(makeUser(QString("user%1").arg(i),
-                                       proto::router::SESSION_TYPE_CLIENT)),
+                                       proto::router::SESSION_TYPE_OPERATOR)),
                   proto::router::kErrorOk);
     }
 
@@ -218,9 +218,9 @@ TEST_F(RouterDatabaseTest, UserListRefusesUnboundedPage)
 // the first whatever case the client types.
 TEST_F(RouterDatabaseTest, UserNamesAreCaseFolded)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
-    EXPECT_EQ(db_.addUser(makeUser("BoB", proto::router::SESSION_TYPE_CLIENT)),
+    EXPECT_EQ(db_.addUser(makeUser("BoB", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorAlreadyExists);
 
     RouterUser user;
@@ -228,7 +228,7 @@ TEST_F(RouterDatabaseTest, UserNamesAreCaseFolded)
     EXPECT_EQ(user.name, "bob");
 
     // A rename cannot take the folded name of somebody else either.
-    RouterUser renamed = makeUser("BOB", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser renamed = makeUser("BOB", proto::router::SESSION_TYPE_OPERATOR);
     renamed.entry_id = admin_.entry_id;
     EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
 }
@@ -303,7 +303,7 @@ TEST_F(RouterDatabaseTest, HostListTakesEveryGroupOfTheWorkspace)
 // request even when the credentials are fully replaced.
 TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
 {
-    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
@@ -311,7 +311,7 @@ TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
     modified.entry_id = user_id;
     ASSERT_EQ(db_.modifyUser(modified), proto::router::kErrorOk);
 
-    EXPECT_EQ(findUser(user_id).sessions, proto::router::SESSION_TYPE_CLIENT);
+    EXPECT_EQ(findUser(user_id).sessions, proto::router::SESSION_TYPE_OPERATOR);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -319,7 +319,7 @@ TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
 // survive, so a stale snapshot cannot roll back a concurrent change.
 TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
 {
-    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
     const RouterUser stored = findUser("bob");
 
@@ -421,7 +421,7 @@ TEST_F(RouterDatabaseTest, RevisionGuardsConcurrentModification)
 //--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
 {
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = findUser("client");
 
@@ -600,7 +600,7 @@ TEST_F(RouterDatabaseTest, RemoveWorkspaceReleasesHostsAndAccess)
 //--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
 {
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = findUser("client");
 
@@ -622,7 +622,7 @@ TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
 // granting the access back.
 TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
 {
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = findUser("client");
 
@@ -644,7 +644,7 @@ TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
 // saw the user in its snapshot, so the answer is a conflict resolved by refetching.
 TEST_F(RouterDatabaseTest, EntryForDeletedUserIsConflict)
 {
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
     client = findUser("client");
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
@@ -663,15 +663,15 @@ TEST_F(RouterDatabaseTest, EntryForDeletedUserIsConflict)
 // error of the UNIQUE constraint.
 TEST_F(RouterDatabaseTest, DuplicateUserNameIsAlreadyExists)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
-    EXPECT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    EXPECT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorAlreadyExists);
 
-    ASSERT_EQ(db_.addUser(makeUser("alice", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("alice", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
 
-    RouterUser renamed = makeUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser renamed = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     renamed.entry_id = findUser("alice").entry_id;
     EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
     EXPECT_TRUE(findUser("alice").isValid());

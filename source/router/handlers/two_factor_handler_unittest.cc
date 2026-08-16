@@ -354,7 +354,7 @@ TEST_F(TwoFactorHandlerTest, SecretResetWhileThePromptIsOpenClosesTheSession)
 TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     const QByteArray secret = Totp::generateSecret();
@@ -362,7 +362,7 @@ TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
 
     caller_.user_id = client.entry_id;
     caller_.name = client.name.toStdString();
-    caller_.session_type = proto::router::SESSION_TYPE_CLIENT;
+    caller_.session_type = proto::router::SESSION_TYPE_OPERATOR;
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -447,7 +447,7 @@ TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
 TEST_F(TwoFactorHandlerTest, TokenOfAnotherUserIsRejected)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     std::string foreign_token;
@@ -664,7 +664,7 @@ TEST_F(TwoFactorHandlerTest, IssuingATokenKeepsTheLiveOnesOfTheSameUser)
 // whole table, and a row of somebody else is invisible to them anyway.
 TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
 {
-    const RouterUser other = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    const RouterUser other = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(other.isValid());
 
     std::string foreign_token;

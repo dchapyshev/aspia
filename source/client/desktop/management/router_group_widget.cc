@@ -458,7 +458,7 @@ void RouterGroupWidget::startDrag()
 {
     // Clients are read-only and cannot move hosts between groups.
     Router* router = Router::instance(router_id_);
-    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
         return;
 
     const QModelIndex index = ui->tree_host->indexAt(start_pos_);

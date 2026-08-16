@@ -228,7 +228,7 @@ TEST_F(HostRequestHandlerTest, UnassignedHostCannotBeEdited)
 TEST_F(HostRequestHandlerTest, NonMemberCannotEditHost)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     caller_.user_id = client.entry_id;
@@ -498,9 +498,9 @@ TEST_F(HostListTest, AdminSeesEveryHostInModeAll)
 TEST_F(HostListTest, NonAdminCannotUseModeAll)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::HostList list =
         hostList(hostListRequest(proto::router::HostListRequest::MODE_ALL, 0, 0));
@@ -514,11 +514,11 @@ TEST_F(HostListTest, NonAdminCannotUseModeAll)
 TEST_F(HostListTest, FilteredListRequiresWorkspaceAccess)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
     ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "first"), kInvalidHostId);
 
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::HostList list = hostList(
         hostListRequest(proto::router::HostListRequest::MODE_FILTERED, workspace_id_, 0));
@@ -606,9 +606,9 @@ TEST_F(HostListTest, UnassignedHostsAreListedForAdminOnly)
     EXPECT_EQ(list.host_size(), 1);
     EXPECT_EQ(list.total_count(), 1);
 
-    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     EXPECT_EQ(hostList(hostListRequest(proto::router::HostListRequest::MODE_FILTERED, 0, 0))
                   .error_code(),
@@ -734,7 +734,7 @@ TEST_F(HostListTest, FullPageOfLargestHostsFitsTheChannel)
 TEST_F(HostListTest, SearchIsScopedToAccessibleWorkspaces)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     const qint64 other_id = addWorkspace("beta");
@@ -749,7 +749,7 @@ TEST_F(HostListTest, SearchIsScopedToAccessibleWorkspaces)
     EXPECT_EQ(admin_result.host_size(), 2);
 
     // A user without any membership sees nothing, and that is not an error.
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::HostSearchResult client_result = searchHosts("host");
     EXPECT_EQ(client_result.error_code(), proto::router::kErrorOk);

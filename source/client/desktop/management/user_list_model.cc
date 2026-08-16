@@ -211,8 +211,8 @@ QString UserListModel::textAt(const RouterUser& user, Column column) const
                 sessions.append(tr("Administrator"));
             if (user.sessions & proto::router::SESSION_TYPE_MANAGER)
                 sessions.append(tr("Manager"));
-            if (user.sessions & proto::router::SESSION_TYPE_CLIENT)
-                sessions.append(tr("Client"));
+            if (user.sessions & proto::router::SESSION_TYPE_OPERATOR)
+                sessions.append(tr("Operator"));
 
             return sessions.join(", ");
         }

@@ -84,7 +84,7 @@ bool unsealMessage(const QByteArray& blob, const char* aad, Message* message)
 
 //--------------------------------------------------------------------------------------------------
 RouterConfig::RouterConfig()
-    : session_type_(proto::router::SESSION_TYPE_CLIENT)
+    : session_type_(proto::router::SESSION_TYPE_OPERATOR)
 {
     // Nothing
 }

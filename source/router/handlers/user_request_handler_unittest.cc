@@ -93,7 +93,7 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
 {
     const RequestResult result = handle(makeRequest(
         proto::router::kCommandUserAdd,
-        makeUser("bob", proto::router::SESSION_TYPE_CLIENT)));
+        makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)));
 
     EXPECT_EQ(result.error_code, proto::router::kErrorOk);
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
@@ -106,7 +106,7 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
 // the old secret die with it and the sessions holding them are dropped.
 TEST_F(UserRequestHandlerTest, ResetOtpRevokesTokensAndStopsSessions)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
@@ -149,7 +149,7 @@ TEST_F(UserRequestHandlerTest, ResetOtpOfUnknownUserIsNotFound)
 // An empty token list means "every token of this user", and every session of the user goes with it.
 TEST_F(UserRequestHandlerTest, RevokeAllTokensStopsEverySession)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
@@ -169,7 +169,7 @@ TEST_F(UserRequestHandlerTest, RevokeAllTokensStopsEverySession)
 // Named tokens: only the sessions holding them are stopped, the rest of the user's sessions stay.
 TEST_F(UserRequestHandlerTest, RevokeSelectedTokensStopsOnlyThem)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
@@ -194,7 +194,7 @@ TEST_F(UserRequestHandlerTest, RevokeSelectedTokensStopsOnlyThem)
 // stopped for a change that did not happen.
 TEST_F(UserRequestHandlerTest, RevokeUnknownTokenIsAtomic)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
@@ -217,9 +217,9 @@ TEST_F(UserRequestHandlerTest, RevokeUnknownTokenIsAtomic)
 // A token of another user must not be revoked through the id of this one.
 TEST_F(UserRequestHandlerTest, RevokeForeignTokenIsRejected)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
-    ASSERT_EQ(db_.addUser(makeUser("alice", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("alice", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
 
     const qint64 bob_id = findUser("bob").entry_id;
@@ -241,7 +241,7 @@ TEST_F(UserRequestHandlerTest, RevokeForeignTokenIsRejected)
 //--------------------------------------------------------------------------------------------------
 TEST_F(UserRequestHandlerTest, RevokeTokensRejectsInvalidTokenId)
 {
-    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_CLIENT)),
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
     ASSERT_GT(issueToken(user_id), 0);
@@ -340,7 +340,7 @@ protected:
 TEST_F(UserListTest, PageCarriesTotalCount)
 {
     for (int i = 0; i < 3; ++i)
-        ASSERT_TRUE(addUser(QString("user%1").arg(i), proto::router::SESSION_TYPE_CLIENT).isValid());
+        ASSERT_TRUE(addUser(QString("user%1").arg(i), proto::router::SESSION_TYPE_OPERATOR).isValid());
 
     const proto::router::UserList first = list(pageRequest(0, 2));
     ASSERT_EQ(first.error_code(), proto::router::kErrorOk);
@@ -366,7 +366,7 @@ TEST_F(UserListTest, UnboundedPageIsRefused)
 // A lookup answers the single record it names, and needs no page.
 TEST_F(UserListTest, LookupAnswersOneRecord)
 {
-    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_CLIENT);
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(bob.isValid());
 
     proto::router::UserListRequest by_id;
@@ -549,9 +549,9 @@ TEST_F(ChangePasswordTest, RejectsOversizedCredentials)
 // including the one that would delete the offender.
 TEST_F(ChangePasswordTest, UserListStaysSendableAfterACredentialRotation)
 {
-    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const std::string oversized(1024 * 1024, 'x');
 
@@ -578,13 +578,13 @@ TEST_F(ChangePasswordTest, UserListStaysSendableAfterACredentialRotation)
 TEST_F(ChangePasswordTest, OfDeletedUserIsNotFound)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
     const RouterUser rotated = makeUser("client",
-                                        proto::router::SESSION_TYPE_CLIENT);
+                                        proto::router::SESSION_TYPE_OPERATOR);
 
     const RequestResult result = handleChangePassword(db_, caller_, makeRequest(rotated));
 

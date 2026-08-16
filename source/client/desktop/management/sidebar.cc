@@ -1156,7 +1156,7 @@ void Sidebar::startDrag()
 
         // Clients are read-only and cannot move host groups.
         Router* router = Router::instance(group_item->routerId());
-        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_CLIENT)
+        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
             return;
 
         RouterGroupDrag drag(this);

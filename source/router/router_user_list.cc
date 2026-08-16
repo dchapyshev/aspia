@@ -30,9 +30,9 @@ namespace {
 quint32 expandSessionTypes(quint32 sessions)
 {
     if (sessions & proto::router::SESSION_TYPE_ADMIN)
-        sessions |= proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_CLIENT;
+        sessions |= proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
     if (sessions & proto::router::SESSION_TYPE_MANAGER)
-        sessions |= proto::router::SESSION_TYPE_CLIENT;
+        sessions |= proto::router::SESSION_TYPE_OPERATOR;
     return sessions;
 }
 

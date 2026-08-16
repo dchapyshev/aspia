@@ -141,7 +141,7 @@ protected:
 // answers anything.
 TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
@@ -160,7 +160,7 @@ TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 // no answer at all.
 TEST_F(ClientOperatorTest, RequestsBeforeTheSecondFactorAreDropped)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
@@ -193,7 +193,7 @@ TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 // identity of its account, and only then is the session usable.
 TEST_F(ClientOperatorTest, ValidCodeDeliversTokenAndUserInfo)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
@@ -222,7 +222,7 @@ TEST_F(ClientOperatorTest, ValidCodeDeliversTokenAndUserInfo)
 // A wrong code ends the session instead of letting the client try again on the same connection.
 TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [](ClientOperator& client, FakeTcpChannel* channel)
     {
         int finished = 0;
@@ -269,7 +269,7 @@ TEST_F(ClientOperatorTest, WorkspaceListIsAnsweredAfterTheStage)
 // client session does not answer on them, whatever it sends.
 TEST_F(ClientOperatorTest, PlainClientIgnoresThePrivilegedChannels)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
@@ -337,7 +337,7 @@ TEST_F(ClientOperatorTest, ManagerIgnoresTheAdminChannel)
 // The stage is over: a second answer to it is not a way back into it.
 TEST_F(ClientOperatorTest, SecondTwoFactorResponseIsIgnored)
 {
-    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);

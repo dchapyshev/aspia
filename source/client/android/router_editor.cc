@@ -176,7 +176,7 @@ void RouterEditor::onSaveClicked()
     data.setRouterId(router_id_);
     data.setDisplayName(name_->text());
     data.setAddress(address_text);
-    data.setSessionType(proto::router::SESSION_TYPE_CLIENT);
+    data.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     data.setUsername(username);
     data.setPassword(password);
     data.setDeviceToken(device_token_);

@@ -575,12 +575,12 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
 
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
 
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         if (Router* router = Router::instance(workspace_item->routerId()))
             session_type = router->config().sessionType();
 
         // Clients are read-only and cannot manage host groups or workspaces.
-        if (session_type != proto::router::SESSION_TYPE_CLIENT)
+        if (session_type != proto::router::SESSION_TYPE_OPERATOR)
         {
             menu.addAction(ui->action_add_group);
             menu.addSeparator();
@@ -596,12 +596,12 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
 
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
-        if (session_type != proto::router::SESSION_TYPE_CLIENT)
+        if (session_type != proto::router::SESSION_TYPE_OPERATOR)
         {
             menu.addAction(ui->action_add_group);
             menu.addAction(ui->action_edit_group);
@@ -1770,12 +1770,12 @@ void ManagementTab::updateActionsState()
     {
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
 
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         if (Router* router = Router::instance(workspace_item->routerId()))
             session_type = router->config().sessionType();
 
         // Clients are read-only and cannot manage host groups or workspaces.
-        const bool can_manage = session_type != proto::router::SESSION_TYPE_CLIENT;
+        const bool can_manage = session_type != proto::router::SESSION_TYPE_OPERATOR;
         ui->action_add_group->setVisible(can_manage);
         ui->action_edit_workspace->setVisible(can_manage);
         ui->action_delete_workspace->setVisible(can_manage);
@@ -1784,12 +1784,12 @@ void ManagementTab::updateActionsState()
     {
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
 
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         if (Router* router = Router::instance(group_item->routerId()))
             session_type = router->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
-        const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_CLIENT;
+        const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_OPERATOR;
         ui->action_add_group->setVisible(can_manage_groups);
         ui->action_edit_group->setVisible(can_manage_groups);
         ui->action_delete_group->setVisible(can_manage_groups);
@@ -1832,7 +1832,7 @@ void ManagementTab::updateActionsState()
     {
         const bool has_host = router_temp_hosts_widget_->hasSelectedHost();
 
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         if (Router* router = Router::instance(router_temp_hosts_widget_->routerId()))
             session_type = router->config().sessionType();
 
@@ -1881,13 +1881,13 @@ void ManagementTab::updateActionsState()
         (sidebar_item->itemType() == SidebarItem::ROUTER_GROUP ||
          sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE))
     {
-        proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+        proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
         Router* router = Router::instance(router_group_widget_->routerId());
         if (router)
             session_type = router->config().sessionType();
 
         const bool has_selection = router_group_widget_->hasSelectedHost();
-        const bool can_edit = has_selection && session_type != proto::router::SESSION_TYPE_CLIENT;
+        const bool can_edit = has_selection && session_type != proto::router::SESSION_TYPE_OPERATOR;
         ui->action_edit_host->setVisible(can_edit);
     }
 

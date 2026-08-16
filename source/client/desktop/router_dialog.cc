@@ -44,7 +44,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
 
     ui->combo_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
     ui->combo_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
-    ui->combo_session_type->addItem(tr("Client"), proto::router::SESSION_TYPE_CLIENT);
+    ui->combo_session_type->addItem(tr("Operator"), proto::router::SESSION_TYPE_OPERATOR);
     ui->combo_session_type->setCurrentIndex(2);
 
     if (router_id_ != -1)

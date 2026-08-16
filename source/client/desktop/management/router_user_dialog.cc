@@ -86,10 +86,10 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
 
     add_level(proto::router::SESSION_TYPE_ADMIN);
     add_level(proto::router::SESSION_TYPE_MANAGER);
-    add_level(proto::router::SESSION_TYPE_CLIENT);
+    add_level(proto::router::SESSION_TYPE_OPERATOR);
 
     if (entry_id_ == 0)
-        setAccessLevel(proto::router::SESSION_TYPE_CLIENT);
+        setAccessLevel(proto::router::SESSION_TYPE_OPERATOR);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
@@ -730,7 +730,7 @@ proto::router::SessionType RouterUserDialog::accessLevelFromSessions(quint32 ses
         return proto::router::SESSION_TYPE_ADMIN;
     if (sessions & proto::router::SESSION_TYPE_MANAGER)
         return proto::router::SESSION_TYPE_MANAGER;
-    return proto::router::SESSION_TYPE_CLIENT;
+    return proto::router::SESSION_TYPE_OPERATOR;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -749,8 +749,8 @@ QString RouterUserDialog::sessionTypeToString(proto::router::SessionType session
             str = QT_TR_NOOP("Manager");
             break;
 
-        case proto::router::SESSION_TYPE_CLIENT:
-            str = QT_TR_NOOP("Client");
+        case proto::router::SESSION_TYPE_OPERATOR:
+            str = QT_TR_NOOP("Operator");
             break;
 
         default:

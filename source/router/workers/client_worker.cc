@@ -243,7 +243,7 @@ void ClientWorker::onTimer(TimePoint now)
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
-            case proto::router::SESSION_TYPE_CLIENT:
+            case proto::router::SESSION_TYPE_OPERATOR:
                 if (!client_payload.isEmpty())
                     client->sendMessage(proto::router::CHANNEL_ID_CLIENT, client_payload);
                 break;
@@ -270,7 +270,7 @@ void ClientWorker::onNewConnection()
         ClientOperator* client = nullptr;
         switch (session_type)
         {
-            case proto::router::SESSION_TYPE_CLIENT:
+            case proto::router::SESSION_TYPE_OPERATOR:
                 client = new ClientOperator(Database::instance(), channel, this);
                 break;
 
@@ -515,7 +515,7 @@ void ClientWorker::updateClientsMask()
     {
         switch (client->sessionType())
         {
-            case proto::router::SESSION_TYPE_CLIENT:
+            case proto::router::SESSION_TYPE_OPERATOR:
                 clients_mask |= CLIENT_OPERATORS;
                 break;
 

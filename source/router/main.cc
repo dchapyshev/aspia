@@ -315,7 +315,7 @@ int createConfig(QTextStream& out)
     out << "User has been created. Adding a user to the database..." << Qt::endl;
 
     user.sessions = proto::router::SESSION_TYPE_ADMIN | proto::router::SESSION_TYPE_MANAGER |
-                    proto::router::SESSION_TYPE_CLIENT;
+                    proto::router::SESSION_TYPE_OPERATOR;
     user.flags = User::ENABLED;
 
     if (db.addUser(user) != proto::router::kErrorOk)

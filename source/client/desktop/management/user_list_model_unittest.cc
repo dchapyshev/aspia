@@ -111,7 +111,7 @@ protected:
 
         addUser(&list, 3, "user2", User::ENABLED,
                 proto::router::SESSION_TYPE_ADMIN | proto::router::SESSION_TYPE_MANAGER);
-        addUser(&list, 1, "user10", 0, proto::router::SESSION_TYPE_CLIENT);
+        addUser(&list, 1, "user10", 0, proto::router::SESSION_TYPE_OPERATOR);
         addUser(&list, 2, "admin", User::ENABLED, proto::router::SESSION_TYPE_MANAGER);
 
         return list;
@@ -178,7 +178,7 @@ TEST_F(UserListModelTest, SessionTypesAreListed)
     model()->setUsers(users());
 
     EXPECT_EQ(textAt(model(), 0, Column::SESSIONS), QString("Administrator, Manager"));
-    EXPECT_EQ(textAt(model(), 1, Column::SESSIONS), QString("Client"));
+    EXPECT_EQ(textAt(model(), 1, Column::SESSIONS), QString("Operator"));
 }
 
 //--------------------------------------------------------------------------------------------------

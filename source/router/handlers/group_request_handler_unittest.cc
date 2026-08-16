@@ -115,7 +115,7 @@ TEST_F(GroupRequestHandlerTest, AddCreatesGroupAndNotifies)
 TEST_F(GroupRequestHandlerTest, NonMemberIsDenied)
 {
     const RouterUser client = addUser("client",
-                                      proto::router::SESSION_TYPE_CLIENT);
+                                      proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     caller_.user_id = client.entry_id;
@@ -429,9 +429,9 @@ TEST_F(GroupRequestHandlerTest, GroupListIsScopedToItsWorkspace)
 //--------------------------------------------------------------------------------------------------
 TEST_F(GroupRequestHandlerTest, GroupListRequiresWorkspaceAccess)
 {
-    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::GroupList list = groupList(workspace_id_);
 

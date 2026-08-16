@@ -305,7 +305,7 @@ protected:
 // An administrator manages membership, so it gets every member's access entry.
 TEST_F(WorkspaceListTest, AdminSeesFullMembership)
 {
-    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
@@ -324,14 +324,14 @@ TEST_F(WorkspaceListTest, AdminSeesFullMembership)
 // workspace is not its business.
 TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
 {
-    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
     ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
                                   {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::WorkspaceList list = workspaceList(0);
 
@@ -345,9 +345,9 @@ TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
 // full list nor when asked for by id. An administrator sees it either way.
 TEST_F(WorkspaceListTest, InvisibleWorkspaceIsNotListed)
 {
-    RouterUser client = addUser("client", proto::router::SESSION_TYPE_CLIENT);
+    RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_CLIENT);
+    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
 
     const proto::router::WorkspaceList all = workspaceList(0);
     EXPECT_EQ(all.error_code(), proto::router::kErrorOk);

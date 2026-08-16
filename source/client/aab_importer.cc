@@ -112,7 +112,7 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     config.setAddress(combined_address);
     config.setUsername(username);
     config.setPassword(SecureString(password));
-    config.setSessionType(proto::router::SESSION_TYPE_CLIENT);
+    config.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
 
     if (!db.addRouter(config))
     {
