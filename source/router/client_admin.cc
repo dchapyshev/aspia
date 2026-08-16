@@ -24,7 +24,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
-#include "router/client.h"
+#include "router/client_operator.h"
 #include "router/database.h"
 #include "router/handlers/user_request_handler.h"
 #include "router/handlers/workspace_request_handler.h"

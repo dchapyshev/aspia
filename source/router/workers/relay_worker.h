@@ -60,6 +60,9 @@ public:
     // Fire-and-forget: if the relay has disconnected, the notification is dropped.
     void notifyKeyUsed(qint64 session_id, quint32 key_id);
 
+public slots:
+    void onClientsChanged(quint32 clients_mask);
+
 signals:
     // Emitted from the worker thread when the set of connected relays changes.
     void sig_relaysChanged();
@@ -75,6 +78,7 @@ private slots:
     void onRelayFinished();
 
 private:
+    void requestStatistics(TimePoint now);
     void removeRelay(Relay* relay);
     Relay* relayById(qint64 session_id);
     proto::router::RelayList doRelayList() const;
@@ -83,8 +87,7 @@ private:
     ScopedQPointer<TcpServer> server_;
     std::vector<Relay*> relays_;
 
-    // The relays report only what they are asked for, so the interval of the polling is the age
-    // the statistics of the administrator console may have.
+    quint32 clients_mask_ = 0;
     TimePoint next_statistics_time_;
 
     friend class RelayWorkerTestPeer;

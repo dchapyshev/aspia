@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_CLIENT_H
-#define ROUTER_CLIENT_H
+#ifndef ROUTER_CLIENT_OPERATOR_H
+#define ROUTER_CLIENT_OPERATOR_H
 
 #include <QObject>
 #include <QVersionNumber>
@@ -44,7 +44,7 @@ class WorkspaceListRequest;
 enum SessionType : int;
 } // namespace proto::router
 
-class Client : public QObject
+class ClientOperator : public QObject
 {
     Q_OBJECT
 
@@ -52,8 +52,8 @@ public:
     // |database| is the connection of the thread the session runs in; it outlives every session
     // of that thread. Passing it instead of reaching for the per-thread singleton is what lets a
     // session be driven against a temporary database in a test.
-    Client(Database& database, TcpChannel* channel, QObject* parent);
-    virtual ~Client() override;
+    ClientOperator(Database& database, TcpChannel* channel, QObject* parent);
+    virtual ~ClientOperator() override;
 
     void start();
 
@@ -87,7 +87,7 @@ signals:
     void sig_stopClients(qint64 user_id, const std::vector<qint64>& token_ids, qint64 except_client_id);
 
 protected:
-    LOG_DECLARE_CONTEXT(Client);
+    LOG_DECLARE_CONTEXT(ClientOperator);
 
     Database& database() const { return database_; }
 
@@ -138,7 +138,7 @@ private:
     bool two_factor_completed_ = false;
     qint64 token_id_ = 0;
 
-    Q_DISABLE_COPY_MOVE(Client)
+    Q_DISABLE_COPY_MOVE(ClientOperator)
 };
 
-#endif // ROUTER_CLIENT_H
+#endif // ROUTER_CLIENT_OPERATOR_H

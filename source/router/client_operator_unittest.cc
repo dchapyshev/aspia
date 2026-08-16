@@ -29,8 +29,8 @@
 
 // A whole session end to end: the messages it answers, the ones it drops, and the order the stages
 // come in. The session is driven through the fake channel, so nothing here mocks the router - it is
-// the real Client, in a real worker thread, with a real database.
-class ClientTest : public RouterTestBase
+// the real ClientOperator, in a real worker thread, with a real database.
+class ClientOperatorTest : public RouterTestBase
 {
 protected:
     void SetUp() override
@@ -107,7 +107,7 @@ protected:
     }
 
     // Walks the session through the two-factor stage the way a client does.
-    void passTwoFactor(Client* client, FakeTcpChannel* channel)
+    void passTwoFactor(ClientOperator* client, FakeTcpChannel* channel)
     {
         client->start();
 
@@ -139,10 +139,10 @@ protected:
 //--------------------------------------------------------------------------------------------------
 // The stage opens by itself: a session that just came up asks for the second factor before it
 // answers anything.
-TEST_F(ClientTest, TwoFactorStageOpensOnStart)
+TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
 
@@ -158,10 +158,10 @@ TEST_F(ClientTest, TwoFactorStageOpensOnStart)
 //--------------------------------------------------------------------------------------------------
 // Nothing is served before the second factor: a client that skips the stage and asks for data gets
 // no answer at all.
-TEST_F(ClientTest, RequestsBeforeTheSecondFactorAreDropped)
+TEST_F(ClientOperatorTest, RequestsBeforeTheSecondFactorAreDropped)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -174,7 +174,7 @@ TEST_F(ClientTest, RequestsBeforeTheSecondFactorAreDropped)
 
 //--------------------------------------------------------------------------------------------------
 // The same rule on the privileged channels of an administrator session.
-TEST_F(ClientTest, AdminRequestsBeforeTheSecondFactorAreDropped)
+TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [](ClientAdmin& client, FakeTcpChannel* channel)
@@ -191,10 +191,10 @@ TEST_F(ClientTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 //--------------------------------------------------------------------------------------------------
 // A valid code completes the stage: the client gets a device token for the next login and the
 // identity of its account, and only then is the session usable.
-TEST_F(ClientTest, ValidCodeDeliversTokenAndUserInfo)
+TEST_F(ClientOperatorTest, ValidCodeDeliversTokenAndUserInfo)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [this](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         client.start();
         channel->clearSent();
@@ -220,13 +220,13 @@ TEST_F(ClientTest, ValidCodeDeliversTokenAndUserInfo)
 
 //--------------------------------------------------------------------------------------------------
 // A wrong code ends the session instead of letting the client try again on the same connection.
-TEST_F(ClientTest, WrongCodeEndsTheConnection)
+TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
     {
         int finished = 0;
-        QObject::connect(&client, &Client::sig_finished, [&finished](qint64) { ++finished; });
+        QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
 
         client.start();
         channel->clearSent();
@@ -242,7 +242,7 @@ TEST_F(ClientTest, WrongCodeEndsTheConnection)
 //--------------------------------------------------------------------------------------------------
 // After the stage the session answers, and the answer carries back the id of the request so the
 // client can route it.
-TEST_F(ClientTest, WorkspaceListIsAnsweredAfterTheStage)
+TEST_F(ClientOperatorTest, WorkspaceListIsAnsweredAfterTheStage)
 {
     ASSERT_GT(addWorkspace("alpha"), 0);
 
@@ -267,10 +267,10 @@ TEST_F(ClientTest, WorkspaceListIsAnsweredAfterTheStage)
 //--------------------------------------------------------------------------------------------------
 // The privileged channels belong to the session types that authenticated for them: an ordinary
 // client session does not answer on them, whatever it sends.
-TEST_F(ClientTest, PlainClientIgnoresThePrivilegedChannels)
+TEST_F(ClientOperatorTest, PlainClientIgnoresThePrivilegedChannels)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [this](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -283,7 +283,7 @@ TEST_F(ClientTest, PlainClientIgnoresThePrivilegedChannels)
 
 //--------------------------------------------------------------------------------------------------
 // The administrator channel is answered only by an administrator session.
-TEST_F(ClientTest, AdminChannelIsAnsweredByAnAdministrator)
+TEST_F(ClientOperatorTest, AdminChannelIsAnsweredByAnAdministrator)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)
@@ -305,7 +305,7 @@ TEST_F(ClientTest, AdminChannelIsAnsweredByAnAdministrator)
 //--------------------------------------------------------------------------------------------------
 // A manager session manages hosts and groups; the user, workspace and relay commands are not its
 // business, and the channel they live on is not answered by it at all.
-TEST_F(ClientTest, ManagerIgnoresTheAdminChannel)
+TEST_F(ClientOperatorTest, ManagerIgnoresTheAdminChannel)
 {
     withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
                               [this](ClientManager& client, FakeTcpChannel* channel)
@@ -335,10 +335,10 @@ TEST_F(ClientTest, ManagerIgnoresTheAdminChannel)
 
 //--------------------------------------------------------------------------------------------------
 // The stage is over: a second answer to it is not a way back into it.
-TEST_F(ClientTest, SecondTwoFactorResponseIsIgnored)
+TEST_F(ClientOperatorTest, SecondTwoFactorResponseIsIgnored)
 {
-    withClient<Client>(proto::router::SESSION_TYPE_CLIENT,
-                       [this](Client& client, FakeTcpChannel* channel)
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_CLIENT,
+                       [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
 
@@ -353,7 +353,7 @@ TEST_F(ClientTest, SecondTwoFactorResponseIsIgnored)
 //--------------------------------------------------------------------------------------------------
 // An unknown command is answered - with a refusal. A request that never gets a reply would leave
 // the console waiting forever.
-TEST_F(ClientTest, UnknownAdminCommandIsRefusedNotIgnored)
+TEST_F(ClientOperatorTest, UnknownAdminCommandIsRefusedNotIgnored)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)
@@ -378,7 +378,7 @@ TEST_F(ClientTest, UnknownAdminCommandIsRefusedNotIgnored)
 
 //--------------------------------------------------------------------------------------------------
 // Garbage on the wire is not a reason to answer or to crash.
-TEST_F(ClientTest, MalformedMessagesAreIgnored)
+TEST_F(ClientOperatorTest, MalformedMessagesAreIgnored)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)
@@ -397,7 +397,7 @@ TEST_F(ClientTest, MalformedMessagesAreIgnored)
 // Changing your own password revokes every device token, this session's included, so the router
 // re-opens the two-factor stage. Until it is passed again the session answers nothing - which is
 // exactly why the client must treat a challenge on a live session as a disconnect.
-TEST_F(ClientTest, PasswordChangeReopensTheTwoFactorStage)
+TEST_F(ClientOperatorTest, PasswordChangeReopensTheTwoFactorStage)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)

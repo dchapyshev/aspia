@@ -19,14 +19,14 @@
 #ifndef ROUTER_CLIENT_MANAGER_H
 #define ROUTER_CLIENT_MANAGER_H
 
-#include "router/client.h"
+#include "router/client_operator.h"
 
 namespace proto::router {
 class GroupRequest;
 class HostRequest;
 } // namespace proto::router
 
-class ClientManager : public Client
+class ClientManager : public ClientOperator
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
     ~ClientManager() override;
 
 protected:
-    // Client implementation.
+    // ClientOperator implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
 private:

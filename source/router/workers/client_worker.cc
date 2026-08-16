@@ -33,9 +33,9 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/client.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
+#include "router/client_operator.h"
 #include "router/database.h"
 #include "router/router_user_list.h"
 #include "router/settings.h"
@@ -74,6 +74,8 @@ void ClientWorker::onStart()
     CHECK(relay_worker);
     connect(relay_worker, &RelayWorker::sig_relaysChanged, this,
             [this]() { onNotifyChanged(NOTIFY_RELAYS); }, Qt::QueuedConnection);
+    connect(this, &ClientWorker::sig_clientsChanged,
+            relay_worker, &RelayWorker::onClientsChanged, Qt::QueuedConnection);
 
     Settings settings;
 
@@ -148,7 +150,7 @@ void ClientWorker::onStart()
     static constexpr int kMaxPendingConnections = 30;
     static constexpr int kMaxConnectionsPerMinute = 60;
 
-    // Client listener accepts admin/manager/client sessions only. These session types always
+    // The listener accepts operators, managers and administrators only. These session types always
     // authenticate, so anonymous access stays disabled here.
     server_ = new TcpServer();
     connect(server_, &TcpServer::sig_newConnection, this, &ClientWorker::onNewConnection);
@@ -228,8 +230,8 @@ void ClientWorker::onTimer(TimePoint now)
 
     // A snapshot: sendMessage() can synchronously finish a failed session, which removes it from
     // |clients_| and would invalidate the iterator.
-    const std::vector<Client*> client_sessions = clients_;
-    for (Client* client : client_sessions)
+    const std::vector<ClientOperator*> client_sessions = clients_;
+    for (ClientOperator* client : client_sessions)
     {
         if (!client->isTwoFactorCompleted())
             continue;
@@ -265,11 +267,11 @@ void ClientWorker::onNewConnection()
 
         LOG(INFO) << "New client session:" << session_type << "(" << channel->peerAddress() << ")";
 
-        Client* client = nullptr;
+        ClientOperator* client = nullptr;
         switch (session_type)
         {
             case proto::router::SESSION_TYPE_CLIENT:
-                client = new Client(Database::instance(), channel, this);
+                client = new ClientOperator(Database::instance(), channel, this);
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
@@ -304,22 +306,25 @@ void ClientWorker::onNewConnection()
         client->setRouterGuid(router_guid_);
 
         clients_.emplace_back(client);
-        connect(client, &Client::sig_finished, this, &ClientWorker::onSessionFinished);
-        connect(client, &Client::sig_notifyChanged, this, &ClientWorker::onNotifyChanged);
-        connect(client, &Client::sig_stopClients, this, &ClientWorker::onStopClients);
+        connect(client, &ClientOperator::sig_finished, this, &ClientWorker::onSessionFinished);
+        connect(client, &ClientOperator::sig_notifyChanged, this, &ClientWorker::onNotifyChanged);
+        connect(client, &ClientOperator::sig_stopClients, this, &ClientWorker::onStopClients);
         client->start();
+
+        updateClientsMask();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWorker::onSessionFinished()
 {
-    Client* client = static_cast<Client*>(sender());
+    ClientOperator* client = static_cast<ClientOperator*>(sender());
     CHECK(client);
     client->disconnect();
     client->deleteLater();
     std::erase(clients_, client);
 
+    updateClientsMask();
     onNotifyChanged(NOTIFY_CLIENTS);
 }
 
@@ -335,7 +340,7 @@ void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& toke
                                  qint64 except_client_id)
 {
     std::vector<qint64> client_ids;
-    for (Client* client : std::as_const(clients_))
+    for (ClientOperator* client : std::as_const(clients_))
     {
         if (client->userId() != user_id || client->sessionId() == except_client_id)
             continue;
@@ -360,7 +365,7 @@ void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& toke
 //--------------------------------------------------------------------------------------------------
 void ClientWorker::onClientListRequest(const proto::router::ClientListRequest& request)
 {
-    Client* session = static_cast<Client*>(sender());
+    ClientOperator* session = static_cast<ClientOperator*>(sender());
     CHECK(session);
 
     proto::router::RouterToAdmin message;
@@ -387,7 +392,7 @@ void ClientWorker::onClientListRequest(const proto::router::ClientListRequest& r
 //--------------------------------------------------------------------------------------------------
 void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
 {
-    Client* session = static_cast<Client*>(sender());
+    ClientOperator* session = static_cast<ClientOperator*>(sender());
     CHECK(session);
 
     proto::router::RouterToAdmin message;
@@ -436,7 +441,7 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
                 }
                 else
                 {
-                    LOG(INFO) << "Client session" << entry_id << "disconnected by"
+                    LOG(INFO) << "ClientOperator session" << entry_id << "disconnected by"
                               << session->userName();
                 }
 
@@ -484,7 +489,7 @@ bool ClientWorker::stopClient(qint64 client_id)
 {
     for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
     {
-        Client* client = *it;
+        ClientOperator* client = *it;
 
         if (client->sessionId() == client_id)
         {
@@ -492,10 +497,44 @@ bool ClientWorker::stopClient(qint64 client_id)
             client->deleteLater();
             clients_.erase(it);
 
+            updateClientsMask();
             onNotifyChanged(NOTIFY_CLIENTS);
             return true;
         }
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWorker::updateClientsMask()
+{
+    quint32 clients_mask = 0;
+
+    for (const ClientOperator* client : std::as_const(clients_))
+    {
+        switch (client->sessionType())
+        {
+            case proto::router::SESSION_TYPE_CLIENT:
+                clients_mask |= CLIENT_OPERATORS;
+                break;
+
+            case proto::router::SESSION_TYPE_MANAGER:
+                clients_mask |= CLIENT_MANAGERS;
+                break;
+
+            case proto::router::SESSION_TYPE_ADMIN:
+                clients_mask |= CLIENT_ADMINS;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (clients_mask == clients_mask_)
+        return;
+
+    clients_mask_ = clients_mask;
+    emit sig_clientsChanged(clients_mask_);
 }

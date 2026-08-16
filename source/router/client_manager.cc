@@ -30,7 +30,7 @@
 
 //--------------------------------------------------------------------------------------------------
 ClientManager::ClientManager(Database& database, TcpChannel* channel, QObject* parent)
-    : Client(database, channel, parent)
+    : ClientOperator(database, channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -46,7 +46,7 @@ void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 {
     if (channel_id == proto::router::CHANNEL_ID_CLIENT)
     {
-        Client::onSessionMessage(channel_id, buffer);
+        ClientOperator::onSessionMessage(channel_id, buffer);
         return;
     }
 

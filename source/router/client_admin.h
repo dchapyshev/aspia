@@ -48,7 +48,7 @@ signals:
     void sig_clientRequest(const proto::router::ClientRequest& request);
 
 protected:
-    // Client implementation.
+    // ClientOperator implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:

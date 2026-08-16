@@ -30,7 +30,7 @@ class ClientListRequest;
 class ClientRequest;
 } // namespace proto::router
 
-class Client;
+class ClientOperator;
 class TcpServer;
 
 class ClientWorker final : public Worker
@@ -40,6 +40,15 @@ class ClientWorker final : public Worker
 public:
     ClientWorker();
     ~ClientWorker() final;
+
+    // Whom the router is serving right now: a bit stands for the kind of client that has at least
+    // one connection. A worker turns the work only one of them needs on and off by this mask.
+    enum : quint32
+    {
+        CLIENT_OPERATORS = 1u << 0,
+        CLIENT_MANAGERS  = 1u << 1,
+        CLIENT_ADMINS    = 1u << 2,
+    };
 
     enum : quint32
     {
@@ -61,6 +70,11 @@ public:
     // invalid entry id.
     static std::vector<qint64> sessionsToStop(const std::vector<qint64>& session_ids,
                                               qint64 entry_id, qint64 requesting_session_id);
+
+signals:
+    // Emitted when the first client of a kind connects or the last one disconnects, with the mask
+    // of the kinds that remain.
+    void sig_clientsChanged(quint32 clients_mask);
 
 protected:
     // Worker implementation.
@@ -88,14 +102,16 @@ private slots:
 
 private:
     bool stopClient(qint64 client_id);
+    void updateClientsMask();
 
     ScopedQPointer<TcpServer> server_;
+    quint32 clients_mask_ = 0;
     quint32 dirty_mask_ = 0;
     TimePoint next_notify_time_;
     quint16 stun_port_ = 0;
     std::string router_guid_;
 
-    std::vector<Client*> clients_;
+    std::vector<ClientOperator*> clients_;
 
     Q_DISABLE_COPY_MOVE(ClientWorker)
 };

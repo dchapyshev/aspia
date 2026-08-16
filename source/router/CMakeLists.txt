@@ -19,12 +19,12 @@
 # The implementation lives in a static library so both the router binary and the unit tests
 # link the same objects; the executable itself is only the entry point.
 list(APPEND SOURCE_ROUTER_CORE
-    client.cc
-    client.h
     client_admin.cc
     client_admin.h
     client_manager.cc
     client_manager.h
+    client_operator.cc
+    client_operator.h
     database.cc
     database.h
     host.cc
@@ -54,7 +54,7 @@ list(APPEND SOURCE_ROUTER
     main.cc)
 
 list(APPEND SOURCE_ROUTER_TESTS
-    client_unittest.cc
+    client_operator_unittest.cc
     database_unittest.cc
     fake_tcp_channel.h
     host_lifecycle_unittest.cc

@@ -27,12 +27,13 @@
 #include "router/relay.h"
 #include "router/settings.h"
 #include "router/shared_key_pool.h"
+#include "router/workers/client_worker.h"
 
 namespace {
 
-// How often the router asks its relays about their sessions. The statistics are shown in the
-// administrator console, so the interval is a compromise between a fresh list and the traffic of
-// the polling itself.
+// How often the router asks its relays about their peers. The statistics are shown to the
+// administrators, so the interval is a compromise between a fresh list and the traffic of the
+// polling itself.
 constexpr Seconds kStatisticsInterval { 5 };
 
 } // namespace
@@ -86,6 +87,19 @@ void RelayWorker::notifyKeyUsed(qint64 session_id, quint32 key_id)
         if (Relay* relay = relayById(session_id))
             relay->sendKeyUsed(key_id);
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onClientsChanged(quint32 clients_mask)
+{
+    const bool had_admins = (clients_mask_ & ClientWorker::CLIENT_ADMINS) != 0;
+    clients_mask_ = clients_mask;
+
+    // An administrator that has just connected must not wait a whole interval for the first list.
+    if (!had_admins)
+        next_statistics_time_ = TimePoint();
+
+    requestStatistics(Clock::now());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,13 +174,7 @@ void RelayWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void RelayWorker::onTimer(TimePoint now)
 {
-    if (now < next_statistics_time_)
-        return;
-
-    next_statistics_time_ = now + kStatisticsInterval;
-
-    for (auto* relay : std::as_const(relays_))
-        relay->sendStatisticsRequest();
+    requestStatistics(now);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -204,6 +212,21 @@ void RelayWorker::onRelayFinished()
     Relay* relay = static_cast<Relay*>(sender());
     CHECK(relay);
     removeRelay(relay);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::requestStatistics(TimePoint now)
+{
+    // The only place that decides whether the relays are asked at all: nobody looks at the
+    // statistics while no administrator is connected, and the interval bounds how old the list
+    // they see may be.
+    if (!(clients_mask_ & ClientWorker::CLIENT_ADMINS) || now < next_statistics_time_)
+        return;
+
+    next_statistics_time_ = now + kStatisticsInterval;
+
+    for (auto* relay : std::as_const(relays_))
+        relay->sendStatisticsRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
