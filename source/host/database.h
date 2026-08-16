@@ -35,10 +35,7 @@ class SecureString;
 
 // Host secure storage. Readable and writable only by SYSTEM and elevated administrators
 // (root on POSIX); regular users cannot read or write its contents through any path,
-// including direct file access. Intended for security-sensitive data: user list with SRP
-// verifiers, password hashes, router endpoint and public key, all confirmation/one-time-
-// password settings. Permissions are applied by Service at startup; the service refuses to
-// run if the database is unreachable.
+// including direct file access.
 class Database
 {
     Q_GADGET
@@ -117,6 +114,10 @@ public:
 
     quint32 oneTimePasswordCharacters() const;
     bool setOneTimePasswordCharacters(quint32 characters);
+
+    // Host key.
+    QByteArray hostKey() const;
+    bool setHostKey(const QByteArray& key);
 
     // Password protection.
     PasswordProtection passwordProtectionState() const;

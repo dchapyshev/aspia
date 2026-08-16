@@ -198,6 +198,7 @@ TEST_F(HostDatabaseTest, FreshDatabaseAnswersWithDefaults)
     EXPECT_EQ(db_->autoConfirmationInterval(), MilliSeconds(0));
     EXPECT_EQ(db_->passwordProtectionState(), Database::PasswordProtection::DISABLED);
     EXPECT_TRUE(db_->seedKey().isEmpty());
+    EXPECT_TRUE(db_->hostKey().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,16 +209,18 @@ TEST_F(HostDatabaseTest, SettingsSurviveAWriteAndRead)
     address.setHost("router.example.com");
     address.setPort(8061);
 
-    // Both are stored as hex, so they are binary on purpose: zero bytes and everything above the
-    // ascii range have to survive the trip.
+    // All of them are stored as hex, so they are binary on purpose: zero bytes and everything above
+    // the ascii range have to survive the trip.
     const QByteArray key("\x00\x01\xfe\xff public key", 15);
     const QByteArray seed("\x00\xaa\xbb seed", 8);
+    const QByteArray host_key("\x00\xcc\xdd host key", 12);
 
     ASSERT_TRUE(db_->setTcpPort(9999));
     ASSERT_TRUE(db_->setRouterEnabled(true));
     ASSERT_TRUE(db_->setRouterAddress(address));
     ASSERT_TRUE(db_->setRouterPublicKey(key));
     ASSERT_TRUE(db_->setSeedKey(seed));
+    ASSERT_TRUE(db_->setHostKey(host_key));
     ASSERT_TRUE(db_->setConnectConfirmation(true));
     ASSERT_TRUE(db_->setNoUserAction(Database::NoUserAction::ACCEPT));
 
@@ -226,6 +229,7 @@ TEST_F(HostDatabaseTest, SettingsSurviveAWriteAndRead)
     EXPECT_EQ(db_->routerAddress(), address);
     EXPECT_EQ(db_->routerPublicKey(), key);
     EXPECT_EQ(db_->seedKey(), seed);
+    EXPECT_EQ(db_->hostKey(), host_key);
     EXPECT_TRUE(db_->connectConfirmation());
     EXPECT_EQ(db_->noUserAction(), Database::NoUserAction::ACCEPT);
 }

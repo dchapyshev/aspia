@@ -626,8 +626,11 @@ TEST_F(RouterManagerTest, NewHostAsksForANewIdAndKeepsTheIssuedKey)
 
     ASSERT_TRUE(waitFor([this]() { return credentials_host_id_.load() == kHostId; }));
 
+    QByteArray host_key;
+    host_worker_->invoke([&]() { host_key = host_worker_->database().hostKey(); });
+    EXPECT_EQ(host_key, QByteArray(kHostKey));
+
     HostStorage storage;
-    EXPECT_EQ(storage.hostKey(), QByteArray(kHostKey));
     EXPECT_EQ(storage.lastHostId(), kHostId);
 }
 
@@ -636,8 +639,10 @@ TEST_F(RouterManagerTest, NewHostAsksForANewIdAndKeepsTheIssuedKey)
 // the new-id path, so a wiped router database heals by itself.
 TEST_F(RouterManagerTest, UnknownKeyIsResetAndANewIdIsRequested)
 {
-    HostStorage storage;
-    storage.setHostKey(QByteArrayLiteral("the-key-the-router-forgot"));
+    host_worker_->invoke([this]()
+    {
+        ASSERT_TRUE(host_worker_->database().setHostKey(QByteArrayLiteral("the-key-the-router-forgot")));
+    });
 
     startManager();
 

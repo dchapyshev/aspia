@@ -233,17 +233,16 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             return;
         }
 
-        HostStorage host_storage;
-
         QByteArray host_key = QByteArray::fromStdString(host_id_response.key());
         if (!host_key.isEmpty())
         {
             LOG(INFO) << "New host key received";
-            host_storage.setHostKey(host_key);
+            database_.setHostKey(host_key);
         }
 
         LOG(INFO) << "Host ID received:" << host_id_;
 
+        HostStorage host_storage;
         if (host_storage.lastHostId() != host_id_)
             host_storage.setLastHostId(host_id_);
 
@@ -399,8 +398,7 @@ void RouterManager::hostIdRequest()
         return;
     }
 
-    HostStorage host_key_storage;
-    QByteArray host_key = host_key_storage.hostKey();
+    QByteArray host_key = database_.hostKey();
 
     proto::router::HostToRouter message;
     proto::router::HostIdRequest* host_id_request = message.mutable_host_id_request();

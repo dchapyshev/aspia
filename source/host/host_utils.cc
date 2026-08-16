@@ -47,7 +47,6 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "host/database.h"
-#include "host/host_storage.h"
 #include "host/system_settings.h"
 
 namespace {
@@ -282,7 +281,6 @@ void doHostMigrate(const QJsonDocument& doc)
 //--------------------------------------------------------------------------------------------------
 void doHostKeyMigrate(const QJsonDocument& doc)
 {
-    HostStorage storage;
     QJsonObject root_object = doc.object();
 
     LOG(INFO) << "====== Migrate host key ======";
@@ -296,8 +294,8 @@ void doHostKeyMigrate(const QJsonDocument& doc)
     if (root_object.contains("console"))
     {
         QString value = root_object["console"].toString();
-        LOG(INFO) << "console:" << value;
-        storage.setHostKey(QByteArray::fromHex(value.toLatin1()));
+        LOG(INFO) << "console: <present>";
+        Database::instance().setHostKey(QByteArray::fromHex(value.toLatin1()));
     }
 }
 

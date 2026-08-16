@@ -45,6 +45,7 @@ const char kSettingOneTimePassword[] = "one_time_password";
 const char kSettingOneTimePasswordExpire[] = "one_time_password_expire";
 const char kSettingOneTimePasswordLength[] = "one_time_password_length";
 const char kSettingOneTimePasswordCharacters[] = "one_time_password_characters";
+const char kSettingHostKey[] = "host_key";
 const char kSettingPasswordHash[] = "password_hash";
 const char kSettingPasswordHashSalt[] = "password_hash_salt";
 
@@ -576,6 +577,18 @@ quint32 Database::oneTimePasswordCharacters() const
 bool Database::setOneTimePasswordCharacters(quint32 characters)
 {
     return writeSetting(kSettingOneTimePasswordCharacters, QString::number(characters));
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::hostKey() const
+{
+    return QByteArray::fromHex(readSetting(kSettingHostKey).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setHostKey(const QByteArray& key)
+{
+    return writeSetting(kSettingHostKey, QString::fromLatin1(key.toHex()));
 }
 
 //--------------------------------------------------------------------------------------------------

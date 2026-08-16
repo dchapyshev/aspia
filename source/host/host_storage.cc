@@ -22,9 +22,9 @@
 
 //--------------------------------------------------------------------------------------------------
 HostStorage::HostStorage()
-    // The desktop host runs as a system service and keeps the host key machine-wide (SystemScope). On
-    // Android the app is sandboxed and cannot write to the system scope, so the key would be lost and a
-    // new router ID requested on every start; the app-private user scope persists it instead.
+    // The desktop host runs as a system service and keeps these values machine-wide (SystemScope). On
+    // Android the app is sandboxed and cannot write to the system scope, so the values would be lost on
+    // every start; the app-private user scope persists them instead.
 #if defined(Q_OS_ANDROID)
     : impl_(XmlSettings::format(), QSettings::UserScope, "aspia", "host_storage")
 #else
@@ -36,19 +36,6 @@ HostStorage::HostStorage()
 
 //--------------------------------------------------------------------------------------------------
 HostStorage::~HostStorage() = default;
-
-//--------------------------------------------------------------------------------------------------
-QByteArray HostStorage::hostKey() const
-{
-    return impl_.value("host_key").toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void HostStorage::setHostKey(const QByteArray& key)
-{
-    impl_.setValue("host_key", key);
-    impl_.sync();
-}
 
 //--------------------------------------------------------------------------------------------------
 HostId HostStorage::lastHostId() const

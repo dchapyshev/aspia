@@ -29,9 +29,6 @@ public:
     HostStorage();
     ~HostStorage();
 
-    QByteArray hostKey() const;
-    void setHostKey(const QByteArray& key);
-
     HostId lastHostId() const;
     void setLastHostId(HostId host_id);
 

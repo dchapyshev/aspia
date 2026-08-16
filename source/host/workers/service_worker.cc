@@ -576,10 +576,10 @@ void ServiceWorker::onRemoveHost()
     db.setRouterEnabled(false);
     db.setRouterAddress(Address(DEFAULT_ROUTER_HOST_TCP_PORT));
     db.setRouterPublicKey(QByteArray());
+    db.setHostKey(QByteArray());
 
     HostStorage storage;
     storage.setLastHostId(kInvalidHostId);
-    storage.setHostKey("");
 
     LOG(INFO) << "Uninstalling the application";
     HostUtils::uninstallApplication();
