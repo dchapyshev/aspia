@@ -106,7 +106,7 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
-    std::optional<GroupConfig> group = Database::instance().findGroup(group_id);
+    std::optional<LocalGroupConfig> group = Database::instance().findGroup(group_id);
     if (!group.has_value())
     {
         LOG(ERROR) << "Group not found:" << group_id;
@@ -136,7 +136,7 @@ void LocalGroupEditor::onSaveClicked()
         return;
     }
 
-    GroupConfig data;
+    LocalGroupConfig data;
     data.setId(entry_id_);
     data.setParentId(parent_id_);
     data.setName(name);

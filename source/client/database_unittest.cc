@@ -42,7 +42,7 @@ protected:
 
     qint64 addGroup(const QString& name, qint64 parent_id)
     {
-        GroupConfig group;
+        LocalGroupConfig group;
         group.setName(name);
         group.setParentId(parent_id);
 
@@ -52,7 +52,7 @@ protected:
 
     qint64 addHost(const QString& name, qint64 group_id)
     {
-        HostConfig host;
+        LocalHostConfig host;
         host.setName(name);
         host.setAddress("192.168.0.1");
         host.setGroupId(group_id);
@@ -64,7 +64,7 @@ protected:
     QStringList groupNames()
     {
         QStringList names;
-        for (const GroupConfig& group : db_.allGroups())
+        for (const LocalGroupConfig& group : db_.allGroups())
             names.append(group.name());
         names.sort();
         return names;
@@ -73,7 +73,7 @@ protected:
     QStringList hostNamesOfGroup(qint64 group_id)
     {
         QStringList names;
-        for (const HostConfig& host : db_.hostList(group_id))
+        for (const LocalHostConfig& host : db_.hostList(group_id))
             names.append(host.name());
         names.sort();
         return names;
@@ -158,7 +158,7 @@ TEST_F(DatabaseTest, EditedGroupIsNotMadeAChildOfItsOwnChild)
     const qint64 parent = addGroup("parent", 0);
     const qint64 child = addGroup("child", parent);
 
-    GroupConfig group = *db_.findGroup(parent);
+    LocalGroupConfig group = *db_.findGroup(parent);
     group.setParentId(child);
 
     EXPECT_FALSE(db_.modifyGroup(group));
@@ -227,7 +227,7 @@ TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
 {
     const qint64 group = addGroup("group", 0);
 
-    HostConfig host;
+    LocalHostConfig host;
     host.setName("host");
     host.setGroupId(group);
     host.setAddress("192.168.0.1");
@@ -235,7 +235,7 @@ TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
     host.setPassword(SecureString("secret"));
     ASSERT_TRUE(db_.addHost(host));
 
-    std::optional<HostConfig> stored = db_.findHost(host.id());
+    std::optional<LocalHostConfig> stored = db_.findHost(host.id());
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->address(), QString("192.168.0.1"));
@@ -258,7 +258,7 @@ TEST_F(DatabaseTest, RouterDataDoesNotOpenAsHostData)
     std::optional<QByteArray> sealed = router.encryptedData();
     ASSERT_TRUE(sealed.has_value());
 
-    HostConfig host;
+    LocalHostConfig host;
     EXPECT_FALSE(host.setEncryptedData(*sealed));
 
     EXPECT_TRUE(host.address().isEmpty());
@@ -271,7 +271,7 @@ TEST_F(DatabaseTest, RouterDataDoesNotOpenAsHostData)
 // readable at all.
 TEST_F(DatabaseTest, TamperedDataDoesNotOpen)
 {
-    HostConfig host;
+    LocalHostConfig host;
     host.setAddress("192.168.0.1");
     host.setUsername("user");
     host.setPassword(SecureString("secret"));
@@ -282,7 +282,7 @@ TEST_F(DatabaseTest, TamperedDataDoesNotOpen)
     QByteArray tampered = *sealed;
     tampered[tampered.size() - 1] = static_cast<char>(tampered[tampered.size() - 1] ^ 0x01);
 
-    HostConfig target;
+    LocalHostConfig target;
     EXPECT_FALSE(target.setEncryptedData(tampered));
     EXPECT_TRUE(target.address().isEmpty());
 }
@@ -294,7 +294,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
 {
     const qint64 group = addGroup("group", 0);
 
-    HostConfig host;
+    LocalHostConfig host;
     host.setName("host");
     host.setGroupId(group);
     host.setAddress("192.168.0.1");
@@ -302,12 +302,12 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     host.setPassword(SecureString("secret"));
     ASSERT_TRUE(db_.addHost(host));
 
-    QList<HostConfig> hosts = db_.allHosts();
+    QList<LocalHostConfig> hosts = db_.allHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     ASSERT_TRUE(db_.reencryptAll(hosts, db_.routerList(), "salt", "verifier", 1));
 
-    std::optional<HostConfig> stored = db_.findHost(host.id());
+    std::optional<LocalHostConfig> stored = db_.findHost(host.id());
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->address(), QString("192.168.0.1"));

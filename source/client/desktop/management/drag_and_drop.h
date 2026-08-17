@@ -60,11 +60,11 @@ public:
 
     // The record itself and not the row it is drawn on: the list is free to be refilled while the
     // drag is still in flight.
-    void setHost(const HostConfig& host, const QString& mime_type);
-    const HostConfig& host() const { return host_; }
+    void setHost(const LocalHostConfig& host, const QString& mime_type);
+    const LocalHostConfig& host() const { return host_; }
 
 private:
-    HostConfig host_;
+    LocalHostConfig host_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ class LocalHostDrag final : public QDrag
 public:
     explicit LocalHostDrag(QObject* drag_source = nullptr);
 
-    void setHost(const HostConfig& host, const QString& mime_type);
+    void setHost(const LocalHostConfig& host, const QString& mime_type);
 };
 
 //--------------------------------------------------------------------------------------------------

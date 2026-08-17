@@ -50,7 +50,7 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     {
         setWindowTitle(tr("Edit Group"));
 
-        std::optional<GroupConfig> group = Database::instance().findGroup(group_id_);
+        std::optional<LocalGroupConfig> group = Database::instance().findGroup(group_id_);
         if (group.has_value())
         {
             ui->edit_name->setText(group->name());
@@ -68,12 +68,12 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         parent_id_ = parent_id;
     }
 
-    const QList<GroupConfig> all_groups = Database::instance().allGroups();
+    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
 
     QList<GroupComboBox::Entry> entries;
     entries.reserve(all_groups.size());
 
-    for (const GroupConfig& group : std::as_const(all_groups))
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
     {
         GroupComboBox::Entry& entry = entries.emplaceBack();
         entry.id = group.id();
@@ -134,8 +134,8 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
-    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
-    for (const GroupConfig& existing : std::as_const(groups))
+    QList<LocalGroupConfig> groups = Database::instance().groupList(parent_id);
+    for (const LocalGroupConfig& existing : std::as_const(groups))
     {
         if (existing.id() != group_id_ && existing.name() == name)
         {
@@ -146,7 +146,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    GroupConfig group;
+    LocalGroupConfig group;
     group.setId(group_id_);
     group.setParentId(parent_id);
     group.setName(name);

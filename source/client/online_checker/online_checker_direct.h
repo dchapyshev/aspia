@@ -31,7 +31,7 @@ class OnlineCheckerDirect final : public QObject
     Q_OBJECT
 
 public:
-    using HostList = QQueue<HostConfig>;
+    using HostList = QQueue<LocalHostConfig>;
 
     explicit OnlineCheckerDirect(const HostList& hosts, QObject* parent = nullptr);
     ~OnlineCheckerDirect();

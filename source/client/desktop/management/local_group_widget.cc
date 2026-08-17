@@ -71,14 +71,14 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 
     connect(ui->tree_host, &QAbstractItemView::activated, this, [this](const QModelIndex& index)
     {
-        if (const HostConfig* host = model_->hostAt(index.row()))
+        if (const LocalHostConfig* host = model_->hostAt(index.row()))
             emit sig_activated(host->id());
     });
 
     connect(ui->tree_host->selectionModel(), &QItemSelectionModel::currentChanged,
             this, [this](const QModelIndex& current, const QModelIndex& /* previous */)
     {
-        const HostConfig* host = model_->hostAt(current.row());
+        const LocalHostConfig* host = model_->hostAt(current.row());
         emit sig_currentChanged(host ? host->id() : -1);
     });
 
@@ -88,7 +88,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         if (index.isValid())
             ui->tree_host->setCurrentIndex(index);
 
-        const HostConfig* host = model_->hostAt(index.row());
+        const LocalHostConfig* host = model_->hostAt(index.row());
         emit sig_contextMenu(host ? host->id() : 0,
                              ui->tree_host->viewport()->mapToGlobal(pos));
     });
@@ -106,7 +106,7 @@ LocalGroupWidget::~LocalGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-const HostConfig* LocalGroupWidget::currentHost() const
+const LocalHostConfig* LocalGroupWidget::currentHost() const
 {
     return model_->hostAt(ui->tree_host->currentIndex().row());
 }
@@ -153,7 +153,7 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
     if (model_->rowOf(entry_id) < 0)
         return;
 
-    std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> updated = Database::instance().findHost(entry_id);
     if (!updated.has_value())
     {
         removeItem(entry_id);
@@ -216,7 +216,7 @@ void LocalGroupWidget::reload()
 {
     QList<qint64> ids;
     ids.reserve(model_->rowCount());
-    for (const HostConfig& host : model_->hosts())
+    for (const LocalHostConfig& host : model_->hosts())
         ids.append(host.id());
 
     online_checker_->invalidate(ids);
@@ -347,7 +347,7 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 void LocalGroupWidget::startDrag()
 {
     const QModelIndex index = ui->tree_host->indexAt(start_pos_);
-    const HostConfig* host = model_->hostAt(index.row());
+    const LocalHostConfig* host = model_->hostAt(index.row());
     if (!host)
         return;
 

@@ -49,7 +49,7 @@ protected:
 
     static qint64 addGroup(Database& db, const QString& name, qint64 parent_id)
     {
-        GroupConfig group;
+        LocalGroupConfig group;
         group.setName(name);
         group.setParentId(parent_id);
 
@@ -59,7 +59,7 @@ protected:
 
     static qint64 addHost(Database& db, const QString& name, qint64 group_id)
     {
-        HostConfig host;
+        LocalHostConfig host;
         host.setName(name);
         host.setAddress("192.168.0.1");
         host.setGroupId(group_id);
@@ -71,16 +71,16 @@ protected:
     static QStringList groupNames(Database& db)
     {
         QStringList names;
-        for (const GroupConfig& group : db.allGroups())
+        for (const LocalGroupConfig& group : db.allGroups())
             names.append(group.name());
         names.sort();
         return names;
     }
 
     // The record of the group with this name, whatever id it was given on the way in.
-    static std::optional<GroupConfig> groupByName(Database& db, const QString& name)
+    static std::optional<LocalGroupConfig> groupByName(Database& db, const QString& name)
     {
-        for (const GroupConfig& group : db.allGroups())
+        for (const LocalGroupConfig& group : db.allGroups())
         {
             if (group.name() == name)
                 return group;
@@ -161,8 +161,8 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
     EXPECT_EQ(counts.groups, 2);
     EXPECT_EQ(counts.hosts, 1);
 
-    const std::optional<GroupConfig> new_parent = groupByName(target_, "parent");
-    const std::optional<GroupConfig> new_child = groupByName(target_, "child");
+    const std::optional<LocalGroupConfig> new_parent = groupByName(target_, "parent");
+    const std::optional<LocalGroupConfig> new_child = groupByName(target_, "child");
     ASSERT_TRUE(new_parent.has_value() && new_child.has_value());
 
     EXPECT_EQ(new_parent->parentId(), 0);
@@ -192,8 +192,8 @@ TEST_F(BackupTest, GroupWhoseParentIsMissingFromTheFileGoesToTheRoot)
     EXPECT_EQ(groupNames(target_), QStringList({ "child", "parent" }));
     EXPECT_EQ(counts.groups, 2);
 
-    const std::optional<GroupConfig> new_parent = groupByName(target_, "parent");
-    const std::optional<GroupConfig> new_child = groupByName(target_, "child");
+    const std::optional<LocalGroupConfig> new_parent = groupByName(target_, "parent");
+    const std::optional<LocalGroupConfig> new_child = groupByName(target_, "child");
     ASSERT_TRUE(new_parent.has_value() && new_child.has_value());
 
     // The link that was there is kept; only the one the file could not name is replaced by the root.

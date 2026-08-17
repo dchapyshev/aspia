@@ -69,7 +69,7 @@ Sidebar::Sidebar(QWidget* parent)
 
     loadRouters();
 
-    GroupConfig local_root_data;
+    LocalGroupConfig local_root_data;
     local_root_data.setId(0);
     local_root_data.setParentId(0);
     local_root_data.setName(tr("Local"));
@@ -120,11 +120,11 @@ bool Sidebar::dragging() const
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
+    QList<LocalGroupConfig> groups = Database::instance().groupList(parent_id);
 
     Settings settings;
 
-    for (const GroupConfig& group : std::as_const(groups))
+    for (const LocalGroupConfig& group : std::as_const(groups))
     {
         SidebarLocalGroup* item = new SidebarLocalGroup(group, parent_item);
         item->setExpanded(settings.isLocalGroupExpanded(group.id()));
@@ -1410,8 +1410,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
 
         // Check if a group with the same name already exists in the target group.
-        QList<GroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
-        for (const GroupConfig& existing : std::as_const(target_groups))
+        QList<LocalGroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
+        for (const LocalGroupConfig& existing : std::as_const(target_groups))
         {
             if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
             {
@@ -1445,7 +1445,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        const HostConfig& dragged_host = host_mime_data->host();
+        const LocalHostConfig& dragged_host = host_mime_data->host();
 
         QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
         if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
@@ -1468,8 +1468,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Check if a host with the same name already exists in the target group.
-        QList<HostConfig> target_hosts = Database::instance().hostList(target_item->groupId());
-        for (const HostConfig& existing : std::as_const(target_hosts))
+        QList<LocalHostConfig> target_hosts = Database::instance().hostList(target_item->groupId());
+        for (const LocalHostConfig& existing : std::as_const(target_hosts))
         {
             if (existing.name() == dragged_host.name())
             {
@@ -1480,7 +1480,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the host's group in the database.
-        std::optional<HostConfig> host = Database::instance().findHost(dragged_host.id());
+        std::optional<LocalHostConfig> host = Database::instance().findHost(dragged_host.id());
         if (!host.has_value())
         {
             restoreSelection();

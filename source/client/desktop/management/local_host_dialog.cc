@@ -66,7 +66,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     {
         setWindowTitle(tr("Edit Host"));
 
-        std::optional<HostConfig> host = Database::instance().findHost(entry_id_);
+        std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id_);
         if (host.has_value())
         {
             ui->edit_name->setText(host->name());
@@ -103,12 +103,12 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     updateAddressLabel();
 
-    const QList<GroupConfig> all_groups = Database::instance().allGroups();
+    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
 
     QList<GroupComboBox::Entry> group_entries;
     group_entries.reserve(all_groups.size());
 
-    for (const GroupConfig& group : std::as_const(all_groups))
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
     {
         GroupComboBox::Entry& entry = group_entries.emplaceBack();
         entry.id = group.id();
@@ -215,8 +215,8 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui->combo_group->currentGroupId();
 
-    QList<HostConfig> hosts = Database::instance().hostList(group_id);
-    for (const HostConfig& existing : std::as_const(hosts))
+    QList<LocalHostConfig> hosts = Database::instance().hostList(group_id);
+    for (const LocalHostConfig& existing : std::as_const(hosts))
     {
         if (existing.id() != entry_id_ && existing.name() == name)
         {
@@ -227,7 +227,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    HostConfig host;
+    LocalHostConfig host;
     host.setId(entry_id_);
     host.setGroupId(group_id);
     host.setRouterId(router_id);

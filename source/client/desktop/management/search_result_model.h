@@ -52,7 +52,7 @@ public:
 
         // A local row carries the record as it is stored, a router row the same fields taken from
         // the reply. The id of a router row stays -1: there is no record behind it.
-        HostConfig host;
+        LocalHostConfig host;
 
         // The group path in the address book, or the label of the router that answered.
         QString source;
@@ -70,7 +70,7 @@ public:
 
     // Local rows only: a router host has no record of its own and no entry id.
     int rowOfEntry(qint64 entry_id) const;
-    bool updateEntry(const HostConfig& host, const QString& source);
+    bool updateEntry(const LocalHostConfig& host, const QString& source);
     bool removeEntry(qint64 entry_id);
 
     // QAbstractTableModel implementation.

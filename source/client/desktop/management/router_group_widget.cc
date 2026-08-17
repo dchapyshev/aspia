@@ -172,24 +172,18 @@ Router::Host RouterGroupWidget::selectedHost() const
 //--------------------------------------------------------------------------------------------------
 HostConfig RouterGroupWidget::selectedHostConfig() const
 {
-    HostConfig config;
-
     if (!hasSelectedHost())
-        return config;
+        return HostConfig();
 
     const Router::Host selected = selectedHost();
     if (selected.host_id == kInvalidHostId)
-        return config;
-
-    config.setRouterId(router_id_);
-    config.setAddress(hostIdToString(selected.host_id));
+        return HostConfig();
 
     QString name = selected.display_name;
     if (name.isEmpty())
         name = selected.computer_name;
-    config.setName(name);
 
-    return config;
+    return HostConfig::forRouterHost(router_id_, selected.host_id, name);
 }
 
 //--------------------------------------------------------------------------------------------------

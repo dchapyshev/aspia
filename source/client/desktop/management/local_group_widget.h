@@ -45,7 +45,7 @@ public:
     ~LocalGroupWidget() final;
 
     // The host of the row the user is on, or null when the list is empty.
-    const HostConfig* currentHost() const;
+    const LocalHostConfig* currentHost() const;
     qint64 currentGroupId() const { return current_group_id_; }
     void showGroup(qint64 group_id);
     void setConnectTime(qint64 entry_id, qint64 connect_time);

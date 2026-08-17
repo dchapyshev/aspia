@@ -62,6 +62,17 @@
 #include "proto/router_constants.h"
 #include "ui_management_tab.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+HostConfig hostForRouterRow(const SearchResultModel::Row& row)
+{
+    return HostConfig::forRouterHost(
+        row.host.routerId(), stringToHostId(row.host.address()), row.host.name());
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 ManagementTab::ManagementTab(QWidget* parent)
     : Tab(Type::HOSTS, "hosts", parent),
@@ -194,12 +205,6 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(router_group_widget_, &RouterGroupWidget::sig_currentChanged, this, &ManagementTab::updateActionsState);
     connect(router_group_widget_, &RouterGroupWidget::sig_contextMenu, this, &ManagementTab::onRouterGroupContextMenu);
     connect(router_group_widget_, &RouterGroupWidget::sig_activated, this, &ManagementTab::onRouterGroupConnect);
-    connect(this, &ManagementTab::sig_connectRequested, local_group_widget_,
-            [this](const HostConfig& host, proto::peer::SessionType /* session_type */)
-    {
-        if (host.id() != -1)
-            local_group_widget_->setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
-    });
     connect(ui->action_add_host, &QAction::triggered, this, &ManagementTab::onAddHost);
     connect(ui->action_edit_host, &QAction::triggered, this, &ManagementTab::onEditHost);
     connect(ui->action_copy_host, &QAction::triggered, this, &ManagementTab::onCopyHost);
@@ -674,11 +679,11 @@ void ManagementTab::onConnectAction(QAction* action)
 
     if (current_content_ == local_group_widget_)
     {
-        const HostConfig* current = local_group_widget_->currentHost();
+        const LocalHostConfig* current = local_group_widget_->currentHost();
         if (!current)
             return;
 
-        std::optional<HostConfig> found = Database::instance().findHost(current->id());
+        std::optional<LocalHostConfig> found = Database::instance().findHost(current->id());
         if (!found.has_value())
         {
             MsgBox::warning(this,
@@ -686,12 +691,12 @@ void ManagementTab::onConnectAction(QAction* action)
             return;
         }
 
-        host = *found;
+        host = HostConfig::forLocalHost(*found);
 
         if (!validateHostForConnect(host))
             return;
 
-        Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+        setHostConnectTime(found->id());
     }
     else if (current_content_ == search_widget_)
     {
@@ -701,13 +706,13 @@ void ManagementTab::onConnectAction(QAction* action)
 
         if (row->type == SearchResultModel::Type::ROUTER)
         {
-            host = row->host;
+            host = hostForRouterRow(*row);
             if (!validateHostForConnect(host))
                 return;
         }
         else
         {
-            std::optional<HostConfig> found = Database::instance().findHost(row->host.id());
+            std::optional<LocalHostConfig> found = Database::instance().findHost(row->host.id());
             if (!found.has_value())
             {
                 MsgBox::warning(this,
@@ -715,12 +720,12 @@ void ManagementTab::onConnectAction(QAction* action)
                 return;
             }
 
-            host = *found;
+            host = HostConfig::forLocalHost(*found);
 
             if (!validateHostForConnect(host))
                 return;
 
-            Database::instance().setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+            setHostConnectTime(found->id());
         }
     }
     else if (current_content_ == router_group_widget_)
@@ -758,18 +763,19 @@ void ManagementTab::onConnectAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onLocalConnect(qint64 entry_id)
 {
-    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
-    if (!host.has_value())
+    std::optional<LocalHostConfig> entry = Database::instance().findHost(entry_id);
+    if (!entry.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    if (!validateHostForConnect(*host))
+    HostConfig host = HostConfig::forLocalHost(*entry);
+    if (!validateHostForConnect(host))
         return;
 
-    Database::instance().setConnectTime(entry_id, QDateTime::currentSecsSinceEpoch());
-    emit sig_connectRequested(*host, defaultSessionType());
+    setHostConnectTime(entry_id);
+    emit sig_connectRequested(host, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -792,7 +798,7 @@ void ManagementTab::onSearchConnect()
 
     if (row->type == SearchResultModel::Type::ROUTER)
     {
-        HostConfig host = row->host;
+        HostConfig host = hostForRouterRow(*row);
         if (!validateHostForConnect(host))
             return;
         emit sig_connectRequested(host, defaultSessionType());
@@ -822,7 +828,7 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_system_info_connect);
         menu.addSeparator();
 
-        std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+        std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
         if (host.has_value())
         {
             addCopyLinkMenu(menu, *host);
@@ -861,16 +867,19 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     addProxy(ui->action_chat_connect);
     addProxy(ui->action_system_info_connect);
 
-    std::optional<HostConfig> host;
     if (row->type == SearchResultModel::Type::ROUTER)
-        host = row->host;
-    else
-        host = Database::instance().findHost(row->host.id());
-
-    if (host.has_value())
     {
         menu.addSeparator();
-        addCopyLinkMenu(menu, *host);
+        addCopyLinkMenu(menu, row->host.routerId(), stringToHostId(row->host.address()));
+    }
+    else
+    {
+        std::optional<LocalHostConfig> host = Database::instance().findHost(row->host.id());
+        if (host.has_value())
+        {
+            menu.addSeparator();
+            addCopyLinkMenu(menu, *host);
+        }
     }
 
     // Router hosts have no address-book record to edit, copy or delete.
@@ -933,7 +942,7 @@ void ManagementTab::onEditHost()
         return;
     }
 
-    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -964,7 +973,7 @@ void ManagementTab::onCopyHost()
 
     Database& db = Database::instance();
 
-    std::optional<HostConfig> host = db.findHost(entry_id);
+    std::optional<LocalHostConfig> host = db.findHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -1008,7 +1017,7 @@ void ManagementTab::onRemoveHost()
         return;
     }
 
-    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -1079,7 +1088,7 @@ void ManagementTab::onHostContextMenu(const QPoint& pos, int column)
     }
     menu.addSeparator();
 
-    addCopyLinkMenu(menu, router_hosts_widget_->selectedHostConfig());
+    addCopyLinkMenu(menu, router_hosts_widget_->routerId(), router_hosts_widget_->selectedHostId());
 
     const QIcon copy_icon(":/img/copy.svg");
     QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
@@ -1186,7 +1195,8 @@ void ManagementTab::onRouterGroupContextMenu(const QPoint& pos)
     if (ui->action_edit_host->isVisible())
         menu.addAction(ui->action_edit_host);
 
-    addCopyLinkMenu(menu, router_group_widget_->selectedHostConfig());
+    addCopyLinkMenu(menu, router_group_widget_->routerId(),
+                    router_group_widget_->selectedHost().host_id);
     menu.exec(pos);
 }
 
@@ -1913,7 +1923,7 @@ proto::peer::SessionType ManagementTab::defaultSessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
+void ManagementTab::addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host)
 {
     QMenu* link_menu = menu.addMenu(QIcon(":/img/copy.svg"), tr("Copy Link"));
 
@@ -1929,20 +1939,9 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
     for (proto::peer::SessionType session_type : session_types)
     {
         link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
-                             [this, host, session_type]()
+                             [this, guid = host.guid(), session_type]()
         {
-            QString url;
-            if (host.id() > 0)
-            {
-                url = HostUrl::stringForEntry(host.guid(), session_type);
-            }
-            else if (host.routerId() > 0)
-            {
-                std::optional<RouterConfig> router = Database::instance().findRouter(host.routerId());
-                if (router.has_value())
-                    url = HostUrl::stringForRouterHost(router->guid(), stringToHostId(host.address()), session_type);
-            }
-
+            QString url = HostUrl::stringForEntry(guid, session_type);
             if (url.isEmpty())
             {
                 MsgBox::warning(this, tr("Unable to create a link for this host."));
@@ -1952,6 +1951,52 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, const HostConfig& host)
             QApplication::clipboard()->setText(url);
         });
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id)
+{
+    QMenu* link_menu = menu.addMenu(QIcon(":/img/copy.svg"), tr("Copy Link"));
+
+    const proto::peer::SessionType session_types[] =
+    {
+        proto::peer::SESSION_TYPE_DESKTOP,
+        proto::peer::SESSION_TYPE_TERMINAL,
+        proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        proto::peer::SESSION_TYPE_CHAT,
+        proto::peer::SESSION_TYPE_SYSTEM_INFO
+    };
+
+    for (proto::peer::SessionType session_type : session_types)
+    {
+        link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
+                             [this, router_id, host_id, session_type]()
+        {
+            std::optional<RouterConfig> router = Database::instance().findRouter(router_id);
+            if (!router.has_value())
+            {
+                MsgBox::warning(this, tr("Unable to create a link for this host."));
+                return;
+            }
+
+            QString url = HostUrl::stringForRouterHost(router->guid(), host_id, session_type);
+            if (url.isEmpty())
+            {
+                MsgBox::warning(this, tr("Unable to create a link for this host."));
+                return;
+            }
+
+            QApplication::clipboard()->setText(url);
+        });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::setHostConnectTime(qint64 entry_id)
+{
+    const qint64 connect_time = QDateTime::currentSecsSinceEpoch();
+    Database::instance().setConnectTime(entry_id, connect_time);
+    local_group_widget_->setConnectTime(entry_id, connect_time);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1991,7 +2036,7 @@ qint64 ManagementTab::currentHostEntryId() const
 {
     if (current_content_ == local_group_widget_)
     {
-        const HostConfig* host = local_group_widget_->currentHost();
+        const LocalHostConfig* host = local_group_widget_->currentHost();
         return host ? host->id() : -1;
     }
 

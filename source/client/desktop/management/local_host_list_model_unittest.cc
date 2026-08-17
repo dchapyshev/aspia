@@ -51,9 +51,9 @@ void recordingMessageHandler(QtMsgType type, const QMessageLogContext& context, 
 }
 
 //--------------------------------------------------------------------------------------------------
-HostConfig makeHost(qint64 id, const QString& name, const QString& address, qint64 create_time)
+LocalHostConfig makeHost(qint64 id, const QString& name, const QString& address, qint64 create_time)
 {
-    HostConfig host;
+    LocalHostConfig host;
     host.setId(id);
     host.setName(name);
     host.setAddress(address);
@@ -110,7 +110,7 @@ protected:
 
     // Three hosts whose names and addresses only sort right when read as a person reads them, and
     // which were created in an order the names do not follow.
-    static QList<HostConfig> hosts()
+    static QList<LocalHostConfig> hosts()
     {
         return { makeHost(1, "host2", "192.168.0.2", 3000),
                  makeHost(2, "host10", "192.168.0.10", 1000),
@@ -185,7 +185,7 @@ TEST_F(LocalHostListModelTest, UnsetTimestampIsShownAsNothing)
 // whole of it is only in the tooltip.
 TEST_F(LocalHostListModelTest, CommentIsDrawnOnOneLineAndKeptWholeInTheTooltip)
 {
-    HostConfig host = makeHost(1, "host", "192.168.0.1", 1000);
+    LocalHostConfig host = makeHost(1, "host", "192.168.0.1", 1000);
     host.setComment("first\nsecond");
 
     model()->setHosts({ host });
@@ -296,7 +296,7 @@ TEST_F(LocalHostListModelTest, EditedRecordCatchesUp)
 {
     model()->setHosts(hosts());
 
-    HostConfig edited = makeHost(1, "renamed", "192.168.0.99", 3000);
+    LocalHostConfig edited = makeHost(1, "renamed", "192.168.0.99", 3000);
     EXPECT_TRUE(model()->updateHost(edited));
 
     EXPECT_EQ(textAt(model(), 0, Column::NAME), QString("renamed"));

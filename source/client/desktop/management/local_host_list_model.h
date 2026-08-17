@@ -50,18 +50,18 @@ public:
     ~LocalHostListModel() final;
 
     // Shows another group. The probed states of the previous one go with it.
-    void setHosts(const QList<HostConfig>& hosts);
+    void setHosts(const QList<LocalHostConfig>& hosts);
     void clear();
 
     // Null when the row is out of range.
-    const HostConfig* hostAt(int row) const;
+    const LocalHostConfig* hostAt(int row) const;
     int rowOf(qint64 entry_id) const;
 
     // The records themselves, for whoever needs to work with them rather than show them.
-    const QList<HostConfig>& hosts() const { return hosts_; }
+    const QList<LocalHostConfig>& hosts() const { return hosts_; }
 
     // The record was edited elsewhere and its row has to catch up. False when it is not shown here.
-    bool updateHost(const HostConfig& host);
+    bool updateHost(const LocalHostConfig& host);
     bool removeHost(qint64 entry_id);
 
     // A connection was just made to the host, which is the only field of a record this list writes.
@@ -80,11 +80,11 @@ public:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) final;
 
 private:
-    QString textAt(const HostConfig& host, Column column) const;
+    QString textAt(const LocalHostConfig& host, Column column) const;
     void applySort();
     void emitRowChanged(int row);
 
-    QList<HostConfig> hosts_;
+    QList<LocalHostConfig> hosts_;
 
     // Probed states by entry id. A host that is not in it has not been probed.
     QHash<qint64, bool> online_;

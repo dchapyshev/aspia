@@ -183,7 +183,7 @@ void LocalWidget::reload()
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
-    for (const HostConfig& host : Database::instance().hostList(0))
+    for (const LocalHostConfig& host : Database::instance().hostList(0))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { host.name(), host.address() });
         item->setIcon(0, icon);
@@ -236,7 +236,7 @@ void LocalWidget::searchQuery(const QString& query)
     }
 
     QList<SearchWidget::Result> results;
-    for (const HostConfig& host : Database::instance().searchHosts(query))
+    for (const LocalHostConfig& host : Database::instance().searchHosts(query))
     {
         SearchWidget::Result result;
         result.title = host.name();
@@ -410,7 +410,7 @@ void LocalWidget::onRefreshClicked()
 
     QList<qint64> entry_ids;
     OnlineChecker::HostList hosts;
-    for (const HostConfig& host : Database::instance().hostList(group_id))
+    for (const LocalHostConfig& host : Database::instance().hostList(group_id))
     {
         entry_ids.append(host.id());
         hosts.append(host);
@@ -482,7 +482,7 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
 {
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
-    for (const GroupConfig& group : Database::instance().groupList(parent_id))
+    for (const LocalGroupConfig& group : Database::instance().groupList(parent_id))
     {
         QTreeWidgetItem* item = parent ? new QTreeWidgetItem(parent, { group.name() })
                                        : new QTreeWidgetItem(tree_, { group.name() });
@@ -520,7 +520,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
 
-    for (const HostConfig& host : Database::instance().hostList(group_id))
+    for (const LocalHostConfig& host : Database::instance().hostList(group_id))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(host_tree_, { host.name(), host.address() });
         item->setIcon(0, icon);

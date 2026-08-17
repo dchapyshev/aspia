@@ -25,6 +25,7 @@
 #include <optional>
 
 #include "base/crypto/secure_string.h"
+#include "base/peer/host_id.h"
 
 namespace proto::router {
 enum SessionType : int;
@@ -99,10 +100,38 @@ private:
     QByteArray device_token_;
 };
 
-class HostConfig final
+class RouterHostConfig final
 {
 public:
-    HostConfig() = default;
+    RouterHostConfig() = default;
+
+    qint64 routerId() const { return router_id_; }
+    void setRouterId(qint64 id) { router_id_ = id; }
+
+    HostId hostId() const { return host_id_; }
+    void setHostId(HostId id) { host_id_ = id; }
+
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
+
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
+
+    // The sealed column for database I/O. See RouterConfig for what the two answer.
+    std::optional<QByteArray> encryptedData() const;
+    bool setEncryptedData(const QByteArray& blob);
+
+private:
+    qint64 router_id_ = -1;
+    HostId host_id_ = kInvalidHostId;
+    QString username_;
+    SecureString password_;
+};
+
+class LocalHostConfig final
+{
+public:
+    LocalHostConfig() = default;
 
     qint64 id() const { return id_; }
     void setId(qint64 id) { id_ = id; }
@@ -159,10 +188,10 @@ private:
     SecureString password_;
 };
 
-class GroupConfig final
+class LocalGroupConfig final
 {
 public:
-    GroupConfig() = default;
+    LocalGroupConfig() = default;
 
     qint64 id() const { return id_; }
     void setId(qint64 id) { id_ = id; }
@@ -181,6 +210,37 @@ private:
     qint64 parent_id_ = 0;
     QString name_;
     QString comment_;
+};
+
+class HostConfig final
+{
+public:
+    HostConfig() = default;
+
+    static HostConfig forLocalHost(const LocalHostConfig& host);
+    static HostConfig forRouterHost(qint64 router_id, HostId host_id, const QString& name);
+
+    qint64 routerId() const { return router_id_; }
+    void setRouterId(qint64 id) { router_id_ = id; }
+
+    const QString& address() const { return address_; }
+    void setAddress(const QString& value) { address_ = value; }
+
+    const QString& name() const { return name_; }
+    void setName(const QString& value) { name_ = value; }
+
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
+
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
+
+private:
+    qint64 router_id_ = 0;
+    QString address_;
+    QString name_;
+    QString username_;
+    SecureString password_;
 };
 
 proto::control::Config defaultDesktopConfig();

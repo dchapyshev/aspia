@@ -69,7 +69,7 @@ void OnlineChecker::start(const HostList& hosts)
 
     QList<QPair<qint64, bool>> cached_hits;
 
-    for (const HostConfig& host : hosts)
+    for (const LocalHostConfig& host : hosts)
     {
         const qint64 id = host.id();
         auto it = cache_.constFind(id);

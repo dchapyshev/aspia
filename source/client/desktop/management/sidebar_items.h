@@ -24,7 +24,7 @@
 
 #include "client/router.h"
 
-class GroupConfig;
+class LocalGroupConfig;
 
 //--------------------------------------------------------------------------------------------------
 class SidebarItem : public QTreeWidgetItem
@@ -59,8 +59,8 @@ private:
 class SidebarLocalGroup final : public SidebarItem
 {
 public:
-    SidebarLocalGroup(const GroupConfig& group, QTreeWidget* parent);
-    SidebarLocalGroup(const GroupConfig& group, QTreeWidgetItem* parent);
+    SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidget* parent);
+    SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidgetItem* parent);
 
     qint64 parentId() const { return parent_id_; }
     QString groupName() const { return group_name_; }

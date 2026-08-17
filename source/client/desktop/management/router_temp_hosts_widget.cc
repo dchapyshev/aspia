@@ -98,16 +98,11 @@ bool RouterTempHostsWidget::hasSelectedHost() const
 //--------------------------------------------------------------------------------------------------
 HostConfig RouterTempHostsWidget::selectedHostConfig() const
 {
-    HostConfig config;
-
     const RouterTempHost* host = currentHost();
     if (!host || host->temp_id == kInvalidHostId)
-        return config;
+        return HostConfig();
 
-    config.setRouterId(router_id_);
-    config.setAddress(hostIdToString(host->temp_id));
-    config.setName(host->computer_name);
-    return config;
+    return HostConfig::forRouterHost(router_id_, host->temp_id, host->computer_name);
 }
 
 //--------------------------------------------------------------------------------------------------

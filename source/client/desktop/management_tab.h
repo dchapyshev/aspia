@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "client/config.h"
+#include "client/config.h"
 #include "client/router.h"
 #include "client/desktop/tab.h"
 #include "client/desktop/management/sidebar.h"
@@ -114,9 +115,11 @@ private:
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
-    void addCopyLinkMenu(QMenu& menu, const HostConfig& host);
+    void addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host);
+    void addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id);
 
     bool validateHostForConnect(const HostConfig& host);
+    void setHostConnectTime(qint64 entry_id);
     qint64 currentHostEntryId() const;
     void refreshItem(qint64 entry_id);
     void removeItem(qint64 entry_id);

@@ -132,7 +132,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostEditor::prepareForEdit(qint64 host_id)
 {
-    std::optional<HostConfig> host = Database::instance().findHost(host_id);
+    std::optional<LocalHostConfig> host = Database::instance().findHost(host_id);
     if (!host.has_value())
     {
         LOG(ERROR) << "Host not found:" << host_id;
@@ -218,7 +218,7 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
-    HostConfig data;
+    LocalHostConfig data;
     data.setId(entry_id_);
     data.setGroupId(group_id_);
     data.setRouterId(router_id);

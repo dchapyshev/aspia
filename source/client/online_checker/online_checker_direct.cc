@@ -40,7 +40,7 @@ const Seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(const HostConfig& host, QObject* parent);
+    Instance(const LocalHostConfig& host, QObject* parent);
     ~Instance() final;
 
     void start();
@@ -53,7 +53,7 @@ private slots:
 private:
     void onFinished(const Location& location, bool online);
 
-    const HostConfig host_;
+    const LocalHostConfig host_;
 
     TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
@@ -61,7 +61,7 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::Instance::Instance(const HostConfig& host, QObject* parent)
+OnlineCheckerDirect::Instance::Instance(const LocalHostConfig& host, QObject* parent)
     : QObject(parent),
       host_(host)
 {
@@ -165,7 +165,7 @@ void OnlineCheckerDirect::start()
     qsizetype count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
-        const HostConfig& host = pending_queue_.front();
+        const LocalHostConfig& host = pending_queue_.front();
         Instance* instance = new Instance(host, this);
 
         LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";
@@ -200,7 +200,7 @@ void OnlineCheckerDirect::onChecked(qint64 entry_id, bool online)
     // Take the next host from the pending queue and start checking it.
     if (!pending_queue_.isEmpty())
     {
-        const HostConfig& host = pending_queue_.front();
+        const LocalHostConfig& host = pending_queue_.front();
         Instance* instance = new Instance(host, this);
 
         LOG(TRACE) << "Instance for" << host.id() << "is created (" << host.address() << ")";

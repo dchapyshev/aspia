@@ -311,7 +311,7 @@ TEST_F(SearchResultModelTest, UpdatedEntryIsShownAsItIsNow)
 {
     model()->setRows(rows());
 
-    HostConfig host;
+    LocalHostConfig host;
     host.setId(11);
     host.setName("renamed");
     host.setAddress("10.0.0.1");
@@ -329,11 +329,11 @@ TEST_F(SearchResultModelTest, UpdateOfARecordThatIsNotShownChangesNothing)
 {
     model()->setRows(rows());
 
-    HostConfig absent;
+    LocalHostConfig absent;
     absent.setId(777);
     EXPECT_FALSE(model()->updateEntry(absent, "Local"));
 
-    HostConfig router_host;
+    LocalHostConfig router_host;
     EXPECT_FALSE(model()->updateEntry(router_host, "Router 1"));
 
     EXPECT_EQ(rowNames(model()), QStringList({ "host2", "host10", "alpha" }));

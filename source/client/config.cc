@@ -32,8 +32,9 @@ namespace {
 
 // Names the table a column was sealed for. A host and a router number their fields the same way, so
 // without this a router column moved into a host row would parse as a host one and open.
-const char kHostsAad[] = "hosts";
+const char kLocalHostsAad[] = "local_hosts";
 const char kRoutersAad[] = "routers";
+const char kRouterHostsAad[] = "router_hosts";
 
 SecureString toSecureString(const std::string& value)
 {
@@ -127,8 +128,8 @@ std::optional<QByteArray> RouterConfig::encryptedData() const
     }
 
     proto::storage::RouterBlob data;
-    data.set_address(address_.toUtf8().toStdString());
-    data.set_username(username_.toUtf8().toStdString());
+    data.set_address(address_.toStdString());
+    data.set_username(username_.toStdString());
     data.set_device_token(wrapped_token.toStdString());
 
     const SecureByteArray password = password_.toUtf8();
@@ -181,16 +182,16 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> HostConfig::encryptedData() const
+std::optional<QByteArray> RouterHostConfig::encryptedData() const
 {
     proto::storage::HostBlob data;
-    data.set_address(address_.toUtf8().toStdString());
-    data.set_username(username_.toUtf8().toStdString());
+    data.set_address(hostIdToString(host_id_).toStdString());
+    data.set_username(username_.toStdString());
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
-    std::optional<QByteArray> sealed = sealMessage(data, kHostsAad);
+    std::optional<QByteArray> sealed = sealMessage(data, kRouterHostsAad);
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
@@ -200,7 +201,60 @@ std::optional<QByteArray> HostConfig::encryptedData() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostConfig::setEncryptedData(const QByteArray& blob)
+bool RouterHostConfig::setEncryptedData(const QByteArray& blob)
+{
+    username_.clear();
+    password_.clear();
+
+    if (blob.isEmpty())
+        return true;
+
+    proto::storage::HostBlob data;
+    if (!unsealMessage(blob, kRouterHostsAad, &data))
+        return false;
+
+    // The column names the host it was sealed for. Every column of the table opens with the same
+    // key, so without this one moved to another row would hand its credentials to a host the user
+    // never saved them for.
+    const bool same_host = stringToHostId(QString::fromStdString(data.address())) == host_id_;
+    if (same_host)
+    {
+        username_ = QString::fromStdString(data.username());
+        password_ = toSecureString(data.password());
+    }
+    else
+    {
+        LOG(ERROR) << "Credentials of host" << host_id_ << "are sealed for another host";
+    }
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return same_host;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<QByteArray> LocalHostConfig::encryptedData() const
+{
+    proto::storage::HostBlob data;
+    data.set_address(address_.toStdString());
+    data.set_username(username_.toStdString());
+
+    const SecureByteArray password = password_.toUtf8();
+    data.set_password(password.constData(), static_cast<size_t>(password.size()));
+
+    std::optional<QByteArray> sealed = sealMessage(data, kLocalHostsAad);
+
+    memZero(data.mutable_address());
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return sealed;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostConfig::setEncryptedData(const QByteArray& blob)
 {
     address_.clear();
     username_.clear();
@@ -210,7 +264,7 @@ bool HostConfig::setEncryptedData(const QByteArray& blob)
         return true;
 
     proto::storage::HostBlob data;
-    if (!unsealMessage(blob, kHostsAad, &data))
+    if (!unsealMessage(blob, kLocalHostsAad, &data))
         return false;
 
     address_ = QString::fromStdString(data.address());
@@ -222,6 +276,30 @@ bool HostConfig::setEncryptedData(const QByteArray& blob)
     memZero(data.mutable_password());
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+HostConfig HostConfig::forLocalHost(const LocalHostConfig& host)
+{
+    HostConfig config;
+    config.setRouterId(host.routerId());
+    config.setAddress(host.address());
+    config.setName(host.name());
+    config.setUsername(host.username());
+    config.setPassword(host.password());
+    return config;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+HostConfig HostConfig::forRouterHost(qint64 router_id, HostId host_id, const QString& name)
+{
+    HostConfig config;
+    config.setRouterId(router_id);
+    config.setAddress(hostIdToString(host_id));
+    config.setName(name);
+    return config;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -122,8 +122,8 @@ private:
     SearchPageModel page_model_;
     QList<Source> sources_;
     QList<PageSlice> page_slices_;
-    QList<HostConfig> local_matches_;
-    QHash<qint64, GroupConfig> local_groups_;
+    QList<LocalHostConfig> local_matches_;
+    QHash<qint64, LocalGroupConfig> local_groups_;
 
     // Replies of a query the user has already moved on from are dropped by this, and so are the
     // replies of an earlier page of the same query.

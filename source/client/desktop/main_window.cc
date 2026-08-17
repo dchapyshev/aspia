@@ -235,31 +235,27 @@ void MainWindow::connectToUrl(const QString& url)
             router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
                 [this, router_id, host_id, session_type](const Router::HostList& list)
             {
-                HostConfig host;
-                host.setRouterId(router_id);
-                host.setAddress(hostIdToString(host_id));
+                QString name;
 
                 for (const Router::Host& entry : std::as_const(list.hosts))
                 {
                     if (entry.host_id != host_id)
                         continue;
 
-                    host.setName(entry.display_name.isEmpty() ? entry.computer_name :
-                                                                entry.display_name);
+                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
                     break;
                 }
 
-                onConnect(host, session_type);
+                onConnect(HostConfig::forRouterHost(router_id, host_id, name), session_type);
             } });
             return;
         }
 
-        host.setRouterId(router_id);
-        host.setAddress(hostIdToString(host_url.hostId()));
+        host = HostConfig::forRouterHost(router_id, host_url.hostId(), QString());
     }
     else
     {
-        std::optional<HostConfig> entry = db.findHostByGuid(host_url.hostGuid());
+        std::optional<LocalHostConfig> entry = db.findHostByGuid(host_url.hostGuid());
         if (!entry.has_value())
         {
             MsgBox::warning(this,
@@ -267,9 +263,7 @@ void MainWindow::connectToUrl(const QString& url)
             return;
         }
 
-        host = *entry;
-
-        if (host.routerId() != 0 && !db.findRouter(host.routerId()).has_value())
+        if (entry->routerId() != 0 && !db.findRouter(entry->routerId()).has_value())
         {
             MsgBox::warning(this, tr("The router associated with this host has been deleted. "
                                      "Edit the host to select another router or switch to "
@@ -277,7 +271,8 @@ void MainWindow::connectToUrl(const QString& url)
             return;
         }
 
-        db.setConnectTime(host.id(), QDateTime::currentSecsSinceEpoch());
+        host = HostConfig::forLocalHost(*entry);
+        db.setConnectTime(entry->id(), QDateTime::currentSecsSinceEpoch());
     }
 
     onConnect(host, host_url.sessionType());

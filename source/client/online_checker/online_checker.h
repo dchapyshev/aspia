@@ -44,7 +44,7 @@ public:
     explicit OnlineChecker(QObject* parent = nullptr);
     ~OnlineChecker() final;
 
-    using HostList = QList<HostConfig>;
+    using HostList = QList<LocalHostConfig>;
 
     // Begin (or restart) checking the given hosts. Cached fresh entries are emitted via
     // sig_checkerResult on the next event loop tick; stale ones go through a real probe. When all

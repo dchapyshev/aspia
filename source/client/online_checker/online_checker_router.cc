@@ -89,7 +89,7 @@ void OnlineCheckerRouter::checkNextHost()
         return;
     }
 
-    const HostConfig& host = hosts_.front();
+    const LocalHostConfig& host = hosts_.front();
     const HostId host_id = stringToHostId(host.address());
 
     LOG(TRACE) << "Checking status for host id" << host_id
@@ -121,7 +121,7 @@ void OnlineCheckerRouter::onFinished(const Location& location)
 
     LOG(TRACE) << "Finished (" << location << ")";
 
-    for (const HostConfig& host : std::as_const(hosts_))
+    for (const LocalHostConfig& host : std::as_const(hosts_))
         emit sig_checkerResult(host.id(), false);
     hosts_.clear();
 

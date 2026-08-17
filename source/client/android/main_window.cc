@@ -402,11 +402,11 @@ void AndroidMainWindow::onBackClicked()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
-    std::optional<HostConfig> host = Database::instance().findHost(entry_id);
-    if (!host.has_value())
+    std::optional<LocalHostConfig> entry = Database::instance().findHost(entry_id);
+    if (!entry.has_value())
         return;
 
-    openSession(*host, session_type);
+    openSession(HostConfig::forLocalHost(*entry), session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -597,41 +597,36 @@ void AndroidMainWindow::connectToUrl(const QString& url)
             router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
                 [this, router_id, host_id, session_type](const Router::HostList& list)
             {
-                HostConfig host;
-                host.setRouterId(router_id);
-                host.setAddress(hostIdToString(host_id));
+                QString name;
 
                 for (const Router::Host& entry : std::as_const(list.hosts))
                 {
                     if (entry.host_id != host_id)
                         continue;
 
-                    host.setName(entry.display_name.isEmpty() ? entry.computer_name :
-                                                                entry.display_name);
+                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
                     break;
                 }
 
-                openSession(host, session_type);
+                openSession(HostConfig::forRouterHost(router_id, host_id, name), session_type);
             } });
             return;
         }
 
-        HostConfig host;
-        host.setRouterId(router_id);
-        host.setAddress(hostIdToString(host_url.hostId()));
-        openSession(host, session_type);
+        openSession(HostConfig::forRouterHost(router_id, host_url.hostId(), QString()),
+                    session_type);
     }
     else
     {
-        std::optional<HostConfig> host = Database::instance().findHostByGuid(host_url.hostGuid());
-        if (!host.has_value())
+        std::optional<LocalHostConfig> entry = Database::instance().findHostByGuid(host_url.hostGuid());
+        if (!entry.has_value())
         {
             MessageDialog::info(this, tr("Connection by link"),
                 tr("The host referenced by the link was not found in the address book."));
             return;
         }
 
-        openSession(*host, session_type);
+        openSession(HostConfig::forLocalHost(*entry), session_type);
     }
 }
 

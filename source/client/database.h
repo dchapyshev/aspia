@@ -46,26 +46,26 @@ public:
     bool isValid() const;
 
     // Hosts.
-    QList<HostConfig> hostList(qint64 group_id) const;
-    QList<HostConfig> allHosts() const;
-    bool addHost(HostConfig& host);
-    bool modifyHost(HostConfig& host);
+    QList<LocalHostConfig> hostList(qint64 group_id) const;
+    QList<LocalHostConfig> allHosts() const;
+    bool addHost(LocalHostConfig& host);
+    bool modifyHost(LocalHostConfig& host);
     bool removeHost(qint64 entry_id);
     bool setConnectTime(qint64 entry_id, qint64 connect_time);
-    std::optional<HostConfig> findHost(qint64 entry_id) const;
-    std::optional<HostConfig> findHostByGuid(const QString& guid) const;
+    std::optional<LocalHostConfig> findHost(qint64 entry_id) const;
+    std::optional<LocalHostConfig> findHostByGuid(const QString& guid) const;
 
     // Search.
-    QList<HostConfig> searchHosts(const QString& query) const;
+    QList<LocalHostConfig> searchHosts(const QString& query) const;
 
     // Groups.
-    QList<GroupConfig> groupList(qint64 parent_id) const;
-    QList<GroupConfig> allGroups() const;
-    bool addGroup(GroupConfig& group);
-    bool modifyGroup(const GroupConfig& group);
+    QList<LocalGroupConfig> groupList(qint64 parent_id) const;
+    QList<LocalGroupConfig> allGroups() const;
+    bool addGroup(LocalGroupConfig& group);
+    bool modifyGroup(const LocalGroupConfig& group);
     bool moveGroup(qint64 group_id, qint64 new_parent_id);
     bool removeGroup(qint64 group_id);
-    std::optional<GroupConfig> findGroup(qint64 group_id) const;
+    std::optional<LocalGroupConfig> findGroup(qint64 group_id) const;
 
     // Routers.
     QList<RouterConfig> routerList() const;
@@ -90,7 +90,7 @@ public:
     // Atomically rewrites every stored record with fields already re-encrypted under the new key and
     // updates the master password verifier. Either all changes are applied or none of them are, so
     // the address book can never be left with records under two different keys.
-    bool reencryptAll(const QList<HostConfig>& hosts,
+    bool reencryptAll(const QList<LocalHostConfig>& hosts,
                       const QList<RouterConfig>& routers,
                       const QByteArray& salt,
                       const QByteArray& verifier,

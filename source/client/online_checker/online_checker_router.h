@@ -36,7 +36,7 @@ class OnlineCheckerRouter final : public QObject
     Q_OBJECT
 
 public:
-    using HostList = QQueue<HostConfig>;
+    using HostList = QQueue<LocalHostConfig>;
 
     explicit OnlineCheckerRouter(const HostList& hosts, QObject* parent = nullptr);
     ~OnlineCheckerRouter() final;

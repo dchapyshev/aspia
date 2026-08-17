@@ -40,9 +40,9 @@ constexpr auto kSettingVersion       = "master_password_version";
 constexpr auto kSettingBiometricBlob = "biometric_blob";
 
 //--------------------------------------------------------------------------------------------------
-HostConfig readHost(const SqlQuery& query)
+LocalHostConfig readHost(const SqlQuery& query)
 {
-    HostConfig host;
+    LocalHostConfig host;
     host.setId(query.columnInt64(0));
     host.setGroupId(query.columnInt64(1));
     host.setRouterId(query.columnInt64(2));
@@ -60,9 +60,9 @@ HostConfig readHost(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-GroupConfig readGroup(const SqlQuery& query)
+LocalGroupConfig readGroup(const SqlQuery& query)
 {
-    GroupConfig group;
+    LocalGroupConfig group;
     group.setId(query.columnInt64(0));
     group.setParentId(query.columnInt64(1));
     group.setName(query.columnText(2));
@@ -90,20 +90,20 @@ bool createTables(SqlDatabase& db)
 {
     // A group without a parent and a host without a group are the ones at the root: the root is
     // where the tree starts and not a record of its own, so there is no id for them to name.
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_groups\" ("
                  "\"id\" INTEGER UNIQUE,"
-                 "\"parent_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE CASCADE,"
+                 "\"parent_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE CASCADE,"
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"comment\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create groups table:" << db.lastError();
+        LOG(ERROR) << "Unable to create local_groups table:" << db.lastError();
         return false;
     }
 
-    if (!db.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"local_hosts\" ("
                  "\"id\" INTEGER UNIQUE,"
-                 "\"group_id\" INTEGER REFERENCES \"groups\"(\"id\") ON DELETE SET NULL,"
+                 "\"group_id\" INTEGER REFERENCES \"local_groups\"(\"id\") ON DELETE SET NULL,"
                  "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"comment\" TEXT NOT NULL DEFAULT '',"
@@ -114,7 +114,7 @@ bool createTables(SqlDatabase& db)
                  "\"guid\" TEXT NOT NULL DEFAULT '',"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
-        LOG(ERROR) << "Unable to create hosts table:" << db.lastError();
+        LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
         return false;
     }
 
@@ -158,9 +158,9 @@ bool wouldCloseLoop(SqlDatabase& db, qint64 group_id, qint64 new_parent_id)
     // the root, and SQLite caps a runaway recursion by itself.
     const char kSql[] =
         "WITH RECURSIVE ancestors(id) AS ("
-        "    SELECT id FROM \"groups\" WHERE id=?"
+        "    SELECT id FROM local_groups WHERE id=?"
         "    UNION ALL"
-        "    SELECT g.parent_id FROM \"groups\" g JOIN ancestors a ON g.id = a.id "
+        "    SELECT g.parent_id FROM local_groups g JOIN ancestors a ON g.id = a.id "
         "      WHERE g.parent_id IS NOT NULL"
         ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1";
 
@@ -184,14 +184,14 @@ bool backfillHostGuids(SqlDatabase& db)
 
     QList<qint64> ids;
     {
-        SqlQuery query(db, "SELECT id FROM hosts WHERE guid=''");
+        SqlQuery query(db, "SELECT id FROM local_hosts WHERE guid=''");
         while (query.next() == SqlQuery::StepResult::ROW)
             ids.append(query.columnInt64(0));
     }
 
     for (qint64 id : std::as_const(ids))
     {
-        SqlQuery query(db, "UPDATE hosts SET guid=? WHERE id=?");
+        SqlQuery query(db, "UPDATE local_hosts SET guid=? WHERE id=?");
         query.addText(QUuid::createUuid().toString(QUuid::WithoutBraces));
         query.addInt64(id);
 
@@ -237,7 +237,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostConfig> Database::hostList(qint64 group_id) const
+QList<LocalHostConfig> Database::hostList(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -247,10 +247,10 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
-                        "FROM hosts WHERE group_id IS NULLIF(?, 0)");
+                        "FROM local_hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
 
-    QList<HostConfig> hosts;
+    QList<LocalHostConfig> hosts;
     while (query.next() == SqlQuery::StepResult::ROW)
         hosts.append(readHost(query));
 
@@ -258,7 +258,7 @@ QList<HostConfig> Database::hostList(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostConfig> Database::allHosts() const
+QList<LocalHostConfig> Database::allHosts() const
 {
     if (!isValid())
     {
@@ -268,9 +268,9 @@ QList<HostConfig> Database::allHosts() const
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
-                        "FROM hosts");
+                        "FROM local_hosts");
 
-    QList<HostConfig> hosts;
+    QList<LocalHostConfig> hosts;
     while (query.next() == SqlQuery::StepResult::ROW)
         hosts.append(readHost(query));
 
@@ -278,7 +278,7 @@ QList<HostConfig> Database::allHosts() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addHost(HostConfig& host)
+bool Database::addHost(LocalHostConfig& host)
 {
     if (!isValid())
     {
@@ -304,7 +304,7 @@ bool Database::addHost(HostConfig& host)
     if (host.guid().isEmpty())
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO hosts (id, group_id, router_id, name, comment, data, "
+    SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid) "
                         "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addInt64(host.groupId());
@@ -328,7 +328,7 @@ bool Database::addHost(HostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyHost(HostConfig& host)
+bool Database::modifyHost(LocalHostConfig& host)
 {
     if (!isValid())
     {
@@ -342,7 +342,7 @@ bool Database::modifyHost(HostConfig& host)
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
-    SqlQuery query(db_, "UPDATE hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
+    SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
                         "data=?, modify_time=? WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
@@ -370,7 +370,7 @@ bool Database::removeHost(qint64 entry_id)
         return false;
     }
 
-    SqlQuery query(db_, "DELETE FROM hosts WHERE id=?");
+    SqlQuery query(db_, "DELETE FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
     if (!query.exec())
@@ -391,7 +391,7 @@ bool Database::setConnectTime(qint64 entry_id, qint64 connect_time)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE hosts SET connect_time=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE local_hosts SET connect_time=? WHERE id=?");
     query.addInt64(connect_time);
     query.addInt64(entry_id);
 
@@ -405,7 +405,7 @@ bool Database::setConnectTime(qint64 entry_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<HostConfig> Database::findHost(qint64 entry_id) const
+std::optional<LocalHostConfig> Database::findHost(qint64 entry_id) const
 {
     if (!isValid())
     {
@@ -415,7 +415,7 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
-                        "FROM hosts WHERE id=?");
+                        "FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -425,7 +425,7 @@ std::optional<HostConfig> Database::findHost(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
+std::optional<LocalHostConfig> Database::findHostByGuid(const QString& guid) const
 {
     if (!isValid())
     {
@@ -438,7 +438,7 @@ std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
-                        "FROM hosts WHERE guid=?");
+                        "FROM local_hosts WHERE guid=?");
     query.addText(guid);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -448,7 +448,7 @@ std::optional<HostConfig> Database::findHostByGuid(const QString& guid) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostConfig> Database::searchHosts(const QString& query_text) const
+QList<LocalHostConfig> Database::searchHosts(const QString& query_text) const
 {
     if (!isValid())
     {
@@ -457,12 +457,12 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid FROM hosts");
+                        "create_time, modify_time, connect_time, guid FROM local_hosts");
 
-    QList<HostConfig> hosts;
+    QList<LocalHostConfig> hosts;
     while (query.next() == SqlQuery::StepResult::ROW)
     {
-        HostConfig host = readHost(query);
+        LocalHostConfig host = readHost(query);
         if (host.name().contains(query_text, Qt::CaseInsensitive) ||
             host.address().contains(query_text, Qt::CaseInsensitive))
         {
@@ -474,7 +474,7 @@ QList<HostConfig> Database::searchHosts(const QString& query_text) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupConfig> Database::groupList(qint64 parent_id) const
+QList<LocalGroupConfig> Database::groupList(qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -482,11 +482,11 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups "
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM local_groups "
                         "WHERE parent_id IS NULLIF(?, 0)");
     query.addInt64(parent_id);
 
-    QList<GroupConfig> groups;
+    QList<LocalGroupConfig> groups;
     while (query.next() == SqlQuery::StepResult::ROW)
         groups.append(readGroup(query));
 
@@ -494,7 +494,7 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupConfig> Database::allGroups() const
+QList<LocalGroupConfig> Database::allGroups() const
 {
     if (!isValid())
     {
@@ -502,9 +502,9 @@ QList<GroupConfig> Database::allGroups() const
         return {};
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM local_groups");
 
-    QList<GroupConfig> groups;
+    QList<LocalGroupConfig> groups;
     while (query.next() == SqlQuery::StepResult::ROW)
         groups.append(readGroup(query));
 
@@ -512,7 +512,7 @@ QList<GroupConfig> Database::allGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addGroup(GroupConfig& group)
+bool Database::addGroup(LocalGroupConfig& group)
 {
     if (!isValid())
     {
@@ -520,7 +520,7 @@ bool Database::addGroup(GroupConfig& group)
         return false;
     }
 
-    SqlQuery query(db_, "INSERT INTO groups (id, parent_id, name, comment) "
+    SqlQuery query(db_, "INSERT INTO local_groups (id, parent_id, name, comment) "
                         "VALUES (NULL, NULLIF(?, 0), ?, ?)");
     query.addInt64(group.parentId());
     query.addText(group.name());
@@ -537,7 +537,7 @@ bool Database::addGroup(GroupConfig& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyGroup(const GroupConfig& group)
+bool Database::modifyGroup(const LocalGroupConfig& group)
 {
     if (!isValid())
     {
@@ -551,7 +551,7 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
     query.addInt64(group.parentId());
     query.addText(group.name());
     query.addText(group.comment());
@@ -581,7 +581,7 @@ bool Database::moveGroup(qint64 group_id, qint64 new_parent_id)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE groups SET parent_id=NULLIF(?, 0) WHERE id=?");
+    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0) WHERE id=?");
     query.addInt64(new_parent_id);
     query.addInt64(group_id);
 
@@ -613,7 +613,7 @@ bool Database::removeGroup(qint64 group_id)
     // The child groups go with it and the hosts of the whole subtree move to the root. Both are
     // declared by the tables themselves, so no path can leave a row pointing at a group that is
     // gone - the tree is walked from the root down and such a row is in no place the user can reach.
-    SqlQuery query(db_, "DELETE FROM \"groups\" WHERE id=?");
+    SqlQuery query(db_, "DELETE FROM local_groups WHERE id=?");
     query.addInt64(group_id);
 
     if (!query.exec())
@@ -626,7 +626,7 @@ bool Database::removeGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
+std::optional<LocalGroupConfig> Database::findGroup(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -634,7 +634,7 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM groups WHERE id=?");
+    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment FROM local_groups WHERE id=?");
     query.addInt64(group_id);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -822,7 +822,7 @@ bool Database::isMasterPasswordSet() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::reencryptAll(const QList<HostConfig>& hosts,
+bool Database::reencryptAll(const QList<LocalHostConfig>& hosts,
                             const QList<RouterConfig>& routers,
                             const QByteArray& salt,
                             const QByteArray& verifier,
@@ -847,13 +847,13 @@ bool Database::reencryptAll(const QList<HostConfig>& hosts,
     // Only the ciphertext is written. Going through modifyHost() would stamp every host as edited
     // now, and the moment a host was last edited is a column of the list the user reads. Names and
     // comments are plain text, so a change of key leaves them alone.
-    for (const HostConfig& host : hosts)
+    for (const LocalHostConfig& host : hosts)
     {
         std::optional<QByteArray> encrypted_data = host.encryptedData();
         if (!encrypted_data.has_value())
             return false;
 
-        SqlQuery query(db_, "UPDATE hosts SET data=? WHERE id=?");
+        SqlQuery query(db_, "UPDATE local_hosts SET data=? WHERE id=?");
         query.addBlob(*encrypted_data);
         query.addInt64(host.id());
 

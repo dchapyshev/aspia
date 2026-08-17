@@ -175,22 +175,24 @@ bool RouterHostsWidget::isSelectedHostOnline() const
 }
 
 //--------------------------------------------------------------------------------------------------
+HostId RouterHostsWidget::selectedHostId() const
+{
+    const RouterHost* host = currentHost();
+    return host ? host->host_id : kInvalidHostId;
+}
+
+//--------------------------------------------------------------------------------------------------
 HostConfig RouterHostsWidget::selectedHostConfig() const
 {
-    HostConfig config;
-
     const RouterHost* host = currentHost();
     if (!host || host->host_id == kInvalidHostId)
-        return config;
+        return HostConfig();
 
     QString name = host->display_name;
     if (name.isEmpty())
         name = host->computer_name;
 
-    config.setRouterId(router_id_);
-    config.setAddress(hostIdToString(host->host_id));
-    config.setName(name);
-    return config;
+    return HostConfig::forRouterHost(router_id_, host->host_id, name);
 }
 
 //--------------------------------------------------------------------------------------------------

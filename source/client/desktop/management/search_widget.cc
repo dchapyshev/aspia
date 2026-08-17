@@ -96,7 +96,7 @@ QString buildHighlightedHtml(const QString& text, const QString& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups)
+QString buildGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& groups)
 {
     QStringList parts;
     qint64 current = group_id;
@@ -120,7 +120,7 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
 }
 
 //--------------------------------------------------------------------------------------------------
-SearchResultModel::Row makeLocalRow(const HostConfig& host, const QString& group_path)
+SearchResultModel::Row makeLocalRow(const LocalHostConfig& host, const QString& group_path)
 {
     SearchResultModel::Row row;
     row.type = SearchResultModel::Type::LOCAL;
@@ -351,9 +351,9 @@ void SearchWidget::search(const QString& query)
 
     Database& db = Database::instance();
 
-    const QList<GroupConfig> all_groups = db.allGroups();
+    const QList<LocalGroupConfig> all_groups = db.allGroups();
     local_groups_.reserve(all_groups.size());
-    for (const GroupConfig& group : std::as_const(all_groups))
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
 
     local_matches_ = db.searchHosts(query);
@@ -577,7 +577,7 @@ void SearchWidget::showCurrentPage()
                 if (i >= local_matches_.size())
                     break;
 
-                const HostConfig& host = local_matches_[i];
+                const LocalHostConfig& host = local_matches_[i];
                 rows.append(makeLocalRow(host, buildGroupPath(host.groupId(), local_groups_)));
             }
         }
@@ -682,17 +682,17 @@ void SearchWidget::refreshItem(qint64 entry_id)
     if (model_->rowOfEntry(entry_id) < 0)
         return;
 
-    std::optional<HostConfig> updated = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> updated = Database::instance().findHost(entry_id);
     if (!updated.has_value())
     {
         removeItem(entry_id);
         return;
     }
 
-    QHash<qint64, GroupConfig> groups;
-    const QList<GroupConfig> all_groups = Database::instance().allGroups();
+    QHash<qint64, LocalGroupConfig> groups;
+    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
     groups.reserve(all_groups.size());
-    for (const GroupConfig& group : std::as_const(all_groups))
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);
 
     model_->updateEntry(*updated, buildGroupPath(updated->groupId(), groups));

@@ -67,35 +67,35 @@ QString sanitizedComment(const QString& comment)
 void buildRouter(const RouterConfig& router, BackupRouter* out)
 {
     out->set_id(router.routerId());
-    out->set_display_name(router.displayName().toUtf8().toStdString());
-    out->set_address(router.address().toUtf8().toStdString());
+    out->set_display_name(router.displayName().toStdString());
+    out->set_address(router.address().toStdString());
     out->set_session_type(static_cast<quint32>(router.sessionType()));
-    out->set_username(router.username().toUtf8().toStdString());
+    out->set_username(router.username().toStdString());
 
     const SecureByteArray password = router.password().toUtf8();
     out->set_password(password.constData(), static_cast<size_t>(password.size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void buildGroup(const GroupConfig& group, BackupGroup* out)
+void buildGroup(const LocalGroupConfig& group, BackupGroup* out)
 {
     out->set_id(group.id());
     out->set_parent_id(group.parentId());
-    out->set_name(group.name().toUtf8().toStdString());
-    out->set_comment(group.comment().toUtf8().toStdString());
+    out->set_name(group.name().toStdString());
+    out->set_comment(group.comment().toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
-void buildHost(const HostConfig& host, BackupHost* out)
+void buildHost(const LocalHostConfig& host, BackupHost* out)
 {
     out->set_id(host.id());
     out->set_group_id(host.groupId());
     out->set_router_id(host.routerId());
-    out->set_guid(host.guid().toUtf8().toStdString());
-    out->set_name(host.name().toUtf8().toStdString());
-    out->set_comment(host.comment().toUtf8().toStdString());
-    out->set_address(host.address().toUtf8().toStdString());
-    out->set_username(host.username().toUtf8().toStdString());
+    out->set_guid(host.guid().toStdString());
+    out->set_name(host.name().toStdString());
+    out->set_comment(host.comment().toStdString());
+    out->set_address(host.address().toStdString());
+    out->set_username(host.username().toStdString());
 
     const SecureByteArray password = host.password().toUtf8();
     out->set_password(password.constData(), static_cast<size_t>(password.size()));
@@ -215,7 +215,7 @@ void importGroups(Database& db,
                 continue;
             }
 
-            GroupConfig group_config;
+            LocalGroupConfig group_config;
             group_config.setParentId(current_new_parent);
             group_config.setName(name);
             group_config.setComment(
@@ -262,7 +262,7 @@ void importHosts(Database& db,
             continue;
         }
 
-        HostConfig config;
+        LocalHostConfig config;
         config.setGroupId(group_id_map.value(host.group_id(), 0));
         config.setRouterId(router_id_map.value(host.router_id(), 0));
         config.setName(name);
@@ -319,12 +319,12 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path,
     for (const RouterConfig& router : std::as_const(routers))
         buildRouter(router, data.add_routers());
 
-    const QList<GroupConfig> groups = db.allGroups();
-    for (const GroupConfig& group : std::as_const(groups))
+    const QList<LocalGroupConfig> groups = db.allGroups();
+    for (const LocalGroupConfig& group : std::as_const(groups))
         buildGroup(group, data.add_groups());
 
-    const QList<HostConfig> hosts = db.allHosts();
-    for (const HostConfig& host : std::as_const(hosts))
+    const QList<LocalHostConfig> hosts = db.allHosts();
+    for (const LocalHostConfig& host : std::as_const(hosts))
         buildHost(host, data.add_hosts());
 
     // Serialized, the address book is in the clear, so it goes into a buffer that wipes itself.

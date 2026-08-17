@@ -230,12 +230,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         const QString name = match.host.display_name.isEmpty() ? match.host.computer_name
                                                                : match.host.display_name;
 
-        HostConfig config;
-        config.setRouterId(match.router_id);
-        config.setAddress(hostIdToString(match.host.host_id));
-        config.setName(name);
-
-        showSessionMenu(config);
+        showSessionMenu(HostConfig::forRouterHost(match.router_id, match.host.host_id, name));
     });
 
     reload();
@@ -843,9 +838,7 @@ bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) 
 
         const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
 
-        config->setRouterId(host_router_id_);
-        config->setAddress(hostIdToString(host.host_id));
-        config->setName(name);
+        *config = HostConfig::forRouterHost(host_router_id_, host.host_id, name);
         return true;
     }
 
@@ -865,9 +858,7 @@ bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* conf
         if (host.temp_id != temp_id)
             continue;
 
-        config->setRouterId(host_router_id_);
-        config->setAddress(hostIdToString(host.temp_id));
-        config->setName(host.computer_name);
+        *config = HostConfig::forRouterHost(host_router_id_, host.temp_id, host.computer_name);
         return true;
     }
 

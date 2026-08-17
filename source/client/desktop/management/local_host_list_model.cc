@@ -52,7 +52,7 @@ LocalHostListModel::LocalHostListModel(QObject* parent)
 LocalHostListModel::~LocalHostListModel() = default;
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostListModel::setHosts(const QList<HostConfig>& hosts)
+void LocalHostListModel::setHosts(const QList<LocalHostConfig>& hosts)
 {
     beginResetModel();
     hosts_ = hosts;
@@ -71,7 +71,7 @@ void LocalHostListModel::clear()
 }
 
 //--------------------------------------------------------------------------------------------------
-const HostConfig* LocalHostListModel::hostAt(int row) const
+const LocalHostConfig* LocalHostListModel::hostAt(int row) const
 {
     if (row < 0 || row >= hosts_.size())
         return nullptr;
@@ -92,7 +92,7 @@ int LocalHostListModel::rowOf(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalHostListModel::updateHost(const HostConfig& host)
+bool LocalHostListModel::updateHost(const LocalHostConfig& host)
 {
     const int row = rowOf(host.id());
     if (row < 0)
@@ -178,7 +178,7 @@ int LocalHostListModel::columnCount(const QModelIndex& parent) const
 //--------------------------------------------------------------------------------------------------
 QVariant LocalHostListModel::data(const QModelIndex& index, int role) const
 {
-    const HostConfig* host = hostAt(index.row());
+    const LocalHostConfig* host = hostAt(index.row());
     if (!host || index.column() < 0 || index.column() >= kColumnCount)
         return QVariant();
 
@@ -259,7 +259,7 @@ void LocalHostListModel::sort(int column, Qt::SortOrder order)
 
     for (const QModelIndex& old_index : old_indexes)
     {
-        const HostConfig* host = hostAt(old_index.row());
+        const LocalHostConfig* host = hostAt(old_index.row());
         selected_ids.append(host ? host->id() : 0);
     }
 
@@ -280,7 +280,7 @@ void LocalHostListModel::sort(int column, Qt::SortOrder order)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString LocalHostListModel::textAt(const HostConfig& host, Column column) const
+QString LocalHostListModel::textAt(const LocalHostConfig& host, Column column) const
 {
     switch (column)
     {
@@ -331,7 +331,7 @@ void LocalHostListModel::applySort()
     // The moments in time are compared as the times they are and not as the text they are drawn as,
     // which would sort by the order the parts of a date happen to be written in. A name and an
     // address are compared the way the user reads them, so "host2" comes before "host10".
-    auto less = [&](const HostConfig& first, const HostConfig& second)
+    auto less = [&](const LocalHostConfig& first, const LocalHostConfig& second)
     {
         switch (column)
         {
@@ -356,7 +356,7 @@ void LocalHostListModel::applySort()
     const bool ascending = sort_order_ == Qt::AscendingOrder;
 
     std::stable_sort(hosts_.begin(), hosts_.end(),
-                     [&](const HostConfig& first, const HostConfig& second)
+                     [&](const LocalHostConfig& first, const LocalHostConfig& second)
     {
         return ascending ? less(first, second) : less(second, first);
     });

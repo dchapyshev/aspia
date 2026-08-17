@@ -89,7 +89,7 @@ int SearchResultModel::rowOfEntry(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SearchResultModel::updateEntry(const HostConfig& host, const QString& source)
+bool SearchResultModel::updateEntry(const LocalHostConfig& host, const QString& source)
 {
     const int row = rowOfEntry(host.id());
     if (row < 0)

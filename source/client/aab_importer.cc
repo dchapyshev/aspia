@@ -166,7 +166,7 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
 
     qint64 effective_router_id = isHostId(address) ? router_id : 0;
 
-    HostConfig config;
+    LocalHostConfig config;
     config.setGroupId(group_id);
     config.setRouterId(effective_router_id);
     config.setName(name);
@@ -212,7 +212,7 @@ void importGroup(const proto::address_book::ComputerGroup& proto_group,
             return;
         }
 
-        GroupConfig group_config;
+        LocalGroupConfig group_config;
         group_config.setParentId(parent_group_id);
         group_config.setName(group_name);
         group_config.setComment(sanitizedComment(QString::fromStdString(proto_group.comment())));

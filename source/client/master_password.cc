@@ -71,14 +71,14 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     // Reading opens the sealed column of every record with the current key, so from here on the
     // records carry their credentials in the clear and the key can be changed under them. Groups are
     // not here: a group holds a name and a comment, and neither is encrypted.
-    QList<HostConfig> hosts = db.allHosts();
+    QList<LocalHostConfig> hosts = db.allHosts();
     QList<RouterConfig> routers = db.routerList();
 
     // A record whose column refused to open comes back with its credentials empty, and writing it
     // out again would make that emptiness permanent. A stored record always has these fields - both
     // addHost() and addRouter() refuse a record without them - so empty here can only mean the
     // column did not open.
-    for (const HostConfig& host : std::as_const(hosts))
+    for (const LocalHostConfig& host : std::as_const(hosts))
     {
         if (host.address().isEmpty())
         {

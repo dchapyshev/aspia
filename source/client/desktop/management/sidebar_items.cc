@@ -41,7 +41,7 @@ SidebarItem::SidebarItem(Type type, qint64 group_id, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarLocalGroup::SidebarLocalGroup(const GroupConfig& group, QTreeWidget* parent)
+SidebarLocalGroup::SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidget* parent)
     : SidebarItem(LOCAL_GROUP, group.id(), parent),
       parent_id_(group.parentId()),
       group_name_(group.name())
@@ -51,7 +51,7 @@ SidebarLocalGroup::SidebarLocalGroup(const GroupConfig& group, QTreeWidget* pare
 }
 
 //--------------------------------------------------------------------------------------------------
-SidebarLocalGroup::SidebarLocalGroup(const GroupConfig& group, QTreeWidgetItem* parent)
+SidebarLocalGroup::SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidgetItem* parent)
     : SidebarItem(LOCAL_GROUP, group.id(), parent),
       parent_id_(group.parentId()),
       group_name_(group.name())

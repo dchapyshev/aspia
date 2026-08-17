@@ -155,8 +155,7 @@ void ClipboardX11::onClipboardChanged(XServerClipboard::FormatMap&& formats)
             {
                 text_it->second =
                     QString::fromLatin1(text_it->second.data(),
-                                        static_cast<qsizetype>(text_it->second.size()))
-                        .toUtf8().toStdString();
+                                        static_cast<qsizetype>(text_it->second.size())).toStdString();
             }
         }
     }
