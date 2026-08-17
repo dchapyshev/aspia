@@ -403,7 +403,7 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const SecureByteArray&
 
     GenericHash hash(GenericHash::BLAKE2b512);
     hash.addData(I.toLower().toUtf8());
-    hash.addData(QByteArray(":"));
+    hash.addData(QByteArrayLiteral(":"));
     hash.addData(p);
 
     SecureByteArray temp(hash.result());
