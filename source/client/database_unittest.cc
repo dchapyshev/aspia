@@ -290,8 +290,8 @@ TEST_F(DatabaseTest, GroupGetsAGuidOfItsOwn)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A guid brought from elsewhere - what an import carries - is kept as it is: the group arriving
-// here is the group the file names, not a new one.
+// A guid an import brings from elsewhere is kept as it is. The group arriving here is the group
+// the file names, not a new one.
 TEST_F(DatabaseTest, GroupKeepsTheGuidItWasGiven)
 {
     LocalGroupConfig group;

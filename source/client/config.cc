@@ -36,9 +36,9 @@ const char kLocalHostsAad[] = "local_hosts";
 const char kRoutersAad[] = "routers";
 
 // The credentials of a router host are sealed for their row, both halves of its key. Every column
-// of the table opens with the same key, so a blob moved into another row - of another host, or of
-// the same host under another router - would otherwise open and hand out credentials the user
-// never saved for it.
+// of the table opens with the same key, so a blob moved into the row of another host, or of the
+// same host under another router, would otherwise open and hand out credentials the user never
+// saved for it.
 QByteArray routerHostAad(qint64 router_id, HostId host_id)
 {
     return QByteArrayLiteral("router_hosts/") + QByteArray::number(router_id) + '/' +

@@ -204,8 +204,8 @@ public:
         std::string_view address);
 
     // Answers whether the host is in the database: kErrorOk - it is, kErrorNotFound - it is not,
-    // kErrorInternalError - the read failed. A failed read must not pass for a missing host: on
-    // kErrorNotFound the client drops the credentials it keeps for the host.
+    // kErrorInternalError - the read failed. A failed read must not pass for a missing host,
+    // because on kErrorNotFound the client drops the credentials it keeps for the host.
     std::string_view checkHostEntry(HostId host_id) const;
 
     // Reads the workspace of the given host into |workspace_id| (0 - the host is assigned to no

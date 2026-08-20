@@ -274,7 +274,7 @@ message TwoFactorResponse
 // Router to client. The login is complete and the session is open. |new_token| carries a freshly
 // issued device token when a TOTP submission produced one (any successful TOTP, including
 // enrollment, produces one) and is empty when the client got in with the token it already had.
-// Failures never send this message - they drop the connection.
+// Failures never send this message. They drop the connection instead.
 message LoginResult
 {
     bytes new_token = 1;
