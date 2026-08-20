@@ -73,10 +73,6 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
-    // The group combo is populated asynchronously from listGroups(); disable Ok until the
-    // response arrives so the user cannot submit before knowing which group they have selected.
-    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
-
     Router* router = Router::instance(router_id_);
     CHECK(router);
 
@@ -85,6 +81,18 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
         if (status != Router::Status::ONLINE)
             reject();
     });
+
+    // A host that belongs to no workspace lies in no group, and the router refuses a group list
+    // request without a workspace. Such a host is edited with the combo left empty.
+    if (host_.workspace_id <= 0)
+    {
+        ui->combo_group->setEnabled(false);
+        return;
+    }
+
+    // The group combo is populated asynchronously from listGroups(); disable Ok until the
+    // response arrives so the user cannot submit before knowing which group they have selected.
+    ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     router->listGroups(Router::CachePolicy::USE_CACHE, host_.workspace_id,
                        { this, &RouterHostDialog::onGroupListReceived });
