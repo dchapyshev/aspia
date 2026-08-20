@@ -17,8 +17,8 @@
 //
 
 #include "base/logging.h"
-#include "base/threading/asio_event_dispatcher.h"
 #include "base/xml_settings.h"
+#include "base/threading/asio_event_dispatcher.h"
 
 #include <QApplication>
 #include <QSettings>

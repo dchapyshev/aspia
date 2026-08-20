@@ -22,9 +22,9 @@
 #include <QTemporaryDir>
 #include <QUuid>
 
-#include <functional>
-
 #include <gtest/gtest.h>
+
+#include <functional>
 
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
