@@ -30,7 +30,6 @@
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
-#include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "base/peer/host_id.h"
@@ -43,7 +42,6 @@ namespace {
 
 constexpr int kFormatVersion = 1;
 constexpr int kSaltSize = 32;
-constexpr int kVerifierPayloadSize = 32;
 
 using BackupContent = proto::storage::BackupFile::Content;
 using BackupLocalGroup = proto::storage::BackupFile::LocalGroup;
