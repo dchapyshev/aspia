@@ -178,8 +178,13 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host_.group_id     = ui->combo_group->currentGroupId();
 
     // The credentials live on this computer only, so they are not the router's to accept or
-    // refuse. Kept for the answer, they would be lost with any error of it.
-    saveCredentials();
+    // refuse. Kept for the answer, they would be lost with any error of it. A failure to keep them
+    // stops here, with what was typed still in the form.
+    if (!saveCredentials())
+    {
+        MsgBox::warning(this, tr("Failed to save the credentials."));
+        return;
+    }
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -187,10 +192,10 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostDialog::saveCredentials()
+bool RouterHostDialog::saveCredentials()
 {
     if (isTempHostId(host_.host_id))
-        return;
+        return true;
 
     Database& db = Database::instance();
 
@@ -199,9 +204,11 @@ void RouterHostDialog::saveCredentials()
 
     if (username.isEmpty() && password.isEmpty())
     {
-        if (!db.removeRouterHost(router_id_, host_.host_id))
-            LOG(ERROR) << "Unable to remove credentials of host" << host_.host_id;
-        return;
+        if (db.removeRouterHost(router_id_, host_.host_id))
+            return true;
+
+        LOG(ERROR) << "Unable to remove credentials of host" << host_.host_id;
+        return false;
     }
 
     RouterHostConfig credentials;
@@ -218,4 +225,6 @@ void RouterHostDialog::saveCredentials()
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_.host_id;
+
+    return saved;
 }

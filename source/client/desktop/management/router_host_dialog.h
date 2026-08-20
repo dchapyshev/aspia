@@ -50,7 +50,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void saveCredentials();
+    bool saveCredentials();
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;
