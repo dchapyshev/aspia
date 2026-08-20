@@ -58,7 +58,6 @@ SecureString toSecureString(const std::string& value)
 //--------------------------------------------------------------------------------------------------
 void buildRouter(const RouterConfig& router, BackupRouter* out)
 {
-    out->set_id(router.routerId());
     out->set_display_name(router.displayName().toStdString());
     out->set_address(router.address().toStdString());
     out->set_session_type(static_cast<quint32>(router.sessionType()));
@@ -70,20 +69,21 @@ void buildRouter(const RouterConfig& router, BackupRouter* out)
 }
 
 //--------------------------------------------------------------------------------------------------
-void buildLocalGroup(const LocalGroupConfig& group, BackupLocalGroup* out)
+void buildLocalGroup(const LocalGroupConfig& group, const QString& parent_guid,
+                     BackupLocalGroup* out)
 {
-    out->set_id(group.id());
     out->set_guid(group.guid().toStdString());
-    out->set_parent_id(group.parentId());
+    out->set_parent_guid(parent_guid.toStdString());
     out->set_name(group.name().toStdString());
     out->set_comment(group.comment().toStdString());
 }
 
 //--------------------------------------------------------------------------------------------------
-void buildLocalHost(const LocalHostConfig& host, BackupLocalHost* out)
+void buildLocalHost(const LocalHostConfig& host, const QString& group_guid,
+                    const QString& router_guid, BackupLocalHost* out)
 {
-    out->set_group_id(host.groupId());
-    out->set_router_id(host.routerId());
+    out->set_group_guid(group_guid.toStdString());
+    out->set_router_guid(router_guid.toStdString());
     out->set_guid(host.guid().toStdString());
     out->set_name(host.name().toStdString());
     out->set_comment(host.comment().toStdString());
@@ -98,9 +98,10 @@ void buildLocalHost(const LocalHostConfig& host, BackupLocalHost* out)
 }
 
 //--------------------------------------------------------------------------------------------------
-void buildRouterHost(const RouterHostConfig& host, BackupRouterHost* out)
+void buildRouterHost(const RouterHostConfig& host, const QString& router_guid,
+                     BackupRouterHost* out)
 {
-    out->set_router_id(host.routerId());
+    out->set_router_guid(router_guid.toStdString());
     out->set_host_id(host.hostId());
     out->set_username(host.username().toStdString());
 
@@ -145,9 +146,19 @@ QByteArray fileSalt(const proto::storage::BackupFile& file_message)
 // does not open is refused as a whole, because the file would be missing what it exists for.
 Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report* report)
 {
-    QSet<qint64> known_routers;
-
     const QList<RouterConfig> routers = db.routerList();
+    const QList<LocalGroupConfig> groups = db.allLocalGroups();
+
+    // What a record of the book is named by in the file. A link resolved to nothing comes out
+    // empty, which is what a record reaching no router and a group at the root say anyway.
+    QHash<qint64, QString> router_guids;
+    for (const RouterConfig& router : std::as_const(routers))
+        router_guids.insert(router.routerId(), router.guid());
+
+    QHash<qint64, QString> group_guids;
+    for (const LocalGroupConfig& group : std::as_const(groups))
+        group_guids.insert(group.id(), group.guid());
+
     for (const RouterConfig& router : std::as_const(routers))
     {
         if (!router.isValid())
@@ -156,16 +167,13 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
             return Backup::Result::INTERNAL_ERROR;
         }
 
-        known_routers.insert(router.routerId());
-
         buildRouter(router, data->add_routers());
         ++report->routers;
     }
 
-    const QList<LocalGroupConfig> groups = db.allLocalGroups();
     for (const LocalGroupConfig& group : std::as_const(groups))
     {
-        buildLocalGroup(group, data->add_local_groups());
+        buildLocalGroup(group, group_guids.value(group.parentId()), data->add_local_groups());
         ++report->local_groups;
     }
 
@@ -178,15 +186,11 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
             return Backup::Result::INTERNAL_ERROR;
         }
 
-        BackupLocalHost* out = data->add_local_hosts();
-        buildLocalHost(host, out);
-
         // A host keeps naming the router it was reached through even after that router is removed,
         // so that the user is shown a host whose router is gone. The file names only the records it
         // carries, so elsewhere such a host stands on its own.
-        if (!known_routers.contains(host.routerId()))
-            out->set_router_id(0);
-
+        buildLocalHost(host, group_guids.value(host.groupId()), router_guids.value(host.routerId()),
+                       data->add_local_hosts());
         ++report->local_hosts;
     }
 
@@ -199,7 +203,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
             return Backup::Result::INTERNAL_ERROR;
         }
 
-        buildRouterHost(host, data->add_router_hosts());
+        buildRouterHost(host, router_guids.value(host.routerId()), data->add_router_hosts());
         ++report->router_hosts;
     }
 
@@ -211,7 +215,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
 // router of the file is named by in this batch.
 void buildRouters(
     const BackupContent& content, QList<RouterConfig>* routers,
-    QHash<qint64, qint64>* router_links, Backup::Report* report)
+    QHash<QString, qint64>* router_links, Backup::Report* report)
 {
     for (const BackupRouter& router : content.routers())
     {
@@ -224,7 +228,7 @@ void buildRouters(
         config.setSessionType(static_cast<proto::router::SessionType>(router.session_type()));
         config.setGuid(QString::fromStdString(router.guid()));
 
-        router_links->insert(router.id(), config.routerId());
+        router_links->insert(config.guid(), config.routerId());
         routers->append(config);
         ++report->routers;
     }
@@ -235,22 +239,22 @@ void buildRouters(
 // file is named by in this batch, and the root of the file is in it as the root of the book.
 void buildLocalGroups(
     const BackupContent& content, QList<LocalGroupConfig>* local_groups,
-    QHash<qint64, qint64>* group_links, Backup::Report* report)
+    QHash<QString, qint64>* group_links, Backup::Report* report)
 {
-    QHash<qint64, QList<const BackupLocalGroup*>> children;
+    QHash<QString, QList<const BackupLocalGroup*>> children;
     for (const BackupLocalGroup& group : content.local_groups())
-        children[group.parent_id()].append(&group);
+        children[QString::fromStdString(group.parent_guid())].append(&group);
 
-    group_links->insert(0, 0);
+    group_links->insert(QString(), 0);
 
-    QList<qint64> queue;
-    queue.append(0);
+    QList<QString> queue;
+    queue.append(QString());
 
     // The groups of the file are a tree, so walking it from the root down reaches every group once
     // and never comes back to one it has already passed.
     while (!queue.isEmpty())
     {
-        const qint64 current_parent_of_file = queue.takeFirst();
+        const QString current_parent_of_file = queue.takeFirst();
 
         const QList<const BackupLocalGroup*>& list = children.value(current_parent_of_file);
         for (const BackupLocalGroup* group : std::as_const(list))
@@ -262,11 +266,11 @@ void buildLocalGroups(
             config.setName(QString::fromStdString(group->name()));
             config.setComment(QString::fromStdString(group->comment()));
 
-            group_links->insert(group->id(), config.id());
+            group_links->insert(config.guid(), config.id());
             local_groups->append(config);
             ++report->local_groups;
 
-            queue.append(group->id());
+            queue.append(config.guid());
         }
     }
 }
@@ -274,14 +278,14 @@ void buildLocalGroups(
 //--------------------------------------------------------------------------------------------------
 void buildLocalHosts(
     const BackupContent& content, QList<LocalHostConfig>* local_hosts,
-    const QHash<qint64, qint64>& group_links, const QHash<qint64, qint64>& router_links,
+    const QHash<QString, qint64>& group_links, const QHash<QString, qint64>& router_links,
     Backup::Report* report)
 {
     for (const BackupLocalHost& host : content.local_hosts())
     {
         LocalHostConfig config;
-        config.setGroupId(group_links.value(host.group_id()));
-        config.setRouterId(router_links.value(host.router_id(), 0));
+        config.setGroupId(group_links.value(QString::fromStdString(host.group_guid())));
+        config.setRouterId(router_links.value(QString::fromStdString(host.router_guid()), 0));
         config.setGuid(QString::fromStdString(host.guid()));
         config.setName(QString::fromStdString(host.name()));
         config.setComment(QString::fromStdString(host.comment()));
@@ -300,12 +304,12 @@ void buildLocalHosts(
 //--------------------------------------------------------------------------------------------------
 void buildRouterHosts(
     const BackupContent& content, QList<RouterHostConfig>* router_hosts,
-    const QHash<qint64, qint64>& router_links, Backup::Report* report)
+    const QHash<QString, qint64>& router_links, Backup::Report* report)
 {
     for (const BackupRouterHost& host : content.router_hosts())
     {
         RouterHostConfig config;
-        config.setRouterId(router_links.value(host.router_id()));
+        config.setRouterId(router_links.value(QString::fromStdString(host.router_guid())));
         config.setHostId(host.host_id());
         config.setUsername(QString::fromStdString(host.username()));
         config.setPassword(toSecureString(host.password()));
@@ -333,16 +337,12 @@ bool isValidGuid(const QString& guid)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasValidRouters(const BackupContent& content, const QSet<qint64>& router_ids)
+bool hasValidRouters(const BackupContent& content)
 {
     QSet<QString> guids;
 
     for (const BackupRouter& router : content.routers())
     {
-        // Zero is what a host says when it reaches no router at all, so no router is named by it.
-        if (router.id() <= 0)
-            return false;
-
         // A record of the file is a record the address book would take.
         RouterConfig config;
         config.setDisplayName(QString::fromStdString(router.display_name()));
@@ -363,20 +363,16 @@ bool hasValidRouters(const BackupContent& content, const QSet<qint64>& router_id
         guids.insert(guid);
     }
 
-    return router_ids.size() == content.routers().size();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasValidLocalGroups(const BackupContent& content, const QSet<qint64>& group_ids)
+bool hasValidLocalGroups(const BackupContent& content, const QSet<QString>& group_guids)
 {
     QSet<QString> guids;
 
     for (const BackupLocalGroup& group : content.local_groups())
     {
-        // The root is where the tree starts and is not a record, so no group stands for it.
-        if (group.id() <= 0)
-            return false;
-
         LocalGroupConfig config;
         config.setName(QString::fromStdString(group.name()));
         config.setComment(QString::fromStdString(group.comment()));
@@ -391,23 +387,24 @@ bool hasValidLocalGroups(const BackupContent& content, const QSet<qint64>& group
         guids.insert(guid);
 
         // A group lies at the root of the file or under another group the file carries.
-        if (group.parent_id() != 0 && !group_ids.contains(group.parent_id()))
+        const QString parent_guid = QString::fromStdString(group.parent_guid());
+        if (!parent_guid.isEmpty() && !group_guids.contains(parent_guid))
             return false;
     }
 
-    if (group_ids.size() != content.local_groups().size())
-        return false;
-
     // Walking parents upward from any group ends at the root. A ring of groups is not a tree, and
     // the walk over it would never end.
-    QHash<qint64, qint64> parents;
+    QHash<QString, QString> parents;
     for (const BackupLocalGroup& group : content.local_groups())
-        parents.insert(group.id(), group.parent_id());
+    {
+        parents.insert(QString::fromStdString(group.guid()),
+                       QString::fromStdString(group.parent_guid()));
+    }
 
     for (auto it = parents.constBegin(); it != parents.constEnd(); ++it)
     {
-        qint64 current = it.value();
-        for (int steps = 0; current != 0; ++steps)
+        QString current = it.value();
+        for (int steps = 0; !current.isEmpty(); ++steps)
         {
             if (steps > parents.size())
                 return false;
@@ -421,7 +418,8 @@ bool hasValidLocalGroups(const BackupContent& content, const QSet<qint64>& group
 
 //--------------------------------------------------------------------------------------------------
 bool hasValidLocalHosts(
-    const BackupContent& content, const QSet<qint64>& group_ids, const QSet<qint64>& router_ids)
+    const BackupContent& content, const QSet<QString>& group_guids,
+    const QSet<QString>& router_guids)
 {
     QSet<QString> guids;
 
@@ -445,10 +443,12 @@ bool hasValidLocalHosts(
 
         // A host lies at the root of the file or in a group the file carries, and reaches either no
         // router or one of the file.
-        if (host.group_id() != 0 && !group_ids.contains(host.group_id()))
+        const QString group_guid = QString::fromStdString(host.group_guid());
+        if (!group_guid.isEmpty() && !group_guids.contains(group_guid))
             return false;
 
-        if (host.router_id() != 0 && !router_ids.contains(host.router_id()))
+        const QString router_guid = QString::fromStdString(host.router_guid());
+        if (!router_guid.isEmpty() && !router_guids.contains(router_guid))
             return false;
     }
 
@@ -456,17 +456,20 @@ bool hasValidLocalHosts(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasValidRouterHosts(const BackupContent& content, const QSet<qint64>& router_ids)
+bool hasValidRouterHosts(const BackupContent& content, const QSet<QString>& router_guids)
 {
-    QSet<QPair<qint64, HostId>> hosts;
+    QSet<QPair<QString, HostId>> hosts;
 
     for (const BackupRouterHost& host : content.router_hosts())
     {
-        if (!router_ids.contains(host.router_id()))
+        const QString router_guid = QString::fromStdString(host.router_guid());
+        if (!router_guids.contains(router_guid))
             return false;
 
         RouterHostConfig config;
-        config.setRouterId(host.router_id());
+        // The record is written against a number the book hands out on the way in, and the router
+        // it belongs to is named above. Any number that is not zero stands for it here.
+        config.setRouterId(1);
         config.setHostId(host.host_id());
         config.setUsername(QString::fromStdString(host.username()));
         config.setPassword(toSecureString(host.password()));
@@ -474,7 +477,7 @@ bool hasValidRouterHosts(const BackupContent& content, const QSet<qint64>& route
         if (!config.isValid())
             return false;
 
-        const QPair<qint64, HostId> key(host.router_id(), host.host_id());
+        const QPair<QString, HostId> key(router_guid, host.host_id());
         if (hosts.contains(key))
             return false;
 
@@ -490,17 +493,17 @@ bool hasValidRouterHosts(const BackupContent& content, const QSet<qint64>& route
 // that cannot be believed says nothing about the records next to it either.
 bool isValidContent(const BackupContent& content)
 {
-    QSet<qint64> router_ids;
+    QSet<QString> router_guids;
     for (const BackupRouter& router : content.routers())
-        router_ids.insert(router.id());
+        router_guids.insert(QString::fromStdString(router.guid()));
 
-    QSet<qint64> group_ids;
+    QSet<QString> group_guids;
     for (const BackupLocalGroup& group : content.local_groups())
-        group_ids.insert(group.id());
+        group_guids.insert(QString::fromStdString(group.guid()));
 
-    return hasValidRouters(content, router_ids) && hasValidLocalGroups(content, group_ids) &&
-           hasValidLocalHosts(content, group_ids, router_ids) &&
-           hasValidRouterHosts(content, router_ids);
+    return hasValidRouters(content) && hasValidLocalGroups(content, group_guids) &&
+           hasValidLocalHosts(content, group_guids, router_guids) &&
+           hasValidRouterHosts(content, router_guids);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -599,10 +602,10 @@ Backup::Result importContent(Database& db, const BackupContent& content, Backup:
 
     Backup::Report counted;
 
-    QHash<qint64, qint64> router_links;
+    QHash<QString, qint64> router_links;
     buildRouters(content, &routers, &router_links, &counted);
 
-    QHash<qint64, qint64> group_links;
+    QHash<QString, qint64> group_links;
     buildLocalGroups(content, &local_groups, &group_links, &counted);
 
     buildLocalHosts(content, &local_hosts, group_links, router_links, &counted);

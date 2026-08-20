@@ -43,42 +43,37 @@ message RouterBlob
 // password of the backup. |verifier| tells a wrong password from a damaged file.
 message BackupFile
 {
-    // The identifiers are the ones of the source database. The import uses them only to rebuild
-    // the tree and the links, and gives every record an id of its own.
     message Router
     {
-        int64 id            = 1;
-        string guid         = 2;
-        string display_name = 3;
-        string address      = 4;
-        uint32 session_type = 5;
-        string username     = 6;
-        string password     = 7;
+        string guid         = 1;
+        string display_name = 2;
+        string address      = 3;
+        uint32 session_type = 4;
+        string username     = 5;
+        string password     = 6;
     }
 
-    // The credentials the user saved for a host of a router.
     message RouterHost
     {
-        int64 router_id = 1;
-        uint64 host_id  = 2;
-        string username = 3;
-        string password = 4;
+        string router_guid = 1;
+        uint64 host_id     = 2;
+        string username    = 3;
+        string password    = 4;
     }
 
     message LocalGroup
     {
-        int64 id        = 1;
-        string guid     = 2;
-        int64 parent_id = 3;
-        string name     = 4;
-        string comment  = 5;
+        string guid        = 1;
+        string parent_guid = 2;
+        string name        = 3;
+        string comment     = 4;
     }
 
     message LocalHost
     {
         string guid        = 1;
-        int64 group_id     = 2;
-        int64 router_id    = 3;
+        string group_guid  = 2;
+        string router_guid = 3;
         string name        = 4;
         string comment     = 5;
         string address     = 6;
@@ -89,8 +84,6 @@ message BackupFile
         int64 connect_time = 11;
     }
 
-    // What |data| holds once opened. The device token is not exported: it is bound to the user and
-    // the machine that got it.
     message Content
     {
         repeated Router routers          = 1;

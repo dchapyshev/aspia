@@ -124,7 +124,7 @@ Application::Application(int& argc, char* argv[])
 
     // Do not persist the default locale from here. The settings / security-log dialog is launched
     // elevated (euid 0) in the console user's home, so a UserSettings write from the constructor would
-    // create a root-owned host.conf.
+    // create a root-owned host.ini.
     QString locale = user_settings.locale();
     if (!hasLocale(locale))
         locale = DEFAULT_LOCALE;

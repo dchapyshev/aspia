@@ -176,6 +176,18 @@ protected:
         return names;
     }
 
+    // The record of the host with this name, whatever id it was given on the way in.
+    static std::optional<LocalHostConfig> hostByName(Database& db, const QString& name)
+    {
+        for (const LocalHostConfig& host : db.allLocalHosts())
+        {
+            if (host.name() == name)
+                return host;
+        }
+
+        return std::nullopt;
+    }
+
     // The record of the group with this name, whatever id it was given on the way in.
     static std::optional<LocalGroupConfig> groupByName(Database& db, const QString& name)
     {
@@ -250,42 +262,29 @@ protected:
         file.write(serialize(file_message));
     }
 
+    // The guid the source book gave the group, which is how the file names it.
+    QString groupGuid(qint64 group_id)
+    {
+        const std::optional<LocalGroupConfig> group = source_.findLocalGroup(group_id);
+        return group.has_value() ? group->guid() : QString();
+    }
+
+    // A guid no record of the file carries.
+    static QString unknownGuid() { return QUuid::createUuid().toString(QUuid::WithoutBraces); }
+
     // Hands the import a book with a link that names a group the file does not carry.
-    void repointGroupParent(qint64 group_id, qint64 new_parent_id)
+    void repointGroupParent(const QString& group_guid, const QString& new_parent_guid)
     {
         editFileContent([&](proto::storage::BackupFile::Content* data)
         {
             bool found = false;
             for (proto::storage::BackupFile::LocalGroup& group : *data->mutable_local_groups())
             {
-                if (group.id() != group_id)
+                if (group.guid() != group_guid.toStdString())
                     continue;
 
-                group.set_parent_id(new_parent_id);
+                group.set_parent_guid(new_parent_guid.toStdString());
                 found = true;
-            }
-            EXPECT_TRUE(found);
-        });
-    }
-
-    // Hands the import a book where two groups are named by the same id.
-    void copyGroupUnderTheSameId(qint64 group_id, const QString& name)
-    {
-        editFileContent([&](proto::storage::BackupFile::Content* data)
-        {
-            bool found = false;
-            for (const proto::storage::BackupFile::LocalGroup& group : data->local_groups())
-            {
-                if (group.id() != group_id)
-                    continue;
-
-                proto::storage::BackupFile::LocalGroup* copy = data->add_local_groups();
-                *copy = group;
-                copy->set_name(name.toStdString());
-                copy->set_guid(QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString());
-
-                found = true;
-                break;
             }
             EXPECT_TRUE(found);
         });
@@ -353,17 +352,17 @@ TEST_F(BackupTest, FileNamingAParentItDoesNotCarryIsNotImported)
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
-    repointGroupParent(parent, 99999);
+    repointGroupParent(groupGuid(parent), unknownGuid());
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
     EXPECT_TRUE(groupNames(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// Zero is what a host says when it reaches no router at all, so a router of the file cannot be
-// named by it. A file naming one by it is not a file this application wrote, and taken in, such a
-// router would collect every direct host of the file.
-TEST_F(BackupTest, FileNamingARouterByZeroIsNotImported)
+// A guid is what names a router across databases, so a router of the file carries one. A record
+// without it names nothing, and the hosts of the file reaching that router would arrive reaching
+// none.
+TEST_F(BackupTest, FileWithARouterWithoutAGuidIsNotImported)
 {
     addRouter(source_, "router", "router.example.com");
     addHost(source_, "direct", 0);
@@ -373,7 +372,7 @@ TEST_F(BackupTest, FileNamingARouterByZeroIsNotImported)
     editFileContent([](proto::storage::BackupFile::Content* data)
     {
         ASSERT_EQ(data->routers_size(), 1);
-        data->mutable_routers(0)->set_id(0);
+        data->mutable_routers(0)->clear_guid();
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
@@ -403,41 +402,6 @@ TEST_F(BackupTest, FileWithTwoGroupsUnderOneGuidIsNotImported)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An id names one router of the file, and the records pointing at it point at one record.
-TEST_F(BackupTest, FileNamingTwoRoutersByOneIdIsNotImported)
-{
-    addRouter(source_, "first", "first.example.com");
-    addRouter(source_, "second", "second.example.com");
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    editFileContent([](proto::storage::BackupFile::Content* data)
-    {
-        ASSERT_EQ(data->routers_size(), 2);
-        data->mutable_routers(1)->set_id(data->routers(0).id());
-    });
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(target_.routerList().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// An id names one group, so a file naming two by the same one is not a file this application wrote.
-// Nothing of it is imported, because which of the two the id stands for is not for the reader to
-// pick.
-TEST_F(BackupTest, FileNamingTwoGroupsByOneIdIsNotImported)
-{
-    const qint64 group = addGroup(source_, "group", 0);
-
-    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
-
-    copyGroupUnderTheSameId(group, "twin");
-
-    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(groupNames(target_).isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
 // Groups that name each other are not a tree, and an address book is one. Such a file is not one
 // this application wrote, and nothing of it is imported.
 TEST_F(BackupTest, FileWhoseGroupsNameEachOtherIsNotImported)
@@ -447,7 +411,7 @@ TEST_F(BackupTest, FileWhoseGroupsNameEachOtherIsNotImported)
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
-    repointGroupParent(first, second);
+    repointGroupParent(groupGuid(first), groupGuid(second));
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
     EXPECT_TRUE(groupNames(target_).isEmpty());
@@ -618,7 +582,7 @@ TEST_F(BackupTest, FileWhereAHostReachesARouterItDoesNotCarryIsNotImported)
     editFileContent([](proto::storage::BackupFile::Content* data)
     {
         ASSERT_EQ(data->local_hosts_size(), 1);
-        data->mutable_local_hosts(0)->set_router_id(99999);
+        data->mutable_local_hosts(0)->set_router_guid(unknownGuid().toStdString());
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
@@ -637,7 +601,7 @@ TEST_F(BackupTest, FileWhereCredentialsNameARouterItDoesNotCarryIsNotImported)
     editFileContent([](proto::storage::BackupFile::Content* data)
     {
         ASSERT_EQ(data->router_hosts_size(), 1);
-        data->mutable_router_hosts(0)->set_router_id(99999);
+        data->mutable_router_hosts(0)->set_router_guid(unknownGuid().toStdString());
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
@@ -1098,4 +1062,38 @@ TEST_F(BackupTest, ReportOfARefusedImportCountsNothing)
     Backup::Report report;
     EXPECT_EQ(importBook(&report), Backup::Result::INTERNAL_ERROR);
     EXPECT_EQ(report.total(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host reached through a router keeps naming it across the file. The router arrives in the book
+// as a new record with an id of its own, so a host left with the id the file carries would name
+// nothing, and the book would show it as a direct connection to an address that is a host id.
+TEST_F(BackupTest, HostFollowsItsRouter)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    const qint64 group = addGroup(source_, "group", 0);
+
+    addHost(source_, "direct", group);
+    addRoutedHost(source_, "through-router", group, router_id, "100500");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    // A router of this book, which the import replaces along with everything else. Its id is spent,
+    // so the record that arrives cannot get the id the file names it by.
+    addRouter(target_, "decoy", "decoy.example.com");
+
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<RouterConfig> routers = target_.routerList();
+    ASSERT_EQ(routers.size(), 1);
+    ASSERT_NE(routers.front().routerId(), router_id);
+
+    const std::optional<LocalHostConfig> routed = hostByName(target_, "through-router");
+    ASSERT_TRUE(routed.has_value());
+    EXPECT_EQ(routed->routerId(), routers.front().routerId());
+
+    // A host of the file that reaches no router keeps reaching none.
+    const std::optional<LocalHostConfig> direct = hostByName(target_, "direct");
+    ASSERT_TRUE(direct.has_value());
+    EXPECT_EQ(direct->routerId(), 0);
 }
