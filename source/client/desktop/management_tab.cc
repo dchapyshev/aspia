@@ -39,7 +39,6 @@
 #include "client/backup.h"
 #include "client/database.h"
 #include "client/host_url.h"
-#include "client/master_password.h"
 #include "client/settings.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_group_widget.h"
@@ -683,7 +682,7 @@ void ManagementTab::onConnectAction(QAction* action)
         if (!current)
             return;
 
-        std::optional<LocalHostConfig> found = Database::instance().findHost(current->id());
+        std::optional<LocalHostConfig> found = Database::instance().findLocalHost(current->id());
         if (!found.has_value())
         {
             MsgBox::warning(this,
@@ -712,7 +711,7 @@ void ManagementTab::onConnectAction(QAction* action)
         }
         else
         {
-            std::optional<LocalHostConfig> found = Database::instance().findHost(row->host.id());
+            std::optional<LocalHostConfig> found = Database::instance().findLocalHost(row->host.id());
             if (!found.has_value())
             {
                 MsgBox::warning(this,
@@ -763,7 +762,7 @@ void ManagementTab::onConnectAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onLocalConnect(qint64 entry_id)
 {
-    std::optional<LocalHostConfig> entry = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> entry = Database::instance().findLocalHost(entry_id);
     if (!entry.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -828,7 +827,7 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_system_info_connect);
         menu.addSeparator();
 
-        std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
+        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
         if (host.has_value())
         {
             addCopyLinkMenu(menu, *host);
@@ -874,7 +873,7 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     }
     else
     {
-        std::optional<LocalHostConfig> host = Database::instance().findHost(row->host.id());
+        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(row->host.id());
         if (host.has_value())
         {
             menu.addSeparator();
@@ -942,7 +941,7 @@ void ManagementTab::onEditHost()
         return;
     }
 
-    std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -973,7 +972,7 @@ void ManagementTab::onCopyHost()
 
     Database& db = Database::instance();
 
-    std::optional<LocalHostConfig> host = db.findHost(entry_id);
+    std::optional<LocalHostConfig> host = db.findLocalHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -983,7 +982,7 @@ void ManagementTab::onCopyHost()
     host->setName(host->name() + " " + tr("(copy)"));
     host->setGuid(QString());
 
-    if (!db.addHost(*host))
+    if (!db.addLocalHost(*host))
     {
         MsgBox::warning(this, tr("Failed to add the host to the local database."));
         return;
@@ -1017,7 +1016,7 @@ void ManagementTab::onRemoveHost()
         return;
     }
 
-    std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
     if (!host.has_value())
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -1032,7 +1031,7 @@ void ManagementTab::onRemoveHost()
         return;
     }
 
-    if (!Database::instance().removeHost(entry_id))
+    if (!Database::instance().removeLocalHost(entry_id))
     {
         MsgBox::warning(this, tr("Unable to remove host"));
         LOG(INFO) << "Unable to remove host with id" << entry_id;
@@ -1464,7 +1463,13 @@ void ManagementTab::onExportBookAction()
 {
     LOG(INFO) << "[ACTION] Export address book";
 
-    QString file_path = QFileDialog::getSaveFileName(
+    if (!Database::instance().isValid())
+    {
+        MsgBox::warning(this, tr("Address book database is not available."));
+        return;
+    }
+
+    const QString file_path = QFileDialog::getSaveFileName(
         this,
         tr("Export Address Book"),
         QString(),
@@ -1476,52 +1481,34 @@ void ManagementTab::onExportBookAction()
         return;
     }
 
-    if (!Database::instance().isValid())
+    Backup::Report report;
+
+    switch (Backup::exportToFile(Database::instance(), file_path, &report))
     {
-        MsgBox::warning(this, tr("Address book database is not available."));
-        return;
-    }
+        case Backup::Result::SUCCESS:
+            break;
 
-    CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
-    dialog.setWindowTitle(tr("Export Address Book"));
-    dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("Enter a password to encrypt the address book."));
-    dialog.setValidator([](CredentialsDialog* d) -> bool
-    {
-        if (!MasterPassword::isSafePassword(d->password()))
-        {
-            QString unsafe = tr("Password you entered does not meet the security requirements!");
-            QString safe = tr("The password must contain lowercase and uppercase characters, "
-                              "numbers and should not be shorter than %n characters.",
-                              "", MasterPassword::kSafePasswordLength);
-            QString question = tr("Do you want to enter a different password?");
+        case Backup::Result::NOTHING_EXPORTED:
+            MsgBox::information(this, tr("The address book is empty. There is nothing to save."));
+            return;
 
-            if (MsgBox::warning(d, QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                MsgBox::Yes | MsgBox::No) == MsgBox::Yes)
-                return false;
-        }
-        return true;
-    });
+        case Backup::Result::FILE_ERROR:
+            MsgBox::warning(this, tr("Unable to write the file."));
+            return;
 
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    Backup::ExportCounts counts;
-    const Backup::Result result =
-        Backup::exportToFile(Database::instance(), file_path, dialog.password(), &counts);
-
-    if (result != Backup::Result::SUCCESS)
-    {
-        MsgBox::warning(this, tr("Failed to export the address book."));
-        return;
+        default:
+            MsgBox::warning(this, tr("Failed to export the address book."));
+            return;
     }
 
     MsgBox::information(this,
         tr("Export completed successfully.\n"
            "Routers exported: %1\n"
            "Groups exported: %2\n"
-           "Hosts exported: %3")
-            .arg(counts.routers).arg(counts.groups).arg(counts.hosts));
+           "Hosts exported: %3\n"
+           "Saved passwords exported: %4")
+            .arg(report.routers).arg(report.local_groups)
+            .arg(report.local_hosts).arg(report.router_hosts));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1529,14 +1516,13 @@ void ManagementTab::onImportBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book";
 
-    SidebarItem* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::LOCAL_GROUP)
+    if (!Database::instance().isValid())
     {
-        LOG(INFO) << "No current local group item";
+        MsgBox::warning(this, tr("Address book database is not available."));
         return;
     }
 
-    QString file_path = QFileDialog::getOpenFileName(
+    const QString file_path = QFileDialog::getOpenFileName(
         this,
         tr("Import Address Book"),
         QString(),
@@ -1548,18 +1534,35 @@ void ManagementTab::onImportBookAction()
         return;
     }
 
-    CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
-    dialog.setWindowTitle(tr("Unlock"));
-    dialog.setHeaderIcon(":/img/lock.svg");
-    dialog.setHeaderText(tr("The file is encrypted. To open, you must enter a password."));
-    dialog.setShowPasswordButtonVisible(true);
-
-    if (dialog.exec() != QDialog::Accepted)
+    if (MsgBox::question(this, tr("The address book will be replaced with the one in the file. "
+                                  "Everything it holds now is deleted. Continue?")) == MsgBox::No)
+    {
+        LOG(INFO) << "[ACTION] Cancelled by user";
         return;
+    }
 
-    Backup::ImportCounts counts;
-    const Backup::Result result =
-        Backup::importFromFile(Database::instance(), file_path, dialog.password(), &counts);
+    // A file saved from this address book opens with the key it is already open with. One saved
+    // from another book takes the master password of that book.
+    SecureString password;
+    Backup::Report report;
+    Backup::Result result =
+        Backup::importFromFile(Database::instance(), file_path, password, &report);
+
+    if (result == Backup::Result::WRONG_PASSWORD)
+    {
+        CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
+        dialog.setWindowTitle(tr("Import Address Book"));
+        dialog.setHeaderIcon(":/img/lock.svg");
+        dialog.setHeaderText(tr("The file was saved from another address book. Enter the master "
+                                "password of that address book."));
+        dialog.setShowPasswordButtonVisible(true);
+
+        if (dialog.exec() != QDialog::Accepted)
+            return;
+
+        password = dialog.password();
+        result = Backup::importFromFile(Database::instance(), file_path, password, &report);
+    }
 
     switch (result)
     {
@@ -1575,25 +1578,31 @@ void ManagementTab::onImportBookAction()
             return;
 
         case Backup::Result::NOTHING_IMPORTED:
-            MsgBox::information(this, tr("Nothing was imported."));
+            MsgBox::information(this, tr("The file carries no address book, so nothing was "
+                                         "changed."));
+            return;
+
+        case Backup::Result::FILE_ERROR:
+            MsgBox::warning(this, tr("Unable to read the file."));
+            return;
+
+        case Backup::Result::INVALID_FORMAT:
+            MsgBox::warning(this, tr("The file is not a valid address book."));
             return;
 
         default:
-            MsgBox::warning(this, tr("The file is not a valid address book."));
+            MsgBox::warning(this, tr("Failed to import the address book."));
             return;
     }
 
     MsgBox::information(this,
         tr("Import completed successfully.\n"
-           "Routers added: %1\n"
-           "Routers skipped: %2\n"
-           "Groups added: %3\n"
-           "Groups skipped: %4\n"
-           "Hosts added: %5\n"
-           "Hosts skipped: %6")
-            .arg(counts.routers).arg(counts.routers_skipped)
-            .arg(counts.groups).arg(counts.groups_skipped)
-            .arg(counts.hosts).arg(counts.hosts_skipped));
+           "Routers imported: %1\n"
+           "Groups imported: %2\n"
+           "Hosts imported: %3\n"
+           "Saved passwords imported: %4")
+            .arg(report.routers).arg(report.local_groups)
+            .arg(report.local_hosts).arg(report.router_hosts));
 
     reloadRouters();
     ui->sidebar->reloadGroups();
@@ -1995,7 +2004,7 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_i
 void ManagementTab::setHostConnectTime(qint64 entry_id)
 {
     const qint64 connect_time = QDateTime::currentSecsSinceEpoch();
-    Database::instance().setConnectTime(entry_id, connect_time);
+    Database::instance().setLocalHostConnectTime(entry_id, connect_time);
     local_group_widget_->setConnectTime(entry_id, connect_time);
 }
 

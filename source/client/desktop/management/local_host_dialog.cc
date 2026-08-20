@@ -36,9 +36,7 @@
 
 namespace {
 
-constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
-constexpr int kMaxCommentLength = 2048;
 
 } // namespace
 
@@ -66,7 +64,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     {
         setWindowTitle(tr("Edit Host"));
 
-        std::optional<LocalHostConfig> host = Database::instance().findHost(entry_id_);
+        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id_);
         if (host.has_value())
         {
             ui->edit_name->setText(host->name());
@@ -103,7 +101,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     updateAddressLabel();
 
-    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
+    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
 
     QList<GroupComboBox::Entry> group_entries;
     group_entries.reserve(all_groups.size());
@@ -156,11 +154,11 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (name.length() > kMaxNameLength)
+    if (name.length() > LocalHostConfig::kMaxNameLength)
     {
         MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
-               "", kMaxNameLength));
+               "", LocalHostConfig::kMaxNameLength));
         ui->edit_name->setFocus();
         ui->edit_name->selectAll();
         return;
@@ -202,12 +200,18 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    if (username.isEmpty() != ui->edit_password->password().isEmpty())
+    {
+        MsgBox::warning(this, tr("Enter both the username and the password, or leave both empty."));
+        return;
+    }
+
     QString comment = ui->edit_comment->toPlainText();
-    if (comment.length() > kMaxCommentLength)
+    if (comment.length() > LocalHostConfig::kMaxCommentLength)
     {
         MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
-               "", kMaxCommentLength));
+               "", LocalHostConfig::kMaxCommentLength));
         ui->edit_comment->setFocus();
         ui->edit_comment->selectAll();
         return;
@@ -215,7 +219,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui->combo_group->currentGroupId();
 
-    QList<LocalHostConfig> hosts = Database::instance().hostList(group_id);
+    QList<LocalHostConfig> hosts = Database::instance().localHostList(group_id);
     for (const LocalHostConfig& existing : std::as_const(hosts))
     {
         if (existing.id() != entry_id_ && existing.name() == name)
@@ -241,7 +245,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (entry_id_ == -1)
     {
-        if (!db.addHost(host))
+        if (!db.addLocalHost(host))
         {
             MsgBox::warning(this, tr("Unable to add host"));
             LOG(INFO) << "Unable to add host to database";
@@ -251,7 +255,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        if (!db.modifyHost(host))
+        if (!db.modifyLocalHost(host))
         {
             MsgBox::warning(this, tr("Unable to modify host"));
             LOG(INFO) << "Unable to modify host in database";

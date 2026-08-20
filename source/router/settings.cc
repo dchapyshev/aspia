@@ -246,18 +246,6 @@ QByteArray Settings::seedKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterGuid(const QString& guid)
-{
-    ini_.setStringValue(kRouterSection, "guid", guid);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Settings::routerGuid() const
-{
-    return ini_.stringValue(kRouterSection, "guid");
-}
-
-//--------------------------------------------------------------------------------------------------
 void Settings::setEnableStun(bool enable)
 {
     ini_.setBooleanValue(kStunSection, "enabled", enable);

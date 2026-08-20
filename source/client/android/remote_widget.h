@@ -31,6 +31,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class IconButton;
+class RouterHostEditor;
 class SearchWidget;
 class TreeWidget;
 class QStackedWidget;
@@ -74,6 +75,9 @@ signals:
 private slots:
     void onItemActivated(QTreeWidgetItem* item, int column);
     void onRefreshClicked();
+
+    // Opens the editor of the credentials kept for the host of the row.
+    void onHostLongPressed(QTreeWidgetItem* item);
 
 private:
     void connectRouters();
@@ -145,6 +149,7 @@ private:
     TreeWidget* host_tree_ = nullptr;
     TreeWidget* temp_host_tree_ = nullptr;
     SearchWidget* search_page_ = nullptr;
+    RouterHostEditor* credentials_page_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* refresh_button_ = nullptr;
     QSet<qint64> connected_routers_;

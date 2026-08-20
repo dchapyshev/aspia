@@ -351,12 +351,12 @@ void SearchWidget::search(const QString& query)
 
     Database& db = Database::instance();
 
-    const QList<LocalGroupConfig> all_groups = db.allGroups();
+    const QList<LocalGroupConfig> all_groups = db.allLocalGroups();
     local_groups_.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
 
-    local_matches_ = db.searchHosts(query);
+    local_matches_ = db.searchLocalHosts(query);
 
     // The local matches are in hand already, so the local part of the first page is shown at
     // once, with the local address book as the only source. The routers are queried after the
@@ -682,7 +682,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
     if (model_->rowOfEntry(entry_id) < 0)
         return;
 
-    std::optional<LocalHostConfig> updated = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> updated = Database::instance().findLocalHost(entry_id);
     if (!updated.has_value())
     {
         removeItem(entry_id);
@@ -690,7 +690,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
     }
 
     QHash<qint64, LocalGroupConfig> groups;
-    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
+    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
     groups.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);

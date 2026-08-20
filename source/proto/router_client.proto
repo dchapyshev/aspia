@@ -25,15 +25,6 @@ import "peer.proto";
 
 package proto.router;
 
-// The identity of the authenticated user, pushed by the router right after the session is
-// established. Receiving it is what marks the login complete on the client side.
-message UserInfo
-{
-    string router_guid = 1;
-    int64 user_id      = 2;
-    string name        = 3;
-}
-
 // The hosts of a workspace are not part of the record: they are claimed and released one by one,
 // through "modify" of HostRequest, and are listed by HostListRequest.
 message Workspace
@@ -220,9 +211,9 @@ message Notification
     bool groups_dirty     = 7;
 }
 
-// 2FA stage that runs between successful SRP authentication and the first UserInfo delivery.
-// The router opens it from Client::onStarted() and gates UserInfo behind a successful
-// TwoFactorResult. Because the SRP handshake is already complete, identity is confirmed and
+// 2FA stage that runs between successful SRP authentication and the LoginResult that opens the
+// session. The router opens it from Client::onStarted() and gates LoginResult behind a successful
+// answer. Because the SRP handshake is already complete, identity is confirmed and
 // the stage cannot leak user existence: an attacker who failed SRP never reaches here. 2FA
 // is mandatory: every user must either prove possession of an enrolled TOTP secret (or a
 // valid device token derived from one) or self-enroll on first login.
@@ -235,9 +226,8 @@ message Notification
 //      ask the user for a fresh |totp_code|.
 //   3. Router validates the response. Any failure - a rejected code or a server-side error -
 //      drops the connection with no reply; the client cannot retry on the same session, it
-//      reconnects and runs the whole stage again. On success the router sends a TwoFactorResult
-//      only when a TOTP submission produced a fresh |new_token|; the token-path success skips it.
-//   4. On success the router proceeds to send UserInfo, which is what marks the stage complete.
+//      reconnects and runs the whole stage again.
+//   4. On success the router sends LoginResult, which is what marks the stage complete.
 
 enum TwoFactorMode
 {
@@ -281,11 +271,11 @@ message TwoFactorResponse
     string totp_code = 2;
 }
 
-// Router to client. Carries a freshly issued device token after a successful TOTP submission
-// (any successful TOTP, including enrollment, produces a new token). It is sent only when such
-// a token exists: the token-path success has nothing to deliver here, so it is acknowledged by
-// UserInfo alone. Failures never send this message - they drop the connection.
-message TwoFactorResult
+// Router to client. The login is complete and the session is open. |new_token| carries a freshly
+// issued device token when a TOTP submission produced one (any successful TOTP, including
+// enrollment, produces one) and is empty when the client got in with the token it already had.
+// Failures never send this message - they drop the connection.
+message LoginResult
 {
     bytes new_token = 1;
 }
@@ -293,17 +283,16 @@ message TwoFactorResult
 message RouterToClient
 {
     TwoFactorChallenge two_factor_challenge       = 1;
-    TwoFactorResult two_factor_result             = 2;
-    UserInfo user_info                            = 3;
-    Notification notification                     = 4;
-    ChangePasswordResult change_password_result   = 5;
-    ConnectionOffer connection_offer              = 6;
-    HostStatus host_status                        = 7;
-    HostList host_list                            = 8;
-    HostSearchResult host_search_result           = 9;
-    TempHostList temp_host_list                   = 10;
-    WorkspaceList workspace_list                  = 11;
-    GroupList group_list                          = 12;
+    LoginResult login_result                      = 2;
+    Notification notification                     = 3;
+    ChangePasswordResult change_password_result   = 4;
+    ConnectionOffer connection_offer              = 5;
+    HostStatus host_status                        = 6;
+    HostList host_list                            = 7;
+    HostSearchResult host_search_result           = 8;
+    TempHostList temp_host_list                   = 9;
+    WorkspaceList workspace_list                  = 10;
+    GroupList group_list                          = 11;
 }
 
 message ClientToRouter

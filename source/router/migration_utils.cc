@@ -22,7 +22,6 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QUuid>
 
 #include <utility>
 
@@ -139,7 +138,6 @@ bool doConfigMigrate(const QJsonDocument& doc)
     // Values the old configuration may lack; issue them while write access is available.
     if (settings.seedKey().isEmpty())
         settings.setSeedKey(Random::byteArray(64));
-    settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     if (!settings.sync())
     {

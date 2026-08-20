@@ -255,7 +255,7 @@ void MainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<LocalHostConfig> entry = db.findHostByGuid(host_url.hostGuid());
+        std::optional<LocalHostConfig> entry = db.findLocalHostByGuid(host_url.hostGuid());
         if (!entry.has_value())
         {
             MsgBox::warning(this,
@@ -272,7 +272,7 @@ void MainWindow::connectToUrl(const QString& url)
         }
 
         host = HostConfig::forLocalHost(*entry);
-        db.setConnectTime(entry->id(), QDateTime::currentSecsSinceEpoch());
+        db.setLocalHostConnectTime(entry->id(), QDateTime::currentSecsSinceEpoch());
     }
 
     onConnect(host, host_url.sessionType());

@@ -32,7 +32,9 @@ class AuthorizationDialog final : public Dialog
 
 public:
     // |one_time_password_available| enables the one-time password switch (router hosts only).
-    explicit AuthorizationDialog(bool one_time_password_available, QWidget* parent = nullptr);
+    // |save_credentials_available| enables the switch that keeps the credentials on the device.
+    AuthorizationDialog(bool one_time_password_available, bool save_credentials_available,
+                        QWidget* parent = nullptr);
     ~AuthorizationDialog() final;
 
     void setUserName(const QString& username);
@@ -40,6 +42,8 @@ public:
     // Empty when a one-time password is used; the caller then connects by host id.
     QString userName() const;
     SecureString password() const;
+
+    bool isSaveCredentialsChecked() const;
 
 private slots:
     void onAcceptClicked();
@@ -49,6 +53,7 @@ private:
     void showError(const QString& message);
 
     Switch* one_time_password_ = nullptr;
+    Switch* save_credentials_ = nullptr;
     LineEdit* username_ = nullptr;
     LineEdit* password_ = nullptr;
     Label* error_ = nullptr;

@@ -20,6 +20,9 @@
 
 #include <QFile>
 #include <QTemporaryDir>
+#include <QUuid>
+
+#include <functional>
 
 #include <gtest/gtest.h>
 
@@ -28,7 +31,9 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "base/peer/host_id.h"
 #include "client/database.h"
+#include "proto/router.h"
 #include "proto/storage.h"
 
 class BackupTest : public testing::Test
@@ -41,8 +46,23 @@ protected:
         ASSERT_TRUE(dir_.isValid());
         ASSERT_TRUE(source_.open(dir_.filePath("source.db3")));
         ASSERT_TRUE(target_.open(dir_.filePath("target.db3")));
+
+        // The file is sealed with the key of the book it is saved from, so the book has to be one
+        // with a master password set. reencryptAll() with nothing to re-encrypt is how a book gets
+        // one without going through the singleton MasterPassword talks to.
+        const QByteArray salt = Random::byteArray(32);
+        const SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password(), salt));
+
+        const std::optional<QByteArray> verifier =
+            DataCryptor(CipherType::AES256_GCM, key).encrypt(Random::byteArray(32));
+        ASSERT_TRUE(verifier.has_value());
+
+        ASSERT_TRUE(source_.reencryptAll({}, {}, {}, salt, *verifier, 1));
+
+        DataCryptor::instance().setKey(key);
     }
 
+    // The master password of the source book, which is what its files are sealed with.
     static SecureString password() { return SecureString(QString("Password123")); }
 
     QString backupPath() const { return dir_.filePath("book.aspia-backup"); }
@@ -53,7 +73,7 @@ protected:
         group.setName(name);
         group.setParentId(parent_id);
 
-        EXPECT_TRUE(db.addGroup(group));
+        EXPECT_TRUE(db.addLocalGroup(group));
         return group.id();
     }
 
@@ -64,14 +84,80 @@ protected:
         host.setAddress("192.168.0.1");
         host.setGroupId(group_id);
 
-        EXPECT_TRUE(db.addHost(host));
+        EXPECT_TRUE(db.addLocalHost(host));
         return host.id();
+    }
+
+    // The guid is not passed in: the database issues one to every router it adds, the same way it
+    // does for groups and hosts.
+    static qint64 addRouter(Database& db, const QString& name, const QString& address)
+    {
+        RouterConfig router;
+        router.setDisplayName(name);
+        router.setAddress(address);
+        router.setUsername("router-user");
+        router.setPassword(SecureString(QString("router-secret")));
+
+        EXPECT_TRUE(db.addRouter(router));
+        return router.routerId();
+    }
+
+    static void addRouterHost(Database& db, qint64 router_id, HostId host_id,
+                              const QString& username, const QString& password)
+    {
+        RouterHostConfig host;
+        host.setRouterId(router_id);
+        host.setHostId(host_id);
+        host.setUsername(username);
+        host.setPassword(SecureString(password));
+
+        EXPECT_TRUE(db.addRouterHost(host));
+    }
+
+    static qint64 addRoutedHost(Database& db, const QString& name, qint64 group_id,
+                                qint64 router_id, const QString& address)
+    {
+        LocalHostConfig host;
+        host.setName(name);
+        host.setAddress(address);
+        host.setGroupId(group_id);
+        host.setRouterId(router_id);
+
+        EXPECT_TRUE(db.addLocalHost(host));
+        return host.id();
+    }
+
+    static QStringList hostNames(Database& db)
+    {
+        QStringList names;
+        for (const LocalHostConfig& host : db.allLocalHosts())
+            names.append(host.name());
+        names.sort();
+        return names;
+    }
+
+    Backup::Result exportBook(Backup::Report* report = nullptr)
+    {
+        return Backup::exportToFile(source_, backupPath(), report);
+    }
+
+    // Writes the file into the target database, in place of what it holds. The key of the book
+    // opens the file, so no password is handed over.
+    Backup::Result importBook(Backup::Report* report = nullptr)
+    {
+        return Backup::importFromFile(target_, backupPath(), SecureString(), report);
+    }
+
+    // The same for a file of another address book.
+    Backup::Result importBookWithPassword(const SecureString& file_password)
+    {
+        return Backup::importFromFile(target_, backupPath(), file_password, nullptr);
     }
 
     static QStringList groupNames(Database& db)
     {
         QStringList names;
-        for (const LocalGroupConfig& group : db.allGroups())
+        for (const LocalGroupConfig& group : db.allLocalGroups())
             names.append(group.name());
         names.sort();
         return names;
@@ -80,7 +166,7 @@ protected:
     // The record of the group with this name, whatever id it was given on the way in.
     static std::optional<LocalGroupConfig> groupByName(Database& db, const QString& name)
     {
-        for (const LocalGroupConfig& group : db.allGroups())
+        for (const LocalGroupConfig& group : db.allLocalGroups())
         {
             if (group.name() == name)
                 return group;
@@ -89,10 +175,9 @@ protected:
         return std::nullopt;
     }
 
-    // Hands the import a book with a link that names a group the file does not carry. The whole
-    // address book is sealed, so getting at that link means opening the file with the password of
-    // the backup, the same way the import does.
-    void repointGroupParent(qint64 group_id, qint64 new_parent_id)
+    // Opens the file the way the import does, hands the address book to |edit| and seals it back.
+    // The tests write with it what the export never produces.
+    void editFileContent(const std::function<void(proto::storage::BackupFile::Content*)>& edit)
     {
         proto::storage::BackupFile file_message;
 
@@ -114,16 +199,7 @@ protected:
         proto::storage::BackupFile::Content data;
         ASSERT_TRUE(parse(*decrypted, &data));
 
-        bool found = false;
-        for (proto::storage::BackupFile::Group& group : *data.mutable_groups())
-        {
-            if (group.id() != group_id)
-                continue;
-
-            group.set_parent_id(new_parent_id);
-            found = true;
-        }
-        ASSERT_TRUE(found);
+        edit(&data);
 
         std::optional<QByteArray> sealed = cryptor.encrypt(serialize(data));
         ASSERT_TRUE(sealed.has_value());
@@ -133,6 +209,73 @@ protected:
         QFile file(backupPath());
         ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
         file.write(serialize(file_message));
+    }
+
+    // Seals |payload| into the file in place of the address book it holds.
+    void sealPayload(const QByteArray& payload)
+    {
+        proto::storage::BackupFile file_message;
+
+        {
+            QFile file(backupPath());
+            ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+            ASSERT_TRUE(parse(file.readAll(), &file_message));
+        }
+
+        SecureByteArray key(PasswordHash::hash(
+            PasswordHash::ARGON2ID, password(),
+            QByteArray::fromStdString(file_message.salt())));
+
+        std::optional<QByteArray> sealed =
+            DataCryptor(CipherType::AES256_GCM, key).encrypt(payload);
+        ASSERT_TRUE(sealed.has_value());
+
+        file_message.set_data(sealed->toStdString());
+
+        QFile file(backupPath());
+        ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
+        file.write(serialize(file_message));
+    }
+
+    // Hands the import a book with a link that names a group the file does not carry.
+    void repointGroupParent(qint64 group_id, qint64 new_parent_id)
+    {
+        editFileContent([&](proto::storage::BackupFile::Content* data)
+        {
+            bool found = false;
+            for (proto::storage::BackupFile::LocalGroup& group : *data->mutable_local_groups())
+            {
+                if (group.id() != group_id)
+                    continue;
+
+                group.set_parent_id(new_parent_id);
+                found = true;
+            }
+            EXPECT_TRUE(found);
+        });
+    }
+
+    // Hands the import a book where two groups are named by the same id.
+    void copyGroupUnderTheSameId(qint64 group_id, const QString& name)
+    {
+        editFileContent([&](proto::storage::BackupFile::Content* data)
+        {
+            bool found = false;
+            for (const proto::storage::BackupFile::LocalGroup& group : data->local_groups())
+            {
+                if (group.id() != group_id)
+                    continue;
+
+                proto::storage::BackupFile::LocalGroup* copy = data->add_local_groups();
+                *copy = group;
+                copy->set_name(name.toStdString());
+                copy->set_guid(QUuid::createUuid().toString(QUuid::WithoutBraces).toStdString());
+
+                found = true;
+                break;
+            }
+            EXPECT_TRUE(found);
+        });
     }
 
     Database source_;
@@ -150,16 +293,14 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
     const qint64 child = addGroup(source_, "child", parent);
     addHost(source_, "host", child);
 
-    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
-              Backup::Result::SUCCESS);
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
-    Backup::ImportCounts counts;
-    ASSERT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
-              Backup::Result::SUCCESS);
+    Backup::Report report;
+    ASSERT_EQ(importBook(&report), Backup::Result::SUCCESS);
 
     EXPECT_EQ(groupNames(target_), QStringList({ "child", "parent" }));
-    EXPECT_EQ(counts.groups, 2);
-    EXPECT_EQ(counts.hosts, 1);
+    EXPECT_EQ(report.local_groups, 2);
+    EXPECT_EQ(report.local_hosts, 1);
 
     const std::optional<LocalGroupConfig> new_parent = groupByName(target_, "parent");
     const std::optional<LocalGroupConfig> new_child = groupByName(target_, "child");
@@ -167,72 +308,342 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
 
     EXPECT_EQ(new_parent->parentId(), 0);
     EXPECT_EQ(new_child->parentId(), new_parent->id());
-    EXPECT_EQ(target_.hostList(new_child->id()).size(), 1);
+    EXPECT_EQ(target_.localHostList(new_child->id()).size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A host whose group the file does not carry is kept, at the root. A group whose parent the file
-// does not carry has to be kept the same way: dropping it takes everything below it as well, and
-// the tally the user is shown says nothing about it.
-TEST_F(BackupTest, GroupWhoseParentIsMissingFromTheFileGoesToTheRoot)
+// The id of a group is good inside one database only, so the file carries the guid as well: the
+// group that arrives is the same group the file was made from.
+TEST_F(BackupTest, GroupKeepsItsGuidThroughTheFile)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+
+    const std::optional<LocalGroupConfig> original = source_.findLocalGroup(group);
+    ASSERT_TRUE(original.has_value());
+    ASSERT_FALSE(original->guid().isEmpty());
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const std::optional<LocalGroupConfig> imported = groupByName(target_, "group");
+    ASSERT_TRUE(imported.has_value());
+    EXPECT_EQ(imported->guid(), original->guid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every group the file names is a group the file carries. One naming a parent that is not there is
+// not a file this application wrote, and nothing of it is imported.
+TEST_F(BackupTest, FileNamingAParentItDoesNotCarryIsNotImported)
 {
     const qint64 parent = addGroup(source_, "parent", 0);
-    const qint64 child = addGroup(source_, "child", parent);
-    addHost(source_, "host", child);
+    addGroup(source_, "child", parent);
 
-    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
-              Backup::Result::SUCCESS);
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     repointGroupParent(parent, 99999);
 
-    Backup::ImportCounts counts;
-    ASSERT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
-              Backup::Result::SUCCESS);
 
-    EXPECT_EQ(groupNames(target_), QStringList({ "child", "parent" }));
-    EXPECT_EQ(counts.groups, 2);
-
-    const std::optional<LocalGroupConfig> new_parent = groupByName(target_, "parent");
-    const std::optional<LocalGroupConfig> new_child = groupByName(target_, "child");
-    ASSERT_TRUE(new_parent.has_value() && new_child.has_value());
-
-    // The link that was there is kept; only the one the file could not name is replaced by the root.
-    EXPECT_EQ(new_parent->parentId(), 0);
-    EXPECT_EQ(new_child->parentId(), new_parent->id());
-    EXPECT_EQ(target_.hostList(new_child->id()).size(), 1);
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(groupNames(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// Groups that name each other cannot be a tree, so they are not imported - and the tally says so
-// instead of leaving the user to count the rows.
-TEST_F(BackupTest, GroupsThatNameEachOtherAreCountedAsSkipped)
+// Zero is what a host says when it reaches no router at all, so a router of the file cannot be
+// named by it. A file naming one by it is not a file this application wrote, and taken in, such a
+// router would collect every direct host of the file.
+TEST_F(BackupTest, FileNamingARouterByZeroIsNotImported)
+{
+    addRouter(source_, "router", "router.example.com");
+    addHost(source_, "direct", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 1);
+        data->mutable_routers(0)->set_id(0);
+    });
+
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(target_.allLocalHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A guid names one group in any database, so a file carrying two of them under one guid is not a
+// file this application wrote.
+TEST_F(BackupTest, FileWithTwoGroupsUnderOneGuidIsNotImported)
+{
+    addGroup(source_, "first", 0);
+    addGroup(source_, "second", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_groups_size(), 2);
+        data->mutable_local_groups(1)->set_guid(data->local_groups(0).guid());
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(groupNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An id names one router of the file, and the records pointing at it point at one record.
+TEST_F(BackupTest, FileNamingTwoRoutersByOneIdIsNotImported)
+{
+    addRouter(source_, "first", "first.example.com");
+    addRouter(source_, "second", "second.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 2);
+        data->mutable_routers(1)->set_id(data->routers(0).id());
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(target_.routerList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An id names one group, so a file naming two by the same one is not a file this application wrote.
+// Nothing of it is imported, because which of the two the id stands for is not for the reader to
+// pick.
+TEST_F(BackupTest, FileNamingTwoGroupsByOneIdIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    copyGroupUnderTheSameId(group, "twin");
+
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(groupNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Groups that name each other are not a tree, and an address book is one. Such a file is not one
+// this application wrote, and nothing of it is imported.
+TEST_F(BackupTest, FileWhoseGroupsNameEachOtherIsNotImported)
 {
     const qint64 first = addGroup(source_, "first", 0);
     const qint64 second = addGroup(source_, "second", first);
 
-    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
-              Backup::Result::SUCCESS);
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     repointGroupParent(first, second);
 
-    Backup::ImportCounts counts;
-    EXPECT_EQ(Backup::importFromFile(target_, backupPath(), password(), &counts),
-              Backup::Result::NOTHING_IMPORTED);
 
-    EXPECT_EQ(counts.groups, 0);
-    EXPECT_EQ(counts.groups_skipped, 2);
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(groupNames(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// The password is what the file is locked with, and nothing is written without it.
+// A record of the file carries what a record of the address book carries. One that does not takes
+// the whole file with it, because the reader has no way to tell which half of a file to believe.
+TEST_F(BackupTest, FileWithARouterWithoutAPasswordIsNotImported)
+{
+    addRouter(source_, "router", "router.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 1);
+        data->mutable_routers(0)->clear_password();
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(target_.routerList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, FileWithARouterOfAnUnknownSessionTypeIsNotImported)
+{
+    addRouter(source_, "router", "router.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 1);
+        data->mutable_routers(0)->set_session_type(proto::router::SESSION_TYPE_HOST);
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(target_.routerList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, FileWithAGroupWithoutANameIsNotImported)
+{
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_groups_size(), 1);
+        data->mutable_local_groups(0)->clear_name();
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(groupNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The bounds a record is held to are the bounds of the file as well. A name past them would arrive
+// cut in half, and half a name is not what the user typed.
+TEST_F(BackupTest, FileWithATooLongHostNameIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        data->mutable_local_hosts(0)->set_name(
+            std::string(LocalHostConfig::kMaxNameLength + 1, 'a'));
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An address is what the host is reached at, and a host of the file carries one.
+TEST_F(BackupTest, FileWithAHostWithoutAnAddressIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        data->mutable_local_hosts(0)->clear_address();
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Credentials are kept as a pair, so half a pair says nothing at all. It says neither that the
+// host is asked at every connection, nor what it is answered with.
+TEST_F(BackupTest, FileWithHalfTheCredentialsOfAHostIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        data->mutable_local_hosts(0)->set_username("user");
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A guid is what says that two records are one record, so a record of the file carries one and no
+// two records of the file carry the same.
+TEST_F(BackupTest, FileWithAHostWithoutAGuidIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        data->mutable_local_hosts(0)->clear_guid();
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(BackupTest, FileWithTwoHostsUnderOneGuidIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "first", group);
+    addHost(source_, "second", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 2);
+        data->mutable_local_hosts(1)->set_guid(data->local_hosts(0).guid());
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host reaches the router named among the routers of the file, or no router at all.
+TEST_F(BackupTest, FileWhereAHostReachesARouterItDoesNotCarryIsNotImported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRoutedHost(source_, "through-router", group, router_id, "100500");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        data->mutable_local_hosts(0)->set_router_id(99999);
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(hostNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same holds for the credentials saved for a host of a router.
+TEST_F(BackupTest, FileWhereCredentialsNameARouterItDoesNotCarryIsNotImported)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouterHost(source_, router_id, 100500, "user", "secret");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->router_hosts_size(), 1);
+        data->mutable_router_hosts(0)->set_router_id(99999);
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The file is sealed with the key of the book it came from, and nothing is written without it.
 TEST_F(BackupTest, BookIsNotImportedWithAnotherPassword)
 {
     addGroup(source_, "group", 0);
 
-    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
-              Backup::Result::SUCCESS);
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(Backup::importFromFile(target_, backupPath(), SecureString(QString("Other123"))),
+    EXPECT_EQ(importBookWithPassword(SecureString(QString("Other123"))),
               Backup::Result::WRONG_PASSWORD);
 
     EXPECT_TRUE(groupNames(target_).isEmpty());
@@ -246,8 +657,7 @@ TEST_F(BackupTest, NothingOfTheBookIsReadableInTheFile)
     const qint64 group = addGroup(source_, "accounting-department", 0);
     addHost(source_, "prod-database-server", group);
 
-    ASSERT_EQ(Backup::exportToFile(source_, backupPath(), password()),
-              Backup::Result::SUCCESS);
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     QFile file(backupPath());
     ASSERT_TRUE(file.open(QIODevice::ReadOnly));
@@ -258,4 +668,406 @@ TEST_F(BackupTest, NothingOfTheBookIsReadableInTheFile)
     EXPECT_FALSE(bytes.contains("accounting-department"));
     EXPECT_FALSE(bytes.contains("prod-database-server"));
     EXPECT_FALSE(bytes.contains("192.168.0.1"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The credentials saved for hosts of a router travel with that router. The id it has here belongs
+// to the database it came from, so what they hang on is the router the import wrote.
+TEST_F(BackupTest, SavedCredentialsFollowTheirRouter)
+{
+    const qint64 source_router = addRouter(source_, "router", "router.example.com");
+    addRouterHost(source_, source_router, 100500, "user", "secret");
+    addRouterHost(source_, source_router, 100501, "other-user", "other-secret");
+
+    const std::optional<RouterConfig> original = source_.findRouter(source_router);
+    ASSERT_TRUE(original.has_value());
+
+    Backup::Report export_counts;
+    ASSERT_EQ(exportBook(&export_counts), Backup::Result::SUCCESS);
+    EXPECT_EQ(export_counts.router_hosts, 2);
+
+    // A router of this database, which the file replaces along with everything else.
+    addRouter(target_, "decoy", "decoy.example.com");
+
+    Backup::Report report;
+    ASSERT_EQ(importBook(&report), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(report.routers, 1);
+    EXPECT_EQ(report.router_hosts, 2);
+
+    const QList<RouterConfig> routers = target_.routerList();
+    ASSERT_EQ(routers.size(), 1);
+    EXPECT_EQ(routers.front().guid(), original->guid());
+
+    const qint64 target_router = routers.front().routerId();
+
+    const std::optional<RouterHostConfig> stored = target_.findRouterHost(target_router, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+
+    EXPECT_TRUE(target_.findRouterHost(target_router, 100501).has_value());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid is what binds the saved credentials to a router across databases, so a router created
+// by the import carries the guid of the file, and the credentials arrive bound to it.
+TEST_F(BackupTest, ImportedRouterKeepsItsGuid)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    addRouterHost(source_, router_id, 100500, "user", "secret");
+
+    const std::optional<RouterConfig> original = source_.findRouter(router_id);
+    ASSERT_TRUE(original.has_value());
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<RouterConfig> routers = target_.routerList();
+    ASSERT_EQ(routers.size(), 1);
+    EXPECT_EQ(routers.front().guid(), original->guid());
+
+    const std::optional<RouterHostConfig> stored =
+        target_.findRouterHost(routers.front().routerId(), 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), "user");
+    EXPECT_EQ(stored->password().toString(), "secret");
+}
+
+//--------------------------------------------------------------------------------------------------
+// A name of its own is not required of a router, and the address book shows the address in place of
+// it. Written into the record on the way in, the address would become a name the user never gave
+// and would stay behind when the address changes.
+TEST_F(BackupTest, RouterWithoutANameComesBackWithoutOne)
+{
+    addRouter(source_, QString(), "router.example.com");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<RouterConfig> routers = target_.routerList();
+    ASSERT_EQ(routers.size(), 1);
+
+    EXPECT_TRUE(routers.front().displayName().isEmpty());
+    EXPECT_EQ(routers.front().displayLabel(), "router.example.com");
+}
+
+//--------------------------------------------------------------------------------------------------
+// A guid names one router, so a file naming two of them by the same guid is not an address book.
+// Nothing of it is taken, not even the records that are fine on their own.
+TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
+{
+    addRouter(source_, "first", "first.example.com");
+    addRouter(source_, "second", "second.example.com");
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->routers_size(), 2);
+        data->mutable_routers(1)->set_guid(data->routers(0).guid());
+    });
+
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+
+    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(groupNames(target_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A temporary id is handed out again once the host holding it is gone, so credentials saved under
+// one say nothing about the host wearing it now. The address book does not keep such a row, and a
+// file carrying one is not a file this application wrote.
+TEST_F(BackupTest, SavedCredentialsOfATemporaryHostAreNotImported)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    RouterHostConfig temporary;
+    temporary.setRouterId(router_id);
+    temporary.setHostId(kMinTempHostId);
+    temporary.setUsername("user");
+    temporary.setPassword(SecureString(QString("secret")));
+    EXPECT_FALSE(source_.addRouterHost(temporary));
+
+    addRouterHost(source_, router_id, 100500, "other-user", "other-secret");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->router_hosts_size(), 1);
+        data->mutable_router_hosts(0)->set_host_id(kMinTempHostId);
+    });
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An address book with nothing to write leaves no file behind, and the caller is told why instead
+// of being handed a failure it can make nothing of.
+TEST_F(BackupTest, EmptyBookIsNotWrittenToAFile)
+{
+    EXPECT_EQ(exportBook(), Backup::Result::NOTHING_EXPORTED);
+    EXPECT_FALSE(QFile::exists(backupPath()));
+
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    EXPECT_TRUE(QFile::exists(backupPath()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record whose sealed column does not open comes back with its address, user name and password
+// empty. A file written out of such a book would be missing exactly the records it exists for, so
+// no file is written at all and no half-empty file is left behind.
+TEST_F(BackupTest, BookThatCannotBeReadWholeIsNotExported)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    const qint64 group = addGroup(source_, "group", 0);
+
+    addHost(source_, "host", group);
+    addRoutedHost(source_, "through-router", group, router_id, "100500");
+    addRouterHost(source_, router_id, 100500, "user", "secret");
+
+    // The key of the process is what opens the sealed columns of the address book.
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    Backup::Report report;
+    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_FALSE(QFile::exists(backupPath()));
+
+    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same holds for a host of a book that is otherwise readable. One record that does not open
+// is enough for the file not to be written.
+TEST_F(BackupTest, BookWithOneUnreadableHostIsNotExported)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    // The key of the process is what opens the sealed columns of the address book.
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    Backup::Report report;
+    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_FALSE(QFile::exists(backupPath()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The whole book goes into the file, and the whole file comes back. Nothing is picked out on either
+// side.
+TEST_F(BackupTest, WholeBookTravels)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    const qint64 group = addGroup(source_, "group", 0);
+
+    addHost(source_, "direct", group);
+    addRoutedHost(source_, "through-router", group, router_id, "100500");
+    addRouterHost(source_, router_id, 100500, "user", "secret");
+
+    Backup::Report exported;
+    ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(exported.routers, 1);
+    EXPECT_EQ(exported.local_groups, 1);
+    EXPECT_EQ(exported.local_hosts, 2);
+    EXPECT_EQ(exported.router_hosts, 1);
+
+    Backup::Report imported;
+    ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(imported.routers, 1);
+    EXPECT_EQ(imported.local_groups, 1);
+    EXPECT_EQ(imported.local_hosts, 2);
+    EXPECT_EQ(imported.router_hosts, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file of another address book does not open with the key of this one, and it takes the master
+// password of the book it was saved from.
+TEST_F(BackupTest, FileOfAnotherBookTakesItsOwnPassword)
+{
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    // What another machine is: an address book whose master password is not this one.
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    EXPECT_EQ(importBook(), Backup::Result::WRONG_PASSWORD);
+
+    ASSERT_EQ(Backup::importFromFile(target_, backupPath(), password(), nullptr),
+              Backup::Result::SUCCESS);
+
+    EXPECT_EQ(groupNames(target_), QStringList({ "group" }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// When a host was made, changed and last connected to are columns of the list the user reads and
+// sorts by. Stamped with the moment of the import, every host of a restored book would claim it was
+// made then.
+TEST_F(BackupTest, MomentsOfAHostTravelWithIt)
+{
+    const qint64 entry_id = addHost(source_, "host", 0);
+    ASSERT_TRUE(source_.setLocalHostConnectTime(entry_id, 1500000000));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    // The moments of a record made now are the moments the import would write by itself, so the
+    // file says something else and the answer tells the two apart.
+    editFileContent([](proto::storage::BackupFile::Content* data)
+    {
+        ASSERT_EQ(data->local_hosts_size(), 1);
+        EXPECT_EQ(data->local_hosts(0).connect_time(), 1500000000);
+
+        data->mutable_local_hosts(0)->set_create_time(1400000000);
+        data->mutable_local_hosts(0)->set_modify_time(1450000000);
+    });
+
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    const QList<LocalHostConfig> hosts = target_.allLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+
+    EXPECT_EQ(hosts.front().createTime(), 1400000000);
+    EXPECT_EQ(hosts.front().modifyTime(), 1450000000);
+    EXPECT_EQ(hosts.front().connectTime(), 1500000000);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host whose router the book no longer has is not a host anyone left out, so it travels. The
+// router it named is gone, so in the file the host stands on its own.
+TEST_F(BackupTest, HostOfARemovedRouterTravels)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+
+    addRoutedHost(source_, "through-router", 0, router_id, "100500");
+    ASSERT_TRUE(source_.removeRouter(router_id));
+
+    Backup::Report report;
+    ASSERT_EQ(exportBook(&report), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(report.local_hosts, 1);
+
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    ASSERT_EQ(target_.allLocalHosts().size(), 1);
+    EXPECT_EQ(target_.allLocalHosts().first().name(), QString("through-router"));
+    EXPECT_EQ(target_.allLocalHosts().first().routerId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An import is a restore: what the address book held before is gone, and what the file carries
+// stands in its place.
+TEST_F(BackupTest, ImportReplacesTheWholeBook)
+{
+    const qint64 group = addGroup(source_, "from the file", 0);
+    addHost(source_, "host of the file", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    // What the target machine held before the file was read.
+    const qint64 own_router = addRouter(target_, "own router", "other.example.com");
+    const qint64 own_group = addGroup(target_, "own group", 0);
+    addRoutedHost(target_, "own host", own_group, own_router, "100500");
+    addRouterHost(target_, own_router, 100500, "user", "secret");
+
+    Backup::Report report;
+    ASSERT_EQ(importBook(&report), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(report.local_groups, 1);
+    EXPECT_EQ(report.local_hosts, 1);
+
+    EXPECT_EQ(groupNames(target_), QStringList({ "from the file" }));
+    EXPECT_EQ(hostNames(target_), QStringList({ "host of the file" }));
+    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same file read twice leaves the same address book, and no copy of anything appears.
+TEST_F(BackupTest, ImportedTwiceLeavesOneBook)
+{
+    const qint64 router_id = addRouter(source_, "router", "router.example.com");
+    const qint64 group = addGroup(source_, "group", 0);
+
+    addRoutedHost(source_, "through-router", group, router_id, "100500");
+    addRouterHost(source_, router_id, 100500, "user", "secret");
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    EXPECT_EQ(target_.routerList().size(), 1);
+    EXPECT_EQ(target_.allLocalGroups().size(), 1);
+    EXPECT_EQ(target_.allLocalHosts().size(), 1);
+    EXPECT_EQ(target_.allRouterHosts().size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file of some other kind is not a backup written by a version nobody has yet. Read by its
+// version alone, it would be answered as one, and the user would go looking for a newer build.
+TEST_F(BackupTest, FileOfSomeOtherKindIsNotOneOfAnotherVersion)
+{
+    // One field this application does not know. Such bytes parse into a message with none of the
+    // fields a backup carries, which is what anything that is not a backup looks like here.
+    QFile file(backupPath());
+    ASSERT_TRUE(file.open(QIODevice::WriteOnly));
+    ASSERT_EQ(file.write(QByteArray("\x38\x01", 2)), 2);
+    file.close();
+
+    EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file that is ours and carries a version this build does not know is answered by its version.
+TEST_F(BackupTest, FileOfAnotherVersionIsNamedByItsVersion)
+{
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    proto::storage::BackupFile file_message;
+
+    {
+        QFile file(backupPath());
+        ASSERT_TRUE(file.open(QIODevice::ReadOnly));
+        ASSERT_TRUE(parse(file.readAll(), &file_message));
+    }
+
+    file_message.set_version(file_message.version() + 1);
+
+    const QByteArray payload = serialize(file_message);
+
+    QFile file(backupPath());
+    ASSERT_TRUE(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
+    ASSERT_EQ(file.write(payload), payload.size());
+    file.close();
+
+    EXPECT_EQ(importBook(), Backup::Result::UNSUPPORTED_VERSION);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file that carries no address book says nothing about what the book should hold, so the book is
+// left as it is instead of being emptied. Our own export never writes such a file, but a file comes
+// from wherever the user got it.
+TEST_F(BackupTest, FileWithoutAnAddressBookLeavesTheBookAlone)
+{
+    addGroup(source_, "group", 0);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+
+    // A payload of one field this application does not know. It opens, it parses, and it carries
+    // no record at all.
+    sealPayload(QByteArray("\x38\x01", 2));
+
+    addGroup(target_, "own group", 0);
+
+    EXPECT_EQ(importBook(), Backup::Result::NOTHING_IMPORTED);
+    EXPECT_EQ(groupNames(target_), QStringList({ "own group" }));
 }

@@ -38,8 +38,6 @@
 
 namespace {
 
-constexpr int kMaxNameLength = 64;
-constexpr int kMaxCommentLength = 2048;
 constexpr int kMaxRecursionDepth = 32;
 
 //--------------------------------------------------------------------------------------------------
@@ -75,15 +73,15 @@ QString combineHostAndPort(const QString& host, quint32 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString sanitizedName(const QString& name)
+QString sanitizedName(const QString& name, int max_length)
 {
-    return name.left(kMaxNameLength);
+    return name.left(max_length);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString sanitizedComment(const QString& comment)
+QString sanitizedComment(const QString& comment, int max_length)
 {
-    return comment.left(kMaxCommentLength);
+    return comment.left(max_length);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -93,7 +91,9 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     QString username = QString::fromStdString(proto_router.username());
     QString password = QString::fromStdString(proto_router.password());
 
-    if (address.isEmpty() || username.isEmpty())
+    // A router of this address book is always entered with an account of its own. One the old book
+    // carries without a password could not be connected to, and would sit here unusable.
+    if (address.isEmpty() || username.isEmpty() || password.isEmpty())
         return 0;
 
     QString combined_address = combineHostAndPort(address, proto_router.port());
@@ -108,7 +108,8 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     }
 
     RouterConfig config;
-    config.setDisplayName(AabImporter::tr("%1 (Imported)").arg(address));
+    config.setDisplayName(
+        sanitizedName(AabImporter::tr("%1 (Imported)").arg(address), RouterConfig::kMaxNameLength));
     config.setAddress(combined_address);
     config.setUsername(username);
     config.setPassword(SecureString(password));
@@ -131,7 +132,8 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
                     const InheritedCredentials& inherited,
                     ImportCounters* counters)
 {
-    QString name = sanitizedName(QString::fromStdString(proto_computer.name()));
+    QString name = sanitizedName(QString::fromStdString(proto_computer.name()),
+                                LocalHostConfig::kMaxNameLength);
     if (name.isEmpty())
     {
         ++counters->hosts_skipped;
@@ -139,7 +141,8 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
         return false;
     }
 
-    QString comment = sanitizedComment(QString::fromStdString(proto_computer.comment()));
+    QString comment = sanitizedComment(QString::fromStdString(proto_computer.comment()),
+                                       LocalHostConfig::kMaxCommentLength);
     QString address_raw = QString::fromStdString(proto_computer.address());
 
     QString address = combineHostAndPort(address_raw, proto_computer.port());
@@ -164,6 +167,14 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
         password = QString::fromStdString(proto_computer.password());
     }
 
+    // The credentials are kept as a pair. Half a pair of the old book means the same as none at
+    // all.
+    if (username.isEmpty() || password.isEmpty())
+    {
+        username.clear();
+        password.clear();
+    }
+
     qint64 effective_router_id = isHostId(address) ? router_id : 0;
 
     LocalHostConfig config;
@@ -175,7 +186,7 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     config.setUsername(username);
     config.setPassword(SecureString(std::move(password)));
 
-    if (!Database::instance().addHost(config))
+    if (!Database::instance().addLocalHost(config))
     {
         LOG(ERROR) << "Unable to add host to local database";
         return false;
@@ -205,7 +216,8 @@ void importGroup(const proto::address_book::ComputerGroup& proto_group,
     // destination root. Only nested groups are materialized.
     if (depth > 0)
     {
-        QString group_name = sanitizedName(QString::fromStdString(proto_group.name()));
+        QString group_name = sanitizedName(QString::fromStdString(proto_group.name()),
+                                           LocalGroupConfig::kMaxNameLength);
         if (group_name.isEmpty())
         {
             LOG(INFO) << "Skip group with empty name";
@@ -215,9 +227,10 @@ void importGroup(const proto::address_book::ComputerGroup& proto_group,
         LocalGroupConfig group_config;
         group_config.setParentId(parent_group_id);
         group_config.setName(group_name);
-        group_config.setComment(sanitizedComment(QString::fromStdString(proto_group.comment())));
+        group_config.setComment(sanitizedComment(QString::fromStdString(proto_group.comment()),
+                                                 LocalGroupConfig::kMaxCommentLength));
 
-        if (!Database::instance().addGroup(group_config))
+        if (!Database::instance().addLocalGroup(group_config))
         {
             LOG(ERROR) << "Unable to add group to local database";
             return;

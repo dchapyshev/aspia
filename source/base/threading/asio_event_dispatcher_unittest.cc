@@ -39,6 +39,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <limits>
 
 #include "base/time_types.h"
@@ -779,6 +780,204 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 
     ASSERT_EQ(triggeredCount, timerCount);
     ASSERT_LT(elapsed_ms, 5000);
+}
+
+// A zero-interval timer must not lock the loop on itself. While such a timer keeps firing, posted
+// events have to be delivered as well, otherwise queued connections and deleteLater stop working
+// for as long as the timer is alive.
+class ED_ZeroTimerObject : public QObject
+{
+public:
+    static constexpr int kTicksToRun = 20;
+
+    QEventLoop* loop = nullptr;
+
+    int timer_id = -1;
+    int ticks = 0;
+    int tick_of_delivery = -1;
+
+protected:
+    void timerEvent(QTimerEvent* event) override
+    {
+        if (event->timerId() != timer_id)
+            return;
+
+        ++ticks;
+
+        if (ticks == 1)
+            QCoreApplication::postEvent(this, new QEvent(QEvent::User));
+
+        if (ticks >= kTicksToRun)
+        {
+            killTimer(timer_id);
+            timer_id = -1;
+
+            if (loop)
+                loop->quit();
+        }
+    }
+
+    void customEvent(QEvent* event) override
+    {
+        if (event->type() == QEvent::User && tick_of_delivery < 0)
+            tick_of_delivery = ticks;
+    }
+};
+
+TEST(TimersTest, ZeroTimerDoesNotStarvePostedEvents)
+{
+    QEventLoop loop;
+
+    ED_ZeroTimerObject obj;
+    obj.loop = &loop;
+
+    obj.timer_id = obj.startTimer(MilliSeconds(0), Qt::CoarseTimer);
+    ASSERT_GT(obj.timer_id, 0);
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(MilliSeconds(10000), &loop, [&]() { loop.quit(); });
+    loop.exec();
+
+    if (obj.timer_id > 0)
+        obj.killTimer(obj.timer_id);
+
+    // A zero timer repeats, so the loop is left by the tick counter and not by the failsafe.
+    ASSERT_EQ(obj.ticks, ED_ZeroTimerObject::kTicksToRun);
+
+    // The event is posted from the first tick. A zero timer fires when the event queue is drained,
+    // so the event must arrive within the next tick or two instead of waiting for the timer to
+    // stop.
+    ASSERT_GT(obj.tick_of_delivery, 0) << "posted events were starved by the zero timer";
+    EXPECT_LE(obj.tick_of_delivery, 3);
+}
+
+// Cost of a single zero-interval timer tick against the cost of a single event posted and
+// delivered through one dispatcher turn. A zero timer served by the event queue costs the latter,
+// so the difference between the two is what the current native-timer implementation adds.
+class ED_TickCostObject : public QObject
+{
+public:
+    QEventLoop* loop = nullptr;
+
+    int timer_id = -1;
+    int ticks = 0;
+    int ticks_to_run = 0;
+    int events = 0;
+    TimePoint finish_time;
+
+protected:
+    void timerEvent(QTimerEvent* event) override
+    {
+        if (event->timerId() != timer_id || ++ticks < ticks_to_run)
+            return;
+
+        finish_time = Clock::now();
+
+        killTimer(timer_id);
+        timer_id = -1;
+
+        loop->quit();
+    }
+
+    void customEvent(QEvent* event) override
+    {
+        if (event->type() == QEvent::User)
+            ++events;
+    }
+};
+
+// The fastest round is reported instead of the average: the slower rounds carry scheduler noise
+// that belongs to the machine and not to the dispatcher.
+static qint64 measureZeroTimerTick(int ticks, int rounds)
+{
+    qint64 best_ns = std::numeric_limits<qint64>::max();
+
+    for (int round = 0; round < rounds; ++round)
+    {
+        QEventLoop loop;
+
+        ED_TickCostObject object;
+        object.loop = &loop;
+        object.ticks_to_run = ticks;
+
+        const TimePoint start_time = Clock::now();
+
+        object.timer_id = object.startTimer(MilliSeconds(0), Qt::CoarseTimer);
+        loop.exec();
+
+        const qint64 elapsed_ns = DurationCast<NanoSeconds>(object.finish_time - start_time).count();
+
+        EXPECT_EQ(object.ticks, ticks);
+        best_ns = std::min(best_ns, elapsed_ns / ticks);
+    }
+
+    return best_ns;
+}
+
+static qint64 measurePostedEventTurn(int events, int rounds)
+{
+    qint64 best_ns = std::numeric_limits<qint64>::max();
+
+    for (int round = 0; round < rounds; ++round)
+    {
+        ED_TickCostObject object;
+
+        const TimePoint start_time = Clock::now();
+
+        for (int i = 0; i < events; ++i)
+        {
+            QCoreApplication::postEvent(&object, new QEvent(QEvent::User));
+            QCoreApplication::processEvents();
+        }
+
+        const qint64 elapsed_ns = DurationCast<NanoSeconds>(Clock::now() - start_time).count();
+
+        EXPECT_EQ(object.events, events);
+        best_ns = std::min(best_ns, elapsed_ns / events);
+    }
+
+    return best_ns;
+}
+
+static qint64 measureIdleTurn(int turns, int rounds)
+{
+    qint64 best_ns = std::numeric_limits<qint64>::max();
+
+    for (int round = 0; round < rounds; ++round)
+    {
+        const TimePoint start_time = Clock::now();
+
+        for (int i = 0; i < turns; ++i)
+            QCoreApplication::processEvents();
+
+        const qint64 elapsed_ns = DurationCast<NanoSeconds>(Clock::now() - start_time).count();
+        best_ns = std::min(best_ns, elapsed_ns / turns);
+    }
+
+    return best_ns;
+}
+
+TEST(TimersTest, ZeroTimerTickCost)
+{
+    constexpr int kIterations = 20000;
+    constexpr int kRounds = 5;
+
+    // Warm up the dispatcher maps and the allocator so the first round is not the slowest.
+    measureZeroTimerTick(1000, 1);
+    measurePostedEventTurn(1000, 1);
+
+    const qint64 idle_turn_ns = measureIdleTurn(kIterations, kRounds);
+    const qint64 posted_turn_ns = measurePostedEventTurn(kIterations, kRounds);
+    const qint64 zero_tick_ns = measureZeroTimerTick(kIterations, kRounds);
+
+    GTEST_LOG_(INFO) << "idle dispatcher turn: " << idle_turn_ns << " ns";
+    GTEST_LOG_(INFO) << "posted event + turn: " << posted_turn_ns << " ns";
+    GTEST_LOG_(INFO) << "zero timer tick: " << zero_tick_ns << " ns";
+    GTEST_LOG_(INFO) << "difference per tick: " << (zero_tick_ns - posted_turn_ns) << " ns";
+
+    EXPECT_GT(idle_turn_ns, 0);
+    EXPECT_GT(posted_turn_ns, 0);
+    EXPECT_GT(zero_tick_ns, 0);
 }
 
 // A thread stall longer than the timer interval must not cause a burst of catch-up firings:

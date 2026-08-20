@@ -183,7 +183,7 @@ void LocalWidget::reload()
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
-    for (const LocalHostConfig& host : Database::instance().hostList(0))
+    for (const LocalHostConfig& host : Database::instance().localHostList(0))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { host.name(), host.address() });
         item->setIcon(0, icon);
@@ -236,7 +236,7 @@ void LocalWidget::searchQuery(const QString& query)
     }
 
     QList<SearchWidget::Result> results;
-    for (const LocalHostConfig& host : Database::instance().searchHosts(query))
+    for (const LocalHostConfig& host : Database::instance().searchLocalHosts(query))
     {
         SearchWidget::Result result;
         result.title = host.name();
@@ -300,38 +300,66 @@ void LocalWidget::onImport()
     if (path.isEmpty())
         return;
 
-    PasswordDialog dialog(PasswordDialog::Mode::ENTER, this);
-    if (dialog.exec() != QDialog::Accepted)
+    if (!MessageDialog::confirm(this, tr("Import"),
+                                tr("The address book will be replaced with the one in the file. "
+                                   "Everything it holds now is deleted."), tr("Import")))
+    {
         return;
+    }
 
-    Backup::ImportCounts counts;
-    switch (Backup::importFromFile(Database::instance(), path, dialog.password(), &counts))
+    // A file saved from this address book opens with the key it is already open with. One saved
+    // from another book takes the master password of that book.
+    SecureString password;
+    Backup::Report report;
+    Backup::Result result = Backup::importFromFile(Database::instance(), path, password, &report);
+
+    if (result == Backup::Result::WRONG_PASSWORD)
+    {
+        PasswordDialog dialog(PasswordDialog::Mode::ENTER, this);
+        if (dialog.exec() != QDialog::Accepted)
+            return;
+
+        password = dialog.password();
+        result = Backup::importFromFile(Database::instance(), path, password, &report);
+    }
+
+    QString message;
+
+    switch (result)
     {
         case Backup::Result::SUCCESS:
-            reload();
-            MessageDialog::info(this, tr("Import"),
-                tr("Imported %n router(s), ", nullptr, counts.routers) +
-                tr("%n group(s), ", nullptr, counts.groups) +
-                tr("%n host(s).", nullptr, counts.hosts));
             break;
 
         case Backup::Result::WRONG_PASSWORD:
-            MessageDialog::info(this, tr("Import"), tr("Invalid password."));
+            message = tr("Invalid password.");
             break;
 
         case Backup::Result::UNSUPPORTED_VERSION:
-            MessageDialog::info(this, tr("Import"),
-                tr("The file was created by a newer version and cannot be imported."));
+            message = tr("The file was created by a newer version and cannot be imported.");
             break;
 
         case Backup::Result::NOTHING_IMPORTED:
-            MessageDialog::info(this, tr("Import"), tr("The address book is already up to date."));
+            message = tr("The file carries no address book, so nothing was changed.");
             break;
 
         default:
-            MessageDialog::info(this, tr("Import"), tr("Failed to import the address book."));
+            message = tr("Failed to import the address book.");
             break;
     }
+
+    if (!message.isEmpty())
+    {
+        MessageDialog::info(this, tr("Import"), message);
+        return;
+    }
+
+    MessageDialog::info(this, tr("Import"),
+        tr("Routers imported: %1\nGroups imported: %2\nHosts imported: %3\n"
+           "Saved passwords imported: %4")
+            .arg(report.routers).arg(report.local_groups)
+            .arg(report.local_hosts).arg(report.router_hosts));
+
+    reload();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,23 +371,36 @@ void LocalWidget::onExport()
     if (path.isEmpty())
         return;
 
-    PasswordDialog dialog(PasswordDialog::Mode::SET, this);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
+    Backup::Report report;
+    QString message;
 
-    Backup::ExportCounts counts;
-    if (Backup::exportToFile(Database::instance(), path, dialog.password(), &counts) ==
-        Backup::Result::SUCCESS)
+    switch (Backup::exportToFile(Database::instance(), path, &report))
     {
-        MessageDialog::info(this, tr("Export"),
-            tr("Exported %n router(s), ", nullptr, counts.routers) +
-            tr("%n group(s), ", nullptr, counts.groups) +
-            tr("%n host(s).", nullptr, counts.hosts));
+        case Backup::Result::SUCCESS:
+            break;
+
+        case Backup::Result::NOTHING_EXPORTED:
+            message = tr("The address book is empty. There is nothing to save.");
+            break;
+
+        case Backup::Result::FILE_ERROR:
+            message = tr("Unable to write the file.");
+            break;
+
+        default:
+            message = tr("Failed to export the address book.");
+            break;
     }
-    else
+
+    if (!message.isEmpty())
     {
-        MessageDialog::info(this, tr("Export"), tr("Failed to export the address book."));
+        MessageDialog::info(this, tr("Export"), message);
+        return;
     }
+
+    MessageDialog::info(this, tr("Export"),
+        tr("The file is written to %1. To open it elsewhere the master password of this address "
+           "book is needed.").arg(path));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -410,7 +451,7 @@ void LocalWidget::onRefreshClicked()
 
     QList<qint64> entry_ids;
     OnlineChecker::HostList hosts;
-    for (const LocalHostConfig& host : Database::instance().hostList(group_id))
+    for (const LocalHostConfig& host : Database::instance().localHostList(group_id))
     {
         entry_ids.append(host.id());
         hosts.append(host);
@@ -482,7 +523,7 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
 {
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
-    for (const LocalGroupConfig& group : Database::instance().groupList(parent_id))
+    for (const LocalGroupConfig& group : Database::instance().localGroupList(parent_id))
     {
         QTreeWidgetItem* item = parent ? new QTreeWidgetItem(parent, { group.name() })
                                        : new QTreeWidgetItem(tree_, { group.name() });
@@ -520,7 +561,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
 
-    for (const LocalHostConfig& host : Database::instance().hostList(group_id))
+    for (const LocalHostConfig& host : Database::instance().localHostList(group_id))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(host_tree_, { host.name(), host.address() });
         item->setIcon(0, icon);

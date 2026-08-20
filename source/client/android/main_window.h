@@ -87,14 +87,20 @@ private:
     // at a time.
     void openSession(HostConfig host, proto::peer::SessionType session_type);
 
+    // Keeps the credentials the user entered, in the local host the connection was built from or
+    // in the row of a host of a router.
+    void saveHostCredentials(const HostConfig& host);
+
     // Replaces the address book with a full-screen desktop view for the given host.
-    void openDesktop(const HostConfig& host);
+    // |credentials_saved| tells the screen that the credentials it was given were written here, so
+    // it is the one to take them back if the host refuses them.
+    void openDesktop(const HostConfig& host, bool credentials_saved);
 
     // Opens the file transfer screen for the given host as a regular page (not full-screen).
-    void openFileTransfer(const HostConfig& host);
+    void openFileTransfer(const HostConfig& host, bool credentials_saved);
 
     // Opens the chat screen for the given host as a regular page (not full-screen).
-    void openChat(const HostConfig& host);
+    void openChat(const HostConfig& host, bool credentials_saved);
 
     // Resolves an aspia:// link against the address book and opens the session. If a session is
     // already active, the link is ignored with a notification.

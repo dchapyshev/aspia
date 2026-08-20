@@ -227,6 +227,16 @@ void AndroidMainWindow::onSectionChanged(int index)
     if (index != SECTION_SETTINGS && settings)
         settings->resetToSettings();
 
+    // Refresh from storage when a browsing screen becomes visible (picks up changes made
+    // elsewhere). This also brings the widget back to its tree page, which is what the app bar
+    // actions are asked for below.
+    if (index == SECTION_LOCAL && local)
+        local->reload();
+    else if (index == SECTION_REMOTE && remote)
+        remote->reload();
+    else if (index == SECTION_ROUTERS && routers)
+        routers->reload();
+
     QList<QWidget*> actions;
     if (index == SECTION_LOCAL && local)
         actions = local->appBarActions();
@@ -237,12 +247,6 @@ void AndroidMainWindow::onSectionChanged(int index)
     else if (index == SECTION_SETTINGS && settings)
         actions = settings->appBarActions();
     app_bar_->setActions(actions);
-
-    // Refresh from storage when a browsing screen becomes visible (picks up changes made elsewhere).
-    if (index == SECTION_LOCAL && local)
-        local->reload();
-    else if (index == SECTION_REMOTE && remote)
-        remote->reload();
 
     switch (index)
     {
@@ -402,7 +406,7 @@ void AndroidMainWindow::onBackClicked()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
-    std::optional<LocalHostConfig> entry = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> entry = Database::instance().findLocalHost(entry_id);
     if (!entry.has_value())
         return;
 
@@ -422,9 +426,40 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (desktop_ || file_transfer_ || chat_)
         return;
 
+    // A local host keeps the credentials in itself, so it always has somewhere to keep them.
+    bool can_save_credentials = host.entryId() > 0;
+
+    // What this screen writes itself is what it takes back if the host refuses it.
+    bool credentials_saved = false;
+
+    if (host.entryId() <= 0 && host.routerId() > 0)
+    {
+        const HostId host_id = stringToHostId(host.address());
+
+        // A temporary host id is handed out at random and comes back for another machine, so what
+        // was saved under it would be sent to a host the user never gave it to.
+        if (!isTempHostId(host_id))
+        {
+            can_save_credentials = true;
+
+            if (host.username().isEmpty() || host.password().isEmpty())
+            {
+                std::optional<RouterHostConfig> saved_credentials =
+                    Database::instance().findRouterHost(host.routerId(), host_id);
+                if (saved_credentials.has_value())
+                {
+                    LOG(INFO) << "Using saved credentials of host" << host_id;
+
+                    host.setUsername(saved_credentials->username());
+                    host.setPassword(saved_credentials->password());
+                }
+            }
+        }
+    }
+
     if (host.username().isEmpty() || host.password().isEmpty())
     {
-        AuthorizationDialog dialog(host.routerId() > 0, this);
+        AuthorizationDialog dialog(host.routerId() > 0, can_save_credentials, this);
         dialog.setUserName(host.username());
 
         if (dialog.exec() != QDialog::Accepted)
@@ -432,20 +467,27 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
 
         host.setUsername(dialog.userName());
         host.setPassword(dialog.password());
+
+        // A one-time password leaves the user name empty and is good for one connection.
+        if (can_save_credentials && dialog.isSaveCredentialsChecked() && !host.username().isEmpty())
+        {
+            saveHostCredentials(host);
+            credentials_saved = true;
+        }
     }
 
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            openDesktop(host);
+            openDesktop(host, credentials_saved);
             break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            openFileTransfer(host);
+            openFileTransfer(host, credentials_saved);
             break;
 
         case proto::peer::SESSION_TYPE_CHAT:
-            openChat(host);
+            openChat(host, credentials_saved);
             break;
 
         default:
@@ -454,14 +496,54 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openDesktop(const HostConfig& host)
+void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
+{
+    Database& db = Database::instance();
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(host.username());
+        local_host->setPassword(host.password());
+
+        if (!db.modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host.address());
+
+    RouterHostConfig credentials;
+    credentials.setRouterId(host.routerId());
+    credentials.setHostId(host_id);
+    credentials.setUsername(host.username());
+    credentials.setPassword(host.password());
+
+    bool saved;
+    if (db.findRouterHost(host.routerId(), host_id).has_value())
+        saved = db.modifyRouterHost(credentials);
+    else
+        saved = db.addRouterHost(credentials);
+
+    if (!saved)
+        LOG(ERROR) << "Unable to save credentials of host" << host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openDesktop(const HostConfig& host, bool credentials_saved)
 {
     // Only a single desktop connection is supported at a time.
     if (desktop_)
         return;
 
     // The desktop view takes over the whole window until the connection is closed.
-    desktop_ = new DesktopWindow(host);
+    desktop_ = new DesktopWindow(host, credentials_saved);
     connect(desktop_, &DesktopWindow::sig_closed, this, &AndroidMainWindow::onDesktopClosed);
 
     root_stack_->addWidget(desktop_);
@@ -491,11 +573,11 @@ void AndroidMainWindow::onDesktopClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openFileTransfer(const HostConfig& host)
+void AndroidMainWindow::openFileTransfer(const HostConfig& host, bool credentials_saved)
 {
     // The file transfer screen is a regular page: the system bars stay visible (no full-screen or
     // cutout drawing, unlike the desktop view).
-    file_transfer_ = new FileTransferWindow(host);
+    file_transfer_ = new FileTransferWindow(host, credentials_saved);
     connect(file_transfer_, &FileTransferWindow::sig_closed, this, &AndroidMainWindow::onFileTransferClosed);
 
     root_stack_->addWidget(file_transfer_);
@@ -515,9 +597,9 @@ void AndroidMainWindow::onFileTransferClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openChat(const HostConfig& host)
+void AndroidMainWindow::openChat(const HostConfig& host, bool credentials_saved)
 {
-    chat_ = new ChatWindow(host);
+    chat_ = new ChatWindow(host, credentials_saved);
     connect(chat_, &ChatWindow::sig_closed, this, &AndroidMainWindow::onChatClosed);
 
     root_stack_->addWidget(chat_);
@@ -618,7 +700,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<LocalHostConfig> entry = Database::instance().findHostByGuid(host_url.hostGuid());
+        std::optional<LocalHostConfig> entry = Database::instance().findLocalHostByGuid(host_url.hostGuid());
         if (!entry.has_value())
         {
             MessageDialog::info(this, tr("Connection by link"),

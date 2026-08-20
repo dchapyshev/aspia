@@ -52,6 +52,7 @@ public:
     qint64 routerId() const { return router_id_; }
     bool hasSelectedHost() const;
     bool isSelectedHostOnline() const;
+    HostId selectedHostId() const;
     HostConfig selectedHostConfig() const;
     int hostCount() const;
 

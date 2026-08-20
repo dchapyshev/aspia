@@ -27,6 +27,7 @@
 #include "base/serialization.h"
 #include "build/build_config.h"
 #include "client/database.h"
+#include "client/router_hosts_cleaner.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 
@@ -757,7 +758,7 @@ void Router::requestConnection(HostId host_id, RouterCallback<proto::router::Con
 void Router::changePassword(const SecureString& new_password,
                             RouterCallback<proto::router::ChangePasswordResult> callback)
 {
-    RouterUser new_user = RouterUser::create(user_name_, new_password);
+    RouterUser new_user = RouterUser::create(config_.username(), new_password);
 
     proto::router::ClientToRouter message;
     auto* request = message.mutable_change_password_request();
@@ -788,7 +789,7 @@ void Router::onTcpAuthenticated(qint64 router_id, const QVersionNumber& peer_ver
     LOG(INFO) << "Connected to router" << config_.address();
     version_ = peer_version;
     // The worker already unpaused the channel. Stay in CONNECTING; the transition to ONLINE happens
-    // when UserInfo arrives.
+    // when LoginResult arrives.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -849,10 +850,8 @@ void Router::onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QBy
         // The session-level messages are read here, everything else answers a request.
         if (message.has_two_factor_challenge())
             readTwoFactorChallenge(message.two_factor_challenge());
-        else if (message.has_two_factor_result())
-            readTwoFactorResult(message.two_factor_result());
-        else if (message.has_user_info())
-            readUserInfo(message.user_info());
+        else if (message.has_login_result())
+            readLoginResult(message.login_result());
         else if (message.has_notification())
             emitNotificationSignals(message.notification());
         else if (!routeReply(message))
@@ -1105,8 +1104,6 @@ void Router::disconnectWorker()
 //--------------------------------------------------------------------------------------------------
 void Router::clearSessionState()
 {
-    user_id_ = 0;
-    user_name_.clear();
     rpc_.clearPending();
     version_ = QVersionNumber();
 }
@@ -1118,30 +1115,11 @@ void Router::send(quint8 channel_id, const google::protobuf::MessageLite& messag
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::readUserInfo(const proto::router::UserInfo& user_info)
-{
-    LOG(INFO) << "User info received (user_id:" << user_info.user_id() << ")";
-
-    user_id_ = user_info.user_id();
-    user_name_ = QString::fromStdString(user_info.name());
-
-    const QString router_guid = QString::fromStdString(user_info.router_guid());
-    if (!router_guid.isEmpty() && router_guid != config_.guid())
-    {
-        config_.setGuid(router_guid);
-        if (!Database::instance().modifyRouter(config_))
-            LOG(WARNING) << "Failed to persist GUID for router" << config_.routerId();
-    }
-
-    setStatus(Status::ONLINE);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge)
 {
     // The two-factor stage can re-open on a session that was already up (our own password change
     // revokes every device token). Until it completes the router drops everything we send, so the
-    // session goes back to CONNECTING; UserInfo puts it back to ONLINE.
+    // session goes back to CONNECTING; LoginResult puts it back to ONLINE.
     if (status_ == Status::ONLINE)
         setStatus(Status::CONNECTING);
 
@@ -1202,10 +1180,12 @@ void Router::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& cha
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
+void Router::readLoginResult(const proto::router::LoginResult& result)
 {
-    // The router sends this only to deliver a freshly issued device token; failures drop the
-    // connection instead. Persist the token. Final success is marked separately by UserInfo.
+    LOG(INFO) << "Login completed for router" << config_.routerId();
+
+    // A token arrives only when a TOTP submission produced one. Failures drop the connection
+    // instead of answering, so getting here at all means the session is open.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
     if (!new_token.isEmpty())
     {
@@ -1215,6 +1195,12 @@ void Router::readTwoFactorResult(const proto::router::TwoFactorResult& result)
         if (!Database::instance().modifyRouter(config_))
             LOG(WARNING) << "Failed to persist new device token for router" << config_.routerId();
     }
+
+    setStatus(Status::ONLINE);
+
+    RouterHostsCleaner* cleaner = new RouterHostsCleaner(config_.routerId(), this);
+    connect(cleaner, &RouterHostsCleaner::sig_finished, cleaner, &QObject::deleteLater);
+    cleaner->start();
 }
 
 //--------------------------------------------------------------------------------------------------

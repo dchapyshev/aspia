@@ -120,7 +120,7 @@ bool Sidebar::dragging() const
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<LocalGroupConfig> groups = Database::instance().groupList(parent_id);
+    QList<LocalGroupConfig> groups = Database::instance().localGroupList(parent_id);
 
     Settings settings;
 
@@ -681,7 +681,7 @@ void Sidebar::onRemoveGroup()
     qint64 parent_id = local_group->parentId();
     qint64 group_id = local_group->groupId();
 
-    if (!Database::instance().removeGroup(group_id))
+    if (!Database::instance().removeLocalGroup(group_id))
     {
         MsgBox::warning(this, tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << group_id;
@@ -1410,7 +1410,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
 
         // Check if a group with the same name already exists in the target group.
-        QList<LocalGroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
+        QList<LocalGroupConfig> target_groups = Database::instance().localGroupList(target_item->groupId());
         for (const LocalGroupConfig& existing : std::as_const(target_groups))
         {
             if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
@@ -1423,7 +1423,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the group's parent in the database.
-        if (!Database::instance().moveGroup(source_group->groupId(), target_item->groupId()))
+        if (!Database::instance().moveLocalGroup(source_group->groupId(), target_item->groupId()))
         {
             MsgBox::warning(tree_widget_, tr("Failed to move the group."));
             restoreSelection();
@@ -1468,7 +1468,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Check if a host with the same name already exists in the target group.
-        QList<LocalHostConfig> target_hosts = Database::instance().hostList(target_item->groupId());
+        QList<LocalHostConfig> target_hosts = Database::instance().localHostList(target_item->groupId());
         for (const LocalHostConfig& existing : std::as_const(target_hosts))
         {
             if (existing.name() == dragged_host.name())
@@ -1480,7 +1480,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the host's group in the database.
-        std::optional<LocalHostConfig> host = Database::instance().findHost(dragged_host.id());
+        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(dragged_host.id());
         if (!host.has_value())
         {
             restoreSelection();
@@ -1489,7 +1489,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         host->setGroupId(target_item->groupId());
 
-        if (!Database::instance().modifyHost(*host))
+        if (!Database::instance().modifyLocalHost(*host))
         {
             MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
             restoreSelection();

@@ -90,6 +90,16 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    if (ui->edit_name->text().length() > RouterConfig::kMaxNameLength)
+    {
+        LOG(ERROR) << "Too long router name entered";
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", RouterConfig::kMaxNameLength));
+        ui->edit_name->setFocus();
+        ui->edit_name->selectAll();
+        return;
+    }
+
     QString address_text = ui->edit_address->text();
     Address address = Address::fromString(address_text, DEFAULT_ROUTER_CLIENT_TCP_PORT);
     if (!address.isValid())

@@ -97,6 +97,15 @@ protected:
         return serialize(message);
     }
 
+    static QByteArray checkHostStatusRequest(qint64 request_id, HostId host_id)
+    {
+        proto::router::ClientToRouter message;
+        proto::router::CheckHostStatus* request = message.mutable_check_host_status();
+        request->set_request_id(request_id);
+        request->set_host_id(host_id);
+        return serialize(message);
+    }
+
     static QByteArray userListRequest(qint64 request_id)
     {
         proto::router::AdminToRouter message;
@@ -124,7 +133,7 @@ protected:
         const std::optional<proto::router::RouterToClient> info =
             lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
         ASSERT_TRUE(info.has_value());
-        ASSERT_TRUE(info->has_user_info());
+        ASSERT_TRUE(info->has_login_result());
 
         channel->clearSent();
     }
@@ -189,9 +198,9 @@ TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A valid code completes the stage: the client gets a device token for the next login and the
-// identity of its account, and only then is the session usable.
-TEST_F(ClientOperatorTest, ValidCodeDeliversTokenAndUserInfo)
+// A valid code completes the stage: the answer opens the session and carries a device token for
+// the next login.
+TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
                        [this](ClientOperator& client, FakeTcpChannel* channel)
@@ -203,18 +212,12 @@ TEST_F(ClientOperatorTest, ValidCodeDeliversTokenAndUserInfo)
                          totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
 
         EXPECT_TRUE(client.isTwoFactorCompleted());
-        ASSERT_EQ(channel->sent().size(), 2);
+        ASSERT_EQ(channel->sent().size(), 1);
 
-        proto::router::RouterToClient first;
-        ASSERT_TRUE(parse(channel->sent().at(0).buffer, &first));
-        ASSERT_TRUE(first.has_two_factor_result());
-        EXPECT_FALSE(first.two_factor_result().new_token().empty());
-
-        proto::router::RouterToClient second;
-        ASSERT_TRUE(parse(channel->sent().at(1).buffer, &second));
-        ASSERT_TRUE(second.has_user_info());
-        EXPECT_EQ(second.user_info().user_id(), admin_.entry_id);
-        EXPECT_EQ(second.user_info().name(), admin_.name.toStdString());
+        proto::router::RouterToClient message;
+        ASSERT_TRUE(parse(channel->sent().at(0).buffer, &message));
+        ASSERT_TRUE(message.has_login_result());
+        EXPECT_FALSE(message.login_result().new_token().empty());
     });
 }
 
@@ -433,5 +436,41 @@ TEST_F(ClientOperatorTest, PasswordChangeReopensTheTwoFactorStage)
         channel->clearSent();
         channel->receive(proto::router::CHANNEL_ID_CLIENT, workspaceListRequest(12));
         EXPECT_TRUE(channel->nothingSent());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Neither host has a live session, so the answer comes from the database: a host that is still
+// there is only offline, one that is not is reported as missing. The client keeps credentials for a
+// host and drops them by that answer, so the two must not read the same.
+TEST_F(ClientOperatorTest, HostStatusTellsAMissingHostFromAnOfflineOne)
+{
+    const HostId host_id = addHost("key-hash");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this, host_id](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, checkHostStatusRequest(11, host_id));
+
+        std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_host_status());
+        EXPECT_EQ(message->host_status().request_id(), 11);
+        EXPECT_EQ(message->host_status().error_code(), proto::router::kErrorHostOffline);
+
+        channel->clearSent();
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         checkHostStatusRequest(12, host_id + 1000));
+
+        message = lastMessage<proto::router::RouterToClient>(
+            channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_host_status());
+        EXPECT_EQ(message->host_status().request_id(), 12);
+        EXPECT_EQ(message->host_status().error_code(), proto::router::kErrorNotFound);
     });
 }

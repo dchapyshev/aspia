@@ -27,7 +27,9 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/peer/host_id.h"
 #include "base/threading/worker.h"
+#include "client/database.h"
 #include "client/router.h"
 #include "client/session_keeper.h"
 #include "client/desktop/authorization_dialog.h"
@@ -93,6 +95,29 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
     // Set the window title.
     setClientTitle(host, session_type_);
 
+    bool can_save_credentials = host.entryId() > 0;
+
+    if (host.entryId() <= 0 && host.routerId() > 0)
+    {
+        const HostId host_id = stringToHostId(host.address());
+        if (!isTempHostId(host_id))
+        {
+            can_save_credentials = true;
+
+            if (host.username().isEmpty() || host.password().isEmpty())
+            {
+                std::optional<RouterHostConfig> saved_credentials =
+                    Database::instance().findRouterHost(host.routerId(), host_id);
+                if (saved_credentials.has_value())
+                {
+                    LOG(INFO) << "Using saved credentials of host" << host_id;
+                    host.setUsername(saved_credentials->username());
+                    host.setPassword(saved_credentials->password());
+                }
+            }
+        }
+    }
+
     if (host.username().isEmpty() || host.password().isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
@@ -100,6 +125,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
         AuthorizationDialog auth_dialog(this);
 
         auth_dialog.setOneTimePasswordEnabled(host.routerId() > 0);
+        auth_dialog.setSaveCredentialsVisible(can_save_credentials);
         auth_dialog.setUserName(host.username());
         auth_dialog.setPassword(host.password());
 
@@ -111,6 +137,12 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
 
         host.setUsername(auth_dialog.userName());
         host.setPassword(auth_dialog.password());
+
+        if (can_save_credentials && auth_dialog.isSaveCredentialsChecked() && !host.username().isEmpty())
+        {
+            saveHostCredentials(host);
+            credentials_saved_ = true;
+        }
     }
 
     // When connecting with a one-time password, the username must be in the following format:
@@ -258,6 +290,10 @@ void ClientWindow::onStatusChanged(NetworkWorker::Status status, const QVariant&
             if (data.canConvert<TcpChannel::ErrorCode>())
             {
                 TcpChannel::ErrorCode error_code = data.value<TcpChannel::ErrorCode>();
+
+                if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+                    forgetRefusedCredentials();
+
                 onErrorOccurred(TcpChannel::errorToString(error_code));
             }
             else
@@ -345,6 +381,81 @@ void ClientWindow::onNetworkConnected()
 
     // Now the session will receive incoming messages.
     emit sig_sessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::saveHostCredentials(const HostConfig& host)
+{
+    Database& db = Database::instance();
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(host.username());
+        local_host->setPassword(host.password());
+
+        if (!db.modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host.address());
+
+    RouterHostConfig credentials;
+    credentials.setRouterId(host.routerId());
+    credentials.setHostId(host_id);
+    credentials.setUsername(host.username());
+    credentials.setPassword(host.password());
+
+    bool saved;
+    if (db.findRouterHost(host.routerId(), host_id).has_value())
+        saved = db.modifyRouterHost(credentials);
+    else
+        saved = db.addRouterHost(credentials);
+
+    if (!saved)
+        LOG(ERROR) << "Unable to save credentials of host" << host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::forgetRefusedCredentials()
+{
+    if (!credentials_saved_)
+        return;
+
+    credentials_saved_ = false;
+
+    const HostConfig& host = session_state_->host();
+
+    LOG(INFO) << "Access denied. Removing the credentials saved for this host";
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host = Database::instance().findLocalHost(host.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(QString());
+        local_host->setPassword(SecureString());
+
+        if (!Database::instance().modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to remove credentials of local host" << host.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host.address());
+
+    if (!Database::instance().removeRouterHost(host.routerId(), host_id))
+        LOG(ERROR) << "Unable to remove credentials of host" << host_id;
 }
 
 //--------------------------------------------------------------------------------------------------

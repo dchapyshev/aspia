@@ -32,6 +32,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "client/router.h"
+#include "client/android/router_host_editor.h"
 #include "client/android/search_widget.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
@@ -45,6 +46,7 @@ constexpr int kPageTree = 0;
 constexpr int kPageHosts = 1;
 constexpr int kPageSearch = 2;
 constexpr int kPageTempHosts = 3;
+constexpr int kPageCredentials = 4;
 
 // Item data roles. A router row is marked by a workspace id of -1, the unapproved-hosts row by -2.
 constexpr int kRouterIdRole = Qt::UserRole;
@@ -167,10 +169,13 @@ RemoteWidget::RemoteWidget(QWidget* parent)
 
     temp_host_layout->addWidget(temp_host_tree_, 1);
 
+    credentials_page_ = new RouterHostEditor(stack_);
+
     stack_->addWidget(tree_page);
     stack_->addWidget(host_page);
     stack_->addWidget(search_page_);
     stack_->addWidget(temp_host_page);
+    stack_->addWidget(credentials_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -200,6 +205,10 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         if (tempHostConfigForItem(item, &config))
             showSessionMenu(config);
     });
+
+    connect(host_tree_, &TreeWidget::sig_itemLongPressed, this, &RemoteWidget::onHostLongPressed);
+    connect(credentials_page_, &RouterHostEditor::sig_accepted, this, &RemoteWidget::showTree);
+
     connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
     connect(search_button_, &IconButton::clicked, this, &RemoteWidget::showSearch);
 
@@ -561,6 +570,7 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     // Clear at once so the previous group's hosts are not left on screen while a request is in
     // flight; a cached selection refills synchronously below.
     host_tree_->clear();
+
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(item->text(0), true);
 
@@ -582,6 +592,20 @@ void RemoteWidget::onRefreshClicked()
         fetchHosts(Router::CachePolicy::RELOAD);
     else if (stack_->currentIndex() == kPageTempHosts)
         fetchTempHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RemoteWidget::onHostLongPressed(QTreeWidgetItem* item)
+{
+    if (!item || item->data(0, kMoreRole).toBool() || !item->data(0, kHostIdRole).isValid())
+        return;
+
+    const HostId host_id = item->data(0, kHostIdRole).value<HostId>();
+    if (!credentials_page_->prepareForEdit(host_router_id_, host_id))
+        return;
+
+    stack_->setCurrentIndex(kPageCredentials);
+    emit sig_titleChanged(item->text(0), true);
 }
 
 //--------------------------------------------------------------------------------------------------

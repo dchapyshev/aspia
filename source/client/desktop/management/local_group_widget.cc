@@ -116,7 +116,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     current_group_id_ = group_id;
 
-    model_->setHosts(Database::instance().hostList(group_id));
+    model_->setHosts(Database::instance().localHostList(group_id));
 
     updateStatusLabels();
 
@@ -153,7 +153,7 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
     if (model_->rowOf(entry_id) < 0)
         return;
 
-    std::optional<LocalHostConfig> updated = Database::instance().findHost(entry_id);
+    std::optional<LocalHostConfig> updated = Database::instance().findLocalHost(entry_id);
     if (!updated.has_value())
     {
         removeItem(entry_id);
@@ -365,7 +365,7 @@ void LocalGroupWidget::updateStatusLabels()
 {
     int child_groups_count = 0;
     if (current_group_id_ >= 0)
-        child_groups_count = Database::instance().groupList(current_group_id_).size();
+        child_groups_count = Database::instance().localGroupList(current_group_id_).size();
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
     status_hosts_label_->setText(tr("%n child host(s)", "", model_->rowCount()));

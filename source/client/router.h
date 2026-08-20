@@ -238,9 +238,8 @@ private:
     void disconnectWorker();
     void clearSessionState();
     void send(quint8 channel_id, const google::protobuf::MessageLite& message);
-    void readUserInfo(const proto::router::UserInfo& user_info);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
-    void readTwoFactorResult(const proto::router::TwoFactorResult& result);
+    void readLoginResult(const proto::router::LoginResult& result);
     void persistChangedPassword(const SecureString& new_password);
     void emitNotificationSignals(const proto::router::Notification& notification);
 
@@ -265,10 +264,6 @@ private:
 
     RouterCache cache_;
     RouterRpc rpc_;
-
-    // The identity of the authenticated session, from the UserInfo message.
-    qint64 user_id_ = 0;
-    QString user_name_;
 
     Q_DISABLE_COPY_MOVE(Router)
 };

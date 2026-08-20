@@ -18,8 +18,11 @@
 
 #include "base/logging.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/xml_settings.h"
 
-#include <QCoreApplication>
+#include <QApplication>
+#include <QSettings>
+#include <QTemporaryDir>
 #include <QTimer>
 
 #if defined(Q_OS_UNIX)
@@ -84,8 +87,18 @@ int main(int argc, char **argv)
 
         ScopedLogging scoped_logging(logging_settings);
 
+        // The settings of the user running the tests are none of their business, and Settings wipes
+        // the whole store when it sees an older version. The store goes to a directory of its own,
+        // which is removed with the process.
+        QTemporaryDir settings_dir;
+        QSettings::setPath(XmlSettings::format(), QSettings::UserScope, settings_dir.path());
+
+        // The widgets under test are drawn into memory: the run needs no display and opens no
+        // window on the machine it runs on.
+        qputenv("QT_QPA_PLATFORM", "offscreen");
+
         QCoreApplication::setEventDispatcher(new AsioEventDispatcher());
-        QCoreApplication app(argc, argv);
+        QApplication app(argc, argv);
         ::testing::InitGoogleTest(&argc, argv);
 
         QTimer::singleShot(MilliSeconds(0), []()

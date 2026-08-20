@@ -46,7 +46,7 @@ class ChatWindow final : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChatWindow(const HostConfig& host, QWidget* parent = nullptr);
+    ChatWindow(const HostConfig& host, bool credentials_saved, QWidget* parent = nullptr);
     ~ChatWindow() final;
 
 signals:
@@ -79,6 +79,9 @@ private slots:
     void clearTypingStatus();
 
 private:
+    // Drops the credentials kept for a host of a router after the host refused them.
+    void forgetHostCredentials();
+
     // A persisted chat entry: a message, or (when |status| is set) a status line.
     struct HistoryMessage
     {
@@ -102,6 +105,8 @@ private:
     void appendHistory(const HistoryMessage& message);
 
     HostConfig host_;
+
+    bool credentials_saved_ = false;
     QString display_name_;
     QString history_id_;
     QList<HistoryMessage> history_messages_;

@@ -47,6 +47,11 @@ class RouterConfig final
 public:
     RouterConfig();
 
+    // A name of its own is not required. displayLabel() falls back to the address.
+    static constexpr int kMaxNameLength = 64;
+
+    // A router is entered with an account of its own, so a record read back without an address, a
+    // user name or a password did not open.
     bool isValid() const;
     bool hasSameParams(const RouterConfig& other) const;
 
@@ -105,6 +110,10 @@ class RouterHostConfig final
 public:
     RouterHostConfig() = default;
 
+    // Credentials belong to one host of one router and are kept as a whole pair. A temporary host
+    // id comes back for another machine, so nothing is kept under one.
+    bool isValid() const;
+
     qint64 routerId() const { return router_id_; }
     void setRouterId(qint64 id) { router_id_ = id; }
 
@@ -132,6 +141,13 @@ class LocalHostConfig final
 {
 public:
     LocalHostConfig() = default;
+
+    static constexpr int kMaxNameLength = 64;
+    static constexpr int kMaxCommentLength = 2048;
+
+    // The credentials are kept as a whole pair, because an empty pair means the host is asked for
+    // them at every connection.
+    bool isValid() const;
 
     qint64 id() const { return id_; }
     void setId(qint64 id) { id_ = id; }
@@ -193,11 +209,19 @@ class LocalGroupConfig final
 public:
     LocalGroupConfig() = default;
 
+    static constexpr int kMaxNameLength = 64;
+    static constexpr int kMaxCommentLength = 2048;
+
+    bool isValid() const;
+
     qint64 id() const { return id_; }
     void setId(qint64 id) { id_ = id; }
 
     qint64 parentId() const { return parent_id_; }
     void setParentId(qint64 id) { parent_id_ = id; }
+
+    const QString& guid() const { return guid_; }
+    void setGuid(const QString& value) { guid_ = value; }
 
     const QString& name() const { return name_; }
     void setName(const QString& value) { name_ = value; }
@@ -208,6 +232,7 @@ public:
 private:
     qint64 id_ = -1;
     qint64 parent_id_ = 0;
+    QString guid_;
     QString name_;
     QString comment_;
 };
@@ -219,6 +244,10 @@ public:
 
     static HostConfig forLocalHost(const LocalHostConfig& host);
     static HostConfig forRouterHost(qint64 router_id, HostId host_id, const QString& name);
+
+    // The local host the connection was built from, 0 for a host of a router.
+    qint64 entryId() const { return entry_id_; }
+    void setEntryId(qint64 id) { entry_id_ = id; }
 
     qint64 routerId() const { return router_id_; }
     void setRouterId(qint64 id) { router_id_ = id; }
@@ -236,6 +265,7 @@ public:
     void setPassword(const SecureString& value) { password_ = value; }
 
 private:
+    qint64 entry_id_ = 0;
     qint64 router_id_ = 0;
     QString address_;
     QString name_;

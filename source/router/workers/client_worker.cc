@@ -18,8 +18,6 @@
 
 #include "router/workers/client_worker.h"
 
-#include <QUuid>
-
 #include <algorithm>
 
 #include "base/logging.h"
@@ -100,37 +98,22 @@ void ClientWorker::onStart()
         LOG(INFO) << "Allowed clients:" << white_list;
 
     QByteArray seed_key = settings.seedKey();
-    QString router_guid = settings.routerGuid();
 
-    if (seed_key.isEmpty() || router_guid.isEmpty())
+    if (seed_key.isEmpty())
     {
-        if (seed_key.isEmpty())
-        {
-            LOG(INFO) << "Seed key is not set; generating a new one";
-            settings.setSeedKey(Random::byteArray(64));
-        }
-
-        if (router_guid.isEmpty())
-        {
-            LOG(INFO) << "Router GUID is not set; generating a new one";
-            settings.setRouterGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
-        }
-
+        LOG(INFO) << "Seed key is not set; generating a new one";
+        settings.setSeedKey(Random::byteArray(64));
         settings.sync();
 
-        // Re-read from disk to confirm the values were actually persisted.
-        Settings written;
-        seed_key = written.seedKey();
-        router_guid = written.routerGuid();
+        // Re-read from disk to confirm the value was actually persisted.
+        seed_key = Settings().seedKey();
 
-        if (seed_key.isEmpty() || router_guid.isEmpty())
+        if (seed_key.isEmpty())
         {
-            LOG(ERROR) << "Unable to write the seed key / router GUID to the configuration";
+            LOG(ERROR) << "Unable to write the seed key to the configuration";
             return;
         }
     }
-
-    router_guid_ = router_guid.toStdString();
 
     SharedPointer<UserList> user_list = RouterUserList::open();
     if (!user_list)
@@ -303,7 +286,6 @@ void ClientWorker::onNewConnection()
 
         if (stun_port_)
             client->setStunInfo(stun_port_);
-        client->setRouterGuid(router_guid_);
 
         clients_.emplace_back(client);
         connect(client, &ClientOperator::sig_finished, this, &ClientWorker::onSessionFinished);

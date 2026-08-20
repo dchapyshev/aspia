@@ -132,7 +132,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostEditor::prepareForEdit(qint64 host_id)
 {
-    std::optional<LocalHostConfig> host = Database::instance().findHost(host_id);
+    std::optional<LocalHostConfig> host = Database::instance().findLocalHost(host_id);
     if (!host.has_value())
     {
         LOG(ERROR) << "Host not found:" << host_id;
@@ -187,6 +187,23 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
+    if (name.length() > LocalHostConfig::kMaxNameLength)
+    {
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", LocalHostConfig::kMaxNameLength));
+        name_->setFocus();
+        name_->selectAll();
+        return;
+    }
+
+    if (comment_->text().length() > LocalHostConfig::kMaxCommentLength)
+    {
+        showError(tr("Too long comment. The maximum length of the comment is %n characters.",
+                     "", LocalHostConfig::kMaxCommentLength));
+        comment_->setFocus();
+        return;
+    }
+
     const qint64 router_id = router_->currentData().toLongLong();
     const QString address_text = address_->text();
 
@@ -218,6 +235,12 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
+    if (username.isEmpty() != password_->text().isEmpty())
+    {
+        showError(tr("Enter both the user name and the password, or leave both empty."));
+        return;
+    }
+
     LocalHostConfig data;
     data.setId(entry_id_);
     data.setGroupId(group_id_);
@@ -229,7 +252,7 @@ void LocalHostEditor::onSaveClicked()
     data.setComment(comment_->text());
 
     Database& db = Database::instance();
-    const bool saved = (entry_id_ < 0) ? db.addHost(data) : db.modifyHost(data);
+    const bool saved = (entry_id_ < 0) ? db.addLocalHost(data) : db.modifyLocalHost(data);
     if (!saved)
     {
         showError(tr("Failed to save the host."));
@@ -248,7 +271,7 @@ void LocalHostEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeHost(entry_id_))
+    if (!Database::instance().removeLocalHost(entry_id_))
     {
         showError(tr("Failed to delete the host."));
         return;

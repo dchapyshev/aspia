@@ -25,6 +25,8 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "base/peer/host_id.h"
+#include "client/database.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -47,6 +49,27 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     ui->edit_display_name->setText(host_.display_name);
     ui->edit_comment->setPlainText(host_.comment);
+
+    ui->edit_password->setShowPasswordButtonVisible(true);
+
+    // A temporary host id is handed out at random and comes back for another machine, so what was
+    // saved under it would be sent to a host the user never gave it to. Such a host is edited like
+    // any other, it just has nowhere to keep credentials.
+    if (isTempHostId(host_.host_id))
+    {
+        ui->edit_username->setEnabled(false);
+        ui->edit_password->setEnabled(false);
+    }
+    else
+    {
+        std::optional<RouterHostConfig> credentials =
+            Database::instance().findRouterHost(router_id_, host_.host_id);
+        if (credentials.has_value())
+        {
+            ui->edit_username->setText(credentials->username());
+            ui->edit_password->setPassword(credentials->password());
+        }
+    }
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
@@ -135,11 +158,56 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    // The credentials are kept as a pair: an empty pair means the host is not remembered at all.
+    if (ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
+    {
+        MsgBox::warning(this, tr("Enter both the username and the password, or leave both empty."));
+        return;
+    }
+
     host_.display_name = ui->edit_display_name->text();
     host_.comment      = ui->edit_comment->toPlainText();
     host_.group_id     = ui->combo_group->currentGroupId();
 
+    // The credentials live on this computer only, so they are not the router's to accept or
+    // refuse. Kept for the answer, they would be lost with any error of it.
+    saveCredentials();
+
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
     router->editHost(host_, { this, &RouterHostDialog::onHostResultReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostDialog::saveCredentials()
+{
+    if (isTempHostId(host_.host_id))
+        return;
+
+    Database& db = Database::instance();
+
+    const QString username = ui->edit_username->text();
+    const SecureString password = ui->edit_password->password();
+
+    if (username.isEmpty() && password.isEmpty())
+    {
+        if (!db.removeRouterHost(router_id_, host_.host_id))
+            LOG(ERROR) << "Unable to remove credentials of host" << host_.host_id;
+        return;
+    }
+
+    RouterHostConfig credentials;
+    credentials.setRouterId(router_id_);
+    credentials.setHostId(host_.host_id);
+    credentials.setUsername(username);
+    credentials.setPassword(password);
+
+    bool saved;
+    if (db.findRouterHost(router_id_, host_.host_id).has_value())
+        saved = db.modifyRouterHost(credentials);
+    else
+        saved = db.addRouterHost(credentials);
+
+    if (!saved)
+        LOG(ERROR) << "Unable to save credentials of host" << host_.host_id;
 }

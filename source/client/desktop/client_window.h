@@ -148,6 +148,8 @@ private slots:
     void onNetworkConnected();
 
 private:
+    void saveHostCredentials(const HostConfig& host);
+    void forgetRefusedCredentials();
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
     void fetchConnectionOffer();
@@ -167,6 +169,7 @@ private:
     QPointer<NetworkWorker> network_worker_;
     SessionKeeper* session_keeper_ = nullptr;
     bool is_legacy_mode_ = false;
+    bool credentials_saved_ = false;
 };
 
 #endif // CLIENT_DESKTOP_CLIENT_WINDOW_H

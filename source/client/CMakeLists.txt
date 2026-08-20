@@ -51,6 +51,8 @@ list(APPEND SOURCE_CLIENT_CORE
     router.h
     router_cache.cc
     router_cache.h
+    router_hosts_cleaner.cc
+    router_hosts_cleaner.h
     router_rpc.h
     page_model.cc
     page_model.h
@@ -74,6 +76,7 @@ list(APPEND SOURCE_CLIENT
 list(APPEND SOURCE_CLIENT_TESTS
     backup_unittest.cc
     database_unittest.cc
+    desktop/authorization_dialog_unittest.cc
     desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
@@ -234,10 +237,13 @@ endif()
 if (NOT ANDROID)
     add_executable(aspia_client_tests ${SOURCE_CLIENT_TESTS})
 
+    # The widget tests draw into memory, so the run needs the offscreen platform plugin. In a static
+    # build it has to be linked in.
     target_link_libraries(aspia_client_tests
         aspia_client_core
         GTest::gtest
         Qt6::Test
+        Qt6::QOffscreenIntegrationPlugin
         ${THIRD_PARTY_LIBS})
 
     set_property(TARGET aspia_client_tests PROPERTY AUTOMOC ON)

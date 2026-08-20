@@ -40,6 +40,11 @@ public:
 
     void setOneTimePasswordEnabled(bool enable);
 
+    // Shows the checkbox that asks to keep the credentials of this host on the machine. Hidden by
+    // default: only a host of a router has somewhere to keep them.
+    void setSaveCredentialsVisible(bool visible);
+    bool isSaveCredentialsChecked() const;
+
     QString userName() const;
     void setUserName(const QString& username);
 
@@ -57,7 +62,14 @@ private slots:
 private:
     void fitSize();
 
+    // A one-time password is asked for only where it can be used, and the checkbox keeps its state
+    // between connections, so its state means nothing where it is not offered.
+    bool isOneTimePassword() const;
+    bool isSaveCredentialsOffered() const;
+
     std::unique_ptr<Ui::AuthorizationDialog> ui;
+    bool one_time_password_enabled_ = false;
+    bool save_credentials_visible_ = false;
     Q_DISABLE_COPY_MOVE(AuthorizationDialog)
 };
 

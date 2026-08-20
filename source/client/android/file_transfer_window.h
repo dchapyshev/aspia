@@ -55,7 +55,7 @@ class FileTransferWindow final : public QWidget
     Q_OBJECT
 
 public:
-    explicit FileTransferWindow(const HostConfig& host, QWidget* parent = nullptr);
+    FileTransferWindow(const HostConfig& host, bool credentials_saved, QWidget* parent = nullptr);
     ~FileTransferWindow() final;
 
 signals:
@@ -87,6 +87,9 @@ private slots:
     void onCreateDirectory(FileTask::Target target, proto::file_transfer::ErrorCode error_code);
 
 private:
+    // Drops the credentials kept for a host of a router after the host refused them.
+    void forgetHostCredentials();
+
     // Prompts for the all-files-access permission needed to browse this device's storage.
     void ensureStoragePermission();
 
@@ -103,6 +106,8 @@ private:
     void setStatusText(const QString& text);
 
     HostConfig host_;
+
+    bool credentials_saved_ = false;
     std::shared_ptr<SessionState> session_state_;
 
     std::unique_ptr<WorkerManager> worker_manager_;

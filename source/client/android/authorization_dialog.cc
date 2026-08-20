@@ -27,7 +27,8 @@
 #include "common/android/switch.h"
 
 //--------------------------------------------------------------------------------------------------
-AuthorizationDialog::AuthorizationDialog(bool one_time_password_available, QWidget* parent)
+AuthorizationDialog::AuthorizationDialog(bool one_time_password_available,
+                                         bool save_credentials_available, QWidget* parent)
     : Dialog(parent),
       username_(new LineEdit(this)),
       password_(new LineEdit(this)),
@@ -59,8 +60,20 @@ AuthorizationDialog::AuthorizationDialog(bool one_time_password_available, QWidg
     contentLayout()->addWidget(username_);
     contentLayout()->addWidget(password_);
 
-    // The one-time password switch defaults to on, so the user name field starts hidden.
-    username_->setVisible(!one_time_password_ || !one_time_password_->isChecked());
+    if (save_credentials_available)
+    {
+        save_credentials_ = new Switch(tr("Save credentials"), this);
+        save_credentials_->setChecked(true);
+        contentLayout()->addWidget(save_credentials_);
+    }
+
+    // The one-time password switch defaults to on, so the user name field starts hidden and there
+    // is nothing to keep: such a password is good for one connection.
+    const bool one_time = one_time_password_ && one_time_password_->isChecked();
+
+    username_->setVisible(!one_time);
+    if (save_credentials_)
+        save_credentials_->setVisible(!one_time);
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* accept = addButton(tr("Connect"), Button::Role::FILLED);
@@ -97,6 +110,15 @@ SecureString AuthorizationDialog::password() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isSaveCredentialsChecked() const
+{
+    // The switch is hidden while a one-time password is asked for, and what the user was never
+    // shown is not his answer.
+    const bool one_time = one_time_password_ && one_time_password_->isChecked();
+    return save_credentials_ && !one_time && save_credentials_->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onAcceptClicked()
 {
     const bool one_time = one_time_password_ && one_time_password_->isChecked();
@@ -124,6 +146,9 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
     username_->setVisible(!checked);
     if (checked)
         username_->clear();
+
+    if (save_credentials_)
+        save_credentials_->setVisible(!checked);
 }
 
 //--------------------------------------------------------------------------------------------------

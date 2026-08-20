@@ -284,25 +284,10 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::completeTwoFactor(std::string&& new_token)
 {
-    // 2FA passed. A TwoFactorResult is sent only to hand over a freshly issued device token;
-    // the token-path success carries no token, and an empty message cannot be sent over the
-    // wire, so in that case success is signalled by UserInfo alone.
-    if (!new_token.empty())
-    {
-        proto::router::RouterToClient envelope;
-        envelope.mutable_two_factor_result()->set_new_token(std::move(new_token));
-        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(envelope));
-    }
-
-    two_factor_completed_ = true;
-    sendUserInfo();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientOperator::sendUserInfo()
-{
-    // Every early return below tears the session down: a client that never receives UserInfo
-    // would otherwise hang in the connecting state with no error, and nothing retries the send.
+    // The account is read once more here: the session was authenticated against the user list, and
+    // a user removed in between must not get in. Either failure tears the session down, because a
+    // client that never receives LoginResult hangs in the connecting state with no error and
+    // nothing retries the send.
     if (!database_.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database. Closing connection";
@@ -319,12 +304,12 @@ void ClientOperator::sendUserInfo()
         return;
     }
 
-    proto::router::RouterToClient message;
-    proto::router::UserInfo* user_info = message.mutable_user_info();
-    user_info->set_router_guid(router_guid_);
-    user_info->set_user_id(user.entry_id);
-    user_info->set_name(user.name.toStdString());
+    two_factor_completed_ = true;
 
+    // Sent on every login, with or without a token to hand over: this is what opens the session on
+    // the client side.
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_new_token(std::move(new_token));
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
@@ -392,7 +377,9 @@ void ClientOperator::readCheckHostStatus(const proto::router::CheckHostStatus& c
     }
     else
     {
-        host_status->set_error_code(proto::router::kErrorHostOffline);
+        const std::string_view error_code = database_.checkHostEntry(check_host_status.host_id());
+        host_status->set_error_code(error_code == proto::router::kErrorOk ?
+                                    proto::router::kErrorHostOffline : error_code);
     }
 
     CLOG(INFO) << "Sending host status:" << *host_status;
@@ -501,7 +488,7 @@ void ClientOperator::readChangePasswordRequest(const proto::router::ChangePasswo
 
     // The rotation revoked every device token, including this session's. Re-run the 2FA stage
     // exactly as on a fresh connection: clear the completion flag and re-challenge. The client
-    // must pass 2FA again before it gets the new UserInfo (sent by completeTwoFactor); a failed
+    // must pass 2FA again before it gets the new LoginResult (sent by completeTwoFactor); a failed
     // attempt tears the session down inside readTwoFactorResponse.
     two_factor_completed_ = false;
     token_id_ = 0;

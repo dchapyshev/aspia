@@ -55,6 +55,8 @@ collect_sources(SOURCE_CLIENT_ANDROID
     router_card.h
     router_editor.cc
     router_editor.h
+    router_host_editor.cc
+    router_host_editor.h
     routers_widget.cc
     routers_widget.h
     search_widget.cc

@@ -143,6 +143,15 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RouterEditor::onSaveClicked()
 {
+    if (name_->text().length() > RouterConfig::kMaxNameLength)
+    {
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", RouterConfig::kMaxNameLength));
+        name_->setFocus();
+        name_->selectAll();
+        return;
+    }
+
     const QString address_text = address_->text();
     Address address = Address::fromString(address_text, DEFAULT_ROUTER_CLIENT_TCP_PORT);
     if (!address.isValid())

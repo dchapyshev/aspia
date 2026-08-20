@@ -30,9 +30,7 @@
 
 namespace {
 
-constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
-constexpr int kMaxCommentLength = 2048;
 
 } // namespace
 
@@ -50,7 +48,7 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     {
         setWindowTitle(tr("Edit Group"));
 
-        std::optional<LocalGroupConfig> group = Database::instance().findGroup(group_id_);
+        std::optional<LocalGroupConfig> group = Database::instance().findLocalGroup(group_id_);
         if (group.has_value())
         {
             ui->edit_name->setText(group->name());
@@ -68,7 +66,7 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         parent_id_ = parent_id;
     }
 
-    const QList<LocalGroupConfig> all_groups = Database::instance().allGroups();
+    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
 
     QList<GroupComboBox::Entry> entries;
     entries.reserve(all_groups.size());
@@ -111,22 +109,22 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (name.length() > kMaxNameLength)
+    if (name.length() > LocalGroupConfig::kMaxNameLength)
     {
         MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
-               "", kMaxNameLength));
+               "", LocalGroupConfig::kMaxNameLength));
         ui->edit_name->setFocus();
         ui->edit_name->selectAll();
         return;
     }
 
     QString comment = ui->edit_comment->toPlainText();
-    if (comment.length() > kMaxCommentLength)
+    if (comment.length() > LocalGroupConfig::kMaxCommentLength)
     {
         MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
-               "", kMaxCommentLength));
+               "", LocalGroupConfig::kMaxCommentLength));
         ui->edit_comment->setFocus();
         ui->edit_comment->selectAll();
         return;
@@ -134,7 +132,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
-    QList<LocalGroupConfig> groups = Database::instance().groupList(parent_id);
+    QList<LocalGroupConfig> groups = Database::instance().localGroupList(parent_id);
     for (const LocalGroupConfig& existing : std::as_const(groups))
     {
         if (existing.id() != group_id_ && existing.name() == name)
@@ -156,7 +154,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (group_id_ == -1)
     {
-        if (!db.addGroup(group))
+        if (!db.addLocalGroup(group))
         {
             MsgBox::warning(this, tr("Unable to add group"));
             LOG(INFO) << "Unable to add group to database";
@@ -165,7 +163,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        if (!db.modifyGroup(group))
+        if (!db.modifyLocalGroup(group))
         {
             MsgBox::warning(this, tr("Unable to modify group"));
             LOG(INFO) << "Unable to modify group in database";

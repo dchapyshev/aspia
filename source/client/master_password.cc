@@ -71,18 +71,19 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     // Reading opens the sealed column of every record with the current key, so from here on the
     // records carry their credentials in the clear and the key can be changed under them. Groups are
     // not here: a group holds a name and a comment, and neither is encrypted.
-    QList<LocalHostConfig> hosts = db.allHosts();
+    QList<LocalHostConfig> local_hosts = db.allLocalHosts();
     QList<RouterConfig> routers = db.routerList();
+    QList<RouterHostConfig> router_hosts = db.allRouterHosts();
 
     // A record whose column refused to open comes back with its credentials empty, and writing it
     // out again would make that emptiness permanent. A stored record always has these fields - both
     // addHost() and addRouter() refuse a record without them - so empty here can only mean the
     // column did not open.
-    for (const LocalHostConfig& host : std::as_const(hosts))
+    for (const LocalHostConfig& local_host : std::as_const(local_hosts))
     {
-        if (host.address().isEmpty())
+        if (local_host.address().isEmpty())
         {
-            LOG(ERROR) << "Unable to read credentials of host:" << host.id();
+            LOG(ERROR) << "Unable to read credentials of host:" << local_host.id();
             return false;
         }
     }
@@ -96,13 +97,23 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
         }
     }
 
+    for (const RouterHostConfig& router_host : std::as_const(router_hosts))
+    {
+        if (router_host.username().isEmpty())
+        {
+            LOG(ERROR) << "Unable to read credentials of router host:" << router_host.hostId();
+            return false;
+        }
+    }
+
     // Everything below is sealed with the new key: the records seal themselves on the way into the
     // database, and they take the key from the cryptor at that moment.
     cryptor.setKey(new_key);
 
     // Persisting all records together with the new verifier is atomic, so a failure cannot leave the
     // address book with some records under the old key and others under the new one.
-    if (!db.reencryptAll(hosts, routers, new_salt, new_verifier, kCurrentVersion))
+    if (!db.reencryptAll(local_hosts, routers, router_hosts, new_salt, new_verifier,
+                         kCurrentVersion))
     {
         // Nothing was written, so restore the in-memory key to keep it consistent with the database.
         cryptor.setKey(old_key);

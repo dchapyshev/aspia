@@ -48,41 +48,55 @@ message BackupFile
     message Router
     {
         int64 id            = 1;
-        string display_name = 2;
-        string address      = 3;
-        uint32 session_type = 4;
-        string username     = 5;
-        string password     = 6;
+        string guid         = 2;
+        string display_name = 3;
+        string address      = 4;
+        uint32 session_type = 5;
+        string username     = 6;
+        string password     = 7;
     }
 
-    message Group
+    // The credentials the user saved for a host of a router.
+    message RouterHost
     {
-        int64 id        = 1;
-        int64 parent_id = 2;
-        string name     = 3;
-        string comment  = 4;
+        int64 router_id = 1;
+        uint64 host_id  = 2;
+        string username = 3;
+        string password = 4;
     }
 
-    message Host
+    message LocalGroup
     {
         int64 id        = 1;
-        int64 group_id  = 2;
-        int64 router_id = 3;
-        string guid     = 4;
-        string name     = 5;
-        string comment  = 6;
-        string address  = 7;
-        string username = 8;
-        string password = 9;
+        string guid     = 2;
+        int64 parent_id = 3;
+        string name     = 4;
+        string comment  = 5;
+    }
+
+    message LocalHost
+    {
+        string guid        = 1;
+        int64 group_id     = 2;
+        int64 router_id    = 3;
+        string name        = 4;
+        string comment     = 5;
+        string address     = 6;
+        string username    = 7;
+        string password    = 8;
+        int64 create_time  = 9;
+        int64 modify_time  = 10;
+        int64 connect_time = 11;
     }
 
     // What |data| holds once opened. The device token is not exported: it is bound to the user and
     // the machine that got it.
     message Content
     {
-        repeated Router routers = 1;
-        repeated Group groups   = 2;
-        repeated Host hosts     = 3;
+        repeated Router routers          = 1;
+        repeated RouterHost router_hosts = 2;
+        repeated LocalGroup local_groups = 3;
+        repeated LocalHost local_hosts   = 4;
     }
 
     uint32 version = 1;

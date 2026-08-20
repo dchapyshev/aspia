@@ -25,8 +25,9 @@
 
 class Database;
 
-// Export and import of the address book as a single sealed file. The password of the backup is its
-// own and has nothing to do with the master password.
+// A copy of the whole address book in a single sealed file. An export writes the book as it is, and
+// an import puts that book back in place of the current one. The file is sealed with the master
+// password of the book it was saved from, so an export asks nothing of the user.
 class Backup
 {
 public:
@@ -38,38 +39,32 @@ public:
         INVALID_FORMAT,       // Not a valid/recognized backup file.
         UNSUPPORTED_VERSION,
         WRONG_PASSWORD,
+        NOTHING_EXPORTED,
         NOTHING_IMPORTED,
         INTERNAL_ERROR,
     };
 
-    struct ExportCounts
+    // How many records of each kind went through.
+    struct Report
     {
         int routers = 0;
-        int groups = 0;
-        int hosts = 0;
+        int local_groups = 0;
+        int local_hosts = 0;
+        int router_hosts = 0;
+
+        int total() const { return routers + local_groups + local_hosts + router_hosts; }
     };
 
-    struct ImportCounts
-    {
-        int routers = 0;
-        int routers_skipped = 0;
-        int groups = 0;
-        int groups_skipped = 0;
-        int hosts = 0;
-        int hosts_skipped = 0;
+    // Writes the address book of |db| to |file_path|. |report| (optional) receives what was
+    // written.
+    static Result exportToFile(Database& db, const QString& file_path, Report* report = nullptr);
 
-        int total() const { return routers + groups + hosts; }
-    };
-
-    // Exports the address book of |db| (routers, groups, hosts) to |file_path|, encrypted with
-    // |password|. |counts| (optional) receives the number of exported entries.
-    static Result exportToFile(Database& db, const QString& file_path, const SecureString& password,
-                               ExportCounts* counts = nullptr);
-
-    // Imports the address book from |file_path|, decrypting it with |password|, into |db|.
-    // |counts| (optional) receives the added/skipped tallies.
-    static Result importFromFile(Database& db, const QString& file_path,
-                                 const SecureString& password, ImportCounts* counts = nullptr);
+    // Puts the address book of the file in place of the one |db| holds. What the book had is
+    // deleted. An empty |password| means the file is expected to open with the key the book is
+    // already open with, and a file saved from another book answers WRONG_PASSWORD.
+    static Result importFromFile(
+        Database& db, const QString& file_path, const SecureString& password,
+        Report* report = nullptr);
 
 private:
     Q_DISABLE_COPY_MOVE(Backup)

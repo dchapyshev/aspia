@@ -72,7 +72,6 @@ public:
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
     void setStunInfo(quint16 port);
-    void setRouterGuid(const std::string& guid) { router_guid_ = guid; }
 
     bool isTwoFactorCompleted() const { return two_factor_completed_; }
 
@@ -115,7 +114,6 @@ private:
     // teardown of the session.
     void applyTwoFactorResult(TwoFactorHandler::Result&& result);
     void completeTwoFactor(std::string&& new_token = std::string());
-    void sendUserInfo();
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void sendConnectionOffer(qint64 request_id, HostId host_id);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
@@ -132,7 +130,6 @@ private:
 
     TcpChannel* tcp_channel_ = nullptr;
     quint16 stun_port_ = 0;
-    std::string router_guid_;
 
     TwoFactorHandler two_factor_;
     bool two_factor_completed_ = false;

@@ -106,7 +106,7 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
-    std::optional<LocalGroupConfig> group = Database::instance().findGroup(group_id);
+    std::optional<LocalGroupConfig> group = Database::instance().findLocalGroup(group_id);
     if (!group.has_value())
     {
         LOG(ERROR) << "Group not found:" << group_id;
@@ -136,6 +136,23 @@ void LocalGroupEditor::onSaveClicked()
         return;
     }
 
+    if (name.length() > LocalGroupConfig::kMaxNameLength)
+    {
+        showError(tr("Too long name. The maximum length of the name is %n characters.",
+                     "", LocalGroupConfig::kMaxNameLength));
+        name_->setFocus();
+        name_->selectAll();
+        return;
+    }
+
+    if (comment_->text().length() > LocalGroupConfig::kMaxCommentLength)
+    {
+        showError(tr("Too long comment. The maximum length of the comment is %n characters.",
+                     "", LocalGroupConfig::kMaxCommentLength));
+        comment_->setFocus();
+        return;
+    }
+
     LocalGroupConfig data;
     data.setId(entry_id_);
     data.setParentId(parent_id_);
@@ -143,7 +160,7 @@ void LocalGroupEditor::onSaveClicked()
     data.setComment(comment_->text());
 
     Database& db = Database::instance();
-    const bool saved = (entry_id_ < 0) ? db.addGroup(data) : db.modifyGroup(data);
+    const bool saved = (entry_id_ < 0) ? db.addLocalGroup(data) : db.modifyLocalGroup(data);
     if (!saved)
     {
         showError(tr("Failed to save the group."));
@@ -162,7 +179,7 @@ void LocalGroupEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeGroup(entry_id_))
+    if (!Database::instance().removeLocalGroup(entry_id_))
     {
         showError(tr("Failed to delete the group."));
         return;

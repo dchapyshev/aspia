@@ -38,14 +38,7 @@ constexpr qint64 kWorkspaceId = 10;
 class RouterTestPeer
 {
 public:
-    static qint64 userId(Router& router) { return router.user_id_; }
     static RouterRpc& rpc(Router& router) { return router.rpc_; }
-
-    static void setIdentity(Router& router, qint64 user_id, const QString& user_name)
-    {
-        router.user_id_ = user_id;
-        router.user_name_ = user_name;
-    }
 
     static void receive(Router& router, quint8 channel_id, const QByteArray& bytes)
     {
@@ -80,11 +73,6 @@ protected:
     }
 
     // Loads the identity of the session.
-    void loadIdentity()
-    {
-        RouterTestPeer::setIdentity(router_, kUserId, QString::fromUtf8(kUserName));
-    }
-
     // Hands a message to the session the way the worker does.
     void deliver(quint8 channel_id, const google::protobuf::MessageLite& message)
     {
@@ -218,7 +206,6 @@ protected:
     // Puts one entry in every cache, so what a reply drops can be seen by what is left.
     void fillCaches()
     {
-        loadIdentity();
         fetchWorkspaces(0, workspaceList({ kWorkspaceId }));
 
         proto::router::GroupList groups;
@@ -261,8 +248,6 @@ protected:
 // The list arrives as the router stored it, membership included.
 TEST_F(RouterTest, WorkspaceListIsParsed)
 {
-    loadIdentity();
-
     const RouterWorkspaceList workspaces = fetchWorkspaces(0, workspaceList({10}, "note"));
 
     ASSERT_EQ(workspaces.error_code, QString::fromStdString(proto::router::kErrorOk));
@@ -277,8 +262,6 @@ TEST_F(RouterTest, WorkspaceListIsParsed)
 // can access.
 TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
 {
-    loadIdentity();
-
     proto::router::WorkspaceList failed;
     failed.set_error_code(proto::router::kErrorInternalError);
     fetchWorkspaces(0, failed);
@@ -314,8 +297,6 @@ TEST_F(RouterTest, ListUsersConversation)
 // The same conversation on the manager channel, which carries the records of a workspace.
 TEST_F(RouterTest, GroupConversationUsesTheManagerChannel)
 {
-    loadIdentity();
-
     RouterGroup group;
     group.name = "servers";
 
@@ -389,8 +370,6 @@ TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
 // without a request.
 TEST_F(RouterTest, HostListIsParsedAndCached)
 {
-    loadIdentity();
-
     proto::router::HostList list = hostList(kWorkspaceId, { HostId(1) }, 25);
     list.mutable_host(0)->set_comment("comment");
 
@@ -418,8 +397,6 @@ TEST_F(RouterTest, HostListIsParsedAndCached)
 // The groups arrive with the workspace they belong to and are cached per workspace.
 TEST_F(RouterTest, GroupListIsParsedAndCached)
 {
-    loadIdentity();
-
     proto::router::GroupList list;
     list.set_error_code(proto::router::kErrorOk);
     list.set_workspace_id(kWorkspaceId);
@@ -475,8 +452,6 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
     deliver(proto::router::CHANNEL_ID_ADMIN, reply);
     EXPECT_EQ(calls, 1);
 
-    // The identity survives a lost connection: only disconnectFromRouter() drops it.
-    EXPECT_EQ(RouterTestPeer::userId(router_), kUserId);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -527,15 +502,14 @@ TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A session that ends keeps nothing: the identity goes with it.
-TEST_F(RouterTest, ClearedSessionKeepsNoIdentity)
+// A session that ends keeps nothing waiting: the callers are answered and the session state goes
+// with it.
+TEST_F(RouterTest, ClearedSessionKeepsNothingPending)
 {
-    loadIdentity();
-
     router_.disconnectFromRouter();
 
-    EXPECT_EQ(RouterTestPeer::userId(router_), 0);
     EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
+    EXPECT_EQ(router_.status(), Router::Status::OFFLINE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -580,8 +554,6 @@ TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
 // A lookup names the record it wants and asks for no page; the paged call is the other one.
 TEST_F(RouterTest, UserLookupNamesTheRecord)
 {
-    loadIdentity();
-
     router_.findUser(qint64(42), { &receiver_, [](const proto::router::UserList&) {} });
 
     auto request = lastRequest<proto::router::AdminToRouter>();
@@ -601,8 +573,6 @@ TEST_F(RouterTest, UserLookupNamesTheRecord)
 // The device tokens are a domain of their own: they are listed and revoked by their own messages.
 TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
 {
-    loadIdentity();
-
     router_.listUserTokens(7, { &receiver_, [](const proto::router::UserTokenList&) {} });
 
     auto request = lastRequest<proto::router::AdminToRouter>();
@@ -627,8 +597,6 @@ TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
 // it by omission.
 TEST_F(RouterTest, HostEditCarriesTheWorkspaceAndTheRevision)
 {
-    loadIdentity();
-
     RouterHost host;
     host.host_id = HostId(1);
     host.workspace_id = kWorkspaceId;
@@ -653,8 +621,6 @@ TEST_F(RouterTest, HostEditCarriesTheWorkspaceAndTheRevision)
 // or a workspace is also mandatory and judged after trimming, the way the router judges it.
 TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 {
-    loadIdentity();
-
     const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
     const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
 
@@ -711,8 +677,6 @@ TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 // there.
 TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
 {
-    loadIdentity();
-
     RouterWorkspace workspace;
     workspace.entry_id = kWorkspaceId;
     workspace.name = "  " + QString(proto::router::kMaxEntryNameLength, QChar('n')) + "  ";
@@ -733,8 +697,6 @@ TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
 // the parsing of the reply is where it stops.
 TEST_F(RouterTest, NegativeTotalCountDoesNotReachTheCallers)
 {
-    loadIdentity();
-
     const RouterHostList delivered = fetchHosts(hostList(kWorkspaceId, { HostId(1) }, -5));
     EXPECT_EQ(delivered.total_count, 0);
 

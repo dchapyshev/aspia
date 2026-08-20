@@ -62,7 +62,7 @@ class DesktopWindow final : public QWidget
     Q_OBJECT
 
 public:
-    explicit DesktopWindow(const HostConfig& host, QWidget* parent = nullptr);
+    DesktopWindow(const HostConfig& host, bool credentials_saved, QWidget* parent = nullptr);
     ~DesktopWindow() final;
 
 signals:
@@ -111,6 +111,9 @@ private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
+    // Drops the credentials kept for a host of a router after the host refused them.
+    void forgetHostCredentials();
+
     void start();
     void fetchConnectionOffer();
     void requestConnectionOffer(Router* router);
@@ -134,6 +137,8 @@ private:
     void readClipboardEvent(const proto::clipboard::Event& event);
 
     HostConfig host_;
+
+    bool credentials_saved_ = false;
     std::shared_ptr<SessionState> session_state_;
     ScopedQPointer<Clipboard> clipboard_;
 

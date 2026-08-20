@@ -34,7 +34,16 @@ namespace {
 // without this a router column moved into a host row would parse as a host one and open.
 const char kLocalHostsAad[] = "local_hosts";
 const char kRoutersAad[] = "routers";
-const char kRouterHostsAad[] = "router_hosts";
+
+// The credentials of a router host are sealed for their row, both halves of its key. Every column
+// of the table opens with the same key, so a blob moved into another row - of another host, or of
+// the same host under another router - would otherwise open and hand out credentials the user
+// never saved for it.
+QByteArray routerHostAad(qint64 router_id, HostId host_id)
+{
+    return QByteArrayLiteral("router_hosts/") + QByteArray::number(router_id) + '/' +
+           QByteArray::number(host_id);
+}
 
 SecureString toSecureString(const std::string& value)
 {
@@ -43,7 +52,7 @@ SecureString toSecureString(const std::string& value)
 }
 
 template <class Message>
-std::optional<QByteArray> sealMessage(const Message& message, const char* aad)
+std::optional<QByteArray> sealMessage(const Message& message, QByteArrayView aad)
 {
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
@@ -58,7 +67,7 @@ std::optional<QByteArray> sealMessage(const Message& message, const char* aad)
 }
 
 template <class Message>
-bool unsealMessage(const QByteArray& blob, const char* aad, Message* message)
+bool unsealMessage(const QByteArray& blob, QByteArrayView aad, Message* message)
 {
     DataCryptor& cryptor = DataCryptor::instance();
     CHECK(cryptor.isValid());
@@ -93,7 +102,8 @@ RouterConfig::RouterConfig()
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
-    return !address_.isEmpty() && !username_.isEmpty() && !password_.isEmpty();
+    return !address_.isEmpty() && !username_.isEmpty() && !password_.isEmpty() &&
+           display_name_.length() <= kMaxNameLength;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,18 +192,23 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool RouterHostConfig::isValid() const
+{
+    return router_id_ > 0 && host_id_ != kInvalidHostId && !isTempHostId(host_id_) &&
+           !username_.isEmpty() && !password_.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterHostConfig::encryptedData() const
 {
     proto::storage::HostBlob data;
-    data.set_address(hostIdToString(host_id_).toStdString());
     data.set_username(username_.toStdString());
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
 
-    std::optional<QByteArray> sealed = sealMessage(data, kRouterHostsAad);
+    std::optional<QByteArray> sealed = sealMessage(data, routerHostAad(router_id_, host_id_));
 
-    memZero(data.mutable_address());
     memZero(data.mutable_username());
     memZero(data.mutable_password());
 
@@ -210,28 +225,28 @@ bool RouterHostConfig::setEncryptedData(const QByteArray& blob)
         return true;
 
     proto::storage::HostBlob data;
-    if (!unsealMessage(blob, kRouterHostsAad, &data))
+    if (!unsealMessage(blob, routerHostAad(router_id_, host_id_), &data))
         return false;
 
-    // The column names the host it was sealed for. Every column of the table opens with the same
-    // key, so without this one moved to another row would hand its credentials to a host the user
-    // never saved them for.
-    const bool same_host = stringToHostId(QString::fromStdString(data.address())) == host_id_;
-    if (same_host)
-    {
-        username_ = QString::fromStdString(data.username());
-        password_ = toSecureString(data.password());
-    }
-    else
-    {
-        LOG(ERROR) << "Credentials of host" << host_id_ << "are sealed for another host";
-    }
+    username_ = QString::fromStdString(data.username());
+    password_ = toSecureString(data.password());
 
-    memZero(data.mutable_address());
     memZero(data.mutable_username());
     memZero(data.mutable_password());
 
-    return same_host;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostConfig::isValid() const
+{
+    if (name_.isEmpty() || name_.length() > kMaxNameLength ||
+        comment_.length() > kMaxCommentLength)
+    {
+        return false;
+    }
+
+    return !address_.isEmpty() && group_id_ >= 0 && username_.isEmpty() == password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,10 +294,18 @@ bool LocalHostConfig::setEncryptedData(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool LocalGroupConfig::isValid() const
+{
+    return !name_.isEmpty() && name_.length() <= kMaxNameLength &&
+           comment_.length() <= kMaxCommentLength;
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 HostConfig HostConfig::forLocalHost(const LocalHostConfig& host)
 {
     HostConfig config;
+    config.setEntryId(host.id());
     config.setRouterId(host.routerId());
     config.setAddress(host.address());
     config.setName(host.name());

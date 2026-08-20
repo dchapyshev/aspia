@@ -1489,6 +1489,31 @@ bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string_view Database::checkHostEntry(HostId host_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    SqlQuery query(db_, "SELECT 1 FROM hosts WHERE id=?");
+    query.addUInt64(host_id);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::string_view Database::hostWorkspaceId(HostId host_id, qint64* workspace_id) const
 {
     CHECK(workspace_id);

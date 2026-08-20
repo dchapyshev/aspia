@@ -552,6 +552,46 @@ TEST_F(RouterDatabaseTest, HostConnectDoesNotMoveTheRevision)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The entry of a host is what tells a host that is only turned off from one the router no longer
+// has: the client keeps credentials for a host and drops them by that answer.
+TEST_F(RouterDatabaseTest, HostEntryIsFoundWhileTheHostIsInTheDatabase)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    EXPECT_EQ(db_.checkHostEntry(host_id), proto::router::kErrorOk);
+    EXPECT_EQ(db_.checkHostEntry(host_id + 1000), proto::router::kErrorNotFound);
+    EXPECT_EQ(db_.checkHostEntry(kInvalidHostId), proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A read that failed says nothing about the host being gone. Collapsed into "not found", the
+// answer would make every client that asks drop the credentials its user saved.
+TEST_F(RouterDatabaseTest, FailedHostEntryReadIsNotAMissingHost)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    ASSERT_TRUE(execRaw("DROP TABLE hosts"));
+
+    EXPECT_EQ(db_.checkHostEntry(host_id), proto::router::kErrorInternalError);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Removal takes the entry out at once, before the host acknowledges the command, so from that
+// moment the host reads as one the router does not have.
+TEST_F(RouterDatabaseTest, ScheduledRemovalTakesTheHostEntryOut)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+
+    EXPECT_EQ(db_.checkHostEntry(host_id), proto::router::kErrorNotFound);
+    EXPECT_TRUE(db_.hasPendingHostRemoval(host_id));
+}
+
+//--------------------------------------------------------------------------------------------------
 // A released host cannot keep the place and the note it had inside the workspace it left.
 TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndComment)
 {

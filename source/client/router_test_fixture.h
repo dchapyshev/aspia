@@ -33,13 +33,10 @@ protected:
     static constexpr char kPassword[] = "Password1234!";
     static constexpr qint64 kUserId = 1;
 
-    // The UserInfo message the router sends right after the two-factor stage.
-    proto::router::UserInfo userInfo()
+    // The message the router sends to open the session once the two-factor stage is passed.
+    proto::router::LoginResult loginResult()
     {
-        proto::router::UserInfo info;
-        info.set_user_id(kUserId);
-        info.set_name(kUserName);
-        return info;
+        return proto::router::LoginResult();
     }
 
     proto::router::HostList hostList(qint64 workspace_id, const QList<HostId>& host_ids,

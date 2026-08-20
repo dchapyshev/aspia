@@ -65,27 +65,44 @@ AuthorizationDialog::~AuthorizationDialog()
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
+    one_time_password_enabled_ = enable;
+
     ui->checkbox_one_time_password->setVisible(enable);
 
-    if (!enable)
-    {
-        ui->label_username->setVisible(true);
-        ui->edit_username->setVisible(true);
-    }
-    else
-    {
-        bool is_checked = ui->checkbox_one_time_password->isChecked();
+    const bool one_time = isOneTimePassword();
 
-        ui->label_username->setVisible(!is_checked);
-        ui->edit_username->setVisible(!is_checked);
-    }
+    ui->label_username->setVisible(!one_time);
+    ui->edit_username->setVisible(!one_time);
+    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
 
     fitSize();
 }
 
 //--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::setSaveCredentialsVisible(bool visible)
+{
+    save_credentials_visible_ = visible;
+
+    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
+
+    fitSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isSaveCredentialsChecked() const
+{
+    // What the user was never shown is not his answer.
+    return isSaveCredentialsOffered() && ui->checkbox_save_credentials->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString AuthorizationDialog::userName() const
 {
+    // A one-time password is asked of the host itself, and the field is hidden while it is. What
+    // the user was never shown is not his answer.
+    if (isOneTimePassword())
+        return QString();
+
     return ui->edit_username->text();
 }
 
@@ -93,6 +110,10 @@ QString AuthorizationDialog::userName() const
 void AuthorizationDialog::setUserName(const QString& username)
 {
     ui->edit_username->setText(username);
+
+    // A saved user name means a named-user connection, so the one-time password path does not apply.
+    if (!username.isEmpty())
+        ui->checkbox_one_time_password->setChecked(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -112,7 +133,7 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 {
     LOG(INFO) << "Show event detected";
 
-    if (ui->edit_username->text().isEmpty() && !ui->checkbox_one_time_password->isChecked())
+    if (ui->edit_username->text().isEmpty() && !isOneTimePassword())
         ui->edit_username->setFocus();
     else
         ui->edit_password->setFocus();
@@ -127,7 +148,12 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 
     ui->label_username->setVisible(!checked);
     ui->edit_username->setVisible(!checked);
-    ui->edit_username->clear();
+
+    if (checked)
+        ui->edit_username->clear();
+
+    // A one-time password is good for one connection, so there is nothing to keep.
+    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
 
     fitSize();
 }
@@ -139,7 +165,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        if (!ui->checkbox_one_time_password->isChecked())
+        if (!isOneTimePassword())
         {
             if (ui->edit_username->text().isEmpty())
             {
@@ -174,4 +200,16 @@ void AuthorizationDialog::fitSize()
     {
         setFixedHeight(sizeHint().height());
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isOneTimePassword() const
+{
+    return one_time_password_enabled_ && ui->checkbox_one_time_password->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isSaveCredentialsOffered() const
+{
+    return save_credentials_visible_ && !isOneTimePassword();
 }

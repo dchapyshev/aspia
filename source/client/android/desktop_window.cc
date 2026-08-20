@@ -90,9 +90,10 @@ QString formatSessionText(int index, const QString& user_name, bool is_console)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopWindow::DesktopWindow(const HostConfig& host, QWidget* parent)
+DesktopWindow::DesktopWindow(const HostConfig& host, bool credentials_saved, QWidget* parent)
     : QWidget(parent),
       host_(host),
+      credentials_saved_(credentials_saved),
       view_(new DesktopView()),
       status_(new Label(QString(), Label::Role::BODY))
 {
@@ -464,6 +465,40 @@ void DesktopWindow::onApplicationStateChanged(Qt::ApplicationState state)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopWindow::forgetHostCredentials()
+{
+    if (!credentials_saved_)
+        return;
+
+    credentials_saved_ = false;
+
+    LOG(INFO) << "Access denied. Removing the credentials saved for this host";
+
+    if (host_.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host =
+            Database::instance().findLocalHost(host_.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host_.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(QString());
+        local_host->setPassword(SecureString());
+
+        if (!Database::instance().modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to remove credentials of local host" << host_.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host_.address());
+
+    if (!Database::instance().removeRouterHost(host_.routerId(), host_id))
+        LOG(ERROR) << "Unable to remove credentials of host" << host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWindow::start()
 {
     // When connecting with a one-time password the authorization dialog leaves the user name
@@ -743,10 +778,17 @@ void DesktopWindow::onStatusChanged(NetworkWorker::Status status, const QVariant
 
         case NetworkWorker::Status::HOST_DISCONNECTED:
         {
-            QString message = tr("The connection to the host has been lost.");
-            if (data.canConvert<TcpChannel::ErrorCode>())
-                message = TcpChannel::errorToString(data.value<TcpChannel::ErrorCode>());
-            setStatusText(message);
+            const TcpChannel::ErrorCode error_code = data.value<TcpChannel::ErrorCode>();
+            if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+            {
+                forgetHostCredentials();
+                setStatusText(TcpChannel::errorToString(error_code));
+            }
+            else
+            {
+                setStatusText(tr("The connection to the host has been lost."));
+            }
+
             view_->setFrame(SharedFrame());
             connected_ = false;
         }

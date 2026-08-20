@@ -74,9 +74,6 @@ public:
     void setSeedKey(const QByteArray& seed_key);
     QByteArray seedKey() const;
 
-    void setRouterGuid(const QString& guid);
-    QString routerGuid() const;
-
     void setEnableStun(bool enable);
     bool isStunEnabled() const;
 

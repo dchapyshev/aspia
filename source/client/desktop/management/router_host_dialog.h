@@ -47,9 +47,10 @@ public:
 private slots:
     void onGroupListReceived(const Router::GroupList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void onButtonBoxClicked(QAbstractButton* button);
+    void saveCredentials();
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;

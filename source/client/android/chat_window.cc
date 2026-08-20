@@ -37,6 +37,8 @@
 #include "base/crypto/generic_hash.h"
 #include "base/files/base_paths.h"
 #include "base/logging.h"
+#include "base/net/tcp_channel.h"
+#include "base/peer/host_id.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/threading/worker.h"
@@ -122,9 +124,10 @@ QString statusToString(const proto::chat::Status& status)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ChatWindow::ChatWindow(const HostConfig& host, QWidget* parent)
+ChatWindow::ChatWindow(const HostConfig& host, bool credentials_saved, QWidget* parent)
     : QWidget(parent),
       host_(host),
+      credentials_saved_(credentials_saved),
       display_name_(Database::instance().displayName()),
       app_bar_(new AppBar(this)),
       view_(new ChatView(this)),
@@ -225,9 +228,21 @@ void ChatWindow::onStatusChanged(NetworkWorker::Status status, const QVariant& d
             break;
 
         case NetworkWorker::Status::HOST_DISCONNECTED:
-            setStatusText(tr("The connection to the host has been lost."));
+        {
+            const TcpChannel::ErrorCode error_code = data.value<TcpChannel::ErrorCode>();
+            if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
+            {
+                forgetHostCredentials();
+                setStatusText(TcpChannel::errorToString(error_code));
+            }
+            else
+            {
+                setStatusText(tr("The connection to the host has been lost."));
+            }
+
             view_->setInputEnabled(false);
-            break;
+        }
+        break;
 
         case NetworkWorker::Status::RELAY_ERROR:
             setStatusText(data.toString());
@@ -364,6 +379,40 @@ void ChatWindow::onTyping()
 void ChatWindow::clearTypingStatus()
 {
     view_->setStatusText(QString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWindow::forgetHostCredentials()
+{
+    if (!credentials_saved_)
+        return;
+
+    credentials_saved_ = false;
+
+    LOG(INFO) << "Access denied. Removing the credentials saved for this host";
+
+    if (host_.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host =
+            Database::instance().findLocalHost(host_.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host_.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(QString());
+        local_host->setPassword(SecureString());
+
+        if (!Database::instance().modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to remove credentials of local host" << host_.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host_.address());
+
+    if (!Database::instance().removeRouterHost(host_.routerId(), host_id))
+        LOG(ERROR) << "Unable to remove credentials of host" << host_id;
 }
 
 //--------------------------------------------------------------------------------------------------
