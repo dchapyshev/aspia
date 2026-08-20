@@ -592,25 +592,27 @@ Backup::Result openContent(
 // Writes the address book of the file into the database, in place of the one it holds. Everything
 // the file is read for happens before a single row is written, and what the database is handed is
 // a batch it takes in one go or not at all.
-Backup::Result importContent(Database& db, const BackupContent& content, Backup::Report& report)
+Backup::Result importContent(Database& db, const BackupContent& content, Backup::Report* report)
 {
     QList<RouterConfig> routers;
     QList<LocalGroupConfig> local_groups;
     QList<LocalHostConfig> local_hosts;
     QList<RouterHostConfig> router_hosts;
 
+    Backup::Report counted;
+
     QHash<qint64, qint64> router_links;
-    buildRouters(content, &routers, &router_links, &report);
+    buildRouters(content, &routers, &router_links, &counted);
 
     QHash<qint64, qint64> group_links;
-    buildLocalGroups(content, &local_groups, &group_links, &report);
+    buildLocalGroups(content, &local_groups, &group_links, &counted);
 
-    buildLocalHosts(content, &local_hosts, group_links, router_links, &report);
-    buildRouterHosts(content, &router_hosts, router_links, &report);
+    buildLocalHosts(content, &local_hosts, group_links, router_links, &counted);
+    buildRouterHosts(content, &router_hosts, router_links, &counted);
 
     // A file with nothing in it says nothing about what the book should hold, so the book is left
     // alone instead of being emptied.
-    if (report.total() == 0)
+    if (counted.total() == 0)
         return Backup::Result::NOTHING_IMPORTED;
 
     if (!db.import(routers, local_groups, local_hosts, router_hosts))
@@ -618,6 +620,11 @@ Backup::Result importContent(Database& db, const BackupContent& content, Backup:
         LOG(ERROR) << "Unable to write the address book of the file";
         return Backup::Result::INTERNAL_ERROR;
     }
+
+    // The batch goes into the book whole or not at all, so the tally is handed over only once it
+    // is there.
+    if (report)
+        *report = counted;
 
     return Backup::Result::SUCCESS;
 }
@@ -643,12 +650,10 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
         return Result::DATABASE_UNAVAILABLE;
     }
 
-    Report local_report;
-    Report& written = report ? *report : local_report;
-
+    Report counted;
     BackupContent data;
 
-    const Result collected = collectContent(db, &data, &written);
+    const Result collected = collectContent(db, &data, &counted);
     if (collected != Result::SUCCESS)
     {
         eraseSecretFields(&data);
@@ -657,7 +662,7 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
 
     // An address book with nothing in it seals into an empty payload, which is not a file anything
     // could be read back from.
-    if (written.total() == 0)
+    if (counted.total() == 0)
         return Result::NOTHING_EXPORTED;
 
     DataCryptor cryptor(CipherType::AES256_GCM, key);
@@ -703,6 +708,10 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
         return Result::FILE_ERROR;
     }
 
+    // Counted while the book was read, handed over only once the file is on disk.
+    if (report)
+        *report = counted;
+
     return Result::SUCCESS;
 }
 
@@ -726,8 +735,7 @@ Backup::Result Backup::importFromFile(
     if (result != Result::SUCCESS)
         return result;
 
-    Report local_report;
-    result = importContent(db, content, report ? *report : local_report);
+    result = importContent(db, content, report);
 
     eraseSecretFields(&content);
     return result;

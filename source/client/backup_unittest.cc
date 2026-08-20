@@ -32,6 +32,7 @@
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/peer/host_id.h"
+#include "base/sql/sql_database.h"
 #include "client/database.h"
 #include "proto/router.h"
 #include "proto/storage.h"
@@ -45,7 +46,7 @@ protected:
 
         ASSERT_TRUE(dir_.isValid());
         ASSERT_TRUE(source_.open(dir_.filePath("source.db3")));
-        ASSERT_TRUE(target_.open(dir_.filePath("target.db3")));
+        ASSERT_TRUE(target_.open(targetPath()));
 
         // The file is sealed with the key of the book it is saved from, so the book has to be one
         // with a master password set. reencryptAll() with nothing to re-encrypt is how a book gets
@@ -66,6 +67,18 @@ protected:
     static SecureString password() { return SecureString(QString("Password123")); }
 
     QString backupPath() const { return dir_.filePath("book.aspia-backup"); }
+    QString targetPath() const { return dir_.filePath("target.db3"); }
+
+    // Runs a statement on the target book behind its back. Taking a table out this way makes the
+    // write of an import fail after the records of the file have been counted.
+    bool execOnTarget(const char* sql)
+    {
+        SqlDatabase raw;
+        if (!raw.open(targetPath()))
+            return false;
+
+        return raw.exec(sql);
+    }
 
     static qint64 addGroup(Database& db, const QString& name, qint64 parent_id)
     {
@@ -856,6 +869,10 @@ TEST_F(BackupTest, BookWithOneUnreadableHostIsNotExported)
     Backup::Report report;
     EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
     EXPECT_FALSE(QFile::exists(backupPath()));
+
+    // The group was read and counted before the host refused to open. The report counts what went
+    // into the file, and no file was written.
+    EXPECT_EQ(report.total(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1070,4 +1087,20 @@ TEST_F(BackupTest, FileWithoutAnAddressBookLeavesTheBookAlone)
 
     EXPECT_EQ(importBook(), Backup::Result::NOTHING_IMPORTED);
     EXPECT_EQ(groupNames(target_), QStringList({ "own group" }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The batch of an import goes into the book whole or not at all. A batch that was rolled back left
+// nothing behind, and the report says the same.
+TEST_F(BackupTest, ReportOfARefusedImportCountsNothing)
+{
+    const qint64 group = addGroup(source_, "group", 0);
+    addHost(source_, "host", group);
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_TRUE(execOnTarget("DROP TABLE local_hosts"));
+
+    Backup::Report report;
+    EXPECT_EQ(importBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_EQ(report.total(), 0);
 }

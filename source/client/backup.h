@@ -56,12 +56,13 @@ public:
     };
 
     // Writes the address book of |db| to |file_path|. |report| (optional) receives what was
-    // written.
+    // written, and is left alone unless the file was.
     static Result exportToFile(Database& db, const QString& file_path, Report* report = nullptr);
 
     // Puts the address book of the file in place of the one |db| holds. What the book had is
     // deleted. An empty |password| means the file is expected to open with the key the book is
-    // already open with, and a file saved from another book answers WRONG_PASSWORD.
+    // already open with, and a file saved from another book answers WRONG_PASSWORD. |report|
+    // (optional) receives what arrived, and is left alone unless the book took it.
     static Result importFromFile(
         Database& db, const QString& file_path, const SecureString& password,
         Report* report = nullptr);
