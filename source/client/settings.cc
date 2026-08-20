@@ -25,7 +25,6 @@
 #include <mutex>
 
 #include "base/logging.h"
-#include "base/xml_settings.h"
 #include "base/net/udp_channel.h"
 #include "build/version.h"
 #include "client/config.h"
@@ -78,7 +77,7 @@ void writeExpanded(QSettings& settings, const QString& key, bool expanded)
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : settings_(XmlSettings::format(), QSettings::UserScope, "aspia", "client")
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "client")
 {
     static std::once_flag version_check_flag;
     std::call_once(version_check_flag, [this]()

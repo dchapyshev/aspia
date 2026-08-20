@@ -18,17 +18,15 @@
 
 #include "host/host_storage.h"
 
-#include "base/xml_settings.h"
-
 //--------------------------------------------------------------------------------------------------
 HostStorage::HostStorage()
     // The desktop host runs as a system service and keeps these values machine-wide (SystemScope). On
     // Android the app is sandboxed and cannot write to the system scope, so the values would be lost on
     // every start; the app-private user scope persists them instead.
 #if defined(Q_OS_ANDROID)
-    : impl_(XmlSettings::format(), QSettings::UserScope, "aspia", "host_storage")
+    : impl_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host_storage")
 #else
-    : impl_(XmlSettings::format(), QSettings::SystemScope, "aspia", "host_storage")
+    : impl_(QSettings::IniFormat, QSettings::SystemScope, "aspia", "host_storage")
 #endif
 {
     // Nothing

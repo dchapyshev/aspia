@@ -18,7 +18,6 @@
 
 #include "host/system_settings.h"
 
-#include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "host/screen_capturer.h"
 
@@ -43,9 +42,9 @@ SystemSettings::SystemSettings()
     // the app is sandboxed and cannot write to the system scope, so use the app-private user scope there
     // (the same split as HostStorage).
 #if defined(Q_OS_ANDROID)
-    : settings_(XmlSettings::format(), QSettings::UserScope, kOrganization, kApplication)
+    : settings_(QSettings::IniFormat, QSettings::UserScope, kOrganization, kApplication)
 #else
-    : settings_(XmlSettings::format(), QSettings::SystemScope, kOrganization, kApplication)
+    : settings_(QSettings::IniFormat, QSettings::SystemScope, kOrganization, kApplication)
 #endif
 {
     // Nothing

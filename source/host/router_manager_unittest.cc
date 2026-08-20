@@ -38,7 +38,6 @@
 #include <vector>
 
 #include "base/serialization.h"
-#include "base/xml_settings.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_server.h"
@@ -174,8 +173,8 @@ protected:
         // Moving the scope into the temporary directory keeps the test off the real storage without
         // any test-only entry in the production code. Both scopes are redirected because the host
         // picks one by platform.
-        QSettings::setPath(XmlSettings::format(), QSettings::SystemScope, temp_dir_.path());
-        QSettings::setPath(XmlSettings::format(), QSettings::UserScope, temp_dir_.path());
+        QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, temp_dir_.path());
+        QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, temp_dir_.path());
 
         router_keys_ = KeyPair::create(KeyPair::Type::X25519);
         ASSERT_TRUE(router_keys_.isValid());

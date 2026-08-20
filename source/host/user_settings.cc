@@ -20,7 +20,6 @@
 
 #include <QLocale>
 
-#include "base/xml_settings.h"
 #include "proto/peer.h"
 
 namespace {
@@ -35,7 +34,7 @@ const QString kSystemInfoWindowStateParam = "SystemInfoWindowState";
 
 //--------------------------------------------------------------------------------------------------
 UserSettings::UserSettings()
-    : settings_(XmlSettings::format(), QSettings::UserScope, "aspia", "host")
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "host")
 {
     // Nothing
 }

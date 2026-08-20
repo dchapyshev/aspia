@@ -77,9 +77,7 @@ list(APPEND SOURCE_BASE
     system_error.h
     time_types.h
     version_constants.cc
-    version_constants.h
-    xml_settings.cc
-    xml_settings.h)
+    version_constants.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE
@@ -138,7 +136,6 @@ list(APPEND SOURCE_BASE_TESTS
     shared_pointer_unittest.cc
     smbios_parser_unittest.cc
     string_util_unittest.cc
-    xml_settings_unittest.cc
     tests_main.cc)
 
 include(codec/sources.cmake)
