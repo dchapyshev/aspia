@@ -150,7 +150,8 @@ void RouterHostEditor::onSaveClicked()
     credentials.setUsername(username);
     credentials.setPassword(SecureString(password));
 
-    bool saved;
+    bool saved = false;
+
     if (db.findRouterHost(router_id_, host_id_).has_value())
         saved = db.modifyRouterHost(credentials);
     else

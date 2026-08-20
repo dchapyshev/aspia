@@ -525,7 +525,8 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
     credentials.setUsername(host.username());
     credentials.setPassword(host.password());
 
-    bool saved;
+    bool saved = false;
+
     if (db.findRouterHost(host.routerId(), host_id).has_value())
         saved = db.modifyRouterHost(credentials);
     else

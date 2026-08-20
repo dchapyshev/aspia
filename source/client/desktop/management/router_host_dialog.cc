@@ -217,7 +217,8 @@ bool RouterHostDialog::saveCredentials()
     credentials.setUsername(username);
     credentials.setPassword(password);
 
-    bool saved;
+    bool saved = false;
+
     if (db.findRouterHost(router_id_, host_.host_id).has_value())
         saved = db.modifyRouterHost(credentials);
     else
