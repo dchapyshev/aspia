@@ -99,10 +99,13 @@ message CheckHostStatus
     uint64 host_id   = 2;
 }
 
+// The answer to CheckHostStatus. "not_found" is the one answer that says the router no longer has
+// the host, and the client drops the credentials it keeps for it by that answer alone. A host that
+// is only turned off answers "host_offline", and a read that failed answers "internal_error".
 message HostStatus
 {
     int64 request_id     = 1;
-    string error_code    = 2;
+    string error_code    = 2; // "ok" | "host_offline" | "not_found" | "internal_error"
     peer.Version version = 3;
 }
 
