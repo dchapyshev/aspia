@@ -183,3 +183,47 @@ TEST_F(AuthorizationDialogTest, CredentialsAreNotOfferedWhenTheyAreNotAskedFor)
     EXPECT_FALSE(save->isVisible());
     EXPECT_FALSE(dialog.isSaveCredentialsChecked());
 }
+
+//--------------------------------------------------------------------------------------------------
+// The box keeps its state between connections, and that state is what the user chose. A record
+// that carries a user name clears the box for the dialog it opens and for that dialog only.
+TEST_F(AuthorizationDialogTest, SavedUserNameLeavesTheRememberedChoiceAlone)
+{
+    rememberOneTimePassword(true);
+
+    {
+        AuthorizationDialog dialog;
+        dialog.setOneTimePasswordEnabled(true);
+        dialog.setUserName("admin");
+        dialog.show();
+
+        QCheckBox* one_time = oneTimePasswordBox(dialog);
+        ASSERT_TRUE(one_time);
+        EXPECT_FALSE(one_time->isChecked());
+    }
+
+    Settings settings;
+    EXPECT_TRUE(settings.isOneTimePasswordChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+// What the user does with the box is what comes back the next time the dialog opens.
+TEST_F(AuthorizationDialogTest, ChoiceOfTheUserIsRemembered)
+{
+    rememberOneTimePassword(false);
+
+    {
+        AuthorizationDialog dialog;
+        dialog.setOneTimePasswordEnabled(true);
+        dialog.show();
+
+        QCheckBox* one_time = oneTimePasswordBox(dialog);
+        ASSERT_TRUE(one_time);
+
+        QTest::mouseClick(one_time, Qt::LeftButton);
+        ASSERT_TRUE(one_time->isChecked());
+    }
+
+    Settings settings;
+    EXPECT_TRUE(settings.isOneTimePasswordChecked());
+}

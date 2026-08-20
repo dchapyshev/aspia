@@ -57,6 +57,7 @@ protected:
 
 private slots:
     void onOneTimePasswordToggled(bool checked);
+    void onOneTimePasswordClicked(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
@@ -69,6 +70,7 @@ private:
 
     std::unique_ptr<Ui::AuthorizationDialog> ui;
     bool one_time_password_enabled_ = false;
+    bool one_time_password_choice_ = false;
     bool save_credentials_visible_ = false;
     Q_DISABLE_COPY_MOVE(AuthorizationDialog)
 };

@@ -31,24 +31,26 @@
 //--------------------------------------------------------------------------------------------------
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     : QDialog(parent),
-      ui(std::make_unique<Ui::AuthorizationDialog>())
+      ui(std::make_unique<Ui::AuthorizationDialog>()),
+      one_time_password_choice_(Settings().isOneTimePasswordChecked())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    Settings settings;
-
-    bool is_one_time_password_checked = settings.isOneTimePasswordChecked();
-    ui->checkbox_one_time_password->setChecked(is_one_time_password_checked);
-    onOneTimePasswordToggled(is_one_time_password_checked);
+    ui->checkbox_one_time_password->setChecked(one_time_password_choice_);
+    onOneTimePasswordToggled(one_time_password_choice_);
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
 
+    // The box follows the state of the dialog, so what it holds is not always an answer of the
+    // user. Only clicked() is one, and only that is remembered.
     connect(ui->checkbox_one_time_password, &QCheckBox::toggled,
             this, &AuthorizationDialog::onOneTimePasswordToggled);
+    connect(ui->checkbox_one_time_password, &QCheckBox::clicked,
+            this, &AuthorizationDialog::onOneTimePasswordClicked);
 
     fitSize();
 }
@@ -59,7 +61,7 @@ AuthorizationDialog::~AuthorizationDialog()
     LOG(INFO) << "Dtor";
 
     Settings settings;
-    settings.setOneTimePasswordChecked(ui->checkbox_one_time_password->isChecked());
+    settings.setOneTimePasswordChecked(one_time_password_choice_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,6 +158,12 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
     ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
 
     fitSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::onOneTimePasswordClicked(bool checked)
+{
+    one_time_password_choice_ = checked;
 }
 
 //--------------------------------------------------------------------------------------------------
