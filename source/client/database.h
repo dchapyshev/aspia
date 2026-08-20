@@ -66,7 +66,6 @@ public:
     bool moveLocalGroup(qint64 group_id, qint64 new_parent_id);
     bool removeLocalGroup(qint64 group_id);
     std::optional<LocalGroupConfig> findLocalGroup(qint64 group_id) const;
-    std::optional<LocalGroupConfig> findLocalGroupByGuid(const QString& guid) const;
 
     // Routers.
     QList<RouterConfig> routerList() const;

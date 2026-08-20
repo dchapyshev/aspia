@@ -287,10 +287,6 @@ TEST_F(DatabaseTest, GroupGetsAGuidOfItsOwn)
     const std::optional<LocalGroupConfig> other = db_.findLocalGroup(second);
     ASSERT_TRUE(other.has_value());
     EXPECT_NE(stored->guid(), other->guid());
-
-    const std::optional<LocalGroupConfig> found = db_.findLocalGroupByGuid(stored->guid());
-    ASSERT_TRUE(found.has_value());
-    EXPECT_EQ(found->id(), first);
 }
 
 //--------------------------------------------------------------------------------------------------

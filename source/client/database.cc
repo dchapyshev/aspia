@@ -668,28 +668,6 @@ std::optional<LocalGroupConfig> Database::findLocalGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalGroupConfig> Database::findLocalGroupByGuid(const QString& guid) const
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
-    }
-
-    if (guid.isEmpty())
-        return std::nullopt;
-
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
-                        "WHERE guid=?");
-    query.addText(guid);
-
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return std::nullopt;
-
-    return readGroup(query);
-}
-
-//--------------------------------------------------------------------------------------------------
 QList<RouterConfig> Database::routerList() const
 {
     if (!isValid())
