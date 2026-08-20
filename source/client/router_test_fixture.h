@@ -29,15 +29,7 @@
 class RouterTestFixture : public testing::Test
 {
 protected:
-    static constexpr char kUserName[] = "admin";
-    static constexpr char kPassword[] = "Password1234!";
     static constexpr qint64 kUserId = 1;
-
-    // The message the router sends to open the session once the two-factor stage is passed.
-    proto::router::LoginResult loginResult()
-    {
-        return proto::router::LoginResult();
-    }
 
     proto::router::HostList hostList(qint64 workspace_id, const QList<HostId>& host_ids,
                                      qint64 total_count)
