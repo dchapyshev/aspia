@@ -378,6 +378,56 @@ int createConfig(QTextStream& out)
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
+int resetOtp(QTextStream& out, const QString& user_name)
+{
+    if (user_name.isEmpty())
+    {
+        out << "User name is not specified." << Qt::endl;
+        return 1;
+    }
+
+    // Database::instance() creates the file if it is missing, and an empty database is not what
+    // the caller of this command asked for.
+    if (!QFileInfo::exists(Database::filePath()))
+    {
+        out << "Database does not exist." << Qt::endl;
+        return 1;
+    }
+
+    Database& db = Database::instance();
+    if (!db.isValid())
+    {
+        out << "Failed to open the database." << Qt::endl;
+        return 1;
+    }
+
+    RouterUser user;
+    if (db.findUser(user_name, &user) != proto::router::kErrorOk)
+    {
+        out << "User not found: " << user_name << Qt::endl;
+        return 1;
+    }
+
+    if (db.clearUserOtp(user.entry_id) != proto::router::kErrorOk)
+    {
+        out << "Failed to reset two-factor authentication." << Qt::endl;
+        return 1;
+    }
+
+    // The device tokens were issued against the secret that has just been cleared.
+    if (db.revokeUserClientDeviceTokens(user.entry_id) != proto::router::kErrorOk)
+    {
+        out << "Two-factor authentication is reset, but the device tokens of the user are still "
+               "in place." << Qt::endl;
+        return 1;
+    }
+
+    out << "Two-factor authentication for user " << user_name << " has been reset." << Qt::endl;
+    out << "The next login of the user starts a new enrollment." << Qt::endl;
+    return 0;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -404,6 +454,8 @@ int main(int argc, char* argv[])
     QCommandLineOption stop_option("stop", "Stop service.");
     QCommandLineOption keygen_option("keygen", "Generating public and private keys.");
     QCommandLineOption create_config_option("create-config", "Creates a configuration.");
+    QCommandLineOption reset_otp_option("reset-otp",
+        "Resets two-factor authentication for the specified user.", "user");
 
     QCommandLineParser parser;
     parser.addOption(install_option);
@@ -412,6 +464,7 @@ int main(int argc, char* argv[])
     parser.addOption(stop_option);
     parser.addOption(keygen_option);
     parser.addOption(create_config_option);
+    parser.addOption(reset_otp_option);
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -426,6 +479,8 @@ int main(int argc, char* argv[])
         return generateAndPrintKeys(out);
     else if (parser.isSet(create_config_option))
         return createConfig(out);
+    else if (parser.isSet(reset_otp_option))
+        return resetOtp(out, parser.value(reset_otp_option));
     else if (parser.isSet(install_option))
         return installService(out);
     else if (parser.isSet(remove_option))
