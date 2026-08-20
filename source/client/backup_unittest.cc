@@ -355,7 +355,6 @@ TEST_F(BackupTest, FileNamingAParentItDoesNotCarryIsNotImported)
 
     repointGroupParent(parent, 99999);
 
-
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
     EXPECT_TRUE(groupNames(target_).isEmpty());
 }
@@ -376,7 +375,6 @@ TEST_F(BackupTest, FileNamingARouterByZeroIsNotImported)
         ASSERT_EQ(data->routers_size(), 1);
         data->mutable_routers(0)->set_id(0);
     });
-
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
 
@@ -435,7 +433,6 @@ TEST_F(BackupTest, FileNamingTwoGroupsByOneIdIsNotImported)
 
     copyGroupUnderTheSameId(group, "twin");
 
-
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
     EXPECT_TRUE(groupNames(target_).isEmpty());
 }
@@ -451,7 +448,6 @@ TEST_F(BackupTest, FileWhoseGroupsNameEachOtherIsNotImported)
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
     repointGroupParent(first, second);
-
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
     EXPECT_TRUE(groupNames(target_).isEmpty());
@@ -781,7 +777,6 @@ TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
         ASSERT_EQ(data->routers_size(), 2);
         data->mutable_routers(1)->set_guid(data->routers(0).guid());
     });
-
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
 

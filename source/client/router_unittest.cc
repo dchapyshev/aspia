@@ -450,7 +450,6 @@ TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
     reply.mutable_user_list()->set_request_id(request.user_list_request().request_id());
     deliver(proto::router::CHANNEL_ID_ADMIN, reply);
     EXPECT_EQ(calls, 1);
-
 }
 
 //--------------------------------------------------------------------------------------------------
