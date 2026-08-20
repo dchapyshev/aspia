@@ -30,12 +30,10 @@
 #include <QHash>
 #include <QUuid>
 
-#include <algorithm>
-
 namespace {
 
-// The most rows a single call may ask to check. The check costs a request to the router for every
-// row, so no caller is allowed to take the whole table at once.
+// The rows one pass takes. Every one of them costs a request to the router, so the list is walked
+// over as many passes as it needs instead of at once.
 const int kMaxRouterHostsToCheck = 10;
 
 // How long the answer of the router is trusted: a row checked less than a week ago is not offered
@@ -957,7 +955,7 @@ std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostI
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostId> Database::outdatedRouterHosts(qint64 router_id, int count) const
+QList<HostId> Database::outdatedRouterHosts(qint64 router_id) const
 {
     if (!isValid())
     {
@@ -965,15 +963,13 @@ QList<HostId> Database::outdatedRouterHosts(qint64 router_id, int count) const
         return {};
     }
 
-    count = std::clamp(count, 1, kMaxRouterHostsToCheck);
-
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
     // returning to the same rows.
     SqlQuery query(db_, "SELECT host_id FROM router_hosts WHERE router_id=? AND check_time<? "
                         "ORDER BY check_time LIMIT ?");
     query.addInt64(router_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
-    query.addInt64(count);
+    query.addInt64(kMaxRouterHostsToCheck);
 
     QList<HostId> hosts;
     while (query.next() == SqlQuery::StepResult::ROW)

@@ -81,7 +81,7 @@ public:
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(qint64 router_id, HostId host_id);
     std::optional<RouterHostConfig> findRouterHost(qint64 router_id, HostId host_id) const;
-    QList<HostId> outdatedRouterHosts(qint64 router_id, int count) const;
+    QList<HostId> outdatedRouterHosts(qint64 router_id) const;
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
 
     // Puts these records in place of the address book, all of them or none. Everything the book

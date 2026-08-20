@@ -633,7 +633,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     addRouterHost(router_id, 100502, "third-user", "third-secret");
 
     // The router was never asked about any of them.
-    QList<HostId> outdated = db_.outdatedRouterHosts(router_id, 10);
+    QList<HostId> outdated = db_.outdatedRouterHosts(router_id);
     EXPECT_EQ(outdated.size(), 3);
     EXPECT_TRUE(outdated.contains(100500));
     EXPECT_TRUE(outdated.contains(100501));
@@ -643,7 +643,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100501));
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100502));
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(router_id, 10).isEmpty());
+    EXPECT_TRUE(db_.outdatedRouterHosts(router_id).isEmpty());
 
     // The answer of the router is trusted for a week. A row asked about a day ago is not offered
     // again, and one asked about eight days ago is.
@@ -653,7 +653,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     ASSERT_TRUE(setRouterHostCheckTime(router_id, 100501, now - day));
     ASSERT_TRUE(setRouterHostCheckTime(router_id, 100502, now - 8 * day));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id, 10), QList<HostId>({ HostId(100502) }));
+    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100502) }));
 
     // There is nothing to remember for a host the user saved nothing for.
     EXPECT_FALSE(db_.updateRouterHostCheckTime(router_id, 100503));
@@ -670,16 +670,13 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTakenInBoundedBatches)
         addRouterHost(router_id, host_id, "user", "secret");
 
     // Twelve rows are waiting, and no answer carries more than ten.
-    const QList<HostId> first = db_.outdatedRouterHosts(router_id, 100);
+    const QList<HostId> first = db_.outdatedRouterHosts(router_id);
     EXPECT_EQ(first.size(), 10);
-
-    // A call asking for nothing still gets a row: an empty answer would be of no use to anybody.
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id, 0).size(), 1);
 
     for (HostId host_id : first)
         ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
 
-    const QList<HostId> second = db_.outdatedRouterHosts(router_id, 100);
+    const QList<HostId> second = db_.outdatedRouterHosts(router_id);
     EXPECT_EQ(second.size(), 2);
 
     for (HostId host_id : second)
@@ -688,7 +685,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTakenInBoundedBatches)
         ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
     }
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(router_id, 100).isEmpty());
+    EXPECT_TRUE(db_.outdatedRouterHosts(router_id).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -702,13 +699,13 @@ TEST_F(DatabaseTest, OutdatedRouterHostsBelongToTheirOwnRouter)
     addRouterHost(first, 100500, "user", "secret");
     addRouterHost(second, 100501, "other-user", "other-secret");
 
-    EXPECT_EQ(db_.outdatedRouterHosts(first, 10), QList<HostId>({ HostId(100500) }));
-    EXPECT_EQ(db_.outdatedRouterHosts(second, 10), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(db_.outdatedRouterHosts(first), QList<HostId>({ HostId(100500) }));
+    EXPECT_EQ(db_.outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
 
     ASSERT_TRUE(db_.updateRouterHostCheckTime(first, 100500));
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(first, 10).isEmpty());
-    EXPECT_EQ(db_.outdatedRouterHosts(second, 10), QList<HostId>({ HostId(100501) }));
+    EXPECT_TRUE(db_.outdatedRouterHosts(first).isEmpty());
+    EXPECT_EQ(db_.outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
 
     EXPECT_FALSE(db_.updateRouterHostCheckTime(second, 100500));
 }
@@ -726,12 +723,12 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
     addRouterHost(router_id, 100501, "other-user", "other-secret");
 
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100500));
-    ASSERT_EQ(db_.outdatedRouterHosts(router_id, 10), QList<HostId>({ HostId(100501) }));
+    ASSERT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 
     ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "edited-user", "edited-secret")));
     ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100501, "third-user", "third-secret")));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id, 10), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 
     QList<RouterHostConfig> router_hosts = db_.allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
@@ -739,7 +736,7 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
     ASSERT_TRUE(db_.reencryptAll(db_.allLocalHosts(), QList<RouterConfig>(), router_hosts,
                                  "salt", "verifier", 1));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id, 10), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 }
 
 //--------------------------------------------------------------------------------------------------

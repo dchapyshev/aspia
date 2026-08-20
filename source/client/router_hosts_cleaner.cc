@@ -23,14 +23,6 @@
 #include "client/database.h"
 #include "client/router.h"
 
-namespace {
-
-// The rows one pass takes. Every one of them costs a request to the router, so the list is walked
-// over as many sessions as it needs instead of at once.
-const int kHostsPerPass = 10;
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 RouterHostsCleaner::RouterHostsCleaner(qint64 router_id, QObject* parent)
     : QObject(parent),
@@ -64,7 +56,7 @@ void RouterHostsCleaner::start()
         return;
     }
 
-    const QList<HostId> hosts = Database::instance().outdatedRouterHosts(router_id_, kHostsPerPass);
+    const QList<HostId> hosts = Database::instance().outdatedRouterHosts(router_id_);
     if (hosts.isEmpty())
     {
         LOG(TRACE) << "No outdated hosts";
