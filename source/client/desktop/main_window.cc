@@ -223,9 +223,8 @@ void MainWindow::connectToUrl(const QString& url)
             return;
         }
 
-        // The credentials of a router host live in its address book record on the router, so
-        // fetch the record before connecting. If the router is not connected, connect right
-        // away and let the authorization dialog ask for the credentials.
+        // The record of the host on the router carries the name to show for it, so it is looked
+        // up before the session opens. Without a connected router the session opens unnamed.
         Router* router = Router::instance(router_id);
         if (router && router->status() == Router::Status::ONLINE)
         {

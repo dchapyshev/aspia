@@ -72,7 +72,6 @@ protected:
         return config;
     }
 
-    // Loads the identity of the session.
     // Hands a message to the session the way the worker does.
     void deliver(quint8 channel_id, const google::protobuf::MessageLite& message)
     {

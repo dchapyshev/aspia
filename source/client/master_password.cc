@@ -76,9 +76,9 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     QList<RouterHostConfig> router_hosts = db.allRouterHosts();
 
     // A record whose column refused to open comes back with its credentials empty, and writing it
-    // out again would make that emptiness permanent. A stored record always has these fields - both
-    // addHost() and addRouter() refuse a record without them - so empty here can only mean the
-    // column did not open.
+    // out again would make that emptiness permanent. A stored record always has these fields,
+    // because addLocalHost(), addRouter() and addRouterHost() refuse a record without them, so
+    // empty here can only mean the column did not open.
     for (const LocalHostConfig& local_host : std::as_const(local_hosts))
     {
         if (local_host.address().isEmpty())
