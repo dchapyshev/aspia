@@ -22,8 +22,16 @@
 #include <gtest/gtest.h>
 
 #include "base/peer/host_id.h"
+#include "client/database.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+
+// Test-only redirection of the client database to an isolated file.
+class DatabaseTestPeer
+{
+public:
+    static void setFilePath(const QString& file_path) { Database::setFilePathForTesting(file_path); }
+};
 
 // The account a router session runs on and the canned replies of the router.
 class RouterTestFixture : public testing::Test

@@ -24,13 +24,13 @@
 #include <QUrlQuery>
 #include <QVBoxLayout>
 
+#include "base/crypto/totp.h"
 #include "common/android/button.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
 
 namespace {
 
-constexpr int kCodeLength = 6;
 constexpr int kSecretGroupSize = 4;
 
 //--------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
     }
 
     code_->setLabel(tr("Code"));
-    code_->setMaxLength(kCodeLength);
+    code_->setMaxLength(Totp::kDefaultDigits);
     code_->setInputMethodHints(Qt::ImhDigitsOnly | Qt::ImhPreferNumbers);
     code_->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d*"), code_));
     content->addWidget(code_);
@@ -96,7 +96,7 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
 
     connect(code_, &QLineEdit::textChanged, this, [ok](const QString& text)
     {
-        ok->setEnabled(text.trimmed().size() == kCodeLength);
+        ok->setEnabled(text.trimmed().size() == Totp::kDefaultDigits);
     });
 
     connect(cancel, &Button::clicked, this, &TwoFactorDialog::reject);

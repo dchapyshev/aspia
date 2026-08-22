@@ -170,12 +170,10 @@ void RouterController::reload()
             // another account replaces it whole, because everything the running login or
             // session holds (the question on screen included) belongs to the account that is
             // gone.
-            const RouterConfig running =
-                context.two_factor ? context.two_factor->config() : context.session->config();
-            if (running.hasSameParams(config))
+            if (context.config->hasSameParams(config))
             {
-                if (context.session)
-                    context.session->updateConfig(config);
+                // The instance is shared with whoever runs, so the edit is seen at once.
+                *context.config = config;
                 continue;
             }
 
@@ -273,7 +271,7 @@ void RouterController::onTwoFactorRequired(qint64 router_id)
     {
         const qint64 minutes = (prompt->blockedSeconds() + 59) / 60;
         addEvent(router_id, RouterEvent::Severity::WARNING,
-                 tr("Too many failed attempts. RouterSession %1 accepts codes again"
+                 tr("Too many failed attempts. Router %1 accepts codes again"
                     " in about %2 min.").arg(address).arg(minutes));
         return;
     }
@@ -284,9 +282,21 @@ void RouterController::onTwoFactorRequired(qint64 router_id)
                  tr("The code was not accepted by router %1.").arg(address));
     }
     addEvent(router_id, RouterEvent::Severity::WARNING,
-             tr("RouterSession %1 is waiting for a two-factor code.").arg(address));
+             tr("Router %1 is waiting for a two-factor code.").arg(address));
 
     emit sig_twoFactorRequired(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::onTwoFactorUndelivered(qint64 router_id)
+{
+    auto it = contexts_.find(router_id);
+    if (it == contexts_.end() || !it->second.two_factor)
+        return;
+
+    addEvent(router_id, RouterEvent::Severity::WARNING,
+             tr("The code could not be delivered to router %1. It will ask again.")
+                 .arg(it->second.two_factor->config().address()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -313,7 +323,8 @@ void RouterController::onTwoFactorFinished(
         return;
     }
 
-    context.session = new RouterSession(*config, user_id, peer_version, this);
+    *context.config = *config;
+    context.session = new RouterSession(context.config, user_id, peer_version, this);
 
     addEvent(router_id, RouterEvent::Severity::INFO,
              tr("Connection to router %1 established.").arg(config->address()));
@@ -465,10 +476,14 @@ void RouterController::onRouterMessage(qint64 router_id, quint8 channel_id, cons
 //--------------------------------------------------------------------------------------------------
 void RouterController::startTwoFactor(qint64 router_id, const RouterConfig& config)
 {
-    Router2FA* two_factor = new Router2FA(config, this);
-    contexts_[router_id].two_factor = two_factor;
+    RouterContext& context = contexts_[router_id];
+    context.config.reset(new RouterConfig(config));
+
+    Router2FA* two_factor = new Router2FA(context.config, this);
+    context.two_factor = two_factor;
 
     connect(two_factor, &Router2FA::sig_twoFactorRequired, this, &RouterController::onTwoFactorRequired);
+    connect(two_factor, &Router2FA::sig_twoFactorUndelivered, this, &RouterController::onTwoFactorUndelivered);
     connect(two_factor, &Router2FA::sig_twoFactorFinished, this, &RouterController::onTwoFactorFinished);
 }
 

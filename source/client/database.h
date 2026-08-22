@@ -125,6 +125,10 @@ public:
     bool clearBiometricUnlock();
 
 private:
+    friend class DatabaseTestPeer;
+
+    static void setFilePathForTesting(const QString& file_path);
+
     bool openDatabase();
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
 

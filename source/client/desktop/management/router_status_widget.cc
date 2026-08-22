@@ -144,6 +144,15 @@ void RouterStatusWidget::onEvent(qint64 router_id, const RouterEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::onStatusChanged(qint64 router_id)
+{
+    if (router_id != router_id_)
+        return;
+
+    updateTwoFactorPrompt();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterStatusWidget::onTwoFactorClicked()
 {
     emit sig_twoFactorClicked(router_id_);

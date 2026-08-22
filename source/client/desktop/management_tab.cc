@@ -161,6 +161,8 @@ ManagementTab::ManagementTab(QWidget* parent)
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_event,
             router_status_widget_, &RouterStatusWidget::onEvent);
+    connect(&controller, &RouterController::sig_statusChanged,
+            router_status_widget_, &RouterStatusWidget::onStatusChanged);
     connect(&controller, &RouterController::sig_twoFactorRequired,
             this, &ManagementTab::onTwoFactorRequired);
 

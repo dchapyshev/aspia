@@ -277,8 +277,7 @@ bool ensureSchema(SqlDatabase& db)
 
     // Bearer "remember this device" tokens issued during client sessions (admin/host sessions
     // do not use this flow). The raw token never reaches the database - only its SHA-256
-    // hash is stored, so a leak of |router.db3| does not yield usable tokens. Device-binding
-    // is provided by the OS keystore wrap that protects the raw token on the client side.
+    // hash is stored, so a leak of |router.db3| does not yield usable tokens.
     // Tokens use a sliding |kClientDeviceTokenTtlSec| TTL: every successful presentation
     // refreshes |last_used_at|, and rows whose last use predates the TTL are pruned lazily
     // on the next lookup attempt. Explicit revocation (admin action, password change, user
@@ -1069,7 +1068,7 @@ bool Database::issueClientDeviceToken(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id) const
+std::string_view Database::findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id)
 {
     CHECK(user_id);
     *user_id = 0;
@@ -1079,11 +1078,11 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     if (token.size() != kClientDeviceTokenSize)
-        return false;
+        return proto::router::kErrorNotFound;
 
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);
 
@@ -1091,7 +1090,7 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     const char kSql[] =
@@ -1099,8 +1098,17 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
     SqlQuery query(db_, kSql);
     query.addBlob(token_hash);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return false;
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        // A failed read must not pass for a missing token, because a missing one makes the
+        // client drop its stored copy.
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
 
     const qint64 last_used_at = query.columnInt64(1);
     const qint64 now = secondsSinceEpoch();
@@ -1114,13 +1122,17 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
             LOG(WARNING) << "Unable to prune expired client device token:" << db_.lastError();
         else if (!transaction.commit())
             LOG(WARNING) << "Unable to commit transaction:" << db_.lastError();
-        return false;
+        return proto::router::kErrorNotFound;
     }
 
     *user_id = query.columnInt64(0);
     if (token_id)
         *token_id = query.columnInt64(2);
-    return true;
+
+    if (!transaction.commit())
+        LOG(WARNING) << "Unable to commit transaction:" << db_.lastError();
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1251,7 +1263,7 @@ std::string_view Database::revokeUserClientDeviceTokens(qint64 user_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const
+std::string_view Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const
 {
     CHECK(tokens);
 
@@ -1260,8 +1272,35 @@ bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* 
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
+
+    if (user_id <= 0)
+    {
+        LOG(ERROR) << "Invalid user id:" << user_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
+    // a missing user.
+    SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
+    exists.addInt64(user_id);
+
+    if (exists.next() != SqlQuery::StepResult::ROW)
+    {
+        LOG(ERROR) << "Unable to check user existence:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (exists.columnInt64(0) == 0)
+        return proto::router::kErrorNotFound;
 
     // The list answers "which devices can log in as this user without a code", so it must hold
     // exactly what findClientDeviceToken() would still accept: a token past its lifetime is not a
@@ -1280,7 +1319,7 @@ bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* 
         if (step == SqlQuery::StepResult::FAILED)
         {
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return proto::router::kErrorInternalError;
         }
 
         if (step == SqlQuery::StepResult::DONE)
@@ -1294,7 +1333,10 @@ bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* 
         tokens->emplace_back(std::move(token));
     }
 
-    return true;
+    if (!transaction.commit())
+        LOG(WARNING) << "Unable to commit transaction:" << db_.lastError();
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

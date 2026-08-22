@@ -348,7 +348,7 @@ void HostWorker::removeHostSession(Host* host)
 
     if (host)
     {
-        host->disconnect();
+        host->stop();
         host->deleteLater();
         std::erase(hosts_, host);
     }

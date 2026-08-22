@@ -18,17 +18,17 @@
 
 #include "client/database.h"
 
-#include "base/logging.h"
-#include "base/files/base_paths.h"
-#include "base/sql/sql_query.h"
-#include "base/sql/sql_transaction.h"
-#include "build/build_config.h"
-
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QHash>
 #include <QUuid>
+
+#include "base/logging.h"
+#include "base/files/base_paths.h"
+#include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
+#include "build/build_config.h"
 
 namespace {
 
@@ -47,6 +47,8 @@ constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
 constexpr auto kSettingBiometricBlob = "biometric_blob";
+
+QString g_test_file_path;
 
 //--------------------------------------------------------------------------------------------------
 LocalHostConfig readHost(const SqlQuery& query)
@@ -224,6 +226,9 @@ Database& Database::instance()
 // static
 QString Database::filePath()
 {
+    if (!g_test_file_path.isEmpty())
+        return g_test_file_path;
+
     QString dir_path = BasePaths::appUserDataDir();
     if (dir_path.isEmpty())
         return QString();
@@ -1256,6 +1261,14 @@ bool Database::clearBiometricUnlock()
     // Overwrite the wrapped key so the stored blob does not survive disabling the feature
     // (the database runs with secure_delete enabled).
     return writeSetting(kSettingBiometricBlob, QString());
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void Database::setFilePathForTesting(const QString& file_path)
+{
+    g_test_file_path = file_path;
+    instance().db_.close();
 }
 
 //--------------------------------------------------------------------------------------------------

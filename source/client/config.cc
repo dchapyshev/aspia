@@ -124,9 +124,9 @@ QString RouterConfig::displayLabel() const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterConfig::encryptedData() const
 {
-    // OSCrypt binds the token to the user on Windows and passes it through everywhere else. A
-    // failure is refused rather than written, so a wrap that was asked for never silently goes
-    // missing.
+    // OSCrypt binds the token to the device, by an OS keystore where there is one and by a key
+    // derived from the hardware identity elsewhere. A failure is refused rather than written, so
+    // a wrap that was asked for never silently goes missing.
     QByteArray wrapped_token;
     if (!device_token_.isEmpty())
     {

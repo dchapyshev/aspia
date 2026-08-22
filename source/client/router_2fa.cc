@@ -18,6 +18,9 @@
 
 #include "client/router_2fa.h"
 
+#include <QUrl>
+#include <QUrlQuery>
+
 #include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -44,15 +47,17 @@ void TwoFactorPrompt::submitCode(const QString& totp_code)
     // call must not send a second code.
     if (answered_)
         return;
-    answered_ = true;
 
-    static_cast<Router2FA*>(parent())->sendCode(totp_code);
+    if (!static_cast<Router2FA*>(parent())->sendCode(totp_code))
+        return;
+
+    answered_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
-Router2FA::Router2FA(const RouterConfig& config, QObject* parent)
+Router2FA::Router2FA(SharedPointer<RouterConfig> config, QObject* parent)
     : QObject(parent),
-      config_(config)
+      config_(std::move(config))
 {
     LOG(INFO) << "Ctor";
 
@@ -74,7 +79,7 @@ Router2FA::~Router2FA()
 //--------------------------------------------------------------------------------------------------
 void Router2FA::onStart(const QVersionNumber& peer_version)
 {
-    LOG(INFO) << "Connected to router" << config_.address();
+    LOG(INFO) << "Connected to router" << config_->address();
     version_ = peer_version;
     // The worker already unpaused the channel. The router speaks next with a challenge or
     // LoginResult.
@@ -129,12 +134,19 @@ void Router2FA::openPrompt(const proto::router::TwoFactorChallenge& challenge,
 
     prompt_ = new TwoFactorPrompt(otpauth_uri, challenge.code_rejected(),
                                   challenge.blocked_seconds(), this);
-    emit sig_twoFactorRequired(config_.routerId());
+    emit sig_twoFactorRequired(config_->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router2FA::sendCode(const QString& totp_code)
+bool Router2FA::sendCode(const QString& totp_code)
 {
+    if (version_.isNull())
+    {
+        LOG(INFO) << "No connection to deliver the code for router" << config_->routerId();
+        emit sig_twoFactorUndelivered(config_->routerId());
+        return false;
+    }
+
     // The question is answered. The reply is either LoginResult or the connection going down,
     // and the next challenge asks anew.
     prompt_.reset();
@@ -143,6 +155,7 @@ void Router2FA::sendCode(const QString& totp_code)
     proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
     response->set_totp_code(totp_code.toStdString());
     send(message);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,7 +165,7 @@ void Router2FA::reconnect()
         return;
 
     QMetaObject::invokeMethod(router_worker_, &RouterWorker::onReconnect, Qt::QueuedConnection,
-                              config_.routerId());
+                              config_->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,7 +175,7 @@ void Router2FA::send(const proto::router::ClientToRouter& message)
         return;
 
     QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
-                              config_.routerId(), quint8(proto::router::CHANNEL_ID_CLIENT),
+                              config_->routerId(), quint8(proto::router::CHANNEL_ID_CLIENT),
                               serialize(message));
 }
 
@@ -179,8 +192,8 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (challenge.token_rejected())
             {
                 LOG(INFO) << "Router rejected device token - clearing local copy";
-                config_.clearDeviceToken();
-                if (!Database::instance().modifyRouter(config_))
+                config_->clearDeviceToken();
+                if (!Database::instance().modifyRouter(*config_))
                     LOG(WARNING) << "Failed to clear stale device token";
 
                 openPrompt(challenge, QString());
@@ -188,7 +201,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             }
 
             // A token from a previous successful TOTP asks nobody. The login passes on its own.
-            const QByteArray token = config_.deviceToken();
+            const QByteArray token = config_->deviceToken();
             if (!token.isEmpty())
             {
                 proto::router::ClientToRouter message;
@@ -198,7 +211,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
                 return;
             }
 
-            LOG(INFO) << "Two-factor code required for router" << config_.routerId();
+            LOG(INFO) << "Two-factor code required for router" << config_->routerId();
             openPrompt(challenge, QString());
             return;
         }
@@ -212,19 +225,29 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (!otpauth_uri.starts_with("otpauth://") ||
                 otpauth_uri.size() > proto::router::kMaxOtpauthUriLength)
             {
-                LOG(ERROR) << "Malformed otpauth URI for router" << config_.routerId();
+                LOG(ERROR) << "Malformed otpauth URI for router" << config_->routerId();
+                reconnect();
+                return;
+            }
+
+            // The dialogs show the secret of the query as the setup key. A URI without one
+            // would put an empty key on screen and leave the operator with nothing to type.
+            const QString uri = QString::fromStdString(otpauth_uri);
+            if (QUrlQuery(QUrl(uri)).queryItemValue("secret").isEmpty())
+            {
+                LOG(ERROR) << "otpauth URI without a secret for router" << config_->routerId();
                 reconnect();
                 return;
             }
 
             // Enrollment means a brand new TOTP secret, so a token of the previous account
             // life is dead.
-            config_.clearDeviceToken();
-            if (!Database::instance().modifyRouter(config_))
+            config_->clearDeviceToken();
+            if (!Database::instance().modifyRouter(*config_))
                 LOG(WARNING) << "Failed to clear stale device token";
 
-            LOG(INFO) << "Two-factor enrollment required for router" << config_.routerId();
-            openPrompt(challenge, QString::fromStdString(otpauth_uri));
+            LOG(INFO) << "Two-factor enrollment required for router" << config_->routerId();
+            openPrompt(challenge, uri);
             return;
         }
 
@@ -238,21 +261,21 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
 //--------------------------------------------------------------------------------------------------
 void Router2FA::readLoginResult(const proto::router::LoginResult& result)
 {
-    LOG(INFO) << "Login completed for router" << config_.routerId();
+    LOG(INFO) << "Login completed for router" << config_->routerId();
 
     // A token arrives only when a TOTP submission produced one. Failures drop the connection
     // instead of answering, so getting here at all means the session is open.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
     if (!new_token.isEmpty())
     {
-        LOG(INFO) << "Device token issued for router" << config_.routerId();
+        LOG(INFO) << "Device token issued for router" << config_->routerId();
 
-        config_.setDeviceToken(new_token);
-        if (!Database::instance().modifyRouter(config_))
-            LOG(WARNING) << "Failed to persist new device token for router" << config_.routerId();
+        config_->setDeviceToken(new_token);
+        if (!Database::instance().modifyRouter(*config_))
+            LOG(WARNING) << "Failed to persist new device token for router" << config_->routerId();
     }
 
     // The login is over. The owner stops feeding the object on this report and only then
     // destroys it, so no late message can reach it.
-    emit sig_twoFactorFinished(config_.routerId(), result.user_id(), version_);
+    emit sig_twoFactorFinished(config_->routerId(), result.user_id(), version_);
 }

@@ -25,6 +25,7 @@
 
 #include <google/protobuf/message_lite.h>
 
+#include "base/shared_pointer.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
@@ -50,25 +51,9 @@ public:
         RELOAD     // Always fetch from the server and refresh the cache.
     };
 
-    // The plain records the session works with. Declared in router_types.h so the cache and the
-    // widgets can hold them without depending on this class.
-    using Workspace     = RouterWorkspace;
-    using WorkspaceList = RouterWorkspaceList;
-    using Host          = RouterHost;
-    using HostList      = RouterHostList;
-    using TempHost      = RouterTempHost;
-    using TempHostList  = RouterTempHostList;
-    using Group         = RouterGroup;
-    using GroupList     = RouterGroupList;
-
-    // |user_id| and |peer_version| come from the login that this session is born from.
-    RouterSession(const RouterConfig& config, qint64 user_id, const QVersionNumber& peer_version,
+    RouterSession(SharedPointer<RouterConfig> config, qint64 user_id, const QVersionNumber& peer_version,
            QObject* parent = nullptr);
     ~RouterSession() final;
-
-    // Refreshes the copy of the stored record. The record still names the same router account;
-    // an edit that changes the account replaces the whole session instead.
-    void updateConfig(const RouterConfig& config);
 
     // Writes into the stored record the credentials this session is to use from now on. Called
     // once the router has accepted their rotation, so the login that follows uses the new ones.
@@ -77,8 +62,8 @@ public:
     qint64 userId() const { return user_id_; }
 
     QVersionNumber version() const { return version_; }
-    qint64 routerId() const { return config_.routerId(); }
-    const RouterConfig& config() const { return config_; }
+    qint64 routerId() const { return config_->routerId(); }
+    const RouterConfig& config() const { return *config_; }
 
     //----------------------------------------------------------------------------------------------
     // Admin: list queries.
@@ -212,7 +197,7 @@ private:
                                  const RouterCache::HostKey& key, bool cacheable);
     RouterGroupList applyGroupList(const proto::router::GroupList& list);
 
-    RouterConfig config_;
+    SharedPointer<RouterConfig> config_;
     QPointer<RouterWorker> router_worker_;
     QVersionNumber version_;
     qint64 user_id_ = 0;

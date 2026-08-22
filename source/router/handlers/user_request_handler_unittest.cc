@@ -80,7 +80,7 @@ protected:
     size_t tokenCount(qint64 user_id)
     {
         std::vector<DeviceToken> tokens;
-        if (!db_.listClientDeviceTokens(user_id, &tokens))
+        if (db_.listClientDeviceTokens(user_id, &tokens) != proto::router::kErrorOk)
             return static_cast<size_t>(-1);
         return tokens.size();
     }
@@ -477,7 +477,7 @@ TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
     EXPECT_EQ(stored.flags, admin_.flags);
 
     std::vector<DeviceToken> tokens;
-    ASSERT_TRUE(db_.listClientDeviceTokens(admin_.entry_id, &tokens));
+    ASSERT_EQ(db_.listClientDeviceTokens(admin_.entry_id, &tokens), proto::router::kErrorOk);
     EXPECT_TRUE(tokens.empty());
 }
 

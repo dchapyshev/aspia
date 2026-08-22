@@ -234,7 +234,7 @@ void RelayWorker::removeRelay(Relay* relay)
 {
     const qint64 session_id = relay->sessionId();
 
-    relay->disconnect();
+    relay->stop();
     relay->deleteLater();
     std::erase(relays_, relay);
 

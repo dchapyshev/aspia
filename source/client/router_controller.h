@@ -23,6 +23,7 @@
 
 #include <unordered_map>
 
+#include "base/shared_pointer.h"
 #include "client/router_2fa.h"
 #include "client/router_session.h"
 
@@ -73,6 +74,7 @@ signals:
 
 private slots:
     void onTwoFactorRequired(qint64 router_id);
+    void onTwoFactorUndelivered(qint64 router_id);
     void onTwoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
     void onRouterAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
     void onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code);
@@ -81,6 +83,7 @@ private slots:
 private:
     struct RouterContext
     {
+        SharedPointer<RouterConfig> config;
         ScopedQPointer<Router2FA> two_factor;
         ScopedQPointer<RouterSession> session;
         RouterStatus last_status = RouterStatus::OFFLINE;

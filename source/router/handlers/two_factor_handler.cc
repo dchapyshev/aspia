@@ -29,7 +29,7 @@ const char kOtpIssuer[] = "Aspia Router";
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unordered_map<qint64, TwoFactorHandler::Attempts> TwoFactorHandler::attempts_;
+std::unordered_map<qint64, TwoFactorHandler::UserState> TwoFactorHandler::user_states_;
 
 //--------------------------------------------------------------------------------------------------
 TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const RequestCaller& caller, qint64 now)
@@ -58,10 +58,10 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
 
     if (user_otp_secret_.isEmpty())
     {
-        // First login or after an administrator reset. The tentative secret is handed to the
-        // client and only reaches the database once the user confirms it with a valid code, so an
-        // abandoned dialog leaves the user un-enrolled.
-        tentative_otp_secret_ = Totp::generateSecret();
+        // First login or after an administrator reset. The secret is kept per user, so the QR
+        // code survives the reconnects of the stage; the database gets it only once a valid code
+        // confirms it, so an abandoned dialog leaves the user un-enrolled.
+        tentative_otp_secret_ = tentativeSecret(caller.user_id);
 
         result.challenge.mode = proto::router::TWO_FACTOR_MODE_ENROLL;
         result.challenge.otpauth_uri =
@@ -73,6 +73,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
         // The user is enrolled, so an enrollment left over from an earlier round of this stage
         // must not be verified against.
         tentative_otp_secret_.clear();
+        dropTentativeSecret(caller.user_id);
         result.challenge.mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
         result.challenge.blocked_seconds = blockedSecondsLeft(caller.user_id, now);
     }
@@ -107,24 +108,38 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
         qint64 stored_user_id = 0;
         qint64 token_id = 0;
-        if (!database.findClientDeviceToken(token, &stored_user_id, &token_id) ||
-            stored_user_id != caller.user_id)
-        {
-            // The presented token is gone or owned by someone else (revoked, password change,
-            // database wiped, expired). The user still has a valid TOTP secret, so instead of
-            // tearing the connection down we re-open the stage and ask for a code.
-            LOG(INFO) << "Device token rejected for user" << caller.name << "- asking for TOTP";
+        const std::string_view error_code =
+            database.findClientDeviceToken(token, &stored_user_id, &token_id);
 
-            token_rejected_ = true;
-            result.action = Action::SEND_CHALLENGE;
-            result.challenge.mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
-            result.challenge.token_rejected = true;
-            result.challenge.code_rejected = isCodeRejected(caller.user_id);
-            result.challenge.blocked_seconds = blockedSecondsLeft(caller.user_id, now);
+        if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorNotFound)
+        {
+            // The database gave no verdict, so the client must not be told to drop the token.
+            // It keeps its copy and presents it again on the next connection.
+            LOG(ERROR) << "Device token lookup failed for user" << caller.name << ". Closing connection";
+            result.action = Action::CLOSE;
             return result;
         }
 
-        database.touchClientDeviceToken(token, address);
+        if (error_code != proto::router::kErrorOk || stored_user_id != caller.user_id)
+        {
+            // The presented token is gone or owned by someone else. Re-opening the stage
+            // re-reads the stored state, so a secret that vanished in between leads to the
+            // enrollment and not to a code prompt nothing can answer.
+            LOG(INFO) << "Device token rejected for user" << caller.name << "- asking for TOTP";
+
+            Result reopened = start(database, caller, now);
+            if (reopened.action == Action::SEND_CHALLENGE)
+            {
+                token_rejected_ = true;
+                reopened.challenge.token_rejected = true;
+            }
+            return reopened;
+        }
+
+        // Failure to refresh the sliding lifetime is non-fatal. The token was judged valid, so
+        // the user is let in and the lifetime stays where the previous use left it.
+        if (!database.touchClientDeviceToken(token, address))
+            LOG(WARNING) << "Failed to touch device token for user" << caller.name;
 
         result.action = Action::ACCEPT;
         result.token_id = token_id;
@@ -224,8 +239,8 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     }
 
     // A code that came out of the secret proves the peer holds what only the user holds, so the
-    // series of failed attempts ends here.
-    resetAttempts(caller.user_id);
+    // stored state of the user ends here, failed attempts and shared secret alike.
+    forgetUser(caller.user_id);
 
     // Any successful TOTP submission produces a fresh bearer token. Failure to persist the token
     // is non-fatal: the user is still let in, they will be prompted for TOTP again next time.
@@ -242,18 +257,25 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
 //--------------------------------------------------------------------------------------------------
 // static
+void TwoFactorHandler::forgetUser(qint64 user_id)
+{
+    user_states_.erase(user_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 bool TwoFactorHandler::isBlockedAttempt(qint64 user_id, qint64 now)
 {
-    const auto it = attempts_.find(user_id);
-    return it != attempts_.end() && now < it->second.blocked_until;
+    const auto it = user_states_.find(user_id);
+    return it != user_states_.end() && now < it->second.blocked_until;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 qint64 TwoFactorHandler::blockedSecondsLeft(qint64 user_id, qint64 now)
 {
-    const auto it = attempts_.find(user_id);
-    if (it == attempts_.end() || now >= it->second.blocked_until)
+    const auto it = user_states_.find(user_id);
+    if (it == user_states_.end() || now >= it->second.blocked_until)
         return 0;
     return it->second.blocked_until - now;
 }
@@ -262,40 +284,52 @@ qint64 TwoFactorHandler::blockedSecondsLeft(qint64 user_id, qint64 now)
 // static
 bool TwoFactorHandler::isCodeRejected(qint64 user_id)
 {
-    const auto it = attempts_.find(user_id);
-    return it != attempts_.end() && it->second.code_rejected;
+    const auto it = user_states_.find(user_id);
+    return it != user_states_.end() && it->second.code_rejected;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 void TwoFactorHandler::markCodeRejected(qint64 user_id)
 {
-    attempts_[user_id].code_rejected = true;
+    user_states_[user_id].code_rejected = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 void TwoFactorHandler::registerFailedAttempt(qint64 user_id, qint64 now)
 {
-    Attempts& attempts = attempts_[user_id];
+    UserState& state = user_states_[user_id];
 
     // A block that has run out closes the series it was imposed for. Those attempts are paid for
     // already and the next one starts counting from scratch.
-    if (attempts.blocked_until && now >= attempts.blocked_until)
+    if (state.blocked_until && now >= state.blocked_until)
     {
-        attempts.failures = 0;
-        attempts.blocked_until = 0;
+        state.failures = 0;
+        state.blocked_until = 0;
     }
 
-    ++attempts.failures;
+    ++state.failures;
 
-    if (attempts.failures >= kMaxFailedAttempts)
-        attempts.blocked_until = now + DurationCast<Seconds>(kFailedAttemptsBlock).count();
+    if (state.failures >= kMaxFailedAttempts)
+        state.blocked_until = now + DurationCast<Seconds>(kFailedAttemptsBlock).count();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void TwoFactorHandler::resetAttempts(qint64 user_id)
+QByteArray TwoFactorHandler::tentativeSecret(qint64 user_id)
 {
-    attempts_.erase(user_id);
+    QByteArray& secret = user_states_[user_id].tentative_secret;
+    if (secret.isEmpty())
+        secret = Totp::generateSecret();
+    return secret;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TwoFactorHandler::dropTentativeSecret(qint64 user_id)
+{
+    const auto it = user_states_.find(user_id);
+    if (it != user_states_.end())
+        it->second.tentative_secret.clear();
 }

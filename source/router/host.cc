@@ -65,6 +65,13 @@ void Host::start()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Host::stop()
+{
+    tcp_channel_->setPaused(true);
+    disconnect();
+}
+
+//--------------------------------------------------------------------------------------------------
 QVersionNumber Host::version() const
 {
     return tcp_channel_->peerVersion();

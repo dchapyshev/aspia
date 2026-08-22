@@ -22,13 +22,17 @@
 
 #include "base/crypto/base32.h"
 #include "base/crypto/totp.h"
+#include "proto/router_admin.h"
+#include "proto/router_constants.h"
 #include "router/router_test_base.h"
+#include "router/handlers/user_request_handler.h"
 
-// The count of failed attempts outlives the sessions on purpose, so it also outlives a test case.
+// The per-user state outlives the sessions on purpose, so it also outlives a test case.
 class TwoFactorHandlerTestPeer
 {
 public:
-    static void forgetFailedAttempts() { TwoFactorHandler::attempts_.clear(); }
+    static void forgetUsers() { TwoFactorHandler::user_states_.clear(); }
+    static bool hasUserState(qint64 user_id) { return TwoFactorHandler::user_states_.contains(user_id); }
 };
 
 // The two-factor stage of a client session against a real database and the real TOTP code, with
@@ -44,7 +48,7 @@ protected:
         // from the authenticated channel, never from the request.
         caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
-        TwoFactorHandlerTestPeer::forgetFailedAttempts();
+        TwoFactorHandlerTestPeer::forgetUsers();
     }
 
     TwoFactorHandler::Result start(TwoFactorHandler& handler, qint64 now = kNow)
@@ -92,7 +96,7 @@ protected:
     size_t tokenCount(qint64 user_id)
     {
         std::vector<DeviceToken> tokens;
-        if (!db_.listClientDeviceTokens(user_id, &tokens))
+        if (db_.listClientDeviceTokens(user_id, &tokens) != proto::router::kErrorOk)
             return static_cast<size_t>(-1);
         return tokens.size();
     }
@@ -153,6 +157,114 @@ TEST_F(TwoFactorHandlerTest, EnrollmentRejectsWrongCode)
               TwoFactorHandler::Action::CLOSE);
     EXPECT_TRUE(findUser(admin_.entry_id).otp_secret.isEmpty());
     EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The stage dies with its session every couple of minutes, but the operator may need longer to
+// set an authenticator up. The secret is kept per user, so the next session asks with the same
+// QR code and the one already scanned stays good.
+TEST_F(TwoFactorHandlerTest, EnrollmentSecretSurvivesReconnect)
+{
+    TwoFactorHandler first;
+    const TwoFactorHandler::Result challenge = start(first);
+    const QByteArray secret = secretFromUri(challenge.challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+
+    TwoFactorHandler second;
+    const TwoFactorHandler::Result again = start(second);
+    EXPECT_EQ(secretFromUri(again.challenge.otpauth_uri), secret);
+
+    EXPECT_EQ(submitCode(second, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A mistyped code ends the session, not the enrollment: the reconnected session asks with the
+// same secret, so the user retypes the code instead of scanning anew.
+TEST_F(TwoFactorHandlerTest, WrongCodeDuringEnrollmentKeepsTheSecret)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+    ASSERT_EQ(submitCode(first, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler second;
+    const TwoFactorHandler::Result reopened = start(second);
+    EXPECT_EQ(secretFromUri(reopened.challenge.otpauth_uri), secret);
+    EXPECT_EQ(submitCode(second, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The confirmation retires the shared secret: an enrollment that starts over after a reset must
+// hand out a fresh one, not the one a previous life confirmed.
+TEST_F(TwoFactorHandlerTest, CompletedEnrollmentRetiresTheSharedSecret)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_EQ(submitCode(first, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
+
+    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+
+    TwoFactorHandler second;
+    const TwoFactorHandler::Result again = start(second);
+    ASSERT_EQ(again.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_NE(secretFromUri(again.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An administrator reset starts the two-factor life of the account anew: the refusal of a code
+// from the old life is not shown, and the QR code of a half-done enrollment is not reused.
+TEST_F(TwoFactorHandlerTest, AdministratorResetForgetsTheUser)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+    ASSERT_EQ(submitCode(first, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    // The refusal is carried into the next challenge until the reset wipes it.
+    TwoFactorHandler second;
+    ASSERT_TRUE(start(second).challenge.code_rejected);
+
+    proto::router::UserRequest request;
+    request.set_command_name(proto::router::kCommandUserResetOtp);
+    request.mutable_user()->set_entry_id(admin_.entry_id);
+    ASSERT_EQ(handleUserRequest(db_, caller_, request).error_code, proto::router::kErrorOk);
+
+    TwoFactorHandler third;
+    const TwoFactorHandler::Result reopened = start(third);
+    ASSERT_EQ(reopened.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_FALSE(reopened.challenge.code_rejected);
+    EXPECT_NE(secretFromUri(reopened.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The id of a deleted user is never reused, so a state entry left behind would sit in memory
+// forever.
+TEST_F(TwoFactorHandlerTest, DeletedUserLeavesNoStateBehind)
+{
+    const RouterUser victim = addUser("operator", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_TRUE(victim.isValid());
+
+    RequestCaller victim_caller;
+    victim_caller.user_id = victim.entry_id;
+    victim_caller.name = "operator";
+    victim_caller.session_type = proto::router::SESSION_TYPE_OPERATOR;
+
+    TwoFactorHandler handler;
+    ASSERT_EQ(handler.start(db_, victim_caller, kNow).action,
+              TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_TRUE(TwoFactorHandlerTestPeer::hasUserState(victim.entry_id));
+
+    proto::router::UserRequest request;
+    request.set_command_name(proto::router::kCommandUserDelete);
+    request.mutable_user()->set_entry_id(victim.entry_id);
+    ASSERT_EQ(handleUserRequest(db_, caller_, request).error_code, proto::router::kErrorOk);
+
+    EXPECT_FALSE(TwoFactorHandlerTestPeer::hasUserState(victim.entry_id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -471,6 +583,38 @@ TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
                                                         next_step);
     EXPECT_EQ(by_code.action, TwoFactorHandler::Action::ACCEPT);
     EXPECT_FALSE(by_code.new_token.empty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The stored state may change while the client sits on its token. A secret that vanished in
+// between re-opens the stage as an enrollment, not as a code prompt nothing can answer.
+TEST_F(TwoFactorHandlerTest, SecretResetBeforeTheTokenReopensAsEnrollment)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler first;
+    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    const TwoFactorHandler::Result accepted = submitCode(first, Totp::code(secret, kNow), kNow);
+    ASSERT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
+
+    TwoFactorHandler second;
+    ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    // An administrator resets the account while the session sits on the prompt.
+    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+
+    const TwoFactorHandler::Result rejected = submitToken(second, accepted.new_token);
+
+    ASSERT_EQ(rejected.action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_EQ(rejected.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_TRUE(rejected.challenge.token_rejected);
+
+    // The enrollment completes with a code of the freshly handed out secret.
+    const QByteArray new_secret = secretFromUri(rejected.challenge.otpauth_uri);
+    ASSERT_FALSE(new_secret.isEmpty());
+    EXPECT_EQ(submitCode(second, Totp::code(new_secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
 }
 
 //--------------------------------------------------------------------------------------------------

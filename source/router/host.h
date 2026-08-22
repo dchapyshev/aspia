@@ -44,6 +44,7 @@ public:
     virtual ~Host() override;
 
     void start();
+    void stop();
 
     QVersionNumber version() const;
     const std::string& osName() const;

@@ -77,9 +77,15 @@ ClientOperator::~ClientOperator()
 void ClientOperator::start()
 {
     start_time_ = Clock::now();
-    tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
     emit sig_notifyChanged(ClientWorker::NOTIFY_CLIENTS);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientOperator::stop()
+{
+    tcp_channel_->setPaused(true);
+    disconnect();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,6 +274,7 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
                 challenge->set_blocked_seconds(result.challenge.blocked_seconds);
 
             sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+            tcp_channel_->setPaused(false);
         }
         return;
 

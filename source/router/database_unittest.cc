@@ -259,11 +259,53 @@ TEST_F(RouterDatabaseTest, DeviceTokensAreCappedPerUser)
     }
 
     std::vector<DeviceToken> tokens;
-    ASSERT_TRUE(db_.listClientDeviceTokens(admin_.entry_id, &tokens));
+    ASSERT_EQ(db_.listClientDeviceTokens(admin_.entry_id, &tokens), proto::router::kErrorOk);
     EXPECT_EQ(tokens.size(), size_t(proto::router::kMaxDeviceTokensPerUser));
 
     qint64 user_id = 0;
-    EXPECT_FALSE(db_.findClientDeviceToken(first_token, &user_id));
+    EXPECT_EQ(db_.findClientDeviceToken(first_token, &user_id), proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The token list tells a user with no devices from a user that is not there, the way the
+// revocation does.
+TEST_F(RouterDatabaseTest, TokenListOfAMissingUserIsNotFound)
+{
+    std::vector<DeviceToken> tokens;
+    EXPECT_EQ(db_.listClientDeviceTokens(admin_.entry_id, &tokens), proto::router::kErrorOk);
+    EXPECT_TRUE(tokens.empty());
+
+    EXPECT_EQ(db_.listClientDeviceTokens(9999, &tokens), proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The cap evicts by the last use and not by the creation: the oldest token of the list survives
+// the overflow when it was just presented, and the one nobody used for a day goes instead.
+TEST_F(RouterDatabaseTest, TrimEvictsTheLeastRecentlyUsedToken)
+{
+    std::string first_token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &first_token));
+
+    std::string second_token;
+    qint64 second_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &second_token, &second_id));
+
+    for (int i = 2; i < proto::router::kMaxDeviceTokensPerUser; ++i)
+    {
+        std::string token;
+        ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token));
+    }
+
+    ASSERT_TRUE(db_.touchClientDeviceToken(first_token, "127.0.0.1"));
+    ASSERT_TRUE(execRaw(QString("UPDATE client_device_tokens SET last_used_at=last_used_at-86400 "
+                                "WHERE token_id=%1").arg(second_id)));
+
+    std::string overflow_token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &overflow_token));
+
+    qint64 user_id = 0;
+    EXPECT_EQ(db_.findClientDeviceToken(first_token, &user_id), proto::router::kErrorOk);
+    EXPECT_EQ(db_.findClientDeviceToken(second_token, &user_id), proto::router::kErrorNotFound);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -367,7 +409,7 @@ TEST_F(RouterDatabaseTest, PasswordRotationRevokesDeviceTokens)
     EXPECT_EQ(findUser(admin_.entry_id).verifier, rotated.verifier);
 
     qint64 user_id = 0;
-    EXPECT_FALSE(db_.findClientDeviceToken(token, &user_id));
+    EXPECT_EQ(db_.findClientDeviceToken(token, &user_id), proto::router::kErrorNotFound);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -396,9 +438,9 @@ TEST_F(RouterDatabaseTest, OtpResetRevokesDeviceTokensOfTheUser)
     EXPECT_EQ(stored.otp_counter, 0u);
 
     qint64 token_owner = 0;
-    EXPECT_FALSE(db_.findClientDeviceToken(token, &token_owner));
+    EXPECT_EQ(db_.findClientDeviceToken(token, &token_owner), proto::router::kErrorNotFound);
 
-    EXPECT_TRUE(db_.findClientDeviceToken(other_token, &token_owner));
+    EXPECT_EQ(db_.findClientDeviceToken(other_token, &token_owner), proto::router::kErrorOk);
     EXPECT_EQ(token_owner, other.entry_id);
 }
 

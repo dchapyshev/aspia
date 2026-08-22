@@ -21,7 +21,14 @@
 #include <gtest/gtest.h>
 
 #include <QObject>
+#include <QTemporaryDir>
 
+#include <optional>
+
+#include "base/crypto/data_cryptor.h"
+#include "base/crypto/secure_byte_array.h"
+#include "client/database.h"
+#include "client/router_test_fixture.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -71,12 +78,34 @@ protected:
         });
     }
 
-    static RouterConfig config(const QByteArray& device_token = QByteArray())
+    void SetUp() override
     {
-        RouterConfig config;
-        config.setRouterId(kRouterId);
-        config.setDeviceToken(device_token);
-        return config;
+        ASSERT_TRUE(temp_dir_.isValid());
+        DatabaseTestPeer::setFilePath(temp_dir_.path() + "/client.db3");
+        ASSERT_TRUE(Database::instance().isValid());
+
+        // The records of the book are sealed with the master key; the tests run against an
+        // unlocked one.
+        DataCryptor::instance().setKey(SecureByteArray(QByteArray(32, 'k')));
+    }
+
+    static SharedPointer<RouterConfig> config(const QByteArray& device_token = QByteArray())
+    {
+        RouterConfig* config = new RouterConfig();
+        config->setRouterId(kRouterId);
+        config->setAddress("router.example.com");
+        config->setUsername("user");
+        config->setPassword(SecureString(QString("secret")));
+        config->setDeviceToken(device_token);
+        return SharedPointer<RouterConfig>(config);
+    }
+
+    // Puts the record the login works with into the isolated book.
+    void seedRecord(const QByteArray& device_token = QByteArray())
+    {
+        RouterConfig record = *config(device_token);
+        ASSERT_TRUE(Database::instance().addRouter(record));
+        ASSERT_EQ(record.routerId(), kRouterId);
     }
 
     static proto::router::RouterToClient activeChallenge()
@@ -86,6 +115,7 @@ protected:
         return message;
     }
 
+    QTemporaryDir temp_dir_;
     Router2FA login_;
     int prompts_required_ = 0;
     qint64 logged_in_user_ = 0;
@@ -121,6 +151,67 @@ TEST_F(Router2FATest, StoredTokenAnswersWithoutAPrompt)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A rejected token is dead on the router, so the stored copy leaves the record at once and the
+// operator is asked for a code.
+TEST_F(Router2FATest, RejectedTokenIsDroppedFromTheRecord)
+{
+    seedRecord("stored-device-token");
+    Router2FA login(config("stored-device-token"));
+
+    proto::router::RouterToClient message = activeChallenge();
+    message.mutable_two_factor_challenge()->set_token_rejected(true);
+    Router2FATestPeer::receive(login, message);
+
+    EXPECT_NE(login.twoFactorPrompt(), nullptr);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->deviceToken().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Enrollment means a brand new secret, so a token of the previous life of the account leaves
+// the record together with it.
+TEST_F(Router2FATest, EnrollmentDropsTheStoredToken)
+{
+    seedRecord("stored-device-token");
+    Router2FA login(config("stored-device-token"));
+
+    proto::router::RouterToClient message;
+    message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+    message.mutable_two_factor_challenge()->set_otpauth_uri(
+        "otpauth://totp/Aspia:user?secret=ABCDEFGH");
+    Router2FATestPeer::receive(login, message);
+
+    EXPECT_NE(login.twoFactorPrompt(), nullptr);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->deviceToken().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The token issued by LoginResult is what skips the prompt next time, so it must reach the
+// stored record.
+TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
+{
+    seedRecord();
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_new_token("fresh-device-token");
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(logged_in_user_, kUserId);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->deviceToken(), QByteArray("fresh-device-token"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The refusal of the last code and a running block arrive with the challenge and are what the
 // reopened prompt describes.
 TEST_F(Router2FATest, RefusalAndBlockArriveWithTheChallenge)
@@ -141,6 +232,7 @@ TEST_F(Router2FATest, RefusalAndBlockArriveWithTheChallenge)
 // connection going down.
 TEST_F(Router2FATest, SubmittedCodeClosesThePrompt)
 {
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
     Router2FATestPeer::receive(login_, activeChallenge());
 
     login_.twoFactorPrompt()->submitCode("123456");
@@ -153,6 +245,7 @@ TEST_F(Router2FATest, SubmittedCodeClosesThePrompt)
 // anything and must not close the question that replaced it.
 TEST_F(Router2FATest, AnsweredPromptCannotTouchTheNextOne)
 {
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
     Router2FATestPeer::receive(login_, activeChallenge());
     TwoFactorPrompt* first = login_.twoFactorPrompt();
     ASSERT_NE(first, nullptr);
@@ -209,6 +302,48 @@ TEST_F(Router2FATest, MalformedEnrollmentUriIsRefused)
 
     EXPECT_EQ(login_.twoFactorPrompt(), nullptr);
     EXPECT_EQ(prompts_required_, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The dialogs show the secret of the URI's query as the setup key. A URI without one passes the
+// shape checks but puts an empty key on screen, so it is refused whole and the stored token of
+// the record stays untouched.
+TEST_F(Router2FATest, EnrollmentUriWithoutASecretIsRefused)
+{
+    seedRecord("stored-device-token");
+    Router2FA login(config("stored-device-token"));
+
+    proto::router::RouterToClient message;
+    message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+    message.mutable_two_factor_challenge()->set_otpauth_uri("otpauth://totp/Aspia:user");
+    Router2FATestPeer::receive(login, message);
+
+    EXPECT_EQ(login.twoFactorPrompt(), nullptr);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->deviceToken(), QByteArray("stored-device-token"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// An answer handed in while the connection is down cannot leave, so it must not spend the
+// question: the same prompt stands, and once the connection is back the answer goes through.
+TEST_F(Router2FATest, CodeWithoutAConnectionKeepsTheQuestion)
+{
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    Router2FATestPeer::receive(login_, activeChallenge());
+    TwoFactorPrompt* prompt = login_.twoFactorPrompt();
+    ASSERT_NE(prompt, nullptr);
+
+    Router2FATestPeer::dropConnection(login_);
+    prompt->submitCode("123456");
+
+    EXPECT_EQ(login_.twoFactorPrompt(), prompt);
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    prompt->submitCode("123456");
+
+    EXPECT_EQ(login_.twoFactorPrompt(), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

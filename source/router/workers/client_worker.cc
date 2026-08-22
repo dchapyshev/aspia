@@ -320,12 +320,7 @@ void ClientWorker::onSessionFinished()
 {
     ClientOperator* client = static_cast<ClientOperator*>(sender());
     CHECK(client);
-    client->disconnect();
-    client->deleteLater();
-    std::erase(clients_, client);
-
-    updateClientsMask();
-    onNotifyChanged(NOTIFY_CLIENTS);
+    stopClient(client->sessionId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -496,7 +491,7 @@ bool ClientWorker::stopClient(qint64 client_id)
 
         if (client->sessionId() == client_id)
         {
-            client->disconnect();
+            client->stop();
             client->deleteLater();
             clients_.erase(it);
 

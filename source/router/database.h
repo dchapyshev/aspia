@@ -165,9 +165,10 @@ public:
         qint64 user_id, std::string_view address, std::string* token, qint64* token_id = nullptr);
 
     // Looks up a token by its opaque value. On success writes the owner user_id into |user_id|
-    // and, when not null, the router-side row id into |token_id|. Returns false if the row is
-    // absent.
-    bool findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id = nullptr) const;
+    // and, when not null, the router-side row id into |token_id|. Returns kErrorNotFound for a
+    // token that is absent or expired (the expired row is dropped), kErrorInternalError when the
+    // database did not answer.
+    std::string_view findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id = nullptr);
 
     // Updates the token's last_used_at timestamp and last seen |address|. Called after a
     // successful token lookup.
@@ -186,9 +187,10 @@ public:
     std::string_view revokeUserClientDeviceTokens(qint64 user_id);
 
     // Fills |tokens| with all device tokens owned by |user_id|. The router never exposes token
-    // material to admins - only the opaque numeric id and timestamp metadata. Returns false on
-    // a database error.
-    bool listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const;
+    // material to admins - only the opaque numeric id and timestamp metadata. Returns
+    // kErrorNotFound if the user row is absent; a user with no tokens answers kErrorOk and an
+    // empty list.
+    std::string_view listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts

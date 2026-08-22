@@ -21,6 +21,7 @@
 
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
+#include "base/shared_pointer.h"
 #include "client/config.h"
 #include "proto/router_client.h"
 
@@ -73,16 +74,17 @@ class Router2FA final : public QObject
     Q_OBJECT
 
 public:
-    explicit Router2FA(const RouterConfig& config, QObject* parent = nullptr);
+    explicit Router2FA(SharedPointer<RouterConfig> config, QObject* parent = nullptr);
     ~Router2FA() final;
 
     // The question of the running two-factor stage, nullptr while nothing is asked.
     TwoFactorPrompt* twoFactorPrompt() const { return prompt_; }
 
-    const RouterConfig& config() const { return config_; }
+    const RouterConfig& config() const { return *config_; }
 
 signals:
     void sig_twoFactorRequired(qint64 router_id);
+    void sig_twoFactorUndelivered(qint64 router_id);
     void sig_twoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
 
 private slots:
@@ -96,13 +98,13 @@ private:
     friend class TwoFactorPrompt;
 
     void openPrompt(const proto::router::TwoFactorChallenge& challenge, const QString& otpauth_uri);
-    void sendCode(const QString& totp_code);
+    bool sendCode(const QString& totp_code);
     void reconnect();
     void send(const proto::router::ClientToRouter& message);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
     void readLoginResult(const proto::router::LoginResult& result);
 
-    RouterConfig config_;
+    SharedPointer<RouterConfig> config_;
     QVersionNumber version_;
     QPointer<RouterWorker> router_worker_;
     ScopedQPointer<TwoFactorPrompt> prompt_;

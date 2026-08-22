@@ -105,7 +105,7 @@ TEST_F(RelayWorkerTest, RelaysAreNotPolledWithoutAdministrators)
 // the polling stops with the last of them.
 TEST_F(RelayWorkerTest, RelaysArePolledWhileAnAdministratorIsConnected)
 {
-    constexpr Seconds kStatisticsInterval { 5 }; // RelayWorker::requestStatistics.
+    static constexpr Seconds kStatisticsInterval { 5 }; // RelayWorker::requestStatistics.
 
     worker_->invoke([]()
     {

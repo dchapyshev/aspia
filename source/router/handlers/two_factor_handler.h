@@ -84,9 +84,9 @@ public:
     static constexpr int kMaxFailedAttempts = 10;
     static constexpr Minutes kFailedAttemptsBlock { 15 };
 
-    // Opens the stage. Called on a fresh connection and again when the session re-authenticates
-    // (its own password change revokes every device token, this one included). |now| is the wall
-    // clock in seconds; the challenge carries the time left in a running block.
+    // Opens the stage. Called on a fresh connection and again when a presented device token is
+    // rejected, because the stored state may have changed since the challenge was sent. |now| is
+    // the wall clock in seconds; the challenge carries the time left in a running block.
     Result start(Database& database, const RequestCaller& caller, qint64 now);
 
     // Handles the answer of the client. |now| is the wall clock in seconds - the TOTP step comes
@@ -95,15 +95,21 @@ public:
                           const proto::router::TwoFactorResponse& response,
                           std::string_view address, qint64 now);
 
+    // Drops the stored state of the user, so the account starts its two-factor life anew.
+    // Called when an administrator resets the OTP of the user or deletes the user.
+    static void forgetUser(qint64 user_id);
+
 private:
-    // Wrong and replayed codes of one user. Either of them takes the session down together with
-    // this object, so whoever guesses just reconnects and no session sees the whole series. Six
-    // digits are few enough to walk through that way.
-    struct Attempts
+    // The state of one user, surviving their sessions and reconnects. A wrong or replayed code
+    // takes the session down together with the handler, so whoever guesses just reconnects and
+    // no session sees the whole series. Six digits are few enough to walk through that way. The
+    // tentative secret lives here so the QR code survives the reconnects of the stage.
+    struct UserState
     {
         int failures = 0;
         qint64 blocked_until = 0;
         bool code_rejected = false;
+        QByteArray tentative_secret;
     };
 
     static bool isBlockedAttempt(qint64 user_id, qint64 now);
@@ -111,12 +117,13 @@ private:
     static bool isCodeRejected(qint64 user_id);
     static void markCodeRejected(qint64 user_id);
     static void registerFailedAttempt(qint64 user_id, qint64 now);
-    static void resetAttempts(qint64 user_id);
+    static QByteArray tentativeSecret(qint64 user_id);
+    static void dropTentativeSecret(qint64 user_id);
 
     // Keyed by user and not by address. Reaching the code prompt takes a completed SRP exchange,
     // so nobody can run somebody else's account into the block and nobody shakes off their own
     // count by changing address. Only the thread of the client worker touches this.
-    static std::unordered_map<qint64, Attempts> attempts_;
+    static std::unordered_map<qint64, UserState> user_states_;
 
     // Set while the user is being walked through the enrollment: it reaches the database only
     // once the user confirms it with a valid code, so an abandoned dialog leaves it un-enrolled.

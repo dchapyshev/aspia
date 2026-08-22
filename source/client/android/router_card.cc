@@ -211,7 +211,14 @@ void RouterCard::setStatus(RouterStatus status)
     // A blocked account has nothing to enter. The router does not look at codes while the block
     // runs, so the button goes away with the prompt.
     TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
-    two_factor_button_->setVisible(prompt && prompt->blockedSeconds() == 0);
+    const bool shown = prompt && prompt->blockedSeconds() == 0;
+    two_factor_button_->setVisible(shown);
+
+    // An account with no secret yet is walked through the enrollment first, and the button says
+    // which of the two dialogs it opens.
+    if (shown)
+        two_factor_button_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
+
     contentChanged();
 }
 

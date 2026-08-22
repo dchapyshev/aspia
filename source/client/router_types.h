@@ -29,9 +29,7 @@
 #include "base/peer/host_id.h"
 
 // The plain records of the router client, shared between the controller, the sessions, the cache
-// and the UI. They live here so a widget can hold them without depending on the class that owns
-// them. RouterSession aliases the list records, so its call sites keep using
-// RouterSession::Workspace, RouterSession::Host and so on.
+// and the UI. They live here so a widget can hold them without depending on the class that owns them.
 
 struct RouterEvent
 {

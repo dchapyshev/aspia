@@ -226,7 +226,7 @@ if (APPLE)
     set(BASE_PLATFORM_LIBS
         ${FOUNDATION_LIB} ${SCREENCAPTUREKIT_LIB} ${COREMEDIA_LIB} ${SYSTEMCONFIGURATION_LIB}
         ${IOKIT_LIB} ${CARBON_LIB} ${APPLICATIONSERVICES_LIB} ${APPKIT_LIB} ${OSLOG_LIB}
-        ${METAL_LIB} cups)
+        ${METAL_LIB} ${SECURITY_LIB} cups)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto

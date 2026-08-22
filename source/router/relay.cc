@@ -69,6 +69,13 @@ void Relay::start()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Relay::stop()
+{
+    tcp_channel_->setPaused(true);
+    disconnect();
+}
+
+//--------------------------------------------------------------------------------------------------
 QVersionNumber Relay::version() const
 {
     return tcp_channel_->peerVersion();

@@ -35,14 +35,14 @@ struct Registrator
 {
     Registrator()
     {
-        qRegisterMetaType<RouterSession::Workspace>("RouterSession::Workspace");
-        qRegisterMetaType<RouterSession::WorkspaceList>("RouterSession::WorkspaceList");
-        qRegisterMetaType<RouterSession::Host>("RouterSession::Host");
-        qRegisterMetaType<RouterSession::HostList>("RouterSession::HostList");
-        qRegisterMetaType<RouterSession::TempHost>("RouterSession::TempHost");
-        qRegisterMetaType<RouterSession::TempHostList>("RouterSession::TempHostList");
-        qRegisterMetaType<RouterSession::Group>("RouterSession::Group");
-        qRegisterMetaType<RouterSession::GroupList>("RouterSession::GroupList");
+        qRegisterMetaType<RouterWorkspace>();
+        qRegisterMetaType<RouterWorkspaceList>();
+        qRegisterMetaType<RouterHost>();
+        qRegisterMetaType<RouterHostList>();
+        qRegisterMetaType<RouterTempHost>();
+        qRegisterMetaType<RouterTempHostList>();
+        qRegisterMetaType<RouterGroup>();
+        qRegisterMetaType<RouterGroupList>();
     }
 };
 
@@ -126,10 +126,10 @@ std::string_view serializeGroup(const RouterGroup& group, proto::router::Group* 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterSession::RouterSession(const RouterConfig& config, qint64 user_id,
+RouterSession::RouterSession(SharedPointer<RouterConfig> config, qint64 user_id,
                              const QVersionNumber& peer_version, QObject* parent)
     : QObject(parent),
-      config_(config),
+      config_(std::move(config)),
       version_(peer_version),
       user_id_(user_id)
 {
@@ -152,20 +152,18 @@ RouterSession::~RouterSession()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::updateConfig(const RouterConfig& config)
-{
-    config_ = config;
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterSession::storeCredentials(const QString& user_name, const SecureString& password)
 {
-    LOG(INFO) << "Credentials changed for router" << config_.routerId();
+    LOG(INFO) << "Credentials changed for router" << config_->routerId();
 
-    config_.setUsername(user_name);
-    config_.setPassword(password);
-    if (!Database::instance().modifyRouter(config_))
-        LOG(WARNING) << "Failed to persist new credentials for router" << config_.routerId();
+    // The rotation revoked every device token of the account on the router, this one included.
+    // Dropping it now spares the next login a doomed token round.
+    config_->clearDeviceToken();
+
+    config_->setUsername(user_name);
+    config_->setPassword(password);
+    if (!Database::instance().modifyRouter(*config_))
+        LOG(WARNING) << "Failed to persist new credentials for router" << config_->routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -705,7 +703,7 @@ void RouterSession::requestConnection(HostId host_id, RouterCallback<proto::rout
 void RouterSession::changePassword(const SecureString& new_password,
                             RouterCallback<proto::router::ChangePasswordResult> callback)
 {
-    RouterUser new_user = RouterUser::create(config_.username(), new_password);
+    RouterUser new_user = RouterUser::create(config_->username(), new_password);
 
     proto::router::ClientToRouter message;
     auto* request = message.mutable_change_password_request();
@@ -720,7 +718,7 @@ void RouterSession::changePassword(const SecureString& new_password,
             const proto::router::ChangePasswordResult& result)
     {
         if (result.error_code() == proto::router::kErrorOk)
-            storeCredentials(config_.username(), new_password);
+            storeCredentials(config_->username(), new_password);
         callback(result);
     }));
 
@@ -847,7 +845,7 @@ void RouterSession::send(quint8 channel_id, const google::protobuf::MessageLite&
         return;
 
     QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
-                              config_.routerId(), channel_id, serialize(message));
+                              config_->routerId(), channel_id, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

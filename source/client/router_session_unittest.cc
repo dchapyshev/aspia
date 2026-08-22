@@ -21,7 +21,13 @@
 #include <gtest/gtest.h>
 
 #include <QObject>
+#include <QTemporaryDir>
 
+#include <optional>
+
+#include "base/crypto/data_cryptor.h"
+#include "base/crypto/secure_byte_array.h"
+#include "client/database.h"
 #include "client/router_test_fixture.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -61,11 +67,34 @@ protected:
         // Nothing
     }
 
-    static RouterConfig config()
+    void SetUp() override
     {
-        RouterConfig config;
-        config.setRouterId(kRouterId);
-        return config;
+        ASSERT_TRUE(temp_dir_.isValid());
+        DatabaseTestPeer::setFilePath(temp_dir_.path() + "/client.db3");
+        ASSERT_TRUE(Database::instance().isValid());
+
+        // The records of the book are sealed with the master key; the tests run against an
+        // unlocked one.
+        DataCryptor::instance().setKey(SecureByteArray(QByteArray(32, 'k')));
+    }
+
+    static SharedPointer<RouterConfig> config(const QByteArray& device_token = QByteArray())
+    {
+        RouterConfig* config = new RouterConfig();
+        config->setRouterId(kRouterId);
+        config->setAddress("router.example.com");
+        config->setUsername("user");
+        config->setPassword(SecureString(QString("secret")));
+        config->setDeviceToken(device_token);
+        return SharedPointer<RouterConfig>(config);
+    }
+
+    // Puts the record the session works with into the isolated book.
+    void seedRecord(const QByteArray& device_token = QByteArray())
+    {
+        RouterConfig record = *config(device_token);
+        ASSERT_TRUE(Database::instance().addRouter(record));
+        ASSERT_EQ(record.routerId(), kRouterId);
     }
 
     // Hands a reply to the session the way the owner does after parsing the wire.
@@ -221,6 +250,7 @@ protected:
         return message;
     }
 
+    QTemporaryDir temp_dir_;
     QObject receiver_;
     RouterSession router_;
     qint64 next_request_id_ = 0;
@@ -376,12 +406,45 @@ TEST_F(RouterSessionTest, GroupListIsParsedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The accepted rotation retires the stored device token: the router revoked every token of the
+// account in the same transaction, so the next login goes straight to the code prompt.
+TEST_F(RouterSessionTest, AcceptedPasswordRotationDropsTheStoredToken)
+{
+    seedRecord("stale-device-token");
+
+    SharedPointer<RouterConfig> shared = config("stale-device-token");
+    RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
+
+    int calls = 0;
+    router.changePassword(SecureString(QString("new-password")),
+                          { &receiver_, [&calls](const proto::router::ChangePasswordResult&)
+    {
+        ++calls;
+    } });
+
+    proto::router::RouterToClient reply;
+    proto::router::ChangePasswordResult* result = reply.mutable_change_password_result();
+    result->set_request_id(1);
+    result->set_error_code(proto::router::kErrorOk);
+    RouterSessionTestPeer::onMessageReceived(router, reply);
+
+    EXPECT_EQ(calls, 1);
+    EXPECT_TRUE(shared->deviceToken().isEmpty());
+    EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->deviceToken().isEmpty());
+    EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The session does not watch the connection; its owner destroys it when the connection dies.
 // The death answers everyone the session still owes, once.
 TEST_F(RouterSessionTest, DyingSessionAnswersItsCallers)
 {
-    RouterConfig other = config();
-    other.setRouterId(kRouterId + 1);
+    SharedPointer<RouterConfig> other = config();
+    other->setRouterId(kRouterId + 1);
 
     int calls = 0;
     std::string last_error;

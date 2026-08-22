@@ -78,6 +78,7 @@ collect_sources(SOURCE_BASE_CRYPTO_TESTS
     generic_hash_unittest.cc
     key_pair_unittest.cc
     large_number_increment_unittest.cc
+    os_crypt_unittest.cc
     password_generator_unittest.cc
     password_hash_unittest.cc
     srp_math_unittest.cc

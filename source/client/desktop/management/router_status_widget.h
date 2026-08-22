@@ -53,6 +53,7 @@ signals:
 
 public slots:
     void onEvent(qint64 router_id, const RouterEvent& event);
+    void onStatusChanged(qint64 router_id);
 
 private slots:
     void onTwoFactorClicked();

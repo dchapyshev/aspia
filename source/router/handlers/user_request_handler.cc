@@ -27,6 +27,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
+#include "router/handlers/two_factor_handler.h"
 #include "router/workers/client_worker.h"
 
 namespace {
@@ -121,6 +122,10 @@ void handleDelete(Database& database, const proto::router::User& user, Result* r
         return;
     }
 
+    // The id is never reused, so the stored two-factor state of the user would sit in memory
+    // forever.
+    TwoFactorHandler::forgetUser(entry_id);
+
     result->stop_user_id = entry_id;
 
     // The cascade dropped the user's access entries and moved the revisions of the affected
@@ -144,6 +149,10 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
         result->error_code = error_code;
         return;
     }
+
+    // The account starts its two-factor life anew. Nothing of the old one may leak into it,
+    // neither the refusal flag nor a half-done enrollment.
+    TwoFactorHandler::forgetUser(user_id);
 
     // The secret the live sessions authenticated with is gone, and the user list shows the OTP
     // state.
@@ -339,9 +348,10 @@ void handleUserTokenList(Database& database, const proto::router::UserTokenListR
     // The router exposes the opaque numeric id and the timestamp metadata. The token hash and
     // anything else that could identify the token outside the router stay here.
     std::vector<DeviceToken> tokens;
-    if (!database.listClientDeviceTokens(user_id, &tokens))
+    const std::string_view error_code = database.listClientDeviceTokens(user_id, &tokens);
+    if (error_code != proto::router::kErrorOk)
     {
-        out->set_error_code(proto::router::kErrorInternalError);
+        out->set_error_code(error_code);
         return;
     }
 
