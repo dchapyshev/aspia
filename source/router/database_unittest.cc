@@ -371,6 +371,47 @@ TEST_F(RouterDatabaseTest, PasswordRotationRevokesDeviceTokens)
 }
 
 //--------------------------------------------------------------------------------------------------
+// An OTP reset drops the device tokens of that user in the same transaction: a token that outlived
+// the secret it was issued against would still open a session without a code. The tokens of other
+// users are untouched.
+TEST_F(RouterDatabaseTest, OtpResetRevokesDeviceTokensOfTheUser)
+{
+    RouterUser other = makeUser("operator", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_EQ(db_.addUser(other), proto::router::kErrorOk);
+    ASSERT_EQ(db_.findUser("operator", &other), proto::router::kErrorOk);
+
+    const QByteArray secret(20, 'x');
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 42));
+
+    std::string token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token));
+
+    std::string other_token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(other.entry_id, "127.0.0.1", &other_token));
+
+    EXPECT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+
+    const RouterUser stored = findUser(admin_.entry_id);
+    EXPECT_TRUE(stored.otp_secret.isEmpty());
+    EXPECT_EQ(stored.otp_counter, 0u);
+
+    qint64 token_owner = 0;
+    EXPECT_FALSE(db_.findClientDeviceToken(token, &token_owner));
+
+    EXPECT_TRUE(db_.findClientDeviceToken(other_token, &token_owner));
+    EXPECT_EQ(token_owner, other.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The reset is answered by the state it leaves behind, so a user that has nothing to reset is not
+// an error. A user that is not there is.
+TEST_F(RouterDatabaseTest, OtpResetOfUserWithoutEnrollment)
+{
+    EXPECT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+    EXPECT_EQ(db_.resetUserOtp(admin_.entry_id + 1000), proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
 // An administrator sees every workspace by its session type, so a workspace can be created
 // without one - and without any member at all.
 TEST_F(RouterDatabaseTest, WorkspaceNeedsNoAdminInItsAccessList)

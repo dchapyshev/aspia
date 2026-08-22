@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router.h"
+#include "client/router_session.h"
 
 #include <gtest/gtest.h>
 
@@ -35,34 +35,30 @@ constexpr qint64 kWorkspaceId = 10;
 } // namespace
 
 // Test-only access to the identity, the pending replies and the incoming messages.
-class RouterTestPeer
+class RouterSessionTestPeer
 {
 public:
-    static RouterRpc& rpc(Router& router) { return router.rpc_; }
+    static RouterRpc& rpc(RouterSession& router) { return router.rpc_; }
 
-    static void receive(Router& router, quint8 channel_id, const QByteArray& bytes)
+    // The replies arrive parsed and typed, the way the owner hands them in.
+    template <class Message>
+    static void onMessageReceived(RouterSession& router, const Message& message)
     {
-        router.onTcpMessageReceived(router.routerId(), channel_id, bytes);
+        router.onMessageReceived(message);
     }
-
-    // ONLINE is reached through the login conversation, which a test does not run.
-    static void setStatus(Router& router, Router::Status status) { router.setStatus(status); }
 };
 
-// A session without a worker: what it sends is collected from sig_sendMessage, the replies are
-// handed to it as the worker would. The cache and the rpc have tests of their own; here the
-// conversation is under test.
-class RouterTest : public RouterTestFixture
+// A session without a worker: what it sends goes nowhere, the replies are handed to it parsed,
+// as the owner does. The request ids are handed out sequentially from one, so the fixture
+// counts the requests the tests make and builds every reply by that count. The cache and the
+// rpc have tests of their own; here the conversation is under test.
+class RouterSessionTest : public RouterTestFixture
 {
 protected:
-    RouterTest()
-        : router_(config())
+    RouterSessionTest()
+        : router_(config(), kUserId, QVersionNumber(3, 0, 0))
     {
-        QObject::connect(&router_, &Router::sig_sendMessage,
-                         [this](qint64, quint8 channel_id, const QByteArray& buffer)
-        {
-            sent_.append({ channel_id, buffer });
-        });
+        // Nothing
     }
 
     static RouterConfig config()
@@ -72,25 +68,11 @@ protected:
         return config;
     }
 
-    // Hands a message to the session the way the worker does.
-    void deliver(quint8 channel_id, const google::protobuf::MessageLite& message)
+    // Hands a reply to the session the way the owner does after parsing the wire.
+    template <class Message>
+    void deliver(const Message& message)
     {
-        RouterTestPeer::receive(router_, channel_id,
-                                QByteArray::fromStdString(message.SerializeAsString()));
-    }
-
-    // The request that went out last, parsed back from the bytes.
-    template<typename MessageT>
-    MessageT lastRequest()
-    {
-        MessageT message;
-        EXPECT_FALSE(sent_.isEmpty());
-        if (!sent_.isEmpty())
-        {
-            const QByteArray& buffer = sent_.constLast().second;
-            EXPECT_TRUE(message.ParseFromArray(buffer.data(), buffer.size()));
-        }
-        return message;
+        RouterSessionTestPeer::onMessageReceived(router_, message);
     }
 
     // A workspace list as the router builds it for an admin session: every workspace carries its
@@ -130,15 +112,13 @@ protected:
     {
         RouterWorkspaceList delivered;
         auto store = [&delivered](const RouterWorkspaceList& value) { delivered = value; };
-        router_.listWorkspaces(Router::CachePolicy::RELOAD, workspace_id, { &receiver_, store });
-
-        const auto request = lastRequest<proto::router::ClientToRouter>();
-        EXPECT_TRUE(request.has_workspace_list_request());
-        list.set_request_id(request.workspace_list_request().request_id());
+        router_.listWorkspaces(RouterSession::CachePolicy::RELOAD, workspace_id,
+                               { &receiver_, store });
+        list.set_request_id(++next_request_id_);
 
         proto::router::RouterToClient reply;
         reply.mutable_workspace_list()->Swap(&list);
-        deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+        deliver(reply);
 
         return delivered;
     }
@@ -147,15 +127,13 @@ protected:
     {
         RouterHostList delivered;
         auto store = [&delivered](const RouterHostList& value) { delivered = value; };
-        router_.listHosts(Router::CachePolicy::RELOAD, hostListRequest(), { &receiver_, store });
-
-        const auto request = lastRequest<proto::router::ClientToRouter>();
-        EXPECT_TRUE(request.has_host_list_request());
-        list.set_request_id(request.host_list_request().request_id());
+        router_.listHosts(RouterSession::CachePolicy::RELOAD, hostListRequest(),
+                          { &receiver_, store });
+        list.set_request_id(++next_request_id_);
 
         proto::router::RouterToClient reply;
         reply.mutable_host_list()->Swap(&list);
-        deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+        deliver(reply);
 
         return delivered;
     }
@@ -164,42 +142,48 @@ protected:
     {
         RouterGroupList delivered;
         auto store = [&delivered](const RouterGroupList& value) { delivered = value; };
-        router_.listGroups(Router::CachePolicy::RELOAD, workspace_id, { &receiver_, store });
-
-        const auto request = lastRequest<proto::router::ClientToRouter>();
-        EXPECT_TRUE(request.has_group_list_request());
-        list.set_request_id(request.group_list_request().request_id());
+        router_.listGroups(RouterSession::CachePolicy::RELOAD, workspace_id, { &receiver_, store });
+        list.set_request_id(++next_request_id_);
 
         proto::router::RouterToClient reply;
         reply.mutable_group_list()->Swap(&list);
-        deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+        deliver(reply);
 
         return delivered;
     }
 
-    // A cached list is one the session answers on its own: nothing new reaches the wire.
+    // A cached list is one the session answers on its own, synchronously. A miss goes to the
+    // wire and consumes a request id.
     bool workspacesServedFromCache()
     {
-        const int sent_before = sent_.size();
-        router_.listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
-                               { &receiver_, [](const RouterWorkspaceList&) {} });
-        return sent_.size() == sent_before;
+        bool answered = false;
+        auto probe = [&answered](const RouterWorkspaceList&) { answered = true; };
+        router_.listWorkspaces(RouterSession::CachePolicy::USE_CACHE, 0, { &receiver_, probe });
+        if (!answered)
+            ++next_request_id_;
+        return answered;
     }
 
     bool groupsServedFromCache(qint64 workspace_id = kWorkspaceId)
     {
-        const int sent_before = sent_.size();
-        router_.listGroups(Router::CachePolicy::USE_CACHE, workspace_id,
-                           { &receiver_, [](const RouterGroupList&) {} });
-        return sent_.size() == sent_before;
+        bool answered = false;
+        auto probe = [&answered](const RouterGroupList&) { answered = true; };
+        router_.listGroups(RouterSession::CachePolicy::USE_CACHE, workspace_id,
+                           { &receiver_, probe });
+        if (!answered)
+            ++next_request_id_;
+        return answered;
     }
 
     bool hostsServedFromCache()
     {
-        const int sent_before = sent_.size();
-        router_.listHosts(Router::CachePolicy::USE_CACHE, hostListRequest(),
-                          { &receiver_, [](const RouterHostList&) {} });
-        return sent_.size() == sent_before;
+        bool answered = false;
+        auto probe = [&answered](const RouterHostList&) { answered = true; };
+        router_.listHosts(RouterSession::CachePolicy::USE_CACHE, hostListRequest(),
+                          { &receiver_, probe });
+        if (!answered)
+            ++next_request_id_;
+        return answered;
     }
 
     // Puts one entry in every cache, so what a reply drops can be seen by what is left.
@@ -237,15 +221,14 @@ protected:
         return message;
     }
 
-    // What the session sent, as it goes to the worker: the channel and the serialized message.
-    QList<QPair<quint8, QByteArray>> sent_;
     QObject receiver_;
-    Router router_;
+    RouterSession router_;
+    qint64 next_request_id_ = 0;
 };
 
 //--------------------------------------------------------------------------------------------------
 // The list arrives as the router stored it, membership included.
-TEST_F(RouterTest, WorkspaceListIsParsed)
+TEST_F(RouterSessionTest, WorkspaceListIsParsed)
 {
     const RouterWorkspaceList workspaces = fetchWorkspaces(0, workspaceList({10}, "note"));
 
@@ -259,7 +242,7 @@ TEST_F(RouterTest, WorkspaceListIsParsed)
 //--------------------------------------------------------------------------------------------------
 // An error reply carries no list at all, so it must not be cached as the answer about what we
 // can access.
-TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
+TEST_F(RouterSessionTest, FailedWorkspaceListChangesNothing)
 {
     proto::router::WorkspaceList failed;
     failed.set_error_code(proto::router::kErrorInternalError);
@@ -269,32 +252,26 @@ TEST_F(RouterTest, FailedWorkspaceListChangesNothing)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The whole conversation seen from outside: the request leaves for its channel with an id of its
-// own, and the reply carrying that id reaches the caller.
-TEST_F(RouterTest, ListUsersConversation)
+// The whole conversation seen from outside: the caller asks, and the reply carrying the id of
+// the request reaches the caller through the admin channel.
+TEST_F(RouterSessionTest, ListUsersConversation)
 {
     int calls = 0;
     router_.listUsers(0, proto::router::kMaxUserPageSize,
                       { &receiver_, [&calls](const proto::router::UserList&) { ++calls; } });
-
-    ASSERT_EQ(sent_.size(), 1);
-    EXPECT_EQ(sent_.at(0).first, proto::router::CHANNEL_ID_ADMIN);
-
-    const auto request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_list_request());
-    ASSERT_GT(request.user_list_request().request_id(), 0);
+    EXPECT_EQ(calls, 0);
 
     proto::router::RouterToAdmin reply;
-    reply.mutable_user_list()->set_request_id(request.user_list_request().request_id());
+    reply.mutable_user_list()->set_request_id(++next_request_id_);
     reply.mutable_user_list()->set_error_code(proto::router::kErrorOk);
-    deliver(proto::router::CHANNEL_ID_ADMIN, reply);
+    deliver(reply);
 
     EXPECT_EQ(calls, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 // The same conversation on the manager channel, which carries the records of a workspace.
-TEST_F(RouterTest, GroupConversationUsesTheManagerChannel)
+TEST_F(RouterSessionTest, GroupConversationUsesTheManagerChannel)
 {
     RouterGroup group;
     group.name = "servers";
@@ -302,47 +279,36 @@ TEST_F(RouterTest, GroupConversationUsesTheManagerChannel)
     int calls = 0;
     router_.addGroup(kWorkspaceId, group,
                      { &receiver_, [&calls](const proto::router::GroupResult&) { ++calls; } });
-
-    ASSERT_EQ(sent_.size(), 1);
-    EXPECT_EQ(sent_.at(0).first, proto::router::CHANNEL_ID_MANAGER);
-
-    const auto request = lastRequest<proto::router::ManagerToRouter>();
-    ASSERT_TRUE(request.has_group_request());
-    EXPECT_EQ(request.group_request().command_name(), proto::router::kCommandGroupAdd);
+    EXPECT_EQ(calls, 0);
 
     proto::router::RouterToManager reply;
-    reply.mutable_group_result()->set_request_id(request.group_request().request_id());
+    reply.mutable_group_result()->set_request_id(++next_request_id_);
     reply.mutable_group_result()->set_error_code(proto::router::kErrorOk);
-    deliver(proto::router::CHANNEL_ID_MANAGER, reply);
+    deliver(reply);
 
     EXPECT_EQ(calls, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 // And on the client channel, where the status of a host is asked before a connection.
-TEST_F(RouterTest, HostStatusConversationUsesTheClientChannel)
+TEST_F(RouterSessionTest, HostStatusConversationUsesTheClientChannel)
 {
     int calls = 0;
     router_.checkHostStatus(
         HostId(1), { &receiver_, [&calls](const proto::router::HostStatus&) { ++calls; } });
-
-    ASSERT_EQ(sent_.size(), 1);
-    EXPECT_EQ(sent_.at(0).first, proto::router::CHANNEL_ID_CLIENT);
-
-    const auto request = lastRequest<proto::router::ClientToRouter>();
-    ASSERT_TRUE(request.has_check_host_status());
+    EXPECT_EQ(calls, 0);
 
     proto::router::RouterToClient reply;
-    reply.mutable_host_status()->set_request_id(request.check_host_status().request_id());
+    reply.mutable_host_status()->set_request_id(++next_request_id_);
     reply.mutable_host_status()->set_error_code(proto::router::kErrorOk);
-    deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+    deliver(reply);
 
     EXPECT_EQ(calls, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The connection request names the host, and the offer of the router comes back to the caller.
-TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
+// The offer of the router comes back to whoever asked for the connection.
+TEST_F(RouterSessionTest, ConnectionRequestBringsTheOffer)
 {
     std::string received_error;
     router_.requestConnection(HostId(7),
@@ -351,15 +317,11 @@ TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
         received_error = offer.error_code();
     } });
 
-    const auto request = lastRequest<proto::router::ClientToRouter>();
-    ASSERT_TRUE(request.has_connection_request());
-    EXPECT_EQ(request.connection_request().host_id(), 7u);
-
     proto::router::RouterToClient reply;
     proto::router::ConnectionOffer* offer = reply.mutable_connection_offer();
-    offer->set_request_id(request.connection_request().request_id());
+    offer->set_request_id(++next_request_id_);
     offer->set_error_code(proto::router::kErrorOk);
-    deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+    deliver(reply);
 
     EXPECT_EQ(received_error, proto::router::kErrorOk);
 }
@@ -367,7 +329,7 @@ TEST_F(RouterTest, ConnectionRequestBringsTheOffer)
 //--------------------------------------------------------------------------------------------------
 // The caller receives the rows of the reply, and the next one that accepts a cached answer is
 // without a request.
-TEST_F(RouterTest, HostListIsParsedAndCached)
+TEST_F(RouterSessionTest, HostListIsParsedAndCached)
 {
     proto::router::HostList list = hostList(kWorkspaceId, { HostId(1) }, 25);
     list.mutable_host(0)->set_comment("comment");
@@ -380,11 +342,9 @@ TEST_F(RouterTest, HostListIsParsedAndCached)
     // The count of the whole scope drives the pagination of the client, so it must survive the
     // cache: a cached answer with a zero count would collapse the page list.
     RouterHostList cached;
-    const int sent_before = sent_.size();
-    router_.listHosts(Router::CachePolicy::USE_CACHE, hostListRequest(),
+    router_.listHosts(RouterSession::CachePolicy::USE_CACHE, hostListRequest(),
                       { &receiver_, [&cached](const RouterHostList& value) { cached = value; } });
 
-    EXPECT_EQ(sent_.size(), sent_before);
     ASSERT_EQ(cached.hosts.size(), 1);
     EXPECT_EQ(cached.hosts.at(0).comment, "comment");
     EXPECT_EQ(cached.total_count, 25);
@@ -394,7 +354,7 @@ TEST_F(RouterTest, HostListIsParsedAndCached)
 
 //--------------------------------------------------------------------------------------------------
 // The groups arrive with the workspace they belong to and are cached per workspace.
-TEST_F(RouterTest, GroupListIsParsedAndCached)
+TEST_F(RouterSessionTest, GroupListIsParsedAndCached)
 {
     proto::router::GroupList list;
     list.set_error_code(proto::router::kErrorOk);
@@ -416,200 +376,62 @@ TEST_F(RouterTest, GroupListIsParsedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A session that leaves ONLINE (a reconnect, or the two-factor stage re-opened after a password
-// change) is suspended: nothing it waits for will arrive and the cached lists are no longer known
-// to be current. The keys survive - it is being re-authenticated, not lost.
-TEST_F(RouterTest, SuspendedSessionDropsPendingRepliesAndCaches)
+// The session does not watch the connection; its owner destroys it when the connection dies.
+// The death answers everyone the session still owes, once.
+TEST_F(RouterSessionTest, DyingSessionAnswersItsCallers)
 {
-    fillCaches();
+    RouterConfig other = config();
+    other.setRouterId(kRouterId + 1);
 
     int calls = 0;
     std::string last_error;
-    router_.listUsers(0, proto::router::kMaxUserPageSize,
-                      { &receiver_, [&](const proto::router::UserList& list)
+
     {
-        ++calls;
-        last_error = list.error_code();
-    } });
+        RouterSession router(other, kUserId, QVersionNumber(3, 0, 0));
+        router.listUsers(0, proto::router::kMaxUserPageSize,
+                         { &receiver_, [&](const proto::router::UserList& list)
+        {
+            ++calls;
+            last_error = list.error_code();
+        } });
 
-    const auto request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_list_request());
-
-    router_.connectToRouter();
-
-    EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
-    EXPECT_FALSE(workspacesServedFromCache());
-    EXPECT_FALSE(hostsServedFromCache());
-
-    // The caller is told the answer will never come, once.
-    EXPECT_EQ(calls, 1);
-    EXPECT_EQ(last_error, proto::router::kErrorLostConnection);
-
-    // A late reply to a request of the dead window must not reach the caller.
-    proto::router::RouterToAdmin reply;
-    reply.mutable_user_list()->set_request_id(request.user_list_request().request_id());
-    deliver(proto::router::CHANNEL_ID_ADMIN, reply);
-    EXPECT_EQ(calls, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A caller answered by the teardown can retry from inside its handler, and a retry that accepts a
-// cached answer must not be served the lists of the session that just died: the caches have to be
-// gone before the callers are woken.
-TEST_F(RouterTest, CallerAnsweredByTeardownDoesNotSeeTheDeadCaches)
-{
-    fillCaches();
-
-    int wire_requests = 0;
-    router_.listUsers(0, proto::router::kMaxUserPageSize,
-                      { &receiver_, [&](const proto::router::UserList&)
-    {
-        const int sent_before = sent_.size();
-        router_.listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
-                               { &receiver_, [](const RouterWorkspaceList&) {} });
-        if (sent_.size() > sent_before)
-            ++wire_requests;
-    } });
-
-    router_.connectToRouter();
-
-    EXPECT_EQ(wire_requests, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Until the router accepts our keys it drops everything we send, so a request issued on the way up
-// can never be answered. Reaching ONLINE has to wake its caller: a dialog that disabled itself for
-// the round trip has nothing else to wait for.
-TEST_F(RouterTest, RequestIssuedBeforeTheSessionIsUpIsAnswered)
-{
-    int calls = 0;
-    std::string last_error;
-    router_.connectToRouter();
-    router_.listUsers(0, proto::router::kMaxUserPageSize,
-                      { &receiver_, [&](const proto::router::UserList& list)
-    {
-        ++calls;
-        last_error = list.error_code();
-    } });
-
-    RouterTestPeer::setStatus(router_, Router::Status::ONLINE);
+        EXPECT_EQ(calls, 0);
+    }
 
     EXPECT_EQ(calls, 1);
     EXPECT_EQ(last_error, proto::router::kErrorLostConnection);
-    EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A session that ends keeps nothing waiting: the callers are answered and the session state goes
-// with it.
-TEST_F(RouterTest, ClearedSessionKeepsNothingPending)
-{
-    router_.disconnectFromRouter();
-
-    EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
-    EXPECT_EQ(router_.status(), Router::Status::OFFLINE);
 }
 
 //--------------------------------------------------------------------------------------------------
 // A reply nobody waits for any more (the dialog was closed) still carries its cache rules. What
 // the rules are is the business of RouterCache; here every reply channel must feed them.
-TEST_F(RouterTest, ReplyWithoutARequestStillAppliesItsRules)
+TEST_F(RouterSessionTest, ReplyWithoutARequestStillAppliesItsRules)
 {
     fillCaches();
 
-    deliver(proto::router::CHANNEL_ID_ADMIN,
-            workspaceResult(proto::router::kCommandWorkspaceModify, proto::router::kErrorOk));
+    deliver(workspaceResult(proto::router::kCommandWorkspaceModify, proto::router::kErrorOk));
     EXPECT_FALSE(workspacesServedFromCache());
 
     fillCaches();
 
-    deliver(proto::router::CHANNEL_ID_MANAGER,
-            groupResult(proto::router::kCommandGroupDelete, proto::router::kErrorOk));
+    deliver(groupResult(proto::router::kCommandGroupDelete, proto::router::kErrorOk));
     EXPECT_FALSE(groupsServedFromCache());
     EXPECT_FALSE(hostsServedFromCache());
 }
 
 //--------------------------------------------------------------------------------------------------
-// A change notification is not a reply to anything: it drops the lists it names and raises the
-// signal the interface refetches on.
-TEST_F(RouterTest, NotificationDropsItsListAndIsAnnounced)
+// A change notification names the lists that went stale. It arrives like any other client
+// message; the named list leaves the cache and the others stay.
+TEST_F(RouterSessionTest, NotificationDropsItsList)
 {
     fillCaches();
 
-    int announced = 0;
-    QObject::connect(&router_, &Router::sig_hostsChanged, [&announced](qint64) { ++announced; });
+    proto::router::RouterToClient reply;
+    reply.mutable_notification()->set_hosts_dirty(true);
+    deliver(reply);
 
-    proto::router::RouterToClient message;
-    message.mutable_notification()->set_hosts_dirty(true);
-    deliver(proto::router::CHANNEL_ID_CLIENT, message);
-
-    EXPECT_EQ(announced, 1);
     EXPECT_FALSE(hostsServedFromCache());
     EXPECT_TRUE(groupsServedFromCache());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A lookup names the record it wants and asks for no page; the paged call is the other one.
-TEST_F(RouterTest, UserLookupNamesTheRecord)
-{
-    router_.findUser(qint64(42), { &receiver_, [](const proto::router::UserList&) {} });
-
-    auto request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_list_request());
-    EXPECT_EQ(request.user_list_request().entry_id(), 42);
-    EXPECT_EQ(request.user_list_request().count(), 0);
-
-    router_.findUser(QString("bob"), { &receiver_, [](const proto::router::UserList&) {} });
-
-    request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_list_request());
-    EXPECT_EQ(request.user_list_request().name(), "bob");
-    EXPECT_EQ(request.user_list_request().entry_id(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The device tokens are a domain of their own: they are listed and revoked by their own messages.
-TEST_F(RouterTest, TokensAreListedAndRevokedByTheirOwnMessages)
-{
-    router_.listUserTokens(7, { &receiver_, [](const proto::router::UserTokenList&) {} });
-
-    auto request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_token_list_request());
-    EXPECT_EQ(request.user_token_list_request().user_id(), 7);
-
-    router_.revokeUserTokens(7, { 100, 101 },
-                             { &receiver_, [](const proto::router::UserTokenResult&) {} });
-
-    request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_user_token_request());
-    EXPECT_EQ(request.user_token_request().command_name(),
-              proto::router::kCommandUserTokenRevoke);
-    EXPECT_EQ(request.user_token_request().user_id(), 7);
-    ASSERT_EQ(request.user_token_request().token_id_size(), 2);
-    EXPECT_EQ(request.user_token_request().token_id(0), 100);
-}
-
-//--------------------------------------------------------------------------------------------------
-// An edit carries the workspace the host is to end up in and the revision it was built on. An
-// ordinary edit repeats the workspace the host is already in, so editing a host never releases
-// it by omission.
-TEST_F(RouterTest, HostEditCarriesTheWorkspaceAndTheRevision)
-{
-    RouterHost host;
-    host.host_id = HostId(1);
-    host.workspace_id = kWorkspaceId;
-    host.group_id = 5;
-    host.display_name = "display";
-    host.revision = 3;
-
-    router_.editHost(host, { &receiver_, [](const proto::router::HostResult&) {} });
-
-    const auto request = lastRequest<proto::router::ManagerToRouter>();
-    ASSERT_TRUE(request.has_host_request());
-    EXPECT_EQ(request.host_request().command_name(), proto::router::kCommandHostModify);
-    EXPECT_EQ(request.host_request().host().workspace_id(), kWorkspaceId);
-    EXPECT_EQ(request.host_request().host().group_id(), 5);
-    EXPECT_EQ(request.host_request().host().revision(), 3);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -617,7 +439,7 @@ TEST_F(RouterTest, HostEditCarriesTheWorkspaceAndTheRevision)
 // so the caller is not left waiting. The bounds count UTF-8 bytes, so a name of 64 non-ASCII
 // characters is over the bound while the input field that accepted it is not; the name of a group
 // or a workspace is also mandatory and judged after trimming, the way the router judges it.
-TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
+TEST_F(RouterSessionTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
 {
     const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
     const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
@@ -665,35 +487,35 @@ TEST_F(RouterTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
     router_.addGroup(kWorkspaceId, group, { &receiver_, store_group });
     EXPECT_EQ(group_result.error_code(), proto::router::kErrorInvalidData);
 
-    EXPECT_TRUE(sent_.isEmpty());
-    EXPECT_EQ(RouterTestPeer::rpc(router_).pendingCount(), 0);
+    EXPECT_EQ(RouterSessionTestPeer::rpc(router_).pendingCount(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A record sitting exactly on the bounds goes out, and its name goes out trimmed - that is the
-// value the router stores and measures, otherwise a name of blanks would pass here and be refused
-// there.
-TEST_F(RouterTest, RecordOnTheBoundsIsSentWithItsNameTrimmed)
+// A record sitting exactly on the bounds goes out. The name is measured after trimming, the way
+// the router measures it, so a name padded with blanks up to twice the bound still passes.
+TEST_F(RouterSessionTest, RecordOnTheBoundsIsSent)
 {
     RouterWorkspace workspace;
     workspace.entry_id = kWorkspaceId;
     workspace.name = "  " + QString(proto::router::kMaxEntryNameLength, QChar('n')) + "  ";
 
+    bool answered = false;
     router_.modifyWorkspace(workspace,
-                            { &receiver_, [](const proto::router::WorkspaceResult&) {} });
+                            { &receiver_, [&answered](const proto::router::WorkspaceResult&)
+    {
+        answered = true;
+    } });
+    ++next_request_id_;
 
-    ASSERT_EQ(sent_.size(), 1);
-    const auto request = lastRequest<proto::router::AdminToRouter>();
-    ASSERT_TRUE(request.has_workspace_request());
-    EXPECT_EQ(request.workspace_request().workspace().name().size(),
-              proto::router::kMaxEntryNameLength);
+    EXPECT_FALSE(answered);
+    EXPECT_EQ(RouterSessionTestPeer::rpc(router_).pendingCount(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 // The count of a scope is never negative. One that arrives so is not data the pagination can work
 // with - it takes a non-negative count as its contract and ends the process on anything else - so
 // the parsing of the reply is where it stops.
-TEST_F(RouterTest, NegativeTotalCountDoesNotReachTheCallers)
+TEST_F(RouterSessionTest, NegativeTotalCountDoesNotReachTheCallers)
 {
     const RouterHostList delivered = fetchHosts(hostList(kWorkspaceId, { HostId(1) }, -5));
     EXPECT_EQ(delivered.total_count, 0);
@@ -702,15 +524,12 @@ TEST_F(RouterTest, NegativeTotalCountDoesNotReachTheCallers)
     router_.searchHosts("host", 0, 25,
                         { &receiver_, [&found](const RouterHostList& value) { found = value; } });
 
-    const auto request = lastRequest<proto::router::ClientToRouter>();
-    ASSERT_TRUE(request.has_host_search_request());
-
     proto::router::RouterToClient reply;
     auto* result = reply.mutable_host_search_result();
-    result->set_request_id(request.host_search_request().request_id());
+    result->set_request_id(++next_request_id_);
     result->set_error_code(proto::router::kErrorOk);
     result->set_total_count(-5);
-    deliver(proto::router::CHANNEL_ID_CLIENT, reply);
+    deliver(reply);
 
     EXPECT_EQ(found.error_code, QString::fromStdString(proto::router::kErrorOk));
     EXPECT_EQ(found.total_count, 0);

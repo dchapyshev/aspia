@@ -27,7 +27,6 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSet>
-#include <QDateTime>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -37,6 +36,7 @@
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/router_dialog.h"
 #include "client/desktop/management/local_group_dialog.h"
@@ -44,8 +44,6 @@
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
-#include "common/desktop/two_factor_code_dialog.h"
-#include "common/desktop/two_factor_enroll_dialog.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
@@ -66,6 +64,11 @@ Sidebar::Sidebar(QWidget* parent)
     tree_widget_->setColumnCount(1);
 
     layout->addWidget(tree_widget_);
+
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
+    connect(&controller, &RouterController::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
+    connect(&controller, &RouterController::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
 
     loadRouters();
 
@@ -173,10 +176,9 @@ void Sidebar::loadRouters()
     {
         SidebarRouter* router = new SidebarRouter(router_config.routerId(), router_config.displayLabel(), tree_widget_);
         router->setExpanded(true);
-
-        if (router_config.isValid())
-            createRouterSession(router_config);
     }
+
+    RouterController::instance().reload();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,10 +200,7 @@ void Sidebar::reloadRouters()
 
         const qint64 router_id = static_cast<SidebarRouter*>(item)->routerId();
         if (!new_ids.contains(router_id))
-        {
-            destroyRouterSession(router_id);
             delete tree_widget_->takeTopLevelItem(i);
-        }
     }
 
     // Update existing routers, append new ones at the end. Child items (Unassigned, ...) are
@@ -214,17 +213,11 @@ void Sidebar::reloadRouters()
         if (router)
         {
             router->setName(name);
-
-            if (Router* session = routers_.value(router_config.routerId()))
-                session->updateConfig(router_config);
         }
         else
         {
             SidebarRouter* new_router = new SidebarRouter(router_config.routerId(), name, tree_widget_);
             new_router->setExpanded(true);
-
-            if (router_config.isValid())
-                createRouterSession(router_config);
 
             // Keep ordering: routers first, local root last.
             int local_idx = tree_widget_->indexOfTopLevelItem(local_root_);
@@ -236,6 +229,8 @@ void Sidebar::reloadRouters()
             }
         }
     }
+
+    RouterController::instance().reload();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,7 +244,7 @@ void Sidebar::setRouterStatus(qint64 router_id, SidebarRouter::Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces)
+void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>& workspaces)
 {
     SidebarRouter* router = routerById(router_id);
     if (!router)
@@ -259,7 +254,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     // selection, expansion state and the host-group subtrees across refreshes.
     QSet<qint64> incoming_ids;
     incoming_ids.reserve(workspaces.size());
-    for (const Router::Workspace& workspace : workspaces)
+    for (const RouterWorkspace& workspace : workspaces)
         incoming_ids.insert(workspace.entry_id);
 
     // Iterate in reverse so takeChild() index shifts do not skip siblings.
@@ -280,7 +275,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
     }
 
     Settings settings;
-    for (const Router::Workspace& workspace : workspaces)
+    for (const RouterWorkspace& workspace : workspaces)
     {
         SidebarRouterWorkspace* item = existing.value(workspace.entry_id);
         if (!item)
@@ -298,7 +293,7 @@ void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspac
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const QList<Router::Group>& groups)
+void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const QList<RouterGroup>& groups)
 {
     SidebarRouter* router = routerById(router_id);
     if (!router)
@@ -334,10 +329,10 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
     //   3. DFS the incoming tree in parent-first order. For each node create it under its
     //      target parent if missing; otherwise update name and re-parent if it moved.
 
-    QHash<qint64, QList<const Router::Group*>> children_of;
+    QHash<qint64, QList<const RouterGroup*>> children_of;
     QSet<qint64> incoming_ids;
     incoming_ids.reserve(groups.size());
-    for (const Router::Group& group : groups)
+    for (const RouterGroup& group : groups)
     {
         children_of[group.parent_id].append(&group);
         incoming_ids.insert(group.entry_id);
@@ -369,7 +364,7 @@ void Sidebar::setRouterHostGroups(qint64 router_id, qint64 workspace_id, const Q
     std::function<void(qint64, QTreeWidgetItem*)> apply = [&](qint64 parent_id,
                                                               QTreeWidgetItem* tree_parent)
     {
-        for (const Router::Group* group : std::as_const(children_of[parent_id]))
+        for (const RouterGroup* group : std::as_const(children_of[parent_id]))
         {
             // Guard against cycles and duplicate entry_ids in the untrusted group list.
             if (visited.contains(group->entry_id))
@@ -467,8 +462,8 @@ QList<qint64> Sidebar::routerWorkspaceIds(qint64 router_id) const
 //--------------------------------------------------------------------------------------------------
 void Sidebar::changeRouterPassword(qint64 router_id)
 {
-    Router* router = routers_.value(router_id);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
     CredentialsDialog dialog(CredentialsDialog::Type::SET_PASSWORD, this);
@@ -505,14 +500,14 @@ void Sidebar::changeRouterPassword(qint64 router_id)
 
     // On success the router revokes this session's token and re-runs the 2FA stage, so the user
     // will be asked for a code again right after (handled by the existing two-factor plumbing).
-    router->changePassword(dialog.password(), { this,
+    session->changePassword(dialog.password(), { this,
         [this, router_id](const proto::router::ChangePasswordResult& result)
     {
         const std::string& error_code = result.error_code();
         if (error_code == proto::router::kErrorOk)
         {
-            addRouterEvent(Severity::INFO, router_id,
-                           tr("Password updated. Waiting for the session to sign in again..."));
+            RouterController::instance().addEvent(router_id, RouterEvent::Severity::INFO,
+                tr("Password updated. Waiting for the session to sign in again..."));
             return;
         }
 
@@ -521,27 +516,14 @@ void Sidebar::changeRouterPassword(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterStatusWidget::Event> Sidebar::routerEvents(qint64 router_id) const
-{
-    return router_events_.value(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::clearRouterEvents(qint64 router_id)
-{
-    router_events_[router_id].clear();
-    addRouterEvent(Severity::INFO, router_id, tr("Event history cleared."));
-}
-
-//--------------------------------------------------------------------------------------------------
 void Sidebar::onRefreshWorkspaces(qint64 router_id)
 {
-    Router* router = routers_.value(router_id);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0, { this,
-        [this, router_id](const Router::WorkspaceList& list)
+    session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0, { this,
+        [this, router_id](const RouterWorkspaceList& list)
     {
         if (list.error_code != proto::router::kErrorOk)
         {
@@ -555,15 +537,15 @@ void Sidebar::onRefreshWorkspaces(qint64 router_id)
 
         // Once the workspace items are in place, fan out a host-group fetch per workspace.
         // Each response builds the subtree under its workspace via setRouterHostGroups().
-        Router* router = routers_.value(router_id);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id);
+        if (!session)
             return;
 
-        for (const Router::Workspace& workspace : list.workspaces)
+        for (const RouterWorkspace& workspace : list.workspaces)
         {
             const qint64 workspace_id = workspace.entry_id;
-            router->listGroups(Router::CachePolicy::RELOAD, workspace_id, { this,
-                [this, router_id, workspace_id](const Router::GroupList& result)
+            session->listGroups(RouterSession::CachePolicy::RELOAD, workspace_id, { this,
+                [this, router_id, workspace_id](const RouterGroupList& result)
             {
                 if (result.error_code != proto::router::kErrorOk)
                 {
@@ -581,15 +563,15 @@ void Sidebar::onRefreshHostGroups(qint64 router_id)
 {
     // The workspace items already exist in the sidebar; refetch the group tree for each one
     // without disturbing the workspaces themselves.
-    Router* router = routers_.value(router_id);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
     const QList<qint64> workspace_ids = routerWorkspaceIds(router_id);
     for (qint64 workspace_id : std::as_const(workspace_ids))
     {
-        router->listGroups(Router::CachePolicy::RELOAD, workspace_id, { this,
-            [this, router_id, workspace_id](const Router::GroupList& result)
+        session->listGroups(RouterSession::CachePolicy::RELOAD, workspace_id, { this,
+            [this, router_id, workspace_id](const RouterGroupList& result)
         {
             if (result.error_code != proto::router::kErrorOk)
             {
@@ -918,38 +900,19 @@ void Sidebar::onItemCollapsed(QTreeWidgetItem* item)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
+void Sidebar::onRouterStatusChanged(qint64 router_id, RouterStatus status)
 {
-    if (Router* router = routers_.value(router_id))
-    {
-        const QString address = router->config().address();
-        switch (status)
-        {
-            case Router::Status::CONNECTING:
-                addRouterEvent(Severity::INFO, router_id,
-                               tr("Connecting to router %1...").arg(address));
-                break;
-            case Router::Status::ONLINE:
-                addRouterEvent(Severity::INFO, router_id,
-                               tr("Connection to router %1 established.").arg(address));
-                break;
-            case Router::Status::OFFLINE:
-                addRouterEvent(Severity::WARNING, router_id,
-                               tr("Disconnected from router %1.").arg(address));
-                break;
-        }
-    }
-
     SidebarRouter::Status sidebar_status = SidebarRouter::Status::OFFLINE;
     switch (status)
     {
-        case Router::Status::OFFLINE:    sidebar_status = SidebarRouter::Status::OFFLINE;    break;
-        case Router::Status::CONNECTING: sidebar_status = SidebarRouter::Status::CONNECTING; break;
-        case Router::Status::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
+        case RouterStatus::OFFLINE:    sidebar_status = SidebarRouter::Status::OFFLINE;    break;
+        case RouterStatus::CONNECTING: sidebar_status = SidebarRouter::Status::CONNECTING; break;
+        case RouterStatus::TWO_FACTOR: sidebar_status = SidebarRouter::Status::TWO_FACTOR; break;
+        case RouterStatus::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
     }
     setRouterStatus(router_id, sidebar_status);
 
-    if (status == Router::Status::ONLINE)
+    if (status == RouterStatus::ONLINE)
     {
         buildRouterSections(router_id);
         onRefreshWorkspaces(router_id);
@@ -959,82 +922,6 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, Router::Status status)
         removeRouterSections(router_id);
         setRouterWorkspaces(router_id, {});
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code)
-{
-    Severity severity = Severity::WARNING;
-    if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
-        error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
-    {
-        severity = Severity::CRITICAL;
-    }
-
-    const QString message = tr("Network error: %1").arg(TcpChannel::errorToString(error_code));
-    addRouterEvent(severity, router_id, message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterTwoFactorCodeRequired(qint64 router_id)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    TwoFactorCodeDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-        router->submitTwoFactorCode(dialog.code());
-    else
-        router->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri)
-{
-    Router* router = routers_.value(router_id);
-    if (!router)
-        return;
-
-    TwoFactorEnrollDialog dialog(otpauth_uri, this);
-    if (dialog.exec() == QDialog::Accepted)
-        router->submitTwoFactorCode(dialog.code());
-    else
-        router->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::createRouterSession(const RouterConfig& config)
-{
-    const qint64 router_id = config.routerId();
-    if (routers_.contains(router_id))
-        return;
-
-    router_events_.insert(router_id, {});
-
-    Router* router = new Router(config, this);
-    routers_.insert(router_id, router);
-
-    connect(router, &Router::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
-    connect(router, &Router::sig_errorOccurred, this, &Sidebar::onRouterErrorOccurred);
-    connect(router, &Router::sig_twoFactorCodeRequired, this, &Sidebar::onRouterTwoFactorCodeRequired);
-    connect(router, &Router::sig_twoFactorEnrollment, this, &Sidebar::onRouterTwoFactorEnrollment);
-    connect(router, &Router::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
-    connect(router, &Router::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
-
-    router->connectToRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::destroyRouterSession(qint64 router_id)
-{
-    if (Router* router = routers_.take(router_id))
-    {
-        router->disconnectFromRouter();
-        delete router;
-    }
-
-    router_events_.remove(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1053,8 +940,8 @@ void Sidebar::buildRouterSections(qint64 router_id)
     };
 
     // Administrative sections are only meaningful for an administrator session.
-    Router* instance = routers_.value(router_id);
-    if (instance && instance->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+    RouterSession* session = RouterController::session(router_id);
+    if (session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
     {
         move_to_top(new SidebarRouterUsers(router_id, router));
         move_to_top(new SidebarRouterRelays(router_id, router));
@@ -1087,18 +974,6 @@ void Sidebar::removeRouterSections(qint64 router_id)
             delete router->takeChild(i);
         }
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::addRouterEvent(Severity severity, qint64 router_id, const QString& message)
-{
-    const RouterStatusWidget::Event entry{ QDateTime::currentDateTime(), severity, message };
-
-    auto it = router_events_.find(router_id);
-    if (it != router_events_.end())
-        it->append(entry);
-
-    emit sig_routerEvent(router_id, entry);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1155,8 +1030,8 @@ void Sidebar::startDrag()
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
         // Clients are read-only and cannot move host groups.
-        Router* router = Router::instance(group_item->routerId());
-        if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
+        RouterSession* session = RouterController::session(group_item->routerId());
+        if (!session || session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
             return;
 
         RouterGroupDrag drag(this);
@@ -1310,7 +1185,7 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        const Router::Host& host = host_mime_data->host();
+        const RouterHost& host = host_mime_data->host();
 
         // The target is either a host group or the workspace item (move to the workspace root,
         // group id 0). Cross-router or cross-workspace moves are forbidden by the server;
@@ -1565,18 +1440,18 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         const qint64 router_id = source_group->routerId();
-        Router* router = Router::instance(router_id);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id);
+        if (!session)
         {
             restoreSelection();
             return true;
         }
 
         // Copy the existing record and just rewrite parent_id.
-        Router::Group group = source_group->group();
+        RouterGroup group = source_group->group();
         group.parent_id = target_group_id;
 
-        router->modifyGroup(source_group->workspaceId(), group, { this,
+        session->modifyGroup(source_group->workspaceId(), group, { this,
             [this, router_id](const proto::router::GroupResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
@@ -1633,7 +1508,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        Router::Host host = host_mime_data->host();
+        RouterHost host = host_mime_data->host();
         const qint64 router_id = host_mime_data->routerId();
 
         // Repeat the eligibility checks from onDragMove in case the user releases over a
@@ -1646,15 +1521,15 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        Router* router = Router::instance(router_id);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id);
+        if (!session)
         {
             restoreSelection();
             return true;
         }
 
         host.group_id = target_group_id;
-        router->editHost(host, { this, [this, router_id](const proto::router::HostResult& result)
+        session->editHost(host, { this, [this, router_id](const proto::router::HostResult& result)
         {
             if (result.error_code() != proto::router::kErrorOk)
             {

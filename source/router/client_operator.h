@@ -67,7 +67,7 @@ public:
 
     qint64 sessionId() const { return session_id_; }
     const std::string& address() const { return tcp_channel_->peerAddress(); }
-    time_t startTime() const { return start_time_; }
+    TimePoint startTime() const { return start_time_; }
 
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
@@ -83,7 +83,7 @@ signals:
     void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
     void sig_notifyChanged(quint32 flags);
-    void sig_stopClients(qint64 user_id, const std::vector<qint64>& token_ids, qint64 except_client_id);
+    void sig_stopClients(qint64 user_id, const std::vector<qint64>& token_ids);
 
 protected:
     LOG_DECLARE_CONTEXT(ClientOperator);
@@ -126,7 +126,7 @@ private:
 
     Database& database_;
     const qint64 session_id_;
-    time_t start_time_ = 0;
+    TimePoint start_time_;
 
     TcpChannel* tcp_channel_ = nullptr;
     quint16 stun_port_ = 0;

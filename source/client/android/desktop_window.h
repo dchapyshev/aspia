@@ -51,7 +51,7 @@ class DesktopView;
 class FloatingActionButton;
 class KeyBar;
 class Label;
-class Router;
+class RouterSession;
 class SessionKeeper;
 class SessionState;
 class StatisticsDialog;
@@ -116,7 +116,7 @@ private:
 
     void start();
     void fetchConnectionOffer();
-    void requestConnectionOffer(Router* router);
+    void requestConnectionOffer(RouterSession* session);
     void startNewSession();
     void reconnect();
     void showPowerActions();

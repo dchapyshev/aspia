@@ -91,13 +91,14 @@ void SidebarRouter::setStatus(Status status)
         case Status::OFFLINE:    setIcon(0, QIcon(":/img/router-offline.svg"));    break;
         case Status::CONNECTING: setIcon(0, QIcon(":/img/router-connecting.svg")); break;
         case Status::ONLINE:     setIcon(0, QIcon(":/img/router-online.svg"));     break;
+        case Status::TWO_FACTOR: setIcon(0, QIcon(":/img/lock.svg"));              break;
         default: break;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 SidebarRouterWorkspace::SidebarRouterWorkspace(
-    qint64 router_id, const Router::Workspace& workspace, QTreeWidgetItem* parent)
+    qint64 router_id, const RouterWorkspace& workspace, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_WORKSPACE, /*group_id=*/0, parent),
       router_id_(router_id),
       workspace_(workspace)
@@ -107,7 +108,7 @@ SidebarRouterWorkspace::SidebarRouterWorkspace(
 }
 
 //--------------------------------------------------------------------------------------------------
-void SidebarRouterWorkspace::update(const Router::Workspace& workspace)
+void SidebarRouterWorkspace::update(const RouterWorkspace& workspace)
 {
     workspace_ = workspace;
     setText(0, workspace.name);
@@ -115,7 +116,7 @@ void SidebarRouterWorkspace::update(const Router::Workspace& workspace)
 
 //--------------------------------------------------------------------------------------------------
 SidebarRouterGroup::SidebarRouterGroup(
-    qint64 router_id, const Router::Group& group, QTreeWidgetItem* parent)
+    qint64 router_id, const RouterGroup& group, QTreeWidgetItem* parent)
     : SidebarItem(ROUTER_GROUP, group.entry_id, parent),
       router_id_(router_id),
       group_(group)
@@ -136,7 +137,7 @@ QString SidebarRouterGroup::workspaceName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void SidebarRouterGroup::update(const Router::Group& group)
+void SidebarRouterGroup::update(const RouterGroup& group)
 {
     group_ = group;
     setText(0, group.name);

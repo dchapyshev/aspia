@@ -20,8 +20,10 @@
 #define BASE_TIME_TYPES_H
 
 #include <chrono>
+#include <cstdint>
 
 using Clock = std::chrono::steady_clock;
+using SystemClock = std::chrono::system_clock;
 using TimePoint = Clock::time_point;
 using NanoSeconds = std::chrono::nanoseconds;
 using MicroSeconds = std::chrono::microseconds;
@@ -34,6 +36,11 @@ template <typename To, typename Rep, typename Period>
 constexpr To DurationCast(const std::chrono::duration<Rep, Period>& duration)
 {
     return std::chrono::duration_cast<To>(duration);
+}
+
+inline int64_t secondsSinceEpoch()
+{
+    return DurationCast<Seconds>(SystemClock::now().time_since_epoch()).count();
 }
 
 #endif // BASE_TIME_TYPES_H

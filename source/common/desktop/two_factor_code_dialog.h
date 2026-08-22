@@ -32,7 +32,9 @@ class TwoFactorCodeDialog final : public QDialog
     Q_OBJECT
 
 public:
-    explicit TwoFactorCodeDialog(QWidget* parent = nullptr);
+    // |code_refused| adds a line saying that the previous code was refused. The refusal itself
+    // only closes the session, so the reopened prompt is where the user learns of it.
+    explicit TwoFactorCodeDialog(bool code_refused, QWidget* parent = nullptr);
     ~TwoFactorCodeDialog() final;
 
     QString code() const;

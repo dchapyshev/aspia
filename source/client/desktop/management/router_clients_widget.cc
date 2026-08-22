@@ -35,7 +35,7 @@
 #include <QStatusBar>
 
 #include "base/logging.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -68,6 +68,22 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
 
     connect(ui->tree_clients->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterClientsWidget::sig_currentChanged);
+
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_clientsChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchClients();
+    });
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        {
+            model_->clear();
+            updateStatusLabel();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,26 +95,6 @@ RouterClientsWidget::~RouterClientsWidget()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::showRouter(qint64 router_id)
 {
-    if (router_id_ != router_id)
-    {
-        // Move the data/status subscriptions to the router that is now displayed.
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, nullptr, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_clientsChanged, this, &RouterClientsWidget::fetchClients);
-            connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
-            {
-                if (status != Router::Status::ONLINE)
-                {
-                    model_->clear();
-                    updateStatusLabel();
-                }
-            });
-        }
-    }
-
     router_id_ = router_id;
 
     model_->clear();
@@ -291,13 +287,12 @@ void RouterClientsWidget::onDisconnectClient()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    router->disconnectClient(client->entry_id(),
-                             { this, &RouterClientsWidget::onClientResultReceived });
+    session->disconnectClient(client->entry_id(), { this, &RouterClientsWidget::onClientResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,12 +311,12 @@ void RouterClientsWidget::onDisconnectAllClients()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
-    router->disconnectClient(-1, { this, &RouterClientsWidget::onClientResultReceived });
+    session->disconnectClient(-1, { this, &RouterClientsWidget::onClientResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,14 +384,14 @@ void RouterClientsWidget::onHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::fetchClients()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listClients({ this, &RouterClientsWidget::onClientListReceived });
+    session->listClients({ this, &RouterClientsWidget::onClientListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

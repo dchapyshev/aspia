@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include "client/router.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/peer_list_model.h"
 #include "client/desktop/management/relay_list_model.h"

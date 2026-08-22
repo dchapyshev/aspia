@@ -18,21 +18,17 @@
 
 #include "client/android/routers_widget.h"
 
-#include <QDateTime>
 #include <QGridLayout>
 #include <QPainter>
-#include <QPointer>
-#include <QSet>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
-#include "base/net/tcp_channel.h"
-#include "client/android/router_editor.h"
-#include "client/android/two_factor_dialog.h"
 #include "client/config.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
+#include "client/android/router_editor.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/scroll_area.h"
@@ -40,7 +36,6 @@
 namespace {
 
 constexpr double kPlaceholderTextOpacity = 0.6;
-constexpr int kMaxEvents = 7;
 
 } // namespace
 
@@ -120,6 +115,15 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
     connect(editor_, &RouterEditor::sig_accepted, this, &RoutersWidget::returnFromEditor);
 
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (RouterCard* card = cards_.value(router_id))
+            card->setStatus(status);
+    });
+    connect(&controller, &RouterController::sig_event, this, &RoutersWidget::onRouterEvent);
+
     placeholder_->setText(tr("No routers added"));
     reload();
 }
@@ -148,24 +152,23 @@ void RoutersWidget::reload()
     {
         cards_layout_->addStretch();
         placeholder_->hide();
-        emit appBarActionsChanged();
+        emit sig_appBarActionsChanged();
         return;
     }
 
-    syncSessions();
+    RouterController::instance().reload();
 
     for (const RouterConfig& config : Database::instance().routerList())
     {
         const qint64 router_id = config.routerId();
-        const Router* session = sessions_.value(router_id);
-        const Router::Status status = session ? session->status() : Router::Status::OFFLINE;
 
         // The event log is filled lazily when the panel is opened, so the card starts empty.
         RouterCard* card = new RouterCard(router_id, config.displayLabel(), container_);
-        card->setStatus(status);
+        card->setStatus(RouterController::status(router_id));
 
-        connect(card, &RouterCard::expandRequested, this, &RoutersWidget::onCardExpandRequested);
-        connect(card, &RouterCard::editRequested, this, &RoutersWidget::onEditRouter);
+        connect(card, &RouterCard::sig_expandRequested, this, &RoutersWidget::onCardExpandRequested);
+        connect(card, &RouterCard::sig_editRequested, this, &RoutersWidget::onEditRouter);
+        connect(card, &RouterCard::sig_twoFactorClicked, this, &RoutersWidget::sig_twoFactorClicked);
 
         cards_layout_->addWidget(card);
         cards_.insert(router_id, card);
@@ -174,7 +177,7 @@ void RoutersWidget::reload()
     cards_layout_->addStretch();
 
     placeholder_->setVisible(cards_.isEmpty());
-    emit appBarActionsChanged();
+    emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -196,7 +199,7 @@ void RoutersWidget::onAddRouter()
     editor_->prepareForAdd();
     stack_->setCurrentIndex(1);
     emit sig_titleChanged(tr("Add Router"), true);
-    emit appBarActionsChanged();
+    emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,7 +223,7 @@ void RoutersWidget::onCardExpandRequested(qint64 router_id)
         return;
 
     // Fill the log from the stored history only now that the panel is being shown.
-    card->setEvents(events_.value(router_id));
+    card->setEvents(RouterController::instance().events(router_id));
     card->setExpanded(true);
     expanded_router_id_ = router_id;
 }
@@ -233,7 +236,19 @@ void RoutersWidget::onEditRouter(qint64 router_id)
 
     stack_->setCurrentIndex(1);
     emit sig_titleChanged(tr("Edit Router"), true);
-    emit appBarActionsChanged();
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RoutersWidget::onRouterEvent(qint64 router_id, const RouterEvent& event)
+{
+    // Only the open panel shows its log live; the others are refilled from the journal when
+    // expanded.
+    if (router_id != expanded_router_id_)
+        return;
+
+    if (RouterCard* card = cards_.value(router_id))
+        card->appendEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,7 +264,7 @@ void RoutersWidget::showList()
 {
     stack_->setCurrentIndex(0);
     emit sig_titleChanged(QString(), false);
-    emit appBarActionsChanged();
+    emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,149 +286,4 @@ void RoutersWidget::clearCards()
 
     cards_.clear();
     expanded_router_id_ = -1;
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::syncSessions()
-{
-    const QList<RouterConfig> configs = Database::instance().routerList();
-
-    QSet<qint64> present;
-    for (const RouterConfig& config : std::as_const(configs))
-        present.insert(config.routerId());
-
-    // Drop sessions whose router was removed.
-    const QList<qint64> existing = sessions_.keys();
-    for (qint64 router_id : existing)
-    {
-        if (!present.contains(router_id))
-        {
-            Router* session = sessions_.take(router_id);
-            session->disconnectFromRouter();
-            session->deleteLater();
-            events_.remove(router_id);
-        }
-    }
-
-    // Connect new routers, refresh the configuration of the ones already connected.
-    for (const RouterConfig& config : std::as_const(configs))
-    {
-        if (!config.isValid())
-            continue;
-
-        if (Router* session = sessions_.value(config.routerId()))
-            session->updateConfig(config);
-        else
-            createRouterSession(config);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::createRouterSession(const RouterConfig& config)
-{
-    Router* router = new Router(config, this);
-    sessions_.insert(config.routerId(), router);
-    events_.insert(config.routerId(), {});
-
-    connect(router, &Router::sig_statusChanged, this, [this](qint64 id, Router::Status status)
-    {
-        if (RouterCard* card = cards_.value(id))
-            card->setStatus(status);
-
-        const Router* session = sessions_.value(id);
-        const QString address = session ? session->config().address() : QString();
-
-        switch (status)
-        {
-            case Router::Status::CONNECTING:
-                addRouterEvent(id, RouterEvent::Severity::INFO,
-                               tr("Connecting to router %1...").arg(address));
-                break;
-
-            case Router::Status::ONLINE:
-                addRouterEvent(id, RouterEvent::Severity::INFO,
-                               tr("Connection to router %1 established.").arg(address));
-                break;
-
-            case Router::Status::OFFLINE:
-                addRouterEvent(id, RouterEvent::Severity::WARNING,
-                               tr("Disconnected from router %1.").arg(address));
-                break;
-        }
-    });
-
-    connect(router, &Router::sig_errorOccurred, this,
-            [this](qint64 id, TcpChannel::ErrorCode error_code)
-    {
-        RouterEvent::Severity severity = RouterEvent::Severity::WARNING;
-        if (error_code == TcpChannel::ErrorCode::CRYPTO_ERROR ||
-            error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
-        {
-            severity = RouterEvent::Severity::CRITICAL;
-        }
-
-        addRouterEvent(id, severity,
-                       tr("Network error: %1").arg(TcpChannel::errorToString(error_code)));
-    });
-
-    connect(router, &Router::sig_twoFactorCodeRequired, this, [this](qint64 id)
-    {
-        requestTwoFactorCode(id, QString());
-    });
-
-    connect(router, &Router::sig_twoFactorEnrollment, this,
-            [this](qint64 id, const QString& otpauth_uri)
-    {
-        requestTwoFactorCode(id, otpauth_uri);
-    });
-
-    router->connectToRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri)
-{
-    QPointer<Router> session = sessions_.value(router_id);
-    if (!session)
-        return;
-
-    TwoFactorDialog dialog(otpauth_uri, this);
-    const bool accepted = dialog.exec() == QDialog::Accepted;
-
-    // The dialog spins a nested event loop, so the session may have been destroyed by a routers
-    // reload while it was open.
-    if (!session)
-        return;
-
-    if (accepted)
-        session->submitTwoFactorCode(dialog.code());
-    else
-        session->disconnectFromRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RoutersWidget::addRouterEvent(qint64 router_id, RouterEvent::Severity severity,
-                                   const QString& text)
-{
-    RouterEvent event;
-    event.time = QDateTime::currentDateTime();
-    event.severity = severity;
-    event.text = text;
-
-    auto it = events_.find(router_id);
-    if (it != events_.end())
-    {
-        it->append(event);
-
-        // Cap the stored history so it matches what the card keeps on screen.
-        while (it->size() > kMaxEvents)
-            it->removeFirst();
-    }
-
-    // Only the open panel shows its log live; the others are refilled from events_ when expanded.
-    if (router_id == expanded_router_id_)
-    {
-        if (RouterCard* card = cards_.value(router_id))
-            card->appendEvent(event);
-    }
 }

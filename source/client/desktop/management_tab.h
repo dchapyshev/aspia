@@ -20,12 +20,12 @@
 #define CLIENT_DESKTOP_MANAGEMENT_TAB_H
 
 #include <QHash>
+#include <QPointer>
 
 #include <memory>
 
+#include "base/peer/host_id.h"
 #include "client/config.h"
-#include "client/config.h"
-#include "client/router.h"
 #include "client/desktop/tab.h"
 #include "client/desktop/management/sidebar.h"
 
@@ -39,6 +39,7 @@ enum SessionType : int;
 
 class ContentWidget;
 class LocalGroupWidget;
+class QDialog;
 class QMenu;
 class RouterClientsWidget;
 class RouterGroupWidget;
@@ -110,8 +111,10 @@ private slots:
     void onApproveHostAction();
     void onCheckHostUpdatesAction();
     void onOnlineCheckToggled(bool checked);
+    void onTwoFactorRequired(qint64 router_id);
 
 private:
+    void showNextTwoFactorPrompt();
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
@@ -125,6 +128,8 @@ private:
     void removeItem(qint64 entry_id);
 
     std::unique_ptr<Ui::ManagementTab> ui;
+
+    QPointer<QDialog> two_factor_dialog_;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 

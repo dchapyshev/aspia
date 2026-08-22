@@ -39,7 +39,7 @@ class AppBar;
 class FilePanelWidget;
 class FileWorker;
 class Label;
-class Router;
+class RouterSession;
 class SessionKeeper;
 class SessionState;
 class TabBar;
@@ -95,7 +95,7 @@ private:
 
     void start();
     void fetchConnectionOffer();
-    void requestConnectionOffer(Router* router);
+    void requestConnectionOffer(RouterSession* session);
     void startNewSession();
 
     void initPanel(FilePanelWidget* panel, FileTask::Target target);

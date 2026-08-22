@@ -20,10 +20,9 @@
 #define CLIENT_ANDROID_REMOTE_WIDGET_H
 
 #include <QList>
-#include <QSet>
 #include <QWidget>
 
-#include "client/router.h"
+#include "client/router_session.h"
 #include "client/search_page_model.h"
 
 namespace proto::peer {
@@ -39,8 +38,8 @@ class QTreeWidgetItem;
 
 // Remote screen for the Android client: an accordion tree of routers -> workspaces -> groups. A tap
 // on a workspace or group opens its host list; routers expand to reveal their content. Fetched lists
-// are served from the Router cache, so a tab switch shows the stored content without a request; the
-// refresh action and router notifications re-fetch from the server.
+// are served from the session cache, so a tab switch shows the stored content without a request;
+// the refresh action and router notifications re-fetch from the server.
 class RemoteWidget final : public QWidget
 {
     Q_OBJECT
@@ -80,11 +79,10 @@ private slots:
     void onHostLongPressed(QTreeWidgetItem* item);
 
 private:
-    void connectRouters();
-    void fetchRouter(qint64 router_id, Router::CachePolicy policy);
+    void fetchRouter(qint64 router_id, RouterSession::CachePolicy policy);
     // Loads a page of the hosts of the selected group. |append| adds the page after the ones
     // already shown (the "show more" row); otherwise the page is the first one and replaces them.
-    void fetchHosts(Router::CachePolicy policy, bool append = false);
+    void fetchHosts(RouterSession::CachePolicy policy, bool append = false);
     void fetchTempHosts();
 
     // Rebuilds the host page from |hosts_|, ending with the "show more" row while the group has
@@ -123,7 +121,7 @@ private:
     struct SearchHost
     {
         qint64 router_id = -1;
-        Router::Host host;
+        RouterHost host;
     };
 
     // One router the search runs against. The routers are ordered by id so the whole result
@@ -141,7 +139,7 @@ private:
         qint64 offset = 0;
         qint64 count = 0;
         bool ready = false;
-        QList<Router::Host> hosts;
+        QList<RouterHost> hosts;
     };
 
     QStackedWidget* stack_ = nullptr;
@@ -152,18 +150,17 @@ private:
     RouterHostEditor* credentials_page_ = nullptr;
     IconButton* search_button_ = nullptr;
     IconButton* refresh_button_ = nullptr;
-    QSet<qint64> connected_routers_;
     qint64 host_router_id_ = -1;
     qint64 host_workspace_id_ = 0;
     qint64 host_group_id_ = 0;
 
     // The hosts loaded so far on the host page, kept to build a connection config on tap. The
     // group can hold more than these: the rest is loaded page by page.
-    QList<Router::Host> hosts_;
+    QList<RouterHost> hosts_;
     qint64 hosts_total_count_ = 0;
 
     // The temporary hosts currently shown on the temp-host page, kept to build a config on tap.
-    QList<Router::TempHost> temp_hosts_;
+    QList<RouterTempHost> temp_hosts_;
 
     // The active search query and the matches of the page currently on screen.
     QString search_query_;

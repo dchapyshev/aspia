@@ -39,6 +39,7 @@
 #include "client/backup.h"
 #include "client/database.h"
 #include "client/host_url.h"
+#include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_group_widget.h"
@@ -56,6 +57,8 @@
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
+#include "common/desktop/two_factor_code_dialog.h"
+#include "common/desktop/two_factor_enroll_dialog.h"
 #include "proto/peer.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -81,6 +84,9 @@ ManagementTab::ManagementTab(QWidget* parent)
 
     if (!Database::instance().isValid())
         LOG(ERROR) << "Failed to open or create book database";
+
+    // The sidebar built by setupUi() below expects the session owner to be up already.
+    new RouterController(this);
 
     ui->setupUi(this);
 
@@ -152,8 +158,15 @@ ManagementTab::ManagementTab(QWidget* parent)
     ui->content_stack->addWidget(router_status_widget_);
     ui->content_stack->addWidget(search_widget_);
 
-    connect(ui->sidebar, &Sidebar::sig_routerEvent,
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_event,
             router_status_widget_, &RouterStatusWidget::onEvent);
+    connect(&controller, &RouterController::sig_twoFactorRequired,
+            this, &ManagementTab::onTwoFactorRequired);
+
+    // The button of the status widget asks the question of its record again.
+    connect(router_status_widget_, &RouterStatusWidget::sig_twoFactorClicked,
+            this, &ManagementTab::onTwoFactorRequired);
 
     connect(router_hosts_widget_, &RouterHostsWidget::sig_currentChanged,
             this, &ManagementTab::updateActionsState);
@@ -463,7 +476,8 @@ void ManagementTab::onSwitchContent(SidebarItem::Type type)
 
             const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
             switchContent(router_status_widget_);
-            router_status_widget_->showRouter(router_id, ui->sidebar->routerEvents(router_id));
+            router_status_widget_->showRouter(
+                router_id, RouterController::instance().events(router_id));
         }
         break;
 
@@ -580,8 +594,8 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (Router* router = Router::instance(workspace_item->routerId()))
-            session_type = router->config().sessionType();
+        if (RouterSession* session = RouterController::session(workspace_item->routerId()))
+            session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups or workspaces.
         if (session_type != proto::router::SESSION_TYPE_OPERATOR)
@@ -601,8 +615,8 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         auto* group_item = static_cast<SidebarRouterGroup*>(item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (Router* router = Router::instance(group_item->routerId()))
-            session_type = router->config().sessionType();
+        if (RouterSession* session = RouterController::session(group_item->routerId()))
+            session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
         if (session_type != proto::router::SESSION_TYPE_OPERATOR)
@@ -623,11 +637,11 @@ void ManagementTab::onSidebarContextMenu(SidebarItem::Type type, const QPoint& p
         menu.addAction(ui->action_clear_router_events);
 
         auto* router_item = static_cast<SidebarRouter*>(item);
-        Router* router = Router::instance(router_item->routerId());
-        if (router && router->status() == Router::Status::ONLINE)
+        RouterSession* session = RouterController::session(router_item->routerId());
+        if (session)
         {
             menu.addSeparator();
-            if (router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
+            if (session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN)
                 menu.addAction(ui->action_add_workspace);
             menu.addAction(ui->action_change_router_password);
         }
@@ -1267,12 +1281,12 @@ void ManagementTab::onDeleteWorkspaceAction()
         return;
     }
 
-    Router* router = Router::instance(router_id);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
-    router->deleteWorkspace(workspace_id, { this,
+    session->deleteWorkspace(workspace_id, { this,
         [this, router_id](const proto::router::WorkspaceResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
@@ -1382,11 +1396,11 @@ void ManagementTab::onDeleteGroupAction()
         return;
 
     const qint64 router_id = group_item->routerId();
-    Router* router = Router::instance(router_id);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
-    router->deleteGroup(group_item->workspaceId(), group_item->groupId(), { this,
+    session->deleteGroup(group_item->workspaceId(), group_item->groupId(), { this,
         [this, router_id](const proto::router::GroupResult& result)
     {
         if (result.error_code() != proto::router::kErrorOk)
@@ -1409,8 +1423,7 @@ void ManagementTab::onChangeRouterPassword()
         return;
 
     SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);
-    Router* instance = Router::instance(router->routerId());
-    if (instance && instance->status() == Router::Status::ONLINE)
+    if (RouterController::session(router->routerId()))
         ui->sidebar->changeRouterPassword(router->routerId());
 }
 
@@ -1422,8 +1435,9 @@ void ManagementTab::onClearRouterEvents()
         return;
 
     const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
-    ui->sidebar->clearRouterEvents(router_id);
-    router_status_widget_->showRouter(router_id, ui->sidebar->routerEvents(router_id));
+    RouterController& controller = RouterController::instance();
+    controller.clearEvents(router_id);
+    router_status_widget_->showRouter(router_id, controller.events(router_id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1691,6 +1705,89 @@ void ManagementTab::onOnlineCheckToggled(bool checked)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ManagementTab::onTwoFactorRequired(qint64 router_id)
+{
+    if (two_factor_dialog_)
+        return;
+
+    // The question of the record. Gone or blocked means nothing to put on screen.
+    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt(router_id));
+    if (!prompt || prompt->blockedSeconds() > 0)
+        return;
+
+    const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
+    if (!record.has_value())
+        return;
+
+    // An account with no secret yet scans what the router handed out before it can answer, so the
+    // two are asked in different dialogs.
+    const QString otpauth_uri = prompt->otpauthUri();
+    const bool code_refused = prompt->codeRefused();
+
+    QDialog* dialog = nullptr;
+    if (otpauth_uri.isEmpty())
+    {
+        TwoFactorCodeDialog* code_dialog = new TwoFactorCodeDialog(code_refused, this);
+        connect(code_dialog, &QDialog::finished, this, [this, prompt, code_dialog](int result)
+        {
+            two_factor_dialog_.clear();
+
+            if (result == QDialog::Accepted && prompt)
+                prompt->submitCode(code_dialog->code());
+
+            // An answered question and a withdrawn one both free the screen for the next record
+            // waiting; only a question the operator dismissed stays off it.
+            if (result == QDialog::Accepted || !prompt)
+                showNextTwoFactorPrompt();
+        });
+        dialog = code_dialog;
+    }
+    else
+    {
+        TwoFactorEnrollDialog* enroll_dialog =
+            new TwoFactorEnrollDialog(otpauth_uri, code_refused, this);
+        connect(enroll_dialog, &QDialog::finished, this, [this, prompt, enroll_dialog](int result)
+        {
+            two_factor_dialog_.clear();
+
+            if (result == QDialog::Accepted && prompt)
+                prompt->submitCode(enroll_dialog->code());
+
+            if (result == QDialog::Accepted || !prompt)
+                showNextTwoFactorPrompt();
+        });
+        dialog = enroll_dialog;
+    }
+
+    // The question can leave the screen before the operator does: its death (the record left,
+    // the challenge changed) closes the dialog.
+    connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
+
+    // The title names the router, so with several of them the user can tell whose code is asked.
+    dialog->setWindowTitle(dialog->windowTitle() + " - " + record->displayLabel());
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    two_factor_dialog_ = dialog;
+
+    // open() and not exec(): the prompt is modal, so it cannot be missed, but it does not spin a
+    // nested event loop inside the delivery of the challenge that opened it.
+    dialog->open();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::showNextTwoFactorPrompt()
+{
+    for (qint64 router_id : ui->sidebar->routerIds())
+    {
+        TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id);
+        if (prompt && prompt->blockedSeconds() == 0)
+        {
+            onTwoFactorRequired(router_id);
+            return;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void ManagementTab::switchContent(ContentWidget* new_widget)
 {
     if (!new_widget || new_widget == current_content_)
@@ -1790,8 +1887,8 @@ void ManagementTab::updateActionsState()
         auto* workspace_item = static_cast<SidebarRouterWorkspace*>(sidebar_item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (Router* router = Router::instance(workspace_item->routerId()))
-            session_type = router->config().sessionType();
+        if (RouterSession* session = RouterController::session(workspace_item->routerId()))
+            session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups or workspaces.
         const bool can_manage = session_type != proto::router::SESSION_TYPE_OPERATOR;
@@ -1804,8 +1901,8 @@ void ManagementTab::updateActionsState()
         auto* group_item = static_cast<SidebarRouterGroup*>(sidebar_item);
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (Router* router = Router::instance(group_item->routerId()))
-            session_type = router->config().sessionType();
+        if (RouterSession* session = RouterController::session(group_item->routerId()))
+            session_type = session->config().sessionType();
 
         // Clients are read-only and cannot manage host groups.
         const bool can_manage_groups = session_type != proto::router::SESSION_TYPE_OPERATOR;
@@ -1852,8 +1949,9 @@ void ManagementTab::updateActionsState()
         const bool has_host = router_temp_hosts_widget_->hasSelectedHost();
 
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        if (Router* router = Router::instance(router_temp_hosts_widget_->routerId()))
-            session_type = router->config().sessionType();
+        RouterSession* session = RouterController::session(router_temp_hosts_widget_->routerId());
+        if (session)
+            session_type = session->config().sessionType();
 
         ui->action_host_approve->setVisible(
             has_host && session_type == proto::router::SESSION_TYPE_ADMIN);
@@ -1873,10 +1971,10 @@ void ManagementTab::updateActionsState()
         // Workspaces are managed from the sidebar tree. Adding one targets the whole router, so
         // its action lives on the router node when connected as an administrator.
         SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);
-        Router* instance = Router::instance(router->routerId());
-        const bool is_online = instance && instance->status() == Router::Status::ONLINE;
+        RouterSession* session = RouterController::session(router->routerId());
+        const bool is_online = session != nullptr;
         const bool is_admin_online = is_online &&
-            instance->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+            session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
         ui->action_add_workspace->setVisible(is_admin_online);
         ui->action_change_router_password->setVisible(is_online);
     }
@@ -1901,9 +1999,9 @@ void ManagementTab::updateActionsState()
          sidebar_item->itemType() == SidebarItem::ROUTER_WORKSPACE))
     {
         proto::router::SessionType session_type = proto::router::SESSION_TYPE_OPERATOR;
-        Router* router = Router::instance(router_group_widget_->routerId());
-        if (router)
-            session_type = router->config().sessionType();
+        RouterSession* session = RouterController::session(router_group_widget_->routerId());
+        if (session)
+            session_type = session->config().sessionType();
 
         const bool has_selection = router_group_widget_->hasSelectedHost();
         const bool can_edit = has_selection && session_type != proto::router::SESSION_TYPE_OPERATOR;

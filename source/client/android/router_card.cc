@@ -27,6 +27,8 @@
 #include <functional>
 
 #include "base/gui_application.h"
+#include "client/router_controller.h"
+#include "common/android/button.h"
 #include "common/android/card.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -42,17 +44,20 @@ constexpr int kEventRowHintWidth = 600;
 constexpr int kMaxEvents = 7;
 
 //--------------------------------------------------------------------------------------------------
-QString statusIconPath(Router::Status status)
+QString statusIconPath(RouterStatus status)
 {
     switch (status)
     {
-        case Router::Status::CONNECTING:
+        case RouterStatus::CONNECTING:
             return ":/img/router-connecting.svg";
 
-        case Router::Status::ONLINE:
+        case RouterStatus::ONLINE:
             return ":/img/router-online.svg";
 
-        case Router::Status::OFFLINE:
+        case RouterStatus::TWO_FACTOR:
+            return ":/img/lock.svg";
+
+        case RouterStatus::OFFLINE:
         default:
             return ":/img/router-offline.svg";
     }
@@ -166,6 +171,14 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
     // Panel: the connection event log on a lifted surface.
     contentLayout()->setContentsMargins(kContentHMargin, 0, kContentHMargin, kContentHMargin);
 
+    // The way to answer the two-factor stage: shown only while the session stands at it, so the
+    // panel of a working router is the event log alone.
+    two_factor_button_ = new Button(tr("Enter Code"), Button::Role::FILLED);
+    two_factor_button_->setVisible(false);
+    connect(two_factor_button_, &Button::clicked, this,
+            [this]() { emit sig_twoFactorClicked(router_id_); });
+    contentLayout()->addWidget(two_factor_button_);
+
     Card* card = new Card(Card::Role::FILLED);
 
     QWidget* events_container = new QWidget(card);
@@ -176,8 +189,8 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
 
     contentLayout()->addWidget(card);
 
-    connect(this, &ExpandablePanel::sig_headerClicked, this, [this]() { emit expandRequested(router_id_); });
-    connect(this, &ExpandablePanel::sig_headerLongPressed, this, [this]() { emit editRequested(router_id_); });
+    connect(this, &ExpandablePanel::sig_headerClicked, this, [this]() { emit sig_expandRequested(router_id_); });
+    connect(this, &ExpandablePanel::sig_headerLongPressed, this, [this]() { emit sig_editRequested(router_id_); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -190,10 +203,16 @@ void RouterCard::setName(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterCard::setStatus(Router::Status status)
+void RouterCard::setStatus(RouterStatus status)
 {
     status_icon_->setPixmap(GuiApplication::svgPixmap(statusIconPath(status),
                                                       QSize(kStatusIconSize, kStatusIconSize)));
+
+    // A blocked account has nothing to enter. The router does not look at codes while the block
+    // runs, so the button goes away with the prompt.
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
+    two_factor_button_->setVisible(prompt && prompt->blockedSeconds() == 0);
+    contentChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

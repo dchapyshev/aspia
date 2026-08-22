@@ -32,6 +32,13 @@ namespace proto::router {
 // used ones, so a client that never comes back cannot grow the list without bound.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;
 
+// Bound on the otpauth:// URI of an enrollment challenge, in UTF-8 bytes. The client is the side
+// that checks it: it renders the URI into a QR code, and the encoder ends the process on a payload
+// that does not fit its largest symbol. What the router builds stays far below - the issuer, a
+// user name bounded by User::kMaxUserNameLength and a Base32 secret come to some 700 bytes even
+// when every character of the name is percent-encoded.
+[[maybe_unused]] constexpr size_t kMaxOtpauthUriLength = 1024;
+
 // Bounds on the manager-editable fields of a host, a group and a workspace, in UTF-8 bytes.
 // Checked on both sides. An unbounded record grows the list reply that carries it past the message
 // limit, and such a reply ends the session instead of being sent, on every reconnect.

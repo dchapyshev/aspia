@@ -16,10 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_H
-#define CLIENT_ROUTER_H
+#ifndef CLIENT_ROUTER_SESSION_H
+#define CLIENT_ROUTER_SESSION_H
 
-#include <QByteArray>
 #include <QList>
 #include <QPointer>
 #include <QVersionNumber>
@@ -27,7 +26,6 @@
 #include <google/protobuf/message_lite.h>
 
 #include "base/crypto/secure_string.h"
-#include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/router_cache.h"
@@ -39,21 +37,13 @@
 
 class RouterWorker;
 
-// A session with a router: its requests, the replies routed back to their callers, the keys it
-// holds and the lists it caches. The bytes travel through RouterWorker, which owns the socket.
-class Router final : public QObject
+// A working session with a router. Born from a completed login, it is online by the fact of
+// its existence and dies with the connection.
+class RouterSession final : public QObject
 {
     Q_OBJECT
 
 public:
-    enum class Status
-    {
-        OFFLINE,
-        CONNECTING,
-        ONLINE
-    };
-    Q_ENUM(Status)
-
     enum class CachePolicy
     {
         USE_CACHE, // Return the cached result when available; otherwise fetch and cache it.
@@ -71,21 +61,21 @@ public:
     using Group         = RouterGroup;
     using GroupList     = RouterGroupList;
 
-    explicit Router(const RouterConfig& config, QObject* parent = nullptr);
-    ~Router() final;
+    // |user_id| and |peer_version| come from the login that this session is born from.
+    RouterSession(const RouterConfig& config, qint64 user_id, const QVersionNumber& peer_version,
+           QObject* parent = nullptr);
+    ~RouterSession() final;
 
-    // Returns nullptr if no Router with that router_id exists in the current thread.
-    static Router* instance(qint64 router_id);
-
-    void connectToRouter();
-    void disconnectFromRouter();
+    // Refreshes the copy of the stored record. The record still names the same router account;
+    // an edit that changes the account replaces the whole session instead.
     void updateConfig(const RouterConfig& config);
 
-    // The answer to sig_twoFactorCodeRequired. A cancelled prompt calls disconnectFromRouter()
-    // instead. An accepted code makes the router issue a device token, which is persisted here.
-    void submitTwoFactorCode(const QString& totp_code);
+    // Writes into the stored record the credentials this session is to use from now on. Called
+    // once the router has accepted their rotation, so the login that follows uses the new ones.
+    void storeCredentials(const QString& user_name, const SecureString& password);
 
-    Status status() const { return status_; }
+    qint64 userId() const { return user_id_; }
+
     QVersionNumber version() const { return version_; }
     qint64 routerId() const { return config_.routerId(); }
     const RouterConfig& config() const { return config_; }
@@ -204,55 +194,20 @@ public:
     void changePassword(const SecureString& new_password,
                         RouterCallback<proto::router::ChangePasswordResult> callback);
 
-signals:
-    void sig_statusChanged(qint64 router_id, Router::Status status);
-    void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void sig_twoFactorCodeRequired(qint64 router_id);
-    void sig_twoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
-
-    // Everything the session sends, connected to the worker owning the socket.
-    void sig_sendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
-
-    // The server says a list has changed and subscribers should refetch it. Fired at most once per
-    // ~5 seconds per resource. A regular client session receives only temp hosts, hosts,
-    // workspaces and groups.
-    void sig_tempHostsChanged(qint64 router_id);
-    void sig_hostsChanged(qint64 router_id);
-    void sig_relaysChanged(qint64 router_id);
-    void sig_clientsChanged(qint64 router_id);
-    void sig_usersChanged(qint64 router_id);
-    void sig_workspacesChanged(qint64 router_id);
-    void sig_groupsChanged(qint64 router_id);
-
 private slots:
-    void onTcpAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
-    void onTcpErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(qint64 router_id, quint8 channel_id, const QByteArray& bytes);
+    void onMessageReceived(const proto::router::RouterToAdmin& message);
+    void onMessageReceived(const proto::router::RouterToManager& message);
+    void onMessageReceived(const proto::router::RouterToClient& message);
 
 private:
-    // Test-only access to the keys, the pending replies and the incoming messages.
-    friend class RouterTestPeer;
+    friend class RouterController;
+    friend class RouterSessionTestPeer;
 
-    void setStatus(Status status);
-    void connectWorker();
-    void disconnectWorker();
-    void clearSessionState();
     void send(quint8 channel_id, const google::protobuf::MessageLite& message);
-    void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
-    void readLoginResult(const proto::router::LoginResult& result);
-    void persistChangedPassword(const SecureString& new_password);
-    void emitNotificationSignals(const proto::router::Notification& notification);
-
-    // Delivers a reply to whoever waits for it and feeds the staleness rules of the cache. Returns
-    // false for a message that answers no request.
-    bool routeReply(const proto::router::RouterToAdmin& message);
-    bool routeReply(const proto::router::RouterToManager& message);
-    bool routeReply(const proto::router::RouterToClient& message);
 
     // A complete list (|requested_workspace_id| == 0) also refreshes the cache and the group keys.
     RouterWorkspaceList applyWorkspaceList(const proto::router::WorkspaceList& list,
                                            qint64 requested_workspace_id);
-
     RouterHostList applyHostList(const proto::router::HostList& list,
                                  const RouterCache::HostKey& key, bool cacheable);
     RouterGroupList applyGroupList(const proto::router::GroupList& list);
@@ -260,12 +215,12 @@ private:
     RouterConfig config_;
     QPointer<RouterWorker> router_worker_;
     QVersionNumber version_;
-    Status status_ = Status::OFFLINE;
+    qint64 user_id_ = 0;
 
     RouterCache cache_;
     RouterRpc rpc_;
 
-    Q_DISABLE_COPY_MOVE(Router)
+    Q_DISABLE_COPY_MOVE(RouterSession)
 };
 
-#endif // CLIENT_ROUTER_H
+#endif // CLIENT_ROUTER_SESSION_H

@@ -19,6 +19,7 @@
 #ifndef CLIENT_ANDROID_MAIN_WINDOW_H
 #define CLIENT_ANDROID_MAIN_WINDOW_H
 
+#include <QPointer>
 #include <QWidget>
 
 #include "base/time_types.h"
@@ -35,6 +36,7 @@ class FileTransferWindow;
 class HostConfig;
 class LocalWidget;
 class RemoteWidget;
+class QDialog;
 class QStackedWidget;
 
 // Top-level application window for the Android client: a top app bar, a content area switched by
@@ -64,6 +66,7 @@ private slots:
     void onDesktopClosed();
     void onFileTransferClosed();
     void onChatClosed();
+    void onTwoFactorRequired(qint64 router_id);
 
     // Tracks foreground/background transitions to re-lock the app after it has been in the background
     // longer than the timeout.
@@ -74,6 +77,9 @@ private slots:
     void onUrlOpened(const QString& url);
 
 private:
+    // The screen is a queue of one: when it frees up, the next record waiting for a code is asked.
+    void showNextTwoFactorPrompt();
+
     // Gates the window behind the master password: prompts to create or unlock it, and reloads the
     // content that depends on the unlocked data cryptor once it is open.
     void runMasterPasswordGate();
@@ -114,6 +120,8 @@ private:
     DesktopWindow* desktop_ = nullptr;
     FileTransferWindow* file_transfer_ = nullptr;
     ChatWindow* chat_ = nullptr;
+
+    QPointer<QDialog> two_factor_dialog_;
 
     // When the app went to the background (invalid while in the foreground), and a guard against
     // re-entering the lock prompt while it is already shown.

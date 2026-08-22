@@ -19,7 +19,6 @@
 #ifndef CLIENT_DESKTOP_ROUTER_DIALOG_H
 #define CLIENT_DESKTOP_ROUTER_DIALOG_H
 
-#include <QByteArray>
 #include <QDialog>
 
 #include <memory>
@@ -46,7 +45,6 @@ private:
 
     std::unique_ptr<Ui::RouterDialog> ui;
     qint64 router_id_ = -1;
-    QByteArray device_token_;
 };
 
 #endif // CLIENT_DESKTOP_ROUTER_DIALOG_H

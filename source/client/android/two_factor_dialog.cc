@@ -55,16 +55,20 @@ QString groupedSecret(const QString& otpauth_uri)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, QWidget* parent)
+TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, QWidget* parent)
     : Dialog(parent),
       code_(new LineEdit(this))
 {
     const bool enroll = !otpauth_uri.isEmpty();
 
+    QString text = enroll ? tr("Add the setup key below to an authenticator app, then enter the"
+                               " 6-digit code it shows to confirm.")
+                          : tr("Enter the 6-digit code from your authenticator app.");
+    if (code_refused)
+        text = tr("The previous code was not accepted.") + ' ' + text;
+
     setTitle(tr("Two-Factor Authentication"));
-    setText(enroll ? tr("Add the setup key below to an authenticator app, then enter the 6-digit"
-                        " code it shows to confirm.")
-                   : tr("Enter the 6-digit code from your authenticator app."));
+    setText(text);
 
     QVBoxLayout* content = contentLayout();
 
@@ -85,6 +89,15 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, QWidget* parent)
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* ok = addButton(tr("OK"), Button::Role::FILLED);
+
+    // The router refuses a code of the wrong length the way it refuses a wrong one: it ends the
+    // session and counts the attempt against the block. So an incomplete code never leaves here.
+    ok->setEnabled(false);
+
+    connect(code_, &QLineEdit::textChanged, this, [ok](const QString& text)
+    {
+        ok->setEnabled(text.trimmed().size() == kCodeLength);
+    });
 
     connect(cancel, &Button::clicked, this, &TwoFactorDialog::reject);
     connect(ok, &Button::clicked, this, &TwoFactorDialog::accept);

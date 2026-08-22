@@ -36,7 +36,7 @@ class AppBar;
 class ChatView;
 class IconButton;
 class QTimer;
-class Router;
+class RouterSession;
 class SessionKeeper;
 class SessionState;
 class WorkerManager;
@@ -94,7 +94,7 @@ private:
 
     void start();
     void fetchConnectionOffer();
-    void requestConnectionOffer(Router* router);
+    void requestConnectionOffer(RouterSession* session);
     void startNewSession();
     void sendChatMessage(const proto::chat::Chat& chat);
     void onSendText(const QString& text);

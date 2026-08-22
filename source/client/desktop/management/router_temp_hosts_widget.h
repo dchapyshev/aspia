@@ -20,7 +20,7 @@
 #define CLIENT_DESKTOP_MANAGEMENT_ROUTER_TEMP_HOSTS_WIDGET_H
 
 #include "client/config.h"
-#include "client/router.h"
+#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/temp_host_list_model.h"
 
@@ -57,7 +57,7 @@ signals:
     void sig_contextMenu(const QPoint& global_pos);
 
 private slots:
-    void onTempHostListReceived(const Router::TempHostList& list);
+    void onTempHostListReceived(const RouterTempHostList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
     void onContextMenu(const QPoint& pos);
 

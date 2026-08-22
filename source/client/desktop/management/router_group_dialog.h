@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "client/router.h"
+#include "client/router_types.h"
 
 class QAbstractButton;
 
@@ -48,7 +48,7 @@ public:
     ~RouterGroupDialog() final;
 
 private slots:
-    void onGroupListReceived(const Router::GroupList& list);
+    void onGroupListReceived(const RouterGroupList& list);
     void onGroupResultReceived(const proto::router::GroupResult& result);
 
 private:

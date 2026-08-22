@@ -91,9 +91,8 @@ private slots:
     void onNotifyChanged(quint32 flags);
 
     // Stops live client sessions (CLIENT/MANAGER/ADMIN) of |user_id|. An empty |token_ids| stops
-    // every such session; otherwise only those whose device token id is listed. |except_client_id|
-    // is left running (0 keeps all).
-    void onStopClients(qint64 user_id, const std::vector<qint64>& token_ids, qint64 except_client_id);
+    // every such session; otherwise only those whose device token id is listed.
+    void onStopClients(qint64 user_id, const std::vector<qint64>& token_ids);
 
     // Admin requests against the session collection; the response is sent through the requesting
     // session (the signal sender).

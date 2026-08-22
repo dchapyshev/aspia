@@ -47,7 +47,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "common/desktop/icon_text_button.h"
 #include "proto/router_constants.h"
 
@@ -132,7 +132,7 @@ SearchResultModel::Row makeLocalRow(const LocalHostConfig& host, const QString& 
 //--------------------------------------------------------------------------------------------------
 // A router host is put into a record of the same shape as one of the address book, so a row of
 // either kind is shown and connected to the same way. The record is never stored, so it has no id.
-SearchResultModel::Row makeRouterRow(qint64 router_id, const Router::Host& host,
+SearchResultModel::Row makeRouterRow(qint64 router_id, const RouterHost& host,
                                      const QString& source_label)
 {
     QString name = host.display_name;
@@ -408,8 +408,7 @@ void SearchWidget::countSources()
 
     for (const RouterConfig& config : std::as_const(routers))
     {
-        Router* router = Router::instance(config.routerId());
-        if (!router || router->status() != Router::Status::ONLINE)
+        if (!RouterController::session(config.routerId()))
             continue;
 
         Source source;
@@ -430,12 +429,12 @@ void SearchWidget::countSources()
     for (int slot : std::as_const(pending))
     {
         const qint64 router_id = sources_[slot].router_id;
-        Router* router = Router::instance(router_id);
+        RouterSession* session = RouterController::session(router_id);
 
         // A single record is asked for: what is wanted here is the size of the whole match set,
         // and the page itself is fetched once every source has reported.
-        router->searchHosts(query, 0, 1, { this,
-            [this, generation, slot, router_id](const Router::HostList& list)
+        session->searchHosts(query, 0, 1, { this,
+            [this, generation, slot, router_id](const RouterHostList& list)
         {
             if (generation != generation_)
                 return;
@@ -527,15 +526,15 @@ void SearchWidget::fetchCurrentPage()
             continue;
         }
 
-        Router* router = Router::instance(router_id);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id);
+        if (!session)
         {
             slice.ready = true;
             continue;
         }
 
-        router->searchHosts(query, slice.offset, slice.count, { this,
-            [this, generation, i, router_id](const Router::HostList& list)
+        session->searchHosts(query, slice.offset, slice.count, { this,
+            [this, generation, i, router_id](const RouterHostList& list)
         {
             if (generation != generation_ || i >= page_slices_.size())
                 return;
@@ -583,7 +582,7 @@ void SearchWidget::showCurrentPage()
         }
         else
         {
-            for (const Router::Host& host : std::as_const(slice.router_hosts))
+            for (const RouterHost& host : std::as_const(slice.router_hosts))
                 rows.append(makeRouterRow(source.router_id, host, source.label));
         }
     }

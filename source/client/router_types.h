@@ -20,6 +20,7 @@
 #define CLIENT_ROUTER_TYPES_H
 
 #include <QByteArray>
+#include <QDateTime>
 #include <QList>
 #include <QMetaType>
 #include <QString>
@@ -27,10 +28,32 @@
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 
-// The records the router session hands to the UI. They live outside Router so that RouterState -
-// which does the decoding and the caching - does not depend on the class that owns the socket.
-// Router aliases every one of them, so the call sites keep using Router::Workspace, Router::Host
-// and so on.
+// The plain records of the router client, shared between the controller, the sessions, the cache
+// and the UI. They live here so a widget can hold them without depending on the class that owns
+// them. RouterSession aliases the list records, so its call sites keep using
+// RouterSession::Workspace, RouterSession::Host and so on.
+
+struct RouterEvent
+{
+    enum class Severity
+    {
+        INFO,
+        WARNING,
+        CRITICAL
+    };
+
+    QDateTime time;
+    Severity severity = Severity::INFO;
+    QString text;
+};
+
+enum class RouterStatus
+{
+    OFFLINE,
+    CONNECTING,
+    TWO_FACTOR,
+    ONLINE
+};
 
 // Workspace data shared between the router session and the UI. Outgoing, entry_id == 0 means add
 // and > 0 means modify; the user list is the complete membership the workspace is to have. The

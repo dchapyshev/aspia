@@ -24,6 +24,7 @@
 
 #include "base/logging.h"
 #include "base/peer/host_id.h"
+#include "client/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -52,6 +53,21 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     tree_->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(tree_, &QWidget::customContextMenuRequested,
             this, &RouterTempHostsWidget::onContextMenu);
+
+    // The working sessions come and go with their connections, so the subscriptions live on the
+    // controller and follow whatever record is displayed.
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_tempHostsChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchTempHosts();
+    });
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+            model_->clear();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,23 +79,6 @@ RouterTempHostsWidget::~RouterTempHostsWidget()
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::showRouter(qint64 router_id)
 {
-    if (router_id_ != router_id)
-    {
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, nullptr, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_tempHostsChanged,
-                    this, &RouterTempHostsWidget::fetchTempHosts);
-            connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
-            {
-                if (status != Router::Status::ONLINE)
-                    model_->clear();
-            });
-        }
-    }
-
     router_id_ = router_id;
 
     // The peer address is only delivered to admin sessions, so hide the column for the rest.
@@ -133,16 +132,16 @@ void RouterTempHostsWidget::onApproveHost()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Approve temporary host requested by user";
-    router->approveHost(host->temp_id, { this, &RouterTempHostsWidget::onHostResultReceived });
+    session->approveHost(host->temp_id, { this, &RouterTempHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTempHostsWidget::onTempHostListReceived(const Router::TempHostList& list)
+void RouterTempHostsWidget::onTempHostListReceived(const RouterTempHostList& list)
 {
     if (list.error_code != proto::router::kErrorOk)
     {
@@ -177,18 +176,18 @@ void RouterTempHostsWidget::onHostResultReceived(const proto::router::HostResult
 //--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::fetchTempHosts()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    router->listTempHosts({ this, &RouterTempHostsWidget::onTempHostListReceived });
+    session->listTempHosts({ this, &RouterTempHostsWidget::onTempHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterTempHostsWidget::isAdmin() const
 {
-    Router* router = Router::instance(router_id_);
-    return router && router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    RouterSession* session = RouterController::session(router_id_);
+    return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }
 
 //--------------------------------------------------------------------------------------------------

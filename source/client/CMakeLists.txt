@@ -47,13 +47,17 @@ list(APPEND SOURCE_CLIENT_CORE
     host_url.h
     master_password.cc
     master_password.h
-    router.cc
-    router.h
+    router_2fa.cc
+    router_2fa.h
     router_cache.cc
     router_cache.h
+    router_controller.cc
+    router_controller.h
     router_hosts_cleaner.cc
     router_hosts_cleaner.h
     router_rpc.h
+    router_session.cc
+    router_session.h
     page_model.cc
     page_model.h
     search_page_model.cc
@@ -85,10 +89,11 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/search_result_model_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
+    router_2fa_unittest.cc
     router_cache_unittest.cc
     router_rpc_unittest.cc
+    router_session_unittest.cc
     router_test_fixture.h
-    router_unittest.cc
     page_model_unittest.cc
     search_page_model_unittest.cc
     tests_main.cc)

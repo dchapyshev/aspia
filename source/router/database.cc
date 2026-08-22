@@ -18,7 +18,6 @@
 
 #include "router/database.h"
 
-#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 
@@ -890,7 +889,7 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& secret, quint64 coun
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::clearUserOtp(qint64 user_id)
+std::string_view Database::resetUserOtp(qint64 user_id)
 {
     if (!isValid())
     {
@@ -931,6 +930,15 @@ std::string_view Database::clearUserOtp(qint64 user_id)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to clear user OTP:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    SqlQuery revoke(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
+    revoke.addInt64(user_id);
+
+    if (!revoke.exec())
+    {
+        LOG(ERROR) << "Unable to revoke client device tokens:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -986,7 +994,7 @@ bool Database::issueClientDeviceToken(
     // sense against 2^256 of entropy.
     std::string new_token = Random::string(kClientDeviceTokenSize);
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
-    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    const qint64 now = secondsSinceEpoch();
 
     // The cleanup and the insert are one operation: a user must never be left over the cap, and
     // the reply carrying its tokens must never grow past what the channel can send.
@@ -1095,7 +1103,7 @@ bool Database::findClientDeviceToken(std::string_view token, qint64* user_id, qi
         return false;
 
     const qint64 last_used_at = query.columnInt64(1);
-    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    const qint64 now = secondsSinceEpoch();
     if (now - last_used_at > kClientDeviceTokenTtlSec)
     {
         // Lazy GC: drop the row so the table does not accumulate stale entries. The caller
@@ -1129,7 +1137,7 @@ bool Database::touchClientDeviceToken(std::string_view token, std::string_view a
     const char kSql[] =
         "UPDATE client_device_tokens SET last_used_at=?, address=? WHERE token_hash=?";
     SqlQuery query(db_, kSql);
-    query.addInt64(QDateTime::currentSecsSinceEpoch());
+    query.addInt64(secondsSinceEpoch());
     query.addText(address);
     query.addBlob(token_hash);
 
@@ -1264,7 +1272,7 @@ bool Database::listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* 
         "FROM client_device_tokens WHERE user_id=? AND last_used_at >= ? ORDER BY created_at";
     SqlQuery query(db_, kSql);
     query.addInt64(user_id);
-    query.addInt64(QDateTime::currentSecsSinceEpoch() - kClientDeviceTokenTtlSec);
+    query.addInt64(secondsSinceEpoch() - kClientDeviceTokenTtlSec);
 
     for (;;)
     {
@@ -1456,7 +1464,7 @@ bool Database::updateHostInfo(HostId host_id, std::string_view hwid, std::string
         return false;
     }
 
-    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+    const qint64 timestamp = secondsSinceEpoch();
 
     // The hosts row is created by addHost() before this method runs, so a plain UPDATE is
     // enough. If display name has never been set by the admin we seed it from computer_name so
@@ -1618,7 +1626,7 @@ std::string_view Database::modifyHost(HostId host_id, qint64 base_revision, qint
     // The place in the tree and the note both belong to the workspace the host is leaving, so
     // they go with it.
     const bool released = workspace_id == 0;
-    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+    const qint64 timestamp = secondsSinceEpoch();
 
     const char kSql[] =
         "UPDATE hosts SET revision=revision+1, workspace_id=?, display_name=?, group_id=?, "
@@ -2026,7 +2034,7 @@ bool Database::scheduleHostRemoval(HostId host_id)
     }
 
     const QByteArray key = select.columnBlob(0);
-    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+    const qint64 timestamp = secondsSinceEpoch();
 
     // OR REPLACE keeps re-scheduling idempotent: a stale hosts_remove row (same host_id, or same
     // key from a host that re-enrolled under a new id) is overwritten instead of aborting on the
@@ -2119,7 +2127,7 @@ bool Database::pruneExpiredHostRemovals()
     }
 
     SqlQuery query(db_, "DELETE FROM hosts_remove WHERE timestamp < ?");
-    query.addInt64(QDateTime::currentSecsSinceEpoch() - kHostRemovalTtlSec);
+    query.addInt64(secondsSinceEpoch() - kHostRemovalTtlSec);
 
     if (!query.exec())
     {

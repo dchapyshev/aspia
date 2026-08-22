@@ -223,6 +223,8 @@ TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
 
 //--------------------------------------------------------------------------------------------------
 // A wrong code ends the session instead of letting the client try again on the same connection.
+// The refusal is announced by the challenge of the next session and not by this one, because an
+// answer sent into a session being torn down has no delivery to rely on.
 TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
@@ -239,6 +241,18 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         EXPECT_EQ(finished, 1);
         EXPECT_FALSE(client.isTwoFactorCompleted());
         EXPECT_TRUE(channel->nothingSent());
+    });
+
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        client.start();
+
+        const std::optional<proto::router::RouterToClient> challenge =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(challenge.has_value());
+        ASSERT_TRUE(challenge->has_two_factor_challenge());
+        EXPECT_TRUE(challenge->two_factor_challenge().code_rejected());
     });
 }
 
@@ -380,6 +394,36 @@ TEST_F(ClientOperatorTest, UnknownAdminCommandIsRefusedNotIgnored)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The peer commands are refused by name like every other command of the channel. Without the check
+// an unknown name would still disconnect the peer, and the answer would name a command the router
+// never ran.
+TEST_F(ClientOperatorTest, UnknownPeerCommandDisconnectsNobody)
+{
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        proto::router::AdminToRouter request;
+        proto::router::PeerRequest* peer_request = request.mutable_peer_request();
+        peer_request->set_request_id(21);
+        peer_request->set_command_name("peer_frobnicate");
+        peer_request->set_relay_id(1);
+        peer_request->set_peer_id(2);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN, serialize(request));
+
+        const std::optional<proto::router::RouterToAdmin> message =
+            lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_peer_result());
+        EXPECT_EQ(message->peer_result().request_id(), 21);
+        EXPECT_EQ(message->peer_result().command_name(), "peer_frobnicate");
+        EXPECT_EQ(message->peer_result().error_code(), proto::router::kErrorInvalidRequest);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // Garbage on the wire is not a reason to answer or to crash.
 TEST_F(ClientOperatorTest, MalformedMessagesAreIgnored)
 {
@@ -397,15 +441,23 @@ TEST_F(ClientOperatorTest, MalformedMessagesAreIgnored)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Changing your own password revokes every device token, this session's included, so the router
-// re-opens the two-factor stage. Until it is passed again the session answers nothing - which is
-// exactly why the client must treat a challenge on a live session as a disconnect.
-TEST_F(ClientOperatorTest, PasswordChangeReopensTheTwoFactorStage)
+// Changing your own password ends every session of the user, this one included: the channel of
+// each is keyed by the password that is gone, and their device tokens died with it. The client
+// reconnects with the new password and runs the two-factor stage on a fresh session.
+TEST_F(ClientOperatorTest, PasswordChangeEndsEverySessionOfTheUser)
 {
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [this](ClientAdmin& client, FakeTcpChannel* channel)
     {
         passTwoFactor(&client, channel);
+
+        qint64 stopped_user_id = 0;
+
+        QObject::connect(&client, &ClientOperator::sig_stopClients,
+                         [&](qint64 user_id, const std::vector<qint64>&)
+        {
+            stopped_user_id = user_id;
+        });
 
         const RouterUser rotated = makeUser(admin_.name, kAllSessions);
 
@@ -417,8 +469,9 @@ TEST_F(ClientOperatorTest, PasswordChangeReopensTheTwoFactorStage)
 
         channel->receive(proto::router::CHANNEL_ID_CLIENT, serialize(request));
 
-        // The result of the rotation, and right after it the re-opened stage.
-        ASSERT_EQ(channel->sent().size(), 2);
+        // The result of the rotation and nothing after it: the stage is not re-opened on a session
+        // that is being torn down.
+        ASSERT_EQ(channel->sent().size(), 1);
 
         proto::router::RouterToClient result;
         ASSERT_TRUE(parse(channel->sent().at(0).buffer, &result));
@@ -426,16 +479,8 @@ TEST_F(ClientOperatorTest, PasswordChangeReopensTheTwoFactorStage)
         EXPECT_EQ(result.change_password_result().request_id(), 11);
         EXPECT_EQ(result.change_password_result().error_code(), proto::router::kErrorOk);
 
-        proto::router::RouterToClient challenge;
-        ASSERT_TRUE(parse(channel->sent().at(1).buffer, &challenge));
-        ASSERT_TRUE(challenge.has_two_factor_challenge());
-        EXPECT_FALSE(client.isTwoFactorCompleted());
-
-        // The window the client must not send anything into: requests are dropped without an
-        // answer.
-        channel->clearSent();
-        channel->receive(proto::router::CHANNEL_ID_CLIENT, workspaceListRequest(12));
-        EXPECT_TRUE(channel->nothingSent());
+        // Nobody is spared, so the session that asked for the rotation goes too.
+        EXPECT_EQ(stopped_user_id, admin_.entry_id);
     });
 }
 

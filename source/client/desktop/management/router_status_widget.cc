@@ -22,10 +22,13 @@
 #include <QEvent>
 #include <QIcon>
 #include <QLabel>
+#include <QPushButton>
 #include <QStatusBar>
 #include <QTreeWidget>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
+#include "client/router_controller.h"
 #include "ui_router_status_widget.h"
 
 namespace {
@@ -46,6 +49,12 @@ RouterStatusWidget::RouterStatusWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
+
+    ui->label_two_factor_icon->setPixmap(GuiApplication::svgPixmap(":/img/lock.svg", QSize(24, 24)));
+    ui->frame_two_factor->setVisible(false);
+
+    connect(ui->button_two_factor, &QPushButton::clicked,
+            this, &RouterStatusWidget::onTwoFactorClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -55,16 +64,17 @@ RouterStatusWidget::~RouterStatusWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::showRouter(qint64 router_id, const QList<Event>& events)
+void RouterStatusWidget::showRouter(qint64 router_id, const QList<RouterEvent>& events)
 {
     router_id_ = router_id;
 
     ui->tree_events->clear();
-    for (const Event& event : events)
+    for (const RouterEvent& event : events)
         addEvent(event);
 
     ui->tree_events->scrollToBottom();
     updateStatusLabel();
+    updateTwoFactorPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +132,7 @@ void RouterStatusWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
+void RouterStatusWidget::onEvent(qint64 router_id, const RouterEvent& event)
 {
     if (router_id != router_id_)
         return;
@@ -130,17 +140,24 @@ void RouterStatusWidget::onEvent(qint64 router_id, const Event& event)
     addEvent(event);
     ui->tree_events->scrollToBottom();
     updateStatusLabel();
+    updateTwoFactorPrompt();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::addEvent(const Event& event)
+void RouterStatusWidget::onTwoFactorClicked()
+{
+    emit sig_twoFactorClicked(router_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::addEvent(const RouterEvent& event)
 {
     QString icon_path;
     switch (event.severity)
     {
-        case Event::Severity::WARNING:  icon_path = ":/img/box-important.svg";   break;
-        case Event::Severity::CRITICAL: icon_path = ":/img/high-importance.svg"; break;
-        case Event::Severity::INFO:     icon_path = ":/img/info.svg";            break;
+        case RouterEvent::Severity::WARNING:  icon_path = ":/img/box-important.svg";   break;
+        case RouterEvent::Severity::CRITICAL: icon_path = ":/img/high-importance.svg"; break;
+        case RouterEvent::Severity::INFO:     icon_path = ":/img/info.svg";            break;
     }
 
     QTreeWidgetItem* item = new QTreeWidgetItem(ui->tree_events);
@@ -153,4 +170,43 @@ void RouterStatusWidget::addEvent(const Event& event)
 void RouterStatusWidget::updateStatusLabel()
 {
     status_events_label_->setText(tr("%n event(s)", "", ui->tree_events->topLevelItemCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterStatusWidget::updateTwoFactorPrompt()
+{
+    TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
+    if (!prompt)
+    {
+        ui->frame_two_factor->setVisible(false);
+        return;
+    }
+
+    // A blocked account has nothing to enter. The router does not look at codes while the block
+    // runs, so the button goes away with the prompt.
+    if (prompt->blockedSeconds() > 0)
+    {
+        ui->label_two_factor->setText(
+            tr("Two-factor authentication is blocked after too many failed attempts."));
+        ui->button_two_factor->setVisible(false);
+        ui->frame_two_factor->setVisible(true);
+        return;
+    }
+
+    ui->button_two_factor->setVisible(true);
+
+    // An account with no secret yet is walked through the enrollment first: the operator scans the
+    // code the router handed out and only then types what their application shows.
+    if (prompt->otpauthUri().isEmpty())
+    {
+        ui->label_two_factor->setText(tr("The router is waiting for a two-factor code."));
+        ui->button_two_factor->setText(tr("Enter Code"));
+    }
+    else
+    {
+        ui->label_two_factor->setText(tr("Two-factor authentication has to be set up for this router."));
+        ui->button_two_factor->setText(tr("Set Up"));
+    }
+
+    ui->frame_two_factor->setVisible(true);
 }

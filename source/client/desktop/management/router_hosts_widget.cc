@@ -40,7 +40,7 @@
 
 #include "base/logging.h"
 #include "base/peer/host_id.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
@@ -117,6 +117,28 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
     connect(ui->button_hosts_next, &QToolButton::clicked, this, &RouterHostsWidget::onHostsNextClicked);
 
     updateHostsPagination();
+
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchHosts();
+    });
+    connect(&controller, &RouterController::sig_workspacesChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchWorkspaces();
+    });
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        {
+            model_->setHosts({});
+            workspace_names_.clear();
+            updateStatusLabel();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,28 +150,6 @@ RouterHostsWidget::~RouterHostsWidget()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::showRouter(qint64 router_id)
 {
-    if (router_id_ != router_id)
-    {
-        // Move the data/status subscriptions to the router that is now displayed.
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, nullptr, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_hostsChanged, this, &RouterHostsWidget::fetchHosts);
-            connect(curr, &Router::sig_workspacesChanged, this, &RouterHostsWidget::fetchWorkspaces);
-            connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
-            {
-                if (status != Router::Status::ONLINE)
-                {
-                    model_->setHosts({});
-                    workspace_names_.clear();
-                    updateStatusLabel();
-                }
-            });
-        }
-    }
-
     router_id_ = router_id;
     hosts_page_.clear();
 
@@ -338,12 +338,12 @@ void RouterHostsWidget::onDisconnectHost()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    router->disconnectHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    session->disconnectHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,12 +362,12 @@ void RouterHostsWidget::onDisconnectAllHosts()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    router->disconnectHost(kAllHostsId, { this, &RouterHostsWidget::onHostResultReceived });
+    session->disconnectHost(kAllHostsId, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,12 +395,12 @@ void RouterHostsWidget::onRemoveHost()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    router->removeHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    session->removeHost(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -413,12 +413,12 @@ void RouterHostsWidget::onCheckHostUpdates()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Check host updates requested by user";
-    router->checkHostUpdates(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
+    session->checkHostUpdates(host->host_id, { this, &RouterHostsWidget::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -437,7 +437,7 @@ bool RouterHostsWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::onHostListReceived(const Router::HostList& list)
+void RouterHostsWidget::onHostListReceived(const RouterHostList& list)
 {
     // Only the "any workspace / any group" response is shown here; per-workspace responses are
     // handled by RouterGroupWidget.
@@ -489,7 +489,7 @@ void RouterHostsWidget::onHostResultReceived(const proto::router::HostResult& re
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::onWorkspaceListReceived(const Router::WorkspaceList& list)
+void RouterHostsWidget::onWorkspaceListReceived(const RouterWorkspaceList& list)
 {
     if (list.error_code != proto::router::kErrorOk)
     {
@@ -500,7 +500,7 @@ void RouterHostsWidget::onWorkspaceListReceived(const Router::WorkspaceList& lis
     }
 
     workspace_names_.clear();
-    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+    for (const RouterWorkspace& workspace : std::as_const(list.workspaces))
         workspace_names_.insert(workspace.entry_id, workspace.name);
 
     model_->setWorkspaceNames(workspace_names_);
@@ -582,33 +582,33 @@ void RouterHostsWidget::onHostsNextClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::fetchHosts()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
     request.set_offset(hosts_page_.offset());
     request.set_count(hosts_page_.pageSize());
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(request),
-                      { this, &RouterHostsWidget::onHostListReceived });
+    session->listHosts(RouterSession::CachePolicy::RELOAD, std::move(request),
+                       { this, &RouterHostsWidget::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterHostsWidget::fetchWorkspaces()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
-                           { this, &RouterHostsWidget::onWorkspaceListReceived });
+    session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
+                            { this, &RouterHostsWidget::onWorkspaceListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -45,6 +45,9 @@ namespace {
 // Accumulated NOTIFY_* bits are flushed to the connected sessions at this interval.
 const Seconds kNotifyInterval{ 5 };
 
+// How long a session may sit at the two-factor stage.
+const Minutes kTwoFactorStageTimeout{ 2 };
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -166,6 +169,21 @@ void ClientWorker::onStop()
 //--------------------------------------------------------------------------------------------------
 void ClientWorker::onTimer(TimePoint now)
 {
+    std::vector<qint64> expired;
+    for (ClientOperator* client : std::as_const(clients_))
+    {
+        if (client->isTwoFactorCompleted() || now - client->startTime() < kTwoFactorStageTimeout)
+            continue;
+
+        expired.emplace_back(client->sessionId());
+    }
+
+    for (qint64 client_id : std::as_const(expired))
+    {
+        if (stopClient(client_id))
+            LOG(INFO) << "Session" << client_id << "left at the two-factor stage. Stopped";
+    }
+
     if (now < next_notify_time_)
         return;
     next_notify_time_ = now + kNotifyInterval;
@@ -318,13 +336,12 @@ void ClientWorker::onNotifyChanged(quint32 flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& token_ids,
-                                 qint64 except_client_id)
+void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& token_ids)
 {
     std::vector<qint64> client_ids;
     for (ClientOperator* client : std::as_const(clients_))
     {
-        if (client->userId() != user_id || client->sessionId() == except_client_id)
+        if (client->userId() != user_id)
             continue;
 
         // Sessions still at the 2FA stage are included: they already passed SRP with the
@@ -355,12 +372,16 @@ void ClientWorker::onClientListRequest(const proto::router::ClientListRequest& r
     result->set_request_id(request.request_id());
     result->set_error_code(proto::router::kErrorOk);
 
+    const qint64 wall_now = secondsSinceEpoch();
+    const TimePoint monotonic_now = Clock::now();
+
     for (const auto& client : std::as_const(clients_))
     {
         proto::router::ClientInfo* item = result->add_client();
 
         item->set_entry_id(client->sessionId());
-        item->set_timepoint(client->startTime());
+        item->set_timepoint(
+            wall_now - DurationCast<Seconds>(monotonic_now - client->startTime()).count());
         item->set_ip_address(client->address());
         item->mutable_version()->CopyFrom(serialize(client->version()));
         item->set_os_name(client->osName());

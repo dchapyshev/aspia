@@ -32,7 +32,7 @@ const char kOtpIssuer[] = "Aspia Router";
 std::unordered_map<qint64, TwoFactorHandler::Attempts> TwoFactorHandler::attempts_;
 
 //--------------------------------------------------------------------------------------------------
-TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const RequestCaller& caller)
+TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const RequestCaller& caller, qint64 now)
 {
     Result result;
 
@@ -54,6 +54,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
     token_rejected_ = false;
 
     result.action = Action::SEND_CHALLENGE;
+    result.challenge.code_rejected = isCodeRejected(caller.user_id);
 
     if (user_otp_secret_.isEmpty())
     {
@@ -73,6 +74,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
         // must not be verified against.
         tentative_otp_secret_.clear();
         result.challenge.mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
+        result.challenge.blocked_seconds = blockedSecondsLeft(caller.user_id, now);
     }
 
     return result;
@@ -117,6 +119,8 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
             result.action = Action::SEND_CHALLENGE;
             result.challenge.mode = proto::router::TWO_FACTOR_MODE_ACTIVE;
             result.challenge.token_rejected = true;
+            result.challenge.code_rejected = isCodeRejected(caller.user_id);
+            result.challenge.blocked_seconds = blockedSecondsLeft(caller.user_id, now);
             return result;
         }
 
@@ -159,6 +163,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     if (!enroll && isBlockedAttempt(caller.user_id, now))
     {
         LOG(INFO) << "Too many failed TOTP attempts for user" << caller.name << ". Closing connection";
+        markCodeRejected(caller.user_id);
         result.action = Action::CLOSE;
         return result;
     }
@@ -171,16 +176,22 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         LOG(INFO) << "Invalid TOTP code for user" << caller.name << ". Closing connection";
         if (!enroll)
             registerFailedAttempt(caller.user_id, now);
+        markCodeRejected(caller.user_id);
         result.action = Action::CLOSE;
         return result;
     }
 
     // Replay protection: refuse any code whose step has already been consumed. ENROLL starts
     // from counter 0, so the first valid code (any positive step) is accepted.
+    //
+    // Not counted as a failed attempt. Getting here takes a code that came out of the secret, so
+    // it is not a guess, and the block exists to stop guessing. A session dropped right after a
+    // login brings the user back to the prompt while their code is still on screen, and typing it
+    // again must not spend the attempts they need.
     if (!enroll && matched_counter <= user_otp_counter_)
     {
         LOG(INFO) << "Replayed TOTP code for user" << caller.name << ". Closing connection";
-        registerFailedAttempt(caller.user_id, now);
+        markCodeRejected(caller.user_id);
         result.action = Action::CLOSE;
         return result;
     }
@@ -193,6 +204,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
             // is gone: the secret this client scanned is not the one on file.
             LOG(ERROR) << "Failed to persist OTP secret for user" << caller.name
                        << ". Closing connection";
+            markCodeRejected(caller.user_id);
             result.action = Action::CLOSE;
             return result;
         }
@@ -205,6 +217,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         {
             LOG(INFO) << "TOTP counter was already consumed for user" << caller.name
                       << ". Closing connection";
+            markCodeRejected(caller.user_id);
             result.action = Action::CLOSE;
             return result;
         }
@@ -233,6 +246,31 @@ bool TwoFactorHandler::isBlockedAttempt(qint64 user_id, qint64 now)
 {
     const auto it = attempts_.find(user_id);
     return it != attempts_.end() && now < it->second.blocked_until;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+qint64 TwoFactorHandler::blockedSecondsLeft(qint64 user_id, qint64 now)
+{
+    const auto it = attempts_.find(user_id);
+    if (it == attempts_.end() || now >= it->second.blocked_until)
+        return 0;
+    return it->second.blocked_until - now;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool TwoFactorHandler::isCodeRejected(qint64 user_id)
+{
+    const auto it = attempts_.find(user_id);
+    return it != attempts_.end() && it->second.code_rejected;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void TwoFactorHandler::markCodeRejected(qint64 user_id)
+{
+    attempts_[user_id].code_rejected = true;
 }
 
 //--------------------------------------------------------------------------------------------------

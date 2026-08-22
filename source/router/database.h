@@ -143,9 +143,11 @@ public:
     // enrollment attempts cannot overwrite each other.
     bool setUserOtp(qint64 user_id, const QByteArray& secret, quint64 counter);
 
-    // Resets the user's TOTP state - clears the secret and zeroes the replay counter. The
+    // Resets the user's TOTP state: clears the secret, zeroes the replay counter and drops every
+    // device token of the user, all in one transaction. The tokens were issued against the secret
+    // being cleared, so a state where they outlive it would let a device in without a code. The
     // next login triggers self-enrollment. Returns kErrorNotFound if the user row is absent.
-    std::string_view clearUserOtp(qint64 user_id);
+    std::string_view resetUserOtp(qint64 user_id);
 
     // Atomically consumes a TOTP step. Succeeds only if |counter| is newer than the value
     // currently stored in the database, so parallel sessions cannot accept the same code.

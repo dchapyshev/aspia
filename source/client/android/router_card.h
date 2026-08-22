@@ -19,31 +19,15 @@
 #ifndef CLIENT_ANDROID_ROUTER_CARD_H
 #define CLIENT_ANDROID_ROUTER_CARD_H
 
-#include <QDateTime>
 #include <QList>
-#include <QString>
 
-#include "client/router.h"
+#include "client/router_types.h"
 #include "common/android/expandable_panel.h"
 
+class Button;
 class Label;
 class QLabel;
 class QVBoxLayout;
-
-// A single router connection event shown in the status panel.
-struct RouterEvent
-{
-    enum class Severity
-    {
-        INFO,
-        WARNING,
-        CRITICAL
-    };
-
-    QDateTime time;
-    Severity severity = Severity::INFO;
-    QString text;
-};
 
 // A router row in the routers list: an ExpandablePanel whose header shows the status icon and name,
 // opens the connection event log on tap and the editor on a long press.
@@ -58,14 +42,15 @@ public:
     qint64 routerId() const { return router_id_; }
 
     void setName(const QString& name);
-    void setStatus(Router::Status status);
+    void setStatus(RouterStatus status);
 
     void setEvents(const QList<RouterEvent>& events);
     void appendEvent(const RouterEvent& event);
 
 signals:
-    void expandRequested(qint64 router_id);
-    void editRequested(qint64 router_id);
+    void sig_expandRequested(qint64 router_id);
+    void sig_editRequested(qint64 router_id);
+    void sig_twoFactorClicked(qint64 router_id);
 
 private:
     void clearEvents();
@@ -73,6 +58,7 @@ private:
     qint64 router_id_;
     QLabel* status_icon_ = nullptr;
     Label* name_label_ = nullptr;
+    Button* two_factor_button_ = nullptr;
     QVBoxLayout* events_layout_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterCard)

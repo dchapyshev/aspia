@@ -25,7 +25,7 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
-#include "client/router.h"
+#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/host_list_model.h"
 
@@ -85,9 +85,9 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) final;
 
 private slots:
-    void onHostListReceived(const Router::HostList& list);
+    void onHostListReceived(const RouterHostList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
-    void onWorkspaceListReceived(const Router::WorkspaceList& list);
+    void onWorkspaceListReceived(const RouterWorkspaceList& list);
     void onHostContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);
     void onHostsPageSizeChanged(int index);

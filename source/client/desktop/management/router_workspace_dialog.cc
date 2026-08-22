@@ -28,6 +28,7 @@
 #include <QToolButton>
 
 #include "base/logging.h"
+#include "client/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -130,52 +131,64 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
         fetchHosts();
     });
 
-    Router* router = Router::instance(router_id_);
-    CHECK(router);
-
-    // Which workspace holds a host is an administrator's call, so anybody else does not get the
-    // tab at all: the lists it shows are refused for such a session anyway.
-    is_admin_ = router->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
-    ui->tab_widget->setTabVisible(ui->tab_widget->indexOf(ui->tab_hosts), is_admin_);
-
-    updateLoadingState();
-
-    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
     {
-        if (status != Router::Status::ONLINE)
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
             reject();
     });
 
     // The dialog can stay open for a long time, so the snapshots it edits on top of track the
     // changes made from other consoles.
-    connect(router, &Router::sig_usersChanged, this, [this](qint64 /* router_id */)
+    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
     {
+        if (router_id != router_id_)
+            return;
+
         fetchUsers();
         fetchMemberNames();
     });
 
     // The save is built on top of the server snapshot (the membership and the revision inside the
-    // model), so the snapshot must follow concurrent changes. RELOAD, because the signal arrives
-    // before the cache is refreshed.
-    connect(router, &Router::sig_workspacesChanged, this, [this](qint64 /* router_id */)
+    // model), so the snapshot must follow concurrent changes.
+    connect(&controller, &RouterController::sig_workspacesChanged, this, [this](qint64 router_id)
     {
-        Router* router = Router::instance(router_id_);
-        if (router)
+        if (router_id != router_id_)
+            return;
+
+        RouterSession* session = RouterController::session(router_id_);
+        if (session)
         {
-            router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
-                                   { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
+            session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
+                                    { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
         }
     });
 
-    connect(router, &Router::sig_hostsChanged, this, [this](qint64 /* router_id */)
+    connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 router_id)
     {
-        fetchHosts();
+        if (router_id == router_id_)
+            fetchHosts();
     });
+
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+    {
+        LOG(ERROR) << "No session for router" << router_id_;
+        return;
+    }
+
+    // Which workspace holds a host is an administrator's call, so anybody else does not get the
+    // tab at all: the lists it shows are refused for such a session anyway.
+    is_admin_ = session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    ui->tab_widget->setTabVisible(ui->tab_widget->indexOf(ui->tab_hosts), is_admin_);
+
+    updateLoadingState();
 
     // The whole list is fetched so the other names are available for the uniqueness check; in
     // modify mode the entry matching entry_id_ also populates the form.
-    router->listWorkspaces(Router::CachePolicy::USE_CACHE, 0,
-                           { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
+    session->listWorkspaces(RouterSession::CachePolicy::USE_CACHE, 0,
+                            { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
     fetchUsers();
     fetchHosts();
 }
@@ -187,7 +200,7 @@ RouterWorkspaceDialog::~RouterWorkspaceDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList& list)
+void RouterWorkspaceDialog::onWorkspaceListReceived(const RouterWorkspaceList& list)
 {
     // A reply arriving while the dialog is already going away must not repopulate it (or stack
     // another message box) - same guard in the other handlers.
@@ -214,7 +227,7 @@ void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList&
 
     QList<WorkspaceEditModel::WorkspaceInfo> workspaces;
     workspaces.reserve(list.workspaces.size());
-    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+    for (const RouterWorkspace& workspace : std::as_const(list.workspaces))
     {
         WorkspaceEditModel::WorkspaceInfo& info = workspaces.emplaceBack();
         info.entry_id = workspace.entry_id;
@@ -300,7 +313,7 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::onHostListReceived(const Router::HostList& list)
+void RouterWorkspaceDialog::onHostListReceived(const RouterHostList& list)
 {
     if (closing_)
         return;
@@ -382,7 +395,7 @@ void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::Works
         return;
     }
 
-    pending_host_ = Router::Host();
+    pending_host_ = RouterHost();
     pending_host_workspace_id_ = 0;
     pending_host_move_ = false;
 
@@ -422,7 +435,7 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
 
     // The request is assembled from the model without mutating it: a failed save retries
     // against the same state.
-    Router::Workspace workspace;
+    RouterWorkspace workspace;
     workspace.entry_id = entry_id_;
     workspace.name = new_name;
     workspace.comment = ui->edit_comment->toPlainText();
@@ -432,10 +445,10 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     workspace.revision = model_->baseRevision();
     workspace.user_ids = model_->accessUserIdsForSave();
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
@@ -447,13 +460,11 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
               << ", access entries:" << workspace.user_ids.size() << ")";
     if (entry_id_ > 0)
     {
-        router->modifyWorkspace(workspace,
-                                { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+        session->modifyWorkspace(workspace, { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
     }
     else
     {
-        router->addWorkspace(workspace,
-                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+        session->addWorkspace(workspace, { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
     }
 }
 
@@ -542,10 +553,10 @@ void RouterWorkspaceDialog::applyMemberLookup(const proto::router::UserList& lis
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::moveHost(const Router::Host& host, qint64 workspace_id)
+void RouterWorkspaceDialog::moveHost(const RouterHost& host, qint64 workspace_id)
 {
-    Router* router = Router::instance(router_id_);
-    if (!router || host.host_id == kInvalidHostId)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session || host.host_id == kInvalidHostId)
     {
         LOG(ERROR) << "Nothing to move";
         return;
@@ -562,13 +573,13 @@ void RouterWorkspaceDialog::moveHost(const Router::Host& host, qint64 workspace_
         const QString new_name = validatedName();
         if (new_name.isEmpty())
         {
-            pending_host_ = Router::Host();
+            pending_host_ = RouterHost();
             pending_host_workspace_id_ = 0;
             pending_host_move_ = false;
             return;
         }
 
-        Router::Workspace workspace;
+        RouterWorkspace workspace;
         workspace.name = new_name;
         workspace.comment = ui->edit_comment->toPlainText();
         workspace.user_ids = model_->accessUserIdsForSave();
@@ -576,8 +587,7 @@ void RouterWorkspaceDialog::moveHost(const Router::Host& host, qint64 workspace_
         setEnabled(false);
 
         LOG(INFO) << "[ACTION] Creating workspace for a host operation";
-        router->addWorkspace(workspace,
-                             { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
+        session->addWorkspace(workspace, { this, &RouterWorkspaceDialog::onWorkspaceResultReceived });
         return;
     }
 
@@ -587,63 +597,63 @@ void RouterWorkspaceDialog::moveHost(const Router::Host& host, qint64 workspace_
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::runPendingHostMove()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router || !pending_host_move_)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session || !pending_host_move_)
         return;
 
     // The record is sent back as it was read, with the workspace it is to end up in: a claim puts
     // the host at the root of the workspace, and a release takes its group and its note with it.
-    Router::Host host = pending_host_;
+    RouterHost host = pending_host_;
     host.workspace_id = pending_host_workspace_id_ == kNoWorkspace ? kNoWorkspace : entry_id_;
     host.group_id = 0;
 
-    pending_host_ = Router::Host();
+    pending_host_ = RouterHost();
     pending_host_workspace_id_ = 0;
     pending_host_move_ = false;
 
     ui->tab_hosts->setEnabled(false);
 
     LOG(INFO) << "[ACTION] Moving host" << host.host_id << "to workspace" << host.workspace_id;
-    router->editHost(host, { this, &RouterWorkspaceDialog::onHostResultReceived });
+    session->editHost(host, { this, &RouterWorkspaceDialog::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
-Router::Host RouterWorkspaceDialog::hostById(quint64 host_id) const
+RouterHost RouterWorkspaceDialog::hostById(quint64 host_id) const
 {
-    for (const Router::Host& host : std::as_const(hosts_in_))
+    for (const RouterHost& host : std::as_const(hosts_in_))
     {
         if (host.host_id == host_id)
             return host;
     }
-    for (const Router::Host& host : std::as_const(hosts_free_))
+    for (const RouterHost& host : std::as_const(hosts_free_))
     {
         if (host.host_id == host_id)
             return host;
     }
-    return Router::Host();
+    return RouterHost();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchUsers()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    router->listUsers(users_page_.offset(), users_page_.pageSize(),
-                      { this, &RouterWorkspaceDialog::onUserListReceived });
+    session->listUsers(users_page_.offset(), users_page_.pageSize(),
+                       { this, &RouterWorkspaceDialog::onUserListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchMemberNames()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     for (qint64 user_id : model_->unresolvedMemberIds())
     {
-        router->findUser(user_id, { this, [this, user_id](const proto::router::UserList& list)
+        session->findUser(user_id, { this, [this, user_id](const proto::router::UserList& list)
         {
             applyMemberLookup(list, user_id);
         } });
@@ -653,8 +663,8 @@ void RouterWorkspaceDialog::fetchMemberNames()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::fetchHosts()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router || !is_admin_)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session || !is_admin_)
         return;
 
     // The hosts of a workspace that does not exist yet are an empty list, and the free ones
@@ -667,8 +677,8 @@ void RouterWorkspaceDialog::fetchHosts()
         request.set_group_id(kAnyGroup);
         request.set_offset(hosts_in_page_.offset());
         request.set_count(hosts_in_page_.pageSize());
-        router->listHosts(Router::CachePolicy::RELOAD, std::move(request),
-                          { this, &RouterWorkspaceDialog::onHostListReceived });
+        session->listHosts(RouterSession::CachePolicy::RELOAD, std::move(request),
+                           { this, &RouterWorkspaceDialog::onHostListReceived });
     }
 
     proto::router::HostListRequest free_request;
@@ -677,19 +687,19 @@ void RouterWorkspaceDialog::fetchHosts()
     free_request.set_group_id(0);
     free_request.set_offset(hosts_free_page_.offset());
     free_request.set_count(hosts_free_page_.pageSize());
-    router->listHosts(Router::CachePolicy::RELOAD, std::move(free_request),
-                      { this, &RouterWorkspaceDialog::onHostListReceived });
+    session->listHosts(RouterSession::CachePolicy::RELOAD, std::move(free_request),
+                       { this, &RouterWorkspaceDialog::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::refetchLists()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    router->listWorkspaces(Router::CachePolicy::RELOAD, 0,
-                           { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
+    session->listWorkspaces(RouterSession::CachePolicy::RELOAD, 0,
+                            { this, &RouterWorkspaceDialog::onWorkspaceListReceived });
     fetchUsers();
     fetchMemberNames();
     fetchHosts();
@@ -763,7 +773,7 @@ void RouterWorkspaceDialog::rebuildLists()
 //--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::rebuildHostLists()
 {
-    const auto fill = [](QListWidget* list, const QList<Router::Host>& hosts)
+    const auto fill = [](QListWidget* list, const QList<RouterHost>& hosts)
     {
         QVariant selected;
         if (QListWidgetItem* item = list->currentItem())
@@ -772,7 +782,7 @@ void RouterWorkspaceDialog::rebuildHostLists()
 
         list->clear();
 
-        for (const Router::Host& host : hosts)
+        for (const RouterHost& host : hosts)
         {
             const QString name = host.computer_name.isEmpty()
                 ? QString::number(host.host_id)

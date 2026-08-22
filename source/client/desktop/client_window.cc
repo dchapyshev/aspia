@@ -30,7 +30,7 @@
 #include "base/peer/host_id.h"
 #include "base/threading/worker.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/session_keeper.h"
 #include "client/desktop/authorization_dialog.h"
 #include "client/desktop/status_overlay.h"
@@ -482,25 +482,24 @@ void ClientWindow::fetchConnectionOffer()
     if (session_state_->isReconnecting() && !session_state_->isAutoReconnect())
         return;
 
-    Router* router = Router::instance(session_state_->routerId());
-    if (!router)
+    RouterSession* session = RouterController::session(session_state_->routerId());
+    if (!session)
     {
-        onErrorOccurred(tr("The specified router is unavailable."));
+        // No context at all means the record is gone from the book; one that is logging in is
+        // just not online yet.
+        if (RouterController::status(session_state_->routerId()) == RouterStatus::OFFLINE)
+            onErrorOccurred(tr("The specified router is unavailable."));
+        else
+            onErrorOccurred(tr("The specified router is offline."));
         return;
     }
 
-    if (router->status() != Router::Status::ONLINE)
-    {
-        onErrorOccurred(tr("The specified router is offline."));
-        return;
-    }
-
-    session_state_->setRouterVersion(router->version());
+    session_state_->setRouterVersion(session->version());
 
     if (!session_state_->isReconnecting())
         status_overlay_->setProgress(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), { this,
+    session->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)

@@ -19,10 +19,9 @@
 #ifndef CLIENT_DESKTOP_MANAGEMENT_ROUTER_STATUS_WIDGET_H
 #define CLIENT_DESKTOP_MANAGEMENT_ROUTER_STATUS_WIDGET_H
 
-#include <QDateTime>
-
 #include <memory>
 
+#include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 
 namespace Ui {
@@ -40,16 +39,7 @@ public:
     explicit RouterStatusWidget(QWidget* parent = nullptr);
     ~RouterStatusWidget() final;
 
-    struct Event
-    {
-        enum class Severity { INFO, WARNING, CRITICAL };
-
-        QDateTime time;
-        Severity severity = Severity::INFO;
-        QString text;
-    };
-
-    void showRouter(qint64 router_id, const QList<Event>& events);
+    void showRouter(qint64 router_id, const QList<RouterEvent>& events);
     qint64 routerId() const { return router_id_; }
 
     // ContentWidget implementation.
@@ -58,12 +48,19 @@ public:
     void activate(QStatusBar* statusbar) final;
     void deactivate(QStatusBar* statusbar) final;
 
+signals:
+    void sig_twoFactorClicked(qint64 router_id);
+
 public slots:
-    void onEvent(qint64 router_id, const RouterStatusWidget::Event& event);
+    void onEvent(qint64 router_id, const RouterEvent& event);
+
+private slots:
+    void onTwoFactorClicked();
 
 private:
-    void addEvent(const Event& event);
+    void addEvent(const RouterEvent& event);
     void updateStatusLabel();
+    void updateTwoFactorPrompt();
 
     std::unique_ptr<Ui::RouterStatusWidget> ui;
     qint64 router_id_ = 0;

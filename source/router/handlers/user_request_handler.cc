@@ -138,7 +138,7 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
         return;
     }
 
-    const std::string_view error_code = database.clearUserOtp(user_id);
+    const std::string_view error_code = database.resetUserOtp(user_id);
     if (error_code != proto::router::kErrorOk)
     {
         result->error_code = error_code;
@@ -146,19 +146,9 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
     }
 
     // The secret the live sessions authenticated with is gone, and the user list shows the OTP
-    // state - both hold regardless of how the token revocation below ends.
+    // state.
     result->stop_user_id = user_id;
     result->notify_flags = ClientWorker::NOTIFY_USERS;
-
-    // The existing device tokens must die with the secret they were issued against.
-    const std::string_view revoke_code = database.revokeUserClientDeviceTokens(user_id);
-    if (revoke_code != proto::router::kErrorOk)
-    {
-        LOG(WARNING) << "OTP cleared but failed to revoke device tokens for user" << user_id
-                     << ":" << revoke_code;
-        result->error_code = revoke_code;
-        return;
-    }
 
     LOG(INFO) << "OTP cleared for user" << user_id << "by" << caller.name;
     result->error_code = proto::router::kErrorOk;

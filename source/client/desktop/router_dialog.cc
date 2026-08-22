@@ -61,8 +61,6 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
 
             ui->edit_username->setText(router->username());
             ui->edit_password->setPassword(router->password());
-
-            device_token_ = router->deviceToken();
         }
         else
         {
@@ -140,7 +138,6 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt()));
     data.setUsername(username);
     data.setPassword(password);
-    data.setDeviceToken(device_token_);
 
     Database& db = Database::instance();
 
@@ -155,6 +152,13 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
+        // The token is not edited here, and the session of this record replaces it every time it
+        // passes the two-factor stage. It is read now instead of when the dialog opened, so a token
+        // issued meanwhile survives the save.
+        const std::optional<RouterConfig> stored = db.findRouter(router_id_);
+        if (stored.has_value())
+            data.setDeviceToken(stored->deviceToken());
+
         if (!db.modifyRouter(data))
         {
             LOG(ERROR) << "Failed to modify router in database";

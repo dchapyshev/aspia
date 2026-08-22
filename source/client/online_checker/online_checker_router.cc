@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/peer/host_id.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
@@ -95,8 +95,8 @@ void OnlineCheckerRouter::checkNextHost()
     LOG(TRACE) << "Checking status for host id" << host_id
                << "(router_id:" << host.routerId() << "entry_id:" << host.id() << ")";
 
-    Router* router = Router::instance(host.routerId());
-    if (!router || router->status() != Router::Status::ONLINE)
+    RouterSession* session = RouterController::session(host.routerId());
+    if (!session)
     {
         emit sig_checkerResult(host.id(), false);
         hosts_.pop_front();
@@ -105,7 +105,7 @@ void OnlineCheckerRouter::checkNextHost()
         return;
     }
 
-    router->checkHostStatus(host_id, { this, &OnlineCheckerRouter::onHostStatusReceived });
+    session->checkHostStatus(host_id, { this, &OnlineCheckerRouter::onHostStatusReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

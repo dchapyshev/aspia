@@ -24,9 +24,8 @@
 #include <QTreeWidget>
 #include <QWidget>
 
-#include "client/router.h"
+#include "client/router_types.h"
 #include "client/desktop/management/drag_and_drop.h"
-#include "client/desktop/management/router_status_widget.h"
 #include "client/desktop/management/sidebar_items.h"
 
 class RouterConfig;
@@ -48,9 +47,9 @@ public:
     void loadRouters();
     void reloadRouters();
     void setRouterStatus(qint64 router_id, SidebarRouter::Status status);
-    void setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces);
+    void setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>& workspaces);
     void setRouterHostGroups(qint64 router_id, qint64 workspace_id,
-                             const QList<Router::Group>& groups);
+                             const QList<RouterGroup>& groups);
     qint64 currentGroupId() const;
     SidebarItem* currentItem() const;
     SidebarRouter* routerById(qint64 router_id) const;
@@ -58,8 +57,6 @@ public:
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;
 
     void changeRouterPassword(qint64 router_id);
-    QList<RouterStatusWidget::Event> routerEvents(qint64 router_id) const;
-    void clearRouterEvents(qint64 router_id);
 
 public slots:
     void onRefreshWorkspaces(qint64 router_id);
@@ -85,27 +82,17 @@ signals:
     void sig_addGroup();
     void sig_removeGroup();
     void sig_editGroup();
-    void sig_routerEvent(qint64 router_id, const RouterStatusWidget::Event& event);
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onContextMenu(const QPoint& pos);
     void onItemExpanded(QTreeWidgetItem* item);
     void onItemCollapsed(QTreeWidgetItem* item);
-    void onRouterStatusChanged(qint64 router_id, Router::Status status);
-    void onRouterErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
-    void onRouterTwoFactorCodeRequired(qint64 router_id);
-    void onRouterTwoFactorEnrollment(qint64 router_id, const QString& otpauth_uri);
+    void onRouterStatusChanged(qint64 router_id, RouterStatus status);
 
 private:
-    using Severity = RouterStatusWidget::Event::Severity;
-
-    void createRouterSession(const RouterConfig& config);
-    void destroyRouterSession(qint64 router_id);
-
     void buildRouterSections(qint64 router_id);
     void removeRouterSections(qint64 router_id);
-    void addRouterEvent(Severity severity, qint64 router_id, const QString& message);
 
     bool onMousePress(QMouseEvent* event);
     bool onMouseMove(QMouseEvent* event);
@@ -120,9 +107,6 @@ private:
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
 
     QTreeWidget* tree_widget_ = nullptr;
-
-    QHash<qint64, Router*> routers_;
-    QHash<qint64, QList<RouterStatusWidget::Event>> router_events_;
 
     SidebarLocalGroup* local_root_ = nullptr;
 

@@ -409,17 +409,9 @@ int resetOtp(QTextStream& out, const QString& user_name)
         return 1;
     }
 
-    if (db.clearUserOtp(user.entry_id) != proto::router::kErrorOk)
+    if (db.resetUserOtp(user.entry_id) != proto::router::kErrorOk)
     {
         out << "Failed to reset two-factor authentication." << Qt::endl;
-        return 1;
-    }
-
-    // The device tokens were issued against the secret that has just been cleared.
-    if (db.revokeUserClientDeviceTokens(user.entry_id) != proto::router::kErrorOk)
-    {
-        out << "Two-factor authentication is reset, but the device tokens of the user are still "
-               "in place." << Qt::endl;
         return 1;
     }
 

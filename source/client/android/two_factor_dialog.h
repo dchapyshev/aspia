@@ -30,7 +30,10 @@ class TwoFactorDialog final : public Dialog
     Q_OBJECT
 
 public:
-    explicit TwoFactorDialog(const QString& otpauth_uri, QWidget* parent = nullptr);
+    // |code_refused| adds a line saying that the previous code was refused. The refusal itself
+    // only closes the session, so the reopened prompt is where the user learns of it.
+    explicit TwoFactorDialog(const QString& otpauth_uri, bool code_refused,
+                             QWidget* parent = nullptr);
     ~TwoFactorDialog() final;
 
     QString code() const;

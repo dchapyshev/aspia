@@ -19,7 +19,6 @@
 #ifndef CLIENT_ANDROID_ROUTER_EDITOR_H
 #define CLIENT_ANDROID_ROUTER_EDITOR_H
 
-#include <QByteArray>
 #include <QWidget>
 
 class Button;
@@ -61,7 +60,6 @@ private:
     Label* error_ = nullptr;
     Button* delete_button_ = nullptr;
     qint64 router_id_ = -1;
-    QByteArray device_token_;
 
     Q_DISABLE_COPY_MOVE(RouterEditor)
 };

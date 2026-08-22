@@ -25,7 +25,7 @@
 
 #include "client/config.h"
 #include "client/page_model.h"
-#include "client/router.h"
+#include "client/router_session.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/host_list_model.h"
 
@@ -47,7 +47,7 @@ public:
 
     qint64 routerId() const { return router_id_; }
     bool hasSelectedHost() const;
-    Router::Host selectedHost() const;
+    RouterHost selectedHost() const;
     HostConfig selectedHostConfig() const;
 
     // ContentWidget implementation.
@@ -73,7 +73,7 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) final;
 
 private slots:
-    void onHostListReceived(const Router::HostList& list);
+    void onHostListReceived(const RouterHostList& list);
     void onPageSizeChanged(int index);
     void onPageChanged(int index);
     void onPrevClicked();
@@ -82,7 +82,7 @@ private slots:
     void onHostContextMenu(const QPoint& pos);
 
 private:
-    void fetchHosts(Router::CachePolicy policy);
+    void fetchHosts(RouterSession::CachePolicy policy);
     void updateStatusLabel();
     void updatePagination();
     void startDrag();

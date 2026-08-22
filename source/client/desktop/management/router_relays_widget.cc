@@ -37,7 +37,7 @@
 #include <QStatusBar>
 
 #include "base/logging.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "common/desktop/formatter.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -79,6 +79,23 @@ RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
     ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_peers, &QWidget::customContextMenuRequested,
             this, &RouterRelaysWidget::onPeerContextMenu);
+
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_relaysChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchRelays();
+    });
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        {
+            relay_model_->clear();
+            peer_model_->clear();
+            updateStatusLabel();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,27 +107,6 @@ RouterRelaysWidget::~RouterRelaysWidget()
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::showRouter(qint64 router_id)
 {
-    if (router_id_ != router_id)
-    {
-        // Move the data/status subscriptions to the router that is now displayed.
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, nullptr, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_relaysChanged, this, &RouterRelaysWidget::fetchRelays);
-            connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
-            {
-                if (status != Router::Status::ONLINE)
-                {
-                    relay_model_->clear();
-                    peer_model_->clear();
-                    updateStatusLabel();
-                }
-            });
-        }
-    }
-
     router_id_ = router_id;
 
     relay_model_->clear();
@@ -359,13 +355,12 @@ void RouterRelaysWidget::onDisconnectRelay()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    router->disconnectRelay(relay->entry_id(),
-                            { this, &RouterRelaysWidget::onRelayResultReceived });
+    session->disconnectRelay(relay->entry_id(), { this, &RouterRelaysWidget::onRelayResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -384,12 +379,12 @@ void RouterRelaysWidget::onDisconnectAllRelays()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    router->disconnectRelay(-1, { this, &RouterRelaysWidget::onRelayResultReceived });
+    session->disconnectRelay(-1, { this, &RouterRelaysWidget::onRelayResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -451,13 +446,13 @@ void RouterRelaysWidget::onPeerContextMenu(const QPoint& pos)
             return;
         }
 
-        Router* router = Router::instance(router_id_);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id_);
+        if (!session)
             return;
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
-        router->disconnectPeer(relay->entry_id(), peer->peer_id(),
-                               { this, &RouterRelaysWidget::onPeerResultReceived });
+        session->disconnectPeer(relay->entry_id(), peer->peer_id(),
+                                { this, &RouterRelaysWidget::onPeerResultReceived });
     }
     else if (selected == copy_row_action)
     {
@@ -551,14 +546,14 @@ void RouterRelaysWidget::onPeerResultReceived(const proto::router::PeerResult& r
 //--------------------------------------------------------------------------------------------------
 void RouterRelaysWidget::fetchRelays()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listRelays({ this, &RouterRelaysWidget::onRelayListReceived });
+    session->listRelays({ this, &RouterRelaysWidget::onRelayListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

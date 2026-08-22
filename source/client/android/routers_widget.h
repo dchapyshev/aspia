@@ -26,8 +26,6 @@
 #include "client/android/router_card.h"
 
 class IconButton;
-class Router;
-class RouterConfig;
 class RouterEditor;
 class RoutersEmptyView;
 class ScrollArea;
@@ -60,24 +58,22 @@ signals:
     void sig_titleChanged(const QString& title, bool back_visible);
 
     // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
-    void appBarActionsChanged();
+    void sig_appBarActionsChanged();
+
+    // The button of a card asks the two-factor question of its record again.
+    void sig_twoFactorClicked(qint64 router_id);
 
 private slots:
     void onAddRouter();
     void onCardExpandRequested(qint64 router_id);
     void onEditRouter(qint64 router_id);
+    void onRouterEvent(qint64 router_id, const RouterEvent& event);
     void returnFromEditor();
 
 private:
     void showList();
     bool isEditorPage() const;
     void clearCards();
-
-    // Connects to the configured routers, reusing existing sessions and dropping removed ones.
-    void syncSessions();
-    void createRouterSession(const RouterConfig& config);
-    void requestTwoFactorCode(qint64 router_id, const QString& otpauth_uri);
-    void addRouterEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);
 
     QStackedWidget* stack_ = nullptr;
     ScrollArea* scroll_ = nullptr;
@@ -88,8 +84,6 @@ private:
     IconButton* add_button_ = nullptr;
     qint64 expanded_router_id_ = -1;
 
-    QHash<qint64, Router*> sessions_;
-    QHash<qint64, QList<RouterEvent>> events_;
     QHash<qint64, RouterCard*> cards_;
 
     Q_DISABLE_COPY_MOVE(RoutersWidget)

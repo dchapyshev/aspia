@@ -43,11 +43,11 @@
 #include "base/sys_info.h"
 #include "base/threading/worker.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/session_keeper.h"
 #include "client/session_state.h"
-#include "client/workers/network_worker.h"
 #include "client/android/chat_view.h"
+#include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
 #include "common/android/message_dialog.h"
@@ -440,48 +440,46 @@ void ChatWindow::start()
 //--------------------------------------------------------------------------------------------------
 void ChatWindow::fetchConnectionOffer()
 {
-    Router* router = Router::instance(session_state_->routerId());
-    if (!router)
+    // The working session exists only while the record is online.
+    if (RouterSession* session = RouterController::session(session_state_->routerId()))
+    {
+        requestConnectionOffer(session);
+        return;
+    }
+
+    RouterController& controller = RouterController::instance();
+    if (RouterController::status(session_state_->routerId()) == RouterStatus::OFFLINE)
     {
         setStatusText(tr("The specified router is unavailable."));
         return;
     }
 
-    if (router->status() == Router::Status::ONLINE)
-    {
-        requestConnectionOffer(router);
-        return;
-    }
-
-    // The router connection is also dropped while the app is in the background.
+    // The record is logging in again (the router connection is also dropped while the app is in
+    // the background); the offer is requested once it is let in.
     setStatusText(tr("Connecting to router..."));
 
-    disconnect(router, &Router::sig_statusChanged, this, nullptr);
-    connect(router, &Router::sig_statusChanged, this,
-        [this](qint64 /* router_id */, Router::Status status)
+    // Drop any previous pending wait, then subscribe again.
+    disconnect(&controller, nullptr, this, nullptr);
+    connect(&controller, &RouterController::sig_statusChanged, this,
+        [this](qint64 router_id, RouterStatus status)
     {
-        if (status != Router::Status::ONLINE)
+        if (router_id != session_state_->routerId() || status != RouterStatus::ONLINE)
             return;
 
-        Router* router = Router::instance(session_state_->routerId());
-        if (!router)
-            return;
+        disconnect(&RouterController::instance(), nullptr, this, nullptr);
 
-        disconnect(router, &Router::sig_statusChanged, this, nullptr);
-        requestConnectionOffer(router);
+        if (RouterSession* session = RouterController::session(session_state_->routerId()))
+            requestConnectionOffer(session);
     });
-
-    if (router->status() == Router::Status::OFFLINE)
-        router->connectToRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWindow::requestConnectionOffer(Router* router)
+void ChatWindow::requestConnectionOffer(RouterSession* session)
 {
-    session_state_->setRouterVersion(router->version());
+    session_state_->setRouterVersion(session->version());
     setStatusText(tr("Requesting connection to the host..."));
 
-    router->requestConnection(session_state_->hostId(), { this,
+    session->requestConnection(session_state_->hostId(), { this,
         [this](const proto::router::ConnectionOffer& offer)
     {
         if (offer.error_code() == proto::router::kErrorOk)

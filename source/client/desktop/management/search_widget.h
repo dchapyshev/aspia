@@ -24,7 +24,7 @@
 #include <QPoint>
 
 #include "client/config.h"
-#include "client/router.h"
+#include "client/router_types.h"
 #include "client/search_page_model.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/search_result_model.h"
@@ -116,7 +116,7 @@ private:
         qint64 offset = 0;
         qint64 count = 0;
         bool ready = false;
-        QList<Router::Host> router_hosts;
+        QList<RouterHost> router_hosts;
     };
 
     SearchPageModel page_model_;

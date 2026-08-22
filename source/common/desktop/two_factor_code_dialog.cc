@@ -19,23 +19,42 @@
 #include "common/desktop/two_factor_code_dialog.h"
 
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <QTimer>
 
 #include "base/gui_application.h"
+#include "base/crypto/totp.h"
 #include "ui_two_factor_code_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
-TwoFactorCodeDialog::TwoFactorCodeDialog(QWidget* parent)
+TwoFactorCodeDialog::TwoFactorCodeDialog(bool code_refused, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::TwoFactorCodeDialog>())
 {
     ui->setupUi(this);
+
+    if (code_refused)
+    {
+        ui->label_prompt->setText(tr("The previous code was not accepted.") + ' ' +
+                                  ui->label_prompt->text());
+    }
+
     ui->label_icon->setPixmap(GuiApplication::svgPixmap(":/img/lock.svg", QSize(48, 48)));
     ui->edit_code->setValidator(
         new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
+
+    // The router refuses a code of the wrong length the way it refuses a wrong one: it ends the
+    // session and counts the attempt against the block. So an incomplete code never leaves here.
+    QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok);
+    ok_button->setEnabled(false);
+
+    connect(ui->edit_code, &QLineEdit::textChanged, this, [ok_button](const QString& text)
+    {
+        ok_button->setEnabled(text.trimmed().size() == Totp::kDefaultDigits);
+    });
 
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);

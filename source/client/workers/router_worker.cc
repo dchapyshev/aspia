@@ -76,6 +76,23 @@ void RouterWorker::onDisconnect(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorker::onReconnect(qint64 router_id)
+{
+    auto it = connections_.find(router_id);
+    if (it == connections_.end())
+        return;
+
+    if (it->channel)
+    {
+        it->channel->disconnect();
+        it->channel->deleteLater();
+        it->channel = nullptr;
+    }
+
+    it->reconnect_countdown = kReconnectTicks;
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorker::onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer)
 {
     auto it = connections_.find(router_id);

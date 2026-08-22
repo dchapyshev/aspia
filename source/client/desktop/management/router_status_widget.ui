@@ -24,6 +24,52 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame_two_factor">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <layout class="QHBoxLayout" name="layout_two_factor">
+      <item>
+       <widget class="QLabel" name="label_two_factor_icon">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_two_factor">
+        <property name="text">
+         <string>The router is waiting for a two-factor code.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="spacer_two_factor">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_two_factor">
+        <property name="text">
+         <string>Enter Code</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QTreeWidget" name="tree_events">
      <property name="rootIsDecorated">
       <bool>false</bool>

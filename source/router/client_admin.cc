@@ -327,11 +327,25 @@ void ClientAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 //--------------------------------------------------------------------------------------------------
 void ClientAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 {
+    const auto request_id = request.request_id();
+    const std::string command_name = request.command_name();
+
+    if (command_name != proto::router::kCommandPeerDisconnect)
+    {
+        CLOG(ERROR) << "Unknown peer request command:" << command_name;
+
+        proto::router::RouterToAdmin message;
+        proto::router::PeerResult* peer_result = message.mutable_peer_result();
+        peer_result->set_request_id(request_id);
+        peer_result->set_command_name(command_name);
+        peer_result->set_error_code(proto::router::kErrorInvalidRequest);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
     RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
     CHECK(relay_worker);
 
-    const auto request_id = request.request_id();
-    const std::string command_name = request.command_name();
     const qint64 relay_id = request.relay_id();
 
     relay_worker->disconnectPeerSession(relay_id, request, this,

@@ -31,8 +31,11 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/application.h"
+#include "client/config.h"
+#include "client/database.h"
 #include "client/host_url.h"
-#include "client/router.h"
+#include "client/master_password.h"
+#include "client/router_controller.h"
 #include "client/android/authorization_dialog.h"
 #include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
@@ -42,9 +45,7 @@
 #include "client/android/remote_widget.h"
 #include "client/android/routers_widget.h"
 #include "client/android/settings_widget.h"
-#include "client/config.h"
-#include "client/database.h"
-#include "client/master_password.h"
+#include "client/android/two_factor_dialog.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "common/android/message_dialog.h"
@@ -135,6 +136,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
       content_(new QStackedWidget(this)),
       navigation_(new BottomNavigationBar(this))
 {
+    RouterController* router_controller = new RouterController(this);
+    connect(router_controller, &RouterController::sig_twoFactorRequired,
+            this, &AndroidMainWindow::onTwoFactorRequired);
+
     LocalWidget* local = new LocalWidget(this);
     RoutersWidget* routers = new RoutersWidget(this);
     RemoteWidget* remote = new RemoteWidget(this);
@@ -145,24 +150,16 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     content_->addWidget(routers);
     content_->addWidget(settings);
 
-    connect(routers, &RoutersWidget::appBarActionsChanged,
-            this, &AndroidMainWindow::onRouterActionsChanged);
-    connect(routers, &RoutersWidget::sig_titleChanged,
-            this, &AndroidMainWindow::onRoutersTitleChanged);
-    connect(local, &LocalWidget::sig_titleChanged,
-            this, &AndroidMainWindow::onLocalTitleChanged);
-    connect(local, &LocalWidget::sig_appBarActionsChanged,
-            this, &AndroidMainWindow::onLocalActionsChanged);
-    connect(remote, &RemoteWidget::sig_titleChanged,
-            this, &AndroidMainWindow::onRemoteTitleChanged);
-    connect(local, &LocalWidget::sig_searchModeChanged,
-            this, &AndroidMainWindow::onSearchModeChanged);
-    connect(remote, &RemoteWidget::sig_searchModeChanged,
-            this, &AndroidMainWindow::onSearchModeChanged);
-    connect(settings, &SettingsWidget::sig_titleChanged,
-            this, &AndroidMainWindow::onSettingsTitleChanged);
-    connect(settings, &SettingsWidget::sig_appBarActionsChanged,
-            this, &AndroidMainWindow::onSettingsActionsChanged);
+    connect(routers, &RoutersWidget::sig_twoFactorClicked, this, &AndroidMainWindow::onTwoFactorRequired);
+    connect(routers, &RoutersWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onRouterActionsChanged);
+    connect(routers, &RoutersWidget::sig_titleChanged, this, &AndroidMainWindow::onRoutersTitleChanged);
+    connect(local, &LocalWidget::sig_titleChanged, this, &AndroidMainWindow::onLocalTitleChanged);
+    connect(local, &LocalWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onLocalActionsChanged);
+    connect(remote, &RemoteWidget::sig_titleChanged, this, &AndroidMainWindow::onRemoteTitleChanged);
+    connect(local, &LocalWidget::sig_searchModeChanged, this, &AndroidMainWindow::onSearchModeChanged);
+    connect(remote, &RemoteWidget::sig_searchModeChanged, this, &AndroidMainWindow::onSearchModeChanged);
+    connect(settings, &SettingsWidget::sig_titleChanged, this, &AndroidMainWindow::onSettingsTitleChanged);
+    connect(settings, &SettingsWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onSettingsActionsChanged);
     connect(local, &LocalWidget::sig_connectHost, this, &AndroidMainWindow::onConnectHost);
     connect(remote, &RemoteWidget::sig_connectHost, this, &AndroidMainWindow::onConnectRouterHost);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
@@ -620,6 +617,51 @@ void AndroidMainWindow::onChatClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
+{
+    if (two_factor_dialog_)
+        return;
+
+    // The question of the record. Gone or blocked means nothing to put on screen.
+    QPointer<TwoFactorPrompt> prompt(RouterController::twoFactorPrompt(router_id));
+    if (!prompt || prompt->blockedSeconds() > 0)
+        return;
+
+    const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
+    if (!record.has_value())
+        return;
+
+    TwoFactorDialog* dialog =
+        new TwoFactorDialog(prompt->otpauthUri(), prompt->codeRefused(), this);
+
+    // The title names the router, so with several of them the user can tell whose code is asked.
+    dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record->displayLabel()));
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    two_factor_dialog_ = dialog;
+
+    connect(dialog, &QDialog::finished, this, [this, prompt, dialog](int result)
+    {
+        two_factor_dialog_.clear();
+
+        if (result == QDialog::Accepted && prompt)
+            prompt->submitCode(dialog->code());
+
+        // An answered question and a withdrawn one both free the screen for the next record
+        // waiting; only a question the operator dismissed stays off it.
+        if (result == QDialog::Accepted || !prompt)
+            showNextTwoFactorPrompt();
+    });
+
+    // The question can leave the screen before the operator does: its death (the record left,
+    // the challenge changed) closes the dialog.
+    connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
+
+    // open() and not exec(): the prompt is modal, so it cannot be missed, but it does not spin a
+    // nested event loop inside the delivery of the challenge that opened it.
+    dialog->open();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::connectToUrl(const QString& url)
 {
     LOG(INFO) << "Connect to URL:" << url;
@@ -671,17 +713,17 @@ void AndroidMainWindow::connectToUrl(const QString& url)
 
         // The record of the host on the router carries the name to show for it, so it is looked
         // up before the session opens. Without a connected router the session opens unnamed.
-        Router* router = Router::instance(router_id);
-        if (router && router->status() == Router::Status::ONLINE)
+        RouterSession* session = RouterController::session(router_id);
+        if (session)
         {
             HostId host_id = host_url.hostId();
 
-            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
-                [this, router_id, host_id, session_type](const Router::HostList& list)
+            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
+                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
             {
                 QString name;
 
-                for (const Router::Host& entry : std::as_const(list.hosts))
+                for (const RouterHost& entry : std::as_const(list.hosts))
                 {
                     if (entry.host_id != host_id)
                         continue;
@@ -744,6 +786,20 @@ void AndroidMainWindow::onUrlOpened(const QString& url)
     }
 
     connectToUrl(url);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::showNextTwoFactorPrompt()
+{
+    for (const RouterConfig& config : Database::instance().routerList())
+    {
+        TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(config.routerId());
+        if (prompt && prompt->blockedSeconds() == 0)
+        {
+            onTwoFactorRequired(config.routerId());
+            return;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

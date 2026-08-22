@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterHostsCleaner::RouterHostsCleaner(qint64 router_id, QObject* parent)
@@ -48,8 +48,8 @@ void RouterHostsCleaner::start()
 
     started_ = true;
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
         LOG(ERROR) << "No session for router" << router_id_;
         emit sig_finished();
@@ -77,7 +77,7 @@ void RouterHostsCleaner::start()
         if (!Database::instance().updateRouterHostCheckTime(router_id_, host_id))
             LOG(ERROR) << "Unable to update check time of host" << host_id;
 
-        router->checkHostStatus(host_id, { this,
+        session->checkHostStatus(host_id, { this,
             [this, host_id](const proto::router::HostStatus& status)
         {
             // Only a host the router says it does not have loses what is kept for it. An offline

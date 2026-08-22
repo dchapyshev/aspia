@@ -258,6 +258,19 @@ message TwoFactorChallenge
     // client must drop the stale local token and proceed straight to the TOTP prompt without
     // re-trying the token path on this challenge.
     bool token_rejected = 3;
+
+    // Any mode: the last code submitted for this account since its last successful login was
+    // refused (wrong, replayed, or the account is blocked after too many attempts). The router
+    // refuses a code by closing the session that sent it without an answer, so the challenge of
+    // the next session is where the client learns what happened and can say so in the reopened
+    // prompt.
+    bool code_rejected = 4;
+
+    // MODE_ACTIVE: seconds left in the block imposed after too many failed code attempts, zero
+    // when the account is not blocked. The router does not look at codes while the block runs,
+    // so instead of asking for one the client shows the wait. Sent as a remaining duration
+    // because the clocks of the two sides are not assumed to agree.
+    int64 blocked_seconds = 5;
 }
 
 // Client to router.
@@ -281,6 +294,7 @@ message TwoFactorResponse
 message LoginResult
 {
     bytes new_token = 1;
+    int64 user_id   = 2;
 }
 
 message RouterToClient

@@ -35,7 +35,7 @@
 #include <QUuid>
 
 #include "base/logging.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "proto/router_client.h"
@@ -118,6 +118,13 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
 
     ui->tree_host->viewport()->installEventFilter(this);
     ui->tree_host->installEventFilter(this);
+
+    connect(&RouterController::instance(), &RouterController::sig_hostsChanged, this,
+            [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchHosts(RouterSession::CachePolicy::RELOAD);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,19 +137,6 @@ RouterGroupWidget::~RouterGroupWidget()
 void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
                                   const QString& workspace_name, qint64 group_id)
 {
-    if (router_id_ != router_id)
-    {
-        // Move the sig_hostsChanged subscription to the router whose workspace is now displayed.
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, &Router::sig_hostsChanged, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_hostsChanged, this,
-                    [this]() { fetchHosts(Router::CachePolicy::RELOAD); });
-        }
-    }
-
     router_id_ = router_id;
     workspace_id_ = workspace_id;
     workspace_name_ = workspace_name;
@@ -153,7 +147,7 @@ void RouterGroupWidget::showGroup(qint64 router_id, qint64 workspace_id,
 
     model_->setHosts({});
     updateStatusLabel();
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,10 +157,10 @@ bool RouterGroupWidget::hasSelectedHost() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Router::Host RouterGroupWidget::selectedHost() const
+RouterHost RouterGroupWidget::selectedHost() const
 {
     const RouterHost* host = currentHost();
-    return host ? *host : Router::Host();
+    return host ? *host : RouterHost();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,7 +169,7 @@ HostConfig RouterGroupWidget::selectedHostConfig() const
     if (!hasSelectedHost())
         return HostConfig();
 
-    const Router::Host selected = selectedHost();
+    const RouterHost selected = selectedHost();
     if (selected.host_id == kInvalidHostId)
         return HostConfig();
 
@@ -217,7 +211,7 @@ void RouterGroupWidget::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 void RouterGroupWidget::reload()
 {
-    fetchHosts(Router::CachePolicy::RELOAD);
+    fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -251,7 +245,7 @@ void RouterGroupWidget::onEditHost()
 
     RouterHostDialog dialog(router_id_, workspace_name_, *host, this);
     if (dialog.exec() == QDialog::Accepted)
-        fetchHosts(Router::CachePolicy::RELOAD);
+        fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -296,7 +290,7 @@ bool RouterGroupWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
+void RouterGroupWidget::onHostListReceived(const RouterHostList& list)
 {
     // The router echoes workspace_id/group_id; ignore responses for other workspaces or
     // groups (e.g. an in-flight request issued before the user switched selection).
@@ -330,7 +324,7 @@ void RouterGroupWidget::onHostListReceived(const Router::HostList& list)
     // for the page it was moved to, and the user would be left looking at nothing. The cached
     // answer for that page is from before the change, so it is not the one to show.
     if (page_moved)
-        fetchHosts(Router::CachePolicy::RELOAD);
+        fetchHosts(RouterSession::CachePolicy::RELOAD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -338,7 +332,7 @@ void RouterGroupWidget::onPageSizeChanged(int /* index */)
 {
     hosts_page_.setPageSize(ui->combo_hosts_page_size->currentData().toLongLong());
     hosts_page_.setCurrentPage(0);
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -351,7 +345,7 @@ void RouterGroupWidget::onPageChanged(int index)
         return;
 
     hosts_page_.setCurrentPage(index);
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -361,7 +355,7 @@ void RouterGroupWidget::onPrevClicked()
         return;
 
     hosts_page_.setCurrentPage(hosts_page_.currentPage() - 1);
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -371,7 +365,7 @@ void RouterGroupWidget::onNextClicked()
         return;
 
     hosts_page_.setCurrentPage(hosts_page_.currentPage() + 1);
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -407,13 +401,13 @@ void RouterGroupWidget::onHostContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
+void RouterGroupWidget::fetchHosts(RouterSession::CachePolicy policy)
 {
     if (router_id_ == 0)
         return;
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     proto::router::HostListRequest request;
@@ -422,7 +416,7 @@ void RouterGroupWidget::fetchHosts(Router::CachePolicy policy)
     request.set_group_id(group_id_);
     request.set_offset(hosts_page_.offset());
     request.set_count(hosts_page_.pageSize());
-    router->listHosts(policy, std::move(request), { this, &RouterGroupWidget::onHostListReceived });
+    session->listHosts(policy, std::move(request), { this, &RouterGroupWidget::onHostListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -451,8 +445,8 @@ void RouterGroupWidget::updatePagination()
 void RouterGroupWidget::startDrag()
 {
     // Clients are read-only and cannot move hosts between groups.
-    Router* router = Router::instance(router_id_);
-    if (!router || router->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session || session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
         return;
 
     const QModelIndex index = ui->tree_host->indexAt(start_pos_);

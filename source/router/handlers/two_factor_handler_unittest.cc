@@ -47,9 +47,9 @@ protected:
         TwoFactorHandlerTestPeer::forgetFailedAttempts();
     }
 
-    TwoFactorHandler::Result start(TwoFactorHandler& handler)
+    TwoFactorHandler::Result start(TwoFactorHandler& handler, qint64 now = kNow)
     {
-        return handler.start(db_, caller_);
+        return handler.start(db_, caller_, now);
     }
 
     TwoFactorHandler::Result submitCode(TwoFactorHandler& handler, const QString& code, qint64 now)
@@ -243,6 +243,37 @@ TEST_F(TwoFactorHandlerTest, ReplayedCodeIsRefused)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A replay is refused but not counted: the code came out of the secret, so it is not a guess. A
+// session that drops right after a login brings the user back to the prompt with the same code
+// still on their screen, and typing it again must not spend the attempts they are about to need.
+TEST_F(TwoFactorHandlerTest, ReplayedCodeIsNotAFailedAttempt)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString code = Totp::code(secret, kNow);
+
+    TwoFactorHandler first;
+    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitCode(first, code, kNow).action, TwoFactorHandler::Action::ACCEPT);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler replay;
+        ASSERT_EQ(start(replay).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(replay, code, kNow).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    // The code of the next step opens a session, so the user was never blocked.
+    const qint64 next_step = kNow + Totp::kDefaultStepSec;
+
+    TwoFactorHandler after;
+    ASSERT_EQ(start(after).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_EQ(submitCode(after, Totp::code(secret, next_step), next_step).action,
+              TwoFactorHandler::Action::ACCEPT);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A wrong code takes the session down with it, so guessing means reconnecting for every attempt
 // and no single session sees the series. The router counts the failed attempts of the user across
 // sessions and stops verifying codes for a while.
@@ -343,7 +374,7 @@ TEST_F(TwoFactorHandlerTest, SecretResetWhileThePromptIsOpenClosesTheSession)
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
 
-    ASSERT_EQ(db_.clearUserOtp(admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
@@ -678,4 +709,78 @@ TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
     ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &token, &token_id));
 
     EXPECT_EQ(storedTokenCount(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A refusal closes the session that sent the code without an answer, so the challenge of the next
+// session is where the refusal is announced. A successful login ends the announcement.
+TEST_F(TwoFactorHandlerTest, RefusedCodeIsCarriedByTheNextChallenge)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler first;
+    EXPECT_FALSE(start(first).challenge.code_rejected);
+    ASSERT_EQ(submitCode(first, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler second;
+    EXPECT_TRUE(start(second).challenge.code_rejected);
+    ASSERT_EQ(submitCode(second, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
+
+    TwoFactorHandler third;
+    EXPECT_FALSE(start(third).challenge.code_rejected);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A replay is refused without counting as a guess, but it is still a code that did not get the
+// user in, so the next challenge announces it all the same.
+TEST_F(TwoFactorHandlerTest, ReplayedCodeCountsAsRefusedForTheNextChallenge)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString code = Totp::code(secret, kNow);
+
+    TwoFactorHandler first;
+    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitCode(first, code, kNow).action, TwoFactorHandler::Action::ACCEPT);
+
+    TwoFactorHandler replay;
+    EXPECT_FALSE(start(replay).challenge.code_rejected);
+    ASSERT_EQ(submitCode(replay, code, kNow).action, TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler next;
+    EXPECT_TRUE(start(next).challenge.code_rejected);
+}
+
+//--------------------------------------------------------------------------------------------------
+// While the block runs the router does not look at codes, so the challenge tells the client how
+// long the wait is instead of asking for a code it would throw away. A challenge opened after
+// the block has run out carries no wait.
+TEST_F(TwoFactorHandlerTest, BlockAnnouncesItsRemainingTimeInTheChallenge)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString wrong = wrongCode(secret, kNow);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(attempt, wrong, kNow).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    TwoFactorHandler blocked;
+    const TwoFactorHandler::Result challenge = start(blocked);
+    ASSERT_EQ(challenge.action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    EXPECT_EQ(challenge.challenge.blocked_seconds,
+              DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count());
+    EXPECT_TRUE(challenge.challenge.code_rejected);
+
+    const qint64 later =
+        kNow + DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count();
+    EXPECT_EQ(start(blocked, later).challenge.blocked_seconds, 0);
 }

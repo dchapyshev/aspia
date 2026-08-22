@@ -34,7 +34,11 @@ class TwoFactorEnrollDialog final : public QDialog
 public:
     // |otpauth_uri| is the ready-made URI the authenticator app expects. The Base32 secret
     // shown as a manual-entry fallback is extracted from its |secret| query parameter.
-    explicit TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget* parent = nullptr);
+    //
+    // |code_refused| adds a line saying that the previous code was refused. The refusal itself
+    // only closes the session, so the reopened prompt is where the user learns of it.
+    explicit TwoFactorEnrollDialog(const QString& otpauth_uri, bool code_refused,
+                                   QWidget* parent = nullptr);
     ~TwoFactorEnrollDialog() final;
 
     QString code() const;

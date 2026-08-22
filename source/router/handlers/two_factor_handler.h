@@ -49,6 +49,15 @@ public:
         // The device token the client presented is dead (revoked, expired, or issued to somebody
         // else). Tells the client to drop its local copy instead of presenting it again.
         bool token_rejected = false;
+
+        // The last code submitted for this account since its last successful login was refused.
+        // The refusal itself closes the session without an answer, so this is how the next
+        // session learns of it.
+        bool code_rejected = false;
+
+        // ACTIVE only. Seconds left in the block imposed after too many failed attempts, zero
+        // when the account is not blocked.
+        qint64 blocked_seconds = 0;
     };
 
     enum class Action
@@ -76,8 +85,9 @@ public:
     static constexpr Minutes kFailedAttemptsBlock { 15 };
 
     // Opens the stage. Called on a fresh connection and again when the session re-authenticates
-    // (its own password change revokes every device token, this one included).
-    Result start(Database& database, const RequestCaller& caller);
+    // (its own password change revokes every device token, this one included). |now| is the wall
+    // clock in seconds; the challenge carries the time left in a running block.
+    Result start(Database& database, const RequestCaller& caller, qint64 now);
 
     // Handles the answer of the client. |now| is the wall clock in seconds - the TOTP step comes
     // from it - and |address| is stored with the issued device token.
@@ -93,9 +103,13 @@ private:
     {
         int failures = 0;
         qint64 blocked_until = 0;
+        bool code_rejected = false;
     };
 
     static bool isBlockedAttempt(qint64 user_id, qint64 now);
+    static qint64 blockedSecondsLeft(qint64 user_id, qint64 now);
+    static bool isCodeRejected(qint64 user_id);
+    static void markCodeRejected(qint64 user_id);
     static void registerFailedAttempt(qint64 user_id, qint64 now);
     static void resetAttempts(qint64 user_id);
 

@@ -27,7 +27,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/user.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "common/desktop/password_edit.h"
@@ -122,21 +122,21 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     updateTokenTree();
     updateLoadingState();
 
-    Router* router = Router::instance(router_id_);
-    CHECK(router);
-
-    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
     {
-        if (status != Router::Status::ONLINE)
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
             reject();
     });
 
     // The record can be changed from another console while the dialog is open (e.g. the user is
     // disabled); without a refetch a later OK would write the stale snapshot back and silently
     // undo that. The fields the operator has touched keep their edits (see onUserListReceived).
-    connect(router, &Router::sig_usersChanged, this, [this](qint64 /* router_id */)
+    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
     {
-        fetchUser();
+        if (router_id == router_id_)
+            fetchUser();
     });
 
     if (entry_id_ > 0)
@@ -310,16 +310,16 @@ void RouterUserDialog::onResetOtpClicked()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
     ui->button_reset_otp->setEnabled(false);
     LOG(INFO) << "[ACTION] Resetting OTP for user" << entry_id_;
-    router->resetUserOtp(entry_id_, { this, &RouterUserDialog::onResetOtpResultReceived });
+    session->resetUserOtp(entry_id_, { this, &RouterUserDialog::onResetOtpResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,18 +358,18 @@ void RouterUserDialog::onRevokeTokenClicked()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
     pending_revoke_token_ids_ = { token_id };
     ui->tab_sessions->setEnabled(false);
     LOG(INFO) << "[ACTION] Revoking device token" << token_id << "of user" << entry_id_;
-    router->revokeUserTokens(entry_id_, pending_revoke_token_ids_,
-                             { this, &RouterUserDialog::onRevokeResultReceived });
+    session->revokeUserTokens(entry_id_, pending_revoke_token_ids_,
+                              { this, &RouterUserDialog::onRevokeResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -385,10 +385,10 @@ void RouterUserDialog::onRevokeAllTokensClicked()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
@@ -402,8 +402,8 @@ void RouterUserDialog::onRevokeAllTokensClicked()
 
     ui->tab_sessions->setEnabled(false);
     LOG(INFO) << "[ACTION] Revoking all device tokens of user" << entry_id_;
-    router->revokeUserTokens(entry_id_, /*token_ids=*/QList<qint64>(),
-                             { this, &RouterUserDialog::onRevokeResultReceived });
+    session->revokeUserTokens(entry_id_, /*token_ids=*/QList<qint64>(),
+                              { this, &RouterUserDialog::onRevokeResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -568,27 +568,27 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::fetchUser()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router || entry_id_ <= 0)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session || entry_id_ <= 0)
         return;
 
-    router->findUser(entry_id_, { this, &RouterUserDialog::onUserListReceived });
-    router->listUserTokens(entry_id_, { this, &RouterUserDialog::onTokenListReceived });
+    session->findUser(entry_id_, { this, &RouterUserDialog::onUserListReceived });
+    session->listUserTokens(entry_id_, { this, &RouterUserDialog::onTokenListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QString& username)
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
     setEnabled(false);
 
-    router->findUser(username, { this, [this, request](const proto::router::UserList& list)
+    session->findUser(username, { this, [this, request](const proto::router::UserList& list)
     {
         if (list.error_code() != proto::router::kErrorOk)
         {
@@ -615,20 +615,46 @@ void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QStr
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::submitUser(const RouterUser& request)
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance is gone";
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
     setEnabled(false);
 
     LOG(INFO) << "[ACTION] Submitting user (entry_id:" << entry_id_ << ")";
-    if (entry_id_ > 0)
-        router->modifyUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
-    else
-        router->addUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
+
+    if (entry_id_ <= 0)
+    {
+        session->addUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
+        return;
+    }
+
+    // A rotation of our own credentials ends this session. The client signs in again by itself
+    // and needs the new credentials for that. The reply does not carry them back, so they are
+    // captured here and stored once the router has accepted the change.
+    if (model_.accountChanged() && entry_id_ == session->userId())
+    {
+        const QString user_name = ui->edit_username->text();
+        const SecureString password = ui->edit_password->password();
+
+        session->modifyUser(request.serialize(), { this,
+            [this, user_name, password](const proto::router::UserResult& result)
+        {
+            if (result.error_code() == proto::router::kErrorOk)
+            {
+                if (RouterSession* session = RouterController::session(router_id_))
+                    session->storeCredentials(user_name, password);
+            }
+
+            onUserResultReceived(result);
+        } });
+        return;
+    }
+
+    session->modifyUser(request.serialize(), { this, &RouterUserDialog::onUserResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

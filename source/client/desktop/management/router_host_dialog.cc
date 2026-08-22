@@ -27,6 +27,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
+#include "client/router_controller.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -37,7 +38,7 @@
 
 //--------------------------------------------------------------------------------------------------
 RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_name,
-                                   const Router::Host& host, QWidget* parent)
+                                   const RouterHost& host, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterHostDialog>()),
       router_id_(router_id),
@@ -73,12 +74,10 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
-    Router* router = Router::instance(router_id_);
-    CHECK(router);
-
-    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
     {
-        if (status != Router::Status::ONLINE)
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
             reject();
     });
 
@@ -94,8 +93,15 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
     // response arrives so the user cannot submit before knowing which group they have selected.
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    router->listGroups(Router::CachePolicy::USE_CACHE, host_.workspace_id,
-                       { this, &RouterHostDialog::onGroupListReceived });
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+    {
+        LOG(ERROR) << "No session for router" << router_id_;
+        return;
+    }
+
+    session->listGroups(RouterSession::CachePolicy::USE_CACHE, host_.workspace_id,
+                        { this, &RouterHostDialog::onGroupListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,7 +111,7 @@ RouterHostDialog::~RouterHostDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostDialog::onGroupListReceived(const Router::GroupList& list)
+void RouterHostDialog::onGroupListReceived(const RouterGroupList& list)
 {
     if (list.error_code != proto::router::kErrorOk)
     {
@@ -119,7 +125,7 @@ void RouterHostDialog::onGroupListReceived(const Router::GroupList& list)
 
     QList<GroupComboBox::Entry> entries;
     entries.reserve(list.groups.size());
-    for (const Router::Group& group : std::as_const(list.groups))
+    for (const RouterGroup& group : std::as_const(list.groups))
     {
         GroupComboBox::Entry& entry = entries.emplaceBack();
         entry.id = group.entry_id;
@@ -158,10 +164,10 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router not available for id:" << router_id_;
+        LOG(ERROR) << "No session for router" << router_id_;
         reject();
         return;
     }
@@ -188,7 +194,7 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Edit host accepted, sending request";
     ui->button_box->button(QDialogButtonBox::Ok)->setEnabled(false);
-    router->editHost(host_, { this, &RouterHostDialog::onHostResultReceived });
+    session->editHost(host_, { this, &RouterHostDialog::onHostResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------

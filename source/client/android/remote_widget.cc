@@ -31,7 +31,7 @@
 #include "base/gui_application.h"
 #include "client/config.h"
 #include "client/database.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/android/router_host_editor.h"
 #include "client/android/search_widget.h"
 #include "common/android/bottom_sheet.h"
@@ -65,30 +65,32 @@ constexpr int kMoreRole = Qt::UserRole + 1;
 constexpr qint64 kHostPageSize = proto::router::kMaxHostPageSize;
 
 //--------------------------------------------------------------------------------------------------
-QString statusIconPath(Router::Status status)
+QString statusIconPath(RouterStatus status)
 {
     switch (status)
     {
-        case Router::Status::CONNECTING:
+        case RouterStatus::CONNECTING:
             return ":/img/router-connecting.svg";
 
-        case Router::Status::ONLINE:
+        case RouterStatus::ONLINE:
             return ":/img/router-online.svg";
 
-        case Router::Status::OFFLINE:
+        case RouterStatus::TWO_FACTOR:
+            return ":/img/lock.svg";
+
+        case RouterStatus::OFFLINE:
         default:
             return ":/img/router-offline.svg";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void populateGroups(qint64 router_id, QTreeWidgetItem* workspace_item,
-                    const QList<Router::Group>& groups)
+void populateGroups(qint64 router_id, QTreeWidgetItem* workspace_item, const QList<RouterGroup>& groups)
 {
     qDeleteAll(workspace_item->takeChildren());
 
-    QHash<qint64, QList<const Router::Group*>> children_of;
-    for (const Router::Group& group : groups)
+    QHash<qint64, QList<const RouterGroup*>> children_of;
+    for (const RouterGroup& group : groups)
         children_of[group.parent_id].append(&group);
 
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
@@ -96,7 +98,7 @@ void populateGroups(qint64 router_id, QTreeWidgetItem* workspace_item,
     QSet<qint64> visited;
     std::function<void(qint64, QTreeWidgetItem*)> build = [&](qint64 parent_id, QTreeWidgetItem* parent)
     {
-        for (const Router::Group* group : std::as_const(children_of[parent_id]))
+        for (const RouterGroup* group : std::as_const(children_of[parent_id]))
         {
             // Guard against cycles and duplicate entry_ids in the untrusted group list.
             if (visited.contains(group->entry_id))
@@ -189,7 +191,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     {
         if (item && item->data(0, kMoreRole).toBool())
         {
-            fetchHosts(Router::CachePolicy::USE_CACHE, true);
+            fetchHosts(RouterSession::CachePolicy::USE_CACHE, true);
             return;
         }
 
@@ -242,6 +244,44 @@ RemoteWidget::RemoteWidget(QWidget* parent)
         showSessionMenu(HostConfig::forRouterHost(match.router_id, match.host.host_id, name));
     });
 
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 id, RouterStatus status)
+    {
+        if (QTreeWidgetItem* item = routerItem(id))
+        {
+            item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
+            if (status != RouterStatus::ONLINE)
+                qDeleteAll(item->takeChildren());
+        }
+
+        if (status == RouterStatus::ONLINE)
+        {
+            fetchRouter(id, RouterSession::CachePolicy::RELOAD);
+        }
+        else if ((stack_->currentIndex() == kPageHosts ||
+                  stack_->currentIndex() == kPageTempHosts) && id == host_router_id_)
+        {
+            // The open host or temporary-host list belongs to a router that just dropped; return
+            // to the tree root.
+            showTree();
+        }
+    });
+    connect(&controller, &RouterController::sig_workspacesChanged, this,
+            [this](qint64 id) { fetchRouter(id, RouterSession::CachePolicy::RELOAD); });
+    connect(&controller, &RouterController::sig_groupsChanged, this,
+            [this](qint64 id) { fetchRouter(id, RouterSession::CachePolicy::RELOAD); });
+    connect(&controller, &RouterController::sig_tempHostsChanged, this, [this](qint64 id)
+    {
+        if (stack_->currentIndex() == kPageTempHosts && id == host_router_id_)
+            fetchTempHosts();
+    });
+    connect(&controller, &RouterController::sig_hostsChanged, this, [this](qint64 id)
+    {
+        if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
+            fetchHosts(RouterSession::CachePolicy::RELOAD);
+    });
+
     reload();
 }
 
@@ -266,15 +306,13 @@ void RemoteWidget::reload()
         return;
 
     showTree();
-    connectRouters();
 
     tree_->clear();
 
     for (const RouterConfig& config : Database::instance().routerList())
     {
         const qint64 router_id = config.routerId();
-        const Router* router = Router::instance(router_id);
-        const Router::Status status = router ? router->status() : Router::Status::OFFLINE;
+        const RouterStatus status = RouterController::status(router_id);
 
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { config.displayLabel() });
         item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
@@ -282,8 +320,8 @@ void RemoteWidget::reload()
         item->setData(0, kWorkspaceIdRole, kRouterMarker);
         item->setExpanded(true);
 
-        if (status == Router::Status::ONLINE)
-            fetchRouter(router_id, Router::CachePolicy::USE_CACHE);
+        if (status == RouterStatus::ONLINE)
+            fetchRouter(router_id, RouterSession::CachePolicy::USE_CACHE);
     }
 }
 
@@ -353,8 +391,7 @@ void RemoteWidget::countSearchSources()
 
     for (const RouterConfig& config : std::as_const(routers))
     {
-        Router* router = Router::instance(config.routerId());
-        if (!router || router->status() != Router::Status::ONLINE)
+        if (!RouterController::session(config.routerId()))
             continue;
 
         SearchSource source;
@@ -371,12 +408,12 @@ void RemoteWidget::countSearchSources()
     for (int slot = 0; slot < search_sources_.size(); ++slot)
     {
         const qint64 router_id = search_sources_[slot].router_id;
-        Router* router = Router::instance(router_id);
+        RouterSession* session = RouterController::session(router_id);
 
         // A single record is asked for: what is wanted here is the size of the whole match set,
         // and the page itself is fetched once every router has reported.
-        router->searchHosts(query, 0, 1, { this,
-            [this, generation, slot, router_id](const Router::HostList& list)
+        session->searchHosts(query, 0, 1, { this,
+            [this, generation, slot, router_id](const RouterHostList& list)
         {
             if (generation != search_generation_)
                 return;
@@ -457,15 +494,15 @@ void RemoteWidget::fetchSearchPage()
     for (int i = 0; i < search_slices_.size(); ++i)
     {
         const qint64 router_id = search_sources_[search_slices_[i].source].router_id;
-        Router* router = Router::instance(router_id);
-        if (!router)
+        RouterSession* session = RouterController::session(router_id);
+        if (!session)
         {
             search_slices_[i].ready = true;
             continue;
         }
 
-        router->searchHosts(query, search_slices_[i].offset, search_slices_[i].count, { this,
-            [this, generation, i, router_id](const Router::HostList& list)
+        session->searchHosts(query, search_slices_[i].offset, search_slices_[i].count, { this,
+            [this, generation, i, router_id](const RouterHostList& list)
         {
             if (generation != search_generation_ || i >= search_slices_.size())
                 return;
@@ -500,7 +537,7 @@ void RemoteWidget::showSearchPage()
     {
         const qint64 router_id = search_sources_[slice.source].router_id;
 
-        for (const Router::Host& host : std::as_const(slice.hosts))
+        for (const RouterHost& host : std::as_const(slice.hosts))
             search_results_.append({ router_id, host });
     }
 
@@ -574,7 +611,7 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(item->text(0), true);
 
-    fetchHosts(Router::CachePolicy::USE_CACHE);
+    fetchHosts(RouterSession::CachePolicy::USE_CACHE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -583,13 +620,12 @@ void RemoteWidget::onRefreshClicked()
     for (const RouterConfig& config : Database::instance().routerList())
     {
         const qint64 router_id = config.routerId();
-        Router* router = Router::instance(router_id);
-        if (router && router->status() == Router::Status::ONLINE)
-            fetchRouter(router_id, Router::CachePolicy::RELOAD);
+        if (RouterController::session(router_id))
+            fetchRouter(router_id, RouterSession::CachePolicy::RELOAD);
     }
 
     if (stack_->currentIndex() == kPageHosts)
-        fetchHosts(Router::CachePolicy::RELOAD);
+        fetchHosts(RouterSession::CachePolicy::RELOAD);
     else if (stack_->currentIndex() == kPageTempHosts)
         fetchTempHosts();
 }
@@ -609,76 +645,14 @@ void RemoteWidget::onHostLongPressed(QTreeWidgetItem* item)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::connectRouters()
+void RemoteWidget::fetchRouter(qint64 router_id, RouterSession::CachePolicy policy)
 {
-    const QList<RouterConfig> configs = Database::instance().routerList();
-
-    QSet<qint64> present;
-    for (const RouterConfig& config : configs)
-        present.insert(config.routerId());
-
-    // Forget routers that were removed; their Router objects (and our connections to them) are gone.
-    connected_routers_.intersect(present);
-
-    for (const RouterConfig& config : configs)
-    {
-        const qint64 router_id = config.routerId();
-        if (connected_routers_.contains(router_id))
-            continue;
-
-        Router* router = Router::instance(router_id);
-        if (!router)
-            continue;
-
-        connect(router, &Router::sig_statusChanged, this, [this](qint64 id, Router::Status status)
-        {
-            if (QTreeWidgetItem* item = routerItem(id))
-            {
-                item->setIcon(0, GuiApplication::svgIcon(statusIconPath(status)));
-                if (status != Router::Status::ONLINE)
-                    qDeleteAll(item->takeChildren());
-            }
-
-            if (status == Router::Status::ONLINE)
-            {
-                fetchRouter(id, Router::CachePolicy::RELOAD);
-            }
-            else if ((stack_->currentIndex() == kPageHosts ||
-                      stack_->currentIndex() == kPageTempHosts) && id == host_router_id_)
-            {
-                // The open host or temporary-host list belongs to a router that just dropped; return
-                // to the tree root.
-                showTree();
-            }
-        });
-        connect(router, &Router::sig_workspacesChanged, this,
-                [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
-        connect(router, &Router::sig_groupsChanged, this,
-                [this](qint64 id) { fetchRouter(id, Router::CachePolicy::RELOAD); });
-        connect(router, &Router::sig_tempHostsChanged, this, [this](qint64 id)
-        {
-            if (stack_->currentIndex() == kPageTempHosts && id == host_router_id_)
-                fetchTempHosts();
-        });
-        connect(router, &Router::sig_hostsChanged, this, [this](qint64 id)
-        {
-            if (stack_->currentIndex() == kPageHosts && id == host_router_id_)
-                fetchHosts(Router::CachePolicy::RELOAD);
-        });
-
-        connected_routers_.insert(router_id);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
-{
-    Router* router = Router::instance(router_id);
-    if (!router || router->status() != Router::Status::ONLINE)
+    RouterSession* session = RouterController::session(router_id);
+    if (!session)
         return;
 
-    router->listWorkspaces(policy, 0,
-        { this, [this, router_id, policy](const Router::WorkspaceList& list)
+    session->listWorkspaces(policy, 0,
+        { this, [this, router_id, policy](const RouterWorkspaceList& list)
     {
         // An error reply carries no list; applying it would wipe the workspaces of the router
         // from the tree. Keep what is shown.
@@ -705,9 +679,9 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
         temp_item->setData(0, kWorkspaceIdRole, kTempHostsMarker);
 
         const QIcon icon = GuiApplication::svgIcon(":/img/workspace.svg");
-        Router* session = Router::instance(router_id);
+        RouterSession* session = RouterController::session(router_id);
 
-        for (const Router::Workspace& workspace : list.workspaces)
+        for (const RouterWorkspace& workspace : list.workspaces)
         {
             QTreeWidgetItem* item = new QTreeWidgetItem(router_item, { workspace.name });
             item->setIcon(0, icon);
@@ -721,7 +695,7 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
 
             const qint64 workspace_id = workspace.entry_id;
             session->listGroups(policy, workspace_id, { this,
-                [this, router_id, workspace_id](const Router::GroupList& result)
+                [this, router_id, workspace_id](const RouterGroupList& result)
             {
                 if (result.error_code != proto::router::kErrorOk)
                 {
@@ -736,10 +710,10 @@ void RemoteWidget::fetchRouter(qint64 router_id, Router::CachePolicy policy)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::fetchHosts(Router::CachePolicy policy, bool append)
+void RemoteWidget::fetchHosts(RouterSession::CachePolicy policy, bool append)
 {
-    Router* router = Router::instance(host_router_id_);
-    if (!router || router->status() != Router::Status::ONLINE)
+    RouterSession* session = RouterController::session(host_router_id_);
+    if (!session)
         return;
 
     const qint64 router_id = host_router_id_;
@@ -754,8 +728,8 @@ void RemoteWidget::fetchHosts(Router::CachePolicy policy, bool append)
     request.set_offset(offset);
     request.set_count(kHostPageSize);
 
-    router->listHosts(policy, std::move(request), { this,
-        [this, router_id, workspace_id, group_id, append](const Router::HostList& list)
+    session->listHosts(policy, std::move(request), { this,
+        [this, router_id, workspace_id, group_id, append](const RouterHostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
         if (stack_->currentIndex() != kPageHosts || router_id != host_router_id_ ||
@@ -786,7 +760,7 @@ void RemoteWidget::rebuildHostRows()
 {
     host_tree_->clear();
 
-    for (const Router::Host& host : std::as_const(hosts_))
+    for (const RouterHost& host : std::as_const(hosts_))
     {
         const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
 
@@ -808,13 +782,13 @@ void RemoteWidget::rebuildHostRows()
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::fetchTempHosts()
 {
-    Router* router = Router::instance(host_router_id_);
-    if (!router || router->status() != Router::Status::ONLINE)
+    RouterSession* session = RouterController::session(host_router_id_);
+    if (!session)
         return;
 
     const qint64 router_id = host_router_id_;
 
-    router->listTempHosts({ this, [this, router_id](const Router::TempHostList& list)
+    session->listTempHosts({ this, [this, router_id](const RouterTempHostList& list)
     {
         // Ignore the result if the selection changed while the request was in flight.
         if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
@@ -830,7 +804,7 @@ void RemoteWidget::fetchTempHosts()
         temp_host_tree_->clear();
         temp_hosts_ = list.hosts;
 
-        for (const Router::TempHost& host : list.hosts)
+        for (const RouterTempHost& host : list.hosts)
         {
             QTreeWidgetItem* item = new QTreeWidgetItem(
                 temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
@@ -855,7 +829,7 @@ bool RemoteWidget::hostConfigForItem(QTreeWidgetItem* item, HostConfig* config) 
 
     const HostId host_id = item->data(0, kHostIdRole).value<HostId>();
 
-    for (const Router::Host& host : std::as_const(hosts_))
+    for (const RouterHost& host : std::as_const(hosts_))
     {
         if (host.host_id != host_id)
             continue;
@@ -877,7 +851,7 @@ bool RemoteWidget::tempHostConfigForItem(QTreeWidgetItem* item, HostConfig* conf
 
     const HostId temp_id = item->data(0, kHostIdRole).value<HostId>();
 
-    for (const Router::TempHost& host : std::as_const(temp_hosts_))
+    for (const RouterTempHost& host : std::as_const(temp_hosts_))
     {
         if (host.temp_id != temp_id)
             continue;

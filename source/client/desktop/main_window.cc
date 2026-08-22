@@ -38,7 +38,7 @@
 #include "base/peer/host_id.h"
 #include "client/database.h"
 #include "client/host_url.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/client_tab.h"
 #include "client/desktop/client_window.h"
@@ -225,18 +225,18 @@ void MainWindow::connectToUrl(const QString& url)
 
         // The record of the host on the router carries the name to show for it, so it is looked
         // up before the session opens. Without a connected router the session opens unnamed.
-        Router* router = Router::instance(router_id);
-        if (router && router->status() == Router::Status::ONLINE)
+        RouterSession* session = RouterController::session(router_id);
+        if (session)
         {
             HostId host_id = host_url.hostId();
             proto::peer::SessionType session_type = host_url.sessionType();
 
-            router->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize, { this,
-                [this, router_id, host_id, session_type](const Router::HostList& list)
+            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
+                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
             {
                 QString name;
 
-                for (const Router::Host& entry : std::as_const(list.hosts))
+                for (const RouterHost& entry : std::as_const(list.hosts))
                 {
                     if (entry.host_id != host_id)
                         continue;

@@ -41,6 +41,10 @@ public slots:
     // Stops the connection to |router_id| and cancels its reconnect.
     void onDisconnect(qint64 router_id);
 
+    // Drops the current connection to |router_id| and lets the timer bring it back, the same way a
+    // channel error does. Used where the session must start over instead of ending.
+    void onReconnect(qint64 router_id);
+
     // Sends an outgoing message on the given channel of |router_id|.
     void onSendMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
 

@@ -22,6 +22,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
+#include <QPushButton>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 #include <QTimer>
@@ -30,7 +31,9 @@
 
 #include <qrcodegen.hpp>
 
+#include "base/logging.h"
 #include "base/time_types.h"
+#include "base/crypto/totp.h"
 #include "ui_two_factor_enroll_dialog.h"
 
 namespace {
@@ -72,11 +75,18 @@ QPixmap renderQrPixmap(const qrcodegen::QrCode& qr, int max_size)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget* parent)
+TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, bool code_refused,
+                                             QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::TwoFactorEnrollDialog>())
 {
     ui->setupUi(this);
+
+    if (code_refused)
+    {
+        ui->label_intro->setText(tr("The previous code was not accepted.") + ' ' +
+                                 ui->label_intro->text());
+    }
 
     // Pull the Base32 secret out of the URI's query string and insert a space every four
     // characters so the user can transcribe it by hand when QR scanning is unavailable. The
@@ -95,13 +105,35 @@ TwoFactorEnrollDialog::TwoFactorEnrollDialog(const QString& otpauth_uri, QWidget
 
     // Medium error-correction matches what GA/MS Authenticator emit by default; it absorbs
     // ~15% damage which is more than enough for an on-screen, never-printed image.
-    const qrcodegen::QrCode qr =
-        qrcodegen::QrCode::encodeText(otpauth_uri.toUtf8().constData(), qrcodegen::QrCode::Ecc::MEDIUM);
-    ui->label_qr->setPixmap(renderQrPixmap(qr, 220));
+    //
+    // The encoder throws when the payload does not fit its largest symbol. Letting that reach the
+    // event loop would end the process, and the enrollment does not need the image: the setup key
+    // above is the same secret, and the text at the top already offers typing it instead.
+    try
+    {
+        const qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(
+            otpauth_uri.toUtf8().constData(), qrcodegen::QrCode::Ecc::MEDIUM);
+        ui->label_qr->setPixmap(renderQrPixmap(qr, 220));
+    }
+    catch (const std::exception& ex)
+    {
+        LOG(ERROR) << "Failed to render enrollment QR code:" << ex.what();
+        ui->label_qr->setVisible(false);
+    }
 
     ui->edit_code->setValidator(
         new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
+
+    // An incomplete code costs the same as a wrong one: the router ends the session over it. So it
+    // never leaves here.
+    QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok);
+    ok_button->setEnabled(false);
+
+    connect(ui->edit_code, &QLineEdit::textChanged, this, [ok_button](const QString& text)
+    {
+        ok_button->setEnabled(text.trimmed().size() == Totp::kDefaultDigits);
+    });
 
     connect(ui->buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);

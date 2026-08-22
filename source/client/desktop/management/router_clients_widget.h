@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include "client/router.h"
 #include "client/desktop/management/client_list_model.h"
 #include "client/desktop/management/content_widget.h"
 

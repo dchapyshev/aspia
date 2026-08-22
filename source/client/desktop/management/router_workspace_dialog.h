@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "client/page_model.h"
-#include "client/router.h"
+#include "client/router_types.h"
 #include "client/desktop/management/workspace_edit_model.h"
 
 class QAbstractButton;
@@ -52,9 +52,9 @@ public:
     ~RouterWorkspaceDialog() final;
 
 private slots:
-    void onWorkspaceListReceived(const Router::WorkspaceList& list);
+    void onWorkspaceListReceived(const RouterWorkspaceList& list);
     void onUserListReceived(const proto::router::UserList& list);
-    void onHostListReceived(const Router::HostList& list);
+    void onHostListReceived(const RouterHostList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
     void onButtonBoxClicked(QAbstractButton* button);
@@ -71,11 +71,11 @@ private:
     // one and apply right away, so a host operation needs a workspace to move the host into. In
     // create mode the first one creates the workspace from the name of the form and runs after
     // the reply.
-    void moveHost(const Router::Host& host, qint64 workspace_id);
+    void moveHost(const RouterHost& host, qint64 workspace_id);
     void runPendingHostMove();
 
     // The record of the host of a list, empty when the pages no longer carry it.
-    Router::Host hostById(quint64 host_id) const;
+    RouterHost hostById(quint64 host_id) const;
 
     void fetchUsers();
     void fetchMemberNames();
@@ -108,11 +108,11 @@ private:
 
     // The pages of hosts as they arrived; the hosts are not part of the model, because a host
     // operation is applied by the router before it is shown.
-    QList<Router::Host> hosts_in_;
-    QList<Router::Host> hosts_free_;
+    QList<RouterHost> hosts_in_;
+    QList<RouterHost> hosts_free_;
 
     // The host operation waiting for the workspace of a create-mode dialog to be created.
-    Router::Host pending_host_;
+    RouterHost pending_host_;
     qint64 pending_host_workspace_id_ = 0;
     bool pending_host_move_ = false;
 

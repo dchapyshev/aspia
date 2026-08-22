@@ -104,7 +104,6 @@ RouterEditor::~RouterEditor() = default;
 void RouterEditor::prepareForAdd()
 {
     router_id_ = -1;
-    device_token_.clear();
 
     name_->clear();
     address_->clear();
@@ -127,7 +126,6 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
     }
 
     router_id_ = router_id;
-    device_token_ = router->deviceToken();
 
     name_->setText(router->displayName());
     address_->setText(router->address());
@@ -188,9 +186,19 @@ void RouterEditor::onSaveClicked()
     data.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     data.setUsername(username);
     data.setPassword(password);
-    data.setDeviceToken(device_token_);
 
     Database& db = Database::instance();
+
+    // The token is not edited here, and the session of this record replaces it every time it passes
+    // the two-factor stage. It is read now instead of when the editor opened, so a token issued
+    // meanwhile survives the save.
+    if (router_id_ >= 0)
+    {
+        const std::optional<RouterConfig> stored = db.findRouter(router_id_);
+        if (stored.has_value())
+            data.setDeviceToken(stored->deviceToken());
+    }
+
     const bool saved = (router_id_ < 0) ? db.addRouter(data) : db.modifyRouter(data);
     if (!saved)
     {

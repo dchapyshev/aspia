@@ -18,7 +18,6 @@
 
 #include "router/client_operator.h"
 
-#include <QDateTime>
 
 #include "base/core_application.h"
 #include "base/serialization.h"
@@ -77,8 +76,7 @@ ClientOperator::~ClientOperator()
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::start()
 {
-    std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
-    start_time_ = std::chrono::system_clock::to_time_t(time_point);
+    start_time_ = Clock::now();
     tcp_channel_->setPaused(false);
     emit sig_started(session_id_);
     emit sig_notifyChanged(ClientWorker::NOTIFY_CLIENTS);
@@ -215,7 +213,7 @@ void ClientOperator::applyRequestResult(const RequestResult& result)
         emit sig_notifyChanged(result.notify_flags);
 
     if (result.stop_user_id > 0)
-        emit sig_stopClients(result.stop_user_id, result.stop_token_ids, 0);
+        emit sig_stopClients(result.stop_user_id, result.stop_token_ids);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -240,15 +238,14 @@ void ClientOperator::onStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::doTwoFactorChallenge()
 {
-    applyTwoFactorResult(two_factor_.start(database_, requestCaller()));
+    applyTwoFactorResult(two_factor_.start(database_, requestCaller(), secondsSinceEpoch()));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::readTwoFactorResponse(const proto::router::TwoFactorResponse& response)
 {
     applyTwoFactorResult(two_factor_.handleResponse(
-        database_, requestCaller(), response, address(),
-        QDateTime::currentSecsSinceEpoch()));
+        database_, requestCaller(), response, address(), secondsSinceEpoch()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,6 +262,10 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
                 challenge->set_otpauth_uri(std::move(result.challenge.otpauth_uri));
             if (result.challenge.token_rejected)
                 challenge->set_token_rejected(true);
+            if (result.challenge.code_rejected)
+                challenge->set_code_rejected(true);
+            if (result.challenge.blocked_seconds)
+                challenge->set_blocked_seconds(result.challenge.blocked_seconds);
 
             sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         }
@@ -309,7 +310,9 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     // Sent on every login, with or without a token to hand over: this is what opens the session on
     // the client side.
     proto::router::RouterToClient message;
-    message.mutable_login_result()->set_new_token(std::move(new_token));
+    proto::router::LoginResult* login_result = message.mutable_login_result();
+    login_result->set_new_token(std::move(new_token));
+    login_result->set_user_id(userId());
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
@@ -482,15 +485,9 @@ void ClientOperator::readChangePasswordRequest(const proto::router::ChangePasswo
 
     CLOG(INFO) << "User" << userName() << "rotated own credentials";
 
-    // This request always rotates the password (tokens are revoked in the transaction). Drop the
-    // user's other live sessions but keep this one.
-    emit sig_stopClients(userId(), {}, sessionId());
-
-    // The rotation revoked every device token, including this session's. Re-run the 2FA stage
-    // exactly as on a fresh connection: clear the completion flag and re-challenge. The client
-    // must pass 2FA again before it gets the new LoginResult (sent by completeTwoFactor); a failed
-    // attempt tears the session down inside readTwoFactorResponse.
-    two_factor_completed_ = false;
-    token_id_ = 0;
-    doTwoFactorChallenge();
+    // Every session of the user, this one included: their channels are keyed by the password
+    // that is gone and their device tokens died with it in the same transaction. The client
+    // reconnects with the new password and passes the two-factor stage on a fresh session, so the
+    // result sent above is what tells it which password to use.
+    emit sig_stopClients(userId(), {});
 }

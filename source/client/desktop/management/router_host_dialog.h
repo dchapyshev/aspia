@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "client/router.h"
+#include "client/router_types.h"
 
 class QAbstractButton;
 
@@ -40,12 +40,12 @@ class RouterHostDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterHostDialog(qint64 router_id, const QString& workspace_name, const Router::Host& host,
+    RouterHostDialog(qint64 router_id, const QString& workspace_name, const RouterHost& host,
                      QWidget* parent);
     ~RouterHostDialog() final;
 
 private slots:
-    void onGroupListReceived(const Router::GroupList& list);
+    void onGroupListReceived(const RouterGroupList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
     void onButtonBoxClicked(QAbstractButton* button);
 
@@ -55,7 +55,7 @@ private:
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;
     QString workspace_name_;
-    Router::Host host_;
+    RouterHost host_;
 
     Q_DISABLE_COPY_MOVE(RouterHostDialog)
 };

@@ -21,6 +21,7 @@
 #include <QAbstractButton>
 
 #include "base/logging.h"
+#include "client/router_controller.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -53,17 +54,23 @@ RouterGroupDialog::RouterGroupDialog(
     // (in modify mode) both depend on it.
     setEnabled(false);
 
-    Router* router = Router::instance(router_id_);
-    CHECK(router);
-
-    connect(router, &Router::sig_statusChanged, this, [this](qint64 /* router_id */, Router::Status status)
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
     {
-        if (status != Router::Status::ONLINE)
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
             reject();
     });
 
-    router->listGroups(Router::CachePolicy::USE_CACHE, workspace_id_,
-                       { this, &RouterGroupDialog::onGroupListReceived });
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+    {
+        LOG(ERROR) << "No session for router" << router_id_;
+        return;
+    }
+
+    session->listGroups(RouterSession::CachePolicy::USE_CACHE, workspace_id_,
+                        { this, &RouterGroupDialog::onGroupListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +80,7 @@ RouterGroupDialog::~RouterGroupDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupDialog::onGroupListReceived(const Router::GroupList& list)
+void RouterGroupDialog::onGroupListReceived(const RouterGroupList& list)
 {
     if (list.error_code != proto::router::kErrorOk)
     {
@@ -90,7 +97,7 @@ void RouterGroupDialog::onGroupListReceived(const Router::GroupList& list)
 
     qint64 selected_parent = default_parent_id_;
 
-    for (const Router::Group& group : std::as_const(list.groups))
+    for (const RouterGroup& group : std::as_const(list.groups))
     {
         GroupComboBox::Entry& entry = entries.emplaceBack();
         entry.id = group.entry_id;
@@ -151,17 +158,17 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    Router::Group group;
+    RouterGroup group;
     group.entry_id  = entry_id_;
     group.parent_id = ui->combo_parent->currentGroupId();
     group.name      = name;
     group.comment   = ui->edit_comment->toPlainText();
     group.revision  = base_revision_;
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
-        LOG(ERROR) << "Router instance not found:" << router_id_;
+        LOG(ERROR) << "No session for router" << router_id_;
         MsgBox::warning(this, tr("Unknown internal error."));
         return;
     }
@@ -172,8 +179,7 @@ void RouterGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     LOG(INFO) << "[ACTION] Submitting group (entry_id:" << entry_id_
               << ", parent_id:" << group.parent_id << ")";
     if (entry_id_ > 0)
-        router->modifyGroup(workspace_id_, group,
-                            { this, &RouterGroupDialog::onGroupResultReceived });
+        session->modifyGroup(workspace_id_, group, { this, &RouterGroupDialog::onGroupResultReceived });
     else
-        router->addGroup(workspace_id_, group, { this, &RouterGroupDialog::onGroupResultReceived });
+        session->addGroup(workspace_id_, group, { this, &RouterGroupDialog::onGroupResultReceived });
 }

@@ -30,7 +30,7 @@
 
 #include "base/logging.h"
 #include "base/peer/user.h"
-#include "client/router.h"
+#include "client/router_controller.h"
 #include "client/desktop/management/router_user_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -85,6 +85,24 @@ RouterUsersWidget::RouterUsersWidget(QWidget* parent)
     updateUsersPagination();
 
     ui->tree_users->installEventFilter(this);
+
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_usersChanged, this, [this](qint64 router_id)
+    {
+        if (router_id == router_id_)
+            fetchUsers();
+    });
+    connect(&controller, &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (router_id == router_id_ && status != RouterStatus::ONLINE)
+        {
+            model_->clear();
+            users_page_.clear();
+            updateUsersPagination();
+            updateStatusLabel();
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -96,27 +114,6 @@ RouterUsersWidget::~RouterUsersWidget()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::showRouter(qint64 router_id)
 {
-    if (router_id_ != router_id)
-    {
-        if (Router* prev = Router::instance(router_id_))
-            disconnect(prev, nullptr, this, nullptr);
-
-        if (Router* curr = Router::instance(router_id))
-        {
-            connect(curr, &Router::sig_usersChanged, this, &RouterUsersWidget::fetchUsers);
-            connect(curr, &Router::sig_statusChanged, this, [this](qint64, Router::Status status)
-            {
-                if (status != Router::Status::ONLINE)
-                {
-                    model_->clear();
-                    users_page_.clear();
-                    updateUsersPagination();
-                    updateStatusLabel();
-                }
-            });
-        }
-    }
-
     router_id_ = router_id;
 
     model_->clear();
@@ -241,12 +238,12 @@ void RouterUsersWidget::onDeleteUser()
         return;
     }
 
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
     LOG(INFO) << "[ACTION] Delete user accepted by user";
-    router->deleteUser(entry_id, { this, &RouterUsersWidget::onUserResultReceived });
+    session->deleteUser(entry_id, { this, &RouterUsersWidget::onUserResultReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -406,15 +403,15 @@ void RouterUsersWidget::onUsersNextClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::fetchUsers()
 {
-    Router* router = Router::instance(router_id_);
-    if (!router)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
         return;
 
-    if (router->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    router->listUsers(users_page_.offset(), users_page_.pageSize(),
-                      { this, &RouterUsersWidget::onUserListReceived });
+    session->listUsers(users_page_.offset(), users_page_.pageSize(),
+                       { this, &RouterUsersWidget::onUserListReceived });
 }
 
 //--------------------------------------------------------------------------------------------------
