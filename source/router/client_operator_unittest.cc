@@ -165,6 +165,34 @@ TEST_F(ClientOperatorTest, TwoFactorStageOpensOnStart)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The channel starts paused and the session lifts the pause only after the challenge is out, so
+// an answer the peer pushed before the stage opened waits in the channel and passes the stage
+// once the question is asked.
+TEST_F(ClientOperatorTest, AnswerSentBeforeTheChallengeWaitsForIt)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [this](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
+
+        EXPECT_TRUE(channel->isPaused());
+        EXPECT_TRUE(channel->nothingSent());
+        EXPECT_FALSE(client.isTwoFactorCompleted());
+
+        client.start();
+
+        EXPECT_FALSE(channel->isPaused());
+        EXPECT_TRUE(client.isTwoFactorCompleted());
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        EXPECT_TRUE(message->has_login_result());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // Nothing is served before the second factor: a client that skips the stage and asks for data gets
 // no answer at all.
 TEST_F(ClientOperatorTest, RequestsBeforeTheSecondFactorAreDropped)
@@ -233,6 +261,10 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         int finished = 0;
         QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
 
+        // The owner stops the session it is told about; the stand-in here does the same, so the
+        // teardown leaves the channel silenced the way it is in the worker.
+        QObject::connect(&client, &ClientOperator::sig_finished, [&client](qint64) { client.stop(); });
+
         client.start();
         channel->clearSent();
 
@@ -241,6 +273,7 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         EXPECT_EQ(finished, 1);
         EXPECT_FALSE(client.isTwoFactorCompleted());
         EXPECT_TRUE(channel->nothingSent());
+        EXPECT_TRUE(channel->isPaused());
     });
 
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,

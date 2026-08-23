@@ -50,7 +50,8 @@ void handleUserList(Database& database, const proto::router::UserListRequest& re
                     proto::router::UserList* out);
 
 // The active device tokens of one user. Fills |out| completely except for request_id.
-void handleUserTokenList(Database& database, const proto::router::UserTokenListRequest& request,
+void handleUserTokenList(Database& database, const RequestCaller& caller,
+                         const proto::router::UserTokenListRequest& request,
                          proto::router::UserTokenList* out);
 
 // The device token commands of the admin channel (revocation).

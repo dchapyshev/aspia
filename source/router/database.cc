@@ -275,8 +275,8 @@ bool ensureSchema(SqlDatabase& db)
         }
     }
 
-    // Bearer "remember this device" tokens issued during client sessions (admin/host sessions
-    // do not use this flow). The raw token never reaches the database - only its SHA-256
+    // Bearer "remember this device" tokens issued during client sessions (host and relay
+    // sessions do not use this flow). The raw token never reaches the database - only its SHA-256
     // hash is stored, so a leak of |router.db3| does not yield usable tokens.
     // Tokens use a sliding |kClientDeviceTokenTtlSec| TTL: every successful presentation
     // refreshes |last_used_at|, and rows whose last use predates the TTL are pruned lazily
@@ -762,7 +762,7 @@ std::string_view Database::removeUser(qint64 entry_id)
     // The cascade of the DELETE removes the user's workspace_access rows, which changes the
     // membership of those workspaces: a save built from a member list that still contains the
     // user must get kErrorConflict instead of re-adding it, so the revisions move together
-    // with the delete (see I4).
+    // with the delete (see I3).
     SqlQuery bump(db_,
         "UPDATE workspaces SET revision=revision+1 WHERE id IN "
         "(SELECT workspace_id FROM workspace_access WHERE user_id=?)");
@@ -951,12 +951,12 @@ std::string_view Database::resetUserOtp(qint64 user_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::consumeUserOtpCounter(qint64 user_id, quint64 counter)
+std::string_view Database::consumeUserOtpCounter(qint64 user_id, quint64 counter)
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return proto::router::kErrorInternalError;
     }
 
     SqlQuery query(db_, "UPDATE users SET otp_counter=? WHERE id=? AND otp_counter < ?");
@@ -967,9 +967,13 @@ bool Database::consumeUserOtpCounter(qint64 user_id, quint64 counter)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to consume OTP counter:" << db_.lastError();
-        return false;
+        return proto::router::kErrorInternalError;
     }
-    return db_.changes() > 0;
+
+    if (db_.changes() == 0)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1712,12 +1716,13 @@ void Database::hosts(qint64 offset, qint64 count, proto::router::HostList* out) 
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }
-    const std::string sql = strCat({
-        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
-        "version, os_name, address, comment, last_connect, last_modify FROM hosts",
-        " LIMIT ? OFFSET ?"});
 
-    SqlQuery query(db_, sql);
+    const char kSql[] =
+        "SELECT id, revision, workspace_id, group_id, display_name, computer_name, cpu_arch, "
+        "version, os_name, address, comment, last_connect, last_modify FROM hosts "
+        "ORDER BY id LIMIT ? OFFSET ?";
+
+    SqlQuery query(db_, kSql);
     if (!query.isValid())
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
@@ -1786,7 +1791,7 @@ void Database::hosts(qint64 workspace_id, qint64 group_id, qint64 offset,
         "version, os_name, address, comment, last_connect, last_modify "
         "FROM hosts WHERE workspace_id=?",
         any_group ? "" : " AND group_id=?",
-        " LIMIT ? OFFSET ?"});
+        " ORDER BY id LIMIT ? OFFSET ?"});
 
     SqlQuery query(db_, sql);
     if (!query.isValid())

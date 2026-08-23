@@ -18,10 +18,13 @@
 
 #include "client/router_2fa.h"
 
+#include <QTimer>
 #include <QUrl>
 #include <QUrlQuery>
 
-#include "base/core_application.h"
+#include <algorithm>
+
+#include "base/crypto/os_crypt.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -35,7 +38,7 @@ TwoFactorPrompt::TwoFactorPrompt(const QString& otpauth_uri, bool code_refused,
     : QObject(parent),
       otpauth_uri_(otpauth_uri),
       code_refused_(code_refused),
-      blocked_seconds_(blocked_seconds)
+      blocked_until_(blocked_seconds * 1000)
 {
     // Nothing
 }
@@ -43,15 +46,14 @@ TwoFactorPrompt::TwoFactorPrompt(const QString& otpauth_uri, bool code_refused,
 //--------------------------------------------------------------------------------------------------
 void TwoFactorPrompt::submitCode(const QString& totp_code)
 {
-    // The prompt answers once. It is already dying when the answer is handed in, and a repeated
-    // call must not send a second code.
-    if (answered_)
+    Router2FA* login = static_cast<Router2FA*>(parent());
+
+    // Only the question being asked answers. A prompt already dying, or one that outlived its
+    // question, must not send a code or spend the question that replaced it.
+    if (login->prompt_ != this)
         return;
 
-    if (!static_cast<Router2FA*>(parent())->sendCode(totp_code))
-        return;
-
-    answered_ = true;
+    login->sendCode(totp_code);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,11 +63,7 @@ Router2FA::Router2FA(SharedPointer<RouterConfig> config, QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
-    // The interface runs on GuiApplication, the headless tools on CoreApplication.
     router_worker_ = GuiApplication::findWorker<RouterWorker>();
-    if (!router_worker_)
-        router_worker_ = CoreApplication::findWorker<RouterWorker>();
-
     if (!router_worker_)
         LOG(ERROR) << "Router worker not found";
 }
@@ -122,45 +120,57 @@ void Router2FA::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 void Router2FA::openPrompt(const proto::router::TwoFactorChallenge& challenge,
                              const QString& otpauth_uri)
 {
+    // The seconds of the block come from the peer, and only their bounds are believed: a
+    // negative block is no block, and none runs longer than the protocol allows.
+    const qint64 blocked_seconds = std::clamp<qint64>(
+        challenge.blocked_seconds(), 0, proto::router::kMaxTwoFactorBlockSeconds);
+
     // The router asks the same question after every reconnect. The prompt lives as long as the
     // question stands, so a challenge that asks what the open prompt already shows changes
-    // nothing.
+    // nothing. The block is compared as a fact and not by the remaining seconds: both sides
+    // count the same block down, and the repeated challenge carries no news in the remainder.
     if (prompt_ && prompt_->otpauthUri() == otpauth_uri &&
         prompt_->codeRefused() == challenge.code_rejected() &&
-        prompt_->blockedSeconds() == challenge.blocked_seconds())
+        (prompt_->blockedSeconds() > 0) == (blocked_seconds > 0))
     {
         return;
     }
 
-    prompt_ = new TwoFactorPrompt(otpauth_uri, challenge.code_rejected(),
-                                  challenge.blocked_seconds(), this);
+    prompt_ = new TwoFactorPrompt(otpauth_uri, challenge.code_rejected(), blocked_seconds, this);
     emit sig_twoFactorRequired(config_->routerId());
+
+    // The wait ends on its own. The router has been counting the same block down since before
+    // this side started, so when the announced seconds run out the question is announced again
+    // and the dialog opens the regular way.
+    if (blocked_seconds > 0)
+    {
+        QTimer::singleShot(static_cast<int>(blocked_seconds * 1000), prompt_, [this]
+        {
+            emit sig_twoFactorRequired(config_->routerId());
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Router2FA::sendCode(const QString& totp_code)
+void Router2FA::sendCode(const QString& totp_code)
 {
-    if (version_.isNull())
-    {
-        LOG(INFO) << "No connection to deliver the code for router" << config_->routerId();
-        emit sig_twoFactorUndelivered(config_->routerId());
-        return false;
-    }
-
-    // The question is answered. The reply is either LoginResult or the connection going down,
-    // and the next challenge asks anew.
+    // The channel lives on another thread, so no check made here can know whether the code will
+    // reach the router. The answer is simply sent, and the question is closed on this side. The
+    // truth comes back from the router alone: LoginResult when the code was accepted, or, when
+    // it was refused or never arrived, the next challenge asking again and reopening the prompt.
     prompt_.reset();
 
     proto::router::ClientToRouter message;
     proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
     response->set_totp_code(totp_code.toStdString());
     send(message);
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Router2FA::reconnect()
 {
+    version_ = QVersionNumber();
+
     if (!router_worker_)
         return;
 
@@ -201,7 +211,13 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             }
 
             // A token from a previous successful TOTP asks nobody. The login passes on its own.
-            const QByteArray token = config_->deviceToken();
+            // The stored copy is wrapped by the OS keystore; one that does not open right now
+            // (another user or machine, a locked keychain) stays in the record untouched and
+            // the operator is asked for a code instead.
+            const QByteArray wrapped = config_->deviceToken();
+            QByteArray token;
+            if (!wrapped.isEmpty() && !OSCrypt::decryptBytes(wrapped, &token))
+                LOG(WARNING) << "Stored device token does not open here";
             if (!token.isEmpty())
             {
                 proto::router::ClientToRouter message;
@@ -270,9 +286,19 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
     {
         LOG(INFO) << "Device token issued for router" << config_->routerId();
 
-        config_->setDeviceToken(new_token);
-        if (!Database::instance().modifyRouter(*config_))
-            LOG(WARNING) << "Failed to persist new device token for router" << config_->routerId();
+        // The record stores the token wrapped by the OS keystore. A failure to wrap costs the
+        // token alone: the next login asks for a code again.
+        QByteArray wrapped;
+        if (OSCrypt::encryptBytes(new_token, &wrapped) && !wrapped.isEmpty())
+        {
+            config_->setDeviceToken(wrapped);
+            if (!Database::instance().modifyRouter(*config_))
+                LOG(WARNING) << "Failed to persist new device token for router" << config_->routerId();
+        }
+        else
+        {
+            LOG(WARNING) << "Failed to wrap new device token for router" << config_->routerId();
+        }
     }
 
     // The login is over. The owner stops feeding the object on this report and only then

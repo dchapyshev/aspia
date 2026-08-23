@@ -33,6 +33,9 @@ struct RequestCaller
     // proto::router::SessionType of the session (the one it authenticated as, out of the mask its
     // record allows). Decides what a request is allowed to ask for, e.g. the unfiltered host list.
     quint32 session_type = 0;
+
+    // Row id of the device token the session authenticated with, 0 when it holds none.
+    qint64 token_id = 0;
 };
 
 #endif // ROUTER_HANDLERS_REQUEST_CALLER_H

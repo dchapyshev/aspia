@@ -1709,6 +1709,10 @@ void ManagementTab::onOnlineCheckToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onTwoFactorRequired(qint64 router_id)
 {
+    // Being asked again, by a fresh question or by the button of the record, puts the record
+    // back into the rotation, even when another dialog holds the screen right now.
+    dismissed_two_factor_.remove(router_id);
+
     if (two_factor_dialog_)
         return;
 
@@ -1730,17 +1734,18 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     if (otpauth_uri.isEmpty())
     {
         TwoFactorCodeDialog* code_dialog = new TwoFactorCodeDialog(code_refused, this);
-        connect(code_dialog, &QDialog::finished, this, [this, prompt, code_dialog](int result)
+        connect(code_dialog, &QDialog::finished, this, [this, prompt, code_dialog, router_id](int result)
         {
             two_factor_dialog_.clear();
 
             if (result == QDialog::Accepted && prompt)
                 prompt->submitCode(code_dialog->code());
+            else if (prompt)
+                dismissed_two_factor_.insert(router_id);
 
-            // An answered question and a withdrawn one both free the screen for the next record
-            // waiting; only a question the operator dismissed stays off it.
-            if (result == QDialog::Accepted || !prompt)
-                showNextTwoFactorPrompt();
+            // The next record waiting takes the screen. A dismissed question steps aside
+            // instead of silencing it.
+            showNextTwoFactorPrompt();
         });
         dialog = code_dialog;
     }
@@ -1748,15 +1753,17 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     {
         TwoFactorEnrollDialog* enroll_dialog =
             new TwoFactorEnrollDialog(otpauth_uri, code_refused, this);
-        connect(enroll_dialog, &QDialog::finished, this, [this, prompt, enroll_dialog](int result)
+        connect(enroll_dialog, &QDialog::finished, this,
+                [this, prompt, enroll_dialog, router_id](int result)
         {
             two_factor_dialog_.clear();
 
             if (result == QDialog::Accepted && prompt)
                 prompt->submitCode(enroll_dialog->code());
+            else if (prompt)
+                dismissed_two_factor_.insert(router_id);
 
-            if (result == QDialog::Accepted || !prompt)
-                showNextTwoFactorPrompt();
+            showNextTwoFactorPrompt();
         });
         dialog = enroll_dialog;
     }
@@ -1780,6 +1787,9 @@ void ManagementTab::showNextTwoFactorPrompt()
 {
     for (qint64 router_id : ui->sidebar->routerIds())
     {
+        if (dismissed_two_factor_.contains(router_id))
+            continue;
+
         TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id);
         if (prompt && prompt->blockedSeconds() == 0)
         {

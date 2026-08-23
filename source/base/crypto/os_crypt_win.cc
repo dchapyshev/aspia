@@ -19,6 +19,7 @@
 #include "base/crypto/os_crypt.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_memory.h"
 
 #include <qt_windows.h>
 #include <wincrypt.h>
@@ -35,6 +36,7 @@ bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
 
     DATA_BLOB output;
     BOOL result = CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output);
+    memZero(&plaintext_utf8);
     if (!result)
     {
         PLOG(ERROR) << "Failed to encrypt";
@@ -67,6 +69,7 @@ bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
         QByteArray::fromRawData(reinterpret_cast<char*>(output.pbData), output.cbData);
 
     *plaintext = QString::fromUtf8(plaintext_utf8);
+    memZero(output.pbData, output.cbData);
     LocalFree(output.pbData);
     return true;
 }
@@ -123,6 +126,7 @@ bool OSCrypt::decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext)
 
     *plaintext = QByteArray(reinterpret_cast<const char*>(output.pbData),
                             static_cast<int>(output.cbData));
+    memZero(output.pbData, output.cbData);
     LocalFree(output.pbData);
     return true;
 }

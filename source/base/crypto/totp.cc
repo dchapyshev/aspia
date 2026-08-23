@@ -131,7 +131,7 @@ bool constantTimeEquals(const QString& a, const QString& b)
 // static
 QByteArray Totp::generateSecret(int bytes)
 {
-    CHECK_GE(bytes, 10);
+    CHECK_GE(bytes, 16);
     CHECK_LE(bytes, 64);
     return Random::byteArray(static_cast<size_t>(bytes));
 }
@@ -149,6 +149,7 @@ QString Totp::hotp(const QByteArray& secret, quint64 counter, int digits)
 QString Totp::code(const QByteArray& secret, qint64 unix_time_sec, int step_sec, int digits)
 {
     CHECK_GT(step_sec, 0);
+    CHECK_GE(unix_time_sec, 0);
     const quint64 counter = static_cast<quint64>(unix_time_sec / step_sec);
     return hotp(secret, counter, digits);
 }
@@ -160,6 +161,11 @@ bool Totp::verify(const QByteArray& secret, const QString& code, qint64 now_unix
 {
     CHECK_GT(step_sec, 0);
     CHECK_GE(window_steps, 0);
+
+    // A code "derived" from an empty secret is computable by anyone out of the time alone, so
+    // an empty secret never verifies. The gate of the caller is not relied upon.
+    if (secret.isEmpty())
+        return false;
 
     if (code.size() != digits)
         return false;

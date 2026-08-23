@@ -88,11 +88,10 @@ private:
     std::unique_ptr<Ui::RouterUserDialog> ui;
     qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
-    // The whole edit state machine (snapshot, intents, no-op detection) lives in the model,
-    // where it is unit-tested; the dialog only feeds replies in and mirrors the state to the
-    // widgets. Tokens are display-only and stay here.
     UserEditModel model_;
     QList<Token> tokens_;
+    qint64 current_token_id_ = 0;
+
     // Guards against stacked error boxes and double reject: several replies can arrive with an
     // error while the first modal warning is still open.
     bool closing_ = false;

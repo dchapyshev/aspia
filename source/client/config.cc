@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
-#include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "proto/desktop_control.h"
@@ -124,23 +123,10 @@ QString RouterConfig::displayLabel() const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterConfig::encryptedData() const
 {
-    // OSCrypt binds the token to the device, by an OS keystore where there is one and by a key
-    // derived from the hardware identity elsewhere. A failure is refused rather than written, so
-    // a wrap that was asked for never silently goes missing.
-    QByteArray wrapped_token;
-    if (!device_token_.isEmpty())
-    {
-        if (!OSCrypt::encryptBytes(device_token_, &wrapped_token) || wrapped_token.isEmpty())
-        {
-            LOG(ERROR) << "OSCrypt::encryptBytes failed for device token";
-            return std::nullopt;
-        }
-    }
-
     proto::storage::RouterBlob data;
     data.set_address(address_.toStdString());
     data.set_username(username_.toStdString());
-    data.set_device_token(wrapped_token.toStdString());
+    data.set_device_token(device_token_.toStdString());
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
@@ -172,17 +158,7 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     address_ = QString::fromStdString(data.address());
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
-
-    // A token wrapped for another user of another machine is not an error of the record: the router
-    // will ask for a TOTP code again and a new one will be issued.
-    if (!data.device_token().empty())
-    {
-        QByteArray token;
-        if (OSCrypt::decryptBytes(QByteArray::fromStdString(data.device_token()), &token))
-            device_token_ = token;
-        else
-            LOG(ERROR) << "OSCrypt::decryptBytes failed for device token";
-    }
+    device_token_ = QByteArray::fromStdString(data.device_token());
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());

@@ -242,6 +242,35 @@ TEST_F(TwoFactorHandlerTest, AdministratorResetForgetsTheUser)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A password rotation answers a leaked password, and a half-done enrollment secret is part of
+// what the old password could have shown. The rotation retires it together with the refusal
+// flag, so the next login enrolls from a fresh QR code.
+TEST_F(TwoFactorHandlerTest, PasswordRotationForgetsTheUser)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+    ASSERT_EQ(submitCode(first, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    RouterUser rotated = RouterUser::create("admin", SecureString("Rotated1234!"));
+    rotated.entry_id = admin_.entry_id;
+    rotated.sessions = kAllSessions;
+    rotated.flags = User::ENABLED;
+
+    proto::router::UserRequest request;
+    request.set_command_name(proto::router::kCommandUserModify);
+    request.mutable_user()->CopyFrom(rotated.serialize());
+    ASSERT_EQ(handleUserRequest(db_, caller_, request).error_code, proto::router::kErrorOk);
+
+    TwoFactorHandler second;
+    const TwoFactorHandler::Result reopened = start(second);
+    ASSERT_EQ(reopened.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_FALSE(reopened.challenge.code_rejected);
+    EXPECT_NE(secretFromUri(reopened.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The id of a deleted user is never reused, so a state entry left behind would sit in memory
 // forever.
 TEST_F(TwoFactorHandlerTest, DeletedUserLeavesNoStateBehind)
@@ -269,8 +298,8 @@ TEST_F(TwoFactorHandlerTest, DeletedUserLeavesNoStateBehind)
 
 //--------------------------------------------------------------------------------------------------
 // Another session of the same user finished the enrollment while this one was still at the prompt:
-// the secret this client scanned is not the one on file, so the session goes away instead of
-// overwriting it.
+// the session goes away instead of overwriting what is on file. The code it sent was right, so
+// the next challenge does not brand it refused.
 TEST_F(TwoFactorHandlerTest, EnrollmentLosesRaceToAnotherSession)
 {
     TwoFactorHandler handler;
@@ -285,6 +314,9 @@ TEST_F(TwoFactorHandlerTest, EnrollmentLosesRaceToAnotherSession)
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
     EXPECT_EQ(findUser(admin_.entry_id).otp_secret, other_secret);
+
+    TwoFactorHandler next;
+    EXPECT_FALSE(start(next).challenge.code_rejected);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -442,6 +474,30 @@ TEST_F(TwoFactorHandlerTest, CodeOfAnAlreadyConsumedStepIsRefused)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Two sessions of the user stand at the prompt with the same counter snapshot. The first answer
+// consumes the step, and the second answer with the same code slips past the snapshot check, so
+// the counter predicate of the database is what refuses it. It counts as a refusal for the next
+// challenge the way an ordinary replay does.
+TEST_F(TwoFactorHandlerTest, ConcurrentlyConsumedStepIsRefused)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler first;
+    TwoFactorHandler second;
+    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+
+    ASSERT_EQ(submitCode(first, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::ACCEPT);
+    EXPECT_EQ(submitCode(second, Totp::code(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler third;
+    EXPECT_TRUE(start(third).challenge.code_rejected);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The next step is a code the user has not used yet.
 TEST_F(TwoFactorHandlerTest, NextStepIsAccepted)
 {
@@ -551,6 +607,36 @@ TEST_F(TwoFactorHandlerTest, ValidTokenSkipsThePrompt)
     EXPECT_TRUE(by_token.new_token.empty());
     EXPECT_EQ(by_token.token_id, accepted.token_id);
     EXPECT_EQ(tokenCount(admin_.entry_id), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The token came out of a verified code, so a login by it is as much of a success as the code
+// itself: the refusal and the failed attempts of the old life end with it, the way the challenge
+// describes the flag.
+TEST_F(TwoFactorHandlerTest, TokenLoginForgetsTheUser)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    TwoFactorHandler first;
+    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    const TwoFactorHandler::Result accepted = submitCode(first, Totp::code(secret, kNow), kNow);
+    ASSERT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
+    ASSERT_FALSE(accepted.new_token.empty());
+
+    TwoFactorHandler second;
+    ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitCode(second, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler third;
+    ASSERT_TRUE(start(third).challenge.code_rejected);
+    ASSERT_EQ(submitToken(third, accepted.new_token).action, TwoFactorHandler::Action::ACCEPT);
+
+    EXPECT_FALSE(TwoFactorHandlerTestPeer::hasUserState(admin_.entry_id));
+
+    TwoFactorHandler fourth;
+    EXPECT_FALSE(start(fourth).challenge.code_rejected);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -679,8 +765,9 @@ TEST_F(TwoFactorHandlerTest, SecondTokenOnTheSameSessionClosesIt)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The stage re-opens when the session rotates its own password, which issues the client a new
-// token. That token gets its own attempt.
+// A repeated start() opens a clean stage: the flag of a rejected token belongs to the caller
+// that re-opens it, so a token presented after a re-open gets its own attempt instead of being
+// cut off as repeated.
 TEST_F(TwoFactorHandlerTest, ReopenedStageAllowsATokenAgain)
 {
     ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
@@ -737,7 +824,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
 
     ASSERT_EQ(rejected.action, TwoFactorHandler::Action::SEND_CHALLENGE);
     EXPECT_TRUE(rejected.challenge.token_rejected);
-    EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
+    EXPECT_EQ(storedTokenCount(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -927,4 +1014,32 @@ TEST_F(TwoFactorHandlerTest, BlockAnnouncesItsRemainingTimeInTheChallenge)
     const qint64 later =
         kNow + DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count();
     EXPECT_EQ(start(blocked, later).challenge.blocked_seconds, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The block runs on the wall clock, the one the TOTP step needs. A clock that jumps back must not
+// stretch the announced wait by the size of the jump: the remainder is capped by the full length
+// of the block, and the re-seated block runs out counted from the new clock.
+TEST_F(TwoFactorHandlerTest, ClockJumpBackDoesNotStretchTheBlock)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString wrong = wrongCode(secret, kNow);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(attempt, wrong, kNow).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    const qint64 full = DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count();
+    const qint64 jumped_back = kNow - 3600;
+
+    TwoFactorHandler blocked;
+    EXPECT_EQ(start(blocked, jumped_back).challenge.blocked_seconds, full);
+
+    TwoFactorHandler after;
+    EXPECT_EQ(start(after, jumped_back + full).challenge.blocked_seconds, 0);
 }

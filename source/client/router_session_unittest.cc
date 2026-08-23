@@ -28,6 +28,7 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
 #include "client/database.h"
+#include "client/router_controller.h"
 #include "client/router_test_fixture.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -436,6 +437,30 @@ TEST_F(RouterSessionTest, AcceptedPasswordRotationDropsTheStoredToken)
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record can be gone by the time the router accepts the rotation. The store says so instead
+// of pretending the record now holds the new password, and the journal of the record tells the
+// operator what to do.
+TEST_F(RouterSessionTest, CredentialsOfAGoneRecordAreReportedUnstored)
+{
+    // The controller does not run in this stand; the store reaches it only for the journal line.
+    RouterController controller;
+
+    SharedPointer<RouterConfig> shared = config();
+    RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
+
+    int warnings = 0;
+    QObject::connect(&controller, &RouterController::sig_event,
+                     &receiver_, [&warnings](qint64 router_id, const RouterEvent& event)
+    {
+        if (router_id == kRouterId && event.severity == RouterEvent::Severity::WARNING)
+            ++warnings;
+    });
+
+    EXPECT_FALSE(router.storeCredentials("user", SecureString(QString("new-password"))));
+    EXPECT_EQ(warnings, 1);
 }
 
 //--------------------------------------------------------------------------------------------------

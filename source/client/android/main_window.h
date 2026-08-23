@@ -20,6 +20,7 @@
 #define CLIENT_ANDROID_MAIN_WINDOW_H
 
 #include <QPointer>
+#include <QSet>
 #include <QWidget>
 
 #include "base/time_types.h"
@@ -122,6 +123,7 @@ private:
     ChatWindow* chat_ = nullptr;
 
     QPointer<QDialog> two_factor_dialog_;
+    QSet<qint64> dismissed_two_factor_;
 
     // When the app went to the background (invalid while in the foreground), and a guard against
     // re-entering the lock prompt while it is already shown.

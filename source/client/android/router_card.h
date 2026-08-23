@@ -43,6 +43,7 @@ public:
 
     void setName(const QString& name);
     void setStatus(RouterStatus status);
+    void updateTwoFactorButton();
 
     void setEvents(const QList<RouterEvent>& events);
     void appendEvent(const RouterEvent& event);

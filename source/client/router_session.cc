@@ -18,13 +18,13 @@
 
 #include "client/router_session.h"
 
-#include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/serialization.h"
 #include "build/build_config.h"
 #include "client/database.h"
+#include "client/router_controller.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 
@@ -135,11 +135,7 @@ RouterSession::RouterSession(SharedPointer<RouterConfig> config, qint64 user_id,
 {
     LOG(INFO) << "Ctor";
 
-    // The interface runs on GuiApplication, the headless tools on CoreApplication.
     router_worker_ = GuiApplication::findWorker<RouterWorker>();
-    if (!router_worker_)
-        router_worker_ = CoreApplication::findWorker<RouterWorker>();
-
     if (!router_worker_)
         LOG(ERROR) << "Router worker not found";
 }
@@ -152,7 +148,7 @@ RouterSession::~RouterSession()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::storeCredentials(const QString& user_name, const SecureString& password)
+bool RouterSession::storeCredentials(const QString& user_name, const SecureString& password)
 {
     LOG(INFO) << "Credentials changed for router" << config_->routerId();
 
@@ -163,7 +159,14 @@ void RouterSession::storeCredentials(const QString& user_name, const SecureStrin
     config_->setUsername(user_name);
     config_->setPassword(password);
     if (!Database::instance().modifyRouter(*config_))
+    {
         LOG(WARNING) << "Failed to persist new credentials for router" << config_->routerId();
+        RouterController::instance().addEvent(config_->routerId(), RouterEvent::Severity::WARNING,
+            tr("The router accepted the new password, but the record was not updated."));
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

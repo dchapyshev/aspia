@@ -74,7 +74,6 @@ signals:
 
 private slots:
     void onTwoFactorRequired(qint64 router_id);
-    void onTwoFactorUndelivered(qint64 router_id);
     void onTwoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
     void onRouterAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
     void onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code);

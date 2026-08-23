@@ -29,6 +29,7 @@
 #include "client/backup.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/router_controller.h"
 #include "client/android/local_group_editor.h"
 #include "client/android/local_host_editor.h"
 #include "client/android/password_dialog.h"
@@ -359,6 +360,7 @@ void LocalWidget::onImport()
             .arg(report.routers).arg(report.local_groups)
             .arg(report.local_hosts).arg(report.router_hosts));
 
+    RouterController::instance().reload();
     reload();
 }
 

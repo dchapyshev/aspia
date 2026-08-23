@@ -107,6 +107,11 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     connect(ui->button_reset_otp, &QPushButton::clicked,
             this, &RouterUserDialog::onResetOtpClicked);
 
+    // The reset is an action, not an indicator: whether there is anything to reset (a confirmed
+    // secret, a half-done enrollment, a code block) lives on the router and cannot be judged
+    // from here. Any existing record can be reset, and the router handles an empty reset fine.
+    ui->button_reset_otp->setVisible(entry_id_ > 0);
+
     connect(ui->button_revoke_token, &QPushButton::clicked,
             this, &RouterUserDialog::onRevokeTokenClicked);
     connect(ui->button_revoke_all_tokens, &QPushButton::clicked,
@@ -200,18 +205,14 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
     const bool initial_load = !model_.isLoaded();
 
-    // A lookup answers the one record it named, or nothing when it is gone. The OTP state stays
-    // display only.
+    // A lookup answers the one record it named, or nothing when it is gone.
     RouterUser record;
     bool record_found = false;
-    bool otp_active = false;
 
     if (list.user_size() > 0)
     {
-        const proto::router::User& user = list.user(0);
         record_found = true;
-        record = RouterUser::parseFrom(user);
-        otp_active = user.otp_active();
+        record = RouterUser::parseFrom(list.user(0));
     }
 
     if (!model_.applySnapshot(record, record_found))
@@ -234,7 +235,6 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
         ui->checkbox_disable->setChecked(!model_.desiredEnabled());
         if (!model_.accountChanged() || initial_load)
             ui->edit_username->setText(model_.snapshot().name);
-        ui->button_reset_otp->setVisible(otp_active);
 
         if (initial_load)
         {
@@ -259,6 +259,7 @@ void RouterUserDialog::onTokenListReceived(const proto::router::UserTokenList& l
 
     tokens_.clear();
     tokens_.reserve(list.token_size());
+    current_token_id_ = list.current_token_id();
 
     for (int i = 0; i < list.token_size(); ++i)
     {
@@ -330,10 +331,11 @@ void RouterUserDialog::onResetOtpResultReceived(const proto::router::UserResult&
     const std::string& error_code = result.error_code();
     if (error_code == proto::router::kErrorOk)
     {
-        // Side effect on the router side: every device token of the user was revoked too.
+        // Side effect on the router side: every device token of the user was revoked too. The
+        // button stays: the user can start enrolling again at once, and a repeated reset is
+        // harmless.
         tokens_.clear();
         updateTokenTree();
-        ui->button_reset_otp->setVisible(false);
         return;
     }
 
@@ -352,11 +354,11 @@ void RouterUserDialog::onRevokeTokenClicked()
     if (token_id <= 0)
         return;
 
-    if (MsgBox::question(this, tr("Are you sure you want to sign this user out of this session?"))
-        != MsgBox::Yes)
-    {
+    const QString question = token_id == current_token_id_ ?
+        tr("This is the token of your current session. Revoking it will disconnect you. Continue?") :
+        tr("Are you sure you want to sign this user out of this session?");
+    if (MsgBox::question(this, question) != MsgBox::Yes)
         return;
-    }
 
     RouterSession* session = RouterController::session(router_id_);
     if (!session)
@@ -728,6 +730,18 @@ void RouterUserDialog::updateTokenTree()
         item->setText(1, formatTimestamp(token.last_used_at));
         item->setText(2, token.address);
         item->setData(0, Qt::UserRole, QVariant::fromValue(token.token_id));
+
+        if (token.token_id == current_token_id_)
+        {
+            QFont font = item->font(0);
+            font.setBold(true);
+            for (int column = 0; column < ui->tree_tokens->columnCount(); ++column)
+            {
+                item->setFont(column, font);
+                item->setToolTip(column, tr("The token of your current session."));
+            }
+        }
+
         ui->tree_tokens->addTopLevelItem(item);
 
         if (selected_token.isValid() && item->data(0, Qt::UserRole) == selected_token)

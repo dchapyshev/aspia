@@ -126,6 +126,17 @@ TEST(TotpTest, VerifyRejectsWrongLength)
     EXPECT_FALSE(Totp::verify(rfcSecret(), "1234567", now));
 }
 
+// A code "derived" from an empty secret is computable by anyone out of the time alone, so an
+// empty secret must never verify, not even against its own HOTP value.
+TEST(TotpTest, VerifyRejectsEmptySecret)
+{
+    const qint64 now = 1111111111; // counter = 37037037
+    EXPECT_FALSE(Totp::verify(QByteArray(), Totp::code(rfcSecret(), now), now));
+
+    const QString empty_code = Totp::hotp(QByteArray(), 37037037);
+    EXPECT_FALSE(Totp::verify(QByteArray(), empty_code, now));
+}
+
 TEST(TotpTest, GenerateSecretHasRequestedLength)
 {
     EXPECT_EQ(Totp::generateSecret(20).size(), 20);
@@ -137,6 +148,21 @@ TEST(TotpTest, GeneratedSecretsDiffer)
     QByteArray a = Totp::generateSecret(20);
     QByteArray b = Totp::generateSecret(20);
     EXPECT_NE(a, b);
+}
+
+// The bounds are CHECKs: breaking them is a crash, not a wrong code. A secret below the
+// RFC 4226 floor of 128 bits must not come into being, and a time before the epoch has no step
+// to compute a code for.
+TEST(TotpDeathTest, SecretBelowTheRfcFloorCrashes)
+{
+    testing::FLAGS_gtest_death_test_style = "threadsafe";
+    EXPECT_DEATH_IF_SUPPORTED(Totp::generateSecret(15), "Check failed");
+}
+
+TEST(TotpDeathTest, TimeBeforeTheEpochCrashes)
+{
+    testing::FLAGS_gtest_death_test_style = "threadsafe";
+    EXPECT_DEATH_IF_SUPPORTED(Totp::code(rfcSecret(), -1), "Check failed");
 }
 
 TEST(TotpTest, BuildUriContainsExpectedFields)

@@ -20,7 +20,6 @@
 
 #include <QSet>
 
-#include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -43,11 +42,7 @@ RouterController::RouterController(QObject* parent)
     CHECK(!g_instance);
     g_instance = this;
 
-    // The interface runs on GuiApplication, the headless tools on CoreApplication.
     router_worker_ = GuiApplication::findWorker<RouterWorker>();
-    if (!router_worker_)
-        router_worker_ = CoreApplication::findWorker<RouterWorker>();
-
     if (!router_worker_)
     {
         LOG(ERROR) << "Router worker not found";
@@ -124,7 +119,7 @@ void RouterController::reload()
 {
     const QList<RouterConfig> configs = Database::instance().routerList();
 
-    // A record whose credentials cannot be read (the address book is locked) is not served.
+    // A record whose sealed column did not open comes back with empty credentials and is not served.
     QSet<qint64> present;
     present.reserve(configs.size());
     for (const RouterConfig& config : configs)
@@ -285,18 +280,6 @@ void RouterController::onTwoFactorRequired(qint64 router_id)
              tr("Router %1 is waiting for a two-factor code.").arg(address));
 
     emit sig_twoFactorRequired(router_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterController::onTwoFactorUndelivered(qint64 router_id)
-{
-    auto it = contexts_.find(router_id);
-    if (it == contexts_.end() || !it->second.two_factor)
-        return;
-
-    addEvent(router_id, RouterEvent::Severity::WARNING,
-             tr("The code could not be delivered to router %1. It will ask again.")
-                 .arg(it->second.two_factor->config().address()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -483,7 +466,6 @@ void RouterController::startTwoFactor(qint64 router_id, const RouterConfig& conf
     context.two_factor = two_factor;
 
     connect(two_factor, &Router2FA::sig_twoFactorRequired, this, &RouterController::onTwoFactorRequired);
-    connect(two_factor, &Router2FA::sig_twoFactorUndelivered, this, &RouterController::onTwoFactorUndelivered);
     connect(two_factor, &Router2FA::sig_twoFactorFinished, this, &RouterController::onTwoFactorFinished);
 }
 

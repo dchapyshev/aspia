@@ -132,7 +132,7 @@ void ClientAdmin::doUserTokenListRequest(const proto::router::UserTokenListReque
     proto::router::UserTokenList* list = message.mutable_user_token_list();
     list->set_request_id(request.request_id());
 
-    handleUserTokenList(database(), request, list);
+    handleUserTokenList(database(), requestCaller(), request, list);
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }

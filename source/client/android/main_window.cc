@@ -619,6 +619,10 @@ void AndroidMainWindow::onChatClosed()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
 {
+    // Being asked again, by a fresh question or by the button of the record, puts the record
+    // back into the rotation, even when another dialog holds the screen right now.
+    dismissed_two_factor_.remove(router_id);
+
     if (two_factor_dialog_)
         return;
 
@@ -639,17 +643,18 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 
-    connect(dialog, &QDialog::finished, this, [this, prompt, dialog](int result)
+    connect(dialog, &QDialog::finished, this, [this, prompt, dialog, router_id](int result)
     {
         two_factor_dialog_.clear();
 
         if (result == QDialog::Accepted && prompt)
             prompt->submitCode(dialog->code());
+        else if (prompt)
+            dismissed_two_factor_.insert(router_id);
 
-        // An answered question and a withdrawn one both free the screen for the next record
-        // waiting; only a question the operator dismissed stays off it.
-        if (result == QDialog::Accepted || !prompt)
-            showNextTwoFactorPrompt();
+        // The next record waiting takes the screen. A dismissed question steps aside instead
+        // of silencing it.
+        showNextTwoFactorPrompt();
     });
 
     // The question can leave the screen before the operator does: its death (the record left,
@@ -793,6 +798,9 @@ void AndroidMainWindow::showNextTwoFactorPrompt()
 {
     for (const RouterConfig& config : Database::instance().routerList())
     {
+        if (dismissed_two_factor_.contains(config.routerId()))
+            continue;
+
         TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(config.routerId());
         if (prompt && prompt->blockedSeconds() == 0)
         {

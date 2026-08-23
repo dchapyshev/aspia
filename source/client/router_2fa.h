@@ -19,6 +19,8 @@
 #ifndef CLIENT_ROUTER_2FA_H
 #define CLIENT_ROUTER_2FA_H
 
+#include <QDeadlineTimer>
+
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
@@ -44,13 +46,15 @@ public:
     // operator when it opens again.
     bool codeRefused() const { return code_refused_; }
 
-    // Seconds that were left in the code block when the challenge arrived, zero when the
-    // account is not blocked. The router does not look at codes while the block runs, so no
-    // dialog is opened and the operator is shown the wait instead.
-    qint64 blockedSeconds() const { return blocked_seconds_; }
+    // Seconds left in the code block right now, zero when the account is not blocked. The
+    // router does not look at codes while the block runs, so no dialog is opened and the
+    // operator is shown the wait instead. The block was sent as a remaining duration, and
+    // this side counts it down by itself.
+    qint64 blockedSeconds() const { return (blocked_until_.remainingTime() + 999) / 1000; }
 
     // The answer of the operator. It destroys the prompt, and the reply of the router is
-    // either LoginResult or the connection going down.
+    // either LoginResult or the connection going down. A prompt that is no longer the question
+    // being asked answers nothing.
     void submitCode(const QString& totp_code);
 
 private:
@@ -59,8 +63,7 @@ private:
 
     const QString otpauth_uri_;
     const bool code_refused_;
-    const qint64 blocked_seconds_;
-    bool answered_ = false;
+    const QDeadlineTimer blocked_until_;
 
     Q_DISABLE_COPY_MOVE(TwoFactorPrompt)
 };
@@ -84,7 +87,6 @@ public:
 
 signals:
     void sig_twoFactorRequired(qint64 router_id);
-    void sig_twoFactorUndelivered(qint64 router_id);
     void sig_twoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
 
 private slots:
@@ -98,7 +100,7 @@ private:
     friend class TwoFactorPrompt;
 
     void openPrompt(const proto::router::TwoFactorChallenge& challenge, const QString& otpauth_uri);
-    bool sendCode(const QString& totp_code);
+    void sendCode(const QString& totp_code);
     void reconnect();
     void send(const proto::router::ClientToRouter& message);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);

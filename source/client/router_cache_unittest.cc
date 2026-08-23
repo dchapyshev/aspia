@@ -194,14 +194,12 @@ TEST_F(RouterCacheTest, GroupResultDropsByTheReachOfItsCommand)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Adding an administrator grants it an access entry in every workspace and deleting a user drops
-// its entries by cascade - both move the revisions the cached list carries. Resetting the second
-// factor touches nothing but the user itself.
-TEST_F(RouterCacheTest, UserResultDropsTheWorkspacesForMembershipCommandsOnly)
+// Deleting a user drops its access entries by cascade and moves the revisions the cached list
+// carries. No other user command reaches the workspaces, and the router marks its notifications
+// the same way (NOTIFY_WORKSPACES on delete alone).
+TEST_F(RouterCacheTest, UserResultDropsTheWorkspacesForDeleteOnly)
 {
-    for (const char* command : { proto::router::kCommandUserAdd,
-                                 proto::router::kCommandUserModify,
-                                 proto::router::kCommandUserDelete })
+    for (const char* command : { proto::router::kCommandUserDelete })
     {
         fillAll();
 
@@ -212,7 +210,9 @@ TEST_F(RouterCacheTest, UserResultDropsTheWorkspacesForMembershipCommandsOnly)
         EXPECT_NE(cache_.groupList(kWorkspaceId), nullptr) << "command: " << command;
     }
 
-    for (const char* command : { proto::router::kCommandUserResetOtp })
+    for (const char* command : { proto::router::kCommandUserAdd,
+                                 proto::router::kCommandUserModify,
+                                 proto::router::kCommandUserResetOtp })
     {
         fillAll();
 

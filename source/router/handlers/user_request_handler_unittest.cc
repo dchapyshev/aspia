@@ -291,7 +291,7 @@ TEST_F(UserRequestHandlerTest, TokenListExposesMetadataOnly)
     request.set_user_id(admin_.entry_id);
 
     proto::router::UserTokenList list;
-    handleUserTokenList(db_, request, &list);
+    handleUserTokenList(db_, caller_, request, &list);
 
     ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
     EXPECT_EQ(list.user_id(), admin_.entry_id);
@@ -303,13 +303,36 @@ TEST_F(UserRequestHandlerTest, TokenListExposesMetadataOnly)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The list names the token of the asking session, so the client can tell which row would sign
+// its own session out.
+TEST_F(UserRequestHandlerTest, TokenListNamesTheTokenOfTheCaller)
+{
+    const qint64 own_token = issueToken(admin_.entry_id);
+    ASSERT_GT(own_token, 0);
+    ASSERT_GT(issueToken(admin_.entry_id), 0);
+
+    RequestCaller caller = caller_;
+    caller.token_id = own_token;
+
+    proto::router::UserTokenListRequest request;
+    request.set_user_id(admin_.entry_id);
+
+    proto::router::UserTokenList list;
+    handleUserTokenList(db_, caller, request, &list);
+
+    ASSERT_EQ(list.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(list.current_token_id(), own_token);
+    EXPECT_EQ(list.token_size(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(UserRequestHandlerTest, TokenListRejectsInvalidUserId)
 {
     proto::router::UserTokenListRequest request;
     request.set_user_id(0);
 
     proto::router::UserTokenList list;
-    handleUserTokenList(db_, request, &list);
+    handleUserTokenList(db_, caller_, request, &list);
 
     EXPECT_EQ(list.error_code(), proto::router::kErrorInvalidRequest);
     EXPECT_EQ(list.token_size(), 0);

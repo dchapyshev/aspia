@@ -20,12 +20,17 @@
 
 #include <gtest/gtest.h>
 
+#include <QEventLoop>
 #include <QObject>
 #include <QTemporaryDir>
+#include <QTimer>
 
+#include <limits>
 #include <optional>
 
+#include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
+#include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
 #include "client/database.h"
 #include "client/router_test_fixture.h"
@@ -96,7 +101,15 @@ protected:
         config->setAddress("router.example.com");
         config->setUsername("user");
         config->setPassword(SecureString(QString("secret")));
-        config->setDeviceToken(device_token);
+
+        // The record holds the token the way it is stored: wrapped by the OS keystore.
+        if (!device_token.isEmpty())
+        {
+            QByteArray wrapped;
+            CHECK(OSCrypt::encryptBytes(device_token, &wrapped));
+            config->setDeviceToken(wrapped);
+        }
+
         return SharedPointer<RouterConfig>(config);
     }
 
@@ -148,6 +161,22 @@ TEST_F(Router2FATest, StoredTokenAnswersWithoutAPrompt)
     Router2FATestPeer::receive(login, activeChallenge());
 
     EXPECT_EQ(login.twoFactorPrompt(), nullptr);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The stored wrap opens with the local OS keystore. One that does not open right now (a record
+// brought from another user or machine, a locked keychain) answers nothing: the operator is
+// asked for a code, and the wrap stays in the record untouched for the day it opens again.
+TEST_F(Router2FATest, UnopenableTokenFallsBackToThePrompt)
+{
+    SharedPointer<RouterConfig> unopenable = config();
+    unopenable->setDeviceToken("not-a-wrap-of-this-machine");
+    Router2FA login(unopenable);
+
+    Router2FATestPeer::receive(login, activeChallenge());
+
+    EXPECT_NE(login.twoFactorPrompt(), nullptr);
+    EXPECT_EQ(unopenable->deviceToken(), QByteArray("not-a-wrap-of-this-machine"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -206,9 +235,12 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
 
     EXPECT_EQ(logged_in_user_, kUserId);
 
+    // The record stores the wrap, and the wrap made here opens back into the token.
     const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
     ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->deviceToken(), QByteArray("fresh-device-token"));
+    QByteArray raw;
+    ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
+    EXPECT_EQ(raw, QByteArray("fresh-device-token"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,6 +257,78 @@ TEST_F(Router2FATest, RefusalAndBlockArriveWithTheChallenge)
     ASSERT_NE(prompt, nullptr);
     EXPECT_TRUE(prompt->codeRefused());
     EXPECT_EQ(prompt->blockedSeconds(), 600);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The seconds of the block come from the peer, and only their bounds are believed. A negative
+// block would split the gates that read it (shown by one, out of the rotation by another), and an
+// enormous one would overflow the arithmetic of whoever formats it.
+TEST_F(Router2FATest, BlockOfTheChallengeIsBounded)
+{
+    proto::router::RouterToClient message = activeChallenge();
+    message.mutable_two_factor_challenge()->set_blocked_seconds(-600);
+    Router2FATestPeer::receive(login_, message);
+
+    TwoFactorPrompt* prompt = login_.twoFactorPrompt();
+    ASSERT_NE(prompt, nullptr);
+    EXPECT_EQ(prompt->blockedSeconds(), 0);
+
+    message.mutable_two_factor_challenge()->set_blocked_seconds(
+        std::numeric_limits<qint64>::max());
+    Router2FATestPeer::receive(login_, message);
+
+    prompt = login_.twoFactorPrompt();
+    ASSERT_NE(prompt, nullptr);
+    EXPECT_EQ(prompt->blockedSeconds(), proto::router::kMaxTwoFactorBlockSeconds);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The block is sent as a remaining duration, and this side counts the same wait down by itself:
+// when the announced seconds run out, the question is announced again and the dialog opens the
+// regular way, without waiting for the connection to die.
+TEST_F(Router2FATest, ExpiredBlockReasksTheQuestion)
+{
+    proto::router::RouterToClient message = activeChallenge();
+    message.mutable_two_factor_challenge()->set_blocked_seconds(1);
+    Router2FATestPeer::receive(login_, message);
+
+    ASSERT_NE(login_.twoFactorPrompt(), nullptr);
+    EXPECT_EQ(prompts_required_, 1);
+
+    QEventLoop loop;
+    QTimer::singleShot(1200, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    EXPECT_EQ(prompts_required_, 2);
+    TwoFactorPrompt* prompt = login_.twoFactorPrompt();
+    ASSERT_NE(prompt, nullptr);
+    EXPECT_EQ(prompt->blockedSeconds(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// While the block runs, every reconnect brings the same question with a smaller remainder. The
+// remainder carries no news (both sides count the same block down), so the prompt stays whole
+// and the journal is not flooded. A challenge without the block is a different question.
+TEST_F(Router2FATest, RepeatedBlockedChallengeChangesNothing)
+{
+    proto::router::RouterToClient message = activeChallenge();
+    message.mutable_two_factor_challenge()->set_blocked_seconds(600);
+    Router2FATestPeer::receive(login_, message);
+    TwoFactorPrompt* prompt = login_.twoFactorPrompt();
+    ASSERT_NE(prompt, nullptr);
+    EXPECT_EQ(prompts_required_, 1);
+
+    message.mutable_two_factor_challenge()->set_blocked_seconds(597);
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(login_.twoFactorPrompt(), prompt);
+    EXPECT_EQ(prompts_required_, 1);
+
+    message.mutable_two_factor_challenge()->set_blocked_seconds(0);
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_NE(login_.twoFactorPrompt(), prompt);
+    EXPECT_EQ(prompts_required_, 2);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,13 +426,16 @@ TEST_F(Router2FATest, EnrollmentUriWithoutASecretIsRefused)
 
     const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
     ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->deviceToken(), QByteArray("stored-device-token"));
+    QByteArray raw;
+    ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
+    EXPECT_EQ(raw, QByteArray("stored-device-token"));
 }
 
 //--------------------------------------------------------------------------------------------------
-// An answer handed in while the connection is down cannot leave, so it must not spend the
-// question: the same prompt stands, and once the connection is back the answer goes through.
-TEST_F(Router2FATest, CodeWithoutAConnectionKeepsTheQuestion)
+// No check on this side can know whether a submitted code reaches the router, so the answer is
+// sent into whatever the connection is and closes the question at once. When the router never
+// received it, the challenge after the reconnect asks again and the prompt is reborn.
+TEST_F(Router2FATest, LostAnswerIsReaskedByTheRouter)
 {
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
     Router2FATestPeer::receive(login_, activeChallenge());
@@ -338,12 +445,37 @@ TEST_F(Router2FATest, CodeWithoutAConnectionKeepsTheQuestion)
     Router2FATestPeer::dropConnection(login_);
     prompt->submitCode("123456");
 
-    EXPECT_EQ(login_.twoFactorPrompt(), prompt);
+    EXPECT_EQ(login_.twoFactorPrompt(), nullptr);
 
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
-    prompt->submitCode("123456");
+    Router2FATestPeer::receive(login_, activeChallenge());
 
-    EXPECT_EQ(login_.twoFactorPrompt(), nullptr);
+    EXPECT_NE(login_.twoFactorPrompt(), nullptr);
+    EXPECT_EQ(prompts_required_, 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A dialog can outlive its question: a fresh challenge replaces the prompt while the old dialog
+// still holds the old one. Its late answer must not send anything and must not spend the
+// question that replaced it.
+TEST_F(Router2FATest, LateSubmissionOfAReplacedQuestionIsIgnored)
+{
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    Router2FATestPeer::receive(login_, activeChallenge());
+    TwoFactorPrompt* first = login_.twoFactorPrompt();
+    ASSERT_NE(first, nullptr);
+
+    proto::router::RouterToClient message = activeChallenge();
+    message.mutable_two_factor_challenge()->set_code_rejected(true);
+    Router2FATestPeer::receive(login_, message);
+    TwoFactorPrompt* second = login_.twoFactorPrompt();
+    ASSERT_NE(second, nullptr);
+    ASSERT_NE(second, first);
+
+    first->submitCode("123456");
+
+    EXPECT_EQ(login_.twoFactorPrompt(), second);
+    EXPECT_EQ(prompts_required_, 2);
 }
 
 //--------------------------------------------------------------------------------------------------

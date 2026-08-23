@@ -20,6 +20,7 @@
 #define PROTO_ROUTER_CONSTANTS_H
 
 #include <cstddef>
+#include <cstdint>
 
 namespace proto::router {
 
@@ -32,11 +33,16 @@ namespace proto::router {
 // used ones, so a client that never comes back cannot grow the list without bound.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;
 
+// Bound on the blocked_seconds of a TwoFactorChallenge. The router sends the remaining part of
+// a block that lasts minutes; the client clamps what it reads to [0, this], so a hostile peer
+// cannot overflow the arithmetic on the value or park a record behind a forever block.
+[[maybe_unused]] constexpr int64_t kMaxTwoFactorBlockSeconds = 24 * 60 * 60;
+
 // Bound on the otpauth:// URI of an enrollment challenge, in UTF-8 bytes. The client is the side
-// that checks it: it renders the URI into a QR code, and the encoder ends the process on a payload
-// that does not fit its largest symbol. What the router builds stays far below - the issuer, a
-// user name bounded by User::kMaxUserNameLength and a Base32 secret come to some 700 bytes even
-// when every character of the name is percent-encoded.
+// that checks it: it renders the URI into a QR code, and the encoder refuses a payload that does
+// not fit its largest symbol, leaving the enrollment without an image to scan. What the router
+// builds stays far below - the issuer, a user name bounded by User::kMaxUserNameLength and a
+// Base32 secret come to some 700 bytes even when every character of the name is percent-encoded.
 [[maybe_unused]] constexpr size_t kMaxOtpauthUriLength = 1024;
 
 // Bounds on the manager-editable fields of a host, a group and a workspace, in UTF-8 bytes.

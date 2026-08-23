@@ -21,6 +21,7 @@
 
 #include <QHash>
 #include <QPointer>
+#include <QSet>
 
 #include <memory>
 
@@ -130,6 +131,7 @@ private:
     std::unique_ptr<Ui::ManagementTab> ui;
 
     QPointer<QDialog> two_factor_dialog_;
+    QSet<qint64> dismissed_two_factor_;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 

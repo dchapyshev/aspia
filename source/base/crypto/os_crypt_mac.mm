@@ -21,6 +21,7 @@
 #include <Foundation/Foundation.h>
 #include <Security/Security.h>
 
+#include <mutex>
 #include <optional>
 #include <utility>
 
@@ -42,9 +43,18 @@ constexpr size_t kKeySize = 32;
 
 //--------------------------------------------------------------------------------------------------
 // Reads the wrapping key from the keychain of the user, creating it on first use. Empty when the
-// keychain refuses.
+// keychain refuses. A key once read is served from memory: the keychain can lock while the client
+// runs (together with the screen, by a timeout), and what worked at startup must keep working
+// behind the lock. A refusal is not cached, so the next call asks the keychain again.
 SecureByteArray wrappingKey()
 {
+    static std::mutex mutex;
+    static SecureByteArray cached_key;
+
+    const std::lock_guard lock(mutex);
+    if (!cached_key.isEmpty())
+        return cached_key;
+
     NSDictionary* query = @{
         (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
         (__bridge id)kSecAttrService : @(kKeychainService),
@@ -62,7 +72,10 @@ SecureByteArray wrappingKey()
         CFRelease(found);
 
         if (key.size() == qsizetype(kKeySize))
-            return key;
+        {
+            cached_key = key;
+            return cached_key;
+        }
 
         LOG(ERROR) << "Keychain item has unexpected size:" << key.size();
         return SecureByteArray();
@@ -91,7 +104,8 @@ SecureByteArray wrappingKey()
         return SecureByteArray();
     }
 
-    return key;
+    cached_key = key;
+    return cached_key;
 }
 
 } // namespace

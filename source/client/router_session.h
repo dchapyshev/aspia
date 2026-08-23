@@ -57,7 +57,9 @@ public:
 
     // Writes into the stored record the credentials this session is to use from now on. Called
     // once the router has accepted their rotation, so the login that follows uses the new ones.
-    void storeCredentials(const QString& user_name, const SecureString& password);
+    // False when the record was not updated; the journal of the record tells the operator to
+    // set the new password there by hand.
+    bool storeCredentials(const QString& user_name, const SecureString& password);
 
     qint64 userId() const { return user_id_; }
 

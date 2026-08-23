@@ -209,6 +209,7 @@ RequestCaller ClientOperator::requestCaller() const
     caller.user_id = userId();
     caller.name = userName();
     caller.session_type = sessionType();
+    caller.token_id = token_id_;
     return caller;
 }
 

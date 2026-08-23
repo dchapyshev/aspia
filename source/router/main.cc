@@ -403,9 +403,15 @@ int resetOtp(QTextStream& out, const QString& user_name)
     }
 
     RouterUser user;
-    if (db.findUser(user_name, &user) != proto::router::kErrorOk)
+    const std::string_view error_code = db.findUser(user_name, &user);
+    if (error_code == proto::router::kErrorNotFound)
     {
         out << "User not found: " << user_name << Qt::endl;
+        return 1;
+    }
+    else if (error_code != proto::router::kErrorOk)
+    {
+        out << "Failed to read the user." << Qt::endl;
         return 1;
     }
 
@@ -417,6 +423,7 @@ int resetOtp(QTextStream& out, const QString& user_name)
 
     out << "Two-factor authentication for user " << user_name << " has been reset." << Qt::endl;
     out << "The next login of the user starts a new enrollment." << Qt::endl;
+    out << "Restart the router service for the reset to take full effect." << Qt::endl;
     return 0;
 }
 

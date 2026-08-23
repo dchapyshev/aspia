@@ -227,9 +227,10 @@ message Notification
 //   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
 //      either (a) submit the |token| it stored after a previous TOTP success, or (b)
 //      ask the user for a fresh |totp_code|.
-//   3. Router validates the response. Any failure - a rejected code or a server-side error -
-//      drops the connection with no reply; the client cannot retry on the same session, it
-//      reconnects and runs the whole stage again.
+//   3. Router validates the response. A rejected token does not end the session: the stage is
+//      re-opened with a second challenge carrying |token_rejected|. A rejected code or a
+//      server-side error drops the connection with no reply; the client cannot retry on the
+//      same session, it reconnects and runs the whole stage again.
 //   4. On success the router sends LoginResult, which is what marks the stage complete.
 
 enum TwoFactorMode
@@ -268,7 +269,8 @@ message TwoFactorChallenge
     // MODE_ACTIVE: seconds left in the block imposed after too many failed code attempts, zero
     // when the account is not blocked. The router does not look at codes while the block runs,
     // so instead of asking for one the client shows the wait. Sent as a remaining duration
-    // because the clocks of the two sides are not assumed to agree.
+    // because the clocks of the two sides are not assumed to agree. Never longer than
+    // kMaxTwoFactorBlockSeconds; the client clamps what it reads to that bound.
     int64 blocked_seconds = 5;
 }
 
@@ -285,8 +287,9 @@ message TwoFactorResponse
 }
 
 // Router to client. The login is complete and the session is open. |new_token| carries a freshly
-// issued device token when a TOTP submission produced one (any successful TOTP, including
-// enrollment, produces one) and is empty when the client got in with the token it already had.
+// issued device token when a TOTP submission produced one (the router issues one on every
+// successful TOTP, enrollment included, but a failed issue is not fatal; the login then passes
+// with an empty token). Empty also when the client got in with the token it already had.
 // Failures never send this message. They drop the connection instead.
 message LoginResult
 {

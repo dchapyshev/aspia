@@ -96,7 +96,8 @@ public:
                           std::string_view address, qint64 now);
 
     // Drops the stored state of the user, so the account starts its two-factor life anew.
-    // Called when an administrator resets the OTP of the user or deletes the user.
+    // Called when an administrator resets the OTP of the user, rotates their password or
+    // deletes the user.
     static void forgetUser(qint64 user_id);
 
 private:

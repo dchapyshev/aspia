@@ -124,7 +124,7 @@ public:
     std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr);
 
     // Removes a user; its workspace_access rows go with it by cascade, and the revision of every
-    // affected workspace is bumped in the same transaction (see I4).
+    // affected workspace is bumped in the same transaction (see I3).
     std::string_view removeUser(qint64 entry_id);
 
     // Reads a user record into |user|. Returns kErrorNotFound when no such user exists and
@@ -149,9 +149,11 @@ public:
     // next login triggers self-enrollment. Returns kErrorNotFound if the user row is absent.
     std::string_view resetUserOtp(qint64 user_id);
 
-    // Atomically consumes a TOTP step. Succeeds only if |counter| is newer than the value
+    // Atomically consumes a TOTP step. kErrorOk only if |counter| is newer than the value
     // currently stored in the database, so parallel sessions cannot accept the same code.
-    bool consumeUserOtpCounter(qint64 user_id, quint64 counter);
+    // kErrorNotFound when no row matched: the step was consumed meanwhile or the user is gone.
+    // kErrorInternalError when the database refused the write.
+    std::string_view consumeUserOtpCounter(qint64 user_id, quint64 counter);
 
     //----------------------------------------------------------------------------------------------
     // Client device tokens (bearer "remember this device" credentials issued during client sessions)
@@ -186,8 +188,9 @@ public:
     // with no tokens, but returns kErrorNotFound if the user row is absent.
     std::string_view revokeUserClientDeviceTokens(qint64 user_id);
 
-    // Fills |tokens| with all device tokens owned by |user_id|. The router never exposes token
-    // material to admins - only the opaque numeric id and timestamp metadata. Returns
+    // Fills |tokens| with the device tokens of |user_id| that are still inside their lifetime;
+    // an expired row is not a credential any more and is not listed. The router never exposes
+    // token material to admins - only the opaque numeric id and timestamp metadata. Returns
     // kErrorNotFound if the user row is absent; a user with no tokens answers kErrorOk and an
     // empty list.
     std::string_view listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const;

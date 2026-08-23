@@ -40,14 +40,15 @@ public:
     // Computes the HOTP value for the given counter.
     static QString hotp(const QByteArray& secret, quint64 counter, int digits = kDefaultDigits);
 
-    // Computes the TOTP code for absolute Unix time |unix_time_sec|.
+    // Computes the TOTP code for absolute Unix time |unix_time_sec|, which must not be negative.
     static QString code(const QByteArray& secret,
                         qint64 unix_time_sec,
                         int step_sec = kDefaultStepSec,
                         int digits = kDefaultDigits);
 
     // Verifies |code| against the TOTP value for |now_unix_sec|, accepting +/-|window_steps|
-    // adjacent steps to compensate for clock drift. If |matched_counter| is non-null and
+    // adjacent steps to compensate for clock drift. An empty secret never verifies.
+    // If |matched_counter| is non-null and
     // verification succeeds, it is filled with the counter that produced the matching code -
     // callers may use this to detect replay (reject any subsequent code whose counter is
     // less-than-or-equal-to the previously accepted counter).

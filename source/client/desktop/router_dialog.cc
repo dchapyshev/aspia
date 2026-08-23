@@ -154,9 +154,11 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         // The token is not edited here, and the session of this record replaces it every time it
         // passes the two-factor stage. It is read now instead of when the dialog opened, so a token
-        // issued meanwhile survives the save.
+        // issued meanwhile survives the save. It belongs to the account of the record, so an edit
+        // that changes the account leaves it behind: presented for another one, it would only be
+        // refused.
         const std::optional<RouterConfig> stored = db.findRouter(router_id_);
-        if (stored.has_value())
+        if (stored.has_value() && stored->hasSameParams(data))
             data.setDeviceToken(stored->deviceToken());
 
         if (!db.modifyRouter(data))

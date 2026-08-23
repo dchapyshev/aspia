@@ -49,8 +49,8 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
     user_otp_secret_ = user.otp_secret;
     user_otp_counter_ = user.otp_counter;
 
-    // A re-opened stage is a fresh one, and the token the client holds is not the one it presented
-    // before: the password change that re-opens the stage issues a new one.
+    // A re-opened stage starts clean. The one caller that re-opens it, the rejected-token
+    // branch, raises the flag again itself after this returns.
     token_rejected_ = false;
 
     result.action = Action::SEND_CHALLENGE;
@@ -141,6 +141,10 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         if (!database.touchClientDeviceToken(token, address))
             LOG(WARNING) << "Failed to touch device token for user" << caller.name;
 
+        // The token came out of a verified code, so this login proves the same thing the code
+        // does and ends the stored state of the user the same way.
+        forgetUser(caller.user_id);
+
         result.action = Action::ACCEPT;
         result.token_id = token_id;
         return result;
@@ -216,10 +220,10 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         if (!database.setUserOtp(caller.user_id, tentative_otp_secret_, matched_counter))
         {
             // Another session of the same user completed the enrollment meanwhile, or the record
-            // is gone: the secret this client scanned is not the one on file.
+            // is gone, or the write failed. The code itself was right, so the refusal flag stays
+            // down: the next challenge asks about the stored state without blaming the user.
             LOG(ERROR) << "Failed to persist OTP secret for user" << caller.name
                        << ". Closing connection";
-            markCodeRejected(caller.user_id);
             result.action = Action::CLOSE;
             return result;
         }
@@ -228,11 +232,24 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     }
     else
     {
-        if (!database.consumeUserOtpCounter(caller.user_id, matched_counter))
+        const std::string_view error_code =
+            database.consumeUserOtpCounter(caller.user_id, matched_counter);
+        if (error_code == proto::router::kErrorNotFound)
         {
+            // The step was consumed by another session after this one took its snapshot (or the
+            // user is gone), so the predicate of the database is the replay check that caught it.
             LOG(INFO) << "TOTP counter was already consumed for user" << caller.name
                       << ". Closing connection";
             markCodeRejected(caller.user_id);
+            result.action = Action::CLOSE;
+            return result;
+        }
+        if (error_code != proto::router::kErrorOk)
+        {
+            // The code was right and the database refused the write, which is not a refusal of
+            // the code.
+            LOG(ERROR) << "Failed to consume OTP counter for user" << caller.name
+                       << ". Closing connection";
             result.action = Action::CLOSE;
             return result;
         }
@@ -266,8 +283,7 @@ void TwoFactorHandler::forgetUser(qint64 user_id)
 // static
 bool TwoFactorHandler::isBlockedAttempt(qint64 user_id, qint64 now)
 {
-    const auto it = user_states_.find(user_id);
-    return it != user_states_.end() && now < it->second.blocked_until;
+    return blockedSecondsLeft(user_id, now) > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,6 +293,14 @@ qint64 TwoFactorHandler::blockedSecondsLeft(qint64 user_id, qint64 now)
     const auto it = user_states_.find(user_id);
     if (it == user_states_.end() || now >= it->second.blocked_until)
         return 0;
+
+    // The block runs on the wall clock, the one the TOTP step needs. A clock that jumped back
+    // would stretch the remainder by the size of the jump, so it is capped by the full length
+    // of the block.
+    const qint64 full = DurationCast<Seconds>(kFailedAttemptsBlock).count();
+    if (it->second.blocked_until - now > full)
+        it->second.blocked_until = now + full;
+
     return it->second.blocked_until - now;
 }
 

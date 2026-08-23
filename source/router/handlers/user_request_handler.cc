@@ -103,6 +103,11 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
     if (password_changed || disabled)
         result->stop_user_id = new_user.entry_id;
 
+    // The rotation answers a leaked password, and a half-done enrollment secret is part of what
+    // the old password could have shown. It retires with the tokens the same rotation revoked.
+    if (password_changed)
+        TwoFactorHandler::forgetUser(new_user.entry_id);
+
     result->notify_flags = ClientWorker::NOTIFY_USERS;
 }
 
@@ -332,7 +337,8 @@ void handleUserList(Database& database, const proto::router::UserListRequest& re
 }
 
 //--------------------------------------------------------------------------------------------------
-void handleUserTokenList(Database& database, const proto::router::UserTokenListRequest& request,
+void handleUserTokenList(Database& database, const RequestCaller& caller,
+                         const proto::router::UserTokenListRequest& request,
                          proto::router::UserTokenList* out)
 {
     const qint64 user_id = request.user_id();
@@ -354,6 +360,8 @@ void handleUserTokenList(Database& database, const proto::router::UserTokenListR
         out->set_error_code(error_code);
         return;
     }
+
+    out->set_current_token_id(caller.token_id);
 
     for (DeviceToken& src : tokens)
     {
@@ -406,12 +414,12 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
     // thread. If client sessions are ever spread over several workers, this must move inside one
     // transaction.
     RouterUser user;
-    if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
+    const std::string_view find_error_code = database.findUser(caller.user_id, &user);
+    if (find_error_code != proto::router::kErrorOk)
     {
-        // The same concurrent delete caught a moment later inside modifyUser answers
-        // kErrorNotFound - one event, one code.
-        LOG(WARNING) << "Authenticated user not found in database (user_id:" << caller.user_id << ")";
-        result.error_code = proto::router::kErrorNotFound;
+        LOG(WARNING) << "Failed to read authenticated user (user_id:" << caller.user_id
+                     << "):" << find_error_code;
+        result.error_code = find_error_code;
         return result;
     }
 
@@ -437,9 +445,8 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
         return result;
     }
 
-    // NOTIFY_USERS only: the repair branch of Database::modifyUser cannot create access entries on
-    // this path - the keys of the request come from the user's own cryptor cache, which only ever
-    // holds the workspaces the user already has an access entry for.
+    // NOTIFY_USERS only: the rotation touches the user row and revokes their device tokens;
+    // the workspaces are not involved.
     result.notify_flags = ClientWorker::NOTIFY_USERS;
     return result;
 }

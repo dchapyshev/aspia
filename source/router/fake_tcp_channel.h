@@ -57,9 +57,15 @@ public:
         os_name_ = "Windows 11";
     }
 
-    // Delivers a message to the session, as the socket would.
+    // Delivers a message to the session, as the socket would: a paused channel does not read,
+    // so the frame waits until the pause is lifted.
     void receive(quint8 channel_id, const QByteArray& buffer)
     {
+        if (paused_)
+        {
+            pending_.append({ channel_id, buffer });
+            return;
+        }
         emit sig_messageReceived(channel_id, buffer);
     }
 
@@ -72,7 +78,18 @@ public:
     bool isConnected() const final { return true; }
     bool isAuthenticated() const final { return true; }
     bool isPaused() const final { return paused_; }
-    void setPaused(bool enable) final { paused_ = enable; }
+
+    // Lifting the pause hands over what arrived during it. Delivery can pause the channel again
+    // (a session closing mid-queue), and the rest keeps waiting the way pending reads do.
+    void setPaused(bool enable) final
+    {
+        paused_ = enable;
+        while (!paused_ && !pending_.isEmpty())
+        {
+            const Sent frame = pending_.takeFirst();
+            emit sig_messageReceived(frame.channel_id, frame.buffer);
+        }
+    }
     void send(quint8 channel_id, const QByteArray& buffer) final { sent_.append({ channel_id, buffer }); }
     bool setReadBufferSize(int /* size */) final { return true; }
     bool setWriteBufferSize(int /* size */) final { return true; }
@@ -84,6 +101,7 @@ protected:
 
 private:
     QList<Sent> sent_;
+    QList<Sent> pending_;
     bool paused_ = true;
 
     Q_DISABLE_COPY_MOVE(FakeTcpChannel)

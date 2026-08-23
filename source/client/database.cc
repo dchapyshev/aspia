@@ -762,6 +762,13 @@ bool Database::modifyRouter(const RouterConfig& router)
         return false;
     }
 
+    // An update of a row that is not there changes nothing and reports no error of its own.
+    if (db_.changes() == 0)
+    {
+        LOG(ERROR) << "Router" << router.routerId() << "not found";
+        return false;
+    }
+
     return true;
 }
 

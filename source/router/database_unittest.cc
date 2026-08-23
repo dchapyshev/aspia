@@ -341,6 +341,52 @@ TEST_F(RouterDatabaseTest, HostListTakesEveryGroupOfTheWorkspace)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The pages of the host list tile the table: glued back together they give every row exactly
+// once, in the contractual id order, so a row cannot land on two pages or fall between them.
+TEST_F(RouterDatabaseTest, HostPagesTileTheTable)
+{
+    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
+    ASSERT_GT(workspace_id, 0);
+
+    QList<HostId> ids;
+    for (int i = 0; i < 5; ++i)
+    {
+        const HostId host_id = addHost("hash-" + std::to_string(i));
+        ASSERT_NE(host_id, kInvalidHostId);
+        ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
+        ids.append(host_id);
+    }
+
+    auto collect = [](const proto::router::HostList& list)
+    {
+        QList<HostId> out;
+        for (int i = 0; i < list.host_size(); ++i)
+            out.append(list.host(i).host_id());
+        return out;
+    };
+
+    QList<HostId> glued;
+    for (qint64 offset = 0; offset < ids.size(); offset += 2)
+    {
+        proto::router::HostList page;
+        db_.hosts(offset, 2, &page);
+        ASSERT_EQ(page.error_code(), proto::router::kErrorOk);
+        glued.append(collect(page));
+    }
+    EXPECT_EQ(glued, ids);
+
+    glued.clear();
+    for (qint64 offset = 0; offset < ids.size(); offset += 2)
+    {
+        proto::router::HostList page;
+        db_.hosts(workspace_id, -1, offset, 2, &page);
+        ASSERT_EQ(page.error_code(), proto::router::kErrorOk);
+        glued.append(collect(page));
+    }
+    EXPECT_EQ(glued, ids);
+}
+
+//--------------------------------------------------------------------------------------------------
 // I1: the session mask is written once at creation; modifyUser must ignore the mask of the
 // request even when the credentials are fully replaced.
 TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
@@ -454,6 +500,25 @@ TEST_F(RouterDatabaseTest, OtpResetOfUserWithoutEnrollment)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A step is consumed once: only a counter newer than the stored one advances it, so parallel
+// sessions cannot accept the same code. A row that is not there answers the same way a spent
+// step does - there is nothing to advance.
+TEST_F(RouterDatabaseTest, OtpCounterIsConsumedOnce)
+{
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, QByteArray(20, 'x'), 42));
+
+    EXPECT_EQ(db_.consumeUserOtpCounter(admin_.entry_id, 43), proto::router::kErrorOk);
+    EXPECT_EQ(findUser(admin_.entry_id).otp_counter, 43u);
+
+    EXPECT_EQ(db_.consumeUserOtpCounter(admin_.entry_id, 43), proto::router::kErrorNotFound);
+    EXPECT_EQ(db_.consumeUserOtpCounter(admin_.entry_id, 42), proto::router::kErrorNotFound);
+    EXPECT_EQ(findUser(admin_.entry_id).otp_counter, 43u);
+
+    EXPECT_EQ(db_.consumeUserOtpCounter(admin_.entry_id + 1000, 100),
+              proto::router::kErrorNotFound);
+}
+
+//--------------------------------------------------------------------------------------------------
 // An administrator sees every workspace by its session type, so a workspace can be created
 // without one - and without any member at all.
 TEST_F(RouterDatabaseTest, WorkspaceNeedsNoAdminInItsAccessList)
@@ -481,7 +546,7 @@ TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameIsAlreadyExists)
 }
 
 //--------------------------------------------------------------------------------------------------
-// I4: a modification based on a stale revision is rejected; a successful one increments the
+// I3: a modification based on a stale revision is rejected; a successful one increments the
 // stored revision.
 TEST_F(RouterDatabaseTest, RevisionGuardsConcurrentModification)
 {

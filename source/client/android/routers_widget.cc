@@ -242,13 +242,18 @@ void RoutersWidget::onEditRouter(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RoutersWidget::onRouterEvent(qint64 router_id, const RouterEvent& event)
 {
+    RouterCard* card = cards_.value(router_id);
+    if (!card)
+        return;
+
+    card->updateTwoFactorButton();
+
     // Only the open panel shows its log live; the others are refilled from the journal when
     // expanded.
     if (router_id != expanded_router_id_)
         return;
 
-    if (RouterCard* card = cards_.value(router_id))
-        card->appendEvent(event);
+    card->appendEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
