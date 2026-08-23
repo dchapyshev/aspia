@@ -281,6 +281,10 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
 
         case TwoFactorHandler::Action::ACCEPT:
             token_id_ = result.token_id;
+            // Every accepted login writes user state: the token path refreshes the row of its
+            // token, a code issues a fresh one, an enrollment stores the secret. The user lists
+            // an administrator watches (devices, the OTP state) change with it.
+            emit sig_notifyChanged(ClientWorker::NOTIFY_USERS);
             completeTwoFactor(std::move(result.new_token));
             return;
 
@@ -294,9 +298,9 @@ void ClientOperator::applyTwoFactorResult(TwoFactorHandler::Result&& result)
 void ClientOperator::completeTwoFactor(std::string&& new_token)
 {
     // The account is read once more here: the session was authenticated against the user list, and
-    // a user removed in between must not get in. Either failure tears the session down, because a
-    // client that never receives LoginResult hangs in the connecting state with no error and
-    // nothing retries the send.
+    // a user removed or disabled in between must not get in. Any failure tears the session down,
+    // because a client that never receives LoginResult hangs in the connecting state with no error
+    // and nothing retries the send.
     if (!database_.isValid())
     {
         CLOG(ERROR) << "Failed to connect to database. Closing connection";
@@ -309,6 +313,13 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     {
         CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId()
                       << "). Closing connection";
+        emit sig_finished(session_id_);
+        return;
+    }
+
+    if (!(user.flags & User::ENABLED))
+    {
+        CLOG(WARNING) << "Authenticated user" << userName() << "is disabled. Closing connection";
         emit sig_finished(session_id_);
         return;
     }

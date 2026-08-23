@@ -184,7 +184,9 @@ void LocalWidget::reload()
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
-    for (const LocalHostConfig& host : Database::instance().localHostList(0))
+    QList<LocalHostConfig> root_hosts;
+    Database::instance().localHostList(0, &root_hosts);
+    for (const LocalHostConfig& host : std::as_const(root_hosts))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { host.name(), host.address() });
         item->setIcon(0, icon);
@@ -237,7 +239,9 @@ void LocalWidget::searchQuery(const QString& query)
     }
 
     QList<SearchWidget::Result> results;
-    for (const LocalHostConfig& host : Database::instance().searchLocalHosts(query))
+    QList<LocalHostConfig> matches;
+    Database::instance().searchLocalHosts(query, &matches);
+    for (const LocalHostConfig& host : std::as_const(matches))
     {
         SearchWidget::Result result;
         result.title = host.name();
@@ -453,7 +457,9 @@ void LocalWidget::onRefreshClicked()
 
     QList<qint64> entry_ids;
     OnlineChecker::HostList hosts;
-    for (const LocalHostConfig& host : Database::instance().localHostList(group_id))
+    QList<LocalHostConfig> group_hosts;
+    Database::instance().localHostList(group_id, &group_hosts);
+    for (const LocalHostConfig& host : std::as_const(group_hosts))
     {
         entry_ids.append(host.id());
         hosts.append(host);
@@ -525,7 +531,9 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
 {
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
-    for (const LocalGroupConfig& group : Database::instance().localGroupList(parent_id))
+    QList<LocalGroupConfig> groups;
+    Database::instance().localGroupList(parent_id, &groups);
+    for (const LocalGroupConfig& group : std::as_const(groups))
     {
         QTreeWidgetItem* item = parent ? new QTreeWidgetItem(parent, { group.name() })
                                        : new QTreeWidgetItem(tree_, { group.name() });
@@ -563,7 +571,9 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
 
-    for (const LocalHostConfig& host : Database::instance().localHostList(group_id))
+    QList<LocalHostConfig> group_hosts;
+    Database::instance().localHostList(group_id, &group_hosts);
+    for (const LocalHostConfig& host : std::as_const(group_hosts))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(host_tree_, { host.name(), host.address() });
         item->setIcon(0, icon);

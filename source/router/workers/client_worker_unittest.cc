@@ -15,7 +15,21 @@
 
 #include "router/workers/client_worker.h"
 
+#include <QDateTime>
+
 #include <gtest/gtest.h>
+
+#include <algorithm>
+#include <memory>
+
+#include "base/serialization.h"
+#include "base/version_constants.h"
+#include "base/crypto/totp.h"
+#include "router/client_operator.h"
+#include "router/fake_tcp_channel.h"
+#include "router/router_test_base.h"
+#include "router/router_test_worker.h"
+#include "router/handlers/two_factor_handler.h"
 
 namespace {
 
@@ -75,4 +89,137 @@ TEST(ClientWorkerTest, UnknownSessionSelectsNothing)
 {
     EXPECT_TRUE(ClientWorker::sessionsToStop(kSessions, 12345, kAdminSession).empty());
     EXPECT_TRUE(ClientWorker::sessionsToStop({}, 1, kAdminSession).empty());
+}
+
+// The list of live sessions and the stop command are private to the worker; the peer reaches them
+// so the command can be exercised against real sessions.
+class ClientWorkerTestPeer
+{
+public:
+    static std::vector<ClientOperator*>& clients(ClientWorker& worker) { return worker.clients_; }
+
+    static void stopClients(ClientWorker& worker, qint64 user_id, const std::vector<qint64>& token_ids)
+    {
+        worker.onStopClients(user_id, token_ids);
+    }
+
+    static void stop(ClientWorker& worker) { worker.onStop(); }
+};
+
+// The stop command against live sessions: which of them the pair (user, token list) takes down.
+// The sessions are the real ClientOperator over the fake channel, created and stopped in the
+// worker thread the way the router does it. The worker object itself is never started: the
+// command is a plain call, and the thread the sessions need is the test worker's.
+class ClientWorkerStopTest : public RouterTestBase
+{
+protected:
+    void SetUp() override
+    {
+        RouterTestBase::SetUp();
+
+        secret_ = Totp::generateSecret();
+        ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret_, 0));
+
+        std::unique_ptr<RouterTestWorker> worker = std::make_unique<RouterTestWorker>(file_path_);
+        worker_ = worker.get();
+
+        workers_.add(std::move(worker));
+        workers_.start();
+    }
+
+    // A session of |user| registered with the worker the way onNewConnection does it. A negative
+    // |code_time| leaves the session at the two-factor stage; otherwise the stage is passed with
+    // the code of that step (the secret of the built-in administrator). Runs in the worker thread.
+    ClientOperator* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time)
+    {
+        FakeTcpChannel* channel = new FakeTcpChannel();
+        channel->setPeer(user.entry_id, user.name.toStdString(),
+                         proto::router::SESSION_TYPE_OPERATOR, kVersion_3_0_0);
+
+        ClientOperator* client = new ClientOperator(worker_->database(), channel, nullptr);
+        ClientWorkerTestPeer::clients(worker).push_back(client);
+
+        client->start();
+
+        if (code_time >= 0)
+        {
+            proto::router::ClientToRouter message;
+            message.mutable_two_factor_response()->set_totp_code(
+                Totp::code(secret_, code_time).toStdString());
+            channel->receive(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+            EXPECT_TRUE(client->isTwoFactorCompleted());
+        }
+
+        return client;
+    }
+
+    static bool holds(ClientWorker& worker, const ClientOperator* client)
+    {
+        const std::vector<ClientOperator*>& clients = ClientWorkerTestPeer::clients(worker);
+        return std::ranges::find(clients, client) != clients.end();
+    }
+
+    // Destroyed before the database and the temporary directory of the base fixture: the worker
+    // thread must be gone before the file it works with.
+    WorkerManager workers_;
+    RouterTestWorker* worker_ = nullptr;
+    QByteArray secret_;
+};
+
+//--------------------------------------------------------------------------------------------------
+// A revocation of specific tokens stops only the sessions opened with them. The one still at the
+// two-factor stage holds no token yet and stays, and so does the session of another token.
+TEST_F(ClientWorkerStopTest, TokenRevocationStopsOnlyTheListedSession)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        const qint64 now = QDateTime::currentSecsSinceEpoch();
+        ClientOperator* revoked = addSession(worker, admin_, now);
+        ClientOperator* kept = addSession(worker, admin_, now + Totp::kDefaultStepSec);
+        ClientOperator* at_stage = addSession(worker, admin_, -1);
+
+        ASSERT_GT(revoked->tokenId(), 0);
+        ASSERT_GT(kept->tokenId(), 0);
+        ASSERT_EQ(at_stage->tokenId(), 0);
+
+        ClientWorkerTestPeer::stopClients(worker, admin_.entry_id, { revoked->tokenId() });
+
+        EXPECT_FALSE(holds(worker, revoked));
+        EXPECT_TRUE(holds(worker, kept));
+        EXPECT_TRUE(holds(worker, at_stage));
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// An empty token list means the whole user: every session of theirs goes, the one still at the
+// two-factor stage included, and the sessions of other users stay.
+TEST_F(ClientWorkerStopTest, FullStopTakesEverySessionOfTheUser)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(bob.entry_id, 0);
+
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        ClientOperator* logged_in = addSession(worker, admin_, QDateTime::currentSecsSinceEpoch());
+        ClientOperator* at_stage = addSession(worker, admin_, -1);
+        ClientOperator* other_user = addSession(worker, bob, -1);
+
+        ClientWorkerTestPeer::stopClients(worker, admin_.entry_id, {});
+
+        EXPECT_FALSE(holds(worker, logged_in));
+        EXPECT_FALSE(holds(worker, at_stage));
+        EXPECT_TRUE(holds(worker, other_user));
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+
+    // The enrollment the session of bob opened lives in a static map and must not leak into the
+    // tests that follow.
+    TwoFactorHandler::forgetUser(bob.entry_id);
 }

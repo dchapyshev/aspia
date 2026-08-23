@@ -52,7 +52,8 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
 
-    QList<RouterConfig> routers = Database::instance().routerList();
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
     for (const RouterConfig& router : std::as_const(routers))
     {
         ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayLabel(), QVariant::fromValue(router.routerId()));
@@ -101,7 +102,8 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     updateAddressLabel();
 
-    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
+    QList<LocalGroupConfig> all_groups;
+    Database::instance().allLocalGroups(&all_groups);
 
     QList<GroupComboBox::Entry> group_entries;
     group_entries.reserve(all_groups.size());
@@ -219,7 +221,8 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui->combo_group->currentGroupId();
 
-    QList<LocalHostConfig> hosts = Database::instance().localHostList(group_id);
+    QList<LocalHostConfig> hosts;
+    Database::instance().localHostList(group_id, &hosts);
     for (const LocalHostConfig& existing : std::as_const(hosts))
     {
         if (existing.id() != entry_id_ && existing.name() == name)

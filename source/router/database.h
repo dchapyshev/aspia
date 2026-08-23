@@ -116,10 +116,10 @@ public:
     // Updates a user record. The access level is set at the creation of the user and never changes
     // afterwards, so the session mask of |user| is ignored. A request with empty salt/verifier
     // changes only the flags: the stored credentials are kept, so a snapshot taken before a
-    // concurrent password change cannot roll that change back. If the change rotates the key
-    // material (salt, verifier or public key differ from the stored ones), every device token of
-    // the user is revoked. If |password_changed| is not null it is set to whether the rotation
-    // happened (the authoritative check against the stored record).
+    // concurrent password change cannot roll that change back. If the change rotates the password
+    // (salt or verifier differ from the stored ones), every device token of the user is revoked.
+    // If |password_changed| is not null it is set to whether the rotation happened (the
+    // authoritative check against the stored record).
     // Returns a proto::router error code.
     std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr);
 

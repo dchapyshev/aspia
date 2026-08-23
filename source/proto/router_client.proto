@@ -223,7 +223,7 @@ message Notification
 //
 // Flow:
 //   1. Router picks |TwoFactorMode| based on the user's stored TOTP state and sends
-//      TwoFactorChallenge (empty for MODE_ACTIVE; carrying |otpauth_uri| for MODE_ENROLL).
+//      TwoFactorChallenge (carrying |otpauth_uri| for MODE_ENROLL).
 //   2. Client answers with TwoFactorResponse. In MODE_ACTIVE the client chooses by itself:
 //      either (a) submit the |token| it stored after a previous TOTP success, or (b)
 //      ask the user for a fresh |totp_code|.

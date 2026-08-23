@@ -22,7 +22,6 @@
 
 #include "base/serialization.h"
 #include "base/crypto/random.h"
-#include "base/net/tcp_channel.h"
 #include "proto/router_admin.h"
 #include "router/router_test_base.h"
 #include "router/workers/client_worker.h"
@@ -99,6 +98,131 @@ TEST_F(UserRequestHandlerTest, AddClientNotifiesUsersOnly)
     EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
     EXPECT_EQ(result.stop_user_id, 0);
     EXPECT_TRUE(findUser("bob").isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A password rotation answers a leaked password: the device tokens derived from the old one are
+// revoked in the same transaction, and every live session of the user is dropped.
+TEST_F(UserRequestHandlerTest, PasswordRotationRevokesTokensAndStopsSessions)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const qint64 user_id = findUser("bob").entry_id;
+    ASSERT_GT(issueToken(user_id), 0);
+
+    RouterUser rotated = RouterUser::create("bob", SecureString("Rotated1234!"));
+    rotated.entry_id = user_id;
+    rotated.sessions = proto::router::SESSION_TYPE_OPERATOR;
+    rotated.flags = User::ENABLED;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, rotated));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(result.stop_user_id, user_id);
+    EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
+    EXPECT_EQ(tokenCount(user_id), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request without credentials edits only the flags. Nothing here invalidates a session or a
+// token, so nobody is dropped.
+TEST_F(UserRequestHandlerTest, PropertyEditStopsNobody)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const qint64 user_id = findUser("bob").entry_id;
+    ASSERT_GT(issueToken(user_id), 0);
+
+    RouterUser flags_only;
+    flags_only.entry_id = user_id;
+    flags_only.flags = User::ENABLED;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, flags_only));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(result.stop_user_id, 0);
+    EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
+    EXPECT_EQ(tokenCount(user_id), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A disabled account must not keep the sessions it opened while it was enabled. The tokens stay:
+// disabling is reversible, and the SRP gate holds them off while it lasts.
+TEST_F(UserRequestHandlerTest, DisablingAUserStopsTheirSessions)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const qint64 user_id = findUser("bob").entry_id;
+    ASSERT_GT(issueToken(user_id), 0);
+
+    RouterUser disabled;
+    disabled.entry_id = user_id;
+    disabled.flags = 0;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, disabled));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(result.stop_user_id, user_id);
+    EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
+    EXPECT_EQ(tokenCount(user_id), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The built-in administrator is the account that recovers the router, so it cannot be disabled.
+TEST_F(UserRequestHandlerTest, DisablingTheBuiltInUserIsRefused)
+{
+    RouterUser disabled;
+    disabled.entry_id = admin_.entry_id;
+    disabled.flags = 0;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, disabled));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorAccessDenied);
+    EXPECT_EQ(result.stop_user_id, 0);
+    EXPECT_EQ(result.notify_flags, 0u);
+    EXPECT_TRUE(findUser(admin_.entry_id).flags & User::ENABLED);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserRequestHandlerTest, ModifyOfUnknownUserIsNotFound)
+{
+    RouterUser gone;
+    gone.entry_id = 12345;
+    gone.flags = User::ENABLED;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, gone));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
+    EXPECT_EQ(result.stop_user_id, 0);
+    EXPECT_EQ(result.notify_flags, 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The cascade of the delete drops the workspace access rows of the user, so both the user list
+// and the workspace lists of the clients go stale, and the sessions of the user go down.
+TEST_F(UserRequestHandlerTest, DeleteStopsSessionsAndMarksWorkspacesStale)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const qint64 user_id = findUser("bob").entry_id;
+
+    const RequestResult result = handle(makeIdRequest(proto::router::kCommandUserDelete, user_id));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(result.stop_user_id, user_id);
+    EXPECT_EQ(result.notify_flags,
+              quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
+    EXPECT_FALSE(findUser(user_id).isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(UserRequestHandlerTest, DeleteOfUnknownUserIsNotFound)
+{
+    const RequestResult result = handle(makeIdRequest(proto::router::kCommandUserDelete, 12345));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorNotFound);
+    EXPECT_EQ(result.stop_user_id, 0);
+    EXPECT_EQ(result.notify_flags, 0u);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -564,35 +688,6 @@ TEST_F(ChangePasswordTest, RejectsOversizedCredentials)
         EXPECT_EQ(result.error_code, proto::router::kErrorInvalidData) << field.name;
         EXPECT_EQ(findUser(admin_.entry_id).verifier, admin_.verifier) << field.name;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-// A client rotates its own credentials unattended, and they all land in the administrator user
-// list. An unbounded record would kill every administrator session that opens that list,
-// including the one that would delete the offender.
-TEST_F(ChangePasswordTest, UserListStaysSendableAfterACredentialRotation)
-{
-    const RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
-    ASSERT_TRUE(client.isValid());
-    setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
-
-    const std::string oversized(1024 * 1024, 'x');
-
-    proto::router::ChangePasswordRequest request;
-    request.set_salt(oversized);
-    request.set_verifier(oversized);
-
-    handleChangePassword(db_, caller_, request);
-
-    proto::router::UserListRequest request_list;
-    request_list.set_count(proto::router::kMaxUserPageSize);
-
-    proto::router::RouterToAdmin message;
-    proto::router::UserList* list = message.mutable_user_list();
-    handleUserList(db_, request_list, list);
-
-    ASSERT_EQ(list->error_code(), proto::router::kErrorOk);
-    EXPECT_LE(serialize(message).size(), TcpChannel::kMaxMessageSize);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -206,7 +206,8 @@ void MainWindow::connectToUrl(const QString& url)
     if (host_url.isRouterHost())
     {
         qint64 router_id = -1;
-        QList<RouterConfig> routers = db.routerList();
+        QList<RouterConfig> routers;
+        db.routerList(&routers);
         for (const RouterConfig& router_config : std::as_const(routers))
         {
             if (router_config.guid() == host_url.routerGuid())

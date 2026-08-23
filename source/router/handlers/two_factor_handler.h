@@ -72,9 +72,8 @@ public:
         Action action = Action::CLOSE;
         Challenge challenge;
 
-        // ACCEPT only. Empty when the client authenticated with a token it already had: an empty
-        // message cannot be sent over the wire, so in that case the success is signalled by the
-        // user keys alone.
+        // ACCEPT only. Empty when the client authenticated with a token it already had: LoginResult
+        // goes out either way, just with nothing for the client to store.
         std::string new_token;
         qint64 token_id = 0;
     };

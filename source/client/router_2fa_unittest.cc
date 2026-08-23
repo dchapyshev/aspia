@@ -220,6 +220,64 @@ TEST_F(Router2FATest, EnrollmentDropsTheStoredToken)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The enrollment challenge repeats on every reconnect of the stage, and most enrollments hold no
+// token at all. A challenge with nothing to drop must not rewrite the record.
+TEST_F(Router2FATest, EnrollmentWithoutAStoredTokenLeavesTheRecordAlone)
+{
+    seedRecord();
+
+    // A rename made behind the login's back: a needless rewrite would revert it.
+    RouterConfig renamed = *config();
+    renamed.setDisplayName("renamed");
+    ASSERT_TRUE(Database::instance().modifyRouter(renamed));
+
+    proto::router::RouterToClient message;
+    message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+    message.mutable_two_factor_challenge()->set_otpauth_uri(
+        "otpauth://totp/Aspia:user?secret=ABCDEFGH");
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_NE(login_.twoFactorPrompt(), nullptr);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->displayName(), QString("renamed"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router repeats the enrollment challenge on every reconnect of the stage. The QR code on
+// screen must not change under the operator's hands, so the same question keeps the same prompt,
+// and a challenge with a different URI is a new question that replaces it.
+TEST_F(Router2FATest, RepeatedEnrollmentChallengeKeepsThePrompt)
+{
+    proto::router::RouterToClient message;
+    message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+    message.mutable_two_factor_challenge()->set_otpauth_uri(
+        "otpauth://totp/Aspia:user?secret=ABCDEFGH");
+
+    Router2FATestPeer::receive(login_, message);
+
+    TwoFactorPrompt* first = login_.twoFactorPrompt();
+    ASSERT_NE(first, nullptr);
+    ASSERT_EQ(prompts_required_, 1);
+
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(login_.twoFactorPrompt(), first);
+    EXPECT_EQ(prompts_required_, 1);
+
+    // A reset on the router hands out a new secret: the different URI is a new question.
+    proto::router::RouterToClient other;
+    other.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
+    other.mutable_two_factor_challenge()->set_otpauth_uri(
+        "otpauth://totp/Aspia:user?secret=IJKLMNOP");
+    Router2FATestPeer::receive(login_, other);
+
+    EXPECT_NE(login_.twoFactorPrompt(), first);
+    EXPECT_EQ(prompts_required_, 2);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The token issued by LoginResult is what skips the prompt next time, so it must reach the
 // stored record.
 TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)

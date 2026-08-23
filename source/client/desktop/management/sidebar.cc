@@ -123,7 +123,8 @@ bool Sidebar::dragging() const
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<LocalGroupConfig> groups = Database::instance().localGroupList(parent_id);
+    QList<LocalGroupConfig> groups;
+    Database::instance().localGroupList(parent_id, &groups);
 
     Settings settings;
 
@@ -170,7 +171,8 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadRouters()
 {
-    QList<RouterConfig> routers = Database::instance().routerList();
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
 
     for (const RouterConfig& router_config : std::as_const(routers))
     {
@@ -184,7 +186,8 @@ void Sidebar::loadRouters()
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
-    QList<RouterConfig> routers = Database::instance().routerList();
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
 
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
@@ -1285,7 +1288,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
 
         // Check if a group with the same name already exists in the target group.
-        QList<LocalGroupConfig> target_groups = Database::instance().localGroupList(target_item->groupId());
+        QList<LocalGroupConfig> target_groups;
+        Database::instance().localGroupList(target_item->groupId(), &target_groups);
         for (const LocalGroupConfig& existing : std::as_const(target_groups))
         {
             if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
@@ -1343,7 +1347,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Check if a host with the same name already exists in the target group.
-        QList<LocalHostConfig> target_hosts = Database::instance().localHostList(target_item->groupId());
+        QList<LocalHostConfig> target_hosts;
+        Database::instance().localHostList(target_item->groupId(), &target_hosts);
         for (const LocalHostConfig& existing : std::as_const(target_hosts))
         {
             if (existing.name() == dragged_host.name())

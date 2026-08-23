@@ -19,19 +19,15 @@
 #ifndef BASE_CRYPTO_OS_CRYPT_H
 #define BASE_CRYPTO_OS_CRYPT_H
 
-#include <QString>
+#include <QByteArray>
 
 class OSCrypt
 {
 public:
-    // Encrypt a QString.
-    static bool encryptString(const QString& plaintext, QByteArray* ciphertext);
-
-    // Decrypt an array of bytes obtained into a QString.
-    static bool decryptString(const QByteArray& ciphertext, QString* plaintext);
-
-    // Binary equivalents of the String variants.
+    // Encrypt an array of bytes.
     static bool encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext);
+
+    // Decrypt an array of bytes.
     static bool decryptBytes(const QByteArray& ciphertext, QByteArray* plaintext);
 
 private:

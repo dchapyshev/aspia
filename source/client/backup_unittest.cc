@@ -140,10 +140,40 @@ protected:
         return host.id();
     }
 
+    // The list scans of the fixture: the read is expected to succeed, and the list comes back by
+    // value the way the tests consume it.
+    static QList<LocalHostConfig> allLocalHosts(Database& db)
+    {
+        QList<LocalHostConfig> hosts;
+        EXPECT_TRUE(db.allLocalHosts(&hosts));
+        return hosts;
+    }
+
+    static QList<LocalGroupConfig> allLocalGroups(Database& db)
+    {
+        QList<LocalGroupConfig> groups;
+        EXPECT_TRUE(db.allLocalGroups(&groups));
+        return groups;
+    }
+
+    static QList<RouterConfig> routerList(Database& db)
+    {
+        QList<RouterConfig> routers;
+        EXPECT_TRUE(db.routerList(&routers));
+        return routers;
+    }
+
+    static QList<RouterHostConfig> allRouterHosts(Database& db)
+    {
+        QList<RouterHostConfig> hosts;
+        EXPECT_TRUE(db.allRouterHosts(&hosts));
+        return hosts;
+    }
+
     static QStringList hostNames(Database& db)
     {
         QStringList names;
-        for (const LocalHostConfig& host : db.allLocalHosts())
+        for (const LocalHostConfig& host : allLocalHosts(db))
             names.append(host.name());
         names.sort();
         return names;
@@ -170,7 +200,7 @@ protected:
     static QStringList groupNames(Database& db)
     {
         QStringList names;
-        for (const LocalGroupConfig& group : db.allLocalGroups())
+        for (const LocalGroupConfig& group : allLocalGroups(db))
             names.append(group.name());
         names.sort();
         return names;
@@ -179,7 +209,7 @@ protected:
     // The record of the host with this name, whatever id it was given on the way in.
     static std::optional<LocalHostConfig> hostByName(Database& db, const QString& name)
     {
-        for (const LocalHostConfig& host : db.allLocalHosts())
+        for (const LocalHostConfig& host : allLocalHosts(db))
         {
             if (host.name() == name)
                 return host;
@@ -191,7 +221,7 @@ protected:
     // The record of the group with this name, whatever id it was given on the way in.
     static std::optional<LocalGroupConfig> groupByName(Database& db, const QString& name)
     {
-        for (const LocalGroupConfig& group : db.allLocalGroups())
+        for (const LocalGroupConfig& group : allLocalGroups(db))
         {
             if (group.name() == name)
                 return group;
@@ -320,7 +350,9 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
 
     EXPECT_EQ(new_parent->parentId(), 0);
     EXPECT_EQ(new_child->parentId(), new_parent->id());
-    EXPECT_EQ(target_.localHostList(new_child->id()).size(), 1);
+    QList<LocalHostConfig> child_hosts;
+    EXPECT_TRUE(target_.localHostList(new_child->id(), &child_hosts));
+    EXPECT_EQ(child_hosts.size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,8 +409,8 @@ TEST_F(BackupTest, FileWithARouterWithoutAGuidIsNotImported)
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
 
-    EXPECT_TRUE(target_.routerList().isEmpty());
-    EXPECT_TRUE(target_.allLocalHosts().isEmpty());
+    EXPECT_TRUE(routerList(target_).isEmpty());
+    EXPECT_TRUE(allLocalHosts(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,7 +465,7 @@ TEST_F(BackupTest, FileWithARouterWithoutAPasswordIsNotImported)
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(routerList(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -450,7 +482,7 @@ TEST_F(BackupTest, FileWithARouterOfAnUnknownSessionTypeIsNotImported)
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(routerList(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -605,7 +637,7 @@ TEST_F(BackupTest, FileWhereCredentialsNameARouterItDoesNotCarryIsNotImported)
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -668,7 +700,7 @@ TEST_F(BackupTest, SavedCredentialsFollowTheirRouter)
     EXPECT_EQ(report.routers, 1);
     EXPECT_EQ(report.router_hosts, 2);
 
-    const QList<RouterConfig> routers = target_.routerList();
+    const QList<RouterConfig> routers = routerList(target_);
     ASSERT_EQ(routers.size(), 1);
     EXPECT_EQ(routers.front().guid(), original->guid());
 
@@ -696,7 +728,7 @@ TEST_F(BackupTest, ImportedRouterKeepsItsGuid)
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<RouterConfig> routers = target_.routerList();
+    const QList<RouterConfig> routers = routerList(target_);
     ASSERT_EQ(routers.size(), 1);
     EXPECT_EQ(routers.front().guid(), original->guid());
 
@@ -718,7 +750,7 @@ TEST_F(BackupTest, RouterWithoutANameComesBackWithoutOne)
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<RouterConfig> routers = target_.routerList();
+    const QList<RouterConfig> routers = routerList(target_);
     ASSERT_EQ(routers.size(), 1);
 
     EXPECT_TRUE(routers.front().displayName().isEmpty());
@@ -744,7 +776,7 @@ TEST_F(BackupTest, FileNamingOneRouterTwiceIsNotImported)
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
 
-    EXPECT_TRUE(target_.routerList().isEmpty());
+    EXPECT_TRUE(routerList(target_).isEmpty());
     EXPECT_TRUE(groupNames(target_).isEmpty());
 }
 
@@ -774,7 +806,7 @@ TEST_F(BackupTest, SavedCredentialsOfATemporaryHostAreNotImported)
     });
 
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
-    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -907,7 +939,7 @@ TEST_F(BackupTest, MomentsOfAHostTravelWithIt)
 
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<LocalHostConfig> hosts = target_.allLocalHosts();
+    const QList<LocalHostConfig> hosts = allLocalHosts(target_);
     ASSERT_EQ(hosts.size(), 1);
 
     EXPECT_EQ(hosts.front().createTime(), 1400000000);
@@ -932,9 +964,9 @@ TEST_F(BackupTest, HostOfARemovedRouterTravels)
 
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    ASSERT_EQ(target_.allLocalHosts().size(), 1);
-    EXPECT_EQ(target_.allLocalHosts().first().name(), QString("through-router"));
-    EXPECT_EQ(target_.allLocalHosts().first().routerId(), 0);
+    ASSERT_EQ(allLocalHosts(target_).size(), 1);
+    EXPECT_EQ(allLocalHosts(target_).first().name(), QString("through-router"));
+    EXPECT_EQ(allLocalHosts(target_).first().routerId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -961,8 +993,8 @@ TEST_F(BackupTest, ImportReplacesTheWholeBook)
 
     EXPECT_EQ(groupNames(target_), QStringList({ "from the file" }));
     EXPECT_EQ(hostNames(target_), QStringList({ "host of the file" }));
-    EXPECT_TRUE(target_.routerList().isEmpty());
-    EXPECT_TRUE(target_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(routerList(target_).isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -979,10 +1011,10 @@ TEST_F(BackupTest, ImportedTwiceLeavesOneBook)
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    EXPECT_EQ(target_.routerList().size(), 1);
-    EXPECT_EQ(target_.allLocalGroups().size(), 1);
-    EXPECT_EQ(target_.allLocalHosts().size(), 1);
-    EXPECT_EQ(target_.allRouterHosts().size(), 1);
+    EXPECT_EQ(routerList(target_).size(), 1);
+    EXPECT_EQ(allLocalGroups(target_).size(), 1);
+    EXPECT_EQ(allLocalHosts(target_).size(), 1);
+    EXPECT_EQ(allRouterHosts(target_).size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1084,7 +1116,7 @@ TEST_F(BackupTest, HostFollowsItsRouter)
 
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const QList<RouterConfig> routers = target_.routerList();
+    const QList<RouterConfig> routers = routerList(target_);
     ASSERT_EQ(routers.size(), 1);
     ASSERT_NE(routers.front().routerId(), router_id);
 

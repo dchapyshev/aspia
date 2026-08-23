@@ -90,8 +90,8 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* ok = addButton(tr("OK"), Button::Role::FILLED);
 
-    // The router refuses a code of the wrong length the way it refuses a wrong one: it ends the
-    // session and counts the attempt against the block. So an incomplete code never leaves here.
+    // An incomplete code costs the same as a wrong one: the router ends the session over it. So it
+    // never leaves here.
     ok->setEnabled(false);
 
     connect(code_, &QLineEdit::textChanged, this, [ok](const QString& text)

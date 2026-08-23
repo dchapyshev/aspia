@@ -351,12 +351,13 @@ void SearchWidget::search(const QString& query)
 
     Database& db = Database::instance();
 
-    const QList<LocalGroupConfig> all_groups = db.allLocalGroups();
+    QList<LocalGroupConfig> all_groups;
+    db.allLocalGroups(&all_groups);
     local_groups_.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
 
-    local_matches_ = db.searchLocalHosts(query);
+    db.searchLocalHosts(query, &local_matches_);
 
     // The local matches are in hand already, so the local part of the first page is shown at
     // once, with the local address book as the only source. The routers are queried after the
@@ -398,7 +399,8 @@ void SearchWidget::countSources()
 
     // Then the routers, ordered by id, so the whole result keeps one order however fast each of
     // them answers.
-    QList<RouterConfig> routers = Database::instance().routerList();
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
     std::sort(routers.begin(), routers.end(), [](const RouterConfig& first, const RouterConfig& second)
     {
         return first.routerId() < second.routerId();
@@ -689,7 +691,8 @@ void SearchWidget::refreshItem(qint64 entry_id)
     }
 
     QHash<qint64, LocalGroupConfig> groups;
-    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
+    QList<LocalGroupConfig> all_groups;
+    Database::instance().allLocalGroups(&all_groups);
     groups.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);

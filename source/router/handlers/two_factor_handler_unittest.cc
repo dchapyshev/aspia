@@ -151,9 +151,10 @@ TEST_F(TwoFactorHandlerTest, EnrollmentStoresSecretOnlyAfterConfirmation)
 TEST_F(TwoFactorHandlerTest, EnrollmentRejectsWrongCode)
 {
     TwoFactorHandler handler;
-    ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    const QByteArray secret = secretFromUri(start(handler).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
 
-    EXPECT_EQ(submitCode(handler, "000000", kNow).action,
+    EXPECT_EQ(submitCode(handler, wrongCode(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
     EXPECT_TRUE(findUser(admin_.entry_id).otp_secret.isEmpty());
     EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
@@ -450,6 +451,49 @@ TEST_F(TwoFactorHandlerTest, GuessingIsStoppedAfterTooManyFailedAttempts)
     ASSERT_EQ(start(after).action, TwoFactorHandler::Action::SEND_CHALLENGE);
     EXPECT_EQ(submitCode(after, Totp::code(secret, later), later).action,
               TwoFactorHandler::Action::ACCEPT);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A block that has run out closes the series it was imposed for: those attempts are paid for.
+// The miss after it starts a fresh count of its own instead of stacking onto the old one and
+// re-imposing the block at once.
+TEST_F(TwoFactorHandlerTest, ExpiredBlockClosesTheSeriesItPunished)
+{
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+
+    const QString wrong = wrongCode(secret, kNow);
+
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(attempt, wrong, kNow).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    const qint64 later =
+        kNow + DurationCast<Seconds>(TwoFactorHandler::kFailedAttemptsBlock).count();
+    const QString wrong_later = wrongCode(secret, later);
+
+    // The first miss after the block is refused as a wrong code, not punished as the eleventh
+    // of a series already paid for.
+    TwoFactorHandler eleventh;
+    ASSERT_EQ(start(eleventh, later).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+    ASSERT_EQ(submitCode(eleventh, wrong_later, later).action, TwoFactorHandler::Action::CLOSE);
+
+    TwoFactorHandler unblocked;
+    EXPECT_EQ(start(unblocked, later).challenge.blocked_seconds, 0);
+
+    // The fresh series carries its own count: the next block takes the full number of misses.
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts - 1; ++i)
+    {
+        TwoFactorHandler attempt;
+        ASSERT_EQ(start(attempt, later).action, TwoFactorHandler::Action::SEND_CHALLENGE);
+        ASSERT_EQ(submitCode(attempt, wrong_later, later).action, TwoFactorHandler::Action::CLOSE);
+    }
+
+    TwoFactorHandler blocked;
+    EXPECT_GT(start(blocked, later).challenge.blocked_seconds, 0);
 }
 
 //--------------------------------------------------------------------------------------------------

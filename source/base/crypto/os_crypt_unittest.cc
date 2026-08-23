@@ -21,7 +21,6 @@
 #include <gtest/gtest.h>
 
 #include <QByteArray>
-#include <QString>
 
 TEST(OSCryptTest, BytesRoundTrip)
 {
@@ -33,18 +32,6 @@ TEST(OSCryptTest, BytesRoundTrip)
 
     QByteArray opened;
     ASSERT_TRUE(OSCrypt::decryptBytes(ciphertext, &opened));
-    EXPECT_EQ(opened, plaintext);
-}
-
-TEST(OSCryptTest, StringRoundTrip)
-{
-    const QString plaintext = QString::fromUtf8("caf\xC3\xA9 \xE2\x82\xAC");
-
-    QByteArray ciphertext;
-    ASSERT_TRUE(OSCrypt::encryptString(plaintext, &ciphertext));
-
-    QString opened;
-    ASSERT_TRUE(OSCrypt::decryptString(ciphertext, &opened));
     EXPECT_EQ(opened, plaintext);
 }
 

@@ -117,7 +117,12 @@ TwoFactorPrompt* RouterController::twoFactorPrompt(qint64 router_id)
 //--------------------------------------------------------------------------------------------------
 void RouterController::reload()
 {
-    const QList<RouterConfig> configs = Database::instance().routerList();
+    QList<RouterConfig> configs;
+    if (!Database::instance().routerList(&configs))
+    {
+        LOG(ERROR) << "Failed to read the router list - keeping the current state";
+        return;
+    }
 
     // A record whose sealed column did not open comes back with empty credentials and is not served.
     QSet<qint64> present;
@@ -224,10 +229,6 @@ void RouterController::clearEvents(qint64 router_id)
 void RouterController::addEvent(qint64 router_id, RouterEvent::Severity severity,
                                const QString& text)
 {
-    // Bounded per record. A record that cannot reach its router writes a few lines on every
-    // reconnect attempt, and an unbounded journal would grow for as long as the client runs.
-    static constexpr int kMaxStoredEvents = 100;
-
     const RouterEvent event{ QDateTime::currentDateTime(), severity, text };
 
     auto it = contexts_.find(router_id);
@@ -291,26 +292,18 @@ void RouterController::onTwoFactorFinished(
         return;
 
     RouterContext& context = it->second;
-
-    // The reporting login is done and only waits to be destroyed; deferred, because it is the
-    // sender of the signal being handled.
     context.two_factor.reset();
 
-    // The config is re-read so the session works with what the record says now, not with what it
-    // said when the record started logging in.
     const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
-    if (!config.has_value() || !config->isValid())
-    {
-        LOG(WARNING) << "Logged in but the record is gone (router_id:" << router_id << ")";
-        updateStatus(router_id);
-        return;
-    }
+    if (config.has_value() && config->isValid())
+        *context.config = *config;
+    else
+        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << ") - using the in-memory copy";
 
-    *context.config = *config;
     context.session = new RouterSession(context.config, user_id, peer_version, this);
 
     addEvent(router_id, RouterEvent::Severity::INFO,
-             tr("Connection to router %1 established.").arg(config->address()));
+             tr("Connection to router %1 established.").arg(context.config->address()));
     updateStatus(router_id);
     emit sig_created(router_id);
 
@@ -366,16 +359,14 @@ void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode err
     context.session.reset();
 
     const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
-    if (!config.has_value() || !config->isValid())
-    {
-        LOG(WARNING) << "Connection lost and the record is gone (router_id:" << router_id << ")";
-        updateStatus(router_id);
-        return;
-    }
+    if (config.has_value() && config->isValid())
+        *context.config = *config;
+    else
+        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << ") - using the in-memory copy";
 
     addEvent(router_id, RouterEvent::Severity::INFO,
-             tr("Connecting to router %1...").arg(config->address()));
-    startTwoFactor(router_id, *config);
+             tr("Connecting to router %1...").arg(context.config->address()));
+    startTwoFactor(router_id, *context.config);
     updateStatus(router_id);
 }
 

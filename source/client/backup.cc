@@ -146,8 +146,13 @@ QByteArray fileSalt(const proto::storage::BackupFile& file_message)
 // does not open is refused as a whole, because the file would be missing what it exists for.
 Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report* report)
 {
-    const QList<RouterConfig> routers = db.routerList();
-    const QList<LocalGroupConfig> groups = db.allLocalGroups();
+    QList<RouterConfig> routers;
+    QList<LocalGroupConfig> groups;
+    if (!db.routerList(&routers) || !db.allLocalGroups(&groups))
+    {
+        LOG(ERROR) << "Unable to read the address book";
+        return Backup::Result::INTERNAL_ERROR;
+    }
 
     // What a record of the book is named by in the file. A link resolved to nothing comes out
     // empty, which is what a record reaching no router and a group at the root say anyway.
@@ -177,7 +182,13 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         ++report->local_groups;
     }
 
-    const QList<LocalHostConfig> hosts = db.allLocalHosts();
+    QList<LocalHostConfig> hosts;
+    if (!db.allLocalHosts(&hosts))
+    {
+        LOG(ERROR) << "Unable to read the address book";
+        return Backup::Result::INTERNAL_ERROR;
+    }
+
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
         if (host.address().isEmpty())
@@ -194,7 +205,13 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         ++report->local_hosts;
     }
 
-    const QList<RouterHostConfig> router_hosts = db.allRouterHosts();
+    QList<RouterHostConfig> router_hosts;
+    if (!db.allRouterHosts(&router_hosts))
+    {
+        LOG(ERROR) << "Unable to read the address book";
+        return Backup::Result::INTERNAL_ERROR;
+    }
+
     for (const RouterHostConfig& host : std::as_const(router_hosts))
     {
         if (host.username().isEmpty() || host.password().isEmpty())

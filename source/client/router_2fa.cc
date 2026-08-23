@@ -40,7 +40,19 @@ TwoFactorPrompt::TwoFactorPrompt(const QString& otpauth_uri, bool code_refused,
       code_refused_(code_refused),
       blocked_until_(blocked_seconds * 1000)
 {
-    // Nothing
+    // The wait ends on its own. The router has been counting the same block down since before
+    // this side started, so when the announced seconds run out the question is announced again
+    // and the dialog opens the regular way. A precise timer, because a coarse one may fire up
+    // to a second early, and the announcement would find seconds still on the prompt and be
+    // filtered by every gate that reads them.
+    if (blocked_seconds > 0)
+    {
+        Router2FA* login = static_cast<Router2FA*>(parent);
+        QTimer::singleShot(Seconds(blocked_seconds), Qt::PreciseTimer, this, [login]
+        {
+            emit login->sig_twoFactorRequired(login->config_->routerId());
+        });
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,17 +150,6 @@ void Router2FA::openPrompt(const proto::router::TwoFactorChallenge& challenge,
 
     prompt_ = new TwoFactorPrompt(otpauth_uri, challenge.code_rejected(), blocked_seconds, this);
     emit sig_twoFactorRequired(config_->routerId());
-
-    // The wait ends on its own. The router has been counting the same block down since before
-    // this side started, so when the announced seconds run out the question is announced again
-    // and the dialog opens the regular way.
-    if (blocked_seconds > 0)
-    {
-        QTimer::singleShot(static_cast<int>(blocked_seconds * 1000), prompt_, [this]
-        {
-            emit sig_twoFactorRequired(config_->routerId());
-        });
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -164,18 +165,6 @@ void Router2FA::sendCode(const QString& totp_code)
     proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
     response->set_totp_code(totp_code.toStdString());
     send(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router2FA::reconnect()
-{
-    version_ = QVersionNumber();
-
-    if (!router_worker_)
-        return;
-
-    QMetaObject::invokeMethod(router_worker_, &RouterWorker::onReconnect, Qt::QueuedConnection,
-                              config_->routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,13 +225,13 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
         {
             // What the operator scans comes from the peer, so it is checked before it reaches the
             // screen or displaces the stored token. A malformed challenge is refused whole, the
-            // way an unknown mode is below.
+            // way an unknown mode is below. Nothing answers it, and the router times the silent
+            // stage out.
             const std::string& otpauth_uri = challenge.otpauth_uri();
             if (!otpauth_uri.starts_with("otpauth://") ||
                 otpauth_uri.size() > proto::router::kMaxOtpauthUriLength)
             {
                 LOG(ERROR) << "Malformed otpauth URI for router" << config_->routerId();
-                reconnect();
                 return;
             }
 
@@ -252,15 +241,17 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (QUrlQuery(QUrl(uri)).queryItemValue("secret").isEmpty())
             {
                 LOG(ERROR) << "otpauth URI without a secret for router" << config_->routerId();
-                reconnect();
                 return;
             }
 
             // Enrollment means a brand new TOTP secret, so a token of the previous account
-            // life is dead.
-            config_->clearDeviceToken();
-            if (!Database::instance().modifyRouter(*config_))
-                LOG(WARNING) << "Failed to clear stale device token";
+            // life is dead. The challenge repeats on every reconnect of the stage.
+            if (!config_->deviceToken().isEmpty())
+            {
+                config_->clearDeviceToken();
+                if (!Database::instance().modifyRouter(*config_))
+                    LOG(WARNING) << "Failed to clear stale device token";
+            }
 
             LOG(INFO) << "Two-factor enrollment required for router" << config_->routerId();
             openPrompt(challenge, uri);
@@ -269,7 +260,6 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
 
         default:
             LOG(ERROR) << "Unknown TwoFactorMode:" << challenge.mode();
-            reconnect();
             return;
     }
 }

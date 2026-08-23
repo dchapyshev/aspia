@@ -26,8 +26,9 @@ const char kAlphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 const qsizetype kTailChars[5] = { 0, 2, 4, 5, 7 };
 
 //--------------------------------------------------------------------------------------------------
-// Maps a Base32 character to its 5-bit value, or 0xFF for invalid input. Accepts both upper-
-// and lower-case letters per RFC 4648 section 12.
+// Maps a Base32 character to its 5-bit value, or 0xFF for invalid input. RFC 4648 defines the
+// alphabet in upper case; lower case is accepted as well, since a secret typed by hand arrives
+// in either case.
 quint8 decodeChar(char ch)
 {
     if (ch >= 'A' && ch <= 'Z')

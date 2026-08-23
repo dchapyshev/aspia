@@ -111,6 +111,7 @@ private:
 
     std::vector<ClientOperator*> clients_;
 
+    friend class ClientWorkerTestPeer;
     Q_DISABLE_COPY_MOVE(ClientWorker)
 };
 

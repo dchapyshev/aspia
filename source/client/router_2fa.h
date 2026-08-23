@@ -101,7 +101,6 @@ private:
 
     void openPrompt(const proto::router::TwoFactorChallenge& challenge, const QString& otpauth_uri);
     void sendCode(const QString& totp_code);
-    void reconnect();
     void send(const proto::router::ClientToRouter& message);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
     void readLoginResult(const proto::router::LoginResult& result);

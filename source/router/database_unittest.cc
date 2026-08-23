@@ -500,6 +500,21 @@ TEST_F(RouterDatabaseTest, OtpResetOfUserWithoutEnrollment)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The touch answers whether it refreshed anything. A token can be revoked from another process
+// between the lookup and the touch, and the caller logs by this answer.
+TEST_F(RouterDatabaseTest, TouchOfAMissingTokenReportsFalse)
+{
+    std::string token;
+    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token));
+
+    EXPECT_TRUE(db_.touchClientDeviceToken(token, "127.0.0.2"));
+
+    ASSERT_EQ(db_.revokeUserClientDeviceTokens(admin_.entry_id), proto::router::kErrorOk);
+
+    EXPECT_FALSE(db_.touchClientDeviceToken(token, "127.0.0.2"));
+}
+
+//--------------------------------------------------------------------------------------------------
 // A step is consumed once: only a counter newer than the stored one advances it, so parallel
 // sessions cannot accept the same code. A row that is not there answers the same way a spent
 // step does - there is nothing to advance.

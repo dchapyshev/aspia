@@ -26,56 +26,6 @@
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
-{
-    QByteArray plaintext_utf8 = plaintext.toUtf8();
-
-    DATA_BLOB input;
-    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(plaintext_utf8.data()));
-    input.cbData = static_cast<DWORD>(plaintext_utf8.length());
-
-    DATA_BLOB output;
-    BOOL result = CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output);
-    memZero(&plaintext_utf8);
-    if (!result)
-    {
-        PLOG(ERROR) << "Failed to encrypt";
-        return false;
-    }
-
-    *ciphertext = QByteArray(reinterpret_cast<const char*>(output.pbData),
-                             static_cast<int>(output.cbData));
-    LocalFree(output.pbData);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
-{
-    DATA_BLOB input;
-    input.pbData = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(ciphertext.data()));
-    input.cbData = static_cast<DWORD>(ciphertext.length());
-
-    DATA_BLOB output;
-    BOOL result = CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0, &output);
-    if (!result)
-    {
-        PLOG(ERROR) << "Failed to decrypt";
-        return false;
-    }
-
-    QByteArray plaintext_utf8 =
-        QByteArray::fromRawData(reinterpret_cast<char*>(output.pbData), output.cbData);
-
-    *plaintext = QString::fromUtf8(plaintext_utf8);
-    memZero(output.pbData, output.cbData);
-    LocalFree(output.pbData);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
 bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
 {
     if (plaintext.isEmpty())

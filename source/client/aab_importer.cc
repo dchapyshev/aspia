@@ -99,7 +99,10 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     QString combined_address = combineHostAndPort(address, proto_router.port());
 
     Database& db = Database::instance();
-    const QList<RouterConfig> routers = db.routerList();
+
+    QList<RouterConfig> routers;
+    if (!db.routerList(&routers))
+        return 0;
 
     for (const RouterConfig& router : std::as_const(routers))
     {

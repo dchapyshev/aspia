@@ -46,8 +46,8 @@ public:
     bool isValid() const;
 
     // Local Hosts.
-    QList<LocalHostConfig> localHostList(qint64 group_id) const;
-    QList<LocalHostConfig> allLocalHosts() const;
+    bool localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
+    bool allLocalHosts(QList<LocalHostConfig>* hosts) const;
     bool addLocalHost(LocalHostConfig& host);
     bool modifyLocalHost(LocalHostConfig& host);
     bool removeLocalHost(qint64 entry_id);
@@ -56,11 +56,11 @@ public:
     std::optional<LocalHostConfig> findLocalHostByGuid(const QString& guid) const;
 
     // Local Search.
-    QList<LocalHostConfig> searchLocalHosts(const QString& query) const;
+    bool searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
 
     // Local Groups.
-    QList<LocalGroupConfig> localGroupList(qint64 parent_id) const;
-    QList<LocalGroupConfig> allLocalGroups() const;
+    bool localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const;
+    bool allLocalGroups(QList<LocalGroupConfig>* groups) const;
     bool addLocalGroup(LocalGroupConfig& group);
     bool modifyLocalGroup(const LocalGroupConfig& group);
     bool moveLocalGroup(qint64 group_id, qint64 new_parent_id);
@@ -68,19 +68,19 @@ public:
     std::optional<LocalGroupConfig> findLocalGroup(qint64 group_id) const;
 
     // Routers.
-    QList<RouterConfig> routerList() const;
+    bool routerList(QList<RouterConfig>* routers) const;
     bool addRouter(RouterConfig& router);
     bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
     std::optional<RouterConfig> findRouter(qint64 router_id) const;
 
     // Router Hosts.
-    QList<RouterHostConfig> allRouterHosts() const;
+    bool allRouterHosts(QList<RouterHostConfig>* hosts) const;
     bool addRouterHost(const RouterHostConfig& host);
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(qint64 router_id, HostId host_id);
     std::optional<RouterHostConfig> findRouterHost(qint64 router_id, HostId host_id) const;
-    QList<HostId> outdatedRouterHosts(qint64 router_id) const;
+    bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
 
     // Puts these records in place of the address book, all of them or none. Everything the book

@@ -173,6 +173,9 @@ void RouterStatusWidget::addEvent(const RouterEvent& event)
     item->setText(COLUMN_TIME, event.time.toString("yyyy-MM-dd HH:mm:ss"));
     item->setText(COLUMN_EVENT, event.text);
     item->setIcon(COLUMN_TIME, QIcon(icon_path));
+
+    while (ui->tree_events->topLevelItemCount() > RouterController::kMaxStoredEvents)
+        delete ui->tree_events->takeTopLevelItem(0);
 }
 
 //--------------------------------------------------------------------------------------------------

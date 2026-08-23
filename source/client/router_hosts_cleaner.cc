@@ -56,8 +56,8 @@ void RouterHostsCleaner::start()
         return;
     }
 
-    const QList<HostId> hosts = Database::instance().outdatedRouterHosts(router_id_);
-    if (hosts.isEmpty())
+    QList<HostId> hosts;
+    if (!Database::instance().outdatedRouterHosts(router_id_, &hosts) || hosts.isEmpty())
     {
         LOG(TRACE) << "No outdated hosts";
         emit sig_finished();

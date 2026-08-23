@@ -59,25 +59,6 @@ SecureByteArray wrappingKey()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
-{
-    return encryptBytes(plaintext.toUtf8(), ciphertext);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
-{
-    QByteArray bytes;
-    if (!decryptBytes(ciphertext, &bytes))
-        return false;
-
-    *plaintext = QString::fromUtf8(bytes);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
 bool OSCrypt::encryptBytes(const QByteArray& plaintext, QByteArray* ciphertext)
 {
     if (plaintext.isEmpty())

@@ -116,7 +116,9 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     current_group_id_ = group_id;
 
-    model_->setHosts(Database::instance().localHostList(group_id));
+    QList<LocalHostConfig> hosts;
+    Database::instance().localHostList(group_id, &hosts);
+    model_->setHosts(hosts);
 
     updateStatusLabels();
 
@@ -363,9 +365,13 @@ void LocalGroupWidget::startDrag()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::updateStatusLabels()
 {
-    int child_groups_count = 0;
+    qsizetype child_groups_count = 0;
     if (current_group_id_ >= 0)
-        child_groups_count = Database::instance().localGroupList(current_group_id_).size();
+    {
+        QList<LocalGroupConfig> child_groups;
+        Database::instance().localGroupList(current_group_id_, &child_groups);
+        child_groups_count = child_groups.size();
+    }
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
     status_hosts_label_->setText(tr("%n child host(s)", "", model_->rowCount()));

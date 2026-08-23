@@ -71,9 +71,16 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     // Reading opens the sealed column of every record with the current key, so from here on the
     // records carry their credentials in the clear and the key can be changed under them. Groups are
     // not here: a group holds a name and a comment, and neither is encrypted.
-    QList<LocalHostConfig> local_hosts = db.allLocalHosts();
-    QList<RouterConfig> routers = db.routerList();
-    QList<RouterHostConfig> router_hosts = db.allRouterHosts();
+    // A truncated list would leave the records it misses sealed with the old key forever, so the
+    // key is not changed unless every record was read.
+    QList<LocalHostConfig> local_hosts;
+    QList<RouterConfig> routers;
+    QList<RouterHostConfig> router_hosts;
+    if (!db.allLocalHosts(&local_hosts) || !db.routerList(&routers) || !db.allRouterHosts(&router_hosts))
+    {
+        LOG(ERROR) << "Unable to read the address book completely";
+        return false;
+    }
 
     // A record whose column refused to open comes back with its credentials empty, and writing it
     // out again would make that emptiness permanent. A stored record always has these fields,

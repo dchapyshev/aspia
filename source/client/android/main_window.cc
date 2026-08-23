@@ -623,6 +623,12 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     // back into the rotation, even when another dialog holds the screen right now.
     dismissed_two_factor_.remove(router_id);
 
+    // The lock screen owns the display: both are overlays of the same window, so a dialog
+    // opened now would rise above the master password prompt, and an enrollment would put the
+    // new setup key in front of whoever holds the phone. The question waits for the unlock.
+    if (relocking_)
+        return;
+
     if (two_factor_dialog_)
         return;
 
@@ -699,7 +705,8 @@ void AndroidMainWindow::connectToUrl(const QString& url)
     if (host_url.isRouterHost())
     {
         qint64 router_id = -1;
-        QList<RouterConfig> routers = Database::instance().routerList();
+        QList<RouterConfig> routers;
+        Database::instance().routerList(&routers);
         for (const RouterConfig& router_config : std::as_const(routers))
         {
             if (router_config.guid() == host_url.routerGuid())
@@ -796,7 +803,9 @@ void AndroidMainWindow::onUrlOpened(const QString& url)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::showNextTwoFactorPrompt()
 {
-    for (const RouterConfig& config : Database::instance().routerList())
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
+    for (const RouterConfig& config : std::as_const(routers))
     {
         if (dismissed_two_factor_.contains(config.routerId()))
             continue;
@@ -868,4 +877,8 @@ void AndroidMainWindow::relock()
     }
 
     relocking_ = false;
+
+    // The questions that arrived while the screen was locked were not shown. The first one
+    // waiting takes the screen now.
+    showNextTwoFactorPrompt();
 }

@@ -161,7 +161,9 @@ void LocalHostEditor::loadRouters(qint64 selected_router_id)
 {
     router_->clear();
     router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
-    for (const RouterConfig& router : Database::instance().routerList())
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
+    for (const RouterConfig& router : std::as_const(routers))
         router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
 
     const int index = router_->findData(QVariant::fromValue(selected_router_id));

@@ -66,7 +66,8 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         parent_id_ = parent_id;
     }
 
-    const QList<LocalGroupConfig> all_groups = Database::instance().allLocalGroups();
+    QList<LocalGroupConfig> all_groups;
+    Database::instance().allLocalGroups(&all_groups);
 
     QList<GroupComboBox::Entry> entries;
     entries.reserve(all_groups.size());
@@ -132,7 +133,8 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
-    QList<LocalGroupConfig> groups = Database::instance().localGroupList(parent_id);
+    QList<LocalGroupConfig> groups;
+    Database::instance().localGroupList(parent_id, &groups);
     for (const LocalGroupConfig& existing : std::as_const(groups))
     {
         if (existing.id() != group_id_ && existing.name() == name)

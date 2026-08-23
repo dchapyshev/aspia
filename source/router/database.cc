@@ -1162,7 +1162,7 @@ bool Database::touchClientDeviceToken(std::string_view token, std::string_view a
         LOG(ERROR) << "Unable to touch client device token:" << db_.lastError();
         return false;
     }
-    return true;
+    return db_.changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------

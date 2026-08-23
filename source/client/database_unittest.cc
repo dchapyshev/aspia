@@ -116,7 +116,7 @@ protected:
     QStringList groupNames()
     {
         QStringList names;
-        for (const LocalGroupConfig& group : db_.allLocalGroups())
+        for (const LocalGroupConfig& group : allLocalGroups())
             names.append(group.name());
         names.sort();
         return names;
@@ -125,10 +125,61 @@ protected:
     QStringList hostNamesOfGroup(qint64 group_id)
     {
         QStringList names;
-        for (const LocalHostConfig& host : db_.localHostList(group_id))
+        for (const LocalHostConfig& host : localHostList(group_id))
             names.append(host.name());
         names.sort();
         return names;
+    }
+
+    // The list scans of the fixture: the read is expected to succeed, and the list comes back by
+    // value the way the tests consume it.
+    QList<LocalHostConfig> localHostList(qint64 group_id)
+    {
+        QList<LocalHostConfig> hosts;
+        EXPECT_TRUE(db_.localHostList(group_id, &hosts));
+        return hosts;
+    }
+
+    QList<LocalHostConfig> allLocalHosts()
+    {
+        QList<LocalHostConfig> hosts;
+        EXPECT_TRUE(db_.allLocalHosts(&hosts));
+        return hosts;
+    }
+
+    QList<LocalGroupConfig> localGroupList(qint64 parent_id)
+    {
+        QList<LocalGroupConfig> groups;
+        EXPECT_TRUE(db_.localGroupList(parent_id, &groups));
+        return groups;
+    }
+
+    QList<LocalGroupConfig> allLocalGroups()
+    {
+        QList<LocalGroupConfig> groups;
+        EXPECT_TRUE(db_.allLocalGroups(&groups));
+        return groups;
+    }
+
+    QList<RouterConfig> routerList()
+    {
+        QList<RouterConfig> routers;
+        EXPECT_TRUE(db_.routerList(&routers));
+        return routers;
+    }
+
+    QList<RouterHostConfig> allRouterHosts()
+    {
+        QList<RouterHostConfig> hosts;
+        EXPECT_TRUE(db_.allRouterHosts(&hosts));
+        return hosts;
+    }
+
+    QList<HostId> outdatedRouterHosts(qint64 router_id)
+    {
+        QList<HostId> hosts;
+        EXPECT_TRUE(db_.outdatedRouterHosts(router_id, &hosts));
+        return hosts;
     }
 
     Database db_;
@@ -201,7 +252,7 @@ TEST_F(DatabaseTest, GroupIsNotMovedIntoItsOwnSubtree)
     EXPECT_FALSE(db_.moveLocalGroup(parent, parent));
 
     EXPECT_EQ(db_.findLocalGroup(parent)->parentId(), 0);
-    EXPECT_EQ(db_.localGroupList(0).size(), 1);
+    EXPECT_EQ(localGroupList(0).size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,7 +300,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     // one that left it alone.
     QThread::msleep(1100);
 
-    ASSERT_TRUE(db_.reencryptAll(db_.allLocalHosts(), db_.routerList(), db_.allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(),
                                  "salt", "verifier", 1));
 
     EXPECT_EQ(db_.findLocalHost(entry_id)->modifyTime(), modify_time);
@@ -500,10 +551,10 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     host.setPassword(SecureString("secret"));
     ASSERT_TRUE(db_.addLocalHost(host));
 
-    QList<LocalHostConfig> hosts = db_.allLocalHosts();
+    QList<LocalHostConfig> hosts = allLocalHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(hosts, db_.routerList(), db_.allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(),
                                  "salt", "verifier", 1));
 
     std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
@@ -526,10 +577,10 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
     stored->setDeviceToken("wrapped-elsewhere");
     ASSERT_TRUE(db_.modifyRouter(*stored));
 
-    QList<RouterConfig> routers = db_.routerList();
+    QList<RouterConfig> routers = routerList();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(db_.allLocalHosts(), routers, db_.allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(),
                                  "salt", "verifier", 1));
 
     const std::optional<RouterConfig> reread = db_.findRouter(router_id);
@@ -571,11 +622,11 @@ TEST_F(DatabaseTest, RouterHostCredentialsAreEditedAndRemoved)
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("other-user"));
     EXPECT_EQ(stored->password().toString(), QString("other-secret"));
-    EXPECT_EQ(db_.allRouterHosts().size(), 1);
+    EXPECT_EQ(allRouterHosts().size(), 1);
 
     ASSERT_TRUE(db_.removeRouterHost(router_id, 100500));
     EXPECT_FALSE(db_.findRouterHost(router_id, 100500).has_value());
-    EXPECT_TRUE(db_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -654,7 +705,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     addRouterHost(router_id, 100502, "third-user", "third-secret");
 
     // The router was never asked about any of them.
-    QList<HostId> outdated = db_.outdatedRouterHosts(router_id);
+    QList<HostId> outdated = outdatedRouterHosts(router_id);
     EXPECT_EQ(outdated.size(), 3);
     EXPECT_TRUE(outdated.contains(100500));
     EXPECT_TRUE(outdated.contains(100501));
@@ -664,7 +715,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100501));
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100502));
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(router_id).isEmpty());
+    EXPECT_TRUE(outdatedRouterHosts(router_id).isEmpty());
 
     // The answer of the router is trusted for a week. A row asked about a day ago is not offered
     // again, and one asked about eight days ago is.
@@ -674,7 +725,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTheOnesNotCheckedForLong)
     ASSERT_TRUE(setRouterHostCheckTime(router_id, 100501, now - day));
     ASSERT_TRUE(setRouterHostCheckTime(router_id, 100502, now - 8 * day));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100502) }));
+    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100502) }));
 
     // There is nothing to remember for a host the user saved nothing for.
     EXPECT_FALSE(db_.updateRouterHostCheckTime(router_id, 100503));
@@ -691,13 +742,13 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTakenInBoundedBatches)
         addRouterHost(router_id, host_id, "user", "secret");
 
     // Twelve rows are waiting, and no answer carries more than ten.
-    const QList<HostId> first = db_.outdatedRouterHosts(router_id);
+    const QList<HostId> first = outdatedRouterHosts(router_id);
     EXPECT_EQ(first.size(), 10);
 
     for (HostId host_id : first)
         ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
 
-    const QList<HostId> second = db_.outdatedRouterHosts(router_id);
+    const QList<HostId> second = outdatedRouterHosts(router_id);
     EXPECT_EQ(second.size(), 2);
 
     for (HostId host_id : second)
@@ -706,7 +757,7 @@ TEST_F(DatabaseTest, OutdatedRouterHostsAreTakenInBoundedBatches)
         ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, host_id));
     }
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(router_id).isEmpty());
+    EXPECT_TRUE(outdatedRouterHosts(router_id).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -720,13 +771,13 @@ TEST_F(DatabaseTest, OutdatedRouterHostsBelongToTheirOwnRouter)
     addRouterHost(first, 100500, "user", "secret");
     addRouterHost(second, 100501, "other-user", "other-secret");
 
-    EXPECT_EQ(db_.outdatedRouterHosts(first), QList<HostId>({ HostId(100500) }));
-    EXPECT_EQ(db_.outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(outdatedRouterHosts(first), QList<HostId>({ HostId(100500) }));
+    EXPECT_EQ(outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
 
     ASSERT_TRUE(db_.updateRouterHostCheckTime(first, 100500));
 
-    EXPECT_TRUE(db_.outdatedRouterHosts(first).isEmpty());
-    EXPECT_EQ(db_.outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
+    EXPECT_TRUE(outdatedRouterHosts(first).isEmpty());
+    EXPECT_EQ(outdatedRouterHosts(second), QList<HostId>({ HostId(100501) }));
 
     EXPECT_FALSE(db_.updateRouterHostCheckTime(second, 100500));
 }
@@ -744,20 +795,20 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
     addRouterHost(router_id, 100501, "other-user", "other-secret");
 
     ASSERT_TRUE(db_.updateRouterHostCheckTime(router_id, 100500));
-    ASSERT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    ASSERT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 
     ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "edited-user", "edited-secret")));
     ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100501, "third-user", "third-secret")));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 
-    QList<RouterHostConfig> router_hosts = db_.allRouterHosts();
+    QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(db_.allLocalHosts(), QList<RouterConfig>(), router_hosts,
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts,
                                  "salt", "verifier", 1));
 
-    EXPECT_EQ(db_.outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
+    EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -768,10 +819,10 @@ TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
     const qint64 router_id = addRouter("router");
     addRouterHost(router_id, 100500, "user", "secret");
 
-    QList<RouterHostConfig> router_hosts = db_.allRouterHosts();
+    QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(db_.allLocalHosts(), QList<RouterConfig>(), router_hosts,
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts,
                                  "salt", "verifier", 1));
 
     std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
@@ -791,7 +842,7 @@ TEST_F(DatabaseTest, RouterWithoutAPasswordIsNotStored)
     router.setUsername("router-user");
 
     EXPECT_FALSE(db_.addRouter(router));
-    EXPECT_TRUE(db_.routerList().isEmpty());
+    EXPECT_TRUE(routerList().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -893,9 +944,9 @@ TEST_F(DatabaseTest, RecordsPastTheirBoundsAreNotStored)
     router.setPassword(SecureString(QString("router-secret")));
     EXPECT_FALSE(db_.addRouter(router));
 
-    EXPECT_TRUE(db_.allLocalGroups().isEmpty());
-    EXPECT_TRUE(db_.allLocalHosts().isEmpty());
-    EXPECT_TRUE(db_.routerList().isEmpty());
+    EXPECT_TRUE(allLocalGroups().isEmpty());
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+    EXPECT_TRUE(routerList().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -909,7 +960,7 @@ TEST_F(DatabaseTest, HostWithHalfItsCredentialsIsNotStored)
     host.setUsername("user");
 
     EXPECT_FALSE(db_.addLocalHost(host));
-    EXPECT_TRUE(db_.allLocalHosts().isEmpty());
+    EXPECT_TRUE(allLocalHosts().isEmpty());
 
     host.setPassword(SecureString(QString("secret")));
     ASSERT_TRUE(db_.addLocalHost(host));
@@ -938,7 +989,7 @@ TEST_F(DatabaseTest, CredentialsOfATemporaryHostAreNotStored)
 
     EXPECT_FALSE(db_.addRouterHost(credentials));
     EXPECT_FALSE(db_.modifyRouterHost(credentials));
-    EXPECT_TRUE(db_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -954,7 +1005,7 @@ TEST_F(DatabaseTest, CredentialsWithoutAPasswordAreNotStored)
     credentials.setUsername("user");
 
     EXPECT_FALSE(db_.addRouterHost(credentials));
-    EXPECT_TRUE(db_.allRouterHosts().isEmpty());
+    EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -992,10 +1043,10 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
 
     ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }));
 
-    const QList<RouterConfig> routers = db_.routerList();
+    const QList<RouterConfig> routers = routerList();
     ASSERT_EQ(routers.size(), 1);
 
-    const QList<LocalGroupConfig> groups = db_.allLocalGroups();
+    const QList<LocalGroupConfig> groups = allLocalGroups();
     ASSERT_EQ(groups.size(), 2);
 
     const std::optional<LocalGroupConfig> stored_parent = db_.findLocalGroup(groups.front().id());
@@ -1005,12 +1056,12 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     EXPECT_EQ(stored_parent->parentId(), 0);
     EXPECT_EQ(stored_child->parentId(), stored_parent->id());
 
-    const QList<LocalHostConfig> hosts = db_.allLocalHosts();
+    const QList<LocalHostConfig> hosts = allLocalHosts();
     ASSERT_EQ(hosts.size(), 1);
     EXPECT_EQ(hosts.front().groupId(), stored_child->id());
     EXPECT_EQ(hosts.front().routerId(), routers.front().routerId());
 
-    const QList<RouterHostConfig> stored_credentials = db_.allRouterHosts();
+    const QList<RouterHostConfig> stored_credentials = allRouterHosts();
     ASSERT_EQ(stored_credentials.size(), 1);
     EXPECT_EQ(stored_credentials.front().routerId(), routers.front().routerId());
 }
@@ -1040,6 +1091,6 @@ TEST_F(DatabaseTest, BatchWithARecordThatCannotBeWrittenLeavesNothingBehind)
 
     EXPECT_FALSE(db_.import({}, { group }, { host, broken }, {}));
 
-    EXPECT_EQ(db_.allLocalGroups().size(), 1);
-    EXPECT_TRUE(db_.allLocalHosts().isEmpty());
+    EXPECT_EQ(allLocalGroups().size(), 1);
+    EXPECT_TRUE(allLocalHosts().isEmpty());
 }

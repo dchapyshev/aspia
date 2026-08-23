@@ -104,12 +104,17 @@ TEST(TotpTest, VerifyAcceptsCurrentStep)
 
 TEST(TotpTest, VerifyAcceptsAdjacentStepsWithinWindow)
 {
-    const qint64 now = 1111111111;
+    const qint64 now = 1111111111; // counter = 37037037
     const QString prev = Totp::code(rfcSecret(), now - 30);
     const QString next = Totp::code(rfcSecret(), now + 30);
 
-    EXPECT_TRUE(Totp::verify(rfcSecret(), prev, now, 30, 6, 1));
-    EXPECT_TRUE(Totp::verify(rfcSecret(), next, now, 30, 6, 1));
+    // The counter of the matching step and not of the base one: it is what the replay
+    // protection of the caller consumes.
+    quint64 matched = 0;
+    EXPECT_TRUE(Totp::verify(rfcSecret(), prev, now, 30, 6, 1, &matched));
+    EXPECT_EQ(matched, 37037036u);
+    EXPECT_TRUE(Totp::verify(rfcSecret(), next, now, 30, 6, 1, &matched));
+    EXPECT_EQ(matched, 37037038u);
 }
 
 TEST(TotpTest, VerifyRejectsCodesOutsideWindow)

@@ -55,6 +55,8 @@ public:
     // everything a record that is gone was running is destroyed.
     void reload();
 
+    static constexpr int kMaxStoredEvents = 100;
+
     QList<RouterEvent> events(qint64 router_id) const;
     void clearEvents(qint64 router_id);
     void addEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);

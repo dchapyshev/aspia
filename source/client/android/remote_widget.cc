@@ -309,7 +309,9 @@ void RemoteWidget::reload()
 
     tree_->clear();
 
-    for (const RouterConfig& config : Database::instance().routerList())
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
+    for (const RouterConfig& config : std::as_const(routers))
     {
         const qint64 router_id = config.routerId();
         const RouterStatus status = RouterController::status(router_id);
@@ -383,7 +385,8 @@ void RemoteWidget::countSearchSources()
     search_sources_.clear();
     search_slices_.clear();
 
-    QList<RouterConfig> routers = Database::instance().routerList();
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
     std::sort(routers.begin(), routers.end(), [](const RouterConfig& first, const RouterConfig& second)
     {
         return first.routerId() < second.routerId();
@@ -617,7 +620,9 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::onRefreshClicked()
 {
-    for (const RouterConfig& config : Database::instance().routerList())
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
+    for (const RouterConfig& config : std::as_const(routers))
     {
         const qint64 router_id = config.routerId();
         if (RouterController::session(router_id))

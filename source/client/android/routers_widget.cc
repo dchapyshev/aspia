@@ -158,7 +158,9 @@ void RoutersWidget::reload()
 
     RouterController::instance().reload();
 
-    for (const RouterConfig& config : Database::instance().routerList())
+    QList<RouterConfig> routers;
+    Database::instance().routerList(&routers);
+    for (const RouterConfig& config : std::as_const(routers))
     {
         const qint64 router_id = config.routerId();
 

@@ -26,6 +26,8 @@
 #include "router/fake_tcp_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
+#include "router/handlers/two_factor_handler.h"
+#include "router/workers/client_worker.h"
 
 // A whole session end to end: the messages it answers, the ones it drops, and the order the stages
 // come in. The session is driven through the fake channel, so nothing here mocks the router - it is
@@ -50,18 +52,25 @@ protected:
     // Creates the session in the worker thread, runs |body| there and destroys it there. The
     // channel belongs to the session, so it goes away with it.
     template <typename ClientT>
-    void withClient(quint32 session_type,
+    void withClient(const RouterUser& user, quint32 session_type,
                     const std::function<void(ClientT&, FakeTcpChannel*)>& body)
     {
         worker_->invoke([&]()
         {
             FakeTcpChannel* channel = new FakeTcpChannel();
-            channel->setPeer(admin_.entry_id, admin_.name.toStdString(), session_type,
-                             kVersion_3_0_0);
+            channel->setPeer(user.entry_id, user.name.toStdString(), session_type, kVersion_3_0_0);
 
             ClientT client(worker_->database(), channel, nullptr);
             body(client, channel);
         });
+    }
+
+    // The common case: the session of the built-in administrator.
+    template <typename ClientT>
+    void withClient(quint32 session_type,
+                    const std::function<void(ClientT&, FakeTcpChannel*)>& body)
+    {
+        withClient<ClientT>(admin_, session_type, body);
     }
 
     // The reply the session sent last, parsed as |MessageT|.
@@ -90,6 +99,29 @@ protected:
         return serialize(message);
     }
 
+    static QByteArray tokenResponse(const std::string& token)
+    {
+        proto::router::ClientToRouter message;
+        message.mutable_two_factor_response()->set_token(token);
+        return serialize(message);
+    }
+
+    // A code the secret does not produce anywhere inside the drift window around |at|.
+    static QString wrongCode(const QByteArray& secret, qint64 at)
+    {
+        quint64 matched = 0;
+        for (int value = 0; ; ++value)
+        {
+            const QString candidate = QString("%1").arg(value, Totp::kDefaultDigits, 10,
+                                                        QLatin1Char('0'));
+            if (!Totp::verify(secret, candidate, at, Totp::kDefaultStepSec, Totp::kDefaultDigits,
+                              Totp::kDefaultWindowSteps, &matched))
+            {
+                return candidate;
+            }
+        }
+    }
+
     static QByteArray workspaceListRequest(qint64 request_id)
     {
         proto::router::ClientToRouter message;
@@ -113,6 +145,15 @@ protected:
         request->set_request_id(request_id);
         request->set_count(proto::router::kMaxUserPageSize);
         return serialize(message);
+    }
+
+    // Clears the ENABLED flag of the user, the way an administrator disables the account.
+    static void disableUser(Database& db, qint64 entry_id)
+    {
+        RouterUser disabled;
+        disabled.entry_id = entry_id;
+        disabled.flags = 0;
+        ASSERT_EQ(db.modifyUser(disabled), proto::router::kErrorOk);
     }
 
     // Walks the session through the two-factor stage the way a client does.
@@ -246,6 +287,55 @@ TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
         ASSERT_TRUE(parse(channel->sent().at(0).buffer, &message));
         ASSERT_TRUE(message.has_login_result());
         EXPECT_FALSE(message.login_result().new_token().empty());
+        EXPECT_EQ(message.login_result().user_id(), admin_.entry_id);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A passed stage writes user state (the issued token, the consumed step, the enrolled secret),
+// and the user lists an administrator watches must learn of it the way they learn of the admin
+// commands touching the same tables.
+TEST_F(ClientOperatorTest, PassedStageMarksTheUsersDirty)
+{
+    std::string token;
+
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [&](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        quint32 notified = 0;
+        QObject::connect(&client, &ClientOperator::sig_notifyChanged,
+                         [&notified](quint32 flags) { notified |= flags; });
+
+        client.start();
+        ASSERT_EQ(notified & ClientWorker::NOTIFY_USERS, 0u);
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
+
+        EXPECT_TRUE(notified & ClientWorker::NOTIFY_USERS);
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_login_result());
+        token = message->login_result().new_token();
+    });
+    ASSERT_FALSE(token.empty());
+
+    // The token path writes too - the row of the token is refreshed.
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [&](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        quint32 notified = 0;
+        QObject::connect(&client, &ClientOperator::sig_notifyChanged,
+                         [&notified](quint32 flags) { notified |= flags; });
+
+        client.start();
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, tokenResponse(token));
+
+        EXPECT_TRUE(client.isTwoFactorCompleted());
+        EXPECT_TRUE(notified & ClientWorker::NOTIFY_USERS);
     });
 }
 
@@ -256,7 +346,7 @@ TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
 TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
 {
     withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
-                       [](ClientOperator& client, FakeTcpChannel* channel)
+                       [this](ClientOperator& client, FakeTcpChannel* channel)
     {
         int finished = 0;
         QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
@@ -268,7 +358,8 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         client.start();
         channel->clearSent();
 
-        channel->receive(proto::router::CHANNEL_ID_CLIENT, totpResponse("000000"));
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(wrongCode(secret_, QDateTime::currentSecsSinceEpoch())));
 
         EXPECT_EQ(finished, 1);
         EXPECT_FALSE(client.isTwoFactorCompleted());
@@ -286,6 +377,173 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         ASSERT_TRUE(challenge.has_value());
         ASSERT_TRUE(challenge->has_two_factor_challenge());
         EXPECT_TRUE(challenge->two_factor_challenge().code_rejected());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The verdicts of the handler reach the client only through the serialized challenge. Without
+// the flag on the wire the client would keep its dead token and present it forever.
+TEST_F(ClientOperatorTest, RejectedTokenIsAnnouncedOnTheWire)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        client.start();
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, tokenResponse("junk"));
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_two_factor_challenge());
+        EXPECT_EQ(message->two_factor_challenge().mode(), proto::router::TWO_FACTOR_MODE_ACTIVE);
+        EXPECT_TRUE(message->two_factor_challenge().token_rejected());
+        EXPECT_FALSE(client.isTwoFactorCompleted());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The enrollment URI is what the operator scans, and it exists only in the serialized challenge.
+TEST_F(ClientOperatorTest, EnrollmentUriIsCarriedOnTheWire)
+{
+    const RouterUser user = addUser("carol", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(user.entry_id, 0);
+
+    withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        client.start();
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_two_factor_challenge());
+        EXPECT_EQ(message->two_factor_challenge().mode(), proto::router::TWO_FACTOR_MODE_ENROLL);
+        EXPECT_TRUE(QString::fromStdString(message->two_factor_challenge().otpauth_uri())
+                        .startsWith("otpauth://"));
+    });
+
+    // The half-done enrollment lives in a static map and must not leak into the tests that follow.
+    TwoFactorHandler::forgetUser(user.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The remainder of the block is how the client knows to show the wait instead of the code prompt,
+// and it exists only in the serialized challenge.
+TEST_F(ClientOperatorTest, BlockRemainderIsAnnouncedOnTheWire)
+{
+    const RouterUser user = addUser("dave", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(user.entry_id, 0);
+
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+
+    // Enough misses to impose the block, straight through the handler: the wire is what this
+    // test watches, and each miss over it would cost a whole session.
+    setCaller(user, proto::router::SESSION_TYPE_OPERATOR);
+    const qint64 now = QDateTime::currentSecsSinceEpoch();
+    for (int i = 0; i < TwoFactorHandler::kMaxFailedAttempts; ++i)
+    {
+        TwoFactorHandler handler;
+        proto::router::TwoFactorResponse response;
+        response.set_totp_code(wrongCode(secret, now).toStdString());
+        ASSERT_EQ(handler.handleResponse(db_, caller_, response, "127.0.0.1", now).action,
+                  TwoFactorHandler::Action::CLOSE);
+    }
+
+    withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
+                       [](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        client.start();
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_two_factor_challenge());
+        EXPECT_GT(message->two_factor_challenge().blocked_seconds(), 0);
+    });
+
+    // The block lives in a static map and must not leak into the tests that follow.
+    TwoFactorHandler::forgetUser(user.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The SRP authenticator checks the ENABLED flag against a snapshot taken when the handshake
+// started, so an account disabled while its login was in flight still reaches this stage. The
+// re-read before LoginResult is where it is caught, the same way a deleted account is.
+TEST_F(ClientOperatorTest, DisabledUserDoesNotFinishTheStage)
+{
+    const RouterUser user = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(user.entry_id, 0);
+
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+
+    withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
+                       [&](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        int finished = 0;
+        QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
+
+        client.start();
+        channel->clearSent();
+
+        disableUser(worker_->database(), user.entry_id);
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(Totp::code(secret, QDateTime::currentSecsSinceEpoch())));
+
+        EXPECT_EQ(finished, 1);
+        EXPECT_FALSE(client.isTwoFactorCompleted());
+        EXPECT_TRUE(channel->nothingSent());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same rule on the token path: a stored device token of a disabled account opens nothing.
+TEST_F(ClientOperatorTest, DisabledUserDoesNotPassWithAToken)
+{
+    const RouterUser user = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(user.entry_id, 0);
+
+    const QByteArray secret = Totp::generateSecret();
+    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+
+    std::string token;
+    withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
+                       [&](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        client.start();
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(Totp::code(secret, QDateTime::currentSecsSinceEpoch())));
+
+        const std::optional<proto::router::RouterToClient> message =
+            lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_login_result());
+        token = message->login_result().new_token();
+    });
+    ASSERT_FALSE(token.empty());
+
+    disableUser(db_, user.entry_id);
+
+    withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
+                       [&](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        int finished = 0;
+        QObject::connect(&client, &ClientOperator::sig_finished, [&finished](qint64) { ++finished; });
+
+        client.start();
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, tokenResponse(token));
+
+        EXPECT_EQ(finished, 1);
+        EXPECT_FALSE(client.isTwoFactorCompleted());
+        EXPECT_TRUE(channel->nothingSent());
     });
 }
 

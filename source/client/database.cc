@@ -243,12 +243,15 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<LocalHostConfig> Database::localHostList(qint64 group_id) const
+bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const
 {
+    CHECK(hosts);
+    hosts->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
@@ -256,31 +259,58 @@ QList<LocalHostConfig> Database::localHostList(qint64 group_id) const
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
 
-    QList<LocalHostConfig> hosts;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        hosts.append(readHost(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            // A failed step must not pass for the end of the rows: a caller may treat what is
+            // missing from the list as deleted.
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return hosts;
+        hosts->append(readHost(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<LocalHostConfig> Database::allLocalHosts() const
+bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
 {
+    CHECK(hosts);
+    hosts->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid "
                         "FROM local_hosts");
 
-    QList<LocalHostConfig> hosts;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        hosts.append(readHost(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            // A failed step must not pass for the end of the rows: a caller may treat what is
+            // missing from the list as deleted.
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return hosts;
+        hosts->append(readHost(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -460,67 +490,104 @@ std::optional<LocalHostConfig> Database::findLocalHostByGuid(const QString& guid
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<LocalHostConfig> Database::searchLocalHosts(const QString& query_text) const
+bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig>* hosts) const
 {
+    CHECK(hosts);
+    hosts->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid FROM local_hosts");
 
-    QList<LocalHostConfig> hosts;
-    while (query.next() == SqlQuery::StepResult::ROW)
+    for (;;)
     {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
+
         LocalHostConfig host = readHost(query);
         if (host.name().contains(query_text, Qt::CaseInsensitive) ||
             host.address().contains(query_text, Qt::CaseInsensitive))
         {
-            hosts.append(host);
+            hosts->append(host);
         }
     }
 
-    return hosts;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<LocalGroupConfig> Database::localGroupList(qint64 parent_id) const
+bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const
 {
+    CHECK(groups);
+    groups->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
                         "WHERE parent_id IS NULLIF(?, 0)");
     query.addInt64(parent_id);
 
-    QList<LocalGroupConfig> groups;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        groups.append(readGroup(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return groups;
+        groups->append(readGroup(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<LocalGroupConfig> Database::allLocalGroups() const
+bool Database::allLocalGroups(QList<LocalGroupConfig>* groups) const
 {
+    CHECK(groups);
+    groups->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups");
 
-    QList<LocalGroupConfig> groups;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        groups.append(readGroup(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return groups;
+        groups->append(readGroup(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -673,21 +740,36 @@ std::optional<LocalGroupConfig> Database::findLocalGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterConfig> Database::routerList() const
+bool Database::routerList(QList<RouterConfig>* routers) const
 {
+    CHECK(routers);
+    routers->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
 
-    QList<RouterConfig> routers;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        routers.append(readRouter(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            // A failed step must not pass for the end of the rows: a caller may treat what is
+            // missing from the list as deleted.
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return routers;
+        routers->append(readRouter(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -805,28 +887,48 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
     SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers WHERE id=?");
     query.addInt64(router_id);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
+    const SqlQuery::StepResult step = query.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return std::nullopt;
+    }
 
     return readRouter(query);
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterHostConfig> Database::allRouterHosts() const
+bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
 {
+    CHECK(hosts);
+    hosts->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     SqlQuery query(db_, "SELECT router_id, host_id, data FROM router_hosts");
 
-    QList<RouterHostConfig> hosts;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        hosts.append(readRouterHost(query));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            // A failed step must not pass for the end of the rows: a caller may treat what is
+            // missing from the list as deleted.
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return hosts;
+        hosts->append(readRouterHost(query));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -945,12 +1047,15 @@ std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostI
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<HostId> Database::outdatedRouterHosts(qint64 router_id) const
+bool Database::outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const
 {
+    CHECK(hosts);
+    hosts->clear();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return {};
+        return false;
     }
 
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
@@ -961,11 +1066,21 @@ QList<HostId> Database::outdatedRouterHosts(qint64 router_id) const
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
     query.addInt64(kMaxRouterHostsToCheck);
 
-    QList<HostId> hosts;
-    while (query.next() == SqlQuery::StepResult::ROW)
-        hosts.append(query.columnUInt64(0));
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
 
-    return hosts;
+        hosts->append(query.columnUInt64(0));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
