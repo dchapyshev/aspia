@@ -662,6 +662,9 @@ void RouterUserDialog::submitUser(const RouterUser& request)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::setAccountChanged(bool changed)
 {
+    if (model_.accountChanged() == changed)
+        return;
+
     model_.setAccountChanged(changed);
 
     ui->edit_password->setEnabled(changed);

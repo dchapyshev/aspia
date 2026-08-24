@@ -47,7 +47,6 @@ namespace {
 // immutable after creation (see I1 in database.h).
 constexpr qint64 kBuiltInUserId = 1;
 
-constexpr int kClientDeviceTokenSize = 32;
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
 
 // How long a queued host removal waits for the host to acknowledge it before the record is dropped
@@ -995,7 +994,7 @@ bool Database::issueClientDeviceToken(
     // client) and persist only its SHA-256 hash. Hashing without a salt is safe here because
     // the input is uniformly random CSPRNG output - precomputation/rainbow tables make no
     // sense against 2^256 of entropy.
-    std::string new_token = Random::string(kClientDeviceTokenSize);
+    std::string new_token = Random::string(proto::router::kDeviceTokenSize);
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, new_token);
     const qint64 now = secondsSinceEpoch();
 
@@ -1085,7 +1084,7 @@ std::string_view Database::findClientDeviceToken(std::string_view token, qint64*
         return proto::router::kErrorInternalError;
     }
 
-    if (token.size() != kClientDeviceTokenSize)
+    if (token.size() != proto::router::kDeviceTokenSize)
         return proto::router::kErrorNotFound;
 
     const QByteArray token_hash = GenericHash::hash(GenericHash::SHA256, token);

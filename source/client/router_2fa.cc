@@ -272,7 +272,7 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
     // A token arrives only when a TOTP submission produced one. Failures drop the connection
     // instead of answering, so getting here at all means the session is open.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
-    if (!new_token.isEmpty())
+    if (new_token.size() == proto::router::kDeviceTokenSize)
     {
         LOG(INFO) << "Device token issued for router" << config_->routerId();
 
@@ -289,6 +289,12 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
         {
             LOG(WARNING) << "Failed to wrap new device token for router" << config_->routerId();
         }
+    }
+    else if (!new_token.isEmpty())
+    {
+        // The router issues tokens of exactly one size, so anything else is not a token, and
+        // storing it would only buy a doomed round of presenting it back.
+        LOG(WARNING) << "Device token of unexpected size for router" << config_->routerId();
     }
 
     // The login is over. The owner stops feeding the object on this report and only then

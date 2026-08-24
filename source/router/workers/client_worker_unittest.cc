@@ -91,8 +91,8 @@ TEST(ClientWorkerTest, UnknownSessionSelectsNothing)
     EXPECT_TRUE(ClientWorker::sessionsToStop({}, 1, kAdminSession).empty());
 }
 
-// The list of live sessions and the stop command are private to the worker; the peer reaches them
-// so the command can be exercised against real sessions.
+// The list of live sessions, the stop command and the timer are private to the worker; the peer
+// reaches them so they can be exercised against real sessions.
 class ClientWorkerTestPeer
 {
 public:
@@ -103,6 +103,8 @@ public:
         worker.onStopClients(user_id, token_ids);
     }
 
+    static void fireTimer(ClientWorker& worker, TimePoint now) { worker.onTimer(now); }
+    static void notifyChanged(ClientWorker& worker, quint32 flags) { worker.onNotifyChanged(flags); }
     static void stop(ClientWorker& worker) { worker.onStop(); }
 };
 
@@ -130,11 +132,14 @@ protected:
     // A session of |user| registered with the worker the way onNewConnection does it. A negative
     // |code_time| leaves the session at the two-factor stage; otherwise the stage is passed with
     // the code of that step (the secret of the built-in administrator). Runs in the worker thread.
-    ClientOperator* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time)
+    ClientOperator* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time,
+                               FakeTcpChannel** channel_out = nullptr)
     {
         FakeTcpChannel* channel = new FakeTcpChannel();
         channel->setPeer(user.entry_id, user.name.toStdString(),
                          proto::router::SESSION_TYPE_OPERATOR, kVersion_3_0_0);
+        if (channel_out)
+            *channel_out = channel;
 
         ClientOperator* client = new ClientOperator(worker_->database(), channel, nullptr);
         ClientWorkerTestPeer::clients(worker).push_back(client);
@@ -222,4 +227,62 @@ TEST_F(ClientWorkerStopTest, FullStopTakesEverySessionOfTheUser)
     // The enrollment the session of bob opened lives in a static map and must not leak into the
     // tests that follow.
     TwoFactorHandler::forgetUser(bob.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The stage does not wait forever: the timer drops a session that sits at the second factor past
+// the timeout and leaves the ones that passed it alone.
+TEST_F(ClientWorkerStopTest, StageTimeoutDropsOnlyTheStuckSession)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        ClientOperator* ready = addSession(worker, admin_, QDateTime::currentSecsSinceEpoch());
+        ClientOperator* stuck = addSession(worker, admin_, -1);
+
+        // Not enough time has passed: both stay.
+        ClientWorkerTestPeer::fireTimer(worker, Clock::now());
+        EXPECT_TRUE(holds(worker, ready));
+        EXPECT_TRUE(holds(worker, stuck));
+
+        // Past the two-minute stage timeout the stuck one goes.
+        ClientWorkerTestPeer::fireTimer(worker, Clock::now() + Minutes(3));
+        EXPECT_TRUE(holds(worker, ready));
+        EXPECT_FALSE(holds(worker, stuck));
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The periodic notifications are data of the session, so they wait for the second factor the same
+// way the requests do.
+TEST_F(ClientWorkerStopTest, NotificationsWaitForTheSecondFactor)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        FakeTcpChannel* ready_channel = nullptr;
+        FakeTcpChannel* stuck_channel = nullptr;
+        addSession(worker, admin_, QDateTime::currentSecsSinceEpoch(), &ready_channel);
+        addSession(worker, admin_, -1, &stuck_channel);
+
+        ready_channel->clearSent();
+        stuck_channel->clearSent();
+
+        ClientWorkerTestPeer::notifyChanged(worker, ClientWorker::NOTIFY_HOSTS);
+        ClientWorkerTestPeer::fireTimer(worker, Clock::now());
+
+        ASSERT_EQ(ready_channel->sent().size(), 1);
+        proto::router::RouterToClient message;
+        ASSERT_TRUE(parse(ready_channel->sent().at(0).buffer, &message));
+        ASSERT_TRUE(message.has_notification());
+        EXPECT_TRUE(message.notification().hosts_dirty());
+
+        EXPECT_TRUE(stuck_channel->nothingSent());
+
+        ClientWorkerTestPeer::stop(worker);
+    });
 }

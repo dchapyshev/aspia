@@ -56,9 +56,10 @@ public:
 
         result_type operator()()
         {
-            result_type value = 0;
-            Random::fillBuffer(&value, sizeof(value));
-            return value;
+            if constexpr (sizeof(result_type) <= sizeof(quint32))
+                return static_cast<result_type>(Random::number32());
+            else
+                return static_cast<result_type>(Random::number64());
         }
     };
 

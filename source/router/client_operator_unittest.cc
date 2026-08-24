@@ -267,6 +267,28 @@ TEST_F(ClientOperatorTest, AdminRequestsBeforeTheSecondFactorAreDropped)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The same rule on the manager channel: a request that would be answered with a refusal after the
+// stage is not answered at all before it.
+TEST_F(ClientOperatorTest, ManagerRequestsBeforeTheSecondFactorAreDropped)
+{
+    withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
+                              [](ClientManager& client, FakeTcpChannel* channel)
+    {
+        client.start();
+        channel->clearSent();
+
+        proto::router::ManagerToRouter request;
+        request.mutable_group_request()->set_request_id(1);
+        request.mutable_group_request()->set_command_name(proto::router::kCommandGroupAdd);
+        request.mutable_group_request()->set_workspace_id(0); // Invalid on purpose.
+
+        channel->receive(proto::router::CHANNEL_ID_MANAGER, serialize(request));
+
+        EXPECT_TRUE(channel->nothingSent());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // A valid code completes the stage: the answer opens the session and carries a device token for
 // the next login.
 TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)

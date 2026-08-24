@@ -286,9 +286,11 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
 
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
 
+    const std::string token(proto::router::kDeviceTokenSize, 't');
+
     proto::router::RouterToClient message;
     message.mutable_login_result()->set_user_id(kUserId);
-    message.mutable_login_result()->set_new_token("fresh-device-token");
+    message.mutable_login_result()->set_new_token(token);
     Router2FATestPeer::receive(login_, message);
 
     EXPECT_EQ(logged_in_user_, kUserId);
@@ -298,7 +300,30 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
     ASSERT_TRUE(stored.has_value());
     QByteArray raw;
     ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
-    EXPECT_EQ(raw, QByteArray("fresh-device-token"));
+    EXPECT_EQ(raw, QByteArray::fromStdString(token));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A token of any other size is not a token: the router refuses everything but the one size it
+// issues, so what is stored would only buy a doomed round of presenting it back. The login is
+// still complete.
+TEST_F(Router2FATest, TokenOfAnUnexpectedSizeIsNotStored)
+{
+    seedRecord();
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_new_token(
+        std::string(proto::router::kDeviceTokenSize + 1, 't'));
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(logged_in_user_, kUserId);
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

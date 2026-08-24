@@ -208,3 +208,26 @@ TEST_F(RouterRpcTest, CallerAnsweredByTeardownCanRegisterAgain)
     EXPECT_EQ(calls, 1);
     EXPECT_EQ(rpc_.pendingCount(), 1);
 }
+
+//--------------------------------------------------------------------------------------------------
+// The teardown of the window drops the waiting requests without answering: the callers are about
+// to die themselves, and waking them would run their handlers over the remains of the window.
+TEST_F(RouterRpcTest, DroppedRequestsWakeNobody)
+{
+    QObject receiver;
+    int calls = 0;
+
+    proto::router::UserListRequest request;
+    request.set_request_id(rpc_.nextRequestId());
+    rpc_.registerPending<proto::router::UserList>(&request,
+        { &receiver, [&calls](const proto::router::UserList&) { ++calls; } });
+
+    rpc_.dropPending();
+
+    EXPECT_EQ(calls, 0);
+    EXPECT_EQ(rpc_.pendingCount(), 0);
+
+    // Nothing is owed any more: the sweep that follows finds nothing to answer.
+    rpc_.clearPending();
+    EXPECT_EQ(calls, 0);
+}

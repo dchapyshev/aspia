@@ -52,6 +52,7 @@ signals:
     void sig_authenticated(qint64 router_id, const QVersionNumber& peer_version);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
     void sig_messageReceived(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
+    void sig_reconnecting(qint64 router_id);
 
 protected:
     // Worker implementation.

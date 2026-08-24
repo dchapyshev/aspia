@@ -51,6 +51,8 @@ RouterController::RouterController(QObject* parent)
 
     connect(router_worker_, &RouterWorker::sig_authenticated,
             this, &RouterController::onRouterAuthenticated, Qt::QueuedConnection);
+    connect(router_worker_, &RouterWorker::sig_reconnecting,
+            this, &RouterController::onRouterReconnecting, Qt::QueuedConnection);
     connect(router_worker_, &RouterWorker::sig_errorOccurred,
             this, &RouterController::onRouterError, Qt::QueuedConnection);
     connect(router_worker_, &RouterWorker::sig_messageReceived,
@@ -60,6 +62,12 @@ RouterController::RouterController(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 RouterController::~RouterController()
 {
+    for (auto& [router_id, context] : contexts_)
+    {
+        if (context.session)
+            context.session->rpc_.dropPending();
+    }
+
     g_instance = nullptr;
 }
 
@@ -179,8 +187,7 @@ void RouterController::reload()
 
             context.two_factor.reset();
             context.session.reset();
-
-            startTwoFactor(router_id, config);
+            context.config.reset(new RouterConfig(config));
 
             if (router_worker_)
             {
@@ -189,12 +196,17 @@ void RouterController::reload()
                 QMetaObject::invokeMethod(router_worker_, &RouterWorker::onReconnect,
                                           Qt::QueuedConnection, router_id);
             }
+            else
+            {
+                startTwoFactor(router_id);
+            }
 
             updateStatus(router_id);
             continue;
         }
 
-        startTwoFactor(router_id, config);
+        contexts_[router_id].config.reset(new RouterConfig(config));
+        startTwoFactor(router_id);
 
         if (router_worker_)
         {
@@ -322,6 +334,17 @@ void RouterController::onRouterAuthenticated(qint64 router_id, const QVersionNum
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterController::onRouterReconnecting(qint64 router_id)
+{
+    auto it = contexts_.find(router_id);
+    if (it == contexts_.end() || it->second.two_factor || it->second.session)
+        return;
+
+    startTwoFactor(router_id);
+    updateStatus(router_id);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code)
 {
     auto it = contexts_.find(router_id);
@@ -366,7 +389,7 @@ void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode err
 
     addEvent(router_id, RouterEvent::Severity::INFO,
              tr("Connecting to router %1...").arg(context.config->address()));
-    startTwoFactor(router_id, *context.config);
+    startTwoFactor(router_id);
     updateStatus(router_id);
 }
 
@@ -448,10 +471,11 @@ void RouterController::onRouterMessage(qint64 router_id, quint8 channel_id, cons
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::startTwoFactor(qint64 router_id, const RouterConfig& config)
+void RouterController::startTwoFactor(qint64 router_id)
 {
-    RouterContext& context = contexts_[router_id];
-    context.config.reset(new RouterConfig(config));
+    auto it = contexts_.find(router_id);
+    CHECK(it != contexts_.end() && it->second.config);
+    RouterContext& context = it->second;
 
     Router2FA* two_factor = new Router2FA(context.config, this);
     context.two_factor = two_factor;

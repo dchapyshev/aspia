@@ -76,6 +76,7 @@ public:
 
     qint64 nextRequestId() { return ++next_request_id_; }
     int pendingCount() const { return pending_.size(); }
+    void dropPending() { pending_.clear(); }
 
     // Answers every caller still waiting with a made-up lost-connection reply.
     void clearPending()

@@ -165,6 +165,8 @@ ManagementTab::ManagementTab(QWidget* parent)
             router_status_widget_, &RouterStatusWidget::onStatusChanged);
     connect(&controller, &RouterController::sig_twoFactorRequired,
             this, &ManagementTab::onTwoFactorRequired);
+    connect(&controller, &RouterController::sig_statusChanged,
+            this, &ManagementTab::updateActionsState);
 
     // The button of the status widget asks the question of its record again.
     connect(router_status_widget_, &RouterStatusWidget::sig_twoFactorClicked,
@@ -307,6 +309,9 @@ ManagementTab::ManagementTab(QWidget* parent)
 ManagementTab::~ManagementTab()
 {
     LOG(INFO) << "Dtor";
+
+    delete two_factor_dialog_;
+
     Settings settings;
     settings.setSessionType(defaultSessionType());
 }
@@ -1244,6 +1249,8 @@ void ManagementTab::onAddWorkspaceAction()
         return;
 
     const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
+    if (!RouterController::session(router_id))
+        return;
 
     RouterWorkspaceDialog dialog(router_id, 0, this);
     if (dialog.exec() == QDialog::Accepted)

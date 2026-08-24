@@ -90,6 +90,7 @@ void RouterWorker::onReconnect(qint64 router_id)
     }
 
     it->reconnect_countdown = kReconnectTicks;
+    emit sig_reconnecting(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------

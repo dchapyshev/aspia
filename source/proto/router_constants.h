@@ -33,6 +33,10 @@ namespace proto::router {
 // used ones, so a client that never comes back cannot grow the list without bound.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;
 
+// Size of a device token, in bytes. The router issues exactly this many and refuses any other
+// size on presentation, so the client stores nothing else either.
+[[maybe_unused]] constexpr int kDeviceTokenSize = 32;
+
 // Bound on the blocked_seconds of a TwoFactorChallenge. The router sends the remaining part of
 // a block that lasts minutes; the client clamps what it reads to [0, this], so a hostile peer
 // cannot overflow the arithmetic on the value or park a record behind a forever block.

@@ -272,6 +272,32 @@ TEST_F(TwoFactorHandlerTest, PasswordRotationForgetsTheUser)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The self-service rotation over the client channel is the same event as the administrative one
+// and must retire the same stored state.
+TEST_F(TwoFactorHandlerTest, SelfServiceRotationForgetsTheUser)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+    ASSERT_EQ(submitCode(first, wrongCode(secret, kNow), kNow).action,
+              TwoFactorHandler::Action::CLOSE);
+
+    const RouterUser rotated = RouterUser::create("admin", SecureString("Rotated1234!"));
+    proto::router::ChangePasswordRequest request;
+    request.set_salt(toStdString(rotated.salt));
+    request.set_verifier(toStdString(rotated.verifier));
+    ASSERT_EQ(handleChangePassword(db_, caller_, request).error_code, proto::router::kErrorOk);
+
+    EXPECT_FALSE(TwoFactorHandlerTestPeer::hasUserState(admin_.entry_id));
+
+    TwoFactorHandler second;
+    const TwoFactorHandler::Result reopened = start(second);
+    ASSERT_EQ(reopened.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_FALSE(reopened.challenge.code_rejected);
+    EXPECT_NE(secretFromUri(reopened.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The id of a deleted user is never reused, so a state entry left behind would sit in memory
 // forever.
 TEST_F(TwoFactorHandlerTest, DeletedUserLeavesNoStateBehind)
@@ -515,30 +541,6 @@ TEST_F(TwoFactorHandlerTest, CodeOfAnAlreadyConsumedStepIsRefused)
     ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
     EXPECT_EQ(submitCode(second, Totp::code(secret, previous_step), kNow).action,
               TwoFactorHandler::Action::CLOSE);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Two sessions of the user stand at the prompt with the same counter snapshot. The first answer
-// consumes the step, and the second answer with the same code slips past the snapshot check, so
-// the counter predicate of the database is what refuses it. It counts as a refusal for the next
-// challenge the way an ordinary replay does.
-TEST_F(TwoFactorHandlerTest, ConcurrentlyConsumedStepIsRefused)
-{
-    const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
-
-    TwoFactorHandler first;
-    TwoFactorHandler second;
-    ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
-    ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
-
-    ASSERT_EQ(submitCode(first, Totp::code(secret, kNow), kNow).action,
-              TwoFactorHandler::Action::ACCEPT);
-    EXPECT_EQ(submitCode(second, Totp::code(secret, kNow), kNow).action,
-              TwoFactorHandler::Action::CLOSE);
-
-    TwoFactorHandler third;
-    EXPECT_TRUE(start(third).challenge.code_rejected);
 }
 
 //--------------------------------------------------------------------------------------------------

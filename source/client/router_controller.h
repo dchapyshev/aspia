@@ -78,6 +78,7 @@ private slots:
     void onTwoFactorRequired(qint64 router_id);
     void onTwoFactorFinished(qint64 router_id, qint64 user_id, const QVersionNumber& peer_version);
     void onRouterAuthenticated(qint64 router_id, const QVersionNumber& peer_version);
+    void onRouterReconnecting(qint64 router_id);
     void onRouterError(qint64 router_id, TcpChannel::ErrorCode error_code);
     void onRouterMessage(qint64 router_id, quint8 channel_id, const QByteArray& buffer);
 
@@ -91,7 +92,7 @@ private:
         QList<RouterEvent> events;
     };
 
-    void startTwoFactor(qint64 router_id, const RouterConfig& config);
+    void startTwoFactor(qint64 router_id);
     void updateStatus(qint64 router_id);
 
     std::unordered_map<qint64, RouterContext> contexts_;

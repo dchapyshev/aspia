@@ -203,7 +203,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-AndroidMainWindow::~AndroidMainWindow() = default;
+AndroidMainWindow::~AndroidMainWindow()
+{
+    delete two_factor_dialog_;
+}
 
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSectionChanged(int index)

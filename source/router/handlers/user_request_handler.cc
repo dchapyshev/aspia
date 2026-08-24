@@ -445,6 +445,10 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
         return result;
     }
 
+    // The rotation answers a leaked password, the same way the administrative one does, and
+    // retires the same stored state with it.
+    TwoFactorHandler::forgetUser(caller.user_id);
+
     // NOTIFY_USERS only: the rotation touches the user row and revokes their device tokens;
     // the workspaces are not involved.
     result.notify_flags = ClientWorker::NOTIFY_USERS;
