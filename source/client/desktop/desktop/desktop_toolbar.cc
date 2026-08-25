@@ -124,11 +124,6 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
 
     connect(ui->action_autosize, &QAction::triggered, this, &DesktopToolBar::onAutosizeButton);
     connect(ui->action_fullscreen, &QAction::triggered, this, &DesktopToolBar::onFullscreenButton);
-    connect(ui->action_autoscroll, &QAction::triggered, this, [this](bool enabled)
-    {
-        LOG(INFO) << "[ACTION] Auto-scroll changed:" << enabled;
-        emit sig_autoScrollChanged(enabled);
-    });
     connect(ui->action_system_info, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] System info requested";

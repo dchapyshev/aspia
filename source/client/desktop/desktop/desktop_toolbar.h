@@ -97,7 +97,6 @@ signals:
     void sig_switchToAutosize();
     void sig_screenSelected(const proto::screen::Screen& screen);
     void sig_scaleChanged();
-    void sig_autoScrollChanged(bool enabled);
     void sig_takeScreenshot();
     void sig_startSession(proto::peer::SessionType session_type);
     void sig_powerControl(proto::power::Control_Action action, bool wait);
