@@ -198,13 +198,16 @@ TEST_F(UserRequestHandlerTest, ModifyOfUnknownUserIsNotFound)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The cascade of the delete drops the workspace access rows of the user, so both the user list
-// and the workspace lists of the clients go stale, and the sessions of the user go down.
-TEST_F(UserRequestHandlerTest, DeleteStopsSessionsAndMarksWorkspacesStale)
+// The cascade of the delete drops the workspace access rows and the device tokens of the user, so
+// both the user list and the workspace lists of the clients go stale, the sessions of the user go
+// down, and no token of the deleted account can be presented again. The rows are counted raw:
+// the list of a user that is gone answers not-found, not zero.
+TEST_F(UserRequestHandlerTest, DeleteRevokesTokensStopsSessionsAndMarksWorkspacesStale)
 {
     ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
               proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
+    ASSERT_GT(issueToken(user_id), 0);
 
     const RequestResult result = handle(makeIdRequest(proto::router::kCommandUserDelete, user_id));
 
@@ -213,6 +216,8 @@ TEST_F(UserRequestHandlerTest, DeleteStopsSessionsAndMarksWorkspacesStale)
     EXPECT_EQ(result.notify_flags,
               quint32(ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES));
     EXPECT_FALSE(findUser(user_id).isValid());
+    EXPECT_EQ(countRaw(QString("SELECT COUNT(*) FROM client_device_tokens WHERE user_id=%1")
+                           .arg(user_id)), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

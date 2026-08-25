@@ -254,7 +254,20 @@ void RouterUserDialog::onTokenListReceived(const proto::router::UserTokenList& l
     if (list.error_code() != proto::router::kErrorOk)
     {
         LOG(ERROR) << "Unable to get the device tokens:" << list.error_code();
+
+        // Nothing has been shown yet, and an empty tree would pass for "no remembered devices".
+        // The tab goes gray until a refetch delivers the list. Once one did, the stale list
+        // stays usable, the way the user form does.
+        if (!tokens_loaded_)
+            ui->tab_sessions->setEnabled(false);
         return;
+    }
+
+    // The first list to arrive lifts the gray-out of a failed initial fetch.
+    if (!tokens_loaded_)
+    {
+        tokens_loaded_ = true;
+        ui->tab_sessions->setEnabled(true);
     }
 
     tokens_.clear();
@@ -304,14 +317,26 @@ void RouterUserDialog::onResetOtpClicked()
     if (entry_id_ <= 0)
         return;
 
-    if (MsgBox::question(this, tr("Resetting two-factor authentication will sign this user out "
-                                  "of all sessions and force them to enroll again on next login. "
-                                  "Continue?")) != MsgBox::Yes)
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
     {
+        LOG(ERROR) << "No session for router" << router_id_;
         return;
     }
 
-    RouterSession* session = RouterController::session(router_id_);
+    // Resetting the OTP of the account this session runs on takes the session down with it, so
+    // the question says whose sessions are about to go.
+    const QString question = entry_id_ == session->userId() ?
+        tr("Resetting two-factor authentication will sign you out of all sessions and force you "
+           "to enroll again on next login. Continue?") :
+        tr("Resetting two-factor authentication will sign this user out of all sessions and "
+           "force them to enroll again on next login. Continue?");
+
+    if (MsgBox::question(this, question) != MsgBox::Yes)
+        return;
+
+    // The question ran a nested event loop, so the session is looked up anew.
+    session = RouterController::session(router_id_);
     if (!session)
     {
         LOG(ERROR) << "No session for router" << router_id_;
@@ -326,6 +351,9 @@ void RouterUserDialog::onResetOtpClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onResetOtpResultReceived(const proto::router::UserResult& result)
 {
+    if (closing_)
+        return;
+
     ui->button_reset_otp->setEnabled(true);
 
     const std::string& error_code = result.error_code();
@@ -411,6 +439,9 @@ void RouterUserDialog::onRevokeAllTokensClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onRevokeResultReceived(const proto::router::UserTokenResult& result)
 {
+    if (closing_)
+        return;
+
     const QList<qint64> targets = std::move(pending_revoke_token_ids_);
     pending_revoke_token_ids_.clear();
     ui->tab_sessions->setEnabled(true);

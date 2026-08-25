@@ -325,6 +325,7 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     }
 
     two_factor_completed_ = true;
+    emit sig_twoFactorCompleted();
 
     // Sent on every login, with or without a token to hand over: this is what opens the session on
     // the client side.

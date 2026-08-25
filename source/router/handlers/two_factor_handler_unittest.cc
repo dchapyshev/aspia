@@ -143,6 +143,11 @@ TEST_F(TwoFactorHandlerTest, EnrollmentStoresSecretOnlyAfterConfirmation)
     EXPECT_FALSE(accepted.new_token.empty());
     EXPECT_GT(accepted.token_id, 0);
     EXPECT_EQ(findUser(admin_.entry_id).otp_secret, secret);
+
+    // The step of the confirming code is consumed, so the account does not start its active
+    // life with a counter the code on the screen can still beat.
+    EXPECT_EQ(findUser(admin_.entry_id).otp_counter,
+              static_cast<quint64>(kNow / Totp::kDefaultStepSec));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +218,23 @@ TEST_F(TwoFactorHandlerTest, CompletedEnrollmentRetiresTheSharedSecret)
     const TwoFactorHandler::Result again = start(second);
     ASSERT_EQ(again.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
     EXPECT_NE(secretFromUri(again.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The code that confirms an enrollment is spent by it, the same way a login code is: whoever saw
+// it over the shoulder must not turn it into a session of their own.
+TEST_F(TwoFactorHandlerTest, ReplayedEnrollmentCodeIsRefused)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+
+    const QString code = Totp::code(secret, kNow);
+    ASSERT_EQ(submitCode(first, code, kNow).action, TwoFactorHandler::Action::ACCEPT);
+
+    TwoFactorHandler second;
+    ASSERT_EQ(start(second).challenge.mode, proto::router::TWO_FACTOR_MODE_ACTIVE);
+    EXPECT_EQ(submitCode(second, code, kNow).action, TwoFactorHandler::Action::CLOSE);
 }
 
 //--------------------------------------------------------------------------------------------------

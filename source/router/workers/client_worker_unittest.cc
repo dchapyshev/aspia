@@ -105,6 +105,8 @@ public:
 
     static void fireTimer(ClientWorker& worker, TimePoint now) { worker.onTimer(now); }
     static void notifyChanged(ClientWorker& worker, quint32 flags) { worker.onNotifyChanged(flags); }
+    static void updateClientsMask(ClientWorker& worker) { worker.updateClientsMask(); }
+    static quint32 clientsMask(ClientWorker& worker) { return worker.clients_mask_; }
     static void stop(ClientWorker& worker) { worker.onStop(); }
 };
 
@@ -143,6 +145,8 @@ protected:
 
         ClientOperator* client = new ClientOperator(worker_->database(), channel, nullptr);
         ClientWorkerTestPeer::clients(worker).push_back(client);
+        QObject::connect(client, &ClientOperator::sig_twoFactorCompleted, client,
+                         [&worker]() { ClientWorkerTestPeer::updateClientsMask(worker); });
 
         client->start();
 
@@ -282,6 +286,34 @@ TEST_F(ClientWorkerStopTest, NotificationsWaitForTheSecondFactor)
         EXPECT_TRUE(message.notification().hosts_dirty());
 
         EXPECT_TRUE(stuck_channel->nothingSent());
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The kinds mask feeds the relay statistics polling, so it counts only the sessions that passed
+// the second factor. A peer that holds the password alone must not switch that work on, and the
+// mask catches up once the stage is passed.
+TEST_F(ClientWorkerStopTest, ClientsMaskWaitsForTheSecondFactor)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        FakeTcpChannel* channel = nullptr;
+        ClientOperator* client = addSession(worker, admin_, -1, &channel);
+        ClientWorkerTestPeer::updateClientsMask(worker);
+        EXPECT_EQ(ClientWorkerTestPeer::clientsMask(worker), 0u);
+
+        proto::router::ClientToRouter message;
+        message.mutable_two_factor_response()->set_totp_code(
+            Totp::code(secret_, QDateTime::currentSecsSinceEpoch()).toStdString());
+        channel->receive(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+
+        ASSERT_TRUE(client->isTwoFactorCompleted());
+        EXPECT_EQ(ClientWorkerTestPeer::clientsMask(worker),
+                  quint32(ClientWorker::CLIENT_OPERATORS));
 
         ClientWorkerTestPeer::stop(worker);
     });

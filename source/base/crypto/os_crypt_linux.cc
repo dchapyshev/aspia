@@ -33,8 +33,8 @@
 
 namespace {
 
-// Salts the derivation. The bare identity cannot be the key, because the identity of a machine
-// that runs a host leaves for its router as hw_id.
+// A domain label for the derivation, so the key is specific to OSCrypt and not a bare hash of the
+// identity.
 const char kContext[] = "base::OSCrypt::key";
 
 // Authenticated by the cipher, so a blob sealed for another consumer of the key does not open.

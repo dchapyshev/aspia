@@ -1021,9 +1021,9 @@ bool Database::issueClientDeviceToken(
         return false;
     }
 
-    // The TTL alone bounds nothing: a user that logs in from a new device every day keeps every
-    // token of the last week alive. The oldest ones make room for the new one, so the list stays
-    // within the cap the protocol counts on.
+    // The TTL alone bounds nothing, because a user that logs in from a new device every day keeps
+    // every token of the last week alive. The least recently used ones make room for the new one,
+    // so the list stays within the cap the protocol counts on.
     const char kTrimSql[] =
         "DELETE FROM client_device_tokens WHERE user_id=? AND token_id NOT IN "
         "(SELECT token_id FROM client_device_tokens WHERE user_id=? "
@@ -1322,6 +1322,7 @@ std::string_view Database::listClientDeviceTokens(qint64 user_id, std::vector<De
         if (step == SqlQuery::StepResult::FAILED)
         {
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            tokens->clear();
             return proto::router::kErrorInternalError;
         }
 

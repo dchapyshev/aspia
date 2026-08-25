@@ -174,8 +174,21 @@ void RouterStatusWidget::addEvent(const RouterEvent& event)
     item->setText(COLUMN_EVENT, event.text);
     item->setIcon(COLUMN_TIME, QIcon(icon_path));
 
+    // The tree is user-sortable, so row 0 is whatever the current order puts first. The cap
+    // drops the oldest event instead, found by its timestamp text, which sorts the way it ages.
     while (ui->tree_events->topLevelItemCount() > RouterController::kMaxStoredEvents)
-        delete ui->tree_events->takeTopLevelItem(0);
+    {
+        int oldest = 0;
+        for (int i = 1; i < ui->tree_events->topLevelItemCount(); ++i)
+        {
+            if (ui->tree_events->topLevelItem(i)->text(COLUMN_TIME) <
+                ui->tree_events->topLevelItem(oldest)->text(COLUMN_TIME))
+            {
+                oldest = i;
+            }
+        }
+        delete ui->tree_events->takeTopLevelItem(oldest);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

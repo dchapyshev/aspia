@@ -86,6 +86,7 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
     code_->setInputMethodHints(Qt::ImhDigitsOnly | Qt::ImhPreferNumbers);
     code_->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d*"), code_));
     content->addWidget(code_);
+    code_->setFocus();
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* ok = addButton(tr("OK"), Button::Role::FILLED);

@@ -122,6 +122,11 @@ TEST(TotpTest, VerifyRejectsCodesOutsideWindow)
     const qint64 now = 1111111111;
     const QString far_past = Totp::code(rfcSecret(), now - 600);
     EXPECT_FALSE(Totp::verify(rfcSecret(), far_past, now, 30, 6, 1));
+
+    // The exact edge, at the defaults the router verifies with. Codes two steps away are refused
+    // in both directions, so neither a wider loop nor a raised default window slips through.
+    EXPECT_FALSE(Totp::verify(rfcSecret(), Totp::code(rfcSecret(), now - 60), now));
+    EXPECT_FALSE(Totp::verify(rfcSecret(), Totp::code(rfcSecret(), now + 60), now));
 }
 
 TEST(TotpTest, VerifyRejectsWrongLength)

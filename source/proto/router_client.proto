@@ -68,7 +68,7 @@ message GroupList
 {
     int64 request_id     = 1;
     string error_code    = 2; // "ok" | "invalid_request" | "access_denied" | "internal_error"
-    int64 workspace_id   = 3; // Echo of the request, so the client can route the response.
+    int64 workspace_id   = 3; // Echo of the request.
     repeated Group group = 4;
 }
 
@@ -155,7 +155,7 @@ message HostList
 {
     int64 request_id   = 1;
     string error_code  = 2; // "ok" | "invalid_request" | "access_denied" | "internal_error"
-    int64 workspace_id = 3; // Echo of the request, so the client can route the response.
+    int64 workspace_id = 3; // Echo of the request.
     int64 group_id     = 4; // Echo of the request.
     int64 total_count  = 5; // Total hosts in scope. Unset on an error reply.
     repeated Host host = 6;

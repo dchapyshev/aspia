@@ -91,6 +91,7 @@ private:
     UserEditModel model_;
     QList<Token> tokens_;
     qint64 current_token_id_ = 0;
+    bool tokens_loaded_ = false;
 
     // Guards against stacked error boxes and double reject: several replies can arrive with an
     // error while the first modal warning is still open.
@@ -99,6 +100,7 @@ private:
     // listed ids are dropped from |tokens_| locally.
     QList<qint64> pending_revoke_token_ids_;
 
+    friend class RouterUserDialogTestPeer;
     Q_DISABLE_COPY_MOVE(RouterUserDialog)
 };
 

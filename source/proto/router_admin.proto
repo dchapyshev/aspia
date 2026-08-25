@@ -184,7 +184,7 @@ message UserTokenList
 {
     int64 request_id         = 1;
     string error_code        = 2; // "ok" | "invalid_request" | "internal_error" | "not_found"
-    int64 user_id            = 3; // Echo of the request, so the client can route the response.
+    int64 user_id            = 3; // Echo of the request.
     int64 current_token_id   = 4;
     repeated UserToken token = 5;
 }

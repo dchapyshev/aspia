@@ -306,6 +306,7 @@ void ClientWorker::onNewConnection()
             client->setStunInfo(stun_port_);
 
         clients_.emplace_back(client);
+        connect(client, &ClientOperator::sig_twoFactorCompleted, this, &ClientWorker::updateClientsMask);
         connect(client, &ClientOperator::sig_finished, this, &ClientWorker::onSessionFinished);
         connect(client, &ClientOperator::sig_notifyChanged, this, &ClientWorker::onNotifyChanged);
         connect(client, &ClientOperator::sig_stopClients, this, &ClientWorker::onStopClients);
@@ -511,6 +512,11 @@ void ClientWorker::updateClientsMask()
 
     for (const ClientOperator* client : std::as_const(clients_))
     {
+        // Sessions still at the two-factor stage do not count. The mask switches the relay
+        // statistics polling, and nothing of it can be seen before the stage is passed.
+        if (!client->isTwoFactorCompleted())
+            continue;
+
         switch (client->sessionType())
         {
             case proto::router::SESSION_TYPE_OPERATOR:

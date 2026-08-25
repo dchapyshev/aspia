@@ -170,14 +170,16 @@ void RouterController::reload()
         const qint64 router_id = config.routerId();
 
         auto it = contexts_.find(router_id);
-        if (it != contexts_.end() && (it->second.two_factor || it->second.session))
+        if (it != contexts_.end())
         {
             RouterContext& context = it->second;
 
             // An edit that renames the record keeps what is running; one that points it at
             // another account replaces it whole, because everything the running login or
             // session holds (the question on screen included) belongs to the account that is
-            // gone.
+            // gone. A context that runs nothing yet is one waiting for its reconnect barrier,
+            // and the login it waits for starts with the config left here - starting one now
+            // would put it in front of the barrier.
             if (context.config->hasSameParams(config))
             {
                 // The instance is shared with whoever runs, so the edit is seen at once.

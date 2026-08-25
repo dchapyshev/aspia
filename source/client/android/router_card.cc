@@ -213,15 +213,23 @@ void RouterCard::setStatus(RouterStatus status)
 //--------------------------------------------------------------------------------------------------
 void RouterCard::updateTwoFactorButton()
 {
-    // A blocked account has nothing to enter. The router does not look at codes while the block
-    // runs, so the button goes away with the prompt.
+    // The router does not look at codes while the block runs, so the button is disabled for it,
+    // but it stays on the card. A hidden button would read as if no question existed, and the
+    // journal line naming the wait can be pushed out by the reconnect noise of the blocked stage.
     TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
-    const bool shown = prompt && prompt->blockedSeconds() == 0;
-    two_factor_button_->setVisible(shown);
+    two_factor_button_->setVisible(prompt != nullptr);
 
-    // An account with no secret yet is walked through the enrollment first, and the button says so.
-    if (shown)
-        two_factor_button_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
+    if (prompt)
+    {
+        const bool blocked = prompt->blockedSeconds() > 0;
+        two_factor_button_->setEnabled(!blocked);
+
+        // An account with no secret yet is walked through the enrollment first, and the button says so.
+        if (blocked)
+            two_factor_button_->setText(tr("Blocked"));
+        else
+            two_factor_button_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
+    }
 
     contentChanged();
 }
