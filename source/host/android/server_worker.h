@@ -60,6 +60,9 @@ public:
         proto::peer::SessionType session_type = {};
     };
 
+public slots:
+    void onNewPassword();
+
 signals:
     void sig_credentialsChanged(const QString& host_id, const QString& password);
     void sig_routerStateChanged(int state, const QString& router);

@@ -280,6 +280,19 @@ void ServerWorker::onRouterStateChanged(const proto::user::RouterState& state)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onNewPassword()
+{
+    if (!router_manager_)
+    {
+        LOG(INFO) << "New password requested without router connection";
+        return;
+    }
+
+    LOG(INFO) << "New password requested";
+    router_manager_->onNewOneTimePassword();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());
