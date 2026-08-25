@@ -52,8 +52,6 @@ collect_sources(SOURCE_BASE_CODEC
     webm_file_writer.h
     webm_video_encoder.cc
     webm_video_encoder.h
-    zstd_compress.cc
-    zstd_compress.h
     zstd_stream_compressor.cc
     zstd_stream_compressor.h
     zstd_stream_decompressor.cc
@@ -89,5 +87,4 @@ endif()
 
 collect_sources(SOURCE_BASE_CODEC_TESTS
     cursor_codec_unittest.cc
-    zstd_compress_unittest.cc
     zstd_stream_unittest.cc)

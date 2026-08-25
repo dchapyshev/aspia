@@ -47,7 +47,5 @@ collect_sources(SOURCE_HOST_WIN
     touch_injector.cc
     touch_injector.h
     touch_injector_defines.h
-    updater_launcher.cc
-    updater_launcher.h
     virtual_display.cc
     virtual_display.h)
