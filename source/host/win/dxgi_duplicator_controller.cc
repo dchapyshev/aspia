@@ -91,24 +91,6 @@ bool DxgiDuplicatorController::isSupported()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DxgiDuplicatorController::retrieveD3dInfo(D3dInfo* info)
-{
-    bool result = false;
-    {
-        result = initialize();
-        *info = d3d_info_;
-    }
-
-    if (!result)
-    {
-        LOG(ERROR) << "Failed to initialize DXGI components, the D3dInfo retrieved may not "
-                      "accurate or out of date";
-    }
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
 DxgiDuplicatorController::Result DxgiDuplicatorController::duplicateMonitor(DxgiFrame* frame, int monitor_id)
 {
     DCHECK_GE(monitor_id, 0);
@@ -291,9 +273,6 @@ bool DxgiDuplicatorController::doInitialize()
     DCHECK(desktop_rect_.isEmpty());
     DCHECK(duplicators_.empty());
 
-    d3d_info_.min_feature_level = static_cast<D3D_FEATURE_LEVEL>(0); // NOLINT
-    d3d_info_.max_feature_level = static_cast<D3D_FEATURE_LEVEL>(0); // NOLINT
-
     std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
     {
@@ -303,14 +282,6 @@ bool DxgiDuplicatorController::doInitialize()
 
     for (size_t i = 0; i < devices.size(); ++i)
     {
-        D3D_FEATURE_LEVEL feature_level = devices[i].d3dDevice()->GetFeatureLevel();
-
-        if (d3d_info_.max_feature_level == 0 || feature_level > d3d_info_.max_feature_level)
-            d3d_info_.max_feature_level = feature_level;
-
-        if (d3d_info_.min_feature_level == 0 || feature_level < d3d_info_.min_feature_level)
-            d3d_info_.min_feature_level = feature_level;
-
         DxgiAdapterDuplicator duplicator(devices[i]);
         // There may be several video cards on the system, some of them may not support
         // IDXGOutputDuplication. But they should not impact others from taking effect, so we

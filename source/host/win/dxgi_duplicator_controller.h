@@ -44,20 +44,6 @@ public:
     using Context = DxgiFrameContext;
     using ErrorCode = DxgiAdapterDuplicator::ErrorCode;
 
-    // A collection of D3d information we are interested on, which may impact capturer performance
-    // or reliability.
-    struct D3dInfo
-    {
-        // Each video adapter has its own D3D_FEATURE_LEVEL, so this structure contains the minimum
-        // and maximium D3D_FEATURE_LEVELs current system supports.
-        // Both fields can be 0, which is the default value to indicate no valid D3D_FEATURE_LEVEL
-        // has been retrieved from underlying OS APIs.
-        D3D_FEATURE_LEVEL min_feature_level;
-        D3D_FEATURE_LEVEL max_feature_level;
-
-        // TODO(zijiehe): Add more fields, such as manufacturer name, mode, driver version.
-    };
-
     enum class Result
     {
         SUCCEEDED,
@@ -79,11 +65,6 @@ public:
 
     // Detects whether the system supports DXGI based capturer.
     bool isSupported();
-
-    // Returns a copy of D3dInfo composed by last Initialize() function call. This function always
-    // copies the latest information into |info|. But once the function returns false, the
-    // information in |info| may not accurate.
-    bool retrieveD3dInfo(D3dInfo* info);
 
     // Captures one monitor and writes into target. |monitor_id| should >= 0. If |monitor_id| is
     // greater than the total screen count of all the Duplicators, this function returns false.
@@ -176,7 +157,6 @@ private:
     int identity_ = 0;
     QRect desktop_rect_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
-    D3dInfo d3d_info_;
     std::optional<QRect> full_screen_rect_;
     // A number to indicate how many succeeded duplications have been performed.
     quint32 succeeded_duplications_ = 0;
