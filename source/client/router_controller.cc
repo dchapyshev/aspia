@@ -319,7 +319,6 @@ void RouterController::onTwoFactorFinished(
     addEvent(router_id, RouterEvent::Severity::INFO,
              tr("Connection to router %1 established.").arg(context.config->address()));
     updateStatus(router_id);
-    emit sig_created(router_id);
 
     // The saved credentials of hosts this router no longer knows are of no use to anyone.
     RouterHostsCleaner* cleaner = new RouterHostsCleaner(router_id, this);

@@ -62,7 +62,6 @@ public:
     void addEvent(qint64 router_id, RouterEvent::Severity severity, const QString& text);
 
 signals:
-    void sig_created(qint64 router_id);
     void sig_statusChanged(qint64 router_id, RouterStatus status);
     void sig_event(qint64 router_id, const RouterEvent& event);
     void sig_twoFactorRequired(qint64 router_id);
