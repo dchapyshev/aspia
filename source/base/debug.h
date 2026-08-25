@@ -19,7 +19,6 @@
 #ifndef BASE_DEBUG_H
 #define BASE_DEBUG_H
 
-bool isDebuggerPresent();
 void debugPrint(const char* str);
 void debugBreak();
 

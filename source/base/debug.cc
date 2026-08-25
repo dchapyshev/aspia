@@ -27,16 +27,6 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
-bool isDebuggerPresent()
-{
-#if defined(Q_OS_WINDOWS)
-    return !!IsDebuggerPresent();
-#else
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
 void debugPrint(const char* str)
 {
 #if defined(Q_OS_WINDOWS)
