@@ -126,9 +126,15 @@ TEST_F(TwoFactorHandlerTest, EnrollmentStoresSecretOnlyAfterConfirmation)
 {
     TwoFactorHandler handler;
 
+    // The lookup and SRP are case-insensitive, so the peer name can spell the account any way.
+    // The label of the URI names it the way the record does.
+    caller_.name = "ADMIN";
+
     const TwoFactorHandler::Result challenge = start(handler);
     ASSERT_EQ(challenge.action, TwoFactorHandler::Action::SEND_CHALLENGE);
     EXPECT_EQ(challenge.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
+    EXPECT_EQ(QUrl(QString::fromStdString(challenge.challenge.otpauth_uri)).path(),
+              QString("/Aspia Router:admin"));
 
     const QByteArray secret = secretFromUri(challenge.challenge.otpauth_uri);
     ASSERT_FALSE(secret.isEmpty());
@@ -291,6 +297,31 @@ TEST_F(TwoFactorHandlerTest, PasswordRotationForgetsTheUser)
     ASSERT_EQ(reopened.challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
     EXPECT_FALSE(reopened.challenge.code_rejected);
     EXPECT_NE(secretFromUri(reopened.challenge.otpauth_uri), secret);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The other side of the rotation rule: an edit that does not carry credentials retires nothing.
+// The enrollment in progress keeps its secret, so the QR code the user is scanning stays valid.
+TEST_F(TwoFactorHandlerTest, PropertyEditKeepsTheEnrollmentState)
+{
+    TwoFactorHandler first;
+    const QByteArray secret = secretFromUri(start(first).challenge.otpauth_uri);
+    ASSERT_FALSE(secret.isEmpty());
+
+    RouterUser edited;
+    edited.entry_id = admin_.entry_id;
+    edited.sessions = kAllSessions;
+    edited.flags = User::ENABLED;
+
+    proto::router::UserRequest request;
+    request.set_command_name(proto::router::kCommandUserModify);
+    request.mutable_user()->CopyFrom(edited.serialize());
+    ASSERT_EQ(handleUserRequest(db_, caller_, request).error_code, proto::router::kErrorOk);
+
+    EXPECT_TRUE(TwoFactorHandlerTestPeer::hasUserState(admin_.entry_id));
+
+    TwoFactorHandler second;
+    EXPECT_EQ(secretFromUri(start(second).challenge.otpauth_uri), secret);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -614,6 +645,9 @@ TEST_F(TwoFactorHandlerTest, SecretResetWhileThePromptIsOpenClosesTheSession)
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
+
+    // The refusal is the router's own doing, so it is not booked as a miss of the user.
+    EXPECT_FALSE(TwoFactorHandlerTestPeer::hasUserState(admin_.entry_id));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -149,9 +149,9 @@ TEST_F(RouterCacheTest, HostResultDropsOnlyTheHostLists)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Every workspace operation assigns hosts to the workspace or releases them from it, so the host
-// lists are stale the moment the reply arrives - seconds before the batched notification. Deleting
-// a workspace also takes its whole group tree with it.
+// Adding or renaming a workspace moves no host, so the cached host lists survive the reply the
+// way they survive the notification of the router. Only deleting a workspace releases its hosts
+// and takes its whole group tree with it.
 TEST_F(RouterCacheTest, WorkspaceResultDropsByTheReachOfItsCommand)
 {
     fillAll();
@@ -159,7 +159,7 @@ TEST_F(RouterCacheTest, WorkspaceResultDropsByTheReachOfItsCommand)
     cache_.onResult(RouterCache::Result::WORKSPACE, proto::router::kCommandWorkspaceModify, true);
 
     EXPECT_FALSE(cache_.workspacesLoaded());
-    EXPECT_EQ(cache_.hostList(kHostKey), nullptr);
+    EXPECT_NE(cache_.hostList(kHostKey), nullptr);   // A modified workspace moved no host.
     EXPECT_NE(cache_.groupList(kWorkspaceId), nullptr);   // A modified workspace keeps its tree.
 
     fillAll();
@@ -277,16 +277,3 @@ TEST_F(RouterCacheTest, NotificationOfSomethingElseKeepsTheLists)
     EXPECT_NE(cache_.hostList(kHostKey), nullptr);
 }
 
-//--------------------------------------------------------------------------------------------------
-// The session is suspended or gone: nothing it fetched is known to be current any more.
-TEST_F(RouterCacheTest, ClearDropsEverything)
-{
-    fillAll();
-
-    cache_.clear();
-
-    EXPECT_FALSE(cache_.workspacesLoaded());
-    EXPECT_EQ(cache_.hostList(kHostKey), nullptr);
-    EXPECT_EQ(cache_.groupList(kWorkspaceId), nullptr);
-    EXPECT_TRUE(cache_.workspaceList().workspaces.isEmpty());
-}

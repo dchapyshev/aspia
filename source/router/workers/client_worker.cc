@@ -317,11 +317,9 @@ void ClientWorker::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onSessionFinished()
+void ClientWorker::onSessionFinished(qint64 session_id)
 {
-    ClientOperator* client = static_cast<ClientOperator*>(sender());
-    CHECK(client);
-    stopClient(client->sessionId());
+    stopClient(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,10 +338,11 @@ void ClientWorker::onStopClients(qint64 user_id, const std::vector<qint64>& toke
         if (client->userId() != user_id)
             continue;
 
-        // Sessions still at the 2FA stage are included: they already passed SRP with the
-        // credentials being revoked and need only a TOTP code to become full sessions. A
-        // revocation of specific tokens skips them for free - their token id is still 0, and
-        // token ids are validated as positive before they reach here.
+        // Sessions still at the 2FA stage are included. The drop is by user, not by what
+        // exactly the command revoked, and a session that has not passed the stage yet loses
+        // nothing but the SRP round it repeats on reconnect. A revocation of specific tokens
+        // skips them for free, because their token id is still 0 and token ids are validated
+        // as positive before they reach here.
         if (!token_ids.empty() && std::ranges::find(token_ids, client->tokenId()) == token_ids.end())
             continue;
 

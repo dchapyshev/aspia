@@ -501,8 +501,9 @@ void Sidebar::changeRouterPassword(qint64 router_id)
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    // On success the router revokes this session's token and re-runs the 2FA stage, so the user
-    // will be asked for a code again right after (handled by the existing two-factor plumbing).
+    // On success the router revokes every device token of the account and drops all of its
+    // sessions, this one included. The client reconnects with the new password, and the user is
+    // asked for a code again on the fresh session (handled by the existing two-factor plumbing).
     session->changePassword(dialog.password(), { this,
         [this, router_id](const proto::router::ChangePasswordResult& result)
     {

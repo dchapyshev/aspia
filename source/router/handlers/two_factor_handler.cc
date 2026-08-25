@@ -65,8 +65,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
 
         result.challenge.mode = proto::router::TWO_FACTOR_MODE_ENROLL;
         result.challenge.otpauth_uri =
-            Totp::buildUri(kOtpIssuer, QString::fromStdString(caller.name),
-                           tentative_otp_secret_).toStdString();
+            Totp::buildUri(kOtpIssuer, user.name, tentative_otp_secret_).toStdString();
     }
     else
     {

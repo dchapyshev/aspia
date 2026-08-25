@@ -102,8 +102,6 @@ public:
     // Marks the cached workspace list stale without dropping it - the next request refetches.
     void invalidateWorkspaces() { workspaces_loaded_ = false; }
 
-    void clear();
-
 private:
     bool workspaces_loaded_ = false;
     RouterWorkspaceList cached_workspaces_;

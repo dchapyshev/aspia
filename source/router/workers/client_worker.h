@@ -41,8 +41,9 @@ public:
     ClientWorker();
     ~ClientWorker() final;
 
-    // Whom the router is serving right now: a bit stands for the kind of client that has at least
-    // one connection. A worker turns the work only one of them needs on and off by this mask.
+    // Whom the router is serving right now. A bit stands for the kind of client with at least
+    // one session past the two-factor stage, and a worker turns the work only one of them
+    // needs on and off by this mask.
     enum : quint32
     {
         CLIENT_OPERATORS = 1u << 0,
@@ -83,7 +84,7 @@ protected:
 
 private slots:
     void onNewConnection();
-    void onSessionFinished();
+    void onSessionFinished(qint64 session_id);
 
     // Accumulates NOTIFY_* bits from sessions and sibling workers; the mask is flushed to the
     // connected sessions by the periodic worker timer.

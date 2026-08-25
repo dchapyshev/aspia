@@ -41,7 +41,6 @@ public:
 
     qint64 routerId() const { return router_id_; }
 
-    void setName(const QString& name);
     void setStatus(RouterStatus status);
     void updateTwoFactorButton();
 

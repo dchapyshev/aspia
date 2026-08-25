@@ -20,6 +20,7 @@
 
 #include <QLineEdit>
 #include <QTest>
+#include <QTreeWidget>
 
 #include <gtest/gtest.h>
 
@@ -111,6 +112,42 @@ TEST(RouterUserDialogTest, FailedTokenListGraysTheSessionsTab)
     list.set_error_code(proto::router::kErrorOk);
     RouterUserDialogTestPeer::receiveTokenList(dialog, list);
     EXPECT_TRUE(tab->isEnabled());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of the token behind the asking session is the one an administrator must not revoke by
+// accident, so it is set in bold with a tooltip. The list also arrives whole every time, and a
+// refetch replaces the rows instead of stacking them.
+TEST(RouterUserDialogTest, TokenListMarksTheSessionRowAndReplacesTheOld)
+{
+    RouterController controller;
+
+    RouterUserDialog dialog(1, 7, nullptr);
+    dialog.show();
+
+    proto::router::UserTokenList list;
+    list.set_error_code(proto::router::kErrorOk);
+    list.set_current_token_id(9);
+    list.add_token()->set_token_id(5);
+    list.add_token()->set_token_id(9);
+
+    RouterUserDialogTestPeer::receiveTokenList(dialog, list);
+
+    auto* tree = dialog.findChild<QTreeWidget*>("tree_tokens");
+    ASSERT_TRUE(tree);
+    ASSERT_EQ(tree->topLevelItemCount(), 2);
+
+    for (int i = 0; i < tree->topLevelItemCount(); ++i)
+    {
+        const QTreeWidgetItem* item = tree->topLevelItem(i);
+        const bool mine = item->data(0, Qt::UserRole).toLongLong() == 9;
+        EXPECT_EQ(item->font(0).bold(), mine);
+        EXPECT_EQ(!item->toolTip(0).isEmpty(), mine);
+    }
+
+    // The same list again does not stack a second copy of the rows.
+    RouterUserDialogTestPeer::receiveTokenList(dialog, list);
+    EXPECT_EQ(tree->topLevelItemCount(), 2);
 }
 
 //--------------------------------------------------------------------------------------------------

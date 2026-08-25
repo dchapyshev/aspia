@@ -189,14 +189,21 @@ void RouterEditor::onSaveClicked()
 
     Database& db = Database::instance();
 
-    // The token is not edited here, and the session of this record replaces it every time it passes
-    // the two-factor stage. It is read now instead of when the editor opened, so a token issued
-    // meanwhile survives the save. It belongs to the account of the record, so an edit that changes
-    // the account leaves it behind: presented for another one, it would only be refused.
+    // The token is not edited here. The login of this record writes a fresh one whenever a TOTP
+    // code is accepted, so it is read now instead of when the editor opened and a token issued
+    // meanwhile survives the save. It belongs to the account of the record, and an edit that
+    // changes the account leaves it behind, because presented for another one it would only be
+    // refused.
     if (router_id_ >= 0)
     {
         const std::optional<RouterConfig> stored = db.findRouter(router_id_);
-        if (stored.has_value() && stored->hasSameParams(data))
+        if (!stored.has_value())
+        {
+            LOG(ERROR) << "Failed to re-read router" << router_id_;
+            showError(tr("Failed to save the router."));
+            return;
+        }
+        if (stored->hasSameParams(data))
             data.setDeviceToken(stored->deviceToken());
     }
 

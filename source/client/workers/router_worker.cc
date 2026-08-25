@@ -202,7 +202,8 @@ void RouterWorker::onChannelAuthenticated(qint64 router_id)
     if (it == connections_.end() || !it->channel)
         return;
 
-    // Authentication passed; let the router replies flow and hand the peer version to Router.
+    // Authentication passed; let the router replies flow and hand the peer version to the
+    // controller.
     it->channel->setPaused(false);
     emit sig_authenticated(router_id, it->channel->peerVersion());
 }

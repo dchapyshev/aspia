@@ -25,6 +25,7 @@
 #include "base/serialization.h"
 #include "base/version_constants.h"
 #include "base/crypto/totp.h"
+#include "router/client_admin.h"
 #include "router/client_operator.h"
 #include "router/fake_tcp_channel.h"
 #include "router/router_test_base.h"
@@ -106,6 +107,15 @@ public:
     static void fireTimer(ClientWorker& worker, TimePoint now) { worker.onTimer(now); }
     static void notifyChanged(ClientWorker& worker, quint32 flags) { worker.onNotifyChanged(flags); }
     static void updateClientsMask(ClientWorker& worker) { worker.updateClientsMask(); }
+
+    // The removal of a session that ended on its own, wired the way onNewConnection does it.
+    // The connection is made direct explicitly, because the worker of the stand is never
+    // started and sits on its own thread, so an automatic connection would queue forever.
+    static void connectFinished(ClientWorker& worker, ClientOperator* client)
+    {
+        QObject::connect(client, &ClientOperator::sig_finished,
+                         &worker, &ClientWorker::onSessionFinished, Qt::DirectConnection);
+    }
     static quint32 clientsMask(ClientWorker& worker) { return worker.clients_mask_; }
     static void stop(ClientWorker& worker) { worker.onStop(); }
 };
@@ -131,22 +141,26 @@ protected:
         workers_.start();
     }
 
-    // A session of |user| registered with the worker the way onNewConnection does it. A negative
+    // A session of |user| held by the worker. Of the wiring onNewConnection sets up, the stand
+    // reproduces the mask update on passing the stage and the removal on sig_finished. A negative
     // |code_time| leaves the session at the two-factor stage; otherwise the stage is passed with
     // the code of that step (the secret of the built-in administrator). Runs in the worker thread.
-    ClientOperator* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time,
-                               FakeTcpChannel** channel_out = nullptr)
+    template <typename ClientT = ClientOperator>
+    ClientT* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time,
+                        FakeTcpChannel** channel_out = nullptr,
+                        quint32 session_type = proto::router::SESSION_TYPE_OPERATOR)
     {
         FakeTcpChannel* channel = new FakeTcpChannel();
-        channel->setPeer(user.entry_id, user.name.toStdString(),
-                         proto::router::SESSION_TYPE_OPERATOR, kVersion_3_0_0);
+        channel->setPeer(user.entry_id, user.name.toStdString(), session_type,
+                         kVersion_3_0_0);
         if (channel_out)
             *channel_out = channel;
 
-        ClientOperator* client = new ClientOperator(worker_->database(), channel, nullptr);
+        ClientT* client = new ClientT(worker_->database(), channel, nullptr);
         ClientWorkerTestPeer::clients(worker).push_back(client);
         QObject::connect(client, &ClientOperator::sig_twoFactorCompleted, client,
                          [&worker]() { ClientWorkerTestPeer::updateClientsMask(worker); });
+        ClientWorkerTestPeer::connectFinished(worker, client);
 
         client->start();
 
@@ -234,6 +248,29 @@ TEST_F(ClientWorkerStopTest, FullStopTakesEverySessionOfTheUser)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The channel error is the only notice the worker gets of a socket that died under a session,
+// and it must take exactly that session out of the list.
+TEST_F(ClientWorkerStopTest, SocketDeathDropsOnlyTheDeadSession)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        const qint64 now = QDateTime::currentSecsSinceEpoch();
+        FakeTcpChannel* channel = nullptr;
+        ClientOperator* dying = addSession(worker, admin_, now, &channel);
+        ClientOperator* kept = addSession(worker, admin_, now + Totp::kDefaultStepSec);
+
+        channel->fail(TcpChannel::ErrorCode::REMOTE_HOST_CLOSED);
+
+        EXPECT_FALSE(holds(worker, dying));
+        EXPECT_TRUE(holds(worker, kept));
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
 // The stage does not wait forever: the timer drops a session that sits at the second factor past
 // the timeout and leaves the ones that passed it alone.
 TEST_F(ClientWorkerStopTest, StageTimeoutDropsOnlyTheStuckSession)
@@ -286,6 +323,40 @@ TEST_F(ClientWorkerStopTest, NotificationsWaitForTheSecondFactor)
         EXPECT_TRUE(message.notification().hosts_dirty());
 
         EXPECT_TRUE(stuck_channel->nothingSent());
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The user lists only the administrators watch ride the admin flush. The notification of an
+// administrator carries the bit, and an operator hears nothing of it at all.
+TEST_F(ClientWorkerStopTest, UsersDirtyReachesTheAdminSessions)
+{
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        const qint64 now = QDateTime::currentSecsSinceEpoch();
+        FakeTcpChannel* admin_channel = nullptr;
+        FakeTcpChannel* operator_channel = nullptr;
+        addSession<ClientAdmin>(worker, admin_, now, &admin_channel,
+                                proto::router::SESSION_TYPE_ADMIN);
+        addSession(worker, admin_, now + Totp::kDefaultStepSec, &operator_channel);
+
+        admin_channel->clearSent();
+        operator_channel->clearSent();
+
+        ClientWorkerTestPeer::notifyChanged(worker, ClientWorker::NOTIFY_USERS);
+        ClientWorkerTestPeer::fireTimer(worker, Clock::now());
+
+        ASSERT_EQ(admin_channel->sent().size(), 1);
+        proto::router::RouterToClient message;
+        ASSERT_TRUE(parse(admin_channel->sent().at(0).buffer, &message));
+        ASSERT_TRUE(message.has_notification());
+        EXPECT_TRUE(message.notification().users_dirty());
+
+        EXPECT_TRUE(operator_channel->nothingSent());
 
         ClientWorkerTestPeer::stop(worker);
     });

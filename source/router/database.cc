@@ -1117,8 +1117,8 @@ std::string_view Database::findClientDeviceToken(std::string_view token, qint64*
     const qint64 now = secondsSinceEpoch();
     if (now - last_used_at > kClientDeviceTokenTtlSec)
     {
-        // Lazy GC: drop the row so the table does not accumulate stale entries. The caller
-        // will treat the result as INVALID_TOKEN and walk the user back through TOTP.
+        // Lazy GC. The row is dropped so the table does not accumulate stale entries, and the
+        // caller sees the same kErrorNotFound an absent token yields.
         SqlQuery prune(db_, "DELETE FROM client_device_tokens WHERE token_hash=?");
         prune.addBlob(token_hash);
         if (!prune.exec())

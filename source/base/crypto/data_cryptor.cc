@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -245,6 +246,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in, QByteArrayView
                                 const_cast<char*>(in.data())) + kIVSize) != 1)
     {
         LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
+        memZero(&out);
         return std::nullopt;
     }
 
@@ -253,6 +255,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in, QByteArrayView
                             &length) <= 0)
     {
         LOG(ERROR) << "EVP_DecryptFinal_ex failed";
+        memZero(&out);
         return std::nullopt;
     }
 

@@ -46,8 +46,8 @@ TwoFactorCodeDialog::TwoFactorCodeDialog(bool code_refused, QWidget* parent)
         new QRegularExpressionValidator(QRegularExpression("\\d*"), ui->edit_code));
     ui->edit_code->setFocus();
 
-    // The router refuses a code of the wrong length the way it refuses a wrong one: it ends the
-    // session and counts the attempt against the block. So an incomplete code never leaves here.
+    // An incomplete code costs the same as a wrong one: the router ends the session over it. So it
+    // never leaves here.
     QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok);
     ok_button->setEnabled(false);
 

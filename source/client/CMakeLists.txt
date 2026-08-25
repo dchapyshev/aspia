@@ -79,6 +79,7 @@ list(APPEND SOURCE_CLIENT
 
 list(APPEND SOURCE_CLIENT_TESTS
     backup_unittest.cc
+    config_unittest.cc
     database_unittest.cc
     desktop/authorization_dialog_unittest.cc
     desktop/management/client_list_model_unittest.cc

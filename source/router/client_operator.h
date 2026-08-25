@@ -76,8 +76,9 @@ public:
 
     bool isTwoFactorCompleted() const { return two_factor_completed_; }
 
-    // Router-side row id of the device token this session authenticated with (0 until 2FA
-    // completes). Lets the admin channel tear down the live connection when its token is revoked.
+    // Router-side row id of the device token bound to this session, either the one it presented
+    // or the one just issued to it; 0 when no token backs the session. Lets the admin channel
+    // tear down the live connection when its token is revoked.
     qint64 tokenId() const { return token_id_; }
 
 signals:

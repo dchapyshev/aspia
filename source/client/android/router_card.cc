@@ -196,11 +196,6 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 RouterCard::~RouterCard() = default;
 
-//--------------------------------------------------------------------------------------------------
-void RouterCard::setName(const QString& name)
-{
-    name_label_->setText(name);
-}
 
 //--------------------------------------------------------------------------------------------------
 void RouterCard::setStatus(RouterStatus status)
@@ -239,8 +234,12 @@ void RouterCard::setEvents(const QList<RouterEvent>& events)
 {
     clearEvents();
 
-    for (const RouterEvent& event : events)
-        appendEvent(event);
+    qsizetype first = events.size() - kMaxEvents;
+    if (first < 0)
+        first = 0;
+
+    for (qsizetype i = first; i < events.size(); ++i)
+        appendEvent(events[i]);
 }
 
 //--------------------------------------------------------------------------------------------------

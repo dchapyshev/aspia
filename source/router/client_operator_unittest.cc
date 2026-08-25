@@ -329,6 +329,8 @@ TEST_F(ClientOperatorTest, PassedStageMarksTheUsersDirty)
                          [&notified](quint32 flags) { notified |= flags; });
 
         client.start();
+        // The new connection itself marks the client list dirty, before any stage is passed.
+        EXPECT_TRUE(notified & ClientWorker::NOTIFY_CLIENTS);
         ASSERT_EQ(notified & ClientWorker::NOTIFY_USERS, 0u);
         channel->clearSent();
 
@@ -400,6 +402,10 @@ TEST_F(ClientOperatorTest, WrongCodeEndsTheConnection)
         ASSERT_TRUE(challenge->has_two_factor_challenge());
         EXPECT_TRUE(challenge->two_factor_challenge().code_rejected());
     });
+
+    // The refused code above went into the static per-user state and must not leak into the
+    // tests that follow.
+    TwoFactorHandler::forgetUser(admin_.entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -794,6 +800,151 @@ TEST_F(ClientOperatorTest, PasswordChangeEndsEverySessionOfTheUser)
 
         // Nobody is spared, so the session that asked for the rotation goes too.
         EXPECT_EQ(stopped_user_id, admin_.entry_id);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The reply is not the whole job of a revoke command. The sessions of the revoked tokens must go
+// and the user lists of the administrators must learn about it, and both ride the signals with
+// exactly the ids the handler picked.
+TEST_F(ClientOperatorTest, TokenRevokeCommandRaisesStopAndNotify)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_TRUE(bob.isValid());
+
+    std::string token;
+    qint64 token_id = 0;
+    ASSERT_TRUE(db_.issueClientDeviceToken(bob.entry_id, "127.0.0.1", &token, &token_id));
+
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [&, this](ClientAdmin& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        qint64 stopped_user_id = 0;
+        std::vector<qint64> stopped_token_ids;
+        quint32 notified = 0;
+
+        QObject::connect(&client, &ClientOperator::sig_stopClients,
+                         [&](qint64 user_id, const std::vector<qint64>& token_ids)
+        {
+            stopped_user_id = user_id;
+            stopped_token_ids = token_ids;
+        });
+        QObject::connect(&client, &ClientOperator::sig_notifyChanged,
+                         [&](quint32 flags) { notified |= flags; });
+
+        proto::router::AdminToRouter request;
+        proto::router::UserTokenRequest* revoke = request.mutable_user_token_request();
+        revoke->set_request_id(31);
+        revoke->set_command_name(proto::router::kCommandUserTokenRevoke);
+        revoke->set_user_id(bob.entry_id);
+        revoke->add_token_id(token_id);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN, serialize(request));
+
+        const std::optional<proto::router::RouterToAdmin> message =
+            lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_user_token_result());
+        EXPECT_EQ(message->user_token_result().error_code(), proto::router::kErrorOk);
+
+        EXPECT_EQ(stopped_user_id, bob.entry_id);
+        EXPECT_EQ(stopped_token_ids, std::vector<qint64>({ token_id }));
+        EXPECT_TRUE(notified & ClientWorker::NOTIFY_USERS);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A delete carried over the admin channel ends the sessions of the account and marks both the
+// user lists and the workspaces stale, because the cascade touched their access entries.
+TEST_F(ClientOperatorTest, UserDeleteCommandRaisesStopAndNotify)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_TRUE(bob.isValid());
+
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [&, this](ClientAdmin& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        qint64 stopped_user_id = 0;
+        std::vector<qint64> stopped_token_ids = { -1 };
+        quint32 notified = 0;
+
+        QObject::connect(&client, &ClientOperator::sig_stopClients,
+                         [&](qint64 user_id, const std::vector<qint64>& token_ids)
+        {
+            stopped_user_id = user_id;
+            stopped_token_ids = token_ids;
+        });
+        QObject::connect(&client, &ClientOperator::sig_notifyChanged,
+                         [&](quint32 flags) { notified |= flags; });
+
+        proto::router::AdminToRouter request;
+        proto::router::UserRequest* remove = request.mutable_user_request();
+        remove->set_request_id(32);
+        remove->set_command_name(proto::router::kCommandUserDelete);
+        remove->mutable_user()->set_entry_id(bob.entry_id);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN, serialize(request));
+
+        const std::optional<proto::router::RouterToAdmin> message =
+            lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_user_result());
+        EXPECT_EQ(message->user_result().error_code(), proto::router::kErrorOk);
+
+        EXPECT_EQ(stopped_user_id, bob.entry_id);
+        EXPECT_TRUE(stopped_token_ids.empty());
+        EXPECT_EQ(notified, ClientWorker::NOTIFY_USERS | ClientWorker::NOTIFY_WORKSPACES);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of the asking session in the device list is marked by the token id the session put
+// into the caller. The handler tests seed that caller by hand, so the id of the live session is
+// pinned on the wire here.
+TEST_F(ClientOperatorTest, TokenListOnTheWireNamesTheTokenOfTheSession)
+{
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+        ASSERT_GT(client.tokenId(), 0);
+
+        // The one token in the table is the one just issued, with both timestamps set to
+        // the same moment. Aged in place, so a swap of the two cannot hide.
+        ASSERT_TRUE(execRaw("UPDATE client_device_tokens SET created_at=created_at-86400"));
+
+        proto::router::AdminToRouter request;
+        request.mutable_user_token_list_request()->set_request_id(33);
+        request.mutable_user_token_list_request()->set_user_id(admin_.entry_id);
+
+        channel->receive(proto::router::CHANNEL_ID_ADMIN, serialize(request));
+
+        const std::optional<proto::router::RouterToAdmin> message =
+            lastMessage<proto::router::RouterToAdmin>(channel, proto::router::CHANNEL_ID_ADMIN);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_user_token_list());
+
+        const proto::router::UserTokenList& list = message->user_token_list();
+        EXPECT_EQ(list.error_code(), proto::router::kErrorOk);
+        EXPECT_EQ(list.current_token_id(), client.tokenId());
+
+        const proto::router::UserToken* mine = nullptr;
+        for (int i = 0; i < list.token_size(); ++i)
+        {
+            if (list.token(i).token_id() == client.tokenId())
+                mine = &list.token(i);
+        }
+        ASSERT_TRUE(mine != nullptr);
+
+        // Issued through the live session, so the row carries the address of its channel.
+        EXPECT_EQ(mine->address(), "203.0.113.5");
+
+        // The aging put the two timestamps a day apart, and the wire must keep them apart.
+        EXPECT_EQ(mine->last_used_at() - mine->created_at(), 86400);
     });
 }
 

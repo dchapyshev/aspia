@@ -121,12 +121,14 @@ void RouterCache::onResult(Result kind, std::string_view command, bool ok)
             break;
 
         case Result::WORKSPACE:
-            // Every workspace operation assigns hosts to the workspace or releases them from it,
-            // and deleting one takes its whole group tree with it.
+            // Adding or renaming a workspace moves no host; only deleting one releases its
+            // hosts and takes its whole group tree with it.
             invalidateWorkspaces();
-            cached_hosts_.clear();
             if (command == proto::router::kCommandWorkspaceDelete)
+            {
+                cached_hosts_.clear();
                 cached_groups_.clear();
+            }
             break;
     }
 }
@@ -147,11 +149,3 @@ void RouterCache::onNotification(const proto::router::Notification& notification
         invalidateWorkspaces();
 }
 
-//--------------------------------------------------------------------------------------------------
-void RouterCache::clear()
-{
-    workspaces_loaded_ = false;
-    cached_workspaces_ = RouterWorkspaceList();
-    cached_groups_.clear();
-    cached_hosts_.clear();
-}

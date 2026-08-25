@@ -400,15 +400,6 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
 {
     RequestResult result;
 
-    // Checked before the lookup below: a user that could not be read must not pass for a user that
-    // is not there - the answers mean different things to the client.
-    if (!database.isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        result.error_code = proto::router::kErrorInternalError;
-        return result;
-    }
-
     // Read-modify-write outside a transaction: the window between this findUser and the modifyUser
     // below is closed only by every users/workspaces write going through the single ClientWorker
     // thread. If client sessions are ever spread over several workers, this must move inside one

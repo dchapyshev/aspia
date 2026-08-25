@@ -1728,9 +1728,9 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
 
+    // The record exists for as long as the prompt does; a nullopt here is a transient read
+    // failure, and the question matters more than the name in the title.
     const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
-    if (!record.has_value())
-        return;
 
     // An account with no secret yet scans what the router handed out before it can answer, so the
     // two are asked in different dialogs.
@@ -1780,7 +1780,8 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
 
     // The title names the router, so with several of them the user can tell whose code is asked.
-    dialog->setWindowTitle(dialog->windowTitle() + " - " + record->displayLabel());
+    if (record.has_value())
+        dialog->setWindowTitle(dialog->windowTitle() + " - " + record->displayLabel());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 

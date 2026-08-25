@@ -78,6 +78,28 @@ TEST_F(RouterRpcTest, DispatchSkipsDestroyedReceiver)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The made-up lost-connection reply obeys the same rule as a real one: a caller that is already
+// gone is not woken. The callback holds a raw pointer to the receiver, so calling it would run
+// on freed memory.
+TEST_F(RouterRpcTest, ClearPendingSkipsDestroyedReceiver)
+{
+    int calls = 0;
+
+    proto::router::UserListRequest request;
+    request.set_request_id(rpc_.nextRequestId());
+
+    {
+        QObject receiver;
+        rpc_.registerPending<proto::router::UserList>(&request,
+            { &receiver, [&calls](const proto::router::UserList&) { ++calls; } });
+    }
+
+    rpc_.clearPending();
+
+    EXPECT_EQ(calls, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A reply of another kind carrying the id of a waiting request means the router broke the protocol.
 // No real answer is coming after that, so the caller has to be told: a dialog that disabled itself
 // for the round trip has nothing else to wake it.

@@ -69,6 +69,9 @@ public:
         emit sig_messageReceived(channel_id, buffer);
     }
 
+    // The socket dying under the session, as the real channel reports it.
+    void fail(ErrorCode error_code) { emit sig_errorOccurred(error_code); }
+
     const QList<Sent>& sent() const { return sent_; }
     bool nothingSent() const { return sent_.isEmpty(); }
     void clearSent() { sent_.clear(); }

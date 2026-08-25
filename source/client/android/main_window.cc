@@ -640,15 +640,16 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
 
+    // The record exists for as long as the prompt does; a nullopt here is a transient read
+    // failure, and the question matters more than the name in the title.
     const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
-    if (!record.has_value())
-        return;
 
     TwoFactorDialog* dialog =
         new TwoFactorDialog(prompt->otpauthUri(), prompt->codeRefused(), this);
 
     // The title names the router, so with several of them the user can tell whose code is asked.
-    dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record->displayLabel()));
+    if (record.has_value())
+        dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record->displayLabel()));
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 

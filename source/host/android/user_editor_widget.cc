@@ -46,7 +46,7 @@ constexpr int kSeedKeySize = 64;
 // A leading '#' and an all-digit name are reserved for the names the program builds itself.
 bool isNameAllowed(const QString& username)
 {
-    if (!User::isValidUserName(username) || username.length() >= User::kMaxUserNameLength)
+    if (!User::isValidUserName(username))
         return false;
 
     if (username.startsWith('#'))

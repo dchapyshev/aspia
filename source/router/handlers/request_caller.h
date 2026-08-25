@@ -34,7 +34,8 @@ struct RequestCaller
     // record allows). Decides what a request is allowed to ask for, e.g. the unfiltered host list.
     quint32 session_type = 0;
 
-    // Row id of the device token the session authenticated with, 0 when it holds none.
+    // Row id of the device token bound to the session, either the one it presented or the one
+    // just issued to it. 0 when no token backs the session.
     qint64 token_id = 0;
 };
 

@@ -91,8 +91,7 @@ void Router2FA::onStart(const QVersionNumber& peer_version)
 {
     LOG(INFO) << "Connected to router" << config_->address();
     version_ = peer_version;
-    // The worker already unpaused the channel. The router speaks next with a challenge or
-    // LoginResult.
+    // The worker already unpaused the channel. The router speaks next with a challenge.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,7 +129,7 @@ void Router2FA::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 
 //--------------------------------------------------------------------------------------------------
 void Router2FA::openPrompt(const proto::router::TwoFactorChallenge& challenge,
-                             const QString& otpauth_uri)
+                           const QString& otpauth_uri)
 {
     // The seconds of the block come from the peer, and only their bounds are believed: a
     // negative block is no block, and none runs longer than the protocol allows.

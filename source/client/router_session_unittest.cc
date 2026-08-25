@@ -440,6 +440,59 @@ TEST_F(RouterSessionTest, AcceptedPasswordRotationDropsTheStoredToken)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The router refused the rotation, so nothing of it reaches the record. The old password is the
+// one that still opens the account, and the stored token is still valid on the router.
+TEST_F(RouterSessionTest, RefusedPasswordRotationStoresNothing)
+{
+    seedRecord("stale-device-token");
+
+    SharedPointer<RouterConfig> shared = config("stale-device-token");
+    RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
+
+    int calls = 0;
+    router.changePassword(SecureString(QString("new-password")),
+                          { &receiver_, [&calls](const proto::router::ChangePasswordResult&)
+    {
+        ++calls;
+    } });
+
+    proto::router::RouterToClient reply;
+    proto::router::ChangePasswordResult* result = reply.mutable_change_password_result();
+    result->set_request_id(1);
+    result->set_error_code(proto::router::kErrorInternalError);
+    RouterSessionTestPeer::onMessageReceived(router, reply);
+
+    EXPECT_EQ(calls, 1);
+    EXPECT_FALSE(shared->deviceToken().isEmpty());
+    EXPECT_TRUE(shared->password() == SecureString(QString("secret")));
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_FALSE(stored->deviceToken().isEmpty());
+    EXPECT_TRUE(stored->password() == SecureString(QString("secret")));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A rename of the own account rides the same store as the rotation. The next login authenticates
+// with the name of the record, so a record that kept the old name would never connect again.
+TEST_F(RouterSessionTest, StoreCredentialsWritesTheNewName)
+{
+    seedRecord();
+
+    SharedPointer<RouterConfig> shared = config();
+    RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
+
+    EXPECT_TRUE(router.storeCredentials("renamed", SecureString(QString("new-password"))));
+
+    EXPECT_EQ(shared->username(), QString("renamed"));
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("renamed"));
+    EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The record can be gone by the time the router accepts the rotation. The store says so instead
 // of pretending the record now holds the new password, and the journal of the record tells the
 // operator what to do.
