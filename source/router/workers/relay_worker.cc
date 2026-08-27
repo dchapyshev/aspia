@@ -19,6 +19,7 @@
 #include "router/workers/relay_worker.h"
 
 #include "base/logging.h"
+#include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/net_utils.h"
@@ -185,18 +186,17 @@ void RelayWorker::onNewRelayConnection()
     CHECK(server_);
     while (server_->hasReadyConnections())
     {
-        TcpChannel* channel = server_->nextReadyConnection();
+        ScopedQPointer<TcpChannel> channel(server_->nextReadyConnection());
 
         if (relays_.size() >= size_t(kMaxRelays))
         {
             LOG(ERROR) << "Too many relay sessions. Connection is rejected for" << channel->peerAddress();
-            channel->deleteLater();
             continue;
         }
 
         LOG(INFO) << "New relay session:" << channel->peerAddress();
 
-        Relay* relay = new Relay(channel, this);
+        Relay* relay = new Relay(channel.release(), this);
         relays_.emplace_back(relay);
 
         connect(relay, &Relay::sig_finished, this, &RelayWorker::onRelayFinished);
