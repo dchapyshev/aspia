@@ -450,11 +450,10 @@ void ClientOperator::readTempHostListRequest(const proto::router::TempHostListRe
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
     const auto request_id = request.request_id();
 
-    host_worker->requestTempHostList(is_admin, this,
+    host_worker->requestTempHostList(is_admin, request.offset(), request.count(), this,
         [this, request_id](proto::router::TempHostList&& temp_host_list)
     {
         temp_host_list.set_request_id(request_id);
-        temp_host_list.set_error_code(proto::router::kErrorOk);
 
         proto::router::RouterToClient message;
         message.mutable_temp_host_list()->Swap(&temp_host_list);

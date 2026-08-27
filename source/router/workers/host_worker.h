@@ -59,9 +59,11 @@ public:
     // in the worker thread and |callback| runs in the caller thread. The callback is dropped if
     // |context| is destroyed before the response arrives.
 
-    // Builds the list of connected temporary hosts. |with_address| adds host addresses (admin
-    // sessions only).
-    void requestTempHostList(bool with_address, QObject* context, TempHostListCallback callback);
+    // Builds one page of the list of connected temporary hosts, ordered by temporary id.
+    // |with_address| adds host addresses (admin sessions only). A request without a valid page is
+    // answered with "invalid_request".
+    void requestTempHostList(bool with_address, qint64 offset, qint64 count, QObject* context,
+                             TempHostListCallback callback);
 
     // Disconnects the host |host_id|, or every connected host if |host_id| is kAllHostsId. The
     // callback receives false if |host_id| is not connected.
@@ -104,7 +106,7 @@ private:
     void removeHostSession(Host* host);
     Host* hostByHostId(HostId host_id);
     void publishHostState(HostId host_id);
-    proto::router::TempHostList doTempHostList(bool with_address) const;
+    proto::router::TempHostList doTempHostList(bool with_address, qint64 offset, qint64 count) const;
     bool doDisconnectHost(HostId host_id);
     RemoveHostResult doRemoveHost(HostId host_id);
     bool doUpdateHost(HostId host_id);

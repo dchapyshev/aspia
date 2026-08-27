@@ -18,6 +18,8 @@
 
 #include "router/workers/host_worker.h"
 
+#include <algorithm>
+
 #include "base/logging.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/net_utils.h"
@@ -60,9 +62,13 @@ HostWorker::~HostWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWorker::requestTempHostList(bool with_address, QObject* context, TempHostListCallback callback)
+void HostWorker::requestTempHostList(bool with_address, qint64 offset, qint64 count, QObject* context,
+                                     TempHostListCallback callback)
 {
-    request(context, [this, with_address]() { return doTempHostList(with_address); }, std::move(callback));
+    request(context, [this, with_address, offset, count]()
+    {
+        return doTempHostList(with_address, offset, count);
+    }, std::move(callback));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -392,15 +398,39 @@ void HostWorker::publishHostState(HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::router::TempHostList HostWorker::doTempHostList(bool with_address) const
+proto::router::TempHostList HostWorker::doTempHostList(bool with_address, qint64 offset, qint64 count) const
 {
     proto::router::TempHostList temp_host_list;
 
+    if (offset < 0 || count < 1 || count > proto::router::kMaxTempHostPageSize)
+    {
+        LOG(ERROR) << "Invalid temporary host list page: offset" << offset << "count" << count;
+        temp_host_list.set_error_code(proto::router::kErrorInvalidRequest);
+        return temp_host_list;
+    }
+
+    std::vector<HostNG*> temp_hosts;
     for (Host* host : std::as_const(hosts_))
     {
         HostNG* host_ng = dynamic_cast<HostNG*>(host);
-        if (!host_ng || !isTempHostId(host_ng->hostId()))
-            continue;
+        if (host_ng && isTempHostId(host_ng->hostId()))
+            temp_hosts.emplace_back(host_ng);
+    }
+
+    // The connections are kept in the order they arrived. The page has to name the same records
+    // every time it is asked for, so the order is fixed here.
+    std::sort(temp_hosts.begin(), temp_hosts.end(),
+              [](const HostNG* a, const HostNG* b) { return a->hostId() < b->hostId(); });
+
+    temp_host_list.set_error_code(proto::router::kErrorOk);
+    temp_host_list.set_total_count(static_cast<qint64>(temp_hosts.size()));
+
+    const size_t begin = std::min(static_cast<size_t>(offset), temp_hosts.size());
+    const size_t end = std::min(begin + static_cast<size_t>(count), temp_hosts.size());
+
+    for (size_t i = begin; i < end; ++i)
+    {
+        HostNG* host_ng = temp_hosts[i];
 
         proto::router::TempHost* temp_host = temp_host_list.add_host();
         temp_host->set_temp_id(host_ng->hostId());

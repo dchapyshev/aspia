@@ -27,6 +27,7 @@ namespace proto::router {
 // Page bounds of the list replies. A reply carrying a list of unbounded length grows past the
 // message limit, and such a reply ends the session instead of being sent.
 [[maybe_unused]] constexpr int kMaxHostPageSize = 100;
+[[maybe_unused]] constexpr int kMaxTempHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxUserPageSize = 100;
 
 // Device tokens one user holds at a time. Issuing a token over the cap drops the least recently

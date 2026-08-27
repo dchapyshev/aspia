@@ -110,6 +110,7 @@ struct RouterTempHost
 struct RouterTempHostList
 {
     QString error_code;
+    qint64 total_count = 0;
     QList<RouterTempHost> hosts;
 };
 

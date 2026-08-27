@@ -64,6 +64,9 @@ constexpr int kMoreRole = Qt::UserRole + 1;
 // Hosts fetched per request on the host page. Cannot exceed what the router serves at once.
 constexpr qint64 kHostPageSize = proto::router::kMaxHostPageSize;
 
+// The same bound for the temp-host page.
+constexpr qint64 kTempHostPageSize = proto::router::kMaxTempHostPageSize;
+
 //--------------------------------------------------------------------------------------------------
 QString statusIconPath(RouterStatus status)
 {
@@ -203,6 +206,12 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     // A tap on a temporary host opens the same session-type chooser.
     connect(temp_host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
+        if (item && item->data(0, kMoreRole).toBool())
+        {
+            fetchTempHosts(true);
+            return;
+        }
+
         HostConfig config;
         if (tempHostConfigForItem(item, &config))
             showSessionMenu(config);
@@ -761,6 +770,40 @@ void RemoteWidget::fetchHosts(RouterSession::CachePolicy policy, bool append)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RemoteWidget::fetchTempHosts(bool append)
+{
+    RouterSession* session = RouterController::session(host_router_id_);
+    if (!session)
+        return;
+
+    const qint64 router_id = host_router_id_;
+    const qint64 offset = append ? temp_hosts_.size() : 0;
+
+    session->listTempHosts(offset, kTempHostPageSize,
+        { this, [this, router_id, append](const RouterTempHostList& list)
+    {
+        // Ignore the result if the selection changed while the request was in flight.
+        if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
+            return;
+
+        // An error reply carries no list; applying it would empty the page. Keep what is shown.
+        if (list.error_code != proto::router::kErrorOk)
+        {
+            LOG(ERROR) << "Unable to get the list of the temporary hosts:" << list.error_code;
+            return;
+        }
+
+        if (append)
+            temp_hosts_.append(list.hosts);
+        else
+            temp_hosts_ = list.hosts;
+
+        temp_hosts_total_count_ = list.total_count;
+        rebuildTempHostRows();
+    } });
+}
+
+//--------------------------------------------------------------------------------------------------
 void RemoteWidget::rebuildHostRows()
 {
     host_tree_->clear();
@@ -785,38 +828,24 @@ void RemoteWidget::rebuildHostRows()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RemoteWidget::fetchTempHosts()
+void RemoteWidget::rebuildTempHostRows()
 {
-    RouterSession* session = RouterController::session(host_router_id_);
-    if (!session)
+    temp_host_tree_->clear();
+
+    for (const RouterTempHost& host : std::as_const(temp_hosts_))
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem(
+            temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
+        item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
+        item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
+    }
+
+    if (temp_hosts_.size() >= temp_hosts_total_count_)
         return;
 
-    const qint64 router_id = host_router_id_;
-
-    session->listTempHosts({ this, [this, router_id](const RouterTempHostList& list)
-    {
-        // Ignore the result if the selection changed while the request was in flight.
-        if (stack_->currentIndex() != kPageTempHosts || router_id != host_router_id_)
-            return;
-
-        // An error reply carries no list; applying it would empty the page. Keep what is shown.
-        if (list.error_code != proto::router::kErrorOk)
-        {
-            LOG(ERROR) << "Unable to get the list of the temporary hosts:" << list.error_code;
-            return;
-        }
-
-        temp_host_tree_->clear();
-        temp_hosts_ = list.hosts;
-
-        for (const RouterTempHost& host : list.hosts)
-        {
-            QTreeWidgetItem* item = new QTreeWidgetItem(
-                temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
-            item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
-            item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
-        }
-    } });
+    QTreeWidgetItem* more = new QTreeWidgetItem(temp_host_tree_,
+        { tr("Show more"), tr("%1 of %2").arg(temp_hosts_.size()).arg(temp_hosts_total_count_) });
+    more->setData(0, kMoreRole, true);
 }
 
 //--------------------------------------------------------------------------------------------------

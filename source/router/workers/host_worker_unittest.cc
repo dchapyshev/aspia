@@ -245,6 +245,85 @@ protected:
         return ready ? peer : nullptr;
     }
 
+    // Connects a peer that behaves like a brand new host: anonymous authentication, then a request
+    // for a new id. The router answers with a temporary id and keeps the connection among the
+    // temporary hosts until an administrator approves it.
+    [[nodiscard]] Peer* connectTempHost()
+    {
+        peers_.push_back(std::make_unique<Peer>());
+        Peer* peer = peers_.back().get();
+
+        peer_worker_->invoke([this, peer]()
+        {
+            ClientAuthenticator* authenticator = new ClientAuthenticator();
+            authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
+            authenticator->setPeerPublicKey(router_keys_.publicKey());
+            authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
+
+            peer->channel = new TcpChannelNG(authenticator, nullptr);
+
+            QObject::connect(peer_worker_, &Worker::sig_tick, peer->channel, &TcpChannel::tick);
+
+            QObject::connect(peer->channel, &TcpChannel::sig_errorOccurred, peer->channel,
+                             [peer](TcpChannel::ErrorCode /* error_code */)
+            {
+                peer->disconnected = true;
+            });
+
+            QObject::connect(peer->channel, &TcpChannel::sig_authenticated, peer->channel, [peer]()
+            {
+                peer->channel->setPaused(false);
+                peer->authenticated = true;
+
+                proto::router::HostToRouter message;
+                proto::router::HostIdRequest* request = message.mutable_host_id_request();
+                request->set_type(proto::router::HostIdRequest::NEW_ID);
+                request->set_hw_id(kHardwareId);
+
+                peer->channel->send(0, serialize(message));
+            });
+
+            QObject::connect(peer->channel, &TcpChannel::sig_messageReceived, peer->channel,
+                             [peer](quint8 /* channel_id */, const QByteArray& buffer)
+            {
+                proto::router::RouterToHost message;
+                if (!parse(buffer, &message))
+                    return;
+
+                if (message.has_host_id_response())
+                    peer->assigned_host_id = message.host_id_response().host_id();
+            });
+
+            peer->channel->connectTo("127.0.0.1", host_port_);
+        });
+
+        const bool ready =
+            waitFor([peer]() { return isTempHostId(peer->assigned_host_id.load()); });
+
+        return ready ? peer : nullptr;
+    }
+
+    // Asks the worker for a page of the temporary host list from another worker thread, the way
+    // an operator session does.
+    proto::router::TempHostList tempHostList(qint64 offset, qint64 count)
+    {
+        proto::router::TempHostList list;
+        std::atomic<bool> done { false };
+
+        peer_worker_->invoke([&]()
+        {
+            host_worker_->requestTempHostList(true, offset, count, peer_worker_,
+                                              [&](proto::router::TempHostList&& result)
+            {
+                list = std::move(result);
+                done = true;
+            });
+        });
+
+        EXPECT_TRUE(waitFor([&]() { return done.load(); }));
+        return list;
+    }
+
     // The peer goes away the way a host whose connection was lost does. The channel belongs to the
     // thread of the peer worker, and so does its teardown.
     void closePeer(Peer* peer)
@@ -413,5 +492,45 @@ TEST_F(HostWorkerTest, RemovedHostIsNoLongerAnnounced)
     removeHost();
 
     EXPECT_TRUE(waitFor([this]() { return !SharedHosts::instance().contains(host_id_); }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The temporary host list is served page by page in one stable order, with the count of the whole
+// list on every page.
+TEST_F(HostWorkerTest, TempHostListIsPagedInAStableOrder)
+{
+    ASSERT_TRUE(connectTempHost());
+    ASSERT_TRUE(connectTempHost());
+    ASSERT_TRUE(connectTempHost());
+
+    const proto::router::TempHostList first = tempHostList(0, 2);
+    ASSERT_EQ(first.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(first.total_count(), 3);
+    ASSERT_EQ(first.host_size(), 2);
+    EXPECT_LT(first.host(0).temp_id(), first.host(1).temp_id());
+
+    const proto::router::TempHostList second = tempHostList(2, 2);
+    ASSERT_EQ(second.error_code(), proto::router::kErrorOk);
+    EXPECT_EQ(second.total_count(), 3);
+    ASSERT_EQ(second.host_size(), 1);
+    EXPECT_LT(first.host(1).temp_id(), second.host(0).temp_id());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request that names no page has a count of zero and is refused, as is one that asks for more
+// than the cap. Whatever comes out of the list goes into a single reply, so its size must never
+// follow the number of connected hosts.
+TEST_F(HostWorkerTest, TempHostListWithoutAPageIsRefused)
+{
+    ASSERT_TRUE(connectTempHost());
+
+    const proto::router::TempHostList refused = tempHostList(0, 0);
+    EXPECT_EQ(refused.error_code(), proto::router::kErrorInvalidRequest);
+    EXPECT_EQ(refused.total_count(), 0);
+    EXPECT_EQ(refused.host_size(), 0);
+
+    const proto::router::TempHostList oversized =
+        tempHostList(0, proto::router::kMaxTempHostPageSize + 1);
+    EXPECT_EQ(oversized.error_code(), proto::router::kErrorInvalidRequest);
 }
 

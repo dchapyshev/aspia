@@ -384,6 +384,36 @@ TEST_F(RouterSessionTest, HostListIsParsedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The temp-host conversation on the client channel: the reply carries the count of the whole
+// list next to the page, and the caller receives both.
+TEST_F(RouterSessionTest, TempHostListIsParsed)
+{
+    RouterTempHostList delivered;
+    router_.listTempHosts(0, proto::router::kMaxTempHostPageSize,
+                          { &receiver_, [&delivered](const RouterTempHostList& value)
+    {
+        delivered = value;
+    } });
+
+    proto::router::RouterToClient reply;
+    auto* list = reply.mutable_temp_host_list();
+    list->set_request_id(++next_request_id_);
+    list->set_error_code(proto::router::kErrorOk);
+    list->set_total_count(150);
+
+    proto::router::TempHost* host = list->add_host();
+    host->set_temp_id(42);
+    host->set_computer_name("new-host");
+    deliver(reply);
+
+    EXPECT_EQ(delivered.error_code, QString::fromStdString(proto::router::kErrorOk));
+    EXPECT_EQ(delivered.total_count, 150);
+    ASSERT_EQ(delivered.hosts.size(), 1);
+    EXPECT_EQ(delivered.hosts.at(0).temp_id, HostId(42));
+    EXPECT_EQ(delivered.hosts.at(0).computer_name, "new-host");
+}
+
+//--------------------------------------------------------------------------------------------------
 // The groups arrive with the workspace they belong to and are cached per workspace.
 TEST_F(RouterSessionTest, GroupListIsParsedAndCached)
 {

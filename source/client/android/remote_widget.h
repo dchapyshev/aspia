@@ -80,14 +80,10 @@ private slots:
 
 private:
     void fetchRouter(qint64 router_id, RouterSession::CachePolicy policy);
-    // Loads a page of the hosts of the selected group. |append| adds the page after the ones
-    // already shown (the "show more" row); otherwise the page is the first one and replaces them.
     void fetchHosts(RouterSession::CachePolicy policy, bool append = false);
-    void fetchTempHosts();
-
-    // Rebuilds the host page from |hosts_|, ending with the "show more" row while the group has
-    // more hosts than are loaded.
+    void fetchTempHosts(bool append = false);
     void rebuildHostRows();
+    void rebuildTempHostRows();
     void showTree();
 
     // Builds the connection config for a host row from the cached host list. Returns false if the
@@ -159,8 +155,10 @@ private:
     QList<RouterHost> hosts_;
     qint64 hosts_total_count_ = 0;
 
-    // The temporary hosts currently shown on the temp-host page, kept to build a config on tap.
+    // The temporary hosts loaded so far on the temp-host page, kept to build a config on tap. The
+    // router can hold more than these: the rest is loaded page by page.
     QList<RouterTempHost> temp_hosts_;
+    qint64 temp_hosts_total_count_ = 0;
 
     // The active search query and the matches of the page currently on screen.
     QString search_query_;

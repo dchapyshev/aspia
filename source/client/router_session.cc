@@ -651,16 +651,19 @@ void RouterSession::searchHosts(const QString& query, qint64 offset, qint64 coun
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::listTempHosts(RouterCallback<RouterTempHostList> callback)
+void RouterSession::listTempHosts(qint64 offset, qint64 count, RouterCallback<RouterTempHostList> callback)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_temp_host_list_request();
     request->set_request_id(rpc_.nextRequestId());
+    request->set_offset(offset);
+    request->set_count(count);
     rpc_.registerPending<proto::router::TempHostList>(request, std::move(callback),
         [](const proto::router::TempHostList& raw)
     {
         RouterTempHostList temp_hosts;
         temp_hosts.error_code = QString::fromStdString(raw.error_code());
+        temp_hosts.total_count = qMax<qint64>(0, raw.total_count());
         temp_hosts.hosts.reserve(raw.host_size());
 
         for (int i = 0; i < raw.host_size(); ++i)

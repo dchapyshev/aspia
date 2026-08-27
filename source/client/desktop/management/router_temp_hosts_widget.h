@@ -20,10 +20,13 @@
 #define CLIENT_DESKTOP_MANAGEMENT_ROUTER_TEMP_HOSTS_WIDGET_H
 
 #include "client/config.h"
+#include "client/page_model.h"
 #include "client/router_types.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/temp_host_list_model.h"
 
+class IconTextButton;
+class QComboBox;
 class QTreeView;
 
 namespace proto::router {
@@ -60,9 +63,14 @@ private slots:
     void onTempHostListReceived(const RouterTempHostList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
     void onContextMenu(const QPoint& pos);
+    void onPageSizeChanged(int index);
+    void onPageChanged(int index);
+    void onPrevClicked();
+    void onNextClicked();
 
 private:
     void fetchTempHosts();
+    void updatePagination();
     bool isAdmin() const;
 
     // The host of the row the user is on, or null when the list is empty.
@@ -70,7 +78,12 @@ private:
 
     QTreeView* tree_ = nullptr;
     TempHostListModel* model_ = nullptr;
+    IconTextButton* button_prev_ = nullptr;
+    IconTextButton* button_next_ = nullptr;
+    QComboBox* combo_page_ = nullptr;
+    QComboBox* combo_page_size_ = nullptr;
     qint64 router_id_ = 0;
+    PageModel page_;
 
     Q_DISABLE_COPY_MOVE(RouterTempHostsWidget)
 };

@@ -169,7 +169,8 @@ public:
                      RouterCallback<RouterHostList> callback);
 
     // The temporary (unapproved) hosts currently online. |address| is filled for admins only.
-    void listTempHosts(RouterCallback<RouterTempHostList> callback);
+    // The page is mandatory as for listHosts; total_count counts every temporary host.
+    void listTempHosts(qint64 offset, qint64 count, RouterCallback<RouterTempHostList> callback);
 
     void checkHostStatus(HostId host_id, RouterCallback<proto::router::HostStatus> callback);
 

@@ -18,16 +18,29 @@
 
 #include "client/desktop/management/router_temp_hosts_widget.h"
 
+#include <QComboBox>
+#include <QHBoxLayout>
 #include <QHeaderView>
+#include <QLabel>
+#include <QSignalBlocker>
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
+#include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
+
+namespace {
+
+// Upper sanity bound on the router-reported temporary host count, used only for pagination.
+const qint64 kMaxTempHostCount = 500000;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
@@ -43,9 +56,46 @@ RouterTempHostsWidget::RouterTempHostsWidget(QWidget* parent)
     tree_->setModel(model_);
     tree_->setSortingEnabled(true);
 
+    button_prev_ = new IconTextButton(this);
+    button_prev_->setText(tr("Previous"));
+    button_prev_->setToolTip(tr("Previous page"));
+    button_prev_->setIcon(GuiApplication::svgIcon(":/img/arrow-left.svg"));
+
+    button_next_ = new IconTextButton(this);
+    button_next_->setText(tr("Next"));
+    button_next_->setToolTip(tr("Next page"));
+    button_next_->setIcon(GuiApplication::svgIcon(":/img/arrow-right.svg"));
+    button_next_->setIconOnRight(true);
+
+    combo_page_ = new QComboBox(this);
+
+    // The largest entry is the largest page the router serves (kMaxTempHostPageSize).
+    combo_page_size_ = new QComboBox(this);
+    combo_page_size_->addItem("25", QVariant::fromValue<qint64>(25));
+    combo_page_size_->addItem("50", QVariant::fromValue<qint64>(50));
+    combo_page_size_->addItem("100", QVariant::fromValue<qint64>(100));
+    combo_page_size_->setCurrentIndex(2);
+    page_.setPageSize(combo_page_size_->currentData().toLongLong());
+
+    QHBoxLayout* pagination_layout = new QHBoxLayout();
+    pagination_layout->addWidget(button_prev_);
+    pagination_layout->addWidget(combo_page_);
+    pagination_layout->addWidget(button_next_);
+    pagination_layout->addWidget(new QLabel(tr("Items per page:"), this));
+    pagination_layout->addWidget(combo_page_size_);
+    pagination_layout->addStretch();
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(tree_);
+    layout->addLayout(pagination_layout);
+
+    connect(combo_page_size_, &QComboBox::currentIndexChanged, this, &RouterTempHostsWidget::onPageSizeChanged);
+    connect(combo_page_, &QComboBox::currentIndexChanged, this, &RouterTempHostsWidget::onPageChanged);
+    connect(button_prev_, &QToolButton::clicked, this, &RouterTempHostsWidget::onPrevClicked);
+    connect(button_next_, &QToolButton::clicked, this, &RouterTempHostsWidget::onNextClicked);
+
+    updatePagination();
 
     connect(tree_->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterTempHostsWidget::sig_currentChanged);
@@ -80,6 +130,7 @@ RouterTempHostsWidget::~RouterTempHostsWidget()
 void RouterTempHostsWidget::showRouter(qint64 router_id)
 {
     router_id_ = router_id;
+    page_.clear();
 
     // The peer address is only delivered to admin sessions, so hide the column for the rest.
     tree_->setColumnHidden(static_cast<int>(TempHostListModel::Column::ADDRESS), !isAdmin());
@@ -155,11 +206,19 @@ void RouterTempHostsWidget::onTempHostListReceived(const RouterTempHostList& lis
 
     model_->setHosts(list.hosts);
 
-    // The list is replaced whole, so the row the user was on has to be found again by the host it
+    // The page is replaced whole, so the row the user was on has to be found again by the host it
     // was showing.
     const int selected_row = model_->rowOf(selected_temp_id);
     if (selected_row >= 0)
         tree_->setCurrentIndex(model_->index(selected_row, 0));
+
+    const bool page_moved = page_.setTotalCount(qMin(list.total_count, kMaxTempHostCount));
+    updatePagination();
+
+    // The page the list was fetched for is gone, so the tree was just emptied. Nothing else asks
+    // for the page it was moved to, and the user would be left looking at nothing.
+    if (page_moved)
+        fetchTempHosts();
 
     emit sig_currentChanged();
 }
@@ -174,23 +233,6 @@ void RouterTempHostsWidget::onHostResultReceived(const proto::router::HostResult
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTempHostsWidget::fetchTempHosts()
-{
-    RouterSession* session = RouterController::session(router_id_);
-    if (!session)
-        return;
-
-    session->listTempHosts({ this, &RouterTempHostsWidget::onTempHostListReceived });
-}
-
-//--------------------------------------------------------------------------------------------------
-bool RouterTempHostsWidget::isAdmin() const
-{
-    RouterSession* session = RouterController::session(router_id_);
-    return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
 {
     const QModelIndex index = tree_->indexAt(pos);
@@ -201,6 +243,81 @@ void RouterTempHostsWidget::onContextMenu(const QPoint& pos)
         return;
 
     emit sig_contextMenu(tree_->viewport()->mapToGlobal(pos));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onPageSizeChanged(int /* index */)
+{
+    page_.setPageSize(combo_page_size_->currentData().toLongLong());
+    page_.setCurrentPage(0);
+    fetchTempHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onPageChanged(int index)
+{
+    if (index < 0)
+        return;
+
+    if (index == page_.currentPage())
+        return;
+
+    page_.setCurrentPage(index);
+    fetchTempHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onPrevClicked()
+{
+    if (page_.currentPage() <= 0)
+        return;
+
+    page_.setCurrentPage(page_.currentPage() - 1);
+    fetchTempHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::onNextClicked()
+{
+    if (page_.currentPage() >= page_.pageCount() - 1)
+        return;
+
+    page_.setCurrentPage(page_.currentPage() + 1);
+    fetchTempHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::fetchTempHosts()
+{
+    RouterSession* session = RouterController::session(router_id_);
+    if (!session)
+        return;
+
+    session->listTempHosts(page_.offset(), page_.pageSize(),
+                           { this, &RouterTempHostsWidget::onTempHostListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterTempHostsWidget::updatePagination()
+{
+    const qint64 total_pages = page_.pageCount();
+
+    QSignalBlocker blocker(combo_page_);
+    combo_page_->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        combo_page_->addItem(QString::number(i));
+    combo_page_->setCurrentIndex(static_cast<int>(page_.currentPage()));
+
+    combo_page_->setEnabled(total_pages > 1);
+    button_prev_->setEnabled(page_.currentPage() > 0);
+    button_next_->setEnabled(page_.currentPage() < total_pages - 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterTempHostsWidget::isAdmin() const
+{
+    RouterSession* session = RouterController::session(router_id_);
+    return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
 }
 
 //--------------------------------------------------------------------------------------------------

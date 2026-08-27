@@ -189,13 +189,16 @@ message TempHost
 message TempHostListRequest
 {
     int64 request_id = 1;
+    int64 offset     = 2; // Index of the first item, zero based.
+    int64 count      = 3; // Items to return. A zero count is refused, as is one over the cap.
 }
 
 message TempHostList
 {
     int64 request_id       = 1;
-    string error_code      = 2; // "ok"
-    repeated TempHost host = 3;
+    string error_code      = 2; // "ok" | "invalid_request"
+    int64 total_count      = 3; // Total temporary hosts. Unset on an error reply.
+    repeated TempHost host = 4;
 }
 
 // Push notification from router to client/admin sessions: a coarse-grained signal that the
