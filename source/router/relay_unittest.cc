@@ -158,17 +158,30 @@ TEST_F(RelayTest, AnnouncedKeysBecomeOffers)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The endpoint comes from the relay over the wire. An offer built on a pool without a host, or on
-// a port that does not survive the cast to quint16, would send the peers nowhere.
+// The endpoint comes from the relay over the wire and reaches the peers unchanged. One that names
+// nothing reachable would send them nowhere and waste a one time key on every offer.
 TEST_F(RelayTest, PoolWithAnUnusableEndpointIsIgnored)
 {
     withRelay([](Relay& relay, FakeTcpChannel* channel)
     {
         channel->receive(0, keyPool(std::string(), 8080, { makeKey(10) }));
-        channel->receive(0, keyPool("relay.example", 0, { makeKey(11) }));
-        channel->receive(0, keyPool("relay.example", 70000, { makeKey(12) }));
+        channel->receive(0, keyPool("relay example/8080", 8080, { makeKey(11) }));
+        channel->receive(0, keyPool("relay.example", 0, { makeKey(12) }));
+        channel->receive(0, keyPool("relay.example", 70000, { makeKey(13) }));
 
         EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 0u);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host name and an IPv6 address have no character set in common, so both forms are checked.
+TEST_F(RelayTest, PoolWithAnIpv6EndpointIsAccepted)
+{
+    withRelay([](Relay& relay, FakeTcpChannel* channel)
+    {
+        channel->receive(0, keyPool("2001:db8::1", 8080, { makeKey(10) }));
+
+        EXPECT_EQ(SharedKeyPool::instance().count(relay.sessionId()), 1u);
     });
 }
 

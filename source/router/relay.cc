@@ -18,6 +18,7 @@
 
 #include "router/relay.h"
 
+#include "base/net/net_utils.h"
 #include "base/threading/worker.h"
 #include "router/shared_key_pool.h"
 
@@ -167,9 +168,9 @@ void Relay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
     const std::string& peer_host = key_pool.peer_host();
     const quint32 peer_port = key_pool.peer_port();
 
-    // The endpoint comes from the relay over the wire; reject a pool with an empty host or an
-    // out-of-range port instead of storing a truncated quint16 that would yield a broken offer.
-    if (peer_host.empty() || peer_port == 0 || peer_port > 65535)
+    const QString host = QString::fromStdString(peer_host);
+    if ((!NetUtils::isValidIpAddress(host) && !NetUtils::isValidHostName(host)) ||
+        !NetUtils::isValidPort(peer_port))
     {
         CLOG(ERROR) << "Ignoring key pool with invalid peer endpoint (host:" << peer_host
                     << "port:" << peer_port << ")";
