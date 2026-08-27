@@ -532,6 +532,12 @@ bool HostWorker::doUpdateHost(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 std::string_view HostWorker::doApproveHost(HostId host_id)
 {
+    if (!isTempHostId(host_id))
+    {
+        LOG(ERROR) << "Attempt to approve a permanent host id:" << host_id;
+        return proto::router::kErrorInvalidEntryId;
+    }
+
     HostNG* host = dynamic_cast<HostNG*>(hostByHostId(host_id));
     if (!host)
         return proto::router::kErrorInvalidEntryId;

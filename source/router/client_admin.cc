@@ -242,13 +242,6 @@ void ClientAdmin::doHostRequest(const proto::router::HostRequest& request)
     }
     else if (command_name == proto::router::kCommandHostApprove)
     {
-        if (!isTempHostId(host_id))
-        {
-            CLOG(ERROR) << "No live temporary session for host_id:" << host_id;
-            send_result(proto::router::kErrorInvalidEntryId);
-            return;
-        }
-
         host_worker->approveHost(host_id, this, [this, host_id, send_result](std::string_view error_code)
         {
             if (error_code == proto::router::kErrorInvalidEntryId)

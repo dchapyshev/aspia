@@ -107,6 +107,27 @@ public:
         finished.wait(guard, [&]() { return done; });
     }
 
+    std::string_view approveHost(HostId host_id)
+    {
+        std::mutex lock;
+        std::condition_variable finished;
+        bool done = false;
+        std::string_view result;
+
+        worker_->post([&]()
+        {
+            result = worker_->doApproveHost(host_id);
+
+            std::lock_guard guard(lock);
+            done = true;
+            finished.notify_one();
+        });
+
+        std::unique_lock guard(lock);
+        finished.wait(guard, [&]() { return done; });
+        return result;
+    }
+
 private:
     HostWorker* worker_;
 };
@@ -534,3 +555,14 @@ TEST_F(HostWorkerTest, TempHostListWithoutAPageIsRefused)
     EXPECT_EQ(oversized.error_code(), proto::router::kErrorInvalidRequest);
 }
 
+
+//--------------------------------------------------------------------------------------------------
+// Approval turns a temporary host into a permanent one, so a permanent id has nothing to approve.
+// Carrying it out would write a second record for a machine that already has its own.
+TEST_F(HostWorkerTest, PermanentHostIsNotApproved)
+{
+    ASSERT_TRUE(connectHost());
+
+    HostWorkerTestPeer peer(host_worker_);
+    EXPECT_EQ(peer.approveHost(host_id_), proto::router::kErrorInvalidEntryId);
+}
