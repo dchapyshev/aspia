@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QComboBox>
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
@@ -32,7 +33,9 @@
 #include <QLabel>
 #include <QMenu>
 #include <QSaveFile>
+#include <QSignalBlocker>
 #include <QStatusBar>
+#include <QToolButton>
 
 #include "base/logging.h"
 #include "client/router_controller.h"
@@ -41,6 +44,13 @@
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "ui_router_clients_widget.h"
+
+namespace {
+
+// Upper sanity bound on the router-reported client count, used only for pagination.
+const qint64 kMaxClientCount = 500000;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterClientsWidget::RouterClientsWidget(QWidget* parent)
@@ -69,6 +79,22 @@ RouterClientsWidget::RouterClientsWidget(QWidget* parent)
     connect(ui->tree_clients->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &RouterClientsWidget::sig_currentChanged);
 
+    // The largest entry is the largest page the router serves (kMaxClientPageSize).
+    ui->combo_clients_page_size->addItem("25", QVariant::fromValue<qint64>(25));
+    ui->combo_clients_page_size->addItem("50", QVariant::fromValue<qint64>(50));
+    ui->combo_clients_page_size->addItem("100", QVariant::fromValue<qint64>(100));
+    ui->combo_clients_page_size->setCurrentIndex(2);
+    page_.setPageSize(ui->combo_clients_page_size->currentData().toLongLong());
+
+    ui->button_clients_next->setIconOnRight(true);
+
+    connect(ui->combo_clients_page_size, &QComboBox::currentIndexChanged, this, &RouterClientsWidget::onPageSizeChanged);
+    connect(ui->combo_clients_page, &QComboBox::currentIndexChanged, this, &RouterClientsWidget::onPageChanged);
+    connect(ui->button_clients_prev, &QToolButton::clicked, this, &RouterClientsWidget::onPrevClicked);
+    connect(ui->button_clients_next, &QToolButton::clicked, this, &RouterClientsWidget::onNextClicked);
+
+    updatePagination();
+
     RouterController& controller = RouterController::instance();
     connect(&controller, &RouterController::sig_clientsChanged, this, [this](qint64 router_id)
     {
@@ -96,6 +122,7 @@ RouterClientsWidget::~RouterClientsWidget()
 void RouterClientsWidget::showRouter(qint64 router_id)
 {
     router_id_ = router_id;
+    page_.clear();
 
     model_->clear();
     updateStatusLabel();
@@ -322,16 +349,28 @@ void RouterClientsWidget::onDisconnectAllClients()
 //--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::onClientListReceived(const proto::router::ClientList& clients)
 {
+    if (clients.error_code() != proto::router::kErrorOk)
+    {
+        LOG(ERROR) << "Unable to get the list of the clients:" << clients.error_code();
+        return;
+    }
+
     const proto::router::ClientInfo* selected = currentClient();
     const qint64 selected_entry_id = selected ? selected->entry_id() : 0;
 
     model_->setClients(clients);
 
-    // The list is replaced whole, so the row the user was on has to be found again by the session
+    // The page is replaced whole, so the row the user was on has to be found again by the client
     // it was showing.
     const int selected_row = model_->rowOf(selected_entry_id);
     if (selected_row >= 0)
         ui->tree_clients->setCurrentIndex(model_->index(selected_row, 0));
+
+    const bool page_moved = page_.setTotalCount(qMin<qint64>(clients.total_count(), kMaxClientCount));
+    updatePagination();
+
+    if (page_moved)
+        fetchClients();
 
     emit sig_currentChanged();
     updateStatusLabel();
@@ -382,6 +421,47 @@ void RouterClientsWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterClientsWidget::onPageSizeChanged(int /* index */)
+{
+    page_.setPageSize(ui->combo_clients_page_size->currentData().toLongLong());
+    page_.setCurrentPage(0);
+    fetchClients();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterClientsWidget::onPageChanged(int index)
+{
+    if (index < 0)
+        return;
+
+    if (index == page_.currentPage())
+        return;
+
+    page_.setCurrentPage(index);
+    fetchClients();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterClientsWidget::onPrevClicked()
+{
+    if (page_.currentPage() <= 0)
+        return;
+
+    page_.setCurrentPage(page_.currentPage() - 1);
+    fetchClients();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterClientsWidget::onNextClicked()
+{
+    if (page_.currentPage() >= page_.pageCount() - 1)
+        return;
+
+    page_.setCurrentPage(page_.currentPage() + 1);
+    fetchClients();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterClientsWidget::fetchClients()
 {
     RouterSession* session = RouterController::session(router_id_);
@@ -391,7 +471,23 @@ void RouterClientsWidget::fetchClients()
     if (session->config().sessionType() != proto::router::SESSION_TYPE_ADMIN)
         return;
 
-    session->listClients({ this, &RouterClientsWidget::onClientListReceived });
+    session->listClients(page_.offset(), page_.pageSize(), { this, &RouterClientsWidget::onClientListReceived });
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterClientsWidget::updatePagination()
+{
+    const qint64 total_pages = page_.pageCount();
+
+    QSignalBlocker blocker(ui->combo_clients_page);
+    ui->combo_clients_page->clear();
+    for (qint64 i = 1; i <= total_pages; ++i)
+        ui->combo_clients_page->addItem(QString::number(i));
+    ui->combo_clients_page->setCurrentIndex(static_cast<int>(page_.currentPage()));
+
+    ui->combo_clients_page->setEnabled(total_pages > 1);
+    ui->button_clients_prev->setEnabled(page_.currentPage() > 0);
+    ui->button_clients_next->setEnabled(page_.currentPage() < total_pages - 1);
 }
 
 //--------------------------------------------------------------------------------------------------

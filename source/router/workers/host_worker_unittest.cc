@@ -304,7 +304,7 @@ protected:
     }
 
     // Asks the worker for a page of the temporary host list from another worker thread, the way
-    // an operator session does.
+    // an operator does.
     proto::router::TempHostList tempHostList(qint64 offset, qint64 count)
     {
         proto::router::TempHostList list;

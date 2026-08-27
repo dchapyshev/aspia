@@ -72,7 +72,7 @@ public:
     //----------------------------------------------------------------------------------------------
 
     void listRelays(RouterCallback<proto::router::RelayList> callback);
-    void listClients(RouterCallback<proto::router::ClientList> callback);
+    void listClients(qint64 offset, qint64 count, RouterCallback<proto::router::ClientList> callback);
 
     // One page of the user list. The reply carries the total, so the caller can page through it.
     void listUsers(qint64 offset, qint64 count, RouterCallback<proto::router::UserList> callback);

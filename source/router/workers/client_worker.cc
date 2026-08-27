@@ -365,15 +365,40 @@ void ClientWorker::onClientListRequest(const proto::router::ClientListRequest& r
     proto::router::RouterToAdmin message;
     proto::router::ClientList* result = message.mutable_client_list();
     result->set_request_id(request.request_id());
+
+    const qint64 offset = request.offset();
+    const qint64 count = request.count();
+
+    if (offset < 0 || count < 1 || count > proto::router::kMaxClientPageSize)
+    {
+        LOG(ERROR) << "Invalid client list page: offset" << offset << "count" << count;
+        result->set_error_code(proto::router::kErrorInvalidRequest);
+        session->sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    // The clients are kept in the order they arrived. The page has to name the same records
+    // every time it is asked for, so the order is fixed here.
+    std::vector<ClientOperator*> clients(clients_.begin(), clients_.end());
+    std::sort(clients.begin(), clients.end(), [](const ClientOperator* a, const ClientOperator* b)
+    {
+        return a->sessionId() < b->sessionId();
+    });
+
     result->set_error_code(proto::router::kErrorOk);
+    result->set_total_count(static_cast<qint64>(clients.size()));
 
     const qint64 wall_now = secondsSinceEpoch();
     const TimePoint monotonic_now = Clock::now();
 
-    for (const auto& client : std::as_const(clients_))
-    {
-        proto::router::ClientInfo* item = result->add_client();
+    const size_t begin = std::min(static_cast<size_t>(offset), clients.size());
+    const size_t end = std::min(begin + static_cast<size_t>(count), clients.size());
 
+    for (size_t i = begin; i < end; ++i)
+    {
+        const ClientOperator* client = clients[i];
+
+        proto::router::ClientInfo* item = result->add_client();
         item->set_entry_id(client->sessionId());
         item->set_timepoint(
             wall_now - DurationCast<Seconds>(monotonic_now - client->startTime()).count());

@@ -102,13 +102,16 @@ message ClientResult
 message ClientListRequest
 {
     int64 request_id = 1;
+    int64 offset     = 2; // Index of the first item, zero based.
+    int64 count      = 3; // Items to return. A zero count is refused, as is one over the cap.
 }
 
 message ClientList
 {
     int64 request_id           = 1;
-    string error_code          = 2;
-    repeated ClientInfo client = 3;
+    string error_code          = 2; // "ok" | "invalid_request"
+    int64 total_count          = 3; // Total clients. Unset on an error reply.
+    repeated ClientInfo client = 4;
 }
 
 message User

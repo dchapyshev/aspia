@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include "client/page_model.h"
 #include "client/desktop/management/client_list_model.h"
 #include "client/desktop/management/content_widget.h"
 
@@ -75,9 +76,14 @@ private slots:
     void onClientResultReceived(const proto::router::ClientResult& result);
     void onClientContextMenu(const QPoint& pos);
     void onHeaderContextMenu(const QPoint& pos);
+    void onPageSizeChanged(int index);
+    void onPageChanged(int index);
+    void onPrevClicked();
+    void onNextClicked();
 
 private:
     void fetchClients();
+    void updatePagination();
     void updateStatusLabel();
     const proto::router::ClientInfo* currentClient() const;
 
@@ -85,6 +91,7 @@ private:
     qint64 router_id_ = 0;
     ClientListModel* model_ = nullptr;
     QLabel* status_clients_label_ = nullptr;
+    PageModel page_;
 
     Q_DISABLE_COPY_MOVE(RouterClientsWidget)
 };

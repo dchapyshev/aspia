@@ -180,11 +180,13 @@ void RouterSession::listRelays(RouterCallback<proto::router::RelayList> callback
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterSession::listClients(RouterCallback<proto::router::ClientList> callback)
+void RouterSession::listClients(qint64 offset, qint64 count, RouterCallback<proto::router::ClientList> callback)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_list_request();
     request->set_request_id(rpc_.nextRequestId());
+    request->set_offset(offset);
+    request->set_count(count);
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
