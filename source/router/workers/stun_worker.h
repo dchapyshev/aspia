@@ -65,6 +65,9 @@ private:
     quint64 read_error_count_ = 0;
     std::error_code last_read_error_;
 
+    quint64 reply_count_ = 0;
+    quint64 throttled_reply_count_ = 0;
+
     Q_DISABLE_COPY_MOVE(StunWorker)
 };
 

@@ -30,6 +30,7 @@
 namespace {
 
 const Seconds kReportInterval{ 60 };
+constexpr quint64 kMaxRepliesPerWindow = 6000;
 
 } // namespace
 
@@ -106,6 +107,15 @@ void StunWorker::onTimer(TimePoint /* now */)
                    << kReportInterval.count() << "seconds. Last error:" << last_read_error_;
         read_error_count_ = 0;
     }
+
+    if (throttled_reply_count_)
+    {
+        LOG(WARNING) << throttled_reply_count_ << "STUN replies dropped in the last"
+                     << kReportInterval.count() << "seconds (reply limit reached)";
+        throttled_reply_count_ = 0;
+    }
+
+    reply_count_ = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,10 +208,19 @@ void StunWorker::doReceiveRequest()
         {
             const proto::stun::EndpointRequest& request = message.endpoint_request();
 
-            if (request.magic_number() == 0xA0B1C2D3)
-                doSendAddressReply(request.transaction_id(), io_->remote_endpoint);
-            else
+            if (request.magic_number() != 0xA0B1C2D3)
+            {
                 ++invalid_datagram_count_;
+            }
+            else if (reply_count_ >= kMaxRepliesPerWindow)
+            {
+                ++throttled_reply_count_;
+            }
+            else
+            {
+                ++reply_count_;
+                doSendAddressReply(request.transaction_id(), io_->remote_endpoint);
+            }
         }
 
         doReceiveRequest();
