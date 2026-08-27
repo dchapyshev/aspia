@@ -158,8 +158,18 @@ User User::create(const QString& name, const SecureString& password)
 //--------------------------------------------------------------------------------------------------
 bool User::isValid() const
 {
-    return isValidUserName(name) && SrpMath::pairByGroup(group).has_value() &&
-           !salt.isEmpty() && !verifier.isEmpty() &&
-           salt.size() <= static_cast<qsizetype>(kMaxSaltSize) &&
-           verifier.size() <= static_cast<qsizetype>(kMaxVerifierSize);
+    if (!isValidUserName(name) || salt.isEmpty() || verifier.isEmpty() ||
+        salt.size() > static_cast<qsizetype>(kMaxSaltSize) ||
+        verifier.size() > static_cast<qsizetype>(kMaxVerifierSize))
+    {
+        return false;
+    }
+
+    std::optional<SrpMath::NgPair> Ng_pair = SrpMath::pairByGroup(group);
+    if (!Ng_pair.has_value())
+        return false;
+
+    // A verifier of 0 or 1 makes the session key derivable from the exchange alone, so the account
+    // would open to anybody who knows the name.
+    return SrpMath::verify_v(BigNum::fromByteArray(verifier), BigNum::fromStdString(Ng_pair->first));
 }

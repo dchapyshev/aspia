@@ -78,6 +78,22 @@ TEST(router_user_test, is_valid_rejects_an_unusable_name_or_group)
     EXPECT_FALSE(unknown_group.isValid());
 }
 
+// With a verifier of 0 or 1 the session key follows from the exchange alone, so the account would
+// let in anybody who knows the name.
+TEST(router_user_test, is_valid_rejects_a_degenerate_verifier)
+{
+    RouterUser user = RouterUser::create("testuser", SecureString("password"));
+    ASSERT_TRUE(user.isValid());
+
+    RouterUser zero_verifier = user;
+    zero_verifier.verifier = QByteArray(1, '\x00');
+    EXPECT_FALSE(zero_verifier.isValid());
+
+    RouterUser one_verifier = user;
+    one_verifier.verifier = QByteArray(1, '\x01');
+    EXPECT_FALSE(one_verifier.isValid());
+}
+
 // ============================================================================
 // serialize / parseFrom roundtrip
 // ============================================================================

@@ -118,3 +118,19 @@ TEST(srp_math_test, wrong_password_yields_different_key)
     ASSERT_TRUE(client_key.isValid());
     EXPECT_NE(server_key.toByteArray(), client_key.toByteArray());
 }
+
+TEST(srp_math_test, verify_v_rejects_values_outside_the_group)
+{
+    const SrpMath::NgPair& Ng_pair = SrpMath::kNgPair_4096;
+
+    BigNum N = BigNum::fromStdString(Ng_pair.first);
+    BigNum g = BigNum::fromStdString(Ng_pair.second);
+    BigNum s = BigNum::fromByteArray(Random::byteArray(64));
+
+    BigNum v = SrpMath::calc_v(QString("alice"), SecureString(QString("password123")), s, N, g);
+    EXPECT_TRUE(SrpMath::verify_v(v, N));
+
+    EXPECT_FALSE(SrpMath::verify_v(BigNum::fromByteArray(QByteArray(1, '\x00')), N));
+    EXPECT_FALSE(SrpMath::verify_v(BigNum::fromByteArray(QByteArray(1, '\x01')), N));
+    EXPECT_FALSE(SrpMath::verify_v(N, N));
+}

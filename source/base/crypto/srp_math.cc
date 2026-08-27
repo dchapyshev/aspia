@@ -629,6 +629,19 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 
 //--------------------------------------------------------------------------------------------------
 // static
+bool SrpMath::verify_v(const BigNum& v, const BigNum& N)
+{
+    if (!v.isValid() || !N.isValid())
+    {
+        LOG(ERROR) << "Invalid arguments (v=" << v.isValid() << "N=" << N.isValid() << ")";
+        return false;
+    }
+
+    return BN_cmp(v, BN_value_one()) > 0 && BN_cmp(v, N) < 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
 BigNum SrpMath::calc_v(const QString& I, const SecureString& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
