@@ -637,7 +637,22 @@ bool SrpMath::verify_v(const BigNum& v, const BigNum& N)
         return false;
     }
 
-    return BN_cmp(v, BN_value_one()) > 0 && BN_cmp(v, N) < 0;
+    // N - 1 has order 2, so v^u takes one of two values and the exchange yields a key anyone can
+    // compute. It is excluded together with 0 and 1.
+    BigNum limit = BigNum::create();
+    if (!limit.isValid())
+    {
+        LOG(ERROR) << "BigNum::create failed";
+        return false;
+    }
+
+    if (!BN_copy(limit, N) || !BN_sub_word(limit, 1))
+    {
+        LOG(ERROR) << "BN_copy or BN_sub_word failed";
+        return false;
+    }
+
+    return BN_cmp(v, BN_value_one()) > 0 && BN_cmp(v, limit) < 0;
 }
 
 //--------------------------------------------------------------------------------------------------

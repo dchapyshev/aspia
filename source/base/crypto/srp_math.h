@@ -68,7 +68,7 @@ public:
     // Checks if A % N == 0.
     static bool verify_A_mod_N(const BigNum& A, const BigNum& N);
 
-    // Checks if 1 < v < N.
+    // Checks if 1 < v < N - 1.
     static bool verify_v(const BigNum& v, const BigNum& N);
 
     static BigNum calc_v(const QString& I, const SecureString& p, const BigNum& s,

@@ -133,4 +133,13 @@ TEST(srp_math_test, verify_v_rejects_values_outside_the_group)
     EXPECT_FALSE(SrpMath::verify_v(BigNum::fromByteArray(QByteArray(1, '\x00')), N));
     EXPECT_FALSE(SrpMath::verify_v(BigNum::fromByteArray(QByteArray(1, '\x01')), N));
     EXPECT_FALSE(SrpMath::verify_v(N, N));
+
+    // N is odd, so subtracting one touches the last byte only.
+    QByteArray n_minus_one = N.toByteArray();
+    --n_minus_one.back();
+    EXPECT_FALSE(SrpMath::verify_v(BigNum::fromByteArray(n_minus_one), N));
+
+    QByteArray n_minus_two = n_minus_one;
+    --n_minus_two.back();
+    EXPECT_TRUE(SrpMath::verify_v(BigNum::fromByteArray(n_minus_two), N));
 }

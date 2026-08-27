@@ -169,7 +169,7 @@ bool User::isValid() const
     if (!Ng_pair.has_value())
         return false;
 
-    // A verifier of 0 or 1 makes the session key derivable from the exchange alone, so the account
+    // A degenerate verifier makes the session key derivable from the exchange alone, so the account
     // would open to anybody who knows the name.
     return SrpMath::verify_v(BigNum::fromByteArray(verifier), BigNum::fromStdString(Ng_pair->first));
 }
