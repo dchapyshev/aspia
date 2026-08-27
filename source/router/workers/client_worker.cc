@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "base/logging.h"
+#include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
@@ -261,31 +262,35 @@ void ClientWorker::onNewConnection()
     CHECK(server_);
     while (server_->hasReadyConnections())
     {
-        TcpChannel* channel = server_->nextReadyConnection();
+        ScopedQPointer<TcpChannel> channel(server_->nextReadyConnection());
 
         proto::router::SessionType session_type =
             static_cast<proto::router::SessionType>(channel->peerSessionType());
 
         LOG(INFO) << "New client session:" << session_type << "(" << channel->peerAddress() << ")";
 
+        if (isUserLimitReached(channel->peerUserId()))
+        {
+            LOG(ERROR) << "Too many connections for user" << channel->peerUserName() << ". Rejected";
+            continue;
+        }
+
         ClientOperator* client = nullptr;
         switch (session_type)
         {
             case proto::router::SESSION_TYPE_OPERATOR:
-                client = new ClientOperator(Database::instance(), channel, this);
+                client = new ClientOperator(Database::instance(), channel.release(), this);
                 break;
 
             case proto::router::SESSION_TYPE_MANAGER:
-                client = new ClientManager(Database::instance(), channel, this);
+                client = new ClientManager(Database::instance(), channel.release(), this);
                 break;
 
             case proto::router::SESSION_TYPE_ADMIN:
             {
-                ClientAdmin* admin = new ClientAdmin(Database::instance(), channel, this);
-                connect(admin, &ClientAdmin::sig_clientListRequest,
-                        this, &ClientWorker::onClientListRequest);
-                connect(admin, &ClientAdmin::sig_clientRequest,
-                        this, &ClientWorker::onClientRequest);
+                ClientAdmin* admin = new ClientAdmin(Database::instance(), channel.release(), this);
+                connect(admin, &ClientAdmin::sig_clientListRequest, this, &ClientWorker::onClientListRequest);
+                connect(admin, &ClientAdmin::sig_clientRequest, this, &ClientWorker::onClientRequest);
                 client = admin;
                 break;
             }
@@ -298,7 +303,6 @@ void ClientWorker::onNewConnection()
         if (!client)
         {
             LOG(ERROR) << "Connection is rejected for" << channel->peerAddress();
-            channel->deleteLater();
             continue;
         }
 
@@ -505,6 +509,17 @@ std::vector<qint64> ClientWorker::sessionsToStop(const std::vector<qint64>& sess
         targets.emplace_back(entry_id);
 
     return targets;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientWorker::isUserLimitReached(qint64 user_id) const
+{
+    const auto count = std::ranges::count_if(clients_, [user_id](const ClientOperator* client)
+    {
+        return client->userId() == user_id;
+    });
+
+    return static_cast<size_t>(count) >= kMaxClientsPerUser;
 }
 
 //--------------------------------------------------------------------------------------------------

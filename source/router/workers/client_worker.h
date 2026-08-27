@@ -62,6 +62,8 @@ public:
         NOTIFY_GROUPS     = 1u << 6,
     };
 
+    static constexpr size_t kMaxClientsPerUser = 32;
+
     // The sessions a "disconnect" command of the admin channel targets, taken from the ids of the
     // live ones. |entry_id| == -1 means every session except the one that sent the command, so an
     // administrator that disconnects everybody does not have to reconnect and pass the two-factor
@@ -100,6 +102,7 @@ private slots:
     void onClientRequest(const proto::router::ClientRequest& request);
 
 private:
+    bool isUserLimitReached(qint64 user_id) const;
     bool stopClient(qint64 client_id);
     void updateClientsMask();
 

@@ -118,6 +118,11 @@ public:
     }
     static quint32 clientsMask(ClientWorker& worker) { return worker.clients_mask_; }
     static void stop(ClientWorker& worker) { worker.onStop(); }
+
+    static bool isUserLimitReached(ClientWorker& worker, qint64 user_id)
+    {
+        return worker.isUserLimitReached(user_id);
+    }
 };
 
 // The stop command against live sessions: which of them the pair (user, token list) takes down.
@@ -244,6 +249,36 @@ TEST_F(ClientWorkerStopTest, FullStopTakesEverySessionOfTheUser)
 
     // The enrollment the session of bob opened lives in a static map and must not leak into the
     // tests that follow.
+    TwoFactorHandler::forgetUser(bob.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An account may not pile up connections without end. The cap is reached by the connections of one
+// account only, and the next one is refused instead of costing a live session.
+TEST_F(ClientWorkerStopTest, ConnectionsOfOneAccountAreCapped)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(bob.entry_id, 0);
+
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        addSession(worker, bob, -1);
+
+        for (size_t i = 0; i < ClientWorker::kMaxClientsPerUser - 1; ++i)
+            addSession(worker, admin_, -1);
+
+        EXPECT_FALSE(ClientWorkerTestPeer::isUserLimitReached(worker, admin_.entry_id));
+
+        addSession(worker, admin_, -1);
+
+        EXPECT_TRUE(ClientWorkerTestPeer::isUserLimitReached(worker, admin_.entry_id));
+        EXPECT_FALSE(ClientWorkerTestPeer::isUserLimitReached(worker, bob.entry_id));
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+
     TwoFactorHandler::forgetUser(bob.entry_id);
 }
 
