@@ -106,6 +106,7 @@ extern const char* const kErrorConflict;
 extern const char* const kErrorLostConnection;
 extern const char* const kErrorHostOffline;
 extern const char* const kErrorKeyPoolEmpty;
+extern const char* const kErrorTooManyRequests;
 
 } // namespace proto::router
 

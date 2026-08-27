@@ -127,6 +127,11 @@ private:
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
 
+    // Whether the session has issued as many connection offers as it may within the current
+    // window. Only issued offers count, so a client retrying an offline host is not held back.
+    bool isOfferLimitReached(TimePoint now) const;
+    void countOffer(TimePoint now);
+
     Database& database_;
     const qint64 session_id_;
     TimePoint start_time_;
@@ -138,6 +143,10 @@ private:
     bool two_factor_completed_ = false;
     qint64 token_id_ = 0;
 
+    TimePoint offer_window_start_;
+    int offer_count_ = 0;
+
+    friend class ClientOperatorTestPeer;
     Q_DISABLE_COPY_MOVE(ClientOperator)
 };
 

@@ -138,6 +138,15 @@ protected:
         return serialize(message);
     }
 
+    static QByteArray connectionRequest(qint64 request_id, HostId host_id)
+    {
+        proto::router::ClientToRouter message;
+        proto::router::ConnectionRequest* request = message.mutable_connection_request();
+        request->set_request_id(request_id);
+        request->set_host_id(host_id);
+        return serialize(message);
+    }
+
     static QByteArray userListRequest(qint64 request_id)
     {
         proto::router::AdminToRouter message;
@@ -981,5 +990,66 @@ TEST_F(ClientOperatorTest, HostStatusTellsAMissingHostFromAnOfflineOne)
         ASSERT_TRUE(message->has_host_status());
         EXPECT_EQ(message->host_status().request_id(), 12);
         EXPECT_EQ(message->host_status().error_code(), proto::router::kErrorNotFound);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+class ClientOperatorTestPeer
+{
+public:
+    static bool isOfferLimitReached(const ClientOperator& client, TimePoint now)
+    {
+        return client.isOfferLimitReached(now);
+    }
+
+    static void countOffer(ClientOperator& client, TimePoint now) { client.countOffer(now); }
+};
+
+//--------------------------------------------------------------------------------------------------
+// The budget of a session is spent by the offers it receives, and it refills once the window is
+// over. Without the cap a single session drains the one-time keys of the whole router.
+TEST_F(ClientOperatorTest, IssuedOffersAreCapped)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [](ClientOperator& client, FakeTcpChannel* /* channel */)
+    {
+        const TimePoint start = Clock::now();
+
+        for (int i = 0; i < 20; ++i)
+        {
+            EXPECT_FALSE(ClientOperatorTestPeer::isOfferLimitReached(client, start));
+            ClientOperatorTestPeer::countOffer(client, start);
+        }
+
+        EXPECT_TRUE(ClientOperatorTestPeer::isOfferLimitReached(client, start));
+        EXPECT_TRUE(ClientOperatorTestPeer::isOfferLimitReached(client, start + Seconds(29)));
+        EXPECT_FALSE(ClientOperatorTestPeer::isOfferLimitReached(client, start + Seconds(30)));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A request for a host that is not connected receives no offer and spends no key, so it must not
+// spend the budget either. The client retries such a request on its own schedule, and those
+// retries must not lock it out of the hosts that are online.
+TEST_F(ClientOperatorTest, RefusedRequestsDoNotSpendTheBudget)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, FakeTcpChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        for (qint64 i = 0; i < 40; ++i)
+        {
+            channel->clearSent();
+            channel->receive(proto::router::CHANNEL_ID_CLIENT, connectionRequest(i, 1234567));
+
+            const std::optional<proto::router::RouterToClient> message =
+                lastMessage<proto::router::RouterToClient>(channel, proto::router::CHANNEL_ID_CLIENT);
+            ASSERT_TRUE(message.has_value());
+            ASSERT_TRUE(message->has_connection_offer());
+            EXPECT_EQ(message->connection_offer().error_code(), proto::router::kErrorHostOffline);
+        }
+
+        EXPECT_FALSE(ClientOperatorTestPeer::isOfferLimitReached(client, Clock::now()));
     });
 }

@@ -47,17 +47,18 @@ const char* const kCommandGroupDelete = "delete";
 
 const char* const kCommandPeerDisconnect = "disconnect";
 
-const char* const kErrorOk             = "ok";
-const char* const kErrorInvalidRequest = "invalid_request";
-const char* const kErrorInternalError  = "internal_error";
-const char* const kErrorInvalidEntryId = "invalid_entry_id";
-const char* const kErrorInvalidData    = "invalid_data";
-const char* const kErrorAlreadyExists  = "already_exists";
-const char* const kErrorNotFound       = "not_found";
-const char* const kErrorAccessDenied   = "access_denied";
-const char* const kErrorConflict       = "conflict";
-const char* const kErrorLostConnection = "lost_connection";
-const char* const kErrorHostOffline    = "host_offline";
-const char* const kErrorKeyPoolEmpty   = "key_pool_empty";
+const char* const kErrorOk              = "ok";
+const char* const kErrorInvalidRequest  = "invalid_request";
+const char* const kErrorInternalError   = "internal_error";
+const char* const kErrorInvalidEntryId  = "invalid_entry_id";
+const char* const kErrorInvalidData     = "invalid_data";
+const char* const kErrorAlreadyExists   = "already_exists";
+const char* const kErrorNotFound        = "not_found";
+const char* const kErrorAccessDenied    = "access_denied";
+const char* const kErrorConflict        = "conflict";
+const char* const kErrorLostConnection  = "lost_connection";
+const char* const kErrorHostOffline     = "host_offline";
+const char* const kErrorKeyPoolEmpty    = "key_pool_empty";
+const char* const kErrorTooManyRequests = "too_many_requests";
 
 } // namespace proto::router

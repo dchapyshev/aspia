@@ -39,6 +39,12 @@
 
 namespace {
 
+// The budget of issued connection offers of one session. The window matches the lifetime of a relay
+// key, so the budget is how many unused offers a client may hold at once. A request that issues no
+// offer spends no key and is not counted against it.
+constexpr Seconds kOfferWindow { 30 };
+constexpr int kMaxOffersPerWindow = 20;
+
 //--------------------------------------------------------------------------------------------------
 qint64 createClientId()
 {
@@ -346,6 +352,20 @@ void ClientOperator::readConnectionRequest(const proto::router::ConnectionReques
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::sendConnectionOffer(qint64 request_id, HostId host_id)
 {
+    const TimePoint now = Clock::now();
+
+    if (isOfferLimitReached(now))
+    {
+        CLOG(ERROR) << "Too many connection offers for user" << userName() << ". Rejected";
+
+        proto::router::RouterToClient message;
+        proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+        offer->set_request_id(request_id);
+        offer->set_error_code(proto::router::kErrorTooManyRequests);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
     ConnectionRequestClient client;
     client.host_id = host_id;
     client.version = version();
@@ -366,6 +386,8 @@ void ClientOperator::sendConnectionOffer(qint64 request_id, HostId host_id)
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
     }
+
+    countOffer(now);
 
     // The relay must learn that one of its keys is gone, or it would keep announcing it.
     RelayWorker* relay_worker = CoreApplication::findWorker<RelayWorker>();
@@ -509,4 +531,25 @@ void ClientOperator::readChangePasswordRequest(const proto::router::ChangePasswo
     // reconnects with the new password and passes the two-factor stage on a fresh session, so the
     // result sent above is what tells it which password to use.
     emit sig_stopClients(userId(), {});
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientOperator::isOfferLimitReached(TimePoint now) const
+{
+    if (now - offer_window_start_ >= kOfferWindow)
+        return false;
+
+    return offer_count_ >= kMaxOffersPerWindow;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientOperator::countOffer(TimePoint now)
+{
+    if (now - offer_window_start_ >= kOfferWindow)
+    {
+        offer_window_start_ = now;
+        offer_count_ = 0;
+    }
+
+    ++offer_count_;
 }
