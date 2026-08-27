@@ -104,6 +104,7 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->combo_hosts_page_size->addItem("50", QVariant::fromValue<qint64>(50));
     ui->combo_hosts_page_size->addItem("100", QVariant::fromValue<qint64>(100));
     ui->combo_hosts_page_size->setCurrentIndex(2);
+    hosts_page_.setPageSize(ui->combo_hosts_page_size->currentData().toLongLong());
 
     ui->button_hosts_next->setIconOnRight(true);
 
