@@ -38,13 +38,18 @@ struct WorkerTestState
     std::atomic<void*> start_thread_id{ nullptr };
     std::atomic<void*> stop_thread_id{ nullptr };
     std::atomic<bool> sibling_found{ false };
+    std::atomic<void*> prepare_thread_id{ nullptr };
+    std::atomic<bool> signal_received{ false };
 
     // Written in onStart(); reading from the test thread is ordered by the start() barrier.
     QString thread_name;
 
+    std::function<void()> on_prepare;
     std::function<void()> on_start;
     std::function<void()> on_stop;
 };
+
+class TestWorkerB;
 
 // Q_OBJECT classes cannot live in an anonymous namespace (moc limitation).
 class TestWorkerA final : public Worker
@@ -61,6 +66,8 @@ public:
     }
 
 protected:
+    void onPrepare() final;
+
     void onStart() final
     {
         state_->start_thread_id = QThread::currentThreadId();
@@ -95,12 +102,16 @@ public:
         // Nothing
     }
 
+signals:
+    void sig_started();
+
 protected:
     void onStart() final
     {
         state_->start_thread_id = QThread::currentThreadId();
         state_->sibling_found = (findWorker<TestWorkerA>() != nullptr);
         state_->started = true;
+        emit sig_started();
     }
 
     void onStop() final { state_->stopped = true; }
@@ -108,6 +119,21 @@ protected:
 private:
     std::shared_ptr<WorkerTestState> state_;
 };
+
+//--------------------------------------------------------------------------------------------------
+void TestWorkerA::onPrepare()
+{
+    state_->prepare_thread_id = QThread::currentThreadId();
+
+    if (state_->on_prepare)
+        state_->on_prepare();
+
+    if (TestWorkerB* sibling = findWorker<TestWorkerB>())
+    {
+        connect(sibling, &TestWorkerB::sig_started, this,
+                [this]() { state_->signal_received = true; }, Qt::QueuedConnection);
+    }
+}
 
 namespace {
 
@@ -301,6 +327,30 @@ TEST(WorkerTests, RequestDeliversReplyToCallerThread)
     EXPECT_EQ(request_thread_id, state_b->start_thread_id);
     EXPECT_EQ(reply_thread_id, state_a->start_thread_id);
     EXPECT_EQ(reply_value, 42);
+}
+
+// A subscription made in onPrepare() catches a signal the sibling emits from onStart(), no matter
+// which thread is ahead. The subscriber dawdles in onPrepare(), so without the phasing the sibling
+// would announce its start before the subscription exists.
+TEST(WorkerTests, SignalFromOnStartReachesSubscriptionFromOnPrepare)
+{
+    auto state_a = std::make_shared<WorkerTestState>();
+    auto state_b = std::make_shared<WorkerTestState>();
+    state_a->on_prepare = []() { std::this_thread::sleep_for(MilliSeconds(100)); };
+
+    WorkerManager manager;
+    manager.add(std::make_unique<TestWorkerA>(state_a));
+    manager.add(std::make_unique<TestWorkerB>(state_b));
+    manager.start();
+
+    EXPECT_EQ(state_a->prepare_thread_id, state_a->start_thread_id);
+
+    // The signal is queued to the thread of the subscriber, which runs its loop by now.
+    const TimePoint wait_start = Clock::now();
+    while (!state_a->signal_received && Clock::now() - wait_start < Seconds(5))
+        std::this_thread::sleep_for(MilliSeconds(10));
+
+    EXPECT_TRUE(state_a->signal_received);
 }
 
 TEST(WorkerTests, DestructorWithoutStartDoesNotHang)

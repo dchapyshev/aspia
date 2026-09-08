@@ -92,14 +92,18 @@ void Worker::onThreadStarted()
 {
     current_worker_ = this;
 
+    onPrepare();
+
+    LOG(INFO) << name() << "prepared";
+    manager_->barrier_->arrive_and_wait();
+
     onStart();
 
     if (timer_interval_ > MilliSeconds::zero())
         timer_id_ = startTimer(timer_interval_);
 
-    std::lock_guard lock(manager_->lock_);
-    started_ = true;
-    manager_->condition_.notify_all();
+    LOG(INFO) << name() << "started";
+    manager_->barrier_->arrive_and_wait();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -187,7 +191,7 @@ WorkerManager::~WorkerManager()
 qint64 WorkerManager::add(std::unique_ptr<Worker> worker)
 {
     CHECK(std::this_thread::get_id() == thread_id_);
-    CHECK(!started_);
+    CHECK(!barrier_);
     CHECK(worker);
     CHECK(!worker->parent());
 
@@ -201,40 +205,19 @@ qint64 WorkerManager::add(std::unique_ptr<Worker> worker)
 void WorkerManager::start()
 {
     CHECK(std::this_thread::get_id() == thread_id_);
-    CHECK(!started_);
+    CHECK(!barrier_);
 
     LOG(INFO) << "Starting workers...";
+
+    barrier_.emplace(static_cast<std::ptrdiff_t>(workers_.size()) + 1);
 
     for (const auto& worker : workers_)
         worker.second->start(this);
 
-    constexpr MilliSeconds kStartWarnInterval = Seconds(3);
-
-    {
-        std::unique_lock lock(lock_);
-
-        bool report = false;
-        for (;;)
-        {
-            QStringList pending;
-            for (const auto& worker : workers_)
-            {
-                if (!worker.second->started_)
-                    pending.append(worker.second->name());
-            }
-
-            if (pending.isEmpty())
-                break;
-
-            if (report)
-                LOG(ERROR) << "Worker threads have not started yet:" << pending.join(", ");
-
-            report = (condition_.wait_for(lock, kStartWarnInterval) == std::cv_status::timeout);
-        }
-    }
+    barrier_->arrive_and_wait();
+    barrier_->arrive_and_wait();
 
     LOG(INFO) << "All workers started";
-    started_ = true;
     watchdog_timer_id_ = startTimer(Seconds(5));
 }
 

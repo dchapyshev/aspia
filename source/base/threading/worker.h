@@ -23,10 +23,10 @@
 #include <QPointer>
 
 #include <atomic>
-#include <condition_variable>
+#include <barrier>
 #include <functional>
 #include <memory>
-#include <mutex>
+#include <optional>
 #include <thread>
 #include <unordered_map>
 
@@ -99,6 +99,9 @@ protected:
     template <typename T>
     T* findWorker() const;
 
+    // Runs inside the worker thread before onStart() of any worker of the manager.
+    virtual void onPrepare() { /* Nothing */ }
+
     // Runs inside the worker thread before its event loop starts. Create here every
     // object that must live in the worker thread.
     virtual void onStart() = 0;
@@ -125,7 +128,6 @@ private:
 
     const MilliSeconds timer_interval_;
     int timer_id_ = 0;
-    bool started_ = false;
 
     std::atomic<bool> pong_pending_{ false };
     TimePoint ping_time_;
@@ -180,9 +182,7 @@ private:
 
     const std::thread::id thread_id_;
 
-    std::condition_variable condition_;
-    std::mutex lock_;
-    bool started_ = false;
+    std::optional<std::barrier<>> barrier_;
     qint64 next_worker_id_ = 0;
     int watchdog_timer_id_ = 0;
 
