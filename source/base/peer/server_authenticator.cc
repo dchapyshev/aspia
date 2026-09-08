@@ -55,7 +55,6 @@ ServerAuthenticator::~ServerAuthenticator()
 void ServerAuthenticator::setUserList(SharedPointer<UserList> user_list)
 {
     user_list_ = std::move(user_list);
-    CDCHECK(user_list_);
     CLOG(TRACE) << "User list is assigned";
 }
 
