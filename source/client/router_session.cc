@@ -152,10 +152,8 @@ bool RouterSession::storeCredentials(const QString& user_name, const SecureStrin
 {
     LOG(INFO) << "Credentials changed for router" << config_->routerId();
 
-    // The rotation revoked every device token of the account on the router, this one included.
-    // Dropping it now spares the next login a doomed token round.
-    config_->clearDeviceToken();
-
+    // The device token is left as it is. This runs before the router has answered and can be
+    // undone, and a token the rotation revoked is dropped by the login that gets it rejected.
     config_->setUsername(user_name);
     config_->setPassword(password);
     if (!Database::instance().modifyRouter(*config_))
@@ -719,14 +717,23 @@ void RouterSession::changePassword(const SecureString& new_password,
     request->set_salt(new_user.salt.toStdString());
     request->set_verifier(new_user.verifier.toStdString());
 
-    // The accepted password becomes the stored one: from now on it is what opens the account.
+    // An accepted rotation ends this session and the reply announcing it dies with the channel,
+    // so only a refusal is ever seen here. The new password is stored right away and the old one
+    // is put back if the router refuses.
+    const SecureString old_password = config_->password();
+    storeCredentials(config_->username(), new_password);
+
     QObject* receiver = callback.receiver();
     rpc_.registerPending(request, RouterCallback<proto::router::ChangePasswordResult>(receiver,
-        [this, new_password, callback = std::move(callback)](
+        [this, old_password, callback = std::move(callback)](
             const proto::router::ChangePasswordResult& result)
     {
-        if (result.error_code() == proto::router::kErrorOk)
-            storeCredentials(config_->username(), new_password);
+        // The session ends on success, and its death answers this request as a lost connection,
+        // so only a refusal by the router takes the new password back.
+        const std::string& error_code = result.error_code();
+        if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorLostConnection)
+            storeCredentials(config_->username(), old_password);
+
         callback(result);
     }));
 

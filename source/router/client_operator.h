@@ -100,8 +100,9 @@ protected:
     RequestCaller requestCaller() const;
 
     // Turns the side effects a command handler returned into signals. Called after the reply is
-    // sent: the sessions being stopped can include the one that sent the request (an administrator
-    // disabling its own account), and it must still see the result of its command.
+    // sent, which is the best that can be done for it: the sessions being stopped can include the
+    // one that sent the request (an administrator disabling its own account), and a reply queued
+    // on a channel about to be destroyed goes with it.
     void applyRequestResult(const RequestResult& result);
 
 private slots:

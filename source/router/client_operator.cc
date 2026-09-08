@@ -526,10 +526,10 @@ void ClientOperator::readChangePasswordRequest(const proto::router::ChangePasswo
 
     CLOG(INFO) << "User" << userName() << "rotated own credentials";
 
-    // Every session of the user, this one included: their channels are keyed by the password
-    // that is gone and their device tokens died with it in the same transaction. The client
-    // reconnects with the new password and passes the two-factor stage on a fresh session, so the
-    // result sent above is what tells it which password to use.
+    // Every session of the user, this one included: their SRP keys were derived from the password
+    // that is gone and their device tokens died with it in the same transaction. The result sent
+    // above shares the fate of the channel, so the client keeps the new password by itself and
+    // signs in with it, passing the two-factor stage on a fresh session.
     emit sig_stopClients(userId(), {});
 }
 

@@ -437,13 +437,34 @@ TEST_F(RouterSessionTest, GroupListIsParsedAndCached)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The accepted rotation retires the stored device token: the router revoked every token of the
-// account in the same transaction, so the next login goes straight to the code prompt.
-TEST_F(RouterSessionTest, AcceptedPasswordRotationDropsTheStoredToken)
+// An accepted rotation ends the session, and the reply announcing it dies with the channel. The
+// new password is what opens the account from that moment, so it is stored without waiting for
+// an answer that may never come.
+TEST_F(RouterSessionTest, PasswordRotationIsStoredWithoutAReply)
 {
-    seedRecord("stale-device-token");
+    seedRecord("device-token");
 
-    SharedPointer<RouterConfig> shared = config("stale-device-token");
+    SharedPointer<RouterConfig> shared = config("device-token");
+    RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
+
+    router.changePassword(SecureString(QString("new-password")),
+                          { &receiver_, [](const proto::router::ChangePasswordResult&) {} });
+
+    EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
+
+    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The end of the session answers the request as a lost connection, and that is what an accepted
+// rotation looks like from here. The stored password stays the new one.
+TEST_F(RouterSessionTest, PasswordRotationSurvivesTheLostConnection)
+{
+    seedRecord("device-token");
+
+    SharedPointer<RouterConfig> shared = config("device-token");
     RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
 
     int calls = 0;
@@ -456,27 +477,25 @@ TEST_F(RouterSessionTest, AcceptedPasswordRotationDropsTheStoredToken)
     proto::router::RouterToClient reply;
     proto::router::ChangePasswordResult* result = reply.mutable_change_password_result();
     result->set_request_id(1);
-    result->set_error_code(proto::router::kErrorOk);
+    result->set_error_code(proto::router::kErrorLostConnection);
     RouterSessionTestPeer::onMessageReceived(router, reply);
 
     EXPECT_EQ(calls, 1);
-    EXPECT_TRUE(shared->deviceToken().isEmpty());
     EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
 
     const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
     ASSERT_TRUE(stored.has_value());
-    EXPECT_TRUE(stored->deviceToken().isEmpty());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
 
 //--------------------------------------------------------------------------------------------------
-// The router refused the rotation, so nothing of it reaches the record. The old password is the
-// one that still opens the account, and the stored token is still valid on the router.
-TEST_F(RouterSessionTest, RefusedPasswordRotationStoresNothing)
+// The router refused the rotation and the session lives on. The old password is the one that
+// still opens the account, so the record is put back as it was.
+TEST_F(RouterSessionTest, RefusedPasswordRotationIsRolledBack)
 {
-    seedRecord("stale-device-token");
+    seedRecord("device-token");
 
-    SharedPointer<RouterConfig> shared = config("stale-device-token");
+    SharedPointer<RouterConfig> shared = config("device-token");
     RouterSession router(shared, kUserId, QVersionNumber(3, 0, 0));
 
     int calls = 0;

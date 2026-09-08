@@ -665,21 +665,28 @@ void RouterUserDialog::submitUser(const RouterUser& request)
         return;
     }
 
-    // A rotation of our own credentials ends this session. The client signs in again by itself
-    // and needs the new credentials for that. The reply does not carry them back, so they are
-    // captured here and stored once the router has accepted the change.
+    // A rotation of our own credentials ends this session and the reply announcing it dies with
+    // the channel, so only a refusal is ever seen here. The client signs in again by itself and
+    // needs the new credentials for that, so they are stored right away and the old ones are put
+    // back if the router refuses.
     if (model_.accountChanged() && entry_id_ == session->userId())
     {
-        const QString user_name = ui->edit_username->text();
-        const SecureString password = ui->edit_password->password();
+        const QString old_user_name = session->config().username();
+        const SecureString old_password = session->config().password();
+
+        session->storeCredentials(ui->edit_username->text(), ui->edit_password->password());
 
         session->modifyUser(request.serialize(), { this,
-            [this, user_name, password](const proto::router::UserResult& result)
+            [this, old_user_name, old_password](const proto::router::UserResult& result)
         {
-            if (result.error_code() == proto::router::kErrorOk)
+            // The session ends on success, and its death answers this request as a lost
+            // connection, so only a refusal by the router takes the new credentials back.
+            const std::string& error_code = result.error_code();
+            if (error_code != proto::router::kErrorOk &&
+                error_code != proto::router::kErrorLostConnection)
             {
                 if (RouterSession* session = RouterController::session(router_id_))
-                    session->storeCredentials(user_name, password);
+                    session->storeCredentials(old_user_name, old_password);
             }
 
             onUserResultReceived(result);

@@ -55,10 +55,10 @@ public:
            QObject* parent = nullptr);
     ~RouterSession() final;
 
-    // Writes into the stored record the credentials this session is to use from now on. Called
-    // once the router has accepted their rotation, so the login that follows uses the new ones.
-    // False when the record was not updated; the journal of the record tells the operator to
-    // set the new password there by hand.
+    // Writes into the stored record the credentials this session is to use from now on. An
+    // accepted rotation ends the session, so the write happens before the router has answered and
+    // the caller puts the old credentials back if it refuses. False when the record was not
+    // updated; the journal of the record tells the operator to set the new password by hand.
     bool storeCredentials(const QString& user_name, const SecureString& password);
 
     qint64 userId() const { return user_id_; }

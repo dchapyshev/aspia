@@ -502,20 +502,20 @@ void Sidebar::changeRouterPassword(qint64 router_id)
         return;
 
     // On success the router revokes every device token of the account and drops all of its
-    // sessions, this one included. The client reconnects with the new password, and the user is
-    // asked for a code again on the fresh session (handled by the existing two-factor plumbing).
-    session->changePassword(dialog.password(), { this,
-        [this, router_id](const proto::router::ChangePasswordResult& result)
-    {
-        const std::string& error_code = result.error_code();
-        if (error_code == proto::router::kErrorOk)
-        {
-            RouterController::instance().addEvent(router_id, RouterEvent::Severity::INFO,
-                tr("Password updated. Waiting for the session to sign in again..."));
-            return;
-        }
+    // sessions, this one included, so a reply arrives only when it refuses. The client reconnects
+    // with the new password, and the user is asked for a code again on the fresh session (handled
+    // by the existing two-factor plumbing).
+    RouterController::instance().addEvent(router_id, RouterEvent::Severity::INFO,
+        tr("Changing the password. Waiting for the session to sign in again..."));
 
-        MsgBox::warning(this, routerErrorText(error_code));
+    session->changePassword(dialog.password(), { this,
+        [this](const proto::router::ChangePasswordResult& result)
+    {
+        // The death of the session answers this request as a lost connection, which is what a
+        // password the router accepted looks like from here.
+        const std::string& error_code = result.error_code();
+        if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorLostConnection)
+            MsgBox::warning(this, routerErrorText(error_code));
     } });
 }
 
