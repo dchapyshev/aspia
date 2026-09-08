@@ -33,6 +33,8 @@
 
 #include <atomic>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 #include "base/time_types.h"
 
@@ -129,6 +131,7 @@ private:
 
     using Timers = std::unordered_map<int, Timer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
+    using ZeroTimers = std::vector<std::pair<int, quint64>>;
 
     void asyncWaitTimer(asio::steady_timer& handle, TimePoint end_time, int timer_id);
 
@@ -154,6 +157,7 @@ private:
 #endif
 
     Timers timers_;
+    ZeroTimers zero_timers_;
     Sockets sockets_;
 
     Q_DISABLE_COPY_MOVE(AsioEventDispatcher)

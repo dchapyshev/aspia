@@ -110,6 +110,15 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
             emit awake();
         }
 
+        for (const auto& [timer_id, unique_id] : zero_timers_)
+        {
+            auto it = timers_.find(timer_id);
+            if (it != timers_.end() && it->second.unique_id == unique_id)
+                asyncWaitTimer(it->second.handle, it->second.end_time, timer_id);
+        }
+
+        zero_timers_.clear();
+
         total_count += current_count;
     }
     while (!interrupted_.load(std::memory_order_relaxed) && current_count);
@@ -512,6 +521,15 @@ void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint e
         const TimePoint now = Clock::now();
         if (timer.end_time <= now)
             timer.end_time = now + timer.interval;
+
+        // A zero timer expires the moment its wait is armed, so arming it here would let
+        // io_context::poll run the timer alone and posted events would never be sent. Such a timer
+        // is armed once per turn of the loop in processEvents instead.
+        if (timer.interval == MilliSeconds::zero())
+        {
+            zero_timers_.emplace_back(timer_id, unique_id);
+            return;
+        }
 
         asyncWaitTimer(timer.handle, timer.end_time, timer_id);
     });
