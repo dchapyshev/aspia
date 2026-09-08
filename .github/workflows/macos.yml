@@ -82,6 +82,16 @@ jobs:
           # Build project
           arch -arch ${{ matrix.arch }} cmake --build --preset ci-${{ matrix.build_type }}
 
+          # The tests seal with OSCrypt, which keeps its key in the keychain. The login keychain of
+          # the runner is locked and nobody is there to unlock it, so the tests get a throwaway
+          # keychain with the key already in it, readable by every test binary.
+          KEYCHAIN="$RUNNER_TEMP/aspia-ci.keychain-db"
+          security create-keychain -p ci "$KEYCHAIN"
+          security set-keychain-settings "$KEYCHAIN"
+          security unlock-keychain -p ci "$KEYCHAIN"
+          security add-generic-password -A -s Aspia -a OSCrypt -X "$(openssl rand -hex 32)" "$KEYCHAIN"
+          security list-keychains -d user -s "$KEYCHAIN" login.keychain-db
+
           # Run tests
           ctest --preset ci-${{ matrix.build_type }}
 
@@ -95,6 +105,13 @@ jobs:
           fi
 
       # Step 3
+      - name: Remove the test keychain
+        if: always()
+        run: |
+          security list-keychains -d user -s login.keychain-db
+          security delete-keychain "$RUNNER_TEMP/aspia-ci.keychain-db" || true
+
+      # Step 4
       - name: Build host installer (.pkg)
         run: |
           case "${{ matrix.build_type }}" in
@@ -107,7 +124,7 @@ jobs:
             "${{ github.workspace }}/builds/ci/${HOST_CONFIG}/aspia_host.app" \
             --output "${{ github.workspace }}/aspia-host-${{ matrix.arch }}-${{ matrix.build_type }}.pkg"
 
-      # Step 4
+      # Step 5
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
