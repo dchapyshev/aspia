@@ -115,17 +115,17 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
         if (flags.testFlag(QEventLoop::WaitForMoreEvents))
         {
+            // With WaitForMoreEvents the zero timers keep ticking here, so they are rescheduled
+            // before the wait below can block on them. Without it each of them fires once per
+            // call, the way Qt dispatchers do, and the next tick belongs to the next call.
+            reschedule_zero_timers();
+
             if (!interrupted_.load(std::memory_order_relaxed) && !current_count)
             {
                 emit aboutToBlock();
                 current_count = io_context_.run_one();
                 emit awake();
             }
-
-            // With WaitForMoreEvents the zero timers keep ticking here. Without it each of them
-            // fires once per call, the way Qt dispatchers do, and the next tick belongs to the
-            // next call.
-            reschedule_zero_timers();
         }
 
         total_count += current_count;

@@ -37,6 +37,7 @@
 #include <unistd.h>
 #endif
 
+#include <asio/post.hpp>
 #include <gtest/gtest.h>
 
 #include <algorithm>
@@ -44,6 +45,7 @@
 #include <thread>
 
 #include "base/time_types.h"
+#include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/thread.h"
 
 namespace {
@@ -887,6 +889,65 @@ TEST(TimersTest, ZeroTimerDoesNotTrapProcessEvents)
 
     ASSERT_FALSE(interrupted) << "processEvents did not return while a zero timer was alive";
     EXPECT_EQ(ticks, 1);
+}
+
+// A handler that runs in the same io_context turn right after a zero timer tick opens a nested
+// loop. The tick left its wait for the dispatcher to rearm, and the nested loop must do that
+// before it blocks, otherwise the timer sleeps until an unrelated event wakes the loop.
+class ED_ZeroTimerNestedLoopObject : public QObject
+{
+public:
+    static constexpr MilliSeconds kNestedLoopDuration{ 200 };
+
+    QEventLoop* loop = nullptr;
+
+    int timer_id = -1;
+    int ticks = 0;
+    int ticks_in_nested_loop = -1;
+
+protected:
+    void timerEvent(QTimerEvent* event) override
+    {
+        if (event->timerId() != timer_id)
+            return;
+
+        ++ticks;
+
+        if (ticks == 1)
+        {
+            asio::post(AsioEventDispatcher::ioContext(), [this]()
+            {
+                const int ticks_before = ticks;
+
+                QEventLoop nested;
+                QTimer::singleShot(kNestedLoopDuration, &nested, [&]() { nested.quit(); });
+                nested.exec();
+
+                ticks_in_nested_loop = ticks - ticks_before;
+                loop->quit();
+            });
+        }
+    }
+};
+
+TEST(TimersTest, ZeroTimerTicksInsideNestedLoop)
+{
+    QEventLoop loop;
+
+    ED_ZeroTimerNestedLoopObject obj;
+    obj.loop = &loop;
+
+    obj.timer_id = obj.startTimer(MilliSeconds(0), Qt::CoarseTimer);
+    ASSERT_GT(obj.timer_id, 0);
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(MilliSeconds(10000), &loop, [&]() { loop.quit(); });
+    loop.exec();
+
+    obj.killTimer(obj.timer_id);
+
+    ASSERT_GE(obj.ticks_in_nested_loop, 0) << "the nested loop never ran";
+    EXPECT_GT(obj.ticks_in_nested_loop, 0) << "the zero timer slept through the nested loop";
 }
 
 // Cost of a single zero-interval timer tick against the cost of a single event posted and
