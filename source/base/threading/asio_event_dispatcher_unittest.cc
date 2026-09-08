@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <thread>
 
 #include "base/time_types.h"
 #include "base/threading/thread.h"
@@ -849,6 +850,43 @@ TEST(TimersTest, ZeroTimerDoesNotStarvePostedEvents)
     // stop.
     ASSERT_GT(obj.tick_of_delivery, 0) << "posted events were starved by the zero timer";
     EXPECT_LE(obj.tick_of_delivery, 3);
+}
+
+// Qt dispatchers fire a timer at most once per processEvents call, so a call without
+// WaitForMoreEvents fires a zero timer once and returns. The watchdog interrupts the call
+// instead of letting a broken dispatcher hang the test.
+TEST(TimersTest, ZeroTimerDoesNotTrapProcessEvents)
+{
+    auto* dispatcher = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(dispatcher, nullptr);
+
+    int ticks = 0;
+
+    QTimer timer;
+    timer.setTimerType(Qt::CoarseTimer);
+    timer.setInterval(MilliSeconds(0));
+    QObject::connect(&timer, &QTimer::timeout, [&]() { ++ticks; });
+    timer.start();
+
+    QSemaphore returned;
+    bool interrupted = false;
+
+    std::thread watchdog([&]()
+    {
+        if (!returned.tryAcquire(1, 5000))
+        {
+            interrupted = true;
+            dispatcher->interrupt();
+        }
+    });
+
+    QCoreApplication::processEvents();
+    returned.release();
+    watchdog.join();
+    timer.stop();
+
+    ASSERT_FALSE(interrupted) << "processEvents did not return while a zero timer was alive";
+    EXPECT_EQ(ticks, 1);
 }
 
 // Cost of a single zero-interval timer tick against the cost of a single event posted and

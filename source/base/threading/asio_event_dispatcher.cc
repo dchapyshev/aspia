@@ -96,20 +96,8 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
     size_t total_count = 0;
     size_t current_count;
 
-    do
+    auto reschedule_zero_timers = [this]() noexcept
     {
-        QCoreApplication::sendPostedEvents();
-        current_count = io_context_.poll();
-
-        if (flags.testFlag(QEventLoop::WaitForMoreEvents) &&
-            !interrupted_.load(std::memory_order_relaxed) &&
-            !current_count)
-        {
-            emit aboutToBlock();
-            current_count = io_context_.run_one();
-            emit awake();
-        }
-
         for (const auto& [timer_id, unique_id] : zero_timers_)
         {
             auto it = timers_.find(timer_id);
@@ -118,10 +106,33 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         }
 
         zero_timers_.clear();
+    };
+
+    do
+    {
+        QCoreApplication::sendPostedEvents();
+        current_count = io_context_.poll();
+
+        if (flags.testFlag(QEventLoop::WaitForMoreEvents))
+        {
+            if (!interrupted_.load(std::memory_order_relaxed) && !current_count)
+            {
+                emit aboutToBlock();
+                current_count = io_context_.run_one();
+                emit awake();
+            }
+
+            // With WaitForMoreEvents the zero timers keep ticking here. Without it each of them
+            // fires once per call, the way Qt dispatchers do, and the next tick belongs to the
+            // next call.
+            reschedule_zero_timers();
+        }
 
         total_count += current_count;
     }
     while (!interrupted_.load(std::memory_order_relaxed) && current_count);
+
+    reschedule_zero_timers();
 
     return total_count != 0;
 }
@@ -524,7 +535,7 @@ void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint e
 
         // A zero timer expires the moment its wait is armed, so arming it here would let
         // io_context::poll run the timer alone and posted events would never be sent. Such a timer
-        // is armed once per turn of the loop in processEvents instead.
+        // is rescheduled by processEvents instead.
         if (timer.interval == MilliSeconds::zero())
         {
             zero_timers_.emplace_back(timer_id, unique_id);
