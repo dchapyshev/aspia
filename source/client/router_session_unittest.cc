@@ -252,8 +252,10 @@ protected:
     }
 
     QTemporaryDir temp_dir_;
-    QObject receiver_;
     RouterSession router_;
+    // Declared after the session so it is gone by the time the session answers what is still
+    // pending on teardown. The probes that leave a request waiting capture locals long dead by then.
+    QObject receiver_;
     qint64 next_request_id_ = 0;
 };
 
