@@ -87,7 +87,6 @@ void DesktopIpcWorker::onAudioData(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopIpcWorker::onStart()
 {
-    LOG(INFO) << "IPC worker started";
     connectToService();
 }
 

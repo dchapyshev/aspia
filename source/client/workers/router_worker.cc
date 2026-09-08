@@ -109,7 +109,7 @@ void RouterWorker::onSendMessage(qint64 router_id, quint8 channel_id, const QByt
 //--------------------------------------------------------------------------------------------------
 void RouterWorker::onStart()
 {
-    LOG(INFO) << "Router worker started";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1719,7 +1719,7 @@ void SysInfoWorker::onQuery(quint32 consumer_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SysInfoWorker::onStart()
 {
-    LOG(INFO) << "Sys info worker started";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

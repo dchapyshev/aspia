@@ -129,7 +129,7 @@ void NetworkWorker::onSendMessage(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void NetworkWorker::onStart()
 {
-    LOG(INFO) << "Network worker started";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

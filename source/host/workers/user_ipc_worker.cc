@@ -178,7 +178,7 @@ void UserIpcWorker::onClipboardFileDataRequest(int file_index)
 //--------------------------------------------------------------------------------------------------
 void UserIpcWorker::onStart()
 {
-    LOG(INFO) << "User IPC worker started";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
