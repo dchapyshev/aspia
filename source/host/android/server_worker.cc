@@ -114,14 +114,8 @@ ServerWorker::~ServerWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerWorker::onStart()
+void ServerWorker::onPrepare()
 {
-    if (tcp_server_)
-    {
-        LOG(ERROR) << "Server is already started";
-        return;
-    }
-
     Database& db = Database::instance();
 
     // Created here (on the I/O thread) so its asio acceptor binds to this thread's io_context.
@@ -130,10 +124,7 @@ void ServerWorker::onStart()
 
     tcp_server_->setMaxPendingConnections(kMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
-    tcp_server_->start(db.tcpPort());
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList(db)));
-
-    LOG(INFO) << "Host server started on port" << db.tcpPort();
 
     // Shared engine for all desktop clients; it owns them and captures only while at least one is
     // connected.
@@ -147,6 +138,15 @@ void ServerWorker::onStart()
     app_active_ = (qGuiApp->applicationState() == Qt::ApplicationActive);
     connect(qGuiApp, &QGuiApplication::applicationStateChanged,
             this, &ServerWorker::onApplicationStateChanged, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ServerWorker::onStart()
+{
+    const quint16 port = Database::instance().tcpPort();
+    tcp_server_->start(port);
+
+    LOG(INFO) << "Host server started on port" << port;
 
     QNativeInterface::QAndroidApplication::runOnAndroidMainThread([]() -> QVariant
     {

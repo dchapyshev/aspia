@@ -205,10 +205,8 @@ void InputWorker::onSetBlockInput(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputWorker::onStart()
+void InputWorker::onPrepare()
 {
-    LOG(INFO) << "Input worker started";
-
     screen_worker_ = findWorker<ScreenWorker>();
     if (screen_worker_)
     {
@@ -247,6 +245,12 @@ void InputWorker::onStart()
     {
         LOG(ERROR) << "IPC worker not found";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void InputWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

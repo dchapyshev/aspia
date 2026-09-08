@@ -87,10 +87,8 @@ void FileWorker::onTransferRequest(FileTransfer* transfer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileWorker::onStart()
+void FileWorker::onPrepare()
 {
-    LOG(INFO) << "File worker started";
-
     // Local file operations run synchronously on this worker thread.
     local_handler_ = new FileRequestHandler(this);
 
@@ -113,6 +111,12 @@ void FileWorker::onStart()
     {
         LOG(ERROR) << "Network worker not found";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

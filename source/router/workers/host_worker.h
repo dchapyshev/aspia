@@ -19,6 +19,8 @@
 #ifndef ROUTER_WORKERS_HOST_WORKER_H
 #define ROUTER_WORKERS_HOST_WORKER_H
 
+#include <QString>
+
 #include <functional>
 #include <string_view>
 #include <unordered_map>
@@ -91,6 +93,7 @@ signals:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
     void onTimer(TimePoint now) final;
@@ -111,6 +114,10 @@ private:
     RemoveHostResult doRemoveHost(HostId host_id);
     bool doUpdateHost(HostId host_id);
     std::string_view doApproveHost(HostId host_id);
+
+    QString listen_interface_;
+    quint16 listen_port_ = 0;
+    quint16 legacy_listen_port_ = 0;
 
     ScopedQPointer<TcpServer> server_;
     ScopedQPointer<TcpServerLegacy> legacy_server_;

@@ -19,6 +19,8 @@
 #ifndef ROUTER_WORKERS_CLIENT_WORKER_H
 #define ROUTER_WORKERS_CLIENT_WORKER_H
 
+#include <QString>
+
 #include <string>
 #include <vector>
 
@@ -80,6 +82,7 @@ signals:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
     void onTimer(TimePoint now) final;
@@ -105,6 +108,9 @@ private:
     bool isUserLimitReached(qint64 user_id) const;
     bool stopClient(qint64 client_id);
     void updateClientsMask();
+
+    QString listen_interface_;
+    quint16 listen_port_ = 0;
 
     ScopedQPointer<TcpServer> server_;
     quint32 clients_mask_ = 0;

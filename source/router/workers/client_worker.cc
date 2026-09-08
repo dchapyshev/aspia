@@ -65,7 +65,7 @@ ClientWorker::~ClientWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWorker::onStart()
+void ClientWorker::onPrepare()
 {
     HostWorker* host_worker = findWorker<HostWorker>();
     CHECK(host_worker);
@@ -146,7 +146,18 @@ void ClientWorker::onStart()
     server_->setMaxPendingConnections(kMaxPendingConnections);
     server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     server_->setWhiteList(white_list);
-    if (!server_->start(port, listen_interface))
+
+    listen_interface_ = listen_interface;
+    listen_port_ = port;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWorker::onStart()
+{
+    if (!server_)
+        return;
+
+    if (!server_->start(listen_port_, listen_interface_))
     {
         LOG(ERROR) << "Unable to start client listener";
         server_.reset();

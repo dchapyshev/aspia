@@ -19,6 +19,8 @@
 #ifndef ROUTER_WORKERS_RELAY_WORKER_H
 #define ROUTER_WORKERS_RELAY_WORKER_H
 
+#include <QString>
+
 #include <functional>
 #include <vector>
 
@@ -69,6 +71,7 @@ signals:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
     void onTimer(TimePoint now) final;
@@ -83,6 +86,9 @@ private:
     Relay* relayById(qint64 session_id);
     proto::router::RelayList doRelayList() const;
     bool doStopRelay(qint64 relay_id);
+
+    QString listen_interface_;
+    quint16 listen_port_ = 0;
 
     ScopedQPointer<TcpServer> server_;
     std::vector<Relay*> relays_;

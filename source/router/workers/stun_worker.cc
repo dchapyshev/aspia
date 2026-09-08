@@ -48,7 +48,7 @@ StunWorker::~StunWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StunWorker::onStart()
+void StunWorker::onPrepare()
 {
     Settings settings;
     if (!settings.isStunEnabled())
@@ -71,8 +71,15 @@ void StunWorker::onStart()
         return;
     }
 
-    if (!startServer(port, listen_interface))
-        LOG(ERROR) << "Unable to start STUN listener";
+    if (!openSocket(port, listen_interface))
+        LOG(ERROR) << "Unable to open STUN socket";
+}
+
+//--------------------------------------------------------------------------------------------------
+void StunWorker::onStart()
+{
+    if (udp_socket_)
+        doReceiveRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,7 +126,7 @@ void StunWorker::onTimer(TimePoint /* now */)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool StunWorker::startServer(quint16 port, const QString& iface)
+bool StunWorker::openSocket(quint16 port, const QString& iface)
 {
     LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
 
@@ -166,7 +173,6 @@ bool StunWorker::startServer(quint16 port, const QString& iface)
         return false;
     }
 
-    doReceiveRequest();
     return true;
 }
 

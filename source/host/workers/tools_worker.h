@@ -56,6 +56,7 @@ public:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
 

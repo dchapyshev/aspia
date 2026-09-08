@@ -46,6 +46,7 @@ signals:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
     void onTimer(TimePoint now) final;

@@ -104,7 +104,7 @@ void RelayWorker::onClientsChanged(quint32 clients_mask)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayWorker::onStart()
+void RelayWorker::onPrepare()
 {
     Settings settings;
 
@@ -150,7 +150,18 @@ void RelayWorker::onStart()
     server_->setMaxPendingConnections(kMaxPendingConnections);
     server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     server_->setWhiteList(white_list);
-    if (!server_->start(port, listen_interface))
+
+    listen_interface_ = listen_interface;
+    listen_port_ = port;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onStart()
+{
+    if (!server_)
+        return;
+
+    if (!server_->start(listen_port_, listen_interface_))
     {
         LOG(ERROR) << "Unable to start relay listener";
         server_.reset();

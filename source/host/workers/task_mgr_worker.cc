@@ -66,10 +66,15 @@ void TaskMgrWorker::query(QObject* context, const QByteArray& buffer, std::funct
 }
 
 //--------------------------------------------------------------------------------------------------
+void TaskMgrWorker::onPrepare()
+{
+    process_monitor_ = ProcessMonitor::create();
+}
+
+//--------------------------------------------------------------------------------------------------
 void TaskMgrWorker::onStart()
 {
-    LOG(INFO) << "Task manager worker started";
-    process_monitor_ = ProcessMonitor::create();
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

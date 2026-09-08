@@ -77,15 +77,19 @@ void ToolsWorker::requestToolList(QObject* context, SessionId session_id,
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::onStart()
+void ToolsWorker::onPrepare()
 {
-    LOG(INFO) << "Tools worker started";
-
     buildToolList();
     scripts_supported_ = scriptsSupported();
 
     LOG(INFO) << "Tool list built (tools:" << tools_.size()
               << "scripts:" << (scripts_supported_ ? scriptTable().size() : 0) << ")";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ToolsWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

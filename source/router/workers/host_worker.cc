@@ -126,7 +126,7 @@ void HostWorker::sendConnectionOffer(HostId host_id, const proto::router::Connec
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostWorker::onStart()
+void HostWorker::onPrepare()
 {
     Settings settings;
 
@@ -178,12 +178,6 @@ void HostWorker::onStart()
     server_->setMaxPendingConnections(kMaxPendingConnections);
     server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     server_->setWhiteList(host_white_list);
-    if (!server_->start(port, listen_interface))
-    {
-        LOG(ERROR) << "Unable to start host listener";
-        server_.reset();
-        return;
-    }
 
     legacy_server_ = new TcpServerLegacy();
     connect(legacy_server_, &TcpServerLegacy::sig_newConnection,
@@ -195,7 +189,27 @@ void HostWorker::onStart()
     legacy_server_->setMaxPendingConnections(kMaxPendingConnections);
     legacy_server_->setMaxConnectionsPerMinute(kMaxConnectionsPerMinute);
     legacy_server_->setWhiteList(host_white_list);
-    if (!legacy_server_->start(legacy_port, listen_interface))
+
+    listen_interface_ = listen_interface;
+    listen_port_ = port;
+    legacy_listen_port_ = legacy_port;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWorker::onStart()
+{
+    if (!server_)
+        return;
+
+    if (!server_->start(listen_port_, listen_interface_))
+    {
+        LOG(ERROR) << "Unable to start host listener";
+        server_.reset();
+        legacy_server_.reset();
+        return;
+    }
+
+    if (!legacy_server_->start(legacy_listen_port_, listen_interface_))
     {
         LOG(ERROR) << "Unable to start legacy host listener";
         legacy_server_.reset();

@@ -37,7 +37,7 @@ UpdateWorker::~UpdateWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWorker::onStart()
+void UpdateWorker::onPrepare()
 {
 #if defined(Q_OS_WINDOWS)
     Database& db = Database::instance();
@@ -52,6 +52,15 @@ void UpdateWorker::onStart()
 
     connect(update_checker_, &UpdateChecker::sig_checkedFinished,
             this, &UpdateWorker::onUpdateCheckedFinished);
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWorker::onStart()
+{
+#if defined(Q_OS_WINDOWS)
+    if (!update_checker_)
+        return;
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();

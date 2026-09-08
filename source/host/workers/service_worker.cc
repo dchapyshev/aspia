@@ -95,7 +95,7 @@ ServiceWorker::~ServiceWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceWorker::onStart()
+void ServiceWorker::onPrepare()
 {
     Database& db = Database::instance();
 
@@ -114,7 +114,7 @@ void ServiceWorker::onStart()
     }
 
     QString settings_file_path = settings_.filePath();
-    LOG(INFO) << "Starting the host server. Configuration file path:" << settings_file_path;
+    LOG(INFO) << "Configuration file path:" << settings_file_path;
 
     if (!QFileInfo::exists(settings_file_path))
     {
@@ -147,12 +147,6 @@ void ServiceWorker::onStart()
     connect(CoreApplication::instance(), &CoreApplication::sig_powerEvent,
             this, &ServiceWorker::onPowerEvent, Qt::QueuedConnection);
 
-    user_session_->start();
-
-    // Open the desktop agent IPC server and keep an agent running for the active session from now on,
-    // independent of connected clients.
-    desktop_manager_->start();
-
     tcp_server_ = new TcpServer(this);
     connect(tcp_server_, &TcpServer::sig_newConnection, this, &ServiceWorker::onNewDirectConnection);
 
@@ -168,9 +162,25 @@ void ServiceWorker::onStart()
     static constexpr int kHostMaxConnectionsPerMinute = 30;
     tcp_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
-
-    tcp_server_->start(db.tcpPort());
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList(db)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ServiceWorker::onStart()
+{
+    if (!tcp_server_)
+        return;
+
+    LOG(INFO) << "Starting the host server";
+
+    user_session_->start();
+
+    // Open the desktop agent IPC server and keep an agent running for the active session from now on,
+    // independent of connected clients.
+    desktop_manager_->start();
+
+    Database& db = Database::instance();
+    tcp_server_->start(db.tcpPort());
 
     if (db.isRouterEnabled())
         connectToRouter(FROM_HERE);

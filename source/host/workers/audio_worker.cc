@@ -96,10 +96,8 @@ void AudioWorker::onRawAudioData(std::shared_ptr<proto::audio::Packet> packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::onStart()
+void AudioWorker::onPrepare()
 {
-    LOG(INFO) << "Audio worker started";
-
     // All AudioWorker<->DesktopIpcWorker wiring lives here: the IPC worker toggles the pipeline through the
     // merged configuration, and the encoded audio produced here is fanned out through it.
     ipc_worker_ = findWorker<DesktopIpcWorker>();
@@ -117,6 +115,12 @@ void AudioWorker::onStart()
 
     // Audio is latency-sensitive: a delayed packet is an audible glitch.
     QThread::currentThread()->setPriority(QThread::HighestPriority);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

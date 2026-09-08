@@ -49,10 +49,8 @@ AudioWorker::~AudioWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AudioWorker::onStart()
+void AudioWorker::onPrepare()
 {
-    LOG(INFO) << "Audio worker started";
-
     NetworkWorker* network_worker = findWorker<NetworkWorker>();
     if (network_worker)
     {
@@ -71,6 +69,12 @@ void AudioWorker::onStart()
     player_ = AudioPlayer::create();
     if (!player_)
         LOG(ERROR) << "Unable to create audio player";
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

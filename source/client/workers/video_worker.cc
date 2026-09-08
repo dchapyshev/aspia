@@ -102,10 +102,8 @@ void VideoWorker::onSetRecording(bool enable, const QString& file_path, const QS
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoWorker::onStart()
+void VideoWorker::onPrepare()
 {
-    LOG(INFO) << "Video worker started";
-
     NetworkWorker* network_worker = findWorker<NetworkWorker>();
     if (network_worker)
     {
@@ -131,6 +129,12 @@ void VideoWorker::onStart()
     encode_timer_ = new QTimer(this);
     encode_timer_->setInterval(MilliSeconds(60));
     connect(encode_timer_, &QTimer::timeout, this, &VideoWorker::onEncodeTimer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

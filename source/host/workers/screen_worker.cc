@@ -466,10 +466,8 @@ void ScreenWorker::onBandwidthChanged(qint64 bandwidth)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenWorker::onStart()
+void ScreenWorker::onPrepare()
 {
-    LOG(INFO) << "Screen worker started";
-
     ipc_worker_ = findWorker<DesktopIpcWorker>();
     if (ipc_worker_)
     {
@@ -527,6 +525,12 @@ void ScreenWorker::onStart()
 #endif // defined(Q_OS_LINUX)
 
     capture_scheduler_.setFps(default_fps_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ScreenWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

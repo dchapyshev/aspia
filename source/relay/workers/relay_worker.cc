@@ -169,7 +169,7 @@ void RelayWorker::onStatisticsRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayWorker::onStart()
+void RelayWorker::onPrepare()
 {
     Settings settings;
 
@@ -239,6 +239,20 @@ void RelayWorker::onStart()
         return;
     }
 
+    idle_timeout_ = idle_timeout;
+
+    flood_guard_ = std::make_unique<FloodGuard>();
+    flood_guard_->setRateLimit(kPerAddressWindow, kPerAddressMax);
+    flood_guard_->setMaxPending(kMaxPendingSessions);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RelayWorker::onStart()
+{
+    if (!acceptor_)
+        return;
+
+    std::error_code error_code;
     acceptor_->listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
@@ -246,12 +260,6 @@ void RelayWorker::onStart()
         acceptor_.reset();
         return;
     }
-
-    idle_timeout_ = idle_timeout;
-
-    flood_guard_ = std::make_unique<FloodGuard>();
-    flood_guard_->setRateLimit(kPerAddressWindow, kPerAddressMax);
-    flood_guard_->setMaxPending(kMaxPendingSessions);
 
     start_time_ = Clock::now();
     next_idle_check_ = start_time_ + kIdleCheckInterval;

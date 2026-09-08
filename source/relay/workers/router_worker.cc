@@ -55,7 +55,7 @@ RouterWorker::~RouterWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorker::onStart()
+void RouterWorker::onPrepare()
 {
     Settings settings;
 
@@ -142,6 +142,12 @@ void RouterWorker::onStart()
             relay_worker, &RelayWorker::onDisconnectSession, Qt::QueuedConnection);
     connect(this, &RouterWorker::sig_statisticsRequested,
             relay_worker, &RelayWorker::onStatisticsRequest, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onStart()
+{
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------

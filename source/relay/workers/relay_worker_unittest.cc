@@ -308,9 +308,6 @@ protected:
     QTemporaryDir temp_dir_;
     quint16 peer_port_ = 0;
 
-    WorkerManager workers_;
-    RelayWorker* worker_ = nullptr;
-
     asio::io_context io_context_;
 
     proto::router::RelayStatistics last_statistics_;
@@ -318,6 +315,10 @@ protected:
     TestLatch session_started_;
     TestLatch session_finished_;
     TestLatch statistics_received_;
+
+    // Declared last, so the worker is stopped while the latches its signals hit are still alive.
+    WorkerManager workers_;
+    RelayWorker* worker_ = nullptr;
 };
 
 //--------------------------------------------------------------------------------------------------

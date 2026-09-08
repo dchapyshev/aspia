@@ -40,12 +40,13 @@ public:
 
 protected:
     // Worker implementation.
+    void onPrepare() final;
     void onStart() final;
     void onStop() final;
     void onTimer(TimePoint now) final;
 
 private:
-    bool startServer(quint16 port, const QString& iface);
+    bool openSocket(quint16 port, const QString& iface);
     void doReceiveRequest();
     bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 
