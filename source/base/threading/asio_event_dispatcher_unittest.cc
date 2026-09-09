@@ -854,9 +854,9 @@ TEST(TimersTest, ZeroTimerDoesNotStarvePostedEvents)
     EXPECT_LE(obj.tick_of_delivery, 3);
 }
 
-// A call without WaitForMoreEvents must return whether or not the zero timer is already due,
-// so the tick is awaited across calls. The watchdog interrupts the call instead of letting a
-// broken dispatcher hang the test.
+// Qt dispatchers fire a timer at most once per processEvents call, so a call without
+// WaitForMoreEvents fires a zero timer once and returns. The watchdog interrupts the call
+// instead of letting a broken dispatcher hang the test.
 TEST(TimersTest, ZeroTimerDoesNotTrapProcessEvents)
 {
     auto* dispatcher = QAbstractEventDispatcher::instance(QThread::currentThread());
@@ -882,16 +882,13 @@ TEST(TimersTest, ZeroTimerDoesNotTrapProcessEvents)
         }
     });
 
-    const TimePoint start_time = Clock::now();
-    while (ticks == 0 && msSince(start_time) < 2000)
-        QCoreApplication::processEvents();
-
+    QCoreApplication::processEvents();
     returned.release();
     watchdog.join();
     timer.stop();
 
     ASSERT_FALSE(interrupted) << "processEvents did not return while a zero timer was alive";
-    EXPECT_GT(ticks, 0);
+    EXPECT_EQ(ticks, 1);
 }
 
 // A handler that runs in the same io_context turn right after a zero timer tick opens a nested
