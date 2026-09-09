@@ -159,6 +159,18 @@ if (LINUX)
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fPIC")
 endif()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # GCC 12 on aarch64 reads a field before a write to that same field when the two are reached
+    # through different pointer types, so a queue reports the size it had before the removal.
+    # C++ compiler flags.
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-strict-aliasing")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-strict-aliasing")
+
+    # C compiler flags.
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-strict-aliasing")
+endif()
+
 # Compiller flags.
 message(STATUS "CXX compiller version: ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "CXX flags (release): ${CMAKE_CXX_FLAGS_RELEASE}")
