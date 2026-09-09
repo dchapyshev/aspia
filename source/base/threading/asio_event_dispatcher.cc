@@ -44,6 +44,18 @@ const float kLoadFactorForTimers = 0.5;
 const size_t kReservedSizeForSockets = 256;
 const float kLoadFactorForSockets = 0.5;
 
+struct ZeroTimerEvent final : public QTimerEvent
+{
+    ZeroTimerEvent(int timer_id, quint64 unique_id)
+        : QTimerEvent(timer_id),
+          unique_id(unique_id)
+    {
+        t = QEvent::ZeroTimerEvent;
+    }
+
+    const quint64 unique_id;
+};
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -102,7 +114,7 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         {
             auto it = timers_.find(timer_id);
             if (it != timers_.end() && it->second.unique_id == unique_id)
-                asyncWaitTimer(it->second.handle, it->second.end_time, timer_id);
+                QCoreApplication::postEvent(this, new ZeroTimerEvent(timer_id, unique_id));
         }
 
         zero_timers_.clear();
@@ -346,6 +358,15 @@ void AsioEventDispatcher::registerTimer(
     auto timer = timers_.emplace(timer_id, Timer(
         uniqueId(), asio::steady_timer(io_context_), interval, end_time, object, type)).first;
 
+    // A zero timer goes through the event queue instead of an asio wait. The wait completes
+    // asynchronously, so the first tick could miss the next processEvents call, while a posted
+    // event is always delivered by it.
+    if (interval == MilliSeconds::zero())
+    {
+        QCoreApplication::postEvent(this, new ZeroTimerEvent(timer_id, timer->second.unique_id));
+        return;
+    }
+
     asyncWaitTimer(timer->second.handle, end_time, timer_id);
 }
 
@@ -492,6 +513,32 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
+bool AsioEventDispatcher::event(QEvent* event)
+{
+    if (event->type() != QEvent::ZeroTimerEvent)
+        return QAbstractEventDispatcher::event(event);
+
+    const ZeroTimerEvent* zero_event = static_cast<const ZeroTimerEvent*>(event);
+    const int timer_id = zero_event->timerId();
+    const quint64 unique_id = zero_event->unique_id;
+
+    auto it = timers_.find(timer_id);
+    if (it == timers_.end() || it->second.unique_id != unique_id)
+        return true;
+
+    QTimerEvent timer_event(timer_id);
+    QCoreApplication::sendEvent(it->second.object, &timer_event);
+
+    // processEvents posts the next tick. Posted from here, it would be delivered again by the same
+    // call, and a call without WaitForMoreEvents would never return.
+    it = timers_.find(timer_id);
+    if (it != timers_.end() && it->second.unique_id == unique_id)
+        zero_timers_.emplace_back(timer_id, unique_id);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint end_time, int timer_id)
 {
     handle.expires_at(end_time);
@@ -532,15 +579,6 @@ void AsioEventDispatcher::asyncWaitTimer(asio::steady_timer& handle, TimePoint e
         const TimePoint now = Clock::now();
         if (timer.end_time <= now)
             timer.end_time = now + timer.interval;
-
-        // A zero timer expires the moment its wait is armed, so arming it here would let
-        // io_context::poll run the timer alone and posted events would never be sent. Such a timer
-        // is rescheduled by processEvents instead.
-        if (timer.interval == MilliSeconds::zero())
-        {
-            zero_timers_.emplace_back(timer_id, unique_id);
-            return;
-        }
 
         asyncWaitTimer(timer.handle, timer.end_time, timer_id);
     });

@@ -62,6 +62,10 @@ public:
 
     static asio::io_context& ioContext();
 
+protected:
+    // QAbstractEventDispatcher implementation.
+    bool event(QEvent* event) final;
+
 private:
 #if defined(Q_OS_WINDOWS)
     struct MultimediaTimer
