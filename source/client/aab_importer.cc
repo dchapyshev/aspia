@@ -73,6 +73,22 @@ QString combineHostAndPort(const QString& host, quint32 port)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString routerAddress(const QString& host, quint32 port)
+{
+    // The old book always carries the port explicitly, and its default was the single router port
+    // of that time. That port now serves legacy hosts only, so it is moved to the client port; a
+    // port the user set by hand is kept.
+    if (port == 0 || port == DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT)
+        port = DEFAULT_ROUTER_CLIENT_TCP_PORT;
+
+    Address address(DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    address.setHost(host);
+    address.setPort(static_cast<quint16>(port));
+
+    return address.toString();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString sanitizedName(const QString& name, int max_length)
 {
     return name.left(max_length);
@@ -96,7 +112,7 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     if (address.isEmpty() || username.isEmpty() || password.isEmpty())
         return 0;
 
-    QString combined_address = combineHostAndPort(address, proto_router.port());
+    QString combined_address = routerAddress(address, proto_router.port());
 
     Database& db = Database::instance();
 
