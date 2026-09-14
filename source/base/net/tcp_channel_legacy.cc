@@ -506,14 +506,18 @@ void TcpChannelLegacy::onKeyChanged()
         return;
     }
 
+    // The old protocol keeps one key for the whole session; a peer of a previous version does not
+    // change it after N messages, so the periodic key change stays off here.
+    constexpr bool kRatchet = false;
+
     if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
         encryptor_ = StreamEncryptor::createForAes256Gcm(
             authenticator_->sessionKey(Authenticator::Direction::ENCRYPT),
-            authenticator_->iv(Authenticator::Direction::ENCRYPT));
+            authenticator_->iv(Authenticator::Direction::ENCRYPT), kRatchet);
         decryptor_ = StreamDecryptor::createForAes256Gcm(
             authenticator_->sessionKey(Authenticator::Direction::DECRYPT),
-            authenticator_->iv(Authenticator::Direction::DECRYPT));
+            authenticator_->iv(Authenticator::Direction::DECRYPT), kRatchet);
     }
     else
     {
@@ -521,10 +525,10 @@ void TcpChannelLegacy::onKeyChanged()
 
         encryptor_ = StreamEncryptor::createForChaCha20Poly1305(
             authenticator_->sessionKey(Authenticator::Direction::ENCRYPT),
-            authenticator_->iv(Authenticator::Direction::ENCRYPT));
+            authenticator_->iv(Authenticator::Direction::ENCRYPT), kRatchet);
         decryptor_ = StreamDecryptor::createForChaCha20Poly1305(
             authenticator_->sessionKey(Authenticator::Direction::DECRYPT),
-            authenticator_->iv(Authenticator::Direction::DECRYPT));
+            authenticator_->iv(Authenticator::Direction::DECRYPT), kRatchet);
     }
 
     if (!encryptor_ || !decryptor_)
