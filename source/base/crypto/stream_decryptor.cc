@@ -38,8 +38,9 @@ constexpr quint64 kRatchetInterval = 256;
 
 //--------------------------------------------------------------------------------------------------
 StreamDecryptor::StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
-    const SecureByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
     : type_(type),
+      ratchet_(ratchet),
       ctx_(std::move(ctx)),
       key_(key),
       iv_(iv)
@@ -51,7 +52,7 @@ StreamDecryptor::StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<StreamDecryptor> StreamDecryptor::createForAes256Gcm(
-    const SecureByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -67,13 +68,13 @@ std::unique_ptr<StreamDecryptor> StreamDecryptor::createForAes256Gcm(
     }
 
     return std::unique_ptr<StreamDecryptor>(new StreamDecryptor(
-        CipherType::AES256_GCM, std::move(ctx), key, iv));
+        CipherType::AES256_GCM, std::move(ctx), key, iv, ratchet));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<StreamDecryptor> StreamDecryptor::createForChaCha20Poly1305(
-    const SecureByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv, bool ratchet)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -89,7 +90,7 @@ std::unique_ptr<StreamDecryptor> StreamDecryptor::createForChaCha20Poly1305(
     }
 
     return std::unique_ptr<StreamDecryptor>(new StreamDecryptor(
-        CipherType::CHACHA20_POLY1305, std::move(ctx), key, iv));
+        CipherType::CHACHA20_POLY1305, std::move(ctx), key, iv, ratchet));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,7 +157,7 @@ bool StreamDecryptor::decrypt(const void* in, qint64 in_size, const void* aad, q
 
     largeNumberIncrement(&iv_);
 
-    if (++msg_count_ >= kRatchetInterval)
+    if (ratchet_ && ++msg_count_ >= kRatchetInterval)
     {
         GenericHash hash(GenericHash::BLAKE2s256);
         hash.addData(key_);

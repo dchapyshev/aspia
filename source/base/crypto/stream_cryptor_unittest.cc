@@ -171,6 +171,44 @@ TEST(CryptorAes256GcmTest, TestVector)
     }
 }
 
+// The old protocol never changes the key. A stream without the ratchet stays readable past the
+// ratchet interval, while a peer with the ratchet loses sync exactly there.
+TEST(CryptorAes256GcmTest, NoRatchet)
+{
+    const SecureByteArray key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
+    const QByteArray message = QByteArray::fromHex("6006ee8029610876ec2facd5fc9ce6bd");
+
+    std::unique_ptr<StreamEncryptor> encryptor =
+        StreamEncryptor::createForAes256Gcm(key, iv, /* ratchet */ false);
+    ASSERT_NE(encryptor, nullptr);
+
+    std::unique_ptr<StreamDecryptor> old_peer =
+        StreamDecryptor::createForAes256Gcm(key, iv, /* ratchet */ false);
+    ASSERT_NE(old_peer, nullptr);
+
+    std::unique_ptr<StreamDecryptor> new_peer = StreamDecryptor::createForAes256Gcm(key, iv);
+    ASSERT_NE(new_peer, nullptr);
+
+    QByteArray encrypted(static_cast<qsizetype>(encryptor->encryptedDataSize(message.size())), 0);
+    QByteArray decrypted(static_cast<qsizetype>(old_peer->decryptedDataSize(encrypted.size())), 0);
+
+    // Well past the ratchet interval of 256 messages.
+    for (int i = 0; i < 300; ++i)
+    {
+        ASSERT_TRUE(encryptor->encrypt(message.data(), message.size(), encrypted.data()));
+
+        ASSERT_TRUE(old_peer->decrypt(encrypted.data(), encrypted.size(), decrypted.data()));
+        EXPECT_EQ(decrypted, message);
+
+        // The 256th message the ratcheting peer decrypts changes its key; the 257th no longer
+        // opens.
+        EXPECT_EQ(new_peer->decrypt(encrypted.data(), encrypted.size(), decrypted.data()),
+                  i < 256) << "message #" << i;
+    }
+}
+
 TEST(CryptorAes256GcmTest, WrongKey)
 {
     const SecureByteArray client_key(
