@@ -36,6 +36,7 @@
 #include "client/database.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/online_checker/online_checker.h"
+#include "client/router_controller.h"
 #include "ui_local_group_widget.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -97,6 +98,28 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
             this, &LocalGroupWidget::onOnlineCheckerResult);
     connect(online_checker_, &OnlineChecker::sig_checkerFinished,
             this, &LocalGroupWidget::onOnlineCheckerFinished);
+
+    connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
+            [this](qint64 router_id, RouterStatus status)
+    {
+        if (status != RouterStatus::ONLINE)
+            return;
+
+        QList<qint64> ids;
+        for (const LocalHostConfig& host : model_->hosts())
+        {
+            if (host.routerId() == router_id)
+                ids.append(host.id());
+        }
+
+        if (ids.isEmpty())
+            return;
+
+        online_checker_->invalidate(ids);
+
+        if (online_check_enabled_)
+            startOnlineChecker();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
