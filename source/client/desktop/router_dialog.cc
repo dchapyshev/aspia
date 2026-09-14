@@ -164,7 +164,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
             showError(tr("Failed to save the router."));
             return;
         }
-        if (stored->hasSameParams(data))
+        if (stored->hasSameAccount(data))
             data.setDeviceToken(stored->deviceToken());
 
         if (!db.modifyRouter(data))

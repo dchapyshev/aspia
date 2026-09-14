@@ -38,32 +38,31 @@ RouterConfig makeConfig()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// The predicate decides whether a record still names the same account. The reload of the
-// controller reconnects on a mismatch, and the editors carry the device token over only on a
-// match. The display name is not part of the account, so a rename keeps both the connection and
-// the token.
-TEST(RouterConfigTest, SameParamsFollowTheAccountNotTheName)
+// The account predicate decides whether the editors carry the device token over: the router
+// binds the token to the user, so the address, the user name and the password make the account.
+// The display name and the session type are not part of it.
+TEST(RouterConfigTest, SameAccountFollowsTheCredentialsOnly)
 {
     const RouterConfig base = makeConfig();
-    EXPECT_TRUE(base.hasSameParams(makeConfig()));
+    EXPECT_TRUE(base.hasSameAccount(makeConfig()));
 
     RouterConfig other = makeConfig();
     other.setAddress("moved.example.com");
-    EXPECT_FALSE(base.hasSameParams(other));
-
-    other = makeConfig();
-    other.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
-    EXPECT_FALSE(base.hasSameParams(other));
+    EXPECT_FALSE(base.hasSameAccount(other));
 
     other = makeConfig();
     other.setUsername("somebody");
-    EXPECT_FALSE(base.hasSameParams(other));
+    EXPECT_FALSE(base.hasSameAccount(other));
 
     other = makeConfig();
     other.setPassword(SecureString(QString("rotated")));
-    EXPECT_FALSE(base.hasSameParams(other));
+    EXPECT_FALSE(base.hasSameAccount(other));
+
+    other = makeConfig();
+    other.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
+    EXPECT_TRUE(base.hasSameAccount(other));
 
     other = makeConfig();
     other.setDisplayName("renamed");
-    EXPECT_TRUE(base.hasSameParams(other));
+    EXPECT_TRUE(base.hasSameAccount(other));
 }

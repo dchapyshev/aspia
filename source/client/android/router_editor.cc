@@ -203,7 +203,7 @@ void RouterEditor::onSaveClicked()
             showError(tr("Failed to save the router."));
             return;
         }
-        if (stored->hasSameParams(data))
+        if (stored->hasSameAccount(data))
             data.setDeviceToken(stored->deviceToken());
     }
 

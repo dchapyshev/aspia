@@ -106,10 +106,10 @@ bool RouterConfig::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterConfig::hasSameParams(const RouterConfig& other) const
+bool RouterConfig::hasSameAccount(const RouterConfig& other) const
 {
-    return address_ == other.address_ && session_type_ == other.session_type_ &&
-           username_ == other.username_ && password_ == other.password_;
+    return address_ == other.address_ && username_ == other.username_ &&
+           password_ == other.password_;
 }
 
 //--------------------------------------------------------------------------------------------------

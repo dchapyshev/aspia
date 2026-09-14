@@ -174,13 +174,12 @@ void RouterController::reload()
         {
             RouterContext& context = it->second;
 
-            // An edit that renames the record keeps what is running; one that points it at
-            // another account replaces it whole, because everything the running login or
-            // session holds (the question on screen included) belongs to the account that is
-            // gone. A context that runs nothing yet is one waiting for its reconnect barrier,
-            // and the login it waits for starts with the config left here - starting one now
-            // would put it in front of the barrier.
-            if (context.config->hasSameParams(config))
+            // A rename keeps what is running. Another account or another session type replaces
+            // it whole: the login and the session belong to the account and the type they were
+            // opened with. A context that runs nothing yet waits for its reconnect barrier and
+            // starts with the config left here.
+            if (context.config->hasSameAccount(config) &&
+                context.config->sessionType() == config.sessionType())
             {
                 // The instance is shared with whoever runs, so the edit is seen at once.
                 *context.config = config;

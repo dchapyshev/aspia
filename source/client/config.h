@@ -55,7 +55,9 @@ public:
     // A router is entered with an account of its own, so a record read back without an address, a
     // user name or a password did not open.
     bool isValid() const;
-    bool hasSameParams(const RouterConfig& other) const;
+
+    // The same router entered with the same account: address, user name and password.
+    bool hasSameAccount(const RouterConfig& other) const;
 
     // Returns user-set display name if non-empty, otherwise falls back to address.
     QString displayLabel() const;
