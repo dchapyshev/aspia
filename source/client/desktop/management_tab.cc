@@ -184,7 +184,7 @@ ManagementTab::ManagementTab(QWidget* parent)
 
     connect(router_users_widget_, &RouterUsersWidget::sig_currentChanged,
             this, &ManagementTab::updateActionsState);
-    connect(router_users_widget_, &RouterUsersWidget::sig_userContextMenu,
+    connect(router_users_widget_, &RouterUsersWidget::sig_contextMenu,
             this, &ManagementTab::onUserContextMenu);
 
     connect(router_clients_widget_, &RouterClientsWidget::sig_currentChanged,
@@ -1063,10 +1063,10 @@ void ManagementTab::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::onUserContextMenu(const User& user, const QPoint& pos)
+void ManagementTab::onUserContextMenu(const QPoint& pos)
 {
     QMenu menu;
-    if (user.isValid())
+    if (router_users_widget_->hasSelectedUser())
     {
         menu.addAction(ui->action_edit_user);
         menu.addAction(ui->action_delete_user);

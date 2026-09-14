@@ -50,7 +50,6 @@ class RouterStatusWidget;
 class RouterTempHostsWidget;
 class RouterUsersWidget;
 class SearchWidget;
-class User;
 
 class ManagementTab final : public Tab
 {
@@ -84,7 +83,7 @@ private slots:
     void onEditHost();
     void onCopyHost();
     void onRemoveHost();
-    void onUserContextMenu(const User& user, const QPoint& pos);
+    void onUserContextMenu(const QPoint& pos);
     void onHostContextMenu(const QPoint& pos, int column);
     void onTempHostContextMenu(const QPoint& pos);
     void onClientContextMenu(const QPoint& pos, int column);

@@ -29,7 +29,6 @@
 #include <QStatusBar>
 
 #include "base/logging.h"
-#include "base/peer/user.h"
 #include "client/router_controller.h"
 #include "client/desktop/management/router_user_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -330,15 +329,10 @@ void RouterUsersWidget::onUserResultReceived(const proto::router::UserResult& re
 //--------------------------------------------------------------------------------------------------
 void RouterUsersWidget::onUserContextMenu(const QPoint& pos)
 {
-    const QModelIndex index = ui->tree_users->indexAt(pos);
-    if (index.isValid())
-        ui->tree_users->setCurrentIndex(index);
-
-    User user;
-    if (const RouterUser* selected = model_->userAt(index.row()))
-        user = *selected;
-
-    emit sig_userContextMenu(user, ui->tree_users->viewport()->mapToGlobal(pos));
+    // A click on the empty part of the list clears the current row, so the selection always
+    // describes what was clicked.
+    ui->tree_users->setCurrentIndex(ui->tree_users->indexAt(pos));
+    emit sig_contextMenu(ui->tree_users->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------

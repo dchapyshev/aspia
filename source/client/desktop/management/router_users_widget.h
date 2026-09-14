@@ -31,7 +31,6 @@ class RouterUsersWidget;
 
 class QLabel;
 class QStatusBar;
-class User;
 
 namespace proto::router {
 class UserList;
@@ -65,7 +64,7 @@ public slots:
 
 signals:
     void sig_currentChanged();
-    void sig_userContextMenu(const User& user, const QPoint& global_pos);
+    void sig_contextMenu(const QPoint& global_pos);
 
 protected:
     // QObject implementation.
