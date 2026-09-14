@@ -163,6 +163,12 @@ void HostLegacy::readHostIdRequest(const proto::router::legacy::HostIdRequest& h
         host_id_response->set_error_code(proto::router::legacy::HostIdResponse::SUCCESS);
         host_id_response->set_host_id(host_id);
 
+        if (!db.updateHostInfo(host_id, {}, computerName(), architecture(),
+                               version().toString().toStdString(), osName(), address()))
+        {
+            CLOG(WARNING) << "Failed to update host info for host_id:" << host_id;
+        }
+
         if (std::ranges::find(host_id_list_, host_id) == host_id_list_.end())
         {
             host_id_list_.emplace_back(host_id);
