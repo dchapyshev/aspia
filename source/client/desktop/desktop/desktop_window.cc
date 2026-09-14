@@ -1491,6 +1491,7 @@ void DesktopWindow::readLegacyCapabilities(const proto::legacy::Capabilities& le
 
     LOG(INFO) << "Converted:" << capabilities;
     onCapabilitiesChanged(capabilities);
+    sendConfig(desktop_config_);
 }
 
 //--------------------------------------------------------------------------------------------------

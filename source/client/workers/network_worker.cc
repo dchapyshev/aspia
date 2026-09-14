@@ -205,7 +205,7 @@ void NetworkWorker::onTimer(TimePoint now)
     receive_rate_last_total_ = total;
 
     // An idle interval carries no information about the path capacity.
-    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_)
+    if (bytes <= 0 || interval <= MilliSeconds::zero() || !tcp_channel_ || is_legacy_mode_)
         return;
 
     proto::peer::ClientToHost message;
@@ -456,6 +456,9 @@ void NetworkWorker::startConnection()
         // Remove this after support for versions below 3.0.0 ends.
         if (kMinimumSupportedVersion < kVersion_3_0_0 && offer.peer_info().is_legacy())
         {
+            is_legacy_mode_ = true;
+            emit sig_statusChanged(Status::LEGACY_HOST);
+
             auto* auth = new ClientAuthenticatorLegacy();
             setupAuthenticator(auth);
             relay_authenticator = auth;
