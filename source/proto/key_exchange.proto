@@ -85,6 +85,15 @@ message ServerHello
     bytes public_key      = 3;
 }
 
+// Server to client (legacy protocol). Peers older than 3.0.0 require the server version in this
+// message; the field takes the number that now carries public_key, the two share the wire type.
+message ServerHelloLegacy
+{
+    Encryption encryption = 1;
+    bytes iv              = 2;
+    peer.Version version  = 3;
+}
+
 // Client to server.
 message SrpIdentify
 {

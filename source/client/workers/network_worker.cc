@@ -449,12 +449,23 @@ void NetworkWorker::startConnection()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        // For relay path the channel type (Legacy/NG) is decided later from the connection
-        // offer. Authenticator implementations are currently identical, so we always use the
-        // non-legacy variant here. When the non-legacy handshake diverges, this will need to
-        // be revisited together with RelayPeer.
-        auto* relay_authenticator = new ClientAuthenticator();
-        setupAuthenticator(relay_authenticator);
+        // The connection offer tells which protocol the host speaks; RelayPeer picks the channel
+        // by it, and the authenticator must match the channel.
+        Authenticator* relay_authenticator = nullptr;
+
+        // Remove this after support for versions below 3.0.0 ends.
+        if (kMinimumSupportedVersion < kVersion_3_0_0 && offer.peer_info().is_legacy())
+        {
+            auto* auth = new ClientAuthenticatorLegacy();
+            setupAuthenticator(auth);
+            relay_authenticator = auth;
+        }
+        else
+        {
+            auto* auth = new ClientAuthenticator();
+            setupAuthenticator(auth);
+            relay_authenticator = auth;
+        }
 
         relay_peer_ = new RelayPeer(relay_authenticator, this);
 

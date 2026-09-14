@@ -261,7 +261,15 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
         }
     }
 
-    proto::key_exchange::ServerHello server_hello ;
+    proto::key_exchange::ServerHelloLegacy server_hello;
+
+    // A peer of version 2.7.0 and later takes the server version from here and rejects the
+    // handshake without it.
+    proto::peer::Version* version = server_hello.mutable_version();
+    version->set_major(ASPIA_VERSION_MAJOR);
+    version->set_minor(ASPIA_VERSION_MINOR);
+    version->set_patch(ASPIA_VERSION_PATCH);
+    version->set_revision(GIT_COMMIT_COUNT);
 
     if (key_pair_.isValid())
     {
