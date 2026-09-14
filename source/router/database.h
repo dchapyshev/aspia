@@ -64,7 +64,8 @@ struct DeviceToken
 
 // Invariants the write paths maintain, each enforced inside the mutating transaction. A change
 // to any user/workspace path must be checked against this list.
-// I1. users.sessions is written only by the INSERT of addUser: the access level of a user never
+// I1. users.sessions is written only by the INSERT of addUser, which stores the full session mask
+//     of the access level (RouterUser::expandSessionTypes): the access level of a user never
 //     changes after creation.
 // I2. An administrator sees every workspace by its session type alone (workspaceListForAdmin),
 //     so workspace_access holds the memberships of the regular users only.

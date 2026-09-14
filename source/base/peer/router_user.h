@@ -42,6 +42,11 @@ public:
     static RouterUser parseFrom(const proto::router::User& serialized_user);
     proto::router::User serialize() const;
 
+    // Expands an access level to the full session mask according to the privilege hierarchy: an
+    // administrator implies a manager and an operator, a manager implies an operator. A client
+    // names the chosen level as a single session type; the router keeps the full mask.
+    static quint32 expandSessionTypes(quint32 sessions);
+
     QByteArray otp_secret;
     quint64 otp_counter = 0;
 };

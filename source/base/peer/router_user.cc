@@ -19,6 +19,7 @@
 #include "base/peer/router_user.h"
 
 #include "base/crypto/secure_string.h"
+#include "proto/router.h"
 #include "proto/router_admin.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -65,4 +66,15 @@ proto::router::User RouterUser::serialize() const
     user.set_flags(flags);
 
     return user;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+quint32 RouterUser::expandSessionTypes(quint32 sessions)
+{
+    if (sessions & proto::router::SESSION_TYPE_ADMIN)
+        sessions |= proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
+    if (sessions & proto::router::SESSION_TYPE_MANAGER)
+        sessions |= proto::router::SESSION_TYPE_OPERATOR;
+    return sessions;
 }

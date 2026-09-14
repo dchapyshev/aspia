@@ -170,6 +170,36 @@ TEST_F(RouterDatabaseTest, AddUserStoresRecord)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A client names the access level as a single session type; the record holds every session type
+// the level implies.
+TEST_F(RouterDatabaseTest, AddUserStoresTheFullMaskOfTheLevel)
+{
+    ASSERT_EQ(db_.addUser(makeUser("root", proto::router::SESSION_TYPE_ADMIN)),
+              proto::router::kErrorOk);
+    ASSERT_EQ(db_.addUser(makeUser("lead", proto::router::SESSION_TYPE_MANAGER)),
+              proto::router::kErrorOk);
+
+    EXPECT_EQ(findUser("root").sessions, kAllSessions);
+    EXPECT_EQ(findUser("lead").sessions,
+              proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The expansion of the 2.7.0 records belongs to the upgrade of the table only: a database that
+// already has the 3.0.0 layout keeps its rows as they are when it is opened again.
+TEST_F(RouterDatabaseTest, ReopenLeavesSessionsOfAnUpgradedDatabaseAlone)
+{
+    ASSERT_TRUE(execRaw("UPDATE users SET sessions=1 WHERE id=1"));
+
+    Database reopened;
+    ASSERT_TRUE(reopened.open(file_path_));
+
+    RouterUser admin;
+    ASSERT_EQ(reopened.findUser("admin", &admin), proto::router::kErrorOk);
+    EXPECT_EQ(admin.sessions, quint32(proto::router::SESSION_TYPE_ADMIN));
+}
+
+//--------------------------------------------------------------------------------------------------
 // The list is read one page at a time, and the same page holds the same records whatever the
 // query planner does with it.
 TEST_F(RouterDatabaseTest, UserListReturnsRequestedPage)
@@ -896,5 +926,43 @@ TEST(RouterDatabaseFreshTest, AddHostBeforeAnyAutoincrementInsert)
     HostId host_id = kInvalidHostId;
     ASSERT_EQ(db.hostId("hash-1", &host_id), proto::router::kErrorOk);
     EXPECT_EQ(host_id, HostId(1));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A 2.7.0 database knows no manager role: its administrators carry ADMIN|CLIENT (3), the other
+// users CLIENT (2, the OPERATOR of 3.0.0). The upgrade of the users table gives the
+// administrators the MANAGER bit their level implies and leaves the other users alone.
+TEST(RouterDatabaseFreshTest, UpgradeFrom27GrantsManagerToAdministrators)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+    const QString file_path = temp_dir.path() + "/router.db3";
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"users\" ("
+                             "\"id\" INTEGER UNIQUE,"
+                             "\"name\" TEXT NOT NULL UNIQUE,"
+                             "\"group\" TEXT NOT NULL,"
+                             "\"salt\" BLOB NOT NULL,"
+                             "\"verifier\" BLOB NOT NULL,"
+                             "\"sessions\" INTEGER DEFAULT 0,"
+                             "\"flags\" INTEGER DEFAULT 0,"
+                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+        ASSERT_TRUE(raw.exec("INSERT INTO users (name, \"group\", salt, verifier, sessions, flags) "
+                             "VALUES ('admin', '8192', X'00', X'00', 3, 1), "
+                             "('bob', '8192', X'00', X'00', 2, 1)"));
+    }
+
+    Database db;
+    ASSERT_TRUE(db.open(file_path));
+
+    RouterUser user;
+    ASSERT_EQ(db.findUser("admin", &user), proto::router::kErrorOk);
+    EXPECT_EQ(user.sessions, kAllSessions);
+
+    ASSERT_EQ(db.findUser("bob", &user), proto::router::kErrorOk);
+    EXPECT_EQ(user.sessions, quint32(proto::router::SESSION_TYPE_OPERATOR));
 }
 

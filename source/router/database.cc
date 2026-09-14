@@ -260,6 +260,10 @@ bool ensureSchema(SqlDatabase& db)
         { "otp_counter", "INTEGER NOT NULL DEFAULT 0" }
     };
 
+    // A users table without these columns has the 2.7.0 layout. The manager role did not exist
+    // in 2.7.0, so the administrators of such a table lack the MANAGER bit their level implies.
+    const bool users_from_2_7 = !hasColumn(db, "users", "otp_secret");
+
     for (const auto& column : kUserColumns)
     {
         if (hasColumn(db, "users", column.name))
@@ -270,6 +274,19 @@ bool ensureSchema(SqlDatabase& db)
         if (!db.exec(sql.c_str()))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << db.lastError();
+            return false;
+        }
+    }
+
+    if (users_from_2_7)
+    {
+        SqlQuery query(db, "UPDATE users SET sessions=sessions|? WHERE (sessions&?)!=0");
+        query.addInt64(proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
+        query.addInt64(proto::router::SESSION_TYPE_ADMIN);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to expand the sessions of administrators:" << db.lastError();
             return false;
         }
     }
@@ -560,7 +577,7 @@ std::string_view Database::addUser(const RouterUser& user)
     query.addText(user.group);
     query.addBlob(user.salt);
     query.addBlob(user.verifier);
-    query.addInt64(user.sessions);
+    query.addInt64(RouterUser::expandSessionTypes(user.sessions));
     query.addInt64(user.flags);
 
     if (!query.exec())
