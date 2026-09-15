@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QDateTime>
+#include <QHeaderView>
 #include <QLocale>
 #include <QPushButton>
 #include <QScrollBar>
@@ -118,6 +119,11 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
             this, &RouterUserDialog::onRevokeAllTokensClicked);
     connect(ui->tree_tokens, &QTreeWidget::itemSelectionChanged,
             this, &RouterUserDialog::onTokenSelectionChanged);
+
+    QHeaderView* tokens_header = ui->tree_tokens->header();
+    tokens_header->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    tokens_header->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    tokens_header->setStretchLastSection(true);
 
     // Tokens are device credentials owned by an existing user; in create mode there is nothing
     // to show and nothing to revoke until the user is persisted.
