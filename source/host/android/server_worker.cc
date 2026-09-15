@@ -293,6 +293,23 @@ void ServerWorker::onNewPassword()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ServerWorker::onRouterSettingsChanged()
+{
+    if (!Database::instance().isRouterEnabled())
+    {
+        disconnectFromRouter();
+    }
+    else if (router_manager_)
+    {
+        router_manager_->onSettingsChanged();
+    }
+    else
+    {
+        updateRouterConnection();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerWorker::onCredentialsChanged(HostId host_id, const SecureString& password)
 {
     emit sig_credentialsChanged(hostIdToString(host_id), password.toString());
@@ -351,7 +368,7 @@ void ServerWorker::disconnectFromRouter()
     emit sig_routerStateChanged(static_cast<int>(proto::user::RouterState::DISABLED), QString());
     emit sig_credentialsChanged(QString(), QString());
 
-    LOG(INFO) << "Router connection closed (host went to background)";
+    LOG(INFO) << "Router connection closed";
 }
 
 //--------------------------------------------------------------------------------------------------

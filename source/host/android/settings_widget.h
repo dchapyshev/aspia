@@ -57,6 +57,9 @@ signals:
     // Emitted when the set returned by appBarActions() changes (the about screen hides the action).
     void sig_appBarActionsChanged();
 
+    // Emitted after the router settings are stored.
+    void sig_routerSettingsChanged();
+
 private:
     void showAbout();
     void showUsers();

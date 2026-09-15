@@ -232,7 +232,6 @@ void DesktopAgent::onClientFinished()
         input_injector_.reset();
         video_encoder_.reset();
         source_size_ = QSize();
-        frame_count_ = 0;
     }
 }
 

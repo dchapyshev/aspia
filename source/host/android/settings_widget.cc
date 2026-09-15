@@ -301,17 +301,18 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
     hint->setOpenExternalLinks(true);
     layout->addWidget(hint);
 
-    connect(enable, &QCheckBox::toggled, this, [address, public_key](bool checked)
+    connect(enable, &QCheckBox::toggled, this, [this, address, public_key](bool checked)
     {
         Database::instance().setRouterEnabled(checked);
         address->setEnabled(checked);
         public_key->setEnabled(checked);
+        emit sig_routerSettingsChanged();
     });
 
     // Values are validated and stored on commit. Invalid input is reverted to the stored value: a
     // modal dialog cannot be shown here because the on-screen keyboard is still up, and a translucent
     // top-level surface aborts the process (QOpenGLContext::makeCurrent) while the surface is invalid.
-    connect(address, &QLineEdit::editingFinished, this, [address]()
+    connect(address, &QLineEdit::editingFinished, this, [this, address]()
     {
         Database& db = Database::instance();
 
@@ -322,6 +323,7 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
         {
             db.setRouterAddress(parsed);
             address->setText(parsed.toString());
+            emit sig_routerSettingsChanged();
         }
         else
         {
@@ -329,7 +331,7 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
         }
     });
 
-    connect(public_key, &QLineEdit::editingFinished, this, [public_key]()
+    connect(public_key, &QLineEdit::editingFinished, this, [this, public_key]()
     {
         Database& db = Database::instance();
 
@@ -340,6 +342,7 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
         {
             db.setRouterPublicKey(key);
             public_key->setText(QString::fromUtf8(key.toHex()));
+            emit sig_routerSettingsChanged();
         }
         else
         {
