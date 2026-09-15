@@ -1689,8 +1689,8 @@ std::string_view Database::modifyHost(HostId host_id, qint64 base_revision, qint
         }
     }
 
-    // The place in the tree and the note both belong to the workspace the host is leaving, so
-    // they go with it.
+    // The place in the tree belongs to the workspace the host is leaving, so it goes with it.
+    // The note is the host's own and stays, whether the host sits in a workspace or not.
     const bool released = workspace_id == 0;
     const qint64 timestamp = secondsSinceEpoch();
 
@@ -1701,7 +1701,7 @@ std::string_view Database::modifyHost(HostId host_id, qint64 base_revision, qint
     query.addInt64(workspace_id);
     query.addText(display_name);
     query.addInt64(released ? 0 : group_id);
-    query.addText(released ? std::string_view() : comment);
+    query.addText(comment);
     query.addInt64(timestamp);
     query.addUInt64(host_id);
 
@@ -2740,8 +2740,7 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
         return proto::router::kErrorNotFound;
 
     SqlQuery release_hosts(db_,
-        "UPDATE hosts SET revision=revision+1, workspace_id=0, group_id=0, comment='' "
-        "WHERE workspace_id=?");
+        "UPDATE hosts SET revision=revision+1, workspace_id=0, group_id=0 WHERE workspace_id=?");
     release_hosts.addInt64(entry_id);
 
     if (!release_hosts.exec())

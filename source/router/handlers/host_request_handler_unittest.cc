@@ -62,12 +62,17 @@ protected:
         proto::router::HostRequest request;
         request.set_command_name(proto::router::kCommandHostModify);
 
+        // An edit carries the whole editable state of the host as the client saw it: the
+        // revision and the note come from the stored record, the way the dialogs send them.
+        const proto::router::Host stored = findHost(host_id);
+
         proto::router::Host* host = request.mutable_host();
         host->set_host_id(host_id);
         host->set_workspace_id(workspace_id);
         host->set_group_id(group_id);
         host->set_display_name(std::string(display_name));
-        host->set_revision(findHost(host_id).revision());
+        host->set_comment(stored.comment());
+        host->set_revision(stored.revision());
         return request;
     }
 
@@ -390,8 +395,8 @@ TEST_F(HostRequestHandlerTest, GroupIsCheckedAgainstTheTargetWorkspace)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A released host keeps nothing of the workspace it left.
-TEST_F(HostRequestHandlerTest, ReleasedHostLosesGroupAndComment)
+// A released host keeps nothing of the workspace it left. The note is the host's own and stays.
+TEST_F(HostRequestHandlerTest, ReleasedHostLosesGroupAndKeepsComment)
 {
     caller_.session_type = proto::router::SESSION_TYPE_ADMIN;
 
@@ -408,7 +413,7 @@ TEST_F(HostRequestHandlerTest, ReleasedHostLosesGroupAndComment)
     const proto::router::Host stored = findHost(host_id_);
     EXPECT_EQ(stored.workspace_id(), 0);
     EXPECT_EQ(stored.group_id(), 0);
-    EXPECT_TRUE(stored.comment().empty());
+    EXPECT_EQ(stored.comment(), "note");
 }
 
 // The host lists and the search of the client channel: what every session type is allowed to see.

@@ -785,8 +785,9 @@ TEST_F(RouterDatabaseTest, ScheduledRemovalTakesTheHostEntryOut)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A released host cannot keep the place and the note it had inside the workspace it left.
-TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndComment)
+// A released host cannot keep the place it had inside the workspace it left; the note is its own
+// and stays.
+TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndKeepsItsComment)
 {
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
@@ -808,7 +809,23 @@ TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndComment)
     const proto::router::Host host = findHost(host_id);
     EXPECT_EQ(host.workspace_id(), 0);
     EXPECT_EQ(host.group_id(), 0);
-    EXPECT_TRUE(host.comment().empty());
+    EXPECT_EQ(host.comment(), "comment");
+    EXPECT_EQ(host.display_name(), "display");
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host outside every workspace is edited like any other: its name and note are stored.
+TEST_F(RouterDatabaseTest, UnassignedHostKeepsItsComment)
+{
+    const HostId host_id = addHost("hash-1");
+    ASSERT_NE(host_id, kInvalidHostId);
+
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), 0, 0, "display", "note"),
+              proto::router::kErrorOk);
+
+    const proto::router::Host host = findHost(host_id);
+    EXPECT_EQ(host.workspace_id(), 0);
+    EXPECT_EQ(host.comment(), "note");
     EXPECT_EQ(host.display_name(), "display");
 }
 
@@ -820,14 +837,20 @@ TEST_F(RouterDatabaseTest, RemoveWorkspaceReleasesHostsAndAccess)
 
     const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
+    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, 0, "display",
+                             "note"),
+              proto::router::kErrorOk);
 
     ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
 
     std::set<qint64> workspace_ids;
     ASSERT_TRUE(db_.workspaceAccessIdsForUser(admin_.entry_id, &workspace_ids));
     EXPECT_TRUE(workspace_ids.empty());
-    EXPECT_EQ(findHost(host_id).workspace_id(), 0);
+
+    // The host is out of the workspace, its note is its own and survives the removal.
+    const proto::router::Host host = findHost(host_id);
+    EXPECT_EQ(host.workspace_id(), 0);
+    EXPECT_EQ(host.comment(), "note");
 }
 
 //--------------------------------------------------------------------------------------------------

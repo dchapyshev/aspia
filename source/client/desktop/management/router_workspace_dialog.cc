@@ -509,11 +509,7 @@ void RouterWorkspaceDialog::onHostRemoveClicked()
     if (!item)
         return;
 
-    // The note a host carries belongs to the workspace it is in and is wiped when it leaves.
-    const QString message = tr("Removing the host from the workspace will permanently clear "
-                               "its comment. This action cannot be undone.\n\nAre you sure "
-                               "you want to continue?");
-    if (MsgBox::question(this, message) == MsgBox::No)
+    if (MsgBox::question(this, tr("Are you sure you want to remove the host from the workspace?")) == MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;

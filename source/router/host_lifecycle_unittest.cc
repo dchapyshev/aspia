@@ -263,7 +263,7 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
     EXPECT_EQ(stored.workspace_id(), 0);
     EXPECT_EQ(stored.computer_name(), "COMPUTER");
     EXPECT_EQ(stored.display_name(), "Accounting");
-    EXPECT_TRUE(stored.comment().empty());
+    EXPECT_EQ(stored.comment(), "comment");
 }
 
 //--------------------------------------------------------------------------------------------------

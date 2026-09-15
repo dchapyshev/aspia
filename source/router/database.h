@@ -222,8 +222,9 @@ public:
     std::string_view hostWorkspaceId(HostId host_id, qint64* workspace_id) const;
 
     // Updates the admin/manager-editable fields of a host. workspace_id is the workspace the host
-    // ends up in: 0 releases it, and the group and the note it carried within the workspace go
-    // with it. A host another workspace holds is refused with kErrorConflict (the caller acted on
+    // ends up in: 0 releases it, and the group it carried within the workspace goes with it; the
+    // note is the host's own and is stored as given whether the host is in a workspace or not.
+    // A host another workspace holds is refused with kErrorConflict (the caller acted on
     // a stale snapshot), as is a move into a workspace that is gone. group_id == 0 places the host
     // at the workspace root; > 0 moves it under the given group (caller must validate group
     // ownership). Also bumps last_modify. |base_revision| is the revision the edit was built on:
