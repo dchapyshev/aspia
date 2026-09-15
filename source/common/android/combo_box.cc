@@ -25,13 +25,12 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QProxyStyle>
-#include <QScroller>
-#include <QScrollerProperties>
 #include <QStyledItemDelegate>
 
 #include "common/android/animation.h"
 #include "common/android/controls.h"
 #include "common/android/scroll_indicator.h"
+#include "common/android/touch_scroller.h"
 
 namespace {
 
@@ -114,19 +113,7 @@ public:
         setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         viewport()->setAutoFillBackground(false);
 
-        // Long lists do not fit the screen, so kinetic finger scrolling is enabled. The mouse
-        // gesture is used because Qt on Android synthesizes mouse events from touches, and the
-        // overshoot bounce is disabled so the list rests cleanly at its ends.
-        QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
-
-        QScroller* scroller = QScroller::scroller(viewport());
-        QScrollerProperties properties = scroller->scrollerProperties();
-        properties.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy,
-                                   QScrollerProperties::OvershootAlwaysOff);
-        properties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
-                                   QScrollerProperties::OvershootAlwaysOff);
-        scroller->setScrollerProperties(properties);
-
+        new TouchScroller(this);
         new ScrollIndicator(this, kPopupRadius);
     }
 

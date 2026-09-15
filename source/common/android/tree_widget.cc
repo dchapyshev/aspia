@@ -21,7 +21,6 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QScroller>
 #include <QStyle>
 #include <QStyledItemDelegate>
 #include <QTimer>
@@ -29,6 +28,7 @@
 #include "base/time_types.h"
 #include "common/android/controls.h"
 #include "common/android/scroll_indicator.h"
+#include "common/android/touch_scroller.h"
 
 namespace {
 
@@ -176,12 +176,10 @@ TreeWidget::TreeWidget(QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setItemDelegate(new ItemDelegate(this));
 
-    // Qt on Android synthesizes mouse events from touches, so the scroller listens to the mouse
-    // gesture: grabbing the touch gesture would swallow row taps.
-    QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
+    new TouchScroller(this);
 
-    // Long press is detected from the synthesized mouse stream: a press starts a timer that, unless
-    // a move or a scroll cancels it first, reports a long press on the pressed row.
+    // A press starts a timer that, unless a move or a scroll cancels it first, reports a long press
+    // on the pressed row.
     long_press_timer_ = new QTimer(this);
     long_press_timer_->setSingleShot(true);
     long_press_timer_->setInterval(kLongPressTimeout);
@@ -192,13 +190,6 @@ TreeWidget::TreeWidget(QWidget* parent)
             long_pressed_ = true;
             emit sig_itemLongPressed(item);
         }
-    });
-
-    connect(QScroller::scroller(viewport()), &QScroller::stateChanged, this,
-            [this](QScroller::State state)
-    {
-        if (state == QScroller::Dragging || state == QScroller::Scrolling)
-            long_press_timer_->stop();
     });
 
     applyBackgroundColor();

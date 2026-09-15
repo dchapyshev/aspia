@@ -29,7 +29,6 @@
 #include <QResizeEvent>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QScroller>
 #include <QTextDocument>
 #include <QTextEdit>
 #include <QVBoxLayout>
@@ -37,6 +36,7 @@
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/label.h"
+#include "common/android/touch_scroller.h"
 
 namespace {
 
@@ -166,9 +166,7 @@ ChatView::ChatView(QWidget* parent)
     scroll_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scroll_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Kinetic finger scrolling instead of the desktop scroll bar (Qt on Android synthesizes mouse
-    // events from touches).
-    QScroller::grabGesture(scroll_->viewport(), QScroller::LeftMouseButtonGesture);
+    new TouchScroller(scroll_);
 
     // Watch the viewport for resizes (e.g. the keyboard opening) to keep following the bottom.
     scroll_->viewport()->installEventFilter(this);
@@ -211,8 +209,7 @@ ChatView::ChatView(QWidget* parent)
     input_palette.setColor(QPalette::PlaceholderText, placeholder_color);
     input_->setPalette(input_palette);
 
-    // Finger scrolling for the overflowing content (no desktop scroll bar).
-    QScroller::grabGesture(input_->viewport(), QScroller::LeftMouseButtonGesture);
+    new TouchScroller(input_);
 
     connect(input_, &QTextEdit::textChanged, this, &ChatView::updateInputHeight);
     connect(input_, &QTextEdit::textChanged, this, [this]()

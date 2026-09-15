@@ -22,11 +22,10 @@
 #include <QPainter>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QScroller>
-#include <QScrollerProperties>
 #include <QShowEvent>
 
 #include "common/android/scroll_indicator.h"
+#include "common/android/touch_scroller.h"
 
 namespace {
 
@@ -75,19 +74,7 @@ ScrollArea::ScrollArea(QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Qt on Android synthesizes mouse events from touches, so the scroller listens to the mouse
-    // gesture: grabbing the touch gesture would swallow taps on the child controls.
-    QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
-
-    // The overshoot bounce makes a flick to an edge spring back instead of resting at it, so it
-    // is disabled and the content stops cleanly at the top and bottom.
-    QScroller* scroller = QScroller::scroller(viewport());
-    QScrollerProperties properties = scroller->scrollerProperties();
-    properties.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy,
-                               QScrollerProperties::OvershootAlwaysOff);
-    properties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
-                               QScrollerProperties::OvershootAlwaysOff);
-    scroller->setScrollerProperties(properties);
+    new TouchScroller(this);
 
     top_fade_ = new FadeOverlay(this, false);
     bottom_fade_ = new FadeOverlay(this, true);

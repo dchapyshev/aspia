@@ -63,5 +63,7 @@ collect_sources(SOURCE_COMMON_ANDROID
     tab_bar.h
     text_area.cc
     text_area.h
+    touch_scroller.cc
+    touch_scroller.h
     tree_widget.cc
     tree_widget.h)
