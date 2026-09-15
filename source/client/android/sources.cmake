@@ -17,8 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_ANDROID
-    authorization_dialog.cc
-    authorization_dialog.h
+    authorization_window.cc
+    authorization_window.h
     biometric_gate.cc
     biometric_gate.h
     chat_view.cc

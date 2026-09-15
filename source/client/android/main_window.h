@@ -30,6 +30,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class AppBar;
+class AuthorizationWindow;
 class BottomNavigationBar;
 class ChatWindow;
 class DesktopWindow;
@@ -67,6 +68,8 @@ private slots:
     void onDesktopClosed();
     void onFileTransferClosed();
     void onChatClosed();
+    void onAuthorizationAccepted();
+    void onAuthorizationClosed();
     void onTwoFactorRequired(qint64 router_id);
 
     // Tracks foreground/background transitions to re-lock the app after it has been in the background
@@ -93,6 +96,10 @@ private:
     // Routes a connection request to the matching session window. Only a single session is supported
     // at a time.
     void openSession(HostConfig host, proto::peer::SessionType session_type);
+
+    // Opens the session once the credentials are known. |credentials_saved| is as for openDesktop().
+    void startSession(const HostConfig& host, proto::peer::SessionType session_type,
+                      bool credentials_saved);
 
     // Keeps the credentials the user entered, in the local host the connection was built from or
     // in the row of a host of a router.
@@ -121,6 +128,7 @@ private:
     DesktopWindow* desktop_ = nullptr;
     FileTransferWindow* file_transfer_ = nullptr;
     ChatWindow* chat_ = nullptr;
+    AuthorizationWindow* authorization_ = nullptr;
 
     QPointer<QDialog> two_factor_dialog_;
     QSet<qint64> dismissed_two_factor_;

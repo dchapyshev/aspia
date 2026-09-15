@@ -36,7 +36,7 @@
 #include "client/host_url.h"
 #include "client/master_password.h"
 #include "client/router_controller.h"
-#include "client/android/authorization_dialog.h"
+#include "client/android/authorization_window.h"
 #include "client/android/chat_window.h"
 #include "client/android/desktop_window.h"
 #include "client/android/file_transfer_window.h"
@@ -288,44 +288,6 @@ void AndroidMainWindow::onLocalActionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onSearchModeChanged(bool active)
-{
-    if (active)
-    {
-        // The field text is routed to the active tab by onSearchTextChanged().
-        app_bar_->setActions({});
-        app_bar_->setBackVisible(true);
-        app_bar_->setSearchMode(true);
-    }
-    else
-    {
-        app_bar_->setSearchMode(false);
-        // Restore the bar to the current tab's default state.
-        onSectionChanged(navigation_->currentIndex());
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::onSearchTextChanged(const QString& text)
-{
-    switch (navigation_->currentIndex())
-    {
-        case SECTION_LOCAL:
-            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
-                local->searchQuery(text);
-            break;
-
-        case SECTION_REMOTE:
-            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
-                remote->searchQuery(text);
-            break;
-
-        default:
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visible)
 {
     if (navigation_->currentIndex() != SECTION_LOCAL)
@@ -371,6 +333,44 @@ void AndroidMainWindow::onSettingsActionsChanged()
     SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
     if (navigation_->currentIndex() == SECTION_SETTINGS && settings)
         app_bar_->setActions(settings->appBarActions());
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSearchModeChanged(bool active)
+{
+    if (active)
+    {
+        // The field text is routed to the active tab by onSearchTextChanged().
+        app_bar_->setActions({});
+        app_bar_->setBackVisible(true);
+        app_bar_->setSearchMode(true);
+    }
+    else
+    {
+        app_bar_->setSearchMode(false);
+        // Restore the bar to the current tab's default state.
+        onSectionChanged(navigation_->currentIndex());
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onSearchTextChanged(const QString& text)
+{
+    switch (navigation_->currentIndex())
+    {
+        case SECTION_LOCAL:
+            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+                local->searchQuery(text);
+            break;
+
+        case SECTION_REMOTE:
+            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+                remote->searchQuery(text);
+            break;
+
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -420,144 +420,6 @@ void AndroidMainWindow::onConnectRouterHost(const HostConfig& host, proto::peer:
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType session_type)
-{
-    // Only a single session is supported at a time.
-    if (desktop_ || file_transfer_ || chat_)
-        return;
-
-    // A local host keeps the credentials in itself, so it always has somewhere to keep them.
-    bool can_save_credentials = host.entryId() > 0;
-
-    // What this screen writes itself is what it takes back if the host refuses it.
-    bool credentials_saved = false;
-
-    if (host.entryId() <= 0 && host.routerId() > 0)
-    {
-        const HostId host_id = stringToHostId(host.address());
-
-        // A temporary host id is handed out at random and comes back for another machine, so what
-        // was saved under it would be sent to a host the user never gave it to.
-        if (!isTempHostId(host_id))
-        {
-            can_save_credentials = true;
-
-            if (host.username().isEmpty() || host.password().isEmpty())
-            {
-                std::optional<RouterHostConfig> saved_credentials =
-                    Database::instance().findRouterHost(host.routerId(), host_id);
-                if (saved_credentials.has_value())
-                {
-                    LOG(INFO) << "Using saved credentials of host" << host_id;
-
-                    host.setUsername(saved_credentials->username());
-                    host.setPassword(saved_credentials->password());
-                }
-            }
-        }
-    }
-
-    if (host.username().isEmpty() || host.password().isEmpty())
-    {
-        AuthorizationDialog dialog(host.routerId() > 0, can_save_credentials, this);
-        dialog.setUserName(host.username());
-
-        if (dialog.exec() != QDialog::Accepted)
-            return;
-
-        host.setUsername(dialog.userName());
-        host.setPassword(dialog.password());
-
-        // A one-time password leaves the user name empty and is good for one connection.
-        if (can_save_credentials && dialog.isSaveCredentialsChecked() && !host.username().isEmpty())
-        {
-            saveHostCredentials(host);
-            credentials_saved = true;
-        }
-    }
-
-    switch (session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-            openDesktop(host, credentials_saved);
-            break;
-
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            openFileTransfer(host, credentials_saved);
-            break;
-
-        case proto::peer::SESSION_TYPE_CHAT:
-            openChat(host, credentials_saved);
-            break;
-
-        default:
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
-{
-    Database& db = Database::instance();
-
-    if (host.entryId() > 0)
-    {
-        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
-        if (!local_host.has_value())
-        {
-            LOG(ERROR) << "Local host" << host.entryId() << "not found";
-            return;
-        }
-
-        local_host->setUsername(host.username());
-        local_host->setPassword(host.password());
-
-        if (!db.modifyLocalHost(*local_host))
-            LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
-        return;
-    }
-
-    const HostId host_id = stringToHostId(host.address());
-
-    RouterHostConfig credentials;
-    credentials.setRouterId(host.routerId());
-    credentials.setHostId(host_id);
-    credentials.setUsername(host.username());
-    credentials.setPassword(host.password());
-
-    bool saved = false;
-
-    if (db.findRouterHost(host.routerId(), host_id).has_value())
-        saved = db.modifyRouterHost(credentials);
-    else
-        saved = db.addRouterHost(credentials);
-
-    if (!saved)
-        LOG(ERROR) << "Unable to save credentials of host" << host_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openDesktop(const HostConfig& host, bool credentials_saved)
-{
-    // Only a single desktop connection is supported at a time.
-    if (desktop_)
-        return;
-
-    // The desktop view takes over the whole window until the connection is closed.
-    desktop_ = new DesktopWindow(host, credentials_saved);
-    connect(desktop_, &DesktopWindow::sig_closed, this, &AndroidMainWindow::onDesktopClosed);
-
-    root_stack_->addWidget(desktop_);
-    root_stack_->setCurrentWidget(desktop_);
-
-    // Hide the system bars and let the desktop view fill the whole screen, including the camera
-    // cutout: allow drawing into the cutout and stop the layout from reserving the safe area.
-    setDrawIntoCutout(true);
-    setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
-    showFullScreen();
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onDesktopClosed()
 {
     if (!desktop_)
@@ -574,18 +436,6 @@ void AndroidMainWindow::onDesktopClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openFileTransfer(const HostConfig& host, bool credentials_saved)
-{
-    // The file transfer screen is a regular page: the system bars stay visible (no full-screen or
-    // cutout drawing, unlike the desktop view).
-    file_transfer_ = new FileTransferWindow(host, credentials_saved);
-    connect(file_transfer_, &FileTransferWindow::sig_closed, this, &AndroidMainWindow::onFileTransferClosed);
-
-    root_stack_->addWidget(file_transfer_);
-    root_stack_->setCurrentWidget(file_transfer_);
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onFileTransferClosed()
 {
     if (!file_transfer_)
@@ -598,16 +448,6 @@ void AndroidMainWindow::onFileTransferClosed()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::openChat(const HostConfig& host, bool credentials_saved)
-{
-    chat_ = new ChatWindow(host, credentials_saved);
-    connect(chat_, &ChatWindow::sig_closed, this, &AndroidMainWindow::onChatClosed);
-
-    root_stack_->addWidget(chat_);
-    root_stack_->setCurrentWidget(chat_);
-}
-
-//--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onChatClosed()
 {
     if (!chat_)
@@ -617,6 +457,42 @@ void AndroidMainWindow::onChatClosed()
     root_stack_->removeWidget(chat_);
     chat_->deleteLater();
     chat_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onAuthorizationAccepted()
+{
+    if (!authorization_)
+        return;
+
+    const HostConfig host = authorization_->host();
+    const proto::peer::SessionType session_type = authorization_->sessionType();
+    const bool save_credentials = authorization_->isSaveCredentialsChecked();
+
+    onAuthorizationClosed();
+
+    // What this screen writes itself is what it takes back if the host refuses it. A one-time
+    // password leaves the user name empty and is good for one connection.
+    bool credentials_saved = false;
+    if (save_credentials && !host.username().isEmpty())
+    {
+        saveHostCredentials(host);
+        credentials_saved = true;
+    }
+
+    startSession(host, session_type, credentials_saved);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::onAuthorizationClosed()
+{
+    if (!authorization_)
+        return;
+
+    root_stack_->setCurrentWidget(shell_);
+    root_stack_->removeWidget(authorization_);
+    authorization_->deleteLater();
+    authorization_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -674,100 +550,6 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     // open() and not exec(): the prompt is modal, so it cannot be missed, but it does not spin a
     // nested event loop inside the delivery of the challenge that opened it.
     dialog->open();
-}
-
-//--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::connectToUrl(const QString& url)
-{
-    LOG(INFO) << "Connect to URL:" << url;
-
-    HostUrl host_url = HostUrl::fromString(url);
-    if (!host_url.isValid())
-    {
-        MessageDialog::info(this, tr("Connection by link"), tr("Invalid link."));
-        return;
-    }
-
-    // Only a single session is supported at a time.
-    if (desktop_ || file_transfer_ || chat_)
-    {
-        MessageDialog::info(this, tr("Connection by link"),
-                            tr("Another session is active. Close it and open the link again."));
-        return;
-    }
-
-    proto::peer::SessionType session_type = host_url.sessionType();
-    if (session_type != proto::peer::SESSION_TYPE_DESKTOP &&
-        session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER &&
-        session_type != proto::peer::SESSION_TYPE_CHAT)
-    {
-        MessageDialog::info(this, tr("Connection by link"),
-                            tr("The session type from the link is not supported on this device."));
-        return;
-    }
-
-    if (host_url.isRouterHost())
-    {
-        qint64 router_id = -1;
-        QList<RouterConfig> routers;
-        Database::instance().routerList(&routers);
-        for (const RouterConfig& router_config : std::as_const(routers))
-        {
-            if (router_config.guid() == host_url.routerGuid())
-            {
-                router_id = router_config.routerId();
-                break;
-            }
-        }
-
-        if (router_id <= 0)
-        {
-            MessageDialog::info(this, tr("Connection by link"),
-                tr("The router referenced by the link was not found in the address book."));
-            return;
-        }
-
-        // The record of the host on the router carries the name to show for it, so it is looked
-        // up before the session opens. Without a connected router the session opens unnamed.
-        RouterSession* session = RouterController::session(router_id);
-        if (session)
-        {
-            HostId host_id = host_url.hostId();
-
-            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
-                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
-            {
-                QString name;
-
-                for (const RouterHost& entry : std::as_const(list.hosts))
-                {
-                    if (entry.host_id != host_id)
-                        continue;
-
-                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
-                    break;
-                }
-
-                openSession(HostConfig::forRouterHost(router_id, host_id, name), session_type);
-            } });
-            return;
-        }
-
-        openSession(HostConfig::forRouterHost(router_id, host_url.hostId(), QString()),
-                    session_type);
-    }
-    else
-    {
-        std::optional<LocalHostConfig> entry = Database::instance().findLocalHostByGuid(host_url.hostGuid());
-        if (!entry.has_value())
-        {
-            MessageDialog::info(this, tr("Connection by link"),
-                tr("The host referenced by the link was not found in the address book."));
-            return;
-        }
-
-        openSession(HostConfig::forLocalHost(*entry), session_type);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -886,3 +668,255 @@ void AndroidMainWindow::relock()
     // waiting takes the screen now.
     showNextTwoFactorPrompt();
 }
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType session_type)
+{
+    // Only a single session is supported at a time.
+    if (desktop_ || file_transfer_ || chat_ || authorization_)
+        return;
+
+    // A local host keeps the credentials in itself, so it always has somewhere to keep them.
+    bool can_save_credentials = host.entryId() > 0;
+
+    if (host.entryId() <= 0 && host.routerId() > 0)
+    {
+        const HostId host_id = stringToHostId(host.address());
+
+        // A temporary host id is handed out at random and comes back for another machine, so what
+        // was saved under it would be sent to a host the user never gave it to.
+        if (!isTempHostId(host_id))
+        {
+            can_save_credentials = true;
+
+            if (host.username().isEmpty() || host.password().isEmpty())
+            {
+                std::optional<RouterHostConfig> saved_credentials =
+                    Database::instance().findRouterHost(host.routerId(), host_id);
+                if (saved_credentials.has_value())
+                {
+                    LOG(INFO) << "Using saved credentials of host" << host_id;
+
+                    host.setUsername(saved_credentials->username());
+                    host.setPassword(saved_credentials->password());
+                }
+            }
+        }
+    }
+
+    if (host.username().isEmpty() || host.password().isEmpty())
+    {
+        authorization_ = new AuthorizationWindow(host, session_type, can_save_credentials);
+        connect(authorization_, &AuthorizationWindow::sig_accepted,
+                this, &AndroidMainWindow::onAuthorizationAccepted);
+        connect(authorization_, &AuthorizationWindow::sig_closed,
+                this, &AndroidMainWindow::onAuthorizationClosed);
+
+        root_stack_->addWidget(authorization_);
+        root_stack_->setCurrentWidget(authorization_);
+        return;
+    }
+
+    startSession(host, session_type, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::startSession(const HostConfig& host, proto::peer::SessionType session_type,
+                                     bool credentials_saved)
+{
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            openDesktop(host, credentials_saved);
+            break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            openFileTransfer(host, credentials_saved);
+            break;
+
+        case proto::peer::SESSION_TYPE_CHAT:
+            openChat(host, credentials_saved);
+            break;
+
+        default:
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
+{
+    Database& db = Database::instance();
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
+        if (!local_host.has_value())
+        {
+            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            return;
+        }
+
+        local_host->setUsername(host.username());
+        local_host->setPassword(host.password());
+
+        if (!db.modifyLocalHost(*local_host))
+            LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
+        return;
+    }
+
+    const HostId host_id = stringToHostId(host.address());
+
+    RouterHostConfig credentials;
+    credentials.setRouterId(host.routerId());
+    credentials.setHostId(host_id);
+    credentials.setUsername(host.username());
+    credentials.setPassword(host.password());
+
+    bool saved = false;
+
+    if (db.findRouterHost(host.routerId(), host_id).has_value())
+        saved = db.modifyRouterHost(credentials);
+    else
+        saved = db.addRouterHost(credentials);
+
+    if (!saved)
+        LOG(ERROR) << "Unable to save credentials of host" << host_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openDesktop(const HostConfig& host, bool credentials_saved)
+{
+    // Only a single desktop connection is supported at a time.
+    if (desktop_)
+        return;
+
+    // The desktop view takes over the whole window until the connection is closed.
+    desktop_ = new DesktopWindow(host, credentials_saved);
+    connect(desktop_, &DesktopWindow::sig_closed, this, &AndroidMainWindow::onDesktopClosed);
+
+    root_stack_->addWidget(desktop_);
+    root_stack_->setCurrentWidget(desktop_);
+
+    // Hide the system bars and let the desktop view fill the whole screen, including the camera
+    // cutout: allow drawing into the cutout and stop the layout from reserving the safe area.
+    setDrawIntoCutout(true);
+    setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
+    showFullScreen();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openFileTransfer(const HostConfig& host, bool credentials_saved)
+{
+    // The file transfer screen is a regular page: the system bars stay visible (no full-screen or
+    // cutout drawing, unlike the desktop view).
+    file_transfer_ = new FileTransferWindow(host, credentials_saved);
+    connect(file_transfer_, &FileTransferWindow::sig_closed, this, &AndroidMainWindow::onFileTransferClosed);
+
+    root_stack_->addWidget(file_transfer_);
+    root_stack_->setCurrentWidget(file_transfer_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::openChat(const HostConfig& host, bool credentials_saved)
+{
+    chat_ = new ChatWindow(host, credentials_saved);
+    connect(chat_, &ChatWindow::sig_closed, this, &AndroidMainWindow::onChatClosed);
+
+    root_stack_->addWidget(chat_);
+    root_stack_->setCurrentWidget(chat_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::connectToUrl(const QString& url)
+{
+    LOG(INFO) << "Connect to URL:" << url;
+
+    HostUrl host_url = HostUrl::fromString(url);
+    if (!host_url.isValid())
+    {
+        MessageDialog::info(this, tr("Connection by link"), tr("Invalid link."));
+        return;
+    }
+
+    // Only a single session is supported at a time.
+    if (desktop_ || file_transfer_ || chat_)
+    {
+        MessageDialog::info(this, tr("Connection by link"),
+                            tr("Another session is active. Close it and open the link again."));
+        return;
+    }
+
+    proto::peer::SessionType session_type = host_url.sessionType();
+    if (session_type != proto::peer::SESSION_TYPE_DESKTOP &&
+        session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER &&
+        session_type != proto::peer::SESSION_TYPE_CHAT)
+    {
+        MessageDialog::info(this, tr("Connection by link"),
+                            tr("The session type from the link is not supported on this device."));
+        return;
+    }
+
+    if (host_url.isRouterHost())
+    {
+        qint64 router_id = -1;
+        QList<RouterConfig> routers;
+        Database::instance().routerList(&routers);
+        for (const RouterConfig& router_config : std::as_const(routers))
+        {
+            if (router_config.guid() == host_url.routerGuid())
+            {
+                router_id = router_config.routerId();
+                break;
+            }
+        }
+
+        if (router_id <= 0)
+        {
+            MessageDialog::info(this, tr("Connection by link"),
+                tr("The router referenced by the link was not found in the address book."));
+            return;
+        }
+
+        // The record of the host on the router carries the name to show for it, so it is looked
+        // up before the session opens. Without a connected router the session opens unnamed.
+        RouterSession* session = RouterController::session(router_id);
+        if (session)
+        {
+            HostId host_id = host_url.hostId();
+
+            session->searchHosts(hostIdToString(host_id), 0, proto::router::kMaxHostPageSize,
+                { this, [this, router_id, host_id, session_type](const RouterHostList& list)
+            {
+                QString name;
+
+                for (const RouterHost& entry : std::as_const(list.hosts))
+                {
+                    if (entry.host_id != host_id)
+                        continue;
+
+                    name = entry.display_name.isEmpty() ? entry.computer_name : entry.display_name;
+                    break;
+                }
+
+                openSession(HostConfig::forRouterHost(router_id, host_id, name), session_type);
+            } });
+            return;
+        }
+
+        openSession(HostConfig::forRouterHost(router_id, host_url.hostId(), QString()),
+                    session_type);
+    }
+    else
+    {
+        std::optional<LocalHostConfig> entry = Database::instance().findLocalHostByGuid(host_url.hostGuid());
+        if (!entry.has_value())
+        {
+            MessageDialog::info(this, tr("Connection by link"),
+                tr("The host referenced by the link was not found in the address book."));
+            return;
+        }
+
+        openSession(HostConfig::forLocalHost(*entry), session_type);
+    }
+}
+
