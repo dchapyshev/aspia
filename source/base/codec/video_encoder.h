@@ -74,7 +74,7 @@ protected:
     explicit VideoEncoder(proto::video::Encoding encoding);
 
     const proto::video::Encoding encoding_;
-    bool key_frame_required_ = false;
+    bool key_frame_required_ = true;
     std::string encode_buffer_;
 
 private:

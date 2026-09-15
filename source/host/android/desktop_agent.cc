@@ -150,7 +150,6 @@ void DesktopAgent::onClientConfigured()
     if (!input_injector_)
         input_injector_ = InputInjectorAndroid::create(this);
 
-    video_encoder_->setKeyFrameRequired(true);
     onPreferredSizeChanged();
     sendScreenList();
 
@@ -184,7 +183,13 @@ void DesktopAgent::onPreferredSizeChanged()
             max_size = size;
     }
 
+    if (preferred_size_ == max_size)
+        return;
+
     preferred_size_ = max_size;
+
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,11 +437,13 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     if (!frame || !video_encoder_)
         return;
 
-    // Skip unchanged frames unless a key frame is pending.
-    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0 && !video_encoder_->isKeyFrameRequired())
-        return;
+    if (frame->constUpdatedRegion().isEmpty())
+    {
+        if (!video_encoder_->isKeyFrameRequired())
+            return;
 
-    ++frame_count_;
+        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
+    }
 
     if (source_size_ != frame->size())
     {

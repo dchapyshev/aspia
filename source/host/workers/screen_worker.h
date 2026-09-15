@@ -193,7 +193,6 @@ private:
     QSize source_size_;
     QSize preferred_size_;
     QSize preferred_resolution_;
-    quint64 frame_count_ = 0;
 
     ScopedQPointer<QTimer> capture_timer_;
     CaptureScheduler capture_scheduler_;

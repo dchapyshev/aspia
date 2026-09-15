@@ -321,7 +321,13 @@ void ScreenWorker::onSetPaused(bool paused)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::onSetPreferredSize(const QSize& size)
 {
+    if (preferred_size_ == size)
+        return;
+
     preferred_size_ = size;
+
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1323,10 +1329,13 @@ void ScreenWorker::encodeScreen(const Frame* frame)
     if (!frame || !video_encoder_)
         return;
 
-    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0 && !video_encoder_->isKeyFrameRequired())
-        return;
+    if (frame->constUpdatedRegion().isEmpty())
+    {
+        if (!video_encoder_->isKeyFrameRequired())
+            return;
 
-    ++frame_count_;
+        *const_cast<Frame*>(frame)->updatedRegion() += QRect(QPoint(0, 0), frame->size());
+    }
 
     if (source_size_ != frame->size())
     {

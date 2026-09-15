@@ -122,7 +122,6 @@ private:
 
     QSize source_size_;
     QSize preferred_size_;
-    quint64 frame_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopAgent)
 };
