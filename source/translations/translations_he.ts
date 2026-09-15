@@ -397,7 +397,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>אימות דו-שלבי - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>שמור פרטי כניסה</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -970,32 +970,32 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">שם מחשב</translation>
+        <translation>שם מחשב</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">כתובת IP</translation>
+        <translation>כתובת IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">זמן חיבור</translation>
+        <translation>זמן חיבור</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">גרסה</translation>
+        <translation>גרסה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">ארכיטקטורה</translation>
+        <translation>ארכיטקטורה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">מערכת הפעלה</translation>
+        <translation>מערכת הפעלה</translation>
     </message>
 </context>
 <context>
@@ -1004,10 +1004,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>ההפעלה החלה.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">שגיאה בבקשת חיבור דרך הנתב: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1028,14 +1024,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>מתחבר למארח %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">נוצר חיבור למארח %1.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">נוצר חיבור למארח %1:%2.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1070,23 +1058,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">שגיאה בבקשת חיבור דרך הנתב.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">המארח עם המזהה שצוין אינו מקוון</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">הגישה נדחתה</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">אין ממסרים זמינים או שמאגר המפתחות ריק</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">שגיאה לא ידועה</translation>
+        <translation>שגיאה בבקשת חיבור דרך הנתב.</translation>
     </message>
 </context>
 <context>
@@ -1880,10 +1852,6 @@ Password: %2</source>
         <translation>לא ניתן לשמור תמונה</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">ההפעלה במחשב המרוחק נכשלה.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>מתחבר...</translation>
@@ -1912,22 +1880,6 @@ Password: %2</source>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">המארח עם המזהה שצוין אינו מקוון.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">הגישה נדחתה.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">אין ממסרים זמינים או שמאגר המפתחות ריק.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">שגיאה בבקשת חיבור דרך הנתב.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2951,72 +2903,72 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">מזהה מארח</translation>
+        <translation>מזהה מארח</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">שם תצוגה</translation>
+        <translation>שם תצוגה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">שם מחשב</translation>
+        <translation>שם מחשב</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">כתובת</translation>
+        <translation>כתובת</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">הערה</translation>
+        <translation>הערה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">סביבת עבודה</translation>
+        <translation>סביבת עבודה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">מערכת הפעלה</translation>
+        <translation>מערכת הפעלה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">גרסה</translation>
+        <translation>גרסה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">ארכיטקטורה</translation>
+        <translation>ארכיטקטורה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">חיבור אחרון</translation>
+        <translation>חיבור אחרון</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">שינוי אחרון</translation>
+        <translation>שינוי אחרון</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">סטטוס</translation>
+        <translation>סטטוס</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">מקוון</translation>
+        <translation>מקוון</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">לא מקוון</translation>
+        <translation>לא מקוון</translation>
     </message>
 </context>
 <context>
@@ -3055,17 +3007,6 @@ Password: %2</source>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של יומן האבטחה.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">מקוון</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">לא מקוון</translation>
     </message>
 </context>
 <context>
@@ -3200,22 +3141,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>הצג</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">לא זמין</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">מתחבר לנתב %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">מחובר לנתב %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">ההתחברות לנתב %1 נכשלה</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3373,7 +3298,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
         </translation>
@@ -3381,7 +3306,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תו.</numerusform>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תווים.</numerusform>
         </translation>
@@ -3410,34 +3335,6 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">שם</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">כתובת / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">הערה</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">נוצר</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">תאריך שינוי</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">חיבור אחרון</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">סטטוס</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>עדכון מצב...</translation>
@@ -3457,14 +3354,6 @@ Password: %2</source>
             <numerusform>%n מארח</numerusform>
             <numerusform>%n מארחים</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">מקוון</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">לא מקוון</translation>
     </message>
 </context>
 <context>
@@ -3571,7 +3460,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3674,7 +3563,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
         </translation>
@@ -3682,7 +3571,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תו.</numerusform>
             <numerusform>ההערה ארוכה מדי. האורך המרבי של ההערה הוא %n תווים.</numerusform>
         </translation>
@@ -3705,7 +3594,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3733,47 +3622,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">שם</translation>
+        <translation>שם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">כתובת / ID</translation>
+        <translation>כתובת / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">הערה</translation>
+        <translation>הערה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">נוצר</translation>
+        <translation>תאריך יצירה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">תאריך שינוי</translation>
+        <translation>תאריך שינוי</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">חיבור אחרון</translation>
+        <translation>חיבור אחרון</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">סטטוס</translation>
+        <translation>סטטוס</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">מקוון</translation>
+        <translation>מקוון</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">לא מקוון</translation>
+        <translation>לא מקוון</translation>
     </message>
 </context>
 <context>
@@ -3812,31 +3701,6 @@ Password: %2</source>
         <translation>ייבוא פנקס כתובות</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">פנקס כתובות (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>יובא %n נתב, </numerusform>
-            <numerusform>יובאו %n נתבים, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n קבוצה, </numerusform>
-            <numerusform>%n קבוצות, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n מארח.</numerusform>
-            <numerusform>%n מארחים.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>סיסמה שגויה.</translation>
@@ -3845,10 +3709,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>הקובץ נוצר בגרסה חדשה יותר ולא ניתן לייבא אותו.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">פנקס הכתובות כבר מעודכן.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3860,28 +3720,21 @@ Password: %2</source>
         <source>Export Address Book</source>
         <translation>ייצוא פנקס כתובות</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>יוצא %n נתב, </numerusform>
-            <numerusform>יוצאו %n נתבים, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>גיבוי Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>פנקס הכתובות יוחלף בזה שבקובץ. כל מה שהוא מכיל כעת יימחק.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקובץ אינו מכיל פנקס כתובות, ולכן לא שונה דבר.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3889,17 +3742,20 @@ Password: %2</source>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>נתבים שיובאו: %1
+קבוצות שיובאו: %2
+מארחים שיובאו: %3
+סיסמאות שמורות שיובאו: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>פנקס הכתובות ריק. אין מה לשמור.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3909,7 +3765,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקובץ נכתב אל %1. כדי לפתוח אותו במקום אחר נדרשת הסיסמה הראשית של פנקס כתובות זה.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4313,7 +4169,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>מחיקת סביבת העבודה נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4323,7 +4179,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">מחיקת הקבוצה נכשלה.</translation>
+        <translation>מחיקת הקבוצה נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4344,17 +4200,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>גיבוי Aspia (*.aspia-backup);;כל הקבצים (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>פנקס הכתובות ריק. אין מה לשמור.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לכתוב את הקובץ.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4363,32 +4219,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>הייצוא הושלם בהצלחה.
+נתבים שיוצאו: %1
+קבוצות שיוצאו: %2
+מארחים שיוצאו: %3
+סיסמאות שמורות שיוצאו: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>פנקס הכתובות יוחלף בזה שבקובץ. כל מה שהוא מכיל כעת יימחק. להמשיך?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקובץ נשמר מפנקס כתובות אחר. הזן את הסיסמה הראשית של אותו פנקס כתובות.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקובץ אינו מכיל פנקס כתובות, ולכן לא שונה דבר.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>לא ניתן לקרוא את הקובץ.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">ייבוא פנקס הכתובות נכשל.</translation>
+        <translation>ייבוא פנקס הכתובות נכשל.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4397,11 +4257,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">פנקס כתובות (*.json);;כל הקבצים (*)</translation>
+        <translation>הייבוא הושלם בהצלחה.
+נתבים שיובאו: %1
+קבוצות שיובאו: %2
+מארחים שיובאו: %3
+סיסמאות שמורות שיובאו: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4410,52 +4270,15 @@ Saved passwords imported: %4</source>
         <translation>מסד הנתונים של פנקס הכתובות אינו זמין.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">הזן סיסמה להצפנת פנקס הכתובות.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">הסיסמה שהזנת אינה עומדת בדרישות האבטחה!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תו.</numerusform>
-            <numerusform>הסיסמה חייבת להכיל אותיות קטנות וגדולות ומספרים, ואורכה לא יפחת מ-%n תווים.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">האם ברצונך להזין סיסמה אחרת?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>ייצוא פנקס הכתובות נכשל.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">הייצוא הושלם בהצלחה.
-נתבים שיוצאו: %1
-קבוצות שיוצאו: %2
-מארחים שיוצאו: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>ייבוא פנקס כתובות</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">בטל נעילה</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">פנקס הכתובות מוצפן. כדי לפתוח אותו, יש להזין סיסמה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4468,29 +4291,9 @@ Hosts exported: %3</source>
         <translation>גרסת תבנית קובץ שאינה נתמכת.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">לא יובא דבר.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>הקובץ אינו פנקס כתובות חוקי.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">הייבוא הושלם בהצלחה.
-נתבים שנוספו: %1
-נתבים שדולגו: %2
-קבוצות שנוספו: %3
-קבוצות שדולגו: %4
-מארחים שנוספו: %5
-מארחים שדולגו: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4888,37 +4691,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">שם משתמש</translation>
+        <translation>שם משתמש</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">מזהה מארח</translation>
+        <translation>מזהה מארח</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">כתובת מארח</translation>
+        <translation>כתובת מארח</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">כתובת לקוח</translation>
+        <translation>כתובת לקוח</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">הועבר</translation>
+        <translation>הועבר</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">משך</translation>
+        <translation>משך</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">לא פעיל</translation>
+        <translation>ללא פעילות</translation>
     </message>
 </context>
 <context>
@@ -5026,37 +4829,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">כתובת</translation>
+        <translation>כתובת</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">זמן חיבור</translation>
+        <translation>זמן חיבור</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">גודל מאגר</translation>
+        <translation>גודל מאגר</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">גרסה</translation>
+        <translation>גרסה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">שם מחשב</translation>
+        <translation>שם מחשב</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">ארכיטקטורה</translation>
+        <translation>ארכיטקטורה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">מערכת הפעלה</translation>
+        <translation>מערכת הפעלה</translation>
     </message>
 </context>
 <context>
@@ -5070,13 +4873,13 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג עוד</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 מתוך %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5100,45 +4903,21 @@ Hosts skipped: %6</source>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן קוד</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>חסום</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>הגדר</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">שם מחשב</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">כתובת IP</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">זמן חיבור</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">גרסה</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">ארכיטקטורה</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">מערכת הפעלה</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5169,22 +4948,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>האם אתה בטוח שברצונך לנתק את כל הלקוחות?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">בקשת לקוח לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">מזהה רשומה לא חוקי.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5196,27 +4959,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">הקודם</translation>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">הבא</translation>
+        <translation>הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">פריטים בעמוד:</translation>
+        <translation>פריטים בעמוד:</translation>
     </message>
 </context>
 <context>
@@ -5226,42 +4989,42 @@ Hosts skipped: %6</source>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">מתחבר לנתב %1...</translation>
+        <translation>מתחבר לנתב %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">היסטוריית האירועים נוקתה.</translation>
+        <translation>היסטוריית האירועים נוקתה.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>יותר מדי ניסיונות כושלים. הנתב %1 יקבל קודים שוב בעוד כ-%2 דק&apos;.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקוד לא התקבל על-ידי הנתב %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>הנתב %1 ממתין לקוד אימות דו-שלבי.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">נוצר חיבור לנתב %1.</translation>
+        <translation>החיבור לנתב %1 נוצר.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">שגיאת רשת: %1</translation>
+        <translation>שגיאת רשת: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">נותק החיבור לנתב %1.</translation>
+        <translation>החיבור לנתב %1 נותק.</translation>
     </message>
 </context>
 <context>
@@ -5317,18 +5080,14 @@ Hosts skipped: %6</source>
         <translation>מנהל</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">לקוח</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>מפעיל</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
         </translation>
@@ -5392,7 +5151,7 @@ Hosts skipped: %6</source>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תו.</numerusform>
             <numerusform>השם ארוך מדי. האורך המרבי של השם הוא %n תווים.</numerusform>
         </translation>
@@ -5439,67 +5198,67 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>הנתב דחה את הבקשה.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">שגיאה פנימית לא ידועה.</translation>
+        <translation>שגיאה פנימית לא ידועה.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">מזהה רשומה לא חוקי.</translation>
+        <translation>מזהה רשומה לא חוקי.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">הועברו נתונים לא חוקיים.</translation>
+        <translation>הועברו נתונים לא חוקיים.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>רשומה בשם שצוין כבר קיימת.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>הרשומה לא נמצאה. ייתכן שהרשימה אינה מעודכנת.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">הגישה נדחתה.</translation>
+        <translation>הגישה נדחתה.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>הנתונים השתנו בנתב. רענן את הרשימה ונסה שוב.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>החיבור לנתב אבד.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">המארח עם המזהה שצוין אינו מקוון.</translation>
+        <translation>המארח בעל המזהה שצוין אינו מקוון.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">אין ממסרים זמינים או שמאגר המפתחות ריק.</translation>
+        <translation>אין ממסרים זמינים או שמאגר המפתחות ריק.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>יותר מדי בקשות חיבור. נסה שוב מאוחר יותר.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">סוג שגיאה לא ידוע.</translation>
+        <translation>סוג שגיאה לא ידוע.</translation>
     </message>
 </context>
 <context>
@@ -5542,32 +5301,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">בקשת קבוצה לא חוקית.</translation>
+        <translation>קבלת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">הגישה נדחתה.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">הקבוצה לא נמצאה.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5577,54 +5316,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">שם תצוגה</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">מזהה מארח</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">שם מחשב</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">כתובת</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">שם משתמש</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">הערה</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">מערכת הפעלה</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">גרסה</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">ארכיטקטורה</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">חיבור אחרון</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">שינוי אחרון</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">סטטוס</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5636,27 +5327,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">הקודם</translation>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">הבא</translation>
+        <translation>הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">פריטים בעמוד:</translation>
+        <translation>פריטים בעמוד:</translation>
     </message>
 </context>
 <context>
@@ -5679,11 +5370,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">שם משתמש:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">שם משתמש:</translation>
+        <translation>שם משתמש:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5693,7 +5380,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המשתמש והסיסמה נשמרים במחשב זה בלבד ואינם נשלחים לנתב.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5701,39 +5388,19 @@ Hosts skipped: %6</source>
         <translation>הערה:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">הגישה נדחתה.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">המארח לא נמצא.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>קבלת רשימת הקבוצות נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>שמירת פרטי הכניסה נכשלה.</translation>
     </message>
 </context>
 <context>
@@ -5741,89 +5408,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">שם משתמש</translation>
+        <translation>שם משתמש</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">סיסמה</translation>
+        <translation>סיסמה</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המשתמש והסיסמה נשמרים במכשיר זה בלבד ואינם נשלחים לנתב. השאר את שניהם ריקים כדי לשכוח אותם.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">שמור</translation>
+        <translation>שמור</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>שמירת פרטי הכניסה נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן גם שם משתמש וגם סיסמה, או השאר את שניהם ריקים.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">מזהה מארח</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">שם תצוגה</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">שם מחשב</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">כתובת</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">שם משתמש</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">הערה</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">סביבת עבודה</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">מערכת הפעלה</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">גרסה</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">ארכיטקטורה</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">חיבור אחרון</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">שינוי אחרון</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">סטטוס</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5850,10 +5465,6 @@ Hosts skipped: %6</source>
         <translation>פריטים בעמוד:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">המארח אינו משויך לאף סביבת עבודה.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את המארח &quot;%1&quot;?</translation>
@@ -5872,22 +5483,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>מחיקת המארח תמחק את כל הגדרות החיבור שלו לנתב, והיישום יוסר מהמארח. פעולה זו אינה הפיכה. האם אתה בטוח שברצונך להמשיך?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">בקשת מארח לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">מזהה רשומה לא חוקי.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5920,62 +5515,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">כתובת</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">זמן חיבור</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">גודל מאגר</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">גרסה</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">שם מחשב</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">ארכיטקטורה</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">מערכת הפעלה</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">שם משתמש</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">מזהה מארח</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">כתובת מארח</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">כתובת לקוח</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">הועבר</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">משך</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">לא פעיל</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6026,26 +5565,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך לנתק את העמית &quot;%1&quot;?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">בקשת ממסר לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">מזהה רשומה לא חוקי.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">הפעלת הממסר לא נמצאה.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6060,7 +5579,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>הנתב קיבל את הסיסמה החדשה, אך הרשומה לא עודכנה.</translation>
     </message>
 </context>
 <context>
@@ -6069,13 +5588,13 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>הנתב ממתין לקוד אימות דו-שלבי.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>הזן קוד</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6098,65 +5617,45 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>האימות הדו-שלבי חסום לאחר יותר מדי ניסיונות כושלים.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>יש להגדיר אימות דו-שלבי עבור נתב זה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>הגדר</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">שם מחשב</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">מערכת הפעלה</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">גרסה</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">כתובת</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">הקודם</translation>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">הבא</translation>
+        <translation>הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">פריטים בעמוד:</translation>
+        <translation>פריטים בעמוד:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6237,30 +5736,6 @@ Hosts skipped: %6</source>
         <translation>נתק הכול</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">בקשת משתמש לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">משתמש בשם שצוין כבר קיים.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">המשתמש לא נמצא. ייתכן שהרשימה אינה מעודכנת.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>איפוס האימות הדו-שלבי ינתק משתמש זה מכל ההפעלות ויחייב אותו להירשם מחדש בכניסה הבאה. להמשיך?</translation>
@@ -6276,18 +5751,6 @@ Hosts skipped: %6</source>
         <translation>האם אתה בטוח שברצונך לנתק משתמש זה מכל ההפעלות?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">ההפעלה לא נמצאה. ייתכן שהרשימה אינה מעודכנת.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">בקשת ניתוק לא חוקית.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים: _, -, ., @</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>שם המשתמש שהזנת כבר קיים.</translation>
@@ -6300,27 +5763,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>המשתמש נמחק ממסוף אחר.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>איפוס האימות הדו-שלבי ינתק אותך מכל ההפעלות ויחייב אותך להירשם מחדש בכניסה הבאה. להמשיך?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>זהו האסימון של ההפעלה הנוכחית שלך. ביטולו ינתק אותך. להמשיך?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים _, -, ., @. הוא אינו יכול להיות מורכב מספרות בלבד.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6366,7 +5829,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>האסימון של ההפעלה הנוכחית שלך.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6381,11 +5844,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">לקוח</translation>
+        <translation>מפעיל</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6395,18 +5854,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">שם</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">מופעל</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">סוגי הפעלה</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6420,31 +5867,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">בקשת משתמש לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">משתמש בשם שצוין כבר קיים.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">המשתמש לא נמצא. ייתכן שהרשימה אינה מעודכנת.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
+        <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6457,27 +5880,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">הקודם</translation>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">הבא</translation>
+        <translation>הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">פריטים בעמוד:</translation>
+        <translation>פריטים בעמוד:</translation>
     </message>
 </context>
 <context>
@@ -6544,28 +5967,28 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6595,29 +6018,31 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>קבלת רשימת סביבות העבודה נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>סביבת העבודה נמחקה ממסוף אחר.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>סביבת העבודה שונתה ממסוף אחר. הרשימות מתרעננות - בדוק את השינויים ושמור שוב.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>הסרת המארח מסביבת העבודה תמחק לצמיתות את ההערה שלו. לא ניתן לבטל פעולה זו.
+
+האם אתה בטוח שברצונך להמשיך?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6628,38 +6053,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>סביבת עבודה בשם שצוין כבר קיימת.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">בקשת סביבת עבודה לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">סביבת העבודה לא נמצאה.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">לא ניתן להסיר מנהלי מערכת מרשימת הגישה של סביבת העבודה.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">הסרת המארח מסביבת העבודה תנקה לצמיתות את השדות המוצפנים שלו (הערה, שם משתמש וסיסמה). לא ניתן לבטל פעולה זו.
-
-האם אתה בטוח שברצונך להמשיך?</translation>
     </message>
 </context>
 <context>
@@ -6678,26 +6071,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>עריכת נתב</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">מתחבר לנתב %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">נוצר חיבור לנתב %1.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">נותק החיבור לנתב %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">שגיאת רשת: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">הנתב דורש שינוי סיסמה, שאינו נתמך כאן עדיין.</translation>
     </message>
 </context>
 <context>
@@ -6718,61 +6091,45 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">שם</translation>
+        <translation>שם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">כתובת / ID</translation>
+        <translation>כתובת / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">קבוצה</translation>
+        <translation>קבוצה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">הערה</translation>
+        <translation>הערה</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">שם</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">כתובת / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">הערה</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">קבוצה</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">הקודם</translation>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">העמוד הקודם</translation>
+        <translation>העמוד הקודם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">הבא</translation>
+        <translation>הבא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">העמוד הבא</translation>
+        <translation>העמוד הבא</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6790,7 +6147,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 מתוך %2</translation>
     </message>
 </context>
 <context>
@@ -7481,22 +6838,6 @@ Are you sure you want to continue?</source>
         <translation>מקומי</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">מתחבר לנתב %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">נוצר חיבור לנתב %1.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">נותק החיבור לנתב %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">כדי להשלים את המעבר מגרסה קודמת, עליך לשנות את הסיסמה.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>שינוי סיסמה</translation>
@@ -7530,31 +6871,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">הסיסמה עודכנה. ממתין למפתחות הצפנה חדשים...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">בקשת שינוי סיסמה לא חוקית.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">שגיאה פנימית לא ידועה.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">הועברו נתונים לא חוקיים.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">סוג שגיאה לא ידוע.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">היסטוריית האירועים נוקתה.</translation>
+        <translation>משנה את הסיסמה. ממתין שההפעלה תתחבר מחדש...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7570,10 +6887,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>האם אתה בטוח שברצונך למחוק את הנתב &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">שגיאת רשת: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7663,18 +6976,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">מצב חיבור</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">סגור</translation>
+        <translation>סגור</translation>
     </message>
 </context>
 <context>
@@ -11599,27 +10905,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">שם מחשב</translation>
+        <translation>שם מחשב</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">מערכת הפעלה</translation>
+        <translation>מערכת הפעלה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">גרסה</translation>
+        <translation>גרסה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">כתובת</translation>
+        <translation>כתובת</translation>
     </message>
 </context>
 <context>
@@ -11676,7 +10982,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקוד הקודם לא התקבל.</translation>
     </message>
 </context>
 <context>
@@ -11699,7 +11005,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקוד הקודם לא התקבל.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11747,7 +11053,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>הקוד הקודם לא התקבל.</translation>
     </message>
 </context>
 <context>
@@ -11887,13 +11193,9 @@ Are you sure you want to continue?</source>
         <translation>בטל סימון הכול</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים: _, -, ., @</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים _, -, ., @. הוא אינו יכול להיות מורכב מספרות בלבד.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11962,10 +11264,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>שגיאה</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12040,7 +11338,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>שם המשתמש אינו יכול להיות ריק ויכול להכיל רק אותיות, ספרות ואת התווים &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. הוא אינו יכול להיות מורכב מספרות בלבד.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12131,65 +11429,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">שם</translation>
+        <translation>שם</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">מופעל</translation>
+        <translation>מופעל</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">סוגי הפעלה</translation>
+        <translation>סוגי הפעלה</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">כן</translation>
+        <translation>כן</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">לא</translation>
+        <translation>לא</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">מנהל מערכת</translation>
+        <translation>מנהל מערכת</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">מנהל</translation>
+        <translation>מנהל</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">כן</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">לא</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">מנהל מערכת</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">לקוח</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">מנהל</translation>
+        <translation>מפעיל</translation>
     </message>
 </context>
 <context>

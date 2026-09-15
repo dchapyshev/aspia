@@ -397,7 +397,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت دومرحله‌ای - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره اطلاعات ورود</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -968,32 +968,32 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">نام رایانه</translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">آدرس IP</translation>
+        <translation>آدرس IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">زمان اتصال</translation>
+        <translation>زمان اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">نسخه</translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">معماری</translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">سیستم‌عامل</translation>
+        <translation>سیستم‌عامل</translation>
     </message>
 </context>
 <context>
@@ -1002,10 +1002,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>نشست شروع شد.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">خطا در درخواست اتصال از طریق روتر: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1026,14 +1022,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>در حال اتصال به میزبان %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">اتصال به میزبان %1 برقرار شد.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">اتصال به میزبان %1:%2 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1068,23 +1056,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">خطا در درخواست اتصال از طریق روتر.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">میزبان با ID مشخص‌شده آنلاین نیست</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">دسترسی رد شده است</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">هیچ رله‌ای در دسترس نیست یا مخزن کلیدها خالی است</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">خطای ناشناخته</translation>
+        <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
 </context>
 <context>
@@ -1876,10 +1848,6 @@ Password: %2</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">اجرا در رایانه راه دور ناموفق بود.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>در حال اتصال...</translation>
@@ -1908,22 +1876,6 @@ Password: %2</source>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>در حال اتصال به روتر...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">میزبان با ID مشخص‌شده آنلاین نیست.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">دسترسی رد شده است.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">هیچ رله‌ای در دسترس نیست یا مخزن کلیدها خالی است.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2943,72 +2895,72 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID میزبان</translation>
+        <translation>ID میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">نام نمایشی</translation>
+        <translation>نام نمایشی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">نام رایانه</translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">آدرس</translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">توضیح</translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">فضای کاری</translation>
+        <translation>فضای کاری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">سیستم‌عامل</translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">نسخه</translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">معماری</translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">آخرین اتصال</translation>
+        <translation>آخرین اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">آخرین تغییر</translation>
+        <translation>آخرین تغییر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">وضعیت</translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">آنلاین</translation>
+        <translation>آنلاین</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">آفلاین</translation>
+        <translation>آفلاین</translation>
     </message>
 </context>
 <context>
@@ -3047,17 +2999,6 @@ Password: %2</source>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>فراخوانی پنجره گزارش امنیتی.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">آنلاین</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">آفلاین</translation>
     </message>
 </context>
 <context>
@@ -3192,22 +3133,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>نمایش</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">در دسترس نیست</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">در حال اتصال به روتر %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">متصل به روتر %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">اتصال به روتر %1 ناموفق بود</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3363,14 +3288,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>توضیح خیلی طولانی است. حداکثر طول توضیح %n نویسه است.</numerusform>
         </translation>
     </message>
@@ -3398,34 +3323,6 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">نام</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">آدرس / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">توضیح</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">تاریخ ایجاد</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">تاریخ تغییر</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">آخرین اتصال</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">وضعیت</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>به‌روزرسانی وضعیت...</translation>
@@ -3443,14 +3340,6 @@ Password: %2</source>
         <translation>
             <numerusform>%n میزبان زیرمجموعه</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">آنلاین</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">آفلاین</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3445,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3658,14 +3547,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>توضیح خیلی طولانی است. حداکثر طول توضیح %n نویسه است.</numerusform>
         </translation>
     </message>
@@ -3687,7 +3576,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3715,47 +3604,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">نام</translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">آدرس / ID</translation>
+        <translation>آدرس / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">توضیح</translation>
+        <translation>توضیح</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">تاریخ ایجاد</translation>
+        <translation>تاریخ ایجاد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">تاریخ تغییر</translation>
+        <translation>تاریخ تغییر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">آخرین اتصال</translation>
+        <translation>آخرین اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">وضعیت</translation>
+        <translation>وضعیت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">آنلاین</translation>
+        <translation>آنلاین</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">آفلاین</translation>
+        <translation>آفلاین</translation>
     </message>
 </context>
 <context>
@@ -3794,28 +3683,6 @@ Password: %2</source>
         <translation>وارد کردن دفترچه آدرس</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">دفترچه آدرس (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n روتر وارد شد، </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n گروه، </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n میزبان.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>گذرواژه نامعتبر است.</translation>
@@ -3824,10 +3691,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>این فایل با نسخه جدیدتری ایجاد شده و قابل وارد کردن نیست.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">دفترچه آدرس هم‌اکنون به‌روز است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3839,27 +3702,21 @@ Password: %2</source>
         <source>Export Address Book</source>
         <translation>صادر کردن دفترچه آدرس</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n روتر صادر شد، </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>پشتیبان Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس با دفترچه آدرس موجود در فایل جایگزین می‌شود. همه محتوای فعلی آن حذف می‌شود.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فایل حاوی دفترچه آدرس نیست، بنابراین چیزی تغییر نکرد.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3867,17 +3724,20 @@ Password: %2</source>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>روترهای واردشده: %1
+گروه‌های واردشده: %2
+میزبان‌های واردشده: %3
+گذرواژه‌های ذخیره‌شده واردشده: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس خالی است. چیزی برای ذخیره وجود ندارد.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3887,7 +3747,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>فایل در %1 نوشته شد. برای باز کردن آن در جای دیگر، گذرواژه اصلی این دفترچه آدرس لازم است.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4291,7 +4151,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف فضای کاری ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4301,7 +4161,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">حذف گروه ناموفق بود.</translation>
+        <translation>حذف گروه ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4322,17 +4182,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>پشتیبان Aspia (*.aspia-backup);;همه فایل‌ها (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس خالی است. چیزی برای ذخیره وجود ندارد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4341,32 +4201,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>صادر کردن با موفقیت انجام شد.
+روترهای صادرشده: %1
+گروه‌های صادرشده: %2
+میزبان‌های صادرشده: %3
+گذرواژه‌های ذخیره‌شده صادرشده: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>دفترچه آدرس با دفترچه آدرس موجود در فایل جایگزین می‌شود. همه محتوای فعلی آن حذف می‌شود. ادامه می‌دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فایل از دفترچه آدرس دیگری ذخیره شده است. گذرواژه اصلی آن دفترچه آدرس را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فایل حاوی دفترچه آدرس نیست، بنابراین چیزی تغییر نکرد.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>خواندن فایل ممکن نیست.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">وارد کردن دفترچه آدرس ناموفق بود.</translation>
+        <translation>وارد کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4375,11 +4239,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">دفترچه آدرس (*.json);;همه فایل‌ها (*)</translation>
+        <translation>وارد کردن با موفقیت انجام شد.
+روترهای واردشده: %1
+گروه‌های واردشده: %2
+میزبان‌های واردشده: %3
+گذرواژه‌های ذخیره‌شده واردشده: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4388,51 +4252,15 @@ Saved passwords imported: %4</source>
         <translation>پایگاه داده دفترچه آدرس در دسترس نیست.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">برای رمزگذاری دفترچه آدرس یک گذرواژه وارد کنید.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>صادر کردن دفترچه آدرس ناموفق بود.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">صادر کردن با موفقیت انجام شد.
-روترهای صادرشده: %1
-گروه‌های صادرشده: %2
-میزبان‌های صادرشده: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>وارد کردن دفترچه آدرس</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">باز کردن قفل</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">دفترچه آدرس رمزگذاری شده است. برای باز کردن باید گذرواژه را وارد کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4445,29 +4273,9 @@ Hosts exported: %3</source>
         <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">چیزی وارد نشد.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>این فایل یک دفترچه آدرس معتبر نیست.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">وارد کردن با موفقیت انجام شد.
-روترهای افزوده‌شده: %1
-روترهای صرف‌نظرشده: %2
-گروه‌های افزوده‌شده: %3
-گروه‌های صرف‌نظرشده: %4
-میزبان‌های افزوده‌شده: %5
-میزبان‌های صرف‌نظرشده: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4865,37 +4673,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">نام کاربری</translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID میزبان</translation>
+        <translation>ID میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">آدرس میزبان</translation>
+        <translation>آدرس میزبان</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">آدرس کلاینت</translation>
+        <translation>آدرس کلاینت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">منتقل‌شده</translation>
+        <translation>منتقل‌شده</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">مدت زمان</translation>
+        <translation>مدت</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">بی‌کار</translation>
+        <translation>بی‌کاری</translation>
     </message>
 </context>
 <context>
@@ -5003,37 +4811,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">آدرس</translation>
+        <translation>آدرس</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">زمان اتصال</translation>
+        <translation>زمان اتصال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">اندازه مخزن</translation>
+        <translation>اندازه استخر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">نسخه</translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">نام رایانه</translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">معماری</translation>
+        <translation>معماری</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">سیستم‌عامل</translation>
+        <translation>سیستم‌عامل</translation>
     </message>
 </context>
 <context>
@@ -5047,13 +4855,13 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>نمایش بیشتر</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 از %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5077,45 +4885,21 @@ Hosts skipped: %6</source>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن کد</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>مسدود</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">نام رایانه</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">آدرس IP</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">زمان اتصال</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">نسخه</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">معماری</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">سیستم‌عامل</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5146,22 +4930,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اتصال همه کلاینت‌ها را قطع کنید؟</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">درخواست کلاینت نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID ورودی نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5172,27 +4940,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">قبلی</translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">بعدی</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">موارد در هر صفحه:</translation>
+        <translation>موارد در هر صفحه:</translation>
     </message>
 </context>
 <context>
@@ -5202,42 +4970,42 @@ Hosts skipped: %6</source>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">در حال اتصال به روتر %1...</translation>
+        <translation>در حال اتصال به روتر %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">تاریخچه رویدادها پاک شد.</translation>
+        <translation>تاریخچه رویدادها پاک شد.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>تلاش‌های ناموفق بیش از حد. روتر %1 پس از حدود %2 دقیقه دوباره کد می‌پذیرد.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد توسط روتر %1 پذیرفته نشد.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر %1 در انتظار کد احراز هویت دومرحله‌ای است.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">اتصال به روتر %1 برقرار شد.</translation>
+        <translation>اتصال به روتر %1 برقرار شد.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">خطای شبکه: %1</translation>
+        <translation>خطای شبکه: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">اتصال از روتر %1 قطع شد.</translation>
+        <translation>اتصال به روتر %1 قطع شد.</translation>
     </message>
 </context>
 <context>
@@ -5293,18 +5061,14 @@ Hosts skipped: %6</source>
         <translation>سرپرست</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">کلاینت</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>اپراتور</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
@@ -5367,7 +5131,7 @@ Hosts skipped: %6</source>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
@@ -5413,67 +5177,67 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر درخواست را رد کرد.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">خطای داخلی ناشناخته.</translation>
+        <translation>خطای داخلی ناشناخته.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">ID ورودی نامعتبر است.</translation>
+        <translation>ID مورد نامعتبر است.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">داده‌های نامعتبری ارسال شده است.</translation>
+        <translation>داده‌های نامعتبر ارسال شده است.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>رکوردی با نام مشخص‌شده از قبل وجود دارد.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>رکورد پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">دسترسی رد شد.</translation>
+        <translation>دسترسی رد شد.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>داده‌ها در روتر تغییر کرده‌اند. فهرست را تازه‌سازی کنید و دوباره تلاش کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>اتصال به روتر از دست رفت.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">میزبان با ID مشخص‌شده آنلاین نیست.</translation>
+        <translation>میزبان با ID مشخص‌شده آنلاین نیست.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">هیچ رله‌ای در دسترس نیست یا مخزن کلیدها خالی است.</translation>
+        <translation>هیچ رله‌ای در دسترس نیست یا استخر کلید خالی است.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>درخواست‌های اتصال بیش از حد است. بعداً دوباره تلاش کنید.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">نوع خطای ناشناخته.</translation>
+        <translation>نوع خطای ناشناخته.</translation>
     </message>
 </context>
 <context>
@@ -5516,32 +5280,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">درخواست گروه نامعتبر است.</translation>
+        <translation>دریافت فهرست گروه‌ها ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">دسترسی رد شد.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">گروه پیدا نشد.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5551,54 +5295,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">نام نمایشی</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID میزبان</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">نام رایانه</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">آدرس</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">نام کاربری</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">توضیح</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">سیستم‌عامل</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">نسخه</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">معماری</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">آخرین اتصال</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">آخرین تغییر</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">وضعیت</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5609,27 +5305,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">قبلی</translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">بعدی</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">موارد در هر صفحه:</translation>
+        <translation>موارد در هر صفحه:</translation>
     </message>
 </context>
 <context>
@@ -5652,11 +5348,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">نام کاربری:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">نام کاربری:</translation>
+        <translation>نام کاربری:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5666,7 +5358,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه فقط در این رایانه ذخیره می‌شوند و به روتر ارسال نمی‌شوند.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5674,39 +5366,19 @@ Hosts skipped: %6</source>
         <translation>توضیح:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">دسترسی رد شد.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">میزبان پیدا نشد.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست گروه‌ها ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره اطلاعات ورود ناموفق بود.</translation>
     </message>
 </context>
 <context>
@@ -5714,89 +5386,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">نام کاربری</translation>
+        <translation>نام کاربری</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">گذرواژه</translation>
+        <translation>گذرواژه</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه فقط در این دستگاه ذخیره می‌شوند و به روتر ارسال نمی‌شوند. برای فراموش کردن آن‌ها، هر دو را خالی بگذارید.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">ذخیره</translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره اطلاعات ورود ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID میزبان</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">نام نمایشی</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">نام رایانه</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">آدرس</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">نام کاربری</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">توضیح</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">فضای کاری</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">سیستم‌عامل</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">نسخه</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">معماری</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">آخرین اتصال</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">آخرین تغییر</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">وضعیت</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5823,10 +5443,6 @@ Hosts skipped: %6</source>
         <translation>موارد در هر صفحه:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">این میزبان به هیچ فضای کاری اختصاص نیافته است.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اتصال میزبان &quot;%1&quot; را قطع کنید؟</translation>
@@ -5845,22 +5461,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>حذف میزبان باعث می‌شود همه پیکربندی آن برای اتصال به روتر حذف شود و برنامه از روی میزبان حذف نصب گردد. این عملیات برگشت‌ناپذیر است. آیا مطمئن هستید که می‌خواهید این کار را انجام دهید؟</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">درخواست میزبان نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID ورودی نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5892,62 +5492,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">آدرس</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">زمان اتصال</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">اندازه مخزن</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">نسخه</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">نام رایانه</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">معماری</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">سیستم‌عامل</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">نام کاربری</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID میزبان</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">آدرس میزبان</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">آدرس کلاینت</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">منتقل‌شده</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">مدت زمان</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">بی‌کار</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -5998,26 +5542,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اتصال همتای &quot;%1&quot; را قطع کنید؟</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">درخواست رله نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID ورودی نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">نشست رله پیدا نشد.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6031,7 +5555,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر گذرواژه جدید را پذیرفت، اما رکورد به‌روزرسانی نشد.</translation>
     </message>
 </context>
 <context>
@@ -6040,13 +5564,13 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>روتر در انتظار کد احراز هویت دومرحله‌ای است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد کردن کد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6068,65 +5592,45 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت دومرحله‌ای پس از تلاش‌های ناموفق بیش از حد مسدود شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>احراز هویت دومرحله‌ای باید برای این روتر راه‌اندازی شود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>راه‌اندازی</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">نام رایانه</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">سیستم‌عامل</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">نسخه</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">آدرس</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">قبلی</translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">بعدی</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">موارد در هر صفحه:</translation>
+        <translation>موارد در هر صفحه:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6207,30 +5711,6 @@ Hosts skipped: %6</source>
         <translation>خروج از همه نشست‌ها</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">درخواست کاربر نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">کاربری با نام مشخص‌شده از قبل وجود دارد.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">کاربر پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>بازنشانی احراز هویت دومرحله‌ای این کاربر را از همه نشست‌ها خارج می‌کند و او را وادار می‌کند در ورود بعدی دوباره ثبت‌نام کند. ادامه می‌دهید؟</translation>
@@ -6246,18 +5726,6 @@ Hosts skipped: %6</source>
         <translation>آیا مطمئن هستید که می‌خواهید این کاربر را از همه نشست‌ها خارج کنید؟</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">نشست پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">درخواست خروج نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>نام کاربری واردشده از قبل وجود دارد.</translation>
@@ -6270,27 +5738,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست کاربران ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>این کاربر از کنسول دیگری حذف شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنشانی احراز هویت دومرحله‌ای شما را از همه نشست‌ها خارج می‌کند و شما را وادار می‌کند در ورود بعدی دوباره ثبت‌نام کنید. ادامه می‌دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>این توکن نشست فعلی شماست. لغو آن اتصال شما را قطع می‌کند. ادامه می‌دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد. نمی‌تواند فقط از ارقام تشکیل شده باشد.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6334,7 +5802,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>توکن نشست فعلی شما.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6349,11 +5817,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">کلاینت</translation>
+        <translation>اپراتور</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6363,18 +5827,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">نام</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">فعال</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">انواع نشست</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6388,31 +5840,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">درخواست کاربر نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">کاربری با نام مشخص‌شده از قبل وجود دارد.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">کاربر پیدا نشد. ممکن است فهرست قدیمی باشد.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
+        <translation>دریافت فهرست کاربران ناموفق بود.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6424,27 +5852,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">قبلی</translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">بعدی</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">موارد در هر صفحه:</translation>
+        <translation>موارد در هر صفحه:</translation>
     </message>
 </context>
 <context>
@@ -6511,28 +5939,28 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6562,29 +5990,31 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست فضاهای کاری ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>این فضای کاری از کنسول دیگری حذف شده است.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>دریافت فهرست کاربران ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>فضای کاری از کنسول دیگری تغییر کرده است. فهرست‌ها در حال تازه‌سازی هستند - تغییرات را بررسی کنید و دوباره ذخیره کنید.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف میزبان از فضای کاری توضیح آن را برای همیشه پاک می‌کند. این عمل قابل بازگشت نیست.
+
+آیا مطمئن هستید که می‌خواهید ادامه دهید؟</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6595,38 +6025,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>فضای کاری با نام مشخص‌شده از قبل وجود دارد.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">درخواست فضای کاری نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">فضای کاری پیدا نشد.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">مدیران را نمی‌توان از فهرست دسترسی فضای کاری حذف کرد.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">حذف میزبان از فضای کاری فیلدهای رمزگذاری‌شده آن (توضیح، نام کاربری و گذرواژه) را برای همیشه پاک می‌کند. این عملیات قابل بازگشت نیست.
-
-آیا مطمئن هستید که می‌خواهید ادامه دهید؟</translation>
     </message>
 </context>
 <context>
@@ -6645,26 +6043,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>ویرایش روتر</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">در حال اتصال به روتر %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">اتصال به روتر %1 برقرار شد.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">اتصال از روتر %1 قطع شد.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">خطای شبکه: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">روتر به تغییر گذرواژه نیاز دارد که هنوز در اینجا پشتیبانی نمی‌شود.</translation>
     </message>
 </context>
 <context>
@@ -6685,61 +6063,45 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">نام</translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">آدرس / ID</translation>
+        <translation>آدرس / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">گروه</translation>
+        <translation>گروه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">توضیح</translation>
+        <translation>توضیح</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">نام</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">آدرس / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">توضیح</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">گروه</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">قبلی</translation>
+        <translation>قبلی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">صفحه قبل</translation>
+        <translation>صفحه قبل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">بعدی</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">صفحه بعد</translation>
+        <translation>صفحه بعد</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6756,7 +6118,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 از %2</translation>
     </message>
 </context>
 <context>
@@ -7446,22 +6808,6 @@ Are you sure you want to continue?</source>
         <translation>محلی</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">در حال اتصال به روتر %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">اتصال به روتر %1 برقرار شد.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">اتصال از روتر %1 قطع شد.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">برای تکمیل مهاجرت از نسخه قبلی، باید گذرواژه خود را تغییر دهید.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>تغییر گذرواژه</translation>
@@ -7493,31 +6839,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">گذرواژه به‌روزرسانی شد. در انتظار کلیدهای رمزگذاری جدید...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">درخواست تغییر گذرواژه نامعتبر است.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">خطای داخلی ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">داده‌های نامعتبری ارسال شده است.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">نوع خطای ناشناخته.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">تاریخچه رویدادها پاک شد.</translation>
+        <translation>در حال تغییر گذرواژه. در انتظار ورود مجدد نشست...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7533,10 +6855,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید روتر &quot;%1&quot; را حذف کنید؟</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">خطای شبکه: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7626,18 +6944,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">وضعیت اتصال</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">بستن</translation>
+        <translation>بستن</translation>
     </message>
 </context>
 <context>
@@ -11562,27 +10873,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">نام رایانه</translation>
+        <translation>نام رایانه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">سیستم‌عامل</translation>
+        <translation>سیستم‌عامل</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">نسخه</translation>
+        <translation>نسخه</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">آدرس</translation>
+        <translation>آدرس</translation>
     </message>
 </context>
 <context>
@@ -11639,7 +10950,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد قبلی پذیرفته نشد.</translation>
     </message>
 </context>
 <context>
@@ -11662,7 +10973,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد قبلی پذیرفته نشد.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11710,7 +11021,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>کد قبلی پذیرفته نشد.</translation>
     </message>
 </context>
 <context>
@@ -11850,13 +11161,9 @@ Are you sure you want to continue?</source>
         <translation>لغو انتخاب همه</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های _، -، .، @ باشد. نمی‌تواند فقط از ارقام تشکیل شده باشد.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11923,10 +11230,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>خطا</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های &quot;_&quot;، &quot;-&quot;، &quot;.&quot;، &quot;@&quot; باشد.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12000,7 +11303,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های &quot;_&quot;، &quot;-&quot;، &quot;.&quot;، &quot;@&quot; باشد. نمی‌تواند فقط از ارقام تشکیل شده باشد.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12091,65 +11394,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">نام</translation>
+        <translation>نام</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">فعال</translation>
+        <translation>فعال</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">انواع نشست</translation>
+        <translation>انواع نشست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">بله</translation>
+        <translation>بله</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">خیر</translation>
+        <translation>خیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">مدیر</translation>
+        <translation>مدیر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">سرپرست</translation>
+        <translation>سرپرست</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">بله</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">خیر</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">مدیر</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">کلاینت</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">سرپرست</translation>
+        <translation>اپراتور</translation>
     </message>
 </context>
 <context>

@@ -397,7 +397,7 @@ Tillagda routrar: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tvåfaktorsautentisering - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Tillagda routrar: %4</translation>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara inloggningsuppgifter</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -970,32 +970,32 @@ Tillagda routrar: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Datornamn</translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP-adress</translation>
+        <translation>IP-adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Anslutningstid</translation>
+        <translation>Anslutningstid</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkitektur</translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operativsystem</translation>
+        <translation>Operativsystem</translation>
     </message>
 </context>
 <context>
@@ -1004,10 +1004,6 @@ Tillagda routrar: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Sessionen har startat.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Fel vid begäran om anslutning via routern: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1028,14 +1024,6 @@ Tillagda routrar: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Ansluter till värden %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">Anslutning till värden %1 upprättad.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">Anslutning till värden %1:%2 upprättad.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1070,23 +1058,7 @@ Tillagda routrar: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Fel vid begäran om anslutning via routern.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">Värden med det angivna ID:t är inte online</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Åtkomst nekad</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Det finns inga tillgängliga reläer eller så är nyckelpoolen tom</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Okänt fel</translation>
+        <translation>Fel vid begäran om anslutning via routern.</translation>
     </message>
 </context>
 <context>
@@ -1880,10 +1852,6 @@ Lösenord: %2</translation>
         <translation>Kunde inte spara bilden</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Det gick inte att starta på fjärrdatorn.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Ansluter...</translation>
@@ -1912,22 +1880,6 @@ Lösenord: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Ansluter till routern...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">Värden med det angivna ID:t är inte online.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Åtkomst nekad.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Det finns inga tillgängliga reläer eller så är nyckelpoolen tom.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Fel vid begäran om anslutning via routern.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2951,72 +2903,72 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">Värd-ID</translation>
+        <translation>Värd-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">Visningsnamn</translation>
+        <translation>Visningsnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Datornamn</translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Adress</translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Arbetsyta</translation>
+        <translation>Arbetsyta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operativsystem</translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkitektur</translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Senaste anslutning</translation>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Senast ändrad</translation>
+        <translation>Senast ändrad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Status</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3055,17 +3007,6 @@ Lösenord: %2</translation>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Öppnar dialogrutan för säkerhetsloggen.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3200,22 +3141,6 @@ Lösenord: %2</translation>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Visa</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Inte tillgänglig</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Ansluter till routern %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Ansluten till routern %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">Det gick inte att ansluta till routern %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3373,7 +3298,7 @@ Lösenord: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
@@ -3381,7 +3306,7 @@ Lösenord: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
             <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
         </translation>
@@ -3410,34 +3335,6 @@ Lösenord: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Namn</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adress / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Skapad</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Ändrad</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Senaste anslutning</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Status</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Statusuppdatering...</translation>
@@ -3457,14 +3354,6 @@ Lösenord: %2</translation>
             <numerusform>%n underordnad värd</numerusform>
             <numerusform>%n underordnade värdar</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3571,7 +3460,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange både användarnamnet och lösenordet, eller lämna båda tomma.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3674,7 +3563,7 @@ Lösenord: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
@@ -3682,7 +3571,7 @@ Lösenord: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
             <numerusform>För lång kommentar. Kommentarens maximala längd är %n tecken.</numerusform>
         </translation>
@@ -3705,7 +3594,7 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange både användarnamnet och lösenordet, eller lämna båda tomma.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3733,47 +3622,47 @@ Lösenord: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adress / ID</translation>
+        <translation>Adress / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Skapad</translation>
+        <translation>Skapad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Ändrad</translation>
+        <translation>Ändrad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Senaste anslutning</translation>
+        <translation>Senaste anslutning</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Status</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3812,31 +3701,6 @@ Lösenord: %2</translation>
         <translation>Importera adressbok</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Adressbok (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Importerade %n router, </numerusform>
-            <numerusform>Importerade %n routrar, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n grupp, </numerusform>
-            <numerusform>%n grupper, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n värd.</numerusform>
-            <numerusform>%n värdar.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Ogiltigt lösenord.</translation>
@@ -3845,10 +3709,6 @@ Lösenord: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Filen skapades av en nyare version och kan inte importeras.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">Adressboken är redan uppdaterad.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3860,28 +3720,21 @@ Lösenord: %2</translation>
         <source>Export Address Book</source>
         <translation>Exportera adressbok</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Exporterade %n router, </numerusform>
-            <numerusform>Exporterade %n routrar, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-säkerhetskopia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken ersätts med den som finns i filen. Allt den innehåller nu tas bort.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen innehåller ingen adressbok, så inget ändrades.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3889,17 +3742,20 @@ Lösenord: %2</translation>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Importerade routrar: %1
+Importerade grupper: %2
+Importerade värdar: %3
+Importerade sparade lösenord: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken är tom. Det finns inget att spara.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3909,7 +3765,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen har skrivits till %1. För att öppna den någon annanstans krävs huvudlösenordet för den här adressboken.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4313,7 +4169,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att ta bort arbetsytan.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4323,7 +4179,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Det gick inte att ta bort gruppen.</translation>
+        <translation>Det gick inte att ta bort gruppen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4344,17 +4200,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-säkerhetskopia (*.aspia-backup);;Alla filer (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken är tom. Det finns inget att spara.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att skriva filen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4363,32 +4219,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporten slutfördes.
+Exporterade routrar: %1
+Exporterade grupper: %2
+Exporterade värdar: %3
+Exporterade sparade lösenord: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Adressboken ersätts med den som finns i filen. Allt den innehåller nu tas bort. Fortsätta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen sparades från en annan adressbok. Ange huvudlösenordet för den adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen innehåller ingen adressbok, så inget ändrades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det går inte att läsa filen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Det gick inte att importera adressboken.</translation>
+        <translation>Det gick inte att importera adressboken.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4397,11 +4257,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Adressbok (*.json);;Alla filer (*)</translation>
+        <translation>Importen slutfördes.
+Importerade routrar: %1
+Importerade grupper: %2
+Importerade värdar: %3
+Importerade sparade lösenord: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4410,52 +4270,15 @@ Saved passwords imported: %4</source>
         <translation>Adressbokens databas är inte tillgänglig.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Ange ett lösenord för att kryptera adressboken.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Lösenordet du angav uppfyller inte säkerhetskraven!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
-            <numerusform>Lösenordet måste innehålla små och stora bokstäver samt siffror och får inte vara kortare än %n tecken.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Vill du ange ett annat lösenord?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Det gick inte att exportera adressboken.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Exporten slutfördes.
-Exporterade routrar: %1
-Exporterade grupper: %2
-Exporterade värdar: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Importera adressbok</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Lås upp</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Adressboken är krypterad. För att öppna den måste du ange ett lösenord.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4468,29 +4291,9 @@ Exporterade värdar: %3</translation>
         <translation>Filformatversionen stöds inte.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Inget importerades.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Filen är inte en giltig adressbok.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Importen slutfördes.
-Tillagda routrar: %1
-Överhoppade routrar: %2
-Tillagda grupper: %3
-Överhoppade grupper: %4
-Tillagda värdar: %5
-Överhoppade värdar: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4888,37 +4691,37 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Användarnamn</translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">Värd-ID</translation>
+        <translation>Värd-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Värdadress</translation>
+        <translation>Värdadress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">Klientadress</translation>
+        <translation>Klientadress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Överfört</translation>
+        <translation>Överfört</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Varaktighet</translation>
+        <translation>Varaktighet</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Inaktiv</translation>
+        <translation>Inaktivitet</translation>
     </message>
 </context>
 <context>
@@ -5026,37 +4829,37 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Adress</translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Anslutningstid</translation>
+        <translation>Anslutningstid</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Poolstorlek</translation>
+        <translation>Poolstorlek</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Datornamn</translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkitektur</translation>
+        <translation>Arkitektur</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operativsystem</translation>
+        <translation>Operativsystem</translation>
     </message>
 </context>
 <context>
@@ -5070,13 +4873,13 @@ Tillagda värdar: %5
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa fler</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 av %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5100,45 +4903,21 @@ Tillagda värdar: %5
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange kod</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Blockerad</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurera</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Datornamn</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP-adress</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Anslutningstid</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkitektur</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operativsystem</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5169,22 +4948,6 @@ Tillagda värdar: %5
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Är du säker på att du vill koppla från alla klienter?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Ogiltig klientbegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Ogiltigt post-ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5196,27 +4959,27 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Föregående</translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Nästa</translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Objekt per sida:</translation>
+        <translation>Objekt per sida:</translation>
     </message>
 </context>
 <context>
@@ -5226,42 +4989,42 @@ Tillagda värdar: %5
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">Ansluter till routern %1...</translation>
+        <translation>Ansluter till routern %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Händelsehistoriken har rensats.</translation>
+        <translation>Händelsehistoriken har rensats.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>För många misslyckade försök. Routern %1 accepterar koder igen om cirka %2 min.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Koden accepterades inte av routern %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern %1 väntar på en tvåfaktorskod.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">Anslutning till routern %1 upprättad.</translation>
+        <translation>Anslutningen till routern %1 har upprättats.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Nätverksfel: %1</translation>
+        <translation>Nätverksfel: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">Frånkopplad från routern %1.</translation>
+        <translation>Frånkopplad från routern %1.</translation>
     </message>
 </context>
 <context>
@@ -5317,18 +5080,14 @@ Tillagda värdar: %5
         <translation>Förvaltare</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Operatör</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
@@ -5392,7 +5151,7 @@ Tillagda värdar: %5
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
             <numerusform>För långt namn. Namnets maximala längd är %n tecken.</numerusform>
         </translation>
@@ -5439,67 +5198,67 @@ Tillagda värdar: %5
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern avvisade begäran.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Okänt internt fel.</translation>
+        <translation>Okänt internt fel.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">Ogiltigt post-ID.</translation>
+        <translation>Ogiltigt post-ID.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Ogiltiga data skickades.</translation>
+        <translation>Ogiltiga data skickades.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>En post med det angivna namnet finns redan.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Posten hittades inte. Listan kan vara inaktuell.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Åtkomst nekad.</translation>
+        <translation>Åtkomst nekad.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Data har ändrats på routern. Uppdatera listan och försök igen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen till routern har brutits.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">Värden med det angivna ID:t är inte online.</translation>
+        <translation>Värden med det angivna ID:t är inte online.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Det finns inga tillgängliga reläer eller så är nyckelpoolen tom.</translation>
+        <translation>Det finns inga tillgängliga reläer eller så är nyckelpoolen tom.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>För många anslutningsbegäranden. Försök igen senare.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Okänd feltyp.</translation>
+        <translation>Okänd feltyp.</translation>
     </message>
 </context>
 <context>
@@ -5542,32 +5301,12 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Ogiltig gruppbegäran.</translation>
+        <translation>Det gick inte att hämta listan över grupper.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Åtkomst nekad.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Gruppen hittades inte.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5577,54 +5316,6 @@ Tillagda värdar: %5
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Visningsnamn</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Värd-ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Datornamn</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adress</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Användarnamn</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operativsystem</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkitektur</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Senaste anslutning</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Senast ändrad</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Status</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5636,27 +5327,27 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Föregående</translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Nästa</translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Objekt per sida:</translation>
+        <translation>Objekt per sida:</translation>
     </message>
 </context>
 <context>
@@ -5679,11 +5370,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Användarnamn:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Användarnamn:</translation>
+        <translation>Användarnamn:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5693,7 +5380,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet och lösenordet lagras endast på den här datorn och skickas inte till routern.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5701,39 +5388,19 @@ Tillagda värdar: %5
         <translation>Kommentar:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Åtkomst nekad.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Värden hittades inte.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över grupper.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange både användarnamnet och lösenordet, eller lämna båda tomma.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara inloggningsuppgifterna.</translation>
     </message>
 </context>
 <context>
@@ -5741,89 +5408,37 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Användarnamn</translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Lösenord</translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet och lösenordet lagras endast på den här enheten och skickas inte till routern. Lämna båda tomma för att glömma dem.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Spara</translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att spara inloggningsuppgifterna.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange både användarnamnet och lösenordet, eller lämna båda tomma.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Värd-ID</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Visningsnamn</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Datornamn</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adress</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Användarnamn</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Arbetsyta</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operativsystem</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkitektur</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Senaste anslutning</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Senast ändrad</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Status</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5850,10 +5465,6 @@ Tillagda värdar: %5
         <translation>Objekt per sida:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">Värden är inte tilldelad någon arbetsyta.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Är du säker på att du vill koppla från värden &quot;%1&quot;?</translation>
@@ -5872,22 +5483,6 @@ Tillagda värdar: %5
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Om värden tas bort raderas hela dess konfiguration för anslutning till routern, och programmet avinstalleras på värden. Åtgärden kan inte ångras. Är du säker på att du vill göra detta?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Ogiltig värdbegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Ogiltigt post-ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5920,62 +5515,6 @@ Tillagda värdar: %5
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adress</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Anslutningstid</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Poolstorlek</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Datornamn</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkitektur</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operativsystem</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Användarnamn</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Värd-ID</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Värdadress</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Klientadress</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Överfört</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Varaktighet</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Inaktiv</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6026,26 +5565,6 @@ Tillagda värdar: %5
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Är du säker på att du vill koppla från peer &quot;%1&quot;?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Ogiltig reläbegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Ogiltigt post-ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Reläsessionen hittades inte.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6060,7 +5579,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern accepterade det nya lösenordet, men posten uppdaterades inte.</translation>
     </message>
 </context>
 <context>
@@ -6069,13 +5588,13 @@ Tillagda värdar: %5
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Routern väntar på en tvåfaktorskod.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange kod</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6098,65 +5617,45 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tvåfaktorsautentiseringen är blockerad efter för många misslyckade försök.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tvåfaktorsautentisering måste konfigureras för den här routern.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurera</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Datornamn</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operativsystem</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adress</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Föregående</translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Nästa</translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Objekt per sida:</translation>
+        <translation>Objekt per sida:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6237,30 +5736,6 @@ Tillagda värdar: %5
         <translation>Logga ut alla</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Ogiltig användarbegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">En användare med det angivna namnet finns redan.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Användaren hittades inte. Listan kan vara inaktuell.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Om tvåfaktorsautentiseringen återställs loggas användaren ut från alla sessioner och måste registrera sig igen vid nästa inloggning. Fortsätta?</translation>
@@ -6276,18 +5751,6 @@ Tillagda värdar: %5
         <translation>Är du säker på att du vill logga ut den här användaren från alla sessioner?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Sessionen hittades inte. Listan kan vara inaktuell.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Ogiltig utloggningsbegäran.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Användarnamnet du angav finns redan.</translation>
@@ -6300,27 +5763,27 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över användare.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användaren togs bort från en annan konsol.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om tvåfaktorsautentiseringen återställs loggas du ut från alla sessioner och måste registrera dig igen vid nästa inloggning. Fortsätta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Det här är token för din aktuella session. Om den återkallas kopplas du från. Fortsätta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @. Det får inte bestå enbart av siffror.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6366,7 +5829,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Token för din aktuella session.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6381,11 +5844,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
+        <translation>Operatör</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6395,18 +5854,6 @@ Tillagda värdar: %5
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Namn</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Aktiverad</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Sessionstyper</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6420,31 +5867,7 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Ogiltig användarbegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">En användare med det angivna namnet finns redan.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Användaren hittades inte. Listan kan vara inaktuell.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
+        <translation>Det gick inte att hämta listan över användare.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6457,27 +5880,27 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Föregående</translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Nästa</translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Objekt per sida:</translation>
+        <translation>Objekt per sida:</translation>
     </message>
 </context>
 <context>
@@ -6544,28 +5967,28 @@ Tillagda värdar: %5
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6595,29 +6018,31 @@ Tillagda värdar: %5
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över arbetsytor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsytan togs bort från en annan konsol.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det gick inte att hämta listan över användare.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbetsytan ändrades från en annan konsol. Listorna uppdateras - kontrollera ändringarna och spara igen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Om värden tas bort från arbetsytan rensas dess kommentar permanent. Åtgärden kan inte ångras.
+
+Är du säker på att du vill fortsätta?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6628,38 +6053,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>En arbetsyta med det angivna namnet finns redan.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Ogiltig arbetsytebegäran.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Arbetsytan hittades inte.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Administratörer kan inte tas bort från arbetsytans åtkomstlista.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">Om värden tas bort från arbetsytan rensas dess krypterade fält (kommentar, användarnamn och lösenord) permanent. Åtgärden kan inte ångras.
-
-Är du säker på att du vill fortsätta?</translation>
     </message>
 </context>
 <context>
@@ -6678,26 +6071,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Redigera router</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Ansluter till routern %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Anslutning till routern %1 upprättad.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Frånkopplad från routern %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Nätverksfel: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Routern kräver ett lösenordsbyte, vilket inte stöds här ännu.</translation>
     </message>
 </context>
 <context>
@@ -6718,61 +6091,45 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adress / ID</translation>
+        <translation>Adress / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Grupp</translation>
+        <translation>Grupp</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentar</translation>
+        <translation>Kommentar</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Namn</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adress / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentar</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Grupp</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Föregående</translation>
+        <translation>Föregående</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Föregående sida</translation>
+        <translation>Föregående sida</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Nästa</translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Nästa sida</translation>
+        <translation>Nästa sida</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6790,7 +6147,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 av %2</translation>
     </message>
 </context>
 <context>
@@ -7481,22 +6838,6 @@ Are you sure you want to continue?</source>
         <translation>Lokal</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Ansluter till routern %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Anslutning till routern %1 upprättad.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Frånkopplad från routern %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">För att slutföra migreringen från en tidigare version måste du byta lösenord.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Byt lösenord</translation>
@@ -7530,31 +6871,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Lösenordet har uppdaterats. Väntar på nya krypteringsnycklar...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Ogiltig begäran om lösenordsbyte.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Okänt internt fel.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Ogiltiga data skickades.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Okänd feltyp.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Händelsehistoriken har rensats.</translation>
+        <translation>Byter lösenord. Väntar på att sessionen ska logga in igen...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7570,10 +6887,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Är du säker på att du vill ta bort routern &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Nätverksfel: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7663,18 +6976,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Anslutningsstatus</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Stäng</translation>
+        <translation>Stäng</translation>
     </message>
 </context>
 <context>
@@ -11599,27 +10905,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Datornamn</translation>
+        <translation>Datornamn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operativsystem</translation>
+        <translation>Operativsystem</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Adress</translation>
+        <translation>Adress</translation>
     </message>
 </context>
 <context>
@@ -11676,7 +10982,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den föregående koden accepterades inte.</translation>
     </message>
 </context>
 <context>
@@ -11699,7 +11005,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den föregående koden accepterades inte.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11747,7 +11053,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den föregående koden accepterades inte.</translation>
     </message>
 </context>
 <context>
@@ -11887,13 +11193,9 @@ Are you sure you want to continue?</source>
         <translation>Avmarkera alla</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen _, -, ., @. Det får inte bestå enbart av siffror.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11962,10 +11264,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Fel</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12040,7 +11338,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamnet får inte vara tomt och får endast innehålla bokstäver, siffror och tecknen &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Det får inte bestå enbart av siffror.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12131,65 +11429,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">Namn</translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Aktiverad</translation>
+        <translation>Aktiverad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Sessionstyper</translation>
+        <translation>Sessionstyper</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Ja</translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">Nej</translation>
+        <translation>Nej</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Administratör</translation>
+        <translation>Administratör</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Förvaltare</translation>
+        <translation>Förvaltare</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Ja</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Nej</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Administratör</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Förvaltare</translation>
+        <translation>Operatör</translation>
     </message>
 </context>
 <context>

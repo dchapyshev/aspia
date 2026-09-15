@@ -397,7 +397,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>2단계 인증 - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>자격 증명 저장</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -968,32 +968,32 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">컴퓨터 이름</translation>
+        <translation>컴퓨터 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP 주소</translation>
+        <translation>IP 주소</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">연결 시간</translation>
+        <translation>연결 시간</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">버전</translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">아키텍처</translation>
+        <translation>아키텍처</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">운영 체제</translation>
+        <translation>운영 체제</translation>
     </message>
 </context>
 <context>
@@ -1017,14 +1017,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>%1:%2 호스트에 연결하는 중...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">%1 호스트에 연결되었습니다.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">%1:%2 호스트에 연결되었습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1064,27 +1056,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">지정한 ID의 호스트가 온라인 상태가 아닙니다</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">액세스가 거부되었습니다</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">사용 가능한 릴레이가 없거나 키 풀이 비어 있습니다</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">알 수 없는 오류</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다: %1.</translation>
+        <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
 </context>
 <context>
@@ -1891,22 +1863,6 @@ Password: %2</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">지정한 ID의 호스트가 온라인 상태가 아닙니다.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">액세스가 거부되었습니다.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">사용 가능한 릴레이가 없거나 키 풀이 비어 있습니다.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
@@ -2041,10 +1997,6 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
-    </message>
-    <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">원격 컴퓨터에서 시작하지 못했습니다.</translation>
     </message>
 </context>
 <context>
@@ -2943,72 +2895,72 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">호스트 ID</translation>
+        <translation>호스트 ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">표시 이름</translation>
+        <translation>표시 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">컴퓨터 이름</translation>
+        <translation>컴퓨터 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">메모</translation>
+        <translation>메모</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">작업 영역</translation>
+        <translation>작업 영역</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">운영 체제</translation>
+        <translation>운영 체제</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">버전</translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">아키텍처</translation>
+        <translation>아키텍처</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">마지막 연결</translation>
+        <translation>마지막 연결</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">마지막 수정</translation>
+        <translation>마지막 수정</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">상태</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">온라인</translation>
+        <translation>온라인</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">오프라인</translation>
+        <translation>오프라인</translation>
     </message>
 </context>
 <context>
@@ -3047,17 +2999,6 @@ Password: %2</source>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>보안 로그 대화 상자를 호출합니다.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">온라인</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">오프라인</translation>
     </message>
 </context>
 <context>
@@ -3192,22 +3133,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>표시</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">사용할 수 없음</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 라우터에 연결하는 중...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">%1 라우터에 연결됨</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">%1 라우터에 연결하지 못했습니다</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3363,14 +3288,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
@@ -3398,34 +3323,6 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">이름</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">주소 / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">메모</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">만든 날짜</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">수정한 날짜</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">마지막 연결</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">상태</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>상태 업데이트 중...</translation>
@@ -3443,14 +3340,6 @@ Password: %2</source>
         <translation>
             <numerusform>하위 호스트 %n개</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">온라인</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">오프라인</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3445,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3658,14 +3547,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
@@ -3687,7 +3576,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3715,47 +3604,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">이름</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">주소 / ID</translation>
+        <translation>주소 / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">메모</translation>
+        <translation>메모</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">만든 날짜</translation>
+        <translation>만든 날짜</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">수정한 날짜</translation>
+        <translation>수정한 날짜</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">마지막 연결</translation>
+        <translation>마지막 연결</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">상태</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">온라인</translation>
+        <translation>온라인</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">오프라인</translation>
+        <translation>오프라인</translation>
     </message>
 </context>
 <context>
@@ -3794,28 +3683,6 @@ Password: %2</source>
         <translation>주소록 가져오기</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">주소록 (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>가져온 라우터 %n개, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>그룹 %n개, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>호스트 %n개.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>잘못된 암호입니다.</translation>
@@ -3824,10 +3691,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>파일이 최신 버전에서 만들어져 가져올 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">주소록이 이미 최신 상태입니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3839,27 +3702,21 @@ Password: %2</source>
         <source>Export Address Book</source>
         <translation>주소록 내보내기</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>내보낸 라우터 %n개, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia 백업 (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>주소록이 파일에 있는 주소록으로 바뀝니다. 현재 주소록의 모든 내용은 삭제됩니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에 주소록이 없으므로 아무것도 변경되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3867,17 +3724,20 @@ Password: %2</source>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>가져온 라우터: %1
+가져온 그룹: %2
+가져온 호스트: %3
+가져온 저장된 암호: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>주소록이 비어 있습니다. 저장할 항목이 없습니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3887,7 +3747,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일이 %1에 저장되었습니다. 다른 곳에서 열려면 이 주소록의 마스터 암호가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4291,7 +4151,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>작업 영역을 삭제하지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4301,7 +4161,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">그룹을 삭제하지 못했습니다.</translation>
+        <translation>그룹을 삭제하지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4322,17 +4182,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia 백업 (*.aspia-backup);;모든 파일 (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>주소록이 비어 있습니다. 저장할 항목이 없습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4341,32 +4201,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>내보내기가 완료되었습니다.
+내보낸 라우터: %1
+내보낸 그룹: %2
+내보낸 호스트: %3
+내보낸 저장된 암호: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>주소록이 파일에 있는 주소록으로 바뀝니다. 현재 주소록의 모든 내용은 삭제됩니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일이 다른 주소록에서 저장되었습니다. 해당 주소록의 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에 주소록이 없으므로 아무것도 변경되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">주소록을 가져오지 못했습니다.</translation>
+        <translation>주소록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4375,11 +4239,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">주소록 (*.json);;모든 파일 (*)</translation>
+        <translation>가져오기가 완료되었습니다.
+가져온 라우터: %1
+가져온 그룹: %2
+가져온 호스트: %3
+가져온 저장된 암호: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4388,51 +4252,15 @@ Saved passwords imported: %4</source>
         <translation>주소록 데이터베이스를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">주소록을 암호화할 암호를 입력하십시오.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">다른 암호를 입력하시겠습니까?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>주소록을 내보내지 못했습니다.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">내보내기가 완료되었습니다.
-내보낸 라우터: %1
-내보낸 그룹: %2
-내보낸 호스트: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>주소록 가져오기</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">잠금 해제</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">주소록이 암호화되어 있습니다. 열려면 암호를 입력해야 합니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4445,29 +4273,9 @@ Hosts exported: %3</source>
         <translation>지원되지 않는 파일 형식 버전입니다.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">가져온 항목이 없습니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>파일이 올바른 주소록이 아닙니다.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">가져오기가 완료되었습니다.
-추가된 라우터: %1
-건너뛴 라우터: %2
-추가된 그룹: %3
-건너뛴 그룹: %4
-추가된 호스트: %5
-건너뛴 호스트: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4865,37 +4673,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">사용자 이름</translation>
+        <translation>사용자 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">호스트 ID</translation>
+        <translation>호스트 ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">호스트 주소</translation>
+        <translation>호스트 주소</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">클라이언트 주소</translation>
+        <translation>클라이언트 주소</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">전송됨</translation>
+        <translation>전송량</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">기간</translation>
+        <translation>지속 시간</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">유휴</translation>
+        <translation>유휴</translation>
     </message>
 </context>
 <context>
@@ -5003,37 +4811,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">연결 시간</translation>
+        <translation>연결 시간</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">풀 크기</translation>
+        <translation>풀 크기</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">버전</translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">컴퓨터 이름</translation>
+        <translation>컴퓨터 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">아키텍처</translation>
+        <translation>아키텍처</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">운영 체제</translation>
+        <translation>운영 체제</translation>
     </message>
 </context>
 <context>
@@ -5047,13 +4855,13 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>더 보기</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5077,45 +4885,21 @@ Hosts skipped: %6</source>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>코드 입력</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>차단됨</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>설정</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">컴퓨터 이름</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP 주소</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">연결 시간</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">버전</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">아키텍처</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">운영 체제</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5146,22 +4930,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>모든 클라이언트의 연결을 끊으시겠습니까?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">잘못된 클라이언트 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">잘못된 항목 ID입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5172,27 +4940,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">이전</translation>
+        <translation>이전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">다음</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">페이지당 항목 수:</translation>
+        <translation>페이지당 항목 수:</translation>
     </message>
 </context>
 <context>
@@ -5202,42 +4970,42 @@ Hosts skipped: %6</source>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">%1 라우터에 연결하는 중...</translation>
+        <translation>%1 라우터에 연결하는 중...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">이벤트 기록을 지웠습니다.</translation>
+        <translation>이벤트 기록이 지워졌습니다.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>실패한 시도가 너무 많습니다. %1 라우터는 약 %2분 후에 코드를 다시 받습니다.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 라우터가 코드를 받아들이지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 라우터가 2단계 인증 코드를 기다리고 있습니다.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">%1 라우터에 연결되었습니다.</translation>
+        <translation>%1 라우터에 연결되었습니다.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">네트워크 오류: %1</translation>
+        <translation>네트워크 오류: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">%1 라우터와의 연결이 끊어졌습니다.</translation>
+        <translation>%1 라우터와의 연결이 끊어졌습니다.</translation>
     </message>
 </context>
 <context>
@@ -5293,18 +5061,14 @@ Hosts skipped: %6</source>
         <translation>매니저</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">클라이언트</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>운영자</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
@@ -5367,7 +5131,7 @@ Hosts skipped: %6</source>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
@@ -5413,67 +5177,67 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>라우터가 요청을 거부했습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">알 수 없는 내부 오류입니다.</translation>
+        <translation>알 수 없는 내부 오류입니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">잘못된 항목 ID입니다.</translation>
+        <translation>잘못된 항목 ID입니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">잘못된 데이터가 전달되었습니다.</translation>
+        <translation>잘못된 데이터가 전달되었습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>지정한 이름의 레코드가 이미 있습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>레코드를 찾을 수 없습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">액세스가 거부되었습니다.</translation>
+        <translation>액세스가 거부되었습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>라우터의 데이터가 변경되었습니다. 목록을 새로 고친 후 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>라우터와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">지정한 ID의 호스트가 온라인 상태가 아닙니다.</translation>
+        <translation>지정한 ID의 호스트가 온라인 상태가 아닙니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">사용 가능한 릴레이가 없거나 키 풀이 비어 있습니다.</translation>
+        <translation>사용 가능한 릴레이가 없거나 키 풀이 비어 있습니다.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>연결 요청이 너무 많습니다. 나중에 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">알 수 없는 오류 유형입니다.</translation>
+        <translation>알 수 없는 오류 유형입니다.</translation>
     </message>
 </context>
 <context>
@@ -5516,32 +5280,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">잘못된 그룹 요청입니다.</translation>
+        <translation>그룹 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">액세스가 거부되었습니다.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">그룹을 찾을 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5551,54 +5295,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">표시 이름</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">호스트 ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">컴퓨터 이름</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">주소</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">사용자 이름</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">메모</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">운영 체제</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">버전</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">아키텍처</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">마지막 연결</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">마지막 수정</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">상태</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5609,27 +5305,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">이전</translation>
+        <translation>이전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">다음</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">페이지당 항목 수:</translation>
+        <translation>페이지당 항목 수:</translation>
     </message>
 </context>
 <context>
@@ -5652,11 +5348,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">사용자 이름:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">사용자 이름:</translation>
+        <translation>사용자 이름:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5666,7 +5358,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호는 이 컴퓨터에만 저장되며 라우터로 전송되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5674,39 +5366,19 @@ Hosts skipped: %6</source>
         <translation>메모:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">액세스가 거부되었습니다.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">호스트를 찾을 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>그룹 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>자격 증명을 저장하지 못했습니다.</translation>
     </message>
 </context>
 <context>
@@ -5714,89 +5386,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">사용자 이름</translation>
+        <translation>사용자 이름</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">암호</translation>
+        <translation>암호</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호는 이 장치에만 저장되며 라우터로 전송되지 않습니다. 저장된 자격 증명을 지우려면 둘 다 비워 두십시오.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">저장</translation>
+        <translation>저장</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>자격 증명을 저장하지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">호스트 ID</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">표시 이름</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">컴퓨터 이름</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">주소</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">사용자 이름</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">메모</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">작업 영역</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">운영 체제</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">버전</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">아키텍처</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">마지막 연결</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">마지막 수정</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">상태</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5823,10 +5443,6 @@ Hosts skipped: %6</source>
         <translation>페이지당 항목 수:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">호스트가 어떤 작업 영역에도 할당되어 있지 않습니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트의 연결을 끊으시겠습니까?</translation>
@@ -5845,22 +5461,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>호스트를 삭제하면 라우터 연결에 대한 모든 구성이 삭제되고 호스트에서 응용 프로그램이 제거됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">잘못된 호스트 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">잘못된 항목 ID입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5892,62 +5492,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">주소</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">연결 시간</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">풀 크기</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">버전</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">컴퓨터 이름</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">아키텍처</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">운영 체제</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">사용자 이름</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">호스트 ID</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">호스트 주소</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">클라이언트 주소</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">전송됨</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">기간</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">유휴</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -5998,26 +5542,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 피어의 연결을 끊으시겠습니까?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">잘못된 릴레이 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">잘못된 항목 ID입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">릴레이 세션을 찾을 수 없습니다.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6031,7 +5555,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>라우터가 새 암호를 수락했지만 레코드가 업데이트되지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -6040,13 +5564,13 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>라우터가 2단계 인증 코드를 기다리고 있습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>코드 입력</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6068,65 +5592,45 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>실패한 시도가 너무 많아 2단계 인증이 차단되었습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 라우터에 대해 2단계 인증을 설정해야 합니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>설정</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">컴퓨터 이름</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">운영 체제</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">버전</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">주소</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">이전</translation>
+        <translation>이전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">다음</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">페이지당 항목 수:</translation>
+        <translation>페이지당 항목 수:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6207,30 +5711,6 @@ Hosts skipped: %6</source>
         <translation>모두 로그아웃</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">잘못된 사용자 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">지정한 이름의 사용자가 이미 있습니다.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">사용자를 찾을 수 없습니다. 목록이 최신이 아닐 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>2단계 인증을 다시 설정하면 이 사용자는 모든 세션에서 로그아웃되며 다음 로그인 시 다시 등록해야 합니다. 계속하시겠습니까?</translation>
@@ -6246,18 +5726,6 @@ Hosts skipped: %6</source>
         <translation>이 사용자를 모든 세션에서 로그아웃하시겠습니까?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">세션을 찾을 수 없습니다. 목록이 최신이 아닐 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">잘못된 로그아웃 요청입니다.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>입력한 사용자 이름이 이미 있습니다.</translation>
@@ -6270,27 +5738,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 콘솔에서 사용자가 삭제되었습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>2단계 인증을 다시 설정하면 모든 세션에서 로그아웃되며 다음 로그인 시 다시 등록해야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>이것은 현재 세션의 토큰입니다. 철회하면 연결이 끊어집니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6334,7 +5802,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 세션의 토큰입니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6349,11 +5817,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">클라이언트</translation>
+        <translation>운영자</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6363,18 +5827,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">이름</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">사용</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">세션 유형</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6388,31 +5840,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">잘못된 사용자 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">지정한 이름의 사용자가 이미 있습니다.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">사용자를 찾을 수 없습니다. 목록이 최신이 아닐 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
+        <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6424,27 +5852,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">이전</translation>
+        <translation>이전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">다음</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">페이지당 항목 수:</translation>
+        <translation>페이지당 항목 수:</translation>
     </message>
 </context>
 <context>
@@ -6511,28 +5939,28 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6562,29 +5990,31 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>작업 영역 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 콘솔에서 작업 영역이 삭제되었습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 콘솔에서 작업 영역이 변경되었습니다. 목록을 새로 고치는 중입니다. 변경 사항을 확인한 후 다시 저장하십시오.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>작업 영역에서 호스트를 제거하면 호스트의 메모가 영구적으로 지워집니다. 이 작업은 되돌릴 수 없습니다.
+
+정말로 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6595,38 +6025,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>지정한 이름의 작업 영역이 이미 있습니다.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">잘못된 작업 영역 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">작업 영역을 찾을 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">관리자는 작업 영역 액세스 목록에서 제거할 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">호스트를 작업 영역에서 제거하면 암호화된 필드(메모, 사용자 이름 및 암호)가 영구적으로 지워집니다. 이 작업은 실행 취소할 수 없습니다.
-
-계속하시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -6645,26 +6043,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>라우터 편집</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 라우터에 연결하는 중...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">%1 라우터에 연결되었습니다.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">%1 라우터와의 연결이 끊어졌습니다.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">네트워크 오류: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">라우터에서 암호 변경을 요구하지만 여기서는 아직 지원되지 않습니다.</translation>
     </message>
 </context>
 <context>
@@ -6685,22 +6063,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">이름</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">주소 / ID</translation>
+        <translation>주소 / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">그룹</translation>
+        <translation>그룹</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">메모</translation>
+        <translation>메모</translation>
     </message>
 </context>
 <context>
@@ -6713,43 +6091,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">이름</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">주소 / ID</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">그룹</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">메모</translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">이전</translation>
+        <translation>이전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">이전 페이지</translation>
+        <translation>이전 페이지</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">다음</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">다음 페이지</translation>
+        <translation>다음 페이지</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -7477,31 +6839,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">암호가 업데이트되었습니다. 새 암호화 키를 기다리는 중...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">잘못된 암호 변경 요청입니다.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">알 수 없는 내부 오류입니다.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">잘못된 데이터가 전달되었습니다.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">알 수 없는 오류 유형입니다.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">이벤트 기록을 지웠습니다.</translation>
+        <translation>암호를 변경하는 중입니다. 세션이 다시 로그인하기를 기다리는 중...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7517,26 +6855,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 라우터를 삭제하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 라우터에 연결하는 중...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">%1 라우터에 연결되었습니다.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">%1 라우터와의 연결이 끊어졌습니다.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">네트워크 오류: %1</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">이전 버전에서의 마이그레이션을 완료하려면 암호를 변경해야 합니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7626,18 +6944,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">연결 상태</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">닫기</translation>
+        <translation>닫기</translation>
     </message>
 </context>
 <context>
@@ -11562,27 +10873,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">컴퓨터 이름</translation>
+        <translation>컴퓨터 이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">운영 체제</translation>
+        <translation>운영 체제</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">버전</translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">주소</translation>
+        <translation>주소</translation>
     </message>
 </context>
 <context>
@@ -11639,7 +10950,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 코드가 받아들여지지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -11662,7 +10973,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 코드가 받아들여지지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11710,7 +11021,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 코드가 받아들여지지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -11850,13 +11161,9 @@ Are you sure you want to continue?</source>
         <translation>모두 선택 해제</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11972,11 +11279,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; 문자만 사용할 수 있습니다.</translation>
+        <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12091,65 +11394,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">이름</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">사용</translation>
+        <translation>사용</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">세션 유형</translation>
+        <translation>세션 유형</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">예</translation>
+        <translation>예</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">아니요</translation>
+        <translation>아니요</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">관리자</translation>
+        <translation>관리자</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">매니저</translation>
+        <translation>매니저</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">예</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">아니요</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">관리자</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">매니저</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">클라이언트</translation>
+        <translation>운영자</translation>
     </message>
 </context>
 <context>

@@ -397,7 +397,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>2要素認証 - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>資格情報を保存</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -968,32 +968,32 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">コンピューター名</translation>
+        <translation>コンピューター名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP アドレス</translation>
+        <translation>IP アドレス</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">接続時刻</translation>
+        <translation>接続日時</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">バージョン</translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">アーキテクチャ</translation>
+        <translation>アーキテクチャ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">オペレーティング システム</translation>
+        <translation>オペレーティング システム</translation>
     </message>
 </context>
 <context>
@@ -1017,14 +1017,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>ホスト %1:%2 に接続しています...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">ホスト %1 への接続が確立されました。</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">ホスト %1:%2 への接続が確立されました。</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1064,27 +1056,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">ルーター経由の接続要求でエラーが発生しました。</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">指定された ID のホストはオンラインではありません</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">アクセスが拒否されています</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">利用可能なリレーがないか、キー プールが空です</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">不明なエラー</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">ルーター経由の接続要求でエラーが発生しました: %1。</translation>
+        <translation>ルーター経由の接続要求でエラーが発生しました。</translation>
     </message>
 </context>
 <context>
@@ -1891,22 +1863,6 @@ Password: %2</source>
         <translation>ホストへの接続を要求しています...</translation>
     </message>
     <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">指定された ID のホストはオンラインではありません。</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">アクセスが拒否されています。</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">利用可能なリレーがないか、キー プールが空です。</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">ルーター経由の接続要求でエラーが発生しました。</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
         <source>Connecting to host %1...</source>
         <translation>ホスト %1 に接続しています...</translation>
@@ -2041,10 +1997,6 @@ Password: %2</source>
         <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
         <source>Could not save image</source>
         <translation>画像を保存できませんでした</translation>
-    </message>
-    <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">リモート コンピューターで起動できませんでした。</translation>
     </message>
 </context>
 <context>
@@ -2943,72 +2895,72 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">ホスト ID</translation>
+        <translation>ホスト ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">表示名</translation>
+        <translation>表示名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">コンピューター名</translation>
+        <translation>コンピューター名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">アドレス</translation>
+        <translation>アドレス</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">コメント</translation>
+        <translation>コメント</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">ワークスペース</translation>
+        <translation>ワークスペース</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">オペレーティング システム</translation>
+        <translation>オペレーティング システム</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">バージョン</translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">アーキテクチャ</translation>
+        <translation>アーキテクチャ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">最終接続</translation>
+        <translation>最終接続</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">最終更新</translation>
+        <translation>最終更新</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">状態</translation>
+        <translation>状態</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">オンライン</translation>
+        <translation>オンライン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">オフライン</translation>
+        <translation>オフライン</translation>
     </message>
 </context>
 <context>
@@ -3047,17 +2999,6 @@ Password: %2</source>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>セキュリティ ログ ダイアログを呼び出します。</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">オンライン</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">オフライン</translation>
     </message>
 </context>
 <context>
@@ -3192,22 +3133,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>表示</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">利用不可</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">ルーター %1 に接続しています...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">ルーター %1 に接続しました</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">ルーター %1 に接続できませんでした</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3363,14 +3288,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>名前が長すぎます。名前の最大長は %n 文字です。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>コメントが長すぎます。コメントの最大長は %n 文字です。</numerusform>
         </translation>
     </message>
@@ -3398,34 +3323,6 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">名前</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">アドレス / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">コメント</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">作成日時</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">更新日時</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">最終接続</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">状態</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>状態を更新しています...</translation>
@@ -3443,14 +3340,6 @@ Password: %2</source>
         <translation>
             <numerusform>%n 台の子ホスト</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">オンライン</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">オフライン</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3445,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3658,14 +3547,14 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>名前が長すぎます。名前の最大長は %n 文字です。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>コメントが長すぎます。コメントの最大長は %n 文字です。</numerusform>
         </translation>
     </message>
@@ -3687,7 +3576,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3715,47 +3604,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">名前</translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">アドレス / ID</translation>
+        <translation>アドレス / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">コメント</translation>
+        <translation>コメント</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">作成日時</translation>
+        <translation>作成日時</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">更新日時</translation>
+        <translation>更新日時</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">最終接続</translation>
+        <translation>最終接続</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">状態</translation>
+        <translation>状態</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">オンライン</translation>
+        <translation>オンライン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">オフライン</translation>
+        <translation>オフライン</translation>
     </message>
 </context>
 <context>
@@ -3794,28 +3683,6 @@ Password: %2</source>
         <translation>アドレス帳のインポート</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">アドレス帳 (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>インポートしたルーター: %n、</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>グループ: %n、</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>ホスト: %n。</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>パスワードが正しくありません。</translation>
@@ -3824,10 +3691,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>このファイルは新しいバージョンで作成されているため、インポートできません。</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">アドレス帳は既に最新です。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3839,27 +3702,21 @@ Password: %2</source>
         <source>Export Address Book</source>
         <translation>アドレス帳のエクスポート</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>エクスポートしたルーター: %n、</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia バックアップ (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>アドレス帳はファイル内のものに置き換えられます。現在の内容はすべて削除されます。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルにはアドレス帳が含まれていないため、何も変更されませんでした。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3867,17 +3724,20 @@ Password: %2</source>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>インポートされたルーター: %1
+インポートされたグループ: %2
+インポートされたホスト: %3
+インポートされた保存済みパスワード: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>アドレス帳は空です。保存するものがありません。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルに書き込めません。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3887,7 +3747,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルは %1 に書き込まれました。別の場所で開くには、このアドレス帳のマスター パスワードが必要です。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4291,7 +4151,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>ワークスペースを削除できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4301,7 +4161,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">グループを削除できませんでした。</translation>
+        <translation>グループを削除できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4322,17 +4182,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia バックアップ (*.aspia-backup);;すべてのファイル (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>アドレス帳は空です。保存するものがありません。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルに書き込めません。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4341,32 +4201,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスポートが正常に完了しました。
+エクスポートされたルーター: %1
+エクスポートされたグループ: %2
+エクスポートされたホスト: %3
+エクスポートされた保存済みパスワード: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>アドレス帳はファイル内のものに置き換えられます。現在の内容はすべて削除されます。続行しますか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルは別のアドレス帳から保存されたものです。そのアドレス帳のマスター パスワードを入力してください。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルにはアドレス帳が含まれていないため、何も変更されませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを読み取れません。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">アドレス帳をインポートできませんでした。</translation>
+        <translation>アドレス帳をインポートできませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4375,11 +4239,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">アドレス帳 (*.json);;すべてのファイル (*)</translation>
+        <translation>インポートが正常に完了しました。
+インポートされたルーター: %1
+インポートされたグループ: %2
+インポートされたホスト: %3
+インポートされた保存済みパスワード: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4388,51 +4252,15 @@ Saved passwords imported: %4</source>
         <translation>アドレス帳データベースを利用できません。</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">アドレス帳を暗号化するパスワードを入力してください。</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">入力されたパスワードはセキュリティ要件を満たしていません！</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>パスワードには小文字、大文字、数字を含める必要があり、%n 文字以上でなければなりません。</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">別のパスワードを入力しますか？</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>アドレス帳をエクスポートできませんでした。</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">エクスポートが正常に完了しました。
-エクスポートされたルーター: %1
-エクスポートされたグループ: %2
-エクスポートされたホスト: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>アドレス帳のインポート</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">ロック解除</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">アドレス帳は暗号化されています。開くにはパスワードを入力する必要があります。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4445,29 +4273,9 @@ Hosts exported: %3</source>
         <translation>サポートされていないファイル形式のバージョンです。</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">何もインポートされませんでした。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>このファイルは有効なアドレス帳ではありません。</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">インポートが正常に完了しました。
-追加されたルーター: %1
-スキップされたルーター: %2
-追加されたグループ: %3
-スキップされたグループ: %4
-追加されたホスト: %5
-スキップされたホスト: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4865,37 +4673,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">ユーザー名</translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">ホスト ID</translation>
+        <translation>ホスト ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">ホスト アドレス</translation>
+        <translation>ホスト アドレス</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">クライアント アドレス</translation>
+        <translation>クライアント アドレス</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">転送量</translation>
+        <translation>転送量</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">継続時間</translation>
+        <translation>継続時間</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">アイドル</translation>
+        <translation>アイドル</translation>
     </message>
 </context>
 <context>
@@ -5003,37 +4811,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">アドレス</translation>
+        <translation>アドレス</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">接続時刻</translation>
+        <translation>接続日時</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">プール サイズ</translation>
+        <translation>プール サイズ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">バージョン</translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">コンピューター名</translation>
+        <translation>コンピューター名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">アーキテクチャ</translation>
+        <translation>アーキテクチャ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">オペレーティング システム</translation>
+        <translation>オペレーティング システム</translation>
     </message>
 </context>
 <context>
@@ -5047,13 +4855,13 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>さらに表示</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5077,45 +4885,21 @@ Hosts skipped: %6</source>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>コードを入力</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>ブロック中</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">コンピューター名</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP アドレス</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">接続時刻</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">バージョン</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">アーキテクチャ</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">オペレーティング システム</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5146,22 +4930,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>すべてのクライアントを切断してもよろしいですか？</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">無効なクライアント要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">無効なエントリ ID です。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5172,27 +4940,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">1 ページあたりの項目数:</translation>
+        <translation>1 ページあたりの項目数:</translation>
     </message>
 </context>
 <context>
@@ -5202,42 +4970,42 @@ Hosts skipped: %6</source>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">ルーター %1 に接続しています...</translation>
+        <translation>ルーター %1 に接続しています...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">イベント履歴がクリアされました。</translation>
+        <translation>イベント履歴をクリアしました。</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>失敗回数が多すぎます。ルーター %1 は約 %2 分後にコードを再び受け付けます。</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>コードはルーター %1 に受け付けられませんでした。</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーター %1 は2要素認証コードを待っています。</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">ルーター %1 への接続が確立されました。</translation>
+        <translation>ルーター %1 への接続が確立されました。</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">ネットワーク エラー: %1</translation>
+        <translation>ネットワーク エラー: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">ルーター %1 から切断されました。</translation>
+        <translation>ルーター %1 から切断されました。</translation>
     </message>
 </context>
 <context>
@@ -5293,18 +5061,14 @@ Hosts skipped: %6</source>
         <translation>マネージャー</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">クライアント</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>オペレーター</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>名前が長すぎます。名前の最大長は %n 文字です。</numerusform>
         </translation>
     </message>
@@ -5367,7 +5131,7 @@ Hosts skipped: %6</source>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>名前が長すぎます。名前の最大長は %n 文字です。</numerusform>
         </translation>
     </message>
@@ -5413,67 +5177,67 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーターが要求を拒否しました。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">不明な内部エラーです。</translation>
+        <translation>不明な内部エラーです。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">無効なエントリ ID です。</translation>
+        <translation>無効なエントリ ID です。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">無効なデータが渡されました。</translation>
+        <translation>無効なデータが渡されました。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>指定した名前のレコードは既に存在します。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>レコードが見つかりません。一覧が古くなっている可能性があります。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">アクセスが拒否されました。</translation>
+        <translation>アクセスが拒否されました。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーター上のデータが変更されました。一覧を更新してから、もう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーターへの接続が失われました。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">指定された ID のホストはオンラインではありません。</translation>
+        <translation>指定した ID のホストはオンラインではありません。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">利用可能なリレーがないか、キー プールが空です。</translation>
+        <translation>利用可能なリレーがないか、キー プールが空です。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>接続要求が多すぎます。後でもう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">不明な種類のエラーです。</translation>
+        <translation>不明なエラーの種類です。</translation>
     </message>
 </context>
 <context>
@@ -5516,32 +5280,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">無効なグループ要求です。</translation>
+        <translation>グループの一覧を取得できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">アクセスが拒否されました。</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">グループが見つかりません。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5551,54 +5295,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">表示名</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ホスト ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">コンピューター名</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">アドレス</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">ユーザー名</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">コメント</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">オペレーティング システム</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">バージョン</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">アーキテクチャ</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">最終接続</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">最終更新</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">状態</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5609,27 +5305,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">1 ページあたりの項目数:</translation>
+        <translation>1 ページあたりの項目数:</translation>
     </message>
 </context>
 <context>
@@ -5652,11 +5348,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">ユーザー名:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">ユーザー名:</translation>
+        <translation>ユーザー名:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5666,7 +5358,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードはこのコンピューターにのみ保存され、ルーターには送信されません。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5674,39 +5366,19 @@ Hosts skipped: %6</source>
         <translation>コメント:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">アクセスが拒否されました。</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">ホストが見つかりません。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>グループの一覧を取得できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>資格情報を保存できませんでした。</translation>
     </message>
 </context>
 <context>
@@ -5714,89 +5386,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">ユーザー名</translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">パスワード</translation>
+        <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードはこのデバイスにのみ保存され、ルーターには送信されません。両方とも空欄のままにすると、保存された資格情報は削除されます。</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">保存</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>資格情報を保存できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名とパスワードの両方を入力するか、両方とも空欄のままにしてください。</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ホスト ID</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">表示名</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">コンピューター名</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">アドレス</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">ユーザー名</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">コメント</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">ワークスペース</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">オペレーティング システム</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">バージョン</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">アーキテクチャ</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">最終接続</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">最終更新</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">状態</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5823,10 +5443,6 @@ Hosts skipped: %6</source>
         <translation>1 ページあたりの項目数:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">ホストはどのワークスペースにも割り当てられていません。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>ホスト &quot;%1&quot; を切断してもよろしいですか？</translation>
@@ -5845,22 +5461,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>ホストを削除すると、ルーターへの接続に関するすべての構成が削除され、ホスト上のアプリケーションがアンインストールされます。この操作は元に戻せません。本当に実行しますか？</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">無効なホスト要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">無効なエントリ ID です。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5892,62 +5492,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">アドレス</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">接続時刻</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">プール サイズ</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">バージョン</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">コンピューター名</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">アーキテクチャ</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">オペレーティング システム</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">ユーザー名</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ホスト ID</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">ホスト アドレス</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">クライアント アドレス</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">転送量</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">継続時間</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">アイドル</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -5998,26 +5542,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>ピア &quot;%1&quot; を切断してもよろしいですか？</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">無効なリレー要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">無効なエントリ ID です。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">リレー セッションが見つかりません。</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6031,7 +5555,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーターは新しいパスワードを受け付けましたが、レコードは更新されませんでした。</translation>
     </message>
 </context>
 <context>
@@ -6040,13 +5564,13 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーターは2要素認証コードを待っています。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>コードを入力</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6068,65 +5592,45 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>失敗回数が多すぎるため、2要素認証はブロックされています。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>このルーターでは2要素認証の設定が必要です。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">コンピューター名</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">オペレーティング システム</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">バージョン</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">アドレス</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">1 ページあたりの項目数:</translation>
+        <translation>1 ページあたりの項目数:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6207,30 +5711,6 @@ Hosts skipped: %6</source>
         <translation>すべてサインアウト</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">無効なユーザー要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">指定した名前のユーザーは既に存在します。</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">ユーザーが見つかりません。一覧が古くなっている可能性があります。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>2要素認証をリセットすると、このユーザーはすべてのセッションからサインアウトされ、次回のログイン時に再登録が必要になります。続行しますか？</translation>
@@ -6246,18 +5726,6 @@ Hosts skipped: %6</source>
         <translation>このユーザーをすべてのセッションからサインアウトさせてもよろしいですか？</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">セッションが見つかりません。一覧が古くなっている可能性があります。</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">無効なサインアウト要求です。</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">ユーザー名は空にできず、英字、数字、および _、-、.、@ の文字のみ使用できます。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>入力されたユーザー名は既に存在します。</translation>
@@ -6270,27 +5738,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーの一覧を取得できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>このユーザーは別のコンソールから削除されました。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>2要素認証をリセットすると、すべてのセッションからサインアウトされ、次回のログイン時に再登録が必要になります。続行しますか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>これは現在のセッションのトークンです。取り消すと切断されます。続行しますか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名は空にできず、英字、数字、および _、-、.、@ の文字のみ使用できます。数字のみで構成することはできません。</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6334,7 +5802,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のセッションのトークンです。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6349,11 +5817,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">クライアント</translation>
+        <translation>オペレーター</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6363,18 +5827,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">名前</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">有効</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">セッションの種類</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6388,31 +5840,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">無効なユーザー要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">指定した名前のユーザーは既に存在します。</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">ユーザーが見つかりません。一覧が古くなっている可能性があります。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
+        <translation>ユーザーの一覧を取得できませんでした。</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6424,27 +5852,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">1 ページあたりの項目数:</translation>
+        <translation>1 ページあたりの項目数:</translation>
     </message>
 </context>
 <context>
@@ -6511,28 +5939,28 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6562,29 +5990,31 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>ワークスペースの一覧を取得できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>このワークスペースは別のコンソールから削除されました。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーの一覧を取得できませんでした。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>このワークスペースは別のコンソールから変更されました。一覧を更新しています。変更内容を確認して、もう一度保存してください。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>ホストをワークスペースから削除すると、そのコメントは完全に消去されます。この操作は元に戻せません。
+
+続行してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6595,38 +6025,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>指定した名前のワークスペースは既に存在します。</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">無効なワークスペース要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">ワークスペースが見つかりません。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">管理者はワークスペースのアクセス リストから削除できません。</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">ホストをワークスペースから削除すると、暗号化されたフィールド (コメント、ユーザー名、パスワード) が完全に消去されます。この操作は元に戻せません。
-
-続行してもよろしいですか？</translation>
     </message>
 </context>
 <context>
@@ -6645,26 +6043,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>ルーターの編集</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">ルーター %1 に接続しています...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">ルーター %1 への接続が確立されました。</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">ルーター %1 から切断されました。</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">ネットワーク エラー: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">ルーターはパスワードの変更を要求していますが、ここではまだサポートされていません。</translation>
     </message>
 </context>
 <context>
@@ -6685,22 +6063,22 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">名前</translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">アドレス / ID</translation>
+        <translation>アドレス / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">グループ</translation>
+        <translation>グループ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">コメント</translation>
+        <translation>コメント</translation>
     </message>
 </context>
 <context>
@@ -6713,43 +6091,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">名前</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">アドレス / ID</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">グループ</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">コメント</translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">前のページ</translation>
+        <translation>前のページ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">次のページ</translation>
+        <translation>次のページ</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -7477,31 +6839,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">パスワードが更新されました。新しい暗号化キーを待機しています...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">無効なパスワード変更要求です。</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">不明な内部エラーです。</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">無効なデータが渡されました。</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">不明な種類のエラーです。</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">イベント履歴がクリアされました。</translation>
+        <translation>パスワードを変更しています。セッションの再サインインを待っています...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7517,26 +6855,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>ルーター &quot;%1&quot; を削除してもよろしいですか？</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">ルーター %1 に接続しています...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">ルーター %1 への接続が確立されました。</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">ルーター %1 から切断されました。</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">ネットワーク エラー: %1</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">以前のバージョンからの移行を完了するには、パスワードを変更する必要があります。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7626,18 +6944,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">接続状態</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
 </context>
 <context>
@@ -11562,27 +10873,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">コンピューター名</translation>
+        <translation>コンピューター名</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">オペレーティング システム</translation>
+        <translation>オペレーティング システム</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">バージョン</translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">アドレス</translation>
+        <translation>アドレス</translation>
     </message>
 </context>
 <context>
@@ -11639,7 +10950,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>前回のコードは受け付けられませんでした。</translation>
     </message>
 </context>
 <context>
@@ -11662,7 +10973,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>前回のコードは受け付けられませんでした。</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11710,7 +11021,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>前回のコードは受け付けられませんでした。</translation>
     </message>
 </context>
 <context>
@@ -11850,13 +11161,9 @@ Are you sure you want to continue?</source>
         <translation>すべて選択解除</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">ユーザー名は空にできず、英字、数字、および _、-、.、@ の文字のみ使用できます。</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名は空にできず、英字、数字、および _、-、.、@ の文字のみ使用できます。数字のみで構成することはできません。</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11972,11 +11279,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot;、&quot;@&quot; の文字のみ使用できます。</translation>
+        <translation>ユーザー名は空にできず、英字、数字、および &quot;_&quot;、&quot;-&quot;、&quot;.&quot;、&quot;@&quot; の文字のみ使用できます。数字のみで構成することはできません。</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12091,65 +11394,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">名前</translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">有効</translation>
+        <translation>有効</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">セッションの種類</translation>
+        <translation>セッションの種類</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">はい</translation>
+        <translation>はい</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">いいえ</translation>
+        <translation>いいえ</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">管理者</translation>
+        <translation>管理者</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">マネージャー</translation>
+        <translation>マネージャー</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">はい</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">いいえ</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">管理者</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">マネージャー</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">クライアント</translation>
+        <translation>オペレーター</translation>
     </message>
 </context>
 <context>

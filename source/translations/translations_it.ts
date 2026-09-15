@@ -397,7 +397,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Autenticazione a due fattori - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Router aggiunti: %4</translation>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva credenziali</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -970,32 +970,32 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Nome computer</translation>
+        <translation>Nome computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">Indirizzo IP</translation>
+        <translation>Indirizzo IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Ora di connessione</translation>
+        <translation>Ora di connessione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Versione</translation>
+        <translation>Versione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architettura</translation>
+        <translation>Architettura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">Sistema operativo</translation>
+        <translation>Sistema operativo</translation>
     </message>
 </context>
 <context>
@@ -1004,10 +1004,6 @@ Router aggiunti: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Sessione avviata.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Errore nella richiesta di connessione tramite il router: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1028,14 +1024,6 @@ Router aggiunti: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Connessione all&apos;host %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">Connessione all&apos;host %1 stabilita.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">Connessione all&apos;host %1:%2 stabilita.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1070,23 +1058,7 @@ Router aggiunti: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Errore nella richiesta di connessione tramite il router.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">L&apos;host con l&apos;ID specificato non è in linea</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Accesso negato</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Non ci sono relay disponibili o il pool di chiavi è vuoto</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Errore sconosciuto</translation>
+        <translation>Errore nella richiesta di connessione tramite il router.</translation>
     </message>
 </context>
 <context>
@@ -1880,10 +1852,6 @@ Password: %2</translation>
         <translation>Impossibile salvare l&apos;immagine</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Impossibile avviare sul computer remoto.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Connessione...</translation>
@@ -1912,22 +1880,6 @@ Password: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">L&apos;host con l&apos;ID specificato non è in linea.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Accesso negato.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Non ci sono relay disponibili o il pool di chiavi è vuoto.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Errore nella richiesta di connessione tramite il router.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2951,72 +2903,72 @@ Password: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID host</translation>
+        <translation>ID host</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome visualizzato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Nome computer</translation>
+        <translation>Nome computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Indirizzo</translation>
+        <translation>Indirizzo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Commento</translation>
+        <translation>Commento</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Area di lavoro</translation>
+        <translation>Area di lavoro</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">Sistema operativo</translation>
+        <translation>Sistema operativo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Versione</translation>
+        <translation>Versione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architettura</translation>
+        <translation>Architettura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Ultima connessione</translation>
+        <translation>Ultima connessione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Ultima modifica</translation>
+        <translation>Ultima modifica</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Stato</translation>
+        <translation>Stato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">In linea</translation>
+        <translation>In linea</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Non in linea</translation>
+        <translation>Non in linea</translation>
     </message>
 </context>
 <context>
@@ -3055,17 +3007,6 @@ Password: %2</translation>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Apre la finestra del registro di sicurezza.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">In linea</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Non in linea</translation>
     </message>
 </context>
 <context>
@@ -3200,22 +3141,6 @@ Password: %2</translation>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Mostra</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Non disponibile</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Connessione al router %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Connesso al router %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">Impossibile connettersi al router %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3373,7 +3298,7 @@ Password: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
         </translation>
@@ -3381,7 +3306,7 @@ Password: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
         </translation>
@@ -3410,34 +3335,6 @@ Password: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nome</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Indirizzo / ID</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Creato</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Modificato</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Ultima connessione</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stato</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Commento</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Aggiornamento dello stato...</translation>
@@ -3457,14 +3354,6 @@ Password: %2</translation>
             <numerusform>%n host figlio</numerusform>
             <numerusform>%n host figli</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">In linea</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Non in linea</translation>
     </message>
 </context>
 <context>
@@ -3571,7 +3460,7 @@ Password: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3674,7 +3563,7 @@ Password: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
         </translation>
@@ -3682,7 +3571,7 @@ Password: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n caratteri.</numerusform>
         </translation>
@@ -3705,7 +3594,7 @@ Password: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3733,47 +3622,47 @@ Password: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Indirizzo / ID</translation>
+        <translation>Indirizzo / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Commento</translation>
+        <translation>Commento</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Creato</translation>
+        <translation>Creato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Modificato</translation>
+        <translation>Modificato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Ultima connessione</translation>
+        <translation>Ultima connessione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Stato</translation>
+        <translation>Stato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">In linea</translation>
+        <translation>In linea</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Non in linea</translation>
+        <translation>Non in linea</translation>
     </message>
 </context>
 <context>
@@ -3812,31 +3701,6 @@ Password: %2</translation>
         <translation>Importa rubrica</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Rubrica (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n router importato, </numerusform>
-            <numerusform>%n router importati, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n gruppo, </numerusform>
-            <numerusform>%n gruppi, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n host.</numerusform>
-            <numerusform>%n host.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Password non valida.</translation>
@@ -3845,10 +3709,6 @@ Password: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Il file è stato creato da una versione più recente e non può essere importato.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">La rubrica è già aggiornata.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3860,28 +3720,21 @@ Password: %2</translation>
         <source>Export Address Book</source>
         <translation>Esporta rubrica</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n router esportato, </numerusform>
-            <numerusform>%n router esportati, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Backup Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>La rubrica verrà sostituita con quella contenuta nel file. Tutto il suo contenuto attuale verrà eliminato.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file non contiene alcuna rubrica, quindi non è stato modificato nulla.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3889,17 +3742,20 @@ Password: %2</translation>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Router importati: %1
+Gruppi importati: %2
+Host importati: %3
+Password salvate importate: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>La rubrica è vuota. Non c&apos;è nulla da salvare.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3909,7 +3765,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file è stato scritto in %1. Per aprirlo altrove è necessaria la password principale di questa rubrica.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4313,7 +4169,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile eliminare l&apos;area di lavoro.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4323,7 +4179,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Impossibile eliminare il gruppo.</translation>
+        <translation>Impossibile eliminare il gruppo.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4344,17 +4200,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Backup Aspia (*.aspia-backup);;Tutti i file (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>La rubrica è vuota. Non c&apos;è nulla da salvare.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4363,32 +4219,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Esportazione completata con successo.
+Router esportati: %1
+Gruppi esportati: %2
+Host esportati: %3
+Password salvate esportate: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>La rubrica verrà sostituita con quella contenuta nel file. Tutto il suo contenuto attuale verrà eliminato. Continuare?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file è stato salvato da un&apos;altra rubrica. Inserire la password principale di quella rubrica.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file non contiene alcuna rubrica, quindi non è stato modificato nulla.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile leggere il file.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Impossibile importare la rubrica.</translation>
+        <translation>Impossibile importare la rubrica.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4397,11 +4257,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Rubrica (*.json);;Tutti i file (*)</translation>
+        <translation>Importazione completata con successo.
+Router importati: %1
+Gruppi importati: %2
+Host importati: %3
+Password salvate importate: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4410,52 +4270,15 @@ Saved passwords imported: %4</source>
         <translation>Il database della rubrica non è disponibile.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Inserisci una password per cifrare la rubrica.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">La password inserita non soddisfa i requisiti di sicurezza!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
-            <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n caratteri.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Vuoi inserire una password diversa?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Impossibile esportare la rubrica.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Esportazione completata con successo.
-Router esportati: %1
-Gruppi esportati: %2
-Host esportati: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Importa rubrica</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Sblocca</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">La rubrica è cifrata. Per aprirla è necessario inserire una password.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4468,29 +4291,9 @@ Host esportati: %3</translation>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Non è stato importato nulla.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Il file non è una rubrica valida.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Importazione completata con successo.
-Router aggiunti: %1
-Router saltati: %2
-Gruppi aggiunti: %3
-Gruppi saltati: %4
-Host aggiunti: %5
-Host saltati: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4888,37 +4691,37 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Nome Utente</translation>
+        <translation>Nome utente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID host</translation>
+        <translation>ID host</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Indirizzo host</translation>
+        <translation>Indirizzo host</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">Indirizzo client</translation>
+        <translation>Indirizzo client</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Trasferito</translation>
+        <translation>Dati trasferiti</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Durata</translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Inattivo</translation>
+        <translation>Inattività</translation>
     </message>
 </context>
 <context>
@@ -5026,37 +4829,37 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Indirizzo</translation>
+        <translation>Indirizzo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Ora di connessione</translation>
+        <translation>Ora di connessione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Dimensione pool</translation>
+        <translation>Dimensione pool</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Versione</translation>
+        <translation>Versione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Nome computer</translation>
+        <translation>Nome computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architettura</translation>
+        <translation>Architettura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">Sistema operativo</translation>
+        <translation>Sistema operativo</translation>
     </message>
 </context>
 <context>
@@ -5070,13 +4873,13 @@ Host saltati: %6</translation>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra altro</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 di %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5100,45 +4903,21 @@ Host saltati: %6</translation>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci codice</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloccato</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Configura</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Nome computer</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">Indirizzo IP</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Ora di connessione</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versione</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architettura</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Sistema operativo</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5169,22 +4948,6 @@ Host saltati: %6</translation>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Disconnettere tutti i client?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Richiesta client non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID voce non valido.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5196,27 +4959,27 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Precedente</translation>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Successivo</translation>
+        <translation>Successivo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Elementi per pagina:</translation>
+        <translation>Elementi per pagina:</translation>
     </message>
 </context>
 <context>
@@ -5226,42 +4989,42 @@ Host saltati: %6</translation>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">Connessione al router %1...</translation>
+        <translation>Connessione al router %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Cronologia eventi cancellata.</translation>
+        <translation>Cronologia degli eventi cancellata.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>Troppi tentativi falliti. Il router %1 accetterà di nuovo i codici tra circa %2 min.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il codice non è stato accettato dal router %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il router %1 è in attesa di un codice a due fattori.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">Connessione al router %1 stabilita.</translation>
+        <translation>Connessione al router %1 stabilita.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Errore di rete: %1</translation>
+        <translation>Errore di rete: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">Disconnesso dal router %1.</translation>
+        <translation>Disconnesso dal router %1.</translation>
     </message>
 </context>
 <context>
@@ -5317,18 +5080,14 @@ Host saltati: %6</translation>
         <translation>Gestore</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">Client</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Operatore</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
         </translation>
@@ -5392,7 +5151,7 @@ Host saltati: %6</translation>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n caratteri.</numerusform>
         </translation>
@@ -5439,67 +5198,67 @@ Host saltati: %6</translation>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il router ha rifiutato la richiesta.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Errore interno sconosciuto.</translation>
+        <translation>Errore interno sconosciuto.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">ID voce non valido.</translation>
+        <translation>ID della voce non valido.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Sono stati trasmessi dati non validi.</translation>
+        <translation>Sono stati passati dati non validi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esiste già un record con il nome specificato.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Record non trovato. L&apos;elenco potrebbe non essere aggiornato.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Accesso negato.</translation>
+        <translation>Accesso rifiutato.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>I dati sono cambiati sul router. Aggiornare l&apos;elenco e riprovare.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione al router persa.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">L&apos;host con l&apos;ID specificato non è in linea.</translation>
+        <translation>L&apos;host con l&apos;ID specificato non è in linea.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Non ci sono relay disponibili o il pool di chiavi è vuoto.</translation>
+        <translation>Non ci sono relay disponibili oppure il pool di chiavi è vuoto.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Troppe richieste di connessione. Riprovare più tardi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Tipo di errore sconosciuto.</translation>
+        <translation>Tipo di errore sconosciuto.</translation>
     </message>
 </context>
 <context>
@@ -5542,32 +5301,12 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Richiesta gruppo non valida.</translation>
+        <translation>Impossibile ottenere l&apos;elenco dei gruppi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Accesso negato.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Gruppo non trovato.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5577,54 +5316,6 @@ Host saltati: %6</translation>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Nome visualizzato</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID host</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Nome computer</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Indirizzo</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Nome Utente</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Commento</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Sistema operativo</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versione</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architettura</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Ultima connessione</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Ultima modifica</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stato</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5636,27 +5327,27 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Precedente</translation>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Successivo</translation>
+        <translation>Successivo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Elementi per pagina:</translation>
+        <translation>Elementi per pagina:</translation>
     </message>
 </context>
 <context>
@@ -5679,11 +5370,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Nome utente:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Nome Utente:</translation>
+        <translation>Nome utente:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5693,7 +5380,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome utente e la password vengono memorizzati solo su questo computer e non vengono inviati al router.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5701,39 +5388,19 @@ Host saltati: %6</translation>
         <translation>Commento:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Accesso negato.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Host non trovato.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile ottenere l&apos;elenco dei gruppi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile salvare le credenziali.</translation>
     </message>
 </context>
 <context>
@@ -5741,89 +5408,37 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Nome Utente</translation>
+        <translation>Nome utente</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome utente e la password vengono memorizzati solo su questo dispositivo e non vengono inviati al router. Lasciare entrambi vuoti per dimenticarli.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Salva</translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile salvare le credenziali.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID host</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Nome visualizzato</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Nome computer</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Indirizzo</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Nome Utente</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Commento</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Area di lavoro</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Sistema operativo</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versione</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architettura</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Ultima connessione</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Ultima modifica</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stato</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5850,10 +5465,6 @@ Host saltati: %6</translation>
         <translation>Elementi per pagina:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">L&apos;host non è assegnato ad alcuna area di lavoro.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Disconnettere l&apos;host &quot;%1&quot;?</translation>
@@ -5872,22 +5483,6 @@ Host saltati: %6</translation>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>L&apos;eliminazione di un host comporterà l&apos;eliminazione di tutta la sua configurazione di connessione al router e la disinstallazione dell&apos;applicazione sull&apos;host. Questa operazione è irreversibile. Procedere?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Richiesta host non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID voce non valido.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5920,62 +5515,6 @@ Host saltati: %6</translation>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Indirizzo</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Ora di connessione</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Dimensione pool</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versione</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Nome computer</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architettura</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Sistema operativo</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Nome Utente</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID host</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Indirizzo host</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Indirizzo client</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Trasferito</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Durata</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Inattivo</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6026,26 +5565,6 @@ Host saltati: %6</translation>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Disconnettere il peer &quot;%1&quot;?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Richiesta relay non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">ID voce non valido.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Sessione relay non trovata.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6060,7 +5579,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il router ha accettato la nuova password, ma il record non è stato aggiornato.</translation>
     </message>
 </context>
 <context>
@@ -6069,13 +5588,13 @@ Host saltati: %6</translation>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il router è in attesa di un codice a due fattori.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci codice</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6098,65 +5617,45 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;autenticazione a due fattori è bloccata dopo troppi tentativi falliti.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;autenticazione a due fattori deve essere configurata per questo router.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Configura</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Nome computer</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Sistema operativo</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versione</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Indirizzo</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Precedente</translation>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Successivo</translation>
+        <translation>Successivo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Elementi per pagina:</translation>
+        <translation>Elementi per pagina:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6237,30 +5736,6 @@ Host saltati: %6</translation>
         <translation>Disconnetti tutte le sessioni</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Richiesta utente non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Un utente con il nome specificato esiste già.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Utente non trovato. L&apos;elenco potrebbe non essere aggiornato.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà questo utente da tutte le sessioni e lo costringerà a registrarsi di nuovo al prossimo accesso. Continuare?</translation>
@@ -6276,18 +5751,6 @@ Host saltati: %6</translation>
         <translation>Disconnettere questo utente da tutte le sessioni?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Sessione non trovata. L&apos;elenco potrebbe non essere aggiornato.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Richiesta di disconnessione non valida.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Il nome utente inserito esiste già.</translation>
@@ -6300,27 +5763,27 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utente è stato eliminato da un&apos;altra console.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà tutte le sessioni e richiederà una nuova registrazione al prossimo accesso. Continuare?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo è il token della sessione corrente. La sua revoca comporterà la disconnessione. Continuare?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6366,7 +5829,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il token della sessione corrente.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6381,11 +5844,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Client</translation>
+        <translation>Operatore</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6395,18 +5854,6 @@ Host saltati: %6</translation>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nome</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Abilitato</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Tipi di sessione</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6420,31 +5867,7 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Richiesta utente non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Un utente con il nome specificato esiste già.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Utente non trovato. L&apos;elenco potrebbe non essere aggiornato.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
+        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6457,27 +5880,27 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Precedente</translation>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Successivo</translation>
+        <translation>Successivo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Elementi per pagina:</translation>
+        <translation>Elementi per pagina:</translation>
     </message>
 </context>
 <context>
@@ -6544,28 +5967,28 @@ Host saltati: %6</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6595,29 +6018,31 @@ Host saltati: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile ottenere l&apos;elenco delle aree di lavoro.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;area di lavoro è stata eliminata da un&apos;altra console.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;area di lavoro è stata modificata da un&apos;altra console. Gli elenchi sono in fase di aggiornamento - verificare le modifiche e salvare di nuovo.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>La rimozione dell&apos;host dall&apos;area di lavoro cancellerà definitivamente il suo commento. Questa azione non può essere annullata.
+
+Continuare?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6628,38 +6053,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Un&apos;area di lavoro con il nome specificato esiste già.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Richiesta area di lavoro non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Area di lavoro non trovata.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Gli amministratori non possono essere rimossi dall&apos;elenco di accesso dell&apos;area di lavoro.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">La rimozione dell&apos;host dall&apos;area di lavoro cancellerà definitivamente i suoi campi cifrati (commento, nome utente e password). Questa azione non può essere annullata.
-
-Continuare?</translation>
     </message>
 </context>
 <context>
@@ -6678,26 +6071,6 @@ Continuare?</translation>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Modifica router</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Connessione al router %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Connessione al router %1 stabilita.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Disconnesso dal router %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Errore di rete: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Il router richiede un cambio di password, che non è ancora supportato qui.</translation>
     </message>
 </context>
 <context>
@@ -6718,61 +6091,45 @@ Continuare?</translation>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Indirizzo / ID</translation>
+        <translation>Indirizzo / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Gruppo</translation>
+        <translation>Gruppo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Commento</translation>
+        <translation>Commento</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nome</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Indirizzo / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Commento</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Gruppo</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Precedente</translation>
+        <translation>Precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Pagina precedente</translation>
+        <translation>Pagina precedente</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Successivo</translation>
+        <translation>Successivo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Pagina successiva</translation>
+        <translation>Pagina successiva</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6790,7 +6147,7 @@ Continuare?</translation>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 di %2</translation>
     </message>
 </context>
 <context>
@@ -7481,22 +6838,6 @@ Continuare?</translation>
         <translation>Locale</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Connessione al router %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Connessione al router %1 stabilita.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Disconnesso dal router %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Per completare la migrazione da una versione precedente, devi cambiare la password.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Cambia Password</translation>
@@ -7530,31 +6871,7 @@ Continuare?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Password aggiornata. In attesa di nuove chiavi di cifratura...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Richiesta di cambio password non valida.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Errore interno sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Sono stati trasmessi dati non validi.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tipo di errore sconosciuto.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Cronologia eventi cancellata.</translation>
+        <translation>Modifica della password in corso. In attesa che la sessione effettui nuovamente l&apos;accesso...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7570,10 +6887,6 @@ Continuare?</translation>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Eliminare il router &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Errore di rete: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7663,18 +6976,11 @@ Continuare?</translation>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Stato Connessione</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Chiudi</translation>
+        <translation>Chiudi</translation>
     </message>
 </context>
 <context>
@@ -11599,27 +10905,27 @@ Continuare?</translation>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Nome computer</translation>
+        <translation>Nome computer</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">Sistema operativo</translation>
+        <translation>Sistema operativo</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Versione</translation>
+        <translation>Versione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Indirizzo</translation>
+        <translation>Indirizzo</translation>
     </message>
 </context>
 <context>
@@ -11676,7 +10982,7 @@ Continuare?</translation>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il codice precedente non è stato accettato.</translation>
     </message>
 </context>
 <context>
@@ -11699,7 +11005,7 @@ Continuare?</translation>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il codice precedente non è stato accettato.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11747,7 +11053,7 @@ Continuare?</translation>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il codice precedente non è stato accettato.</translation>
     </message>
 </context>
 <context>
@@ -11887,13 +11193,9 @@ Continuare?</translation>
         <translation>Deseleziona tutto</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11962,10 +11264,6 @@ Continuare?</translation>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Errore</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12040,7 +11338,7 @@ Continuare?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Non può essere composto solo da cifre.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12131,65 +11429,42 @@ Continuare?</translation>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Abilitato</translation>
+        <translation>Abilitato</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Tipi di sessione</translation>
+        <translation>Tipi di sessione</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Sì</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Amministratore</translation>
+        <translation>Amministratore</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Gestore</translation>
+        <translation>Gestore</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Sì</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">No</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Amministratore</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Client</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Gestore</translation>
+        <translation>Operatore</translation>
     </message>
 </context>
 <context>

@@ -397,7 +397,7 @@ Lisättyjä reitittimiä: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksivaiheinen todennus - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Lisättyjä reitittimiä: %4</translation>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Tallenna kirjautumistiedot</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -970,32 +970,32 @@ Lisättyjä reitittimiä: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Tietokoneen nimi</translation>
+        <translation>Tietokoneen nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP-osoite</translation>
+        <translation>IP-osoite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Yhteysaika</translation>
+        <translation>Yhdistämisaika</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Versio</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkkitehtuuri</translation>
+        <translation>Arkkitehtuuri</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">Käyttöjärjestelmä</translation>
+        <translation>Käyttöjärjestelmä</translation>
     </message>
 </context>
 <context>
@@ -1004,10 +1004,6 @@ Lisättyjä reitittimiä: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Istunto aloitettu.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Virhe pyydettäessä yhteyttä reitittimen kautta: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1028,14 +1024,6 @@ Lisättyjä reitittimiä: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Yhdistetään isäntään %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">Yhteys isäntään %1 muodostettu.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">Yhteys isäntään %1:%2 muodostettu.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1070,23 +1058,7 @@ Lisättyjä reitittimiä: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">Määritetyn ID:n isäntä ei ole online-tilassa</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Käyttö on estetty</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Välityspalvelimia ei ole saatavilla tai avainvaranto on tyhjä</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Tuntematon virhe</translation>
+        <translation>Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
     </message>
 </context>
 <context>
@@ -1880,10 +1852,6 @@ Salasana: %2</translation>
         <translation>Kuvaa ei voitu tallentaa</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Käynnistäminen etätietokoneella epäonnistui.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
@@ -1912,22 +1880,6 @@ Salasana: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Yhdistetään reitittimeen...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">Määritetyn ID:n isäntä ei ole online-tilassa.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Käyttö on estetty.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Välityspalvelimia ei ole saatavilla tai avainvaranto on tyhjä.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2951,72 +2903,72 @@ Salasana: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">Isäntä-ID</translation>
+        <translation>Isäntä-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">Näyttönimi</translation>
+        <translation>Näyttönimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Tietokoneen nimi</translation>
+        <translation>Tietokoneen nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Osoite</translation>
+        <translation>Osoite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentti</translation>
+        <translation>Kommentti</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Työtila</translation>
+        <translation>Työtila</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">Käyttöjärjestelmä</translation>
+        <translation>Käyttöjärjestelmä</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Versio</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkkitehtuuri</translation>
+        <translation>Arkkitehtuuri</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Viimeisin yhteys</translation>
+        <translation>Viimeisin yhteys</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Viimeisin muokkaus</translation>
+        <translation>Viimeksi muokattu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Tila</translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3055,17 +3007,6 @@ Salasana: %2</translation>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Avaa suojauslokin valintaikkunan.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3200,22 +3141,6 @@ Salasana: %2</translation>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Näytä</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Ei saatavilla</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Yhdistetään reitittimeen %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Yhdistetty reitittimeen %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">Yhteys reitittimeen %1 epäonnistui</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3373,7 +3298,7 @@ Salasana: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -3381,7 +3306,7 @@ Salasana: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä kommentti. Kommentin enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä kommentti. Kommentin enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -3410,34 +3335,6 @@ Salasana: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nimi</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Osoite / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentti</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Luotu</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Muokattu</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Viimeisin yhteys</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Tila</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Päivitetään tilaa...</translation>
@@ -3457,14 +3354,6 @@ Salasana: %2</translation>
             <numerusform>%n isäntä</numerusform>
             <numerusform>%n isäntää</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3571,7 +3460,7 @@ Salasana: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä sekä käyttäjänimi että salasana tai jätä molemmat tyhjiksi.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3674,7 +3563,7 @@ Salasana: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -3682,7 +3571,7 @@ Salasana: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä kommentti. Kommentin enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä kommentti. Kommentin enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -3705,7 +3594,7 @@ Salasana: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä sekä käyttäjänimi että salasana tai jätä molemmat tyhjiksi.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3733,47 +3622,47 @@ Salasana: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Osoite / ID</translation>
+        <translation>Osoite / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentti</translation>
+        <translation>Kommentti</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Luotu</translation>
+        <translation>Luotu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Muokattu</translation>
+        <translation>Muokattu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Viimeisin yhteys</translation>
+        <translation>Viimeisin yhteys</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Tila</translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3812,31 +3701,6 @@ Salasana: %2</translation>
         <translation>Tuo osoitekirja</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Osoitekirja (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Tuotiin %n reititin, </numerusform>
-            <numerusform>Tuotiin %n reititintä, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n ryhmä, </numerusform>
-            <numerusform>%n ryhmää, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n isäntä.</numerusform>
-            <numerusform>%n isäntää.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Virheellinen salasana.</translation>
@@ -3845,10 +3709,6 @@ Salasana: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Tiedosto on luotu uudemmalla versiolla, eikä sitä voi tuoda.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">Osoitekirja on jo ajan tasalla.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3860,28 +3720,21 @@ Salasana: %2</translation>
         <source>Export Address Book</source>
         <translation>Vie osoitekirja</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Vietiin %n reititin, </numerusform>
-            <numerusform>Vietiin %n reititintä, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-varmuuskopio (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Osoitekirja korvataan tiedostossa olevalla osoitekirjalla. Kaikki sen nykyinen sisältö poistetaan.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedosto ei sisällä osoitekirjaa, joten mitään ei muutettu.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3889,17 +3742,20 @@ Salasana: %2</translation>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuotuja reitittimiä: %1
+Tuotuja ryhmiä: %2
+Tuotuja isäntiä: %3
+Tuotuja tallennettuja salasanoja: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Osoitekirja on tyhjä. Tallennettavaa ei ole.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3909,7 +3765,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedosto on kirjoitettu kohteeseen %1. Sen avaamiseen muualla tarvitaan tämän osoitekirjan pääsalasana.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4313,7 +4169,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Työtilan poistaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4323,7 +4179,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Ryhmän poistaminen epäonnistui.</translation>
+        <translation>Ryhmän poistaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4344,17 +4200,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia-varmuuskopio (*.aspia-backup);;Kaikki tiedostot (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Osoitekirja on tyhjä. Tallennettavaa ei ole.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4363,32 +4219,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Vienti onnistui.
+Vietyjä reitittimiä: %1
+Vietyjä ryhmiä: %2
+Vietyjä isäntiä: %3
+Vietyjä tallennettuja salasanoja: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Osoitekirja korvataan tiedostossa olevalla osoitekirjalla. Kaikki sen nykyinen sisältö poistetaan. Jatketaanko?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedosto on tallennettu toisesta osoitekirjasta. Syötä kyseisen osoitekirjan pääsalasana.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedosto ei sisällä osoitekirjaa, joten mitään ei muutettu.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedostoa ei voi lukea.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Osoitekirjan tuonti epäonnistui.</translation>
+        <translation>Osoitekirjan tuonti epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4397,11 +4257,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Osoitekirja (*.json);;Kaikki tiedostot (*)</translation>
+        <translation>Tuonti onnistui.
+Tuotuja reitittimiä: %1
+Tuotuja ryhmiä: %2
+Tuotuja isäntiä: %3
+Tuotuja tallennettuja salasanoja: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4410,52 +4270,15 @@ Saved passwords imported: %4</source>
         <translation>Osoitekirjan tietokanta ei ole käytettävissä.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Syötä salasana osoitekirjan salaamista varten.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
-            <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkkiä.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Haluatko syöttää toisen salasanan?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Osoitekirjan vienti epäonnistui.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Vienti onnistui.
-Vietyjä reitittimiä: %1
-Vietyjä ryhmiä: %2
-Vietyjä isäntiä: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Tuo osoitekirja</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Avaa lukitus</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Osoitekirja on salattu. Avaaminen edellyttää salasanan syöttämistä.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4468,29 +4291,9 @@ Vietyjä isäntiä: %3</translation>
         <translation>Tiedostomuodon versiota ei tueta.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Mitään ei tuotu.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Tiedosto ei ole kelvollinen osoitekirja.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Tuonti onnistui.
-Lisättyjä reitittimiä: %1
-Ohitettuja reitittimiä: %2
-Lisättyjä ryhmiä: %3
-Ohitettuja ryhmiä: %4
-Lisättyjä isäntiä: %5
-Ohitettuja isäntiä: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4888,37 +4691,37 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Käyttäjänimi</translation>
+        <translation>Käyttäjänimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">Isäntä-ID</translation>
+        <translation>Isäntä-ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Isännän osoite</translation>
+        <translation>Isännän osoite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">Asiakkaan osoite</translation>
+        <translation>Asiakkaan osoite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Siirretty</translation>
+        <translation>Siirretty</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Kesto</translation>
+        <translation>Kesto</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Vapaa</translation>
+        <translation>Käyttämättä</translation>
     </message>
 </context>
 <context>
@@ -5026,37 +4829,37 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Osoite</translation>
+        <translation>Osoite</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Yhteysaika</translation>
+        <translation>Yhdistämisaika</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Varannon koko</translation>
+        <translation>Varannon koko</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Versio</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Tietokoneen nimi</translation>
+        <translation>Tietokoneen nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Arkkitehtuuri</translation>
+        <translation>Arkkitehtuuri</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">Käyttöjärjestelmä</translation>
+        <translation>Käyttöjärjestelmä</translation>
     </message>
 </context>
 <context>
@@ -5070,13 +4873,13 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä lisää</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5100,45 +4903,21 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä koodi</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Estetty</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Määritä</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Tietokoneen nimi</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP-osoite</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Yhteysaika</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versio</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkkitehtuuri</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Käyttöjärjestelmä</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5169,22 +4948,6 @@ Ohitettuja isäntiä: %6</translation>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Haluatko varmasti katkaista kaikkien asiakkaiden yhteyden?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Virheellinen asiakaspyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Virheellinen merkinnän ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5196,27 +4959,27 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Edellinen</translation>
+        <translation>Edellinen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Seuraava</translation>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Kohteita sivulla:</translation>
+        <translation>Kohteita sivulla:</translation>
     </message>
 </context>
 <context>
@@ -5226,42 +4989,42 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">Yhdistetään reitittimeen %1...</translation>
+        <translation>Yhdistetään reitittimeen %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Tapahtumahistoria tyhjennetty.</translation>
+        <translation>Tapahtumahistoria tyhjennetty.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>Liian monta epäonnistunutta yritystä. Reititin %1 hyväksyy koodeja uudelleen noin %2 min kuluttua.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reititin %1 ei hyväksynyt koodia.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reititin %1 odottaa kaksivaiheisen todennuksen koodia.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">Yhteys reitittimeen %1 muodostettu.</translation>
+        <translation>Yhteys reitittimeen %1 muodostettu.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Verkkovirhe: %1</translation>
+        <translation>Verkkovirhe: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">Yhteys reitittimeen %1 katkaistu.</translation>
+        <translation>Yhteys reitittimeen %1 katkaistu.</translation>
     </message>
 </context>
 <context>
@@ -5317,18 +5080,14 @@ Ohitettuja isäntiä: %6</translation>
         <translation>Hallinnoija</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">Asiakas</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Operaattori</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -5392,7 +5151,7 @@ Ohitettuja isäntiä: %6</translation>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkki.</numerusform>
             <numerusform>Liian pitkä nimi. Nimen enimmäispituus on %n merkkiä.</numerusform>
         </translation>
@@ -5439,67 +5198,67 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reititin hylkäsi pyynnön.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Tuntematon sisäinen virhe.</translation>
+        <translation>Tuntematon sisäinen virhe.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">Virheellinen merkinnän ID.</translation>
+        <translation>Virheellinen merkinnän ID.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Välitettiin virheellisiä tietoja.</translation>
+        <translation>Välitettiin virheellisiä tietoja.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tämänniminen tietue on jo olemassa.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tietuetta ei löytynyt. Luettelo voi olla vanhentunut.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Käyttö estetty.</translation>
+        <translation>Käyttö estetty.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiedot ovat muuttuneet reitittimellä. Päivitä luettelo ja yritä uudelleen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yhteys reitittimeen katkesi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">Määritetyn ID:n isäntä ei ole online-tilassa.</translation>
+        <translation>Isäntä, jolla on määritetty ID, ei ole online-tilassa.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Välityspalvelimia ei ole saatavilla tai avainvaranto on tyhjä.</translation>
+        <translation>Välityspalvelimia ei ole käytettävissä tai avainvaranto on tyhjä.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Liian monta yhteyspyyntöä. Yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Tuntematon virhetyyppi.</translation>
+        <translation>Tuntematon virhetyyppi.</translation>
     </message>
 </context>
 <context>
@@ -5542,32 +5301,12 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Virheellinen ryhmäpyyntö.</translation>
+        <translation>Ryhmäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Käyttö estetty.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Ryhmää ei löytynyt.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5577,54 +5316,6 @@ Ohitettuja isäntiä: %6</translation>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Näyttönimi</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Isäntä-ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Tietokoneen nimi</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Osoite</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Käyttäjänimi</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentti</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Käyttöjärjestelmä</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versio</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkkitehtuuri</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Viimeisin yhteys</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Viimeisin muokkaus</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Tila</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5636,27 +5327,27 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Edellinen</translation>
+        <translation>Edellinen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Seuraava</translation>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Kohteita sivulla:</translation>
+        <translation>Kohteita sivulla:</translation>
     </message>
 </context>
 <context>
@@ -5679,11 +5370,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Käyttäjänimi:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Käyttäjänimi:</translation>
+        <translation>Käyttäjänimi:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5693,7 +5380,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi ja salasana tallennetaan vain tälle tietokoneelle, eikä niitä lähetetä reitittimelle.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5701,39 +5388,19 @@ Ohitettuja isäntiä: %6</translation>
         <translation>Kommentti:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Käyttö estetty.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Isäntää ei löytynyt.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryhmäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä sekä käyttäjänimi että salasana tai jätä molemmat tyhjiksi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirjautumistietojen tallentaminen epäonnistui.</translation>
     </message>
 </context>
 <context>
@@ -5741,89 +5408,37 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Käyttäjänimi</translation>
+        <translation>Käyttäjänimi</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Salasana</translation>
+        <translation>Salasana</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi ja salasana tallennetaan vain tälle laitteelle, eikä niitä lähetetä reitittimelle. Jätä molemmat tyhjiksi unohtaaksesi ne.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Tallenna</translation>
+        <translation>Tallenna</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirjautumistietojen tallentaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä sekä käyttäjänimi että salasana tai jätä molemmat tyhjiksi.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Isäntä-ID</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Näyttönimi</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Tietokoneen nimi</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Osoite</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Käyttäjänimi</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentti</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Työtila</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Käyttöjärjestelmä</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versio</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkkitehtuuri</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Viimeisin yhteys</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Viimeisin muokkaus</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Tila</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5850,10 +5465,6 @@ Ohitettuja isäntiä: %6</translation>
         <translation>Kohteita sivulla:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">Isäntää ei ole liitetty mihinkään työtilaan.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Haluatko varmasti katkaista isännän &quot;%1&quot; yhteyden?</translation>
@@ -5872,22 +5483,6 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Isännän poistaminen poistaa kaikki sen reititinyhteyden määritykset, ja sovellus poistetaan isännältä. Toimintoa ei voi perua. Haluatko varmasti tehdä tämän?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Virheellinen isäntäpyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Virheellinen merkinnän ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5920,62 +5515,6 @@ Ohitettuja isäntiä: %6</translation>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Osoite</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Yhteysaika</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Varannon koko</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versio</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Tietokoneen nimi</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Arkkitehtuuri</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Käyttöjärjestelmä</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Käyttäjänimi</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Isäntä-ID</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Isännän osoite</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Asiakkaan osoite</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Siirretty</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Kesto</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Vapaa</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6026,26 +5565,6 @@ Ohitettuja isäntiä: %6</translation>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Haluatko varmasti katkaista vertaisen &quot;%1&quot; yhteyden?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Virheellinen välityspalvelinpyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Virheellinen merkinnän ID.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Välityspalvelinistuntoa ei löytynyt.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6060,7 +5579,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reititin hyväksyi uuden salasanan, mutta tietuetta ei päivitetty.</translation>
     </message>
 </context>
 <context>
@@ -6069,13 +5588,13 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Reititin odottaa kaksivaiheisen todennuksen koodia.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Syötä koodi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6098,65 +5617,45 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksivaiheinen todennus on estetty liian monen epäonnistuneen yrityksen jälkeen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksivaiheinen todennus on määritettävä tälle reitittimelle.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Määritä</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Tietokoneen nimi</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Käyttöjärjestelmä</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versio</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Osoite</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Edellinen</translation>
+        <translation>Edellinen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Seuraava</translation>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Kohteita sivulla:</translation>
+        <translation>Kohteita sivulla:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6237,30 +5736,6 @@ Ohitettuja isäntiä: %6</translation>
         <translation>Kirjaa ulos kaikista</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Virheellinen käyttäjäpyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Tämänniminen käyttäjä on jo olemassa.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Käyttäjää ei löytynyt. Luettelo voi olla vanhentunut.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Kaksivaiheisen todennuksen nollaaminen kirjaa käyttäjän ulos kaikista istunnoista ja pakottaa hänet rekisteröitymään uudelleen seuraavan kirjautumisen yhteydessä. Jatketaanko?</translation>
@@ -6276,18 +5751,6 @@ Ohitettuja isäntiä: %6</translation>
         <translation>Haluatko varmasti kirjata tämän käyttäjän ulos kaikista istunnoista?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Istuntoa ei löytynyt. Luettelo voi olla vanhentunut.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Virheellinen uloskirjauspyyntö.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Syöttämäsi käyttäjänimi on jo olemassa.</translation>
@@ -6300,27 +5763,27 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjä poistettiin toisesta konsolista.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaksivaiheisen todennuksen nollaaminen kirjaa sinut ulos kaikista istunnoista ja pakottaa sinut rekisteröitymään uudelleen seuraavan kirjautumisen yhteydessä. Jatketaanko?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tämä on nykyisen istuntosi tunniste. Sen peruminen katkaisee yhteytesi. Jatketaanko?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6366,7 +5829,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nykyisen istuntosi tunniste.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6381,11 +5844,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Asiakas</translation>
+        <translation>Operaattori</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6395,18 +5854,6 @@ Ohitettuja isäntiä: %6</translation>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nimi</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Käytössä</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Istuntotyypit</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6420,31 +5867,7 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Virheellinen käyttäjäpyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Tämänniminen käyttäjä on jo olemassa.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Käyttäjää ei löytynyt. Luettelo voi olla vanhentunut.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
+        <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6457,27 +5880,27 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Edellinen</translation>
+        <translation>Edellinen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Seuraava</translation>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Kohteita sivulla:</translation>
+        <translation>Kohteita sivulla:</translation>
     </message>
 </context>
 <context>
@@ -6544,28 +5967,28 @@ Ohitettuja isäntiä: %6</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6595,29 +6018,31 @@ Ohitettuja isäntiä: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Työtilaluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Työtila poistettiin toisesta konsolista.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjäluettelon noutaminen epäonnistui.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Työtilaa muutettiin toisesta konsolista. Luetteloita päivitetään - tarkista muutokset ja tallenna uudelleen.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Isännän poistaminen työtilasta tyhjentää sen kommentin pysyvästi. Toimintoa ei voi perua.
+
+Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6628,38 +6053,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Tämänniminen työtila on jo olemassa.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Virheellinen työtilapyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Työtilaa ei löytynyt.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Järjestelmänvalvojia ei voi poistaa työtilan käyttöoikeusluettelosta.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">Isännän poistaminen työtilasta tyhjentää pysyvästi sen salatut kentät (kommentti, käyttäjänimi ja salasana). Toimintoa ei voi perua.
-
-Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
@@ -6678,26 +6071,6 @@ Haluatko varmasti jatkaa?</translation>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Muokkaa reititintä</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Yhdistetään reitittimeen %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Yhteys reitittimeen %1 muodostettu.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Yhteys reitittimeen %1 katkaistu.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Verkkovirhe: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Reititin vaatii salasanan vaihdon, jota ei vielä tueta tässä.</translation>
     </message>
 </context>
 <context>
@@ -6718,61 +6091,45 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Osoite / ID</translation>
+        <translation>Osoite / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Ryhmä</translation>
+        <translation>Ryhmä</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Kommentti</translation>
+        <translation>Kommentti</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nimi</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Osoite / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Kommentti</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Ryhmä</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Edellinen</translation>
+        <translation>Edellinen</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Edellinen sivu</translation>
+        <translation>Edellinen sivu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Seuraava</translation>
+        <translation>Seuraava</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Seuraava sivu</translation>
+        <translation>Seuraava sivu</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6790,7 +6147,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
 </context>
 <context>
@@ -7481,22 +6838,6 @@ Haluatko varmasti jatkaa?</translation>
         <translation>Paikallinen</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Yhdistetään reitittimeen %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Yhteys reitittimeen %1 muodostettu.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Yhteys reitittimeen %1 katkaistu.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Viimeistele siirtyminen aiemmasta versiosta vaihtamalla salasanasi.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Vaihda salasana</translation>
@@ -7530,31 +6871,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Salasana päivitetty. Odotetaan uusia salausavaimia...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Virheellinen salasanan vaihtopyyntö.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Tuntematon sisäinen virhe.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Välitettiin virheellisiä tietoja.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Tuntematon virhetyyppi.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Tapahtumahistoria tyhjennetty.</translation>
+        <translation>Vaihdetaan salasanaa. Odotetaan istunnon uudelleenkirjautumista...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7570,10 +6887,6 @@ Haluatko varmasti jatkaa?</translation>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa reitittimen &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Verkkovirhe: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7663,18 +6976,11 @@ Haluatko varmasti jatkaa?</translation>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Yhteyden tila</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Sulje</translation>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -11599,27 +10905,27 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Tietokoneen nimi</translation>
+        <translation>Tietokoneen nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">Käyttöjärjestelmä</translation>
+        <translation>Käyttöjärjestelmä</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Versio</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Osoite</translation>
+        <translation>Osoite</translation>
     </message>
 </context>
 <context>
@@ -11676,7 +10982,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Edellistä koodia ei hyväksytty.</translation>
     </message>
 </context>
 <context>
@@ -11699,7 +11005,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Edellistä koodia ei hyväksytty.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11747,7 +11053,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Edellistä koodia ei hyväksytty.</translation>
     </message>
 </context>
 <context>
@@ -11887,13 +11193,9 @@ Haluatko varmasti jatkaa?</translation>
         <translation>Poista kaikki valinnat</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11962,10 +11264,6 @@ Haluatko varmasti jatkaa?</translation>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Virhe</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä &quot;_&quot;, &quot;-&quot;, &quot;.&quot; ja &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12040,7 +11338,7 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä &quot;_&quot;, &quot;-&quot;, &quot;.&quot; ja &quot;@&quot;. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12131,65 +11429,42 @@ Haluatko varmasti jatkaa?</translation>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">Nimi</translation>
+        <translation>Nimi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Käytössä</translation>
+        <translation>Käytössä</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Istuntotyypit</translation>
+        <translation>Istuntotyypit</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Kyllä</translation>
+        <translation>Kyllä</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">Ei</translation>
+        <translation>Ei</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Järjestelmänvalvoja</translation>
+        <translation>Järjestelmänvalvoja</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Hallinnoija</translation>
+        <translation>Hallinnoija</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Kyllä</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Ei</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Järjestelmänvalvoja</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Asiakas</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Hallinnoija</translation>
+        <translation>Operaattori</translation>
     </message>
 </context>
 <context>

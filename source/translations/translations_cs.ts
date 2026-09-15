@@ -397,7 +397,7 @@ Přidané routery: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dvoufaktorové ověřování - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Přidané routery: %4</translation>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit přihlašovací údaje</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -972,32 +972,32 @@ Přidané routery: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Název počítače</translation>
+        <translation>Název počítače</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP adresa</translation>
+        <translation>IP adresa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Čas připojení</translation>
+        <translation>Čas připojení</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Verze</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architektura</translation>
+        <translation>Architektura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operační systém</translation>
+        <translation>Operační systém</translation>
     </message>
 </context>
 <context>
@@ -1006,10 +1006,6 @@ Přidané routery: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Relace zahájena.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Chyba při žádosti o připojení přes router: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1030,14 +1026,6 @@ Přidané routery: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Připojování k hostiteli %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">Připojení k hostiteli %1 navázáno.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">Připojení k hostiteli %1:%2 navázáno.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1072,23 +1060,7 @@ Přidané routery: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Chyba při žádosti o připojení přes router.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">Hostitel se zadaným ID není online</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Přístup je odepřen</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Nejsou dostupné žádné relay servery nebo je fond klíčů prázdný</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Neznámá chyba</translation>
+        <translation>Chyba při žádosti o připojení přes router.</translation>
     </message>
 </context>
 <context>
@@ -1884,10 +1856,6 @@ Heslo: %2</translation>
         <translation>Nelze uložit obrázek</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Nepodařilo se spustit na vzdáleném počítači.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Připojování...</translation>
@@ -1916,22 +1884,6 @@ Heslo: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Připojování k routeru...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">Hostitel se zadaným ID není online.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Přístup je odepřen.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Nejsou dostupné žádné relay servery nebo je fond klíčů prázdný.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Chyba při žádosti o připojení přes router.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2959,72 +2911,72 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID hostitele</translation>
+        <translation>ID hostitele</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">Zobrazovaný název</translation>
+        <translation>Zobrazovaný název</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Název počítače</translation>
+        <translation>Název počítače</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Adresa</translation>
+        <translation>Adresa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Komentář</translation>
+        <translation>Komentář</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Pracovní prostor</translation>
+        <translation>Pracovní prostor</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operační systém</translation>
+        <translation>Operační systém</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Verze</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architektura</translation>
+        <translation>Architektura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Poslední připojení</translation>
+        <translation>Poslední připojení</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Poslední změna</translation>
+        <translation>Poslední změna</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Stav</translation>
+        <translation>Stav</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3063,17 +3015,6 @@ Heslo: %2</translation>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Otevře dialog protokolu zabezpečení.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3208,22 +3149,6 @@ Heslo: %2</translation>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Není k dispozici</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Připojování k routeru %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Připojeno k routeru %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">Nepodařilo se připojit k routeru %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3383,7 +3308,7 @@ Heslo: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znak.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znaků.</numerusform>
@@ -3392,7 +3317,7 @@ Heslo: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře je %n znak.</numerusform>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře je %n znaků.</numerusform>
@@ -3422,34 +3347,6 @@ Heslo: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Název</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adresa / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Komentář</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Vytvořeno</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Změněno</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Poslední připojení</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stav</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Aktualizace stavu...</translation>
@@ -3471,14 +3368,6 @@ Heslo: %2</translation>
             <numerusform>%n podřízení hostitelé</numerusform>
             <numerusform>%n podřízených hostitelů</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Online</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Offline</translation>
     </message>
 </context>
 <context>
@@ -3586,7 +3475,7 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte uživatelské jméno i heslo, nebo ponechte obě pole prázdná.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3690,7 +3579,7 @@ Heslo: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znak.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znaků.</numerusform>
@@ -3699,7 +3588,7 @@ Heslo: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře je %n znak.</numerusform>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý komentář. Maximální délka komentáře je %n znaků.</numerusform>
@@ -3723,7 +3612,7 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte uživatelské jméno i heslo, nebo ponechte obě pole prázdná.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3751,47 +3640,47 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adresa / ID</translation>
+        <translation>Adresa / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Komentář</translation>
+        <translation>Komentář</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Vytvořeno</translation>
+        <translation>Vytvořeno</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Změněno</translation>
+        <translation>Změněno</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Poslední připojení</translation>
+        <translation>Poslední připojení</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Stav</translation>
+        <translation>Stav</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">Online</translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Offline</translation>
+        <translation>Offline</translation>
     </message>
 </context>
 <context>
@@ -3830,34 +3719,6 @@ Heslo: %2</translation>
         <translation>Importovat adresář</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Adresář (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Importován %n router, </numerusform>
-            <numerusform>Importovány %n routery, </numerusform>
-            <numerusform>Importováno %n routerů, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n skupina, </numerusform>
-            <numerusform>%n skupiny, </numerusform>
-            <numerusform>%n skupin, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n hostitel.</numerusform>
-            <numerusform>%n hostitelé.</numerusform>
-            <numerusform>%n hostitelů.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Neplatné heslo.</translation>
@@ -3866,10 +3727,6 @@ Heslo: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Soubor byl vytvořen novější verzí a nelze jej importovat.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">Adresář je již aktuální.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3881,29 +3738,21 @@ Heslo: %2</translation>
         <source>Export Address Book</source>
         <translation>Exportovat adresář</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Exportován %n router, </numerusform>
-            <numerusform>Exportovány %n routery, </numerusform>
-            <numerusform>Exportováno %n routerů, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Záloha Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář bude nahrazen adresářem ze souboru. Vše, co nyní obsahuje, bude odstraněno.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor neobsahuje žádný adresář, takže nebylo nic změněno.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3911,17 +3760,20 @@ Heslo: %2</translation>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Importované routery: %1
+Importované skupiny: %2
+Importovaní hostitelé: %3
+Importovaná uložená hesla: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář je prázdný. Není co uložit.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3931,7 +3783,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor byl zapsán do %1. K jeho otevření jinde je potřeba hlavní heslo tohoto adresáře.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4335,7 +4187,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se odstranit pracovní prostor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4345,7 +4197,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Nepodařilo se odstranit skupinu.</translation>
+        <translation>Nepodařilo se odstranit skupinu.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4366,17 +4218,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář je prázdný. Není co uložit.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4385,32 +4237,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Export byl úspěšně dokončen.
+Exportované routery: %1
+Exportované skupiny: %2
+Exportovaní hostitelé: %3
+Exportovaná uložená hesla: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář bude nahrazen adresářem ze souboru. Vše, co nyní obsahuje, bude odstraněno. Pokračovat?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor byl uložen z jiného adresáře. Zadejte hlavní heslo daného adresáře.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor neobsahuje žádný adresář, takže nebylo nic změněno.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze číst soubor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Nepodařilo se importovat adresář.</translation>
+        <translation>Nepodařilo se importovat adresář.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4419,11 +4275,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Adresář (*.json);;Všechny soubory (*)</translation>
+        <translation>Import byl úspěšně dokončen.
+Importované routery: %1
+Importované skupiny: %2
+Importovaní hostitelé: %3
+Importovaná uložená hesla: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4432,53 +4288,15 @@ Saved passwords imported: %4</source>
         <translation>Databáze adresáře není k dispozici.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Zadejte heslo pro zašifrování adresáře.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
-            <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znaky.</numerusform>
-            <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znaků.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Chcete zadat jiné heslo?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Nepodařilo se exportovat adresář.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Export byl úspěšně dokončen.
-Exportované routery: %1
-Exportované skupiny: %2
-Exportovaní hostitelé: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Importovat adresář</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Odemknout</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Adresář je zašifrován. Pro otevření musíte zadat heslo.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4491,29 +4309,9 @@ Exportovaní hostitelé: %3</translation>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Nebylo importováno nic.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Soubor není platný adresář.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Import byl úspěšně dokončen.
-Přidané routery: %1
-Přeskočené routery: %2
-Přidané skupiny: %3
-Přeskočené skupiny: %4
-Přidaní hostitelé: %5
-Přeskočení hostitelé: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4911,37 +4709,37 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Uživatelské jméno</translation>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID hostitele</translation>
+        <translation>ID hostitele</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Adresa hostitele</translation>
+        <translation>Adresa hostitele</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">Adresa klienta</translation>
+        <translation>Adresa klienta</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Přeneseno</translation>
+        <translation>Přeneseno</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Doba trvání</translation>
+        <translation>Doba trvání</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Nečinný</translation>
+        <translation>Nečinnost</translation>
     </message>
 </context>
 <context>
@@ -5049,37 +4847,37 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Adresa</translation>
+        <translation>Adresa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Čas připojení</translation>
+        <translation>Čas připojení</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Velikost fondu</translation>
+        <translation>Velikost fondu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Verze</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Název počítače</translation>
+        <translation>Název počítače</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Architektura</translation>
+        <translation>Architektura</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operační systém</translation>
+        <translation>Operační systém</translation>
     </message>
 </context>
 <context>
@@ -5093,13 +4891,13 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit více</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 z %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5123,45 +4921,21 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadat kód</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Blokováno</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Název počítače</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP adresa</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Čas připojení</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Verze</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architektura</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operační systém</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5192,22 +4966,6 @@ Přeskočení hostitelé: %6</translation>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Opravdu chcete odpojit všechny klienty?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Neplatný požadavek klienta.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Neplatné ID záznamu.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5220,27 +4978,27 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Předchozí</translation>
+        <translation>Předchozí</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Další</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Položek na stránku:</translation>
+        <translation>Položek na stránku:</translation>
     </message>
 </context>
 <context>
@@ -5250,42 +5008,42 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">Připojování k routeru %1...</translation>
+        <translation>Připojování k routeru %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Historie událostí vymazána.</translation>
+        <translation>Historie událostí vymazána.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>Příliš mnoho neúspěšných pokusů. Router %1 začne kódy znovu přijímat přibližně za %2 min.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router %1 kód nepřijal.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router %1 čeká na dvoufaktorový kód.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">Připojení k routeru %1 navázáno.</translation>
+        <translation>Připojení k routeru %1 navázáno.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Chyba sítě: %1</translation>
+        <translation>Chyba sítě: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">Odpojeno od routeru %1.</translation>
+        <translation>Odpojeno od routeru %1.</translation>
     </message>
 </context>
 <context>
@@ -5341,18 +5099,14 @@ Přeskočení hostitelé: %6</translation>
         <translation>Správce</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Operátor</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znak.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znaků.</numerusform>
@@ -5417,7 +5171,7 @@ Přeskočení hostitelé: %6</translation>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znak.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu jsou %n znaky.</numerusform>
             <numerusform>Příliš dlouhý název. Maximální délka názvu je %n znaků.</numerusform>
@@ -5465,67 +5219,67 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router požadavek odmítl.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Neznámá interní chyba.</translation>
+        <translation>Neznámá interní chyba.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">Neplatné ID záznamu.</translation>
+        <translation>Neplatné ID záznamu.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Byla předána neplatná data.</translation>
+        <translation>Byla předána neplatná data.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Záznam se zadaným názvem již existuje.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Záznam nenalezen. Seznam může být zastaralý.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Přístup odepřen.</translation>
+        <translation>Přístup odepřen.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Data na routeru se změnila. Obnovte seznam a zkuste to znovu.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojení k routeru bylo ztraceno.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">Hostitel se zadaným ID není online.</translation>
+        <translation>Hostitel se zadaným ID není online.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Nejsou dostupné žádné relay servery nebo je fond klíčů prázdný.</translation>
+        <translation>Nejsou k dispozici žádné relay servery nebo je fond klíčů prázdný.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Příliš mnoho žádostí o připojení. Zkuste to později.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Neznámý typ chyby.</translation>
+        <translation>Neznámý typ chyby.</translation>
     </message>
 </context>
 <context>
@@ -5568,32 +5322,12 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Neplatný požadavek skupiny.</translation>
+        <translation>Nepodařilo se získat seznam skupin.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Přístup odepřen.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Skupina nebyla nalezena.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5603,54 +5337,6 @@ Přeskočení hostitelé: %6</translation>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Zobrazovaný název</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID hostitele</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Název počítače</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adresa</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Uživatelské jméno</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Komentář</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operační systém</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Verze</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architektura</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Poslední připojení</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Poslední změna</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stav</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5663,27 +5349,27 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Předchozí</translation>
+        <translation>Předchozí</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Další</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Položek na stránku:</translation>
+        <translation>Položek na stránku:</translation>
     </message>
 </context>
 <context>
@@ -5706,11 +5392,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Uživatelské jméno:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Uživatelské jméno:</translation>
+        <translation>Uživatelské jméno:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5720,7 +5402,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno a heslo jsou uloženy pouze v tomto počítači a nejsou odesílány do routeru.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5728,39 +5410,19 @@ Přeskočení hostitelé: %6</translation>
         <translation>Komentář:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Přístup odepřen.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Hostitel nebyl nalezen.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se získat seznam skupin.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte uživatelské jméno i heslo, nebo ponechte obě pole prázdná.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit přihlašovací údaje.</translation>
     </message>
 </context>
 <context>
@@ -5768,89 +5430,37 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Uživatelské jméno</translation>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Heslo</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno a heslo jsou uloženy pouze v tomto zařízení a nejsou odesílány do routeru. Chcete-li je zapomenout, ponechte obě pole prázdná.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Uložit</translation>
+        <translation>Uložit</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit přihlašovací údaje.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte uživatelské jméno i heslo, nebo ponechte obě pole prázdná.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID hostitele</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Zobrazovaný název</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Název počítače</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adresa</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Uživatelské jméno</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Komentář</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Pracovní prostor</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operační systém</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Verze</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architektura</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Poslední připojení</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Poslední změna</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Stav</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5877,10 +5487,6 @@ Přeskočení hostitelé: %6</translation>
         <translation>Položek na stránku:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">Hostitel není přiřazen k žádnému pracovnímu prostoru.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit hostitele &quot;%1&quot;?</translation>
@@ -5899,22 +5505,6 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Odstranění hostitele povede k odstranění celé jeho konfigurace pro připojení k routeru a aplikace bude na hostiteli odinstalována. Tato operace je nevratná. Opravdu to chcete provést?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Neplatný požadavek hostitele.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Neplatné ID záznamu.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5948,62 +5538,6 @@ Přeskočení hostitelé: %6</translation>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adresa</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Čas připojení</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Velikost fondu</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Verze</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Název počítače</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Architektura</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operační systém</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Uživatelské jméno</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID hostitele</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Adresa hostitele</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Adresa klienta</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Přeneseno</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Doba trvání</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Nečinný</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6054,26 +5588,6 @@ Přeskočení hostitelé: %6</translation>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Opravdu chcete odpojit protistranu &quot;%1&quot;?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Neplatný požadavek relay serveru.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Neplatné ID záznamu.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Relace relay serveru nebyla nalezena.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6089,7 +5603,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router nové heslo přijal, ale záznam nebyl aktualizován.</translation>
     </message>
 </context>
 <context>
@@ -6098,13 +5612,13 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Router čeká na dvoufaktorový kód.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadat kód</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6128,65 +5642,45 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dvoufaktorové ověřování je po příliš mnoha neúspěšných pokusech zablokováno.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro tento router je nutné nastavit dvoufaktorové ověřování.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Název počítače</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Operační systém</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Verze</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adresa</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Předchozí</translation>
+        <translation>Předchozí</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Další</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Položek na stránku:</translation>
+        <translation>Položek na stránku:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6267,30 +5761,6 @@ Přeskočení hostitelé: %6</translation>
         <translation>Odhlásit vše</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Neplatný požadavek uživatele.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Uživatel se zadaným jménem již existuje.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Uživatel nebyl nalezen. Seznam může být zastaralý.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Resetování dvoufaktorového ověřování odhlásí tohoto uživatele ze všech relací a při příštím přihlášení bude vyžadována nová registrace. Pokračovat?</translation>
@@ -6306,18 +5776,6 @@ Přeskočení hostitelé: %6</translation>
         <translation>Opravdu chcete odhlásit tohoto uživatele ze všech relací?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Relace nebyla nalezena. Seznam může být zastaralý.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Neplatný požadavek na odhlášení.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Zadané uživatelské jméno již existuje.</translation>
@@ -6330,27 +5788,27 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatel byl odstraněn z jiné konzole.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetování dvoufaktorového ověřování vás odhlásí ze všech relací a při příštím přihlášení bude vyžadována nová registrace. Pokračovat?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Toto je token vaší aktuální relace. Jeho odvolání vás odpojí. Pokračovat?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky _, -, ., @. Nemůže se skládat pouze z číslic.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6398,7 +5856,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Token vaší aktuální relace.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6413,11 +5871,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
+        <translation>Operátor</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6427,18 +5881,6 @@ Přeskočení hostitelé: %6</translation>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Jméno</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Povoleno</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Typy relací</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6452,31 +5894,7 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Neplatný požadavek uživatele.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Uživatel se zadaným jménem již existuje.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Uživatel nebyl nalezen. Seznam může být zastaralý.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
+        <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6490,27 +5908,27 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Předchozí</translation>
+        <translation>Předchozí</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Další</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Položek na stránku:</translation>
+        <translation>Položek na stránku:</translation>
     </message>
 </context>
 <context>
@@ -6577,28 +5995,28 @@ Přeskočení hostitelé: %6</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6628,29 +6046,31 @@ Přeskočení hostitelé: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se získat seznam pracovních prostorů.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostor byl odstraněn z jiné konzole.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostor byl změněn z jiné konzole. Seznamy se obnovují - zkontrolujte změny a uložte znovu.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebrání hostitele z pracovního prostoru trvale vymaže jeho komentář. Tuto akci nelze vrátit zpět.
+
+Opravdu chcete pokračovat?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6661,38 +6081,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Pracovní prostor se zadaným názvem již existuje.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Neplatný požadavek pracovního prostoru.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Pracovní prostor nebyl nalezen.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Administrátory nelze odebrat ze seznamu přístupu k pracovnímu prostoru.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">Odebráním hostitele z pracovního prostoru budou trvale vymazána jeho šifrovaná pole (komentář, uživatelské jméno a heslo). Tuto akci nelze vrátit zpět.
-
-Opravdu chcete pokračovat?</translation>
     </message>
 </context>
 <context>
@@ -6711,26 +6099,6 @@ Opravdu chcete pokračovat?</translation>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Upravit router</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Připojování k routeru %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Připojení k routeru %1 navázáno.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Odpojeno od routeru %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Chyba sítě: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Router vyžaduje změnu hesla, která zde zatím není podporována.</translation>
     </message>
 </context>
 <context>
@@ -6751,61 +6119,45 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adresa / ID</translation>
+        <translation>Adresa / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Skupina</translation>
+        <translation>Skupina</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Komentář</translation>
+        <translation>Komentář</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Název</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adresa / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Komentář</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Skupina</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Předchozí</translation>
+        <translation>Předchozí</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Předchozí stránka</translation>
+        <translation>Předchozí stránka</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Další</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Další stránka</translation>
+        <translation>Další stránka</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6824,7 +6176,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 z %2</translation>
     </message>
 </context>
 <context>
@@ -7516,22 +6868,6 @@ Opravdu chcete pokračovat?</translation>
         <translation>Místní</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Připojování k routeru %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Připojení k routeru %1 navázáno.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Odpojeno od routeru %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Pro dokončení migrace z předchozí verze je nutné změnit heslo.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Změnit heslo</translation>
@@ -7567,31 +6903,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Heslo aktualizováno. Čekání na nové šifrovací klíče...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Neplatný požadavek na změnu hesla.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Neznámá interní chyba.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Byla předána neplatná data.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Neznámý typ chyby.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Historie událostí vymazána.</translation>
+        <translation>Změna hesla. Čekání na opětovné přihlášení relace...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7607,10 +6919,6 @@ Opravdu chcete pokračovat?</translation>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit router &quot;%1&quot;?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Chyba sítě: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7700,18 +7008,11 @@ Opravdu chcete pokračovat?</translation>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Stav připojení</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -11636,27 +10937,27 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Název počítače</translation>
+        <translation>Název počítače</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">Operační systém</translation>
+        <translation>Operační systém</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Verze</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Adresa</translation>
+        <translation>Adresa</translation>
     </message>
 </context>
 <context>
@@ -11713,7 +11014,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Předchozí kód nebyl přijat.</translation>
     </message>
 </context>
 <context>
@@ -11736,7 +11037,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Předchozí kód nebyl přijat.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11784,7 +11085,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Předchozí kód nebyl přijat.</translation>
     </message>
 </context>
 <context>
@@ -11924,13 +11225,9 @@ Opravdu chcete pokračovat?</translation>
         <translation>Zrušit zaškrtnutí všech</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky _, -, ., @.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky _, -, ., @. Nemůže se skládat pouze z číslic.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -12001,10 +11298,6 @@ Opravdu chcete pokračovat?</translation>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Chyba</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12080,7 +11373,7 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Nemůže se skládat pouze z číslic.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12171,65 +11464,42 @@ Opravdu chcete pokračovat?</translation>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Povoleno</translation>
+        <translation>Povoleno</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Typy relací</translation>
+        <translation>Typy relací</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Ano</translation>
+        <translation>Ano</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">Ne</translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Administrátor</translation>
+        <translation>Administrátor</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Správce</translation>
+        <translation>Správce</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Ano</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Ne</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Administrátor</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Klient</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Správce</translation>
+        <translation>Operátor</translation>
     </message>
 </context>
 <context>

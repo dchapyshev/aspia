@@ -397,7 +397,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>İki Faktörlü Kimlik Doğrulama - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Kimlik bilgilerini kaydet</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -968,32 +968,32 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Bilgisayar Adı</translation>
+        <translation>Bilgisayar Adı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">IP Adresi</translation>
+        <translation>IP Adresi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Bağlantı Zamanı</translation>
+        <translation>Bağlantı Zamanı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Sürüm</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Mimari</translation>
+        <translation>Mimari</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">İşletim Sistemi</translation>
+        <translation>İşletim Sistemi</translation>
     </message>
 </context>
 <context>
@@ -1002,10 +1002,6 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Oturum başladı.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Yönlendirici üzerinden bağlantı isteğinde hata oluştu: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1026,14 +1022,6 @@ Eklenen yönlendiriciler: %4</translation>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>%1:%2 ana bilgisayarına bağlanılıyor...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">%1 ana bilgisayarıyla bağlantı kuruldu.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">%1:%2 ana bilgisayarıyla bağlantı kuruldu.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1068,23 +1056,7 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Yönlendirici üzerinden bağlantı isteğinde hata oluştu.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Erişim reddedildi</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Kullanılabilir aktarıcı yok veya anahtar havuzu boş</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Bilinmeyen hata</translation>
+        <translation>Yönlendirici üzerinden bağlantı isteğinde hata oluştu.</translation>
     </message>
 </context>
 <context>
@@ -1876,10 +1848,6 @@ Parola: %2</translation>
         <translation>Görüntü kaydedilemedi</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Uzak bilgisayarda başlatılamadı.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Bağlanılıyor...</translation>
@@ -1908,22 +1876,6 @@ Parola: %2</translation>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Erişim reddedildi.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Kullanılabilir aktarıcı yok veya anahtar havuzu boş.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Yönlendirici üzerinden bağlantı isteğinde hata oluştu.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2943,72 +2895,72 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">Ana Bilgisayar ID&apos;si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">Görünen Ad</translation>
+        <translation>Görünen Ad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Bilgisayar Adı</translation>
+        <translation>Bilgisayar Adı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Yorum</translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Çalışma Alanı</translation>
+        <translation>Çalışma Alanı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">İşletim Sistemi</translation>
+        <translation>İşletim Sistemi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Sürüm</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Mimari</translation>
+        <translation>Mimari</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Son Bağlantı</translation>
+        <translation>Son Bağlantı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Son Değişiklik</translation>
+        <translation>Son Değiştirilme</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Durum</translation>
+        <translation>Durum</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">Çevrimiçi</translation>
+        <translation>Çevrimiçi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Çevrimdışı</translation>
+        <translation>Çevrimdışı</translation>
     </message>
 </context>
 <context>
@@ -3047,17 +2999,6 @@ Parola: %2</translation>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Güvenlik günlüğü iletişim kutusunu açar.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Çevrimiçi</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Çevrimdışı</translation>
     </message>
 </context>
 <context>
@@ -3192,22 +3133,6 @@ Parola: %2</translation>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Göster</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Kullanılamıyor</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 yönlendiricisine bağlanılıyor...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">%1 yönlendiricisine bağlanıldı</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">%1 yönlendiricisine bağlanılamadı</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3363,14 +3288,14 @@ Parola: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Ad çok uzun. Maksimum ad uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Yorum çok uzun. Maksimum yorum uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
@@ -3398,34 +3323,6 @@ Parola: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Ad</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adres / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Yorum</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Oluşturulma</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Değiştirilme</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Son Bağlantı</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Durum</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Durum güncelleniyor...</translation>
@@ -3443,14 +3340,6 @@ Parola: %2</translation>
         <translation>
             <numerusform>%n alt ana bilgisayar</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Çevrimiçi</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Çevrimdışı</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3445,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3658,14 +3547,14 @@ Parola: %2</translation>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Ad çok uzun. Maksimum ad uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Yorum çok uzun. Maksimum yorum uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
@@ -3687,7 +3576,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3715,47 +3604,47 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adres / ID</translation>
+        <translation>Adres / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Yorum</translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Oluşturulma</translation>
+        <translation>Oluşturulma</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Değiştirilme</translation>
+        <translation>Değiştirilme</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Son Bağlantı</translation>
+        <translation>Son Bağlantı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Durum</translation>
+        <translation>Durum</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">Çevrimiçi</translation>
+        <translation>Çevrimiçi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Çevrimdışı</translation>
+        <translation>Çevrimdışı</translation>
     </message>
 </context>
 <context>
@@ -3794,28 +3683,6 @@ Parola: %2</translation>
         <translation>Adres Defterini İçe Aktar</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Adres defteri (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n yönlendirici içe aktarıldı, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n grup, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n ana bilgisayar.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Geçersiz parola.</translation>
@@ -3824,10 +3691,6 @@ Parola: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Dosya daha yeni bir sürümle oluşturulmuş ve içe aktarılamıyor.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">Adres defteri zaten güncel.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3839,27 +3702,21 @@ Parola: %2</translation>
         <source>Export Address Book</source>
         <translation>Adres Defterini Dışa Aktar</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>%n yönlendirici dışa aktarıldı, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Yedeği (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres defteri, dosyadakiyle değiştirilecek. Şu anda içerdiği her şey silinecek.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya adres defteri içermiyor, bu nedenle hiçbir şey değiştirilmedi.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3867,17 +3724,20 @@ Parola: %2</translation>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>İçe aktarılan yönlendiriciler: %1
+İçe aktarılan gruplar: %2
+İçe aktarılan ana bilgisayarlar: %3
+İçe aktarılan kayıtlı parolalar: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres defteri boş. Kaydedilecek bir şey yok.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya yazılamıyor.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3887,7 +3747,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya %1 konumuna yazıldı. Başka bir yerde açmak için bu adres defterinin ana parolası gereklidir.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4291,7 +4151,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çalışma alanı silinemedi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4301,7 +4161,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Grup silinemedi.</translation>
+        <translation>Grup silinemedi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4322,17 +4182,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aspia Yedeği (*.aspia-backup);;Tüm dosyalar (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres defteri boş. Kaydedilecek bir şey yok.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya yazılamıyor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4341,32 +4201,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktarma başarıyla tamamlandı.
+Dışa aktarılan yönlendiriciler: %1
+Dışa aktarılan gruplar: %2
+Dışa aktarılan ana bilgisayarlar: %3
+Dışa aktarılan kayıtlı parolalar: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres defteri, dosyadakiyle değiştirilecek. Şu anda içerdiği her şey silinecek. Devam edilsin mi?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya başka bir adres defterinden kaydedilmiş. O adres defterinin ana parolasını girin.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya adres defteri içermiyor, bu nedenle hiçbir şey değiştirilmedi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya okunamıyor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Adres defteri içe aktarılamadı.</translation>
+        <translation>Adres defteri içe aktarılamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4375,11 +4239,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Adres Defteri (*.json);;Tüm dosyalar (*)</translation>
+        <translation>İçe aktarma başarıyla tamamlandı.
+İçe aktarılan yönlendiriciler: %1
+İçe aktarılan gruplar: %2
+İçe aktarılan ana bilgisayarlar: %3
+İçe aktarılan kayıtlı parolalar: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4388,51 +4252,15 @@ Saved passwords imported: %4</source>
         <translation>Adres defteri veritabanı kullanılamıyor.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Adres defterini şifrelemek için bir parola girin.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Girdiğiniz parola güvenlik gereksinimlerini karşılamıyor!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Parola küçük ve büyük harfler ile rakamlar içermeli ve %n karakterden kısa olmamalıdır.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Farklı bir parola girmek ister misiniz?</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Adres defteri dışa aktarılamadı.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Dışa aktarma başarıyla tamamlandı.
-Dışa aktarılan yönlendiriciler: %1
-Dışa aktarılan gruplar: %2
-Dışa aktarılan ana bilgisayarlar: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Adres Defterini İçe Aktar</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Kilidi Aç</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Adres defteri şifrelenmiş. Açmak için bir parola girmeniz gerekiyor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4445,29 +4273,9 @@ Dışa aktarılan ana bilgisayarlar: %3</translation>
         <translation>Desteklenmeyen dosya biçimi sürümü.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Hiçbir şey içe aktarılmadı.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Dosya geçerli bir adres defteri değil.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">İçe aktarma başarıyla tamamlandı.
-Eklenen yönlendiriciler: %1
-Atlanan yönlendiriciler: %2
-Eklenen gruplar: %3
-Atlanan gruplar: %4
-Eklenen ana bilgisayarlar: %5
-Atlanan ana bilgisayarlar: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4865,37 +4673,37 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Kullanıcı Adı</translation>
+        <translation>Kullanıcı Adı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">Ana Bilgisayar ID&apos;si</translation>
+        <translation>Ana Bilgisayar ID&apos;si</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Ana Bilgisayar Adresi</translation>
+        <translation>Ana Bilgisayar Adresi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">İstemci Adresi</translation>
+        <translation>İstemci Adresi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Aktarılan</translation>
+        <translation>Aktarılan</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Boşta</translation>
+        <translation>Boşta</translation>
     </message>
 </context>
 <context>
@@ -5003,37 +4811,37 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Bağlantı Zamanı</translation>
+        <translation>Bağlantı Zamanı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Havuz Boyutu</translation>
+        <translation>Havuz Boyutu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Sürüm</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Bilgisayar Adı</translation>
+        <translation>Bilgisayar Adı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Mimari</translation>
+        <translation>Mimari</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">İşletim Sistemi</translation>
+        <translation>İşletim Sistemi</translation>
     </message>
 </context>
 <context>
@@ -5047,13 +4855,13 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Daha fazla göster</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5077,45 +4885,21 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod Gir</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Engellendi</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Kur</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Bilgisayar Adı</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">IP Adresi</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Bağlantı Zamanı</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Sürüm</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Mimari</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">İşletim Sistemi</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5146,22 +4930,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Tüm istemcilerin bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Geçersiz istemci isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Geçersiz girdi ID&apos;si.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5172,27 +4940,27 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Önceki</translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Sonraki</translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Sayfa başına öğe:</translation>
+        <translation>Sayfa başına öğe:</translation>
     </message>
 </context>
 <context>
@@ -5202,42 +4970,42 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">%1 yönlendiricisine bağlanılıyor...</translation>
+        <translation>%1 yönlendiricisine bağlanılıyor...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Olay geçmişi temizlendi.</translation>
+        <translation>Olay geçmişi temizlendi.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çok fazla başarısız deneme. %1 yönlendiricisi yaklaşık %2 dk sonra kodları yeniden kabul edecek.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod, %1 yönlendiricisi tarafından kabul edilmedi.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 yönlendiricisi iki faktörlü kod bekliyor.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">%1 yönlendiricisiyle bağlantı kuruldu.</translation>
+        <translation>%1 yönlendiricisiyle bağlantı kuruldu.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Ağ hatası: %1</translation>
+        <translation>Ağ hatası: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">%1 yönlendiricisiyle bağlantı kesildi.</translation>
+        <translation>%1 yönlendiricisiyle bağlantı kesildi.</translation>
     </message>
 </context>
 <context>
@@ -5293,18 +5061,14 @@ Atlanan ana bilgisayarlar: %6</translation>
         <translation>Sorumlu</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">İstemci</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Operatör</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Ad çok uzun. Maksimum ad uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
@@ -5367,7 +5131,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Ad çok uzun. Maksimum ad uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
@@ -5413,67 +5177,67 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönlendirici isteği reddetti.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Bilinmeyen iç hata.</translation>
+        <translation>Bilinmeyen iç hata.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">Geçersiz girdi ID&apos;si.</translation>
+        <translation>Geçersiz kayıt ID&apos;si.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Geçersiz veri iletildi.</translation>
+        <translation>Geçersiz veri iletildi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belirtilen ada sahip bir kayıt zaten var.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kayıt bulunamadı. Liste güncel olmayabilir.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Erişim reddedildi.</translation>
+        <translation>Erişim reddedildi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veriler yönlendiricide değişti. Listeyi yenileyip yeniden deneyin.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönlendiriciyle bağlantı kesildi.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil.</translation>
+        <translation>Belirtilen ID&apos;ye sahip ana bilgisayar çevrimiçi değil.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Kullanılabilir aktarıcı yok veya anahtar havuzu boş.</translation>
+        <translation>Kullanılabilir aktarıcı yok veya anahtar havuzu boş.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çok fazla bağlantı isteği. Daha sonra yeniden deneyin.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Bilinmeyen hata türü.</translation>
+        <translation>Bilinmeyen hata türü.</translation>
     </message>
 </context>
 <context>
@@ -5516,32 +5280,12 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Geçersiz grup isteği.</translation>
+        <translation>Grup listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Erişim reddedildi.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Grup bulunamadı.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5551,54 +5295,6 @@ Atlanan ana bilgisayarlar: %6</translation>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Görünen Ad</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Ana Bilgisayar ID&apos;si</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Bilgisayar Adı</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adres</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Kullanıcı Adı</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Yorum</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">İşletim Sistemi</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Sürüm</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Mimari</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Son Bağlantı</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Son Değişiklik</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Durum</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5609,27 +5305,27 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Önceki</translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Sonraki</translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Sayfa başına öğe:</translation>
+        <translation>Sayfa başına öğe:</translation>
     </message>
 </context>
 <context>
@@ -5652,11 +5348,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Kullanıcı adı:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Kullanıcı Adı:</translation>
+        <translation>Kullanıcı adı:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5666,7 +5358,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ve parola yalnızca bu bilgisayarda saklanır ve yönlendiriciye gönderilmez.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5674,39 +5366,19 @@ Atlanan ana bilgisayarlar: %6</translation>
         <translation>Yorum:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Erişim reddedildi.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Ana bilgisayar bulunamadı.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kimlik bilgileri kaydedilemedi.</translation>
     </message>
 </context>
 <context>
@@ -5714,89 +5386,37 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Kullanıcı Adı</translation>
+        <translation>Kullanıcı Adı</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Parola</translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ve parola yalnızca bu cihazda saklanır ve yönlendiriciye gönderilmez. Bunları unutmak için her ikisini de boş bırakın.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Kaydet</translation>
+        <translation>Kaydet</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kimlik bilgileri kaydedilemedi.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı ile parolanın her ikisini de girin veya her ikisini de boş bırakın.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Ana Bilgisayar ID&apos;si</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Görünen Ad</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Bilgisayar Adı</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adres</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Kullanıcı Adı</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Yorum</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Çalışma Alanı</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">İşletim Sistemi</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Sürüm</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Mimari</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Son Bağlantı</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Son Değişiklik</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Durum</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5823,10 +5443,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <translation>Sayfa başına öğe:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">Ana bilgisayar hiçbir çalışma alanına atanmamış.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; ana bilgisayarının bağlantısını kesmek istediğinizden emin misiniz?</translation>
@@ -5845,22 +5461,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Bir ana bilgisayarın silinmesi, yönlendiriciye bağlanmak için yapılmış tüm yapılandırmasının silinmesine ve uygulamanın ana bilgisayardan kaldırılmasına neden olur. Bu işlem geri alınamaz. Bunu yapmak istediğinizden emin misiniz?</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Geçersiz ana bilgisayar isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Geçersiz girdi ID&apos;si.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5892,62 +5492,6 @@ Atlanan ana bilgisayarlar: %6</translation>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adres</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Bağlantı Zamanı</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Havuz Boyutu</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Sürüm</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Bilgisayar Adı</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Mimari</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">İşletim Sistemi</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Kullanıcı Adı</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">Ana Bilgisayar ID&apos;si</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Ana Bilgisayar Adresi</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">İstemci Adresi</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Aktarılan</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Süre</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Boşta</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -5998,26 +5542,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; eşinin bağlantısını kesmek istediğinizden emin misiniz?</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Geçersiz aktarıcı isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Geçersiz girdi ID&apos;si.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Aktarıcı oturumu bulunamadı.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6031,7 +5555,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönlendirici yeni parolayı kabul etti, ancak kayıt güncellenmedi.</translation>
     </message>
 </context>
 <context>
@@ -6040,13 +5564,13 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönlendirici iki faktörlü kod bekliyor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod Gir</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6068,65 +5592,45 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çok fazla başarısız denemeden sonra iki faktörlü kimlik doğrulama engellendi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu yönlendirici için iki faktörlü kimlik doğrulamanın kurulması gerekiyor.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Kur</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Bilgisayar Adı</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">İşletim Sistemi</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Sürüm</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Adres</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Önceki</translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Sonraki</translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Sayfa başına öğe:</translation>
+        <translation>Sayfa başına öğe:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6207,30 +5711,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <translation>Tüm oturumları kapat</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Geçersiz kullanıcı isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Belirtilen ada sahip bir kullanıcı zaten var.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Kullanıcı bulunamadı. Liste güncel olmayabilir.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>İki faktörlü kimlik doğrulamanın sıfırlanması bu kullanıcının tüm oturumlarını kapatır ve bir sonraki oturum açışında yeniden kayıt olmasını zorunlu kılar. Devam edilsin mi?</translation>
@@ -6246,18 +5726,6 @@ Atlanan ana bilgisayarlar: %6</translation>
         <translation>Bu kullanıcının tüm oturumlarını kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Oturum bulunamadı. Liste güncel olmayabilir.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Geçersiz oturum kapatma isteği.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile _, -, ., @ karakterlerini içerebilir.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Girdiğiniz kullanıcı adı zaten var.</translation>
@@ -6270,27 +5738,27 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı başka bir konsoldan silindi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>İki faktörlü kimlik doğrulamanın sıfırlanması tüm oturumlarınızı kapatır ve bir sonraki oturum açışınızda yeniden kayıt olmanızı zorunlu kılar. Devam edilsin mi?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu, geçerli oturumunuzun belirtecidir. İptal edilmesi bağlantınızı keser. Devam edilsin mi?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile _, -, ., @ karakterlerini içerebilir. Yalnızca rakamlardan oluşamaz.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6334,7 +5802,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli oturumunuzun belirteci.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6349,11 +5817,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">İstemci</translation>
+        <translation>Operatör</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6363,18 +5827,6 @@ Atlanan ana bilgisayarlar: %6</translation>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Ad</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Etkin</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Oturum Türleri</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6388,31 +5840,7 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Geçersiz kullanıcı isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Belirtilen ada sahip bir kullanıcı zaten var.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Kullanıcı bulunamadı. Liste güncel olmayabilir.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
+        <translation>Kullanıcı listesi alınamadı.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6424,27 +5852,27 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Önceki</translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Sonraki</translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Sayfa başına öğe:</translation>
+        <translation>Sayfa başına öğe:</translation>
     </message>
 </context>
 <context>
@@ -6511,28 +5939,28 @@ Atlanan ana bilgisayarlar: %6</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6562,29 +5990,31 @@ Atlanan ana bilgisayarlar: %6</translation>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çalışma alanı listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çalışma alanı başka bir konsoldan silindi.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı listesi alınamadı.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çalışma alanı başka bir konsoldan değiştirildi. Listeler yenileniyor - değişiklikleri denetleyip yeniden kaydedin.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana bilgisayarın çalışma alanından kaldırılması, yorumunu kalıcı olarak siler. Bu işlem geri alınamaz.
+
+Devam etmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6595,38 +6025,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Belirtilen ada sahip bir çalışma alanı zaten var.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Geçersiz çalışma alanı isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Çalışma alanı bulunamadı.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Yöneticiler çalışma alanı erişim listesinden kaldırılamaz.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">Ana bilgisayarın çalışma alanından kaldırılması, şifrelenmiş alanlarını (yorum, kullanıcı adı ve parola) kalıcı olarak temizler. Bu işlem geri alınamaz.
-
-Devam etmek istediğinizden emin misiniz?</translation>
     </message>
 </context>
 <context>
@@ -6645,26 +6043,6 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Yönlendiriciyi Düzenle</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 yönlendiricisine bağlanılıyor...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">%1 yönlendiricisiyle bağlantı kuruldu.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">%1 yönlendiricisiyle bağlantı kesildi.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Ağ hatası: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Yönlendirici parola değişikliği gerektiriyor; bu henüz burada desteklenmiyor.</translation>
     </message>
 </context>
 <context>
@@ -6685,61 +6063,45 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Adres / ID</translation>
+        <translation>Adres / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Grup</translation>
+        <translation>Grup</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Yorum</translation>
+        <translation>Yorum</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Ad</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Adres / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Yorum</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Grup</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Önceki</translation>
+        <translation>Önceki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Önceki sayfa</translation>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Sonraki</translation>
+        <translation>Sonraki</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Sonraki sayfa</translation>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6756,7 +6118,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2</translation>
     </message>
 </context>
 <context>
@@ -7446,22 +6808,6 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <translation>Yerel</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">%1 yönlendiricisine bağlanılıyor...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">%1 yönlendiricisiyle bağlantı kuruldu.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">%1 yönlendiricisiyle bağlantı kesildi.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Önceki sürümden geçişi tamamlamak için parolanızı değiştirmeniz gerekiyor.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Parolayı Değiştir</translation>
@@ -7493,31 +6839,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Parola güncellendi. Yeni şifreleme anahtarları bekleniyor...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Geçersiz parola değiştirme isteği.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Bilinmeyen iç hata.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Geçersiz veri iletildi.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Bilinmeyen hata türü.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Olay geçmişi temizlendi.</translation>
+        <translation>Parola değiştiriliyor. Oturumun yeniden açılması bekleniyor...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7533,10 +6855,6 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Ağ hatası: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7626,18 +6944,11 @@ Devam etmek istediğinizden emin misiniz?</translation>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Bağlantı Durumu</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
 </context>
 <context>
@@ -11562,27 +10873,27 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Bilgisayar Adı</translation>
+        <translation>Bilgisayar Adı</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">İşletim Sistemi</translation>
+        <translation>İşletim Sistemi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Sürüm</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
 </context>
 <context>
@@ -11639,7 +10950,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki kod kabul edilmedi.</translation>
     </message>
 </context>
 <context>
@@ -11662,7 +10973,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki kod kabul edilmedi.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11710,7 +11021,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki kod kabul edilmedi.</translation>
     </message>
 </context>
 <context>
@@ -11850,13 +11161,9 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <translation>Tüm işaretleri kaldır</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile _, -, ., @ karakterlerini içerebilir.</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile _, -, ., @ karakterlerini içerebilir. Yalnızca rakamlardan oluşamaz.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11923,10 +11230,6 @@ Devam etmek istediğinizden emin misiniz?</translation>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Hata</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; karakterlerini içerebilir.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12000,7 +11303,7 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı adı boş olamaz ve yalnızca alfabe karakterleri, rakamlar ile &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; karakterlerini içerebilir. Yalnızca rakamlardan oluşamaz.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12091,65 +11394,42 @@ Devam etmek istediğinizden emin misiniz?</translation>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Etkin</translation>
+        <translation>Etkin</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Oturum Türleri</translation>
+        <translation>Oturum Türleri</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Evet</translation>
+        <translation>Evet</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">Hayır</translation>
+        <translation>Hayır</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Yönetici</translation>
+        <translation>Yönetici</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Sorumlu</translation>
+        <translation>Sorumlu</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Evet</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Hayır</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Yönetici</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">İstemci</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Sorumlu</translation>
+        <translation>Operatör</translation>
     </message>
 </context>
 <context>

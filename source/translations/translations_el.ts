@@ -397,7 +397,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="652"/>
         <source>Two-Factor Authentication - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Έλεγχος ταυτότητας δύο παραγόντων - %1</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="687"/>
@@ -506,7 +506,7 @@ Routers added: %4</source>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
         <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση διαπιστευτηρίων</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_dialog.cc" line="38"/>
@@ -970,32 +970,32 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="141"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Όνομα υπολογιστή</translation>
+        <translation>Όνομα υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="144"/>
         <source>IP Address</source>
-        <translation type="unfinished">Διεύθυνση IP</translation>
+        <translation>Διεύθυνση IP</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="147"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Ώρα σύνδεσης</translation>
+        <translation>Ώρα σύνδεσης</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Έκδοση</translation>
+        <translation>Έκδοση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="153"/>
         <source>Architecture</source>
-        <translation type="unfinished">Αρχιτεκτονική</translation>
+        <translation>Αρχιτεκτονική</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/client_list_model.cc" line="156"/>
         <source>Operating System</source>
-        <translation type="unfinished">Λειτουργικό σύστημα</translation>
+        <translation>Λειτουργικό σύστημα</translation>
     </message>
 </context>
 <context>
@@ -1004,10 +1004,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="261"/>
         <source>Session started.</source>
         <translation>Η περίοδος λειτουργίας ξεκίνησε.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router: %1.</source>
-        <translation type="vanished">Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή: %1.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="491"/>
@@ -1028,14 +1024,6 @@ Routers added: %4</source>
         <location filename="../client/desktop/client_window.cc" line="277"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Σύνδεση με τον κεντρικό υπολογιστή %1:%2...</translation>
-    </message>
-    <message>
-        <source>Connection to host %1 established.</source>
-        <translation type="vanished">Η σύνδεση με τον κεντρικό υπολογιστή %1 δημιουργήθηκε.</translation>
-    </message>
-    <message>
-        <source>Connection to host %1:%2 established.</source>
-        <translation type="vanished">Η σύνδεση με τον κεντρικό υπολογιστή %1:%2 δημιουργήθηκε.</translation>
     </message>
     <message>
         <location filename="../client/desktop/client_window.cc" line="307"/>
@@ -1070,23 +1058,7 @@ Routers added: %4</source>
     <message>
         <location filename="../client/desktop/client_window.cc" line="525"/>
         <source>Error requesting connection via router.</source>
-        <translation type="unfinished">Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online</source>
-        <translation type="vanished">Ο κεντρικός υπολογιστής με το καθορισμένο ID δεν είναι σε σύνδεση</translation>
-    </message>
-    <message>
-        <source>Access is denied</source>
-        <translation type="vanished">Δεν επιτρέπεται η πρόσβαση</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty</source>
-        <translation type="vanished">Δεν υπάρχουν διαθέσιμοι αναμεταδότες ή η συγκέντρωση κλειδιών είναι κενή</translation>
-    </message>
-    <message>
-        <source>Unknown error</source>
-        <translation type="vanished">Άγνωστο σφάλμα</translation>
+        <translation>Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
     </message>
 </context>
 <context>
@@ -1880,10 +1852,6 @@ Password: %2</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση της εικόνας</translation>
     </message>
     <message>
-        <source>Failed to start on the remote computer.</source>
-        <translation type="vanished">Δεν ήταν δυνατή η εκκίνηση στον απομακρυσμένο υπολογιστή.</translation>
-    </message>
-    <message>
         <location filename="../client/android/desktop_window.cc" line="512"/>
         <source>Connecting...</source>
         <translation>Σύνδεση...</translation>
@@ -1912,22 +1880,6 @@ Password: %2</source>
         <location filename="../client/android/desktop_window.cc" line="539"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
-    </message>
-    <message>
-        <source>The host with the specified ID is not online.</source>
-        <translation type="vanished">Ο κεντρικός υπολογιστής με το καθορισμένο ID δεν είναι σε σύνδεση.</translation>
-    </message>
-    <message>
-        <source>Access is denied.</source>
-        <translation type="vanished">Δεν επιτρέπεται η πρόσβαση.</translation>
-    </message>
-    <message>
-        <source>There are no relays available or the key pool is empty.</source>
-        <translation type="vanished">Δεν υπάρχουν διαθέσιμοι αναμεταδότες ή η συγκέντρωση κλειδιών είναι κενή.</translation>
-    </message>
-    <message>
-        <source>Error requesting connection via router.</source>
-        <translation type="vanished">Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="767"/>
@@ -2951,72 +2903,72 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="183"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID κεντρικού υπολογιστή</translation>
+        <translation>ID κεντρικού υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="186"/>
         <source>Display Name</source>
-        <translation type="unfinished">Εμφανιζόμενο όνομα</translation>
+        <translation>Εμφανιζόμενο όνομα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="189"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Όνομα υπολογιστή</translation>
+        <translation>Όνομα υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="192"/>
         <source>Address</source>
-        <translation type="unfinished">Διεύθυνση</translation>
+        <translation>Διεύθυνση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="195"/>
         <source>Comment</source>
-        <translation type="unfinished">Σχόλιο</translation>
+        <translation>Σχόλιο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="198"/>
         <source>Workspace</source>
-        <translation type="unfinished">Χώρος εργασίας</translation>
+        <translation>Χώρος εργασίας</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="201"/>
         <source>Operating System</source>
-        <translation type="unfinished">Λειτουργικό σύστημα</translation>
+        <translation>Λειτουργικό σύστημα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="204"/>
         <source>Version</source>
-        <translation type="unfinished">Έκδοση</translation>
+        <translation>Έκδοση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="207"/>
         <source>Architecture</source>
-        <translation type="unfinished">Αρχιτεκτονική</translation>
+        <translation>Αρχιτεκτονική</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="210"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Τελευταία σύνδεση</translation>
+        <translation>Τελευταία σύνδεση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="213"/>
         <source>Last Modify</source>
-        <translation type="unfinished">Τελευταία τροποποίηση</translation>
+        <translation>Τελευταία τροποποίηση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="216"/>
         <source>Status</source>
-        <translation type="unfinished">Κατάσταση</translation>
+        <translation>Κατάσταση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Online</source>
-        <translation type="unfinished">Σε σύνδεση</translation>
+        <translation>Σε σύνδεση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/host_list_model.cc" line="301"/>
         <source>Offline</source>
-        <translation type="unfinished">Εκτός σύνδεσης</translation>
+        <translation>Εκτός σύνδεσης</translation>
     </message>
 </context>
 <context>
@@ -3055,17 +3007,6 @@ Password: %2</source>
         <location filename="../host/main.cc" line="552"/>
         <source>Calling the security log dialog.</source>
         <translation>Κλήση του παραθύρου διαλόγου αρχείου καταγραφής ασφαλείας.</translation>
-    </message>
-</context>
-<context>
-    <name>HostTreeItem</name>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Σε σύνδεση</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Εκτός σύνδεσης</translation>
     </message>
 </context>
 <context>
@@ -3200,22 +3141,6 @@ Password: %2</source>
         <location filename="../host/ui/host_window.cc" line="706"/>
         <source>Show</source>
         <translation>Εμφάνιση</translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="vanished">Μη διαθέσιμο</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Σύνδεση με τον δρομολογητή %1...</translation>
-    </message>
-    <message>
-        <source>Connected to router %1</source>
-        <translation type="vanished">Συνδέθηκε με τον δρομολογητή %1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to router %1</source>
-        <translation type="vanished">Δεν ήταν δυνατή η σύνδεση με τον δρομολογητή %1</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.cc" line="514"/>
@@ -3373,7 +3298,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="141"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -3381,7 +3306,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_group_editor.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -3410,34 +3335,6 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Όνομα</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Διεύθυνση / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Σχόλιο</translation>
-    </message>
-    <message>
-        <source>Created</source>
-        <translation type="vanished">Δημιουργήθηκε</translation>
-    </message>
-    <message>
-        <source>Modified</source>
-        <translation type="vanished">Τροποποιήθηκε</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Τελευταία σύνδεση</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Κατάσταση</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
         <source>Status update...</source>
         <translation>Ενημέρωση κατάστασης...</translation>
@@ -3457,14 +3354,6 @@ Password: %2</source>
             <numerusform>%n θυγατρικός κεντρικός υπολογιστής</numerusform>
             <numerusform>%n θυγατρικοί κεντρικοί υπολογιστές</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Online</source>
-        <translation type="vanished">Σε σύνδεση</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation type="vanished">Εκτός σύνδεσης</translation>
     </message>
 </context>
 <context>
@@ -3571,7 +3460,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
@@ -3674,7 +3563,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="194"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -3682,7 +3571,7 @@ Password: %2</source>
     <message numerus="yes">
         <location filename="../client/android/local_host_editor.cc" line="203"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -3705,7 +3594,7 @@ Password: %2</source>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="242"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message>
         <location filename="../client/android/local_host_editor.cc" line="260"/>
@@ -3733,47 +3622,47 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
         <source>Name</source>
-        <translation type="unfinished">Όνομα</translation>
+        <translation>Όνομα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Διεύθυνση / ID</translation>
+        <translation>Διεύθυνση / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
         <source>Comment</source>
-        <translation type="unfinished">Σχόλιο</translation>
+        <translation>Σχόλιο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
         <source>Created</source>
-        <translation type="unfinished">Δημιουργήθηκε</translation>
+        <translation>Δημιουργήθηκε</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
         <source>Modified</source>
-        <translation type="unfinished">Τροποποιήθηκε</translation>
+        <translation>Τροποποιήθηκε</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
         <source>Last Connect</source>
-        <translation type="unfinished">Τελευταία σύνδεση</translation>
+        <translation>Τελευταία σύνδεση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Status</source>
-        <translation type="unfinished">Κατάσταση</translation>
+        <translation>Κατάσταση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Online</source>
-        <translation type="unfinished">Σε σύνδεση</translation>
+        <translation>Σε σύνδεση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
         <source>Offline</source>
-        <translation type="unfinished">Εκτός σύνδεσης</translation>
+        <translation>Εκτός σύνδεσης</translation>
     </message>
 </context>
 <context>
@@ -3812,31 +3701,6 @@ Password: %2</source>
         <translation>Εισαγωγή βιβλίου διευθύνσεων</translation>
     </message>
     <message>
-        <source>Address book (*.json)</source>
-        <translation type="vanished">Βιβλίο διευθύνσεων (*.json)</translation>
-    </message>
-    <message numerus="yes">
-        <source>Imported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Εισήχθη %n δρομολογητής, </numerusform>
-            <numerusform>Εισήχθησαν %n δρομολογητές, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n group(s), </source>
-        <translation type="vanished">
-            <numerusform>%n ομάδα, </numerusform>
-            <numerusform>%n ομάδες, </numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>%n host(s).</source>
-        <translation type="vanished">
-            <numerusform>%n κεντρικός υπολογιστής.</numerusform>
-            <numerusform>%n κεντρικοί υπολογιστές.</numerusform>
-        </translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Μη έγκυρος κωδικός πρόσβασης.</translation>
@@ -3845,10 +3709,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Το αρχείο δημιουργήθηκε από νεότερη έκδοση και δεν μπορεί να εισαχθεί.</translation>
-    </message>
-    <message>
-        <source>The address book is already up to date.</source>
-        <translation type="vanished">Το βιβλίο διευθύνσεων είναι ήδη ενημερωμένο.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="351"/>
@@ -3860,28 +3720,21 @@ Password: %2</source>
         <source>Export Address Book</source>
         <translation>Εξαγωγή βιβλίου διευθύνσεων</translation>
     </message>
-    <message numerus="yes">
-        <source>Exported %n router(s), </source>
-        <translation type="vanished">
-            <numerusform>Εξήχθη %n δρομολογητής, </numerusform>
-            <numerusform>Εξήχθησαν %n δρομολογητές, </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντίγραφο ασφαλείας Aspia (*.aspia-backup)</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="309"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το βιβλίο διευθύνσεων θα αντικατασταθεί με αυτό του αρχείου. Ό,τι περιέχει τώρα θα διαγραφεί.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="347"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το αρχείο δεν περιέχει βιβλίο διευθύνσεων, επομένως δεν έγινε καμία αλλαγή.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3889,17 +3742,20 @@ Password: %2</source>
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Δρομολογητές που εισήχθησαν: %1
+Ομάδες που εισήχθησαν: %2
+Κεντρικοί υπολογιστές που εισήχθησαν: %3
+Αποθηκευμένοι κωδικοί πρόσβασης που εισήχθησαν: %4</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="389"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το βιβλίο διευθύνσεων είναι κενό. Δεν υπάρχει τίποτα για αποθήκευση.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
@@ -3909,7 +3765,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
         <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το αρχείο γράφτηκε στο %1. Για να το ανοίξετε αλλού, απαιτείται ο κύριος κωδικός πρόσβασης αυτού του βιβλίου διευθύνσεων.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4313,7 +4169,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1306"/>
         <source>Failed to delete the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η διαγραφή του χώρου εργασίας.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1401"/>
@@ -4323,7 +4179,7 @@ Saved passwords imported: %4</source>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1420"/>
         <source>Failed to delete the group.</source>
-        <translation type="unfinished">Δεν ήταν δυνατή η διαγραφή της ομάδας.</translation>
+        <translation>Δεν ήταν δυνατή η διαγραφή της ομάδας.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1466"/>
@@ -4344,17 +4200,17 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/management_tab.cc" line="1499"/>
         <location filename="../client/desktop/management_tab.cc" line="1552"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντίγραφο ασφαλείας Aspia (*.aspia-backup);;Όλα τα αρχεία (*)</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1515"/>
         <source>The address book is empty. There is nothing to save.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το βιβλίο διευθύνσεων είναι κενό. Δεν υπάρχει τίποτα για αποθήκευση.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1519"/>
         <source>Unable to write the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1528"/>
@@ -4363,32 +4219,36 @@ Routers exported: %1
 Groups exported: %2
 Hosts exported: %3
 Saved passwords exported: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Η εξαγωγή ολοκληρώθηκε με επιτυχία.
+Δρομολογητές που εξήχθησαν: %1
+Ομάδες που εξήχθησαν: %2
+Κεντρικοί υπολογιστές που εξήχθησαν: %3
+Αποθηκευμένοι κωδικοί πρόσβασης που εξήχθησαν: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1560"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Το βιβλίο διευθύνσεων θα αντικατασταθεί με αυτό του αρχείου. Ό,τι περιέχει τώρα θα διαγραφεί. Συνέχεια;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1579"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το αρχείο αποθηκεύτηκε από άλλο βιβλίο διευθύνσεων. Εισαγάγετε τον κύριο κωδικό πρόσβασης εκείνου του βιβλίου διευθύνσεων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>The file carries no address book, so nothing was changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το αρχείο δεν περιέχει βιβλίο διευθύνσεων, επομένως δεν έγινε καμία αλλαγή.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Unable to read the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν είναι δυνατή η ανάγνωση του αρχείου.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Failed to import the address book.</source>
-        <translation type="unfinished">Δεν ήταν δυνατή η εισαγωγή του βιβλίου διευθύνσεων.</translation>
+        <translation>Δεν ήταν δυνατή η εισαγωγή του βιβλίου διευθύνσεων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1622"/>
@@ -4397,11 +4257,11 @@ Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
 Saved passwords imported: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address Book (*.json);;All files (*)</source>
-        <translation type="vanished">Βιβλίο διευθύνσεων (*.json);;Όλα τα αρχεία (*)</translation>
+        <translation>Η εισαγωγή ολοκληρώθηκε με επιτυχία.
+Δρομολογητές που εισήχθησαν: %1
+Ομάδες που εισήχθησαν: %2
+Κεντρικοί υπολογιστές που εισήχθησαν: %3
+Αποθηκευμένοι κωδικοί πρόσβασης που εισήχθησαν: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1491"/>
@@ -4410,52 +4270,15 @@ Saved passwords imported: %4</source>
         <translation>Η βάση δεδομένων του βιβλίου διευθύνσεων δεν είναι διαθέσιμη.</translation>
     </message>
     <message>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation type="vanished">Εισαγάγετε έναν κωδικό πρόσβασης για την κρυπτογράφηση του βιβλίου διευθύνσεων.</translation>
-    </message>
-    <message>
-        <source>Password you entered does not meet the security requirements!</source>
-        <translation type="vanished">Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
-    </message>
-    <message numerus="yes">
-        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation type="vanished">
-            <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
-            <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρες.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Do you want to enter a different password?</source>
-        <translation type="vanished">Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Failed to export the address book.</source>
         <translation>Δεν ήταν δυνατή η εξαγωγή του βιβλίου διευθύνσεων.</translation>
-    </message>
-    <message>
-        <source>Export completed successfully.
-Routers exported: %1
-Groups exported: %2
-Hosts exported: %3</source>
-        <translation type="vanished">Η εξαγωγή ολοκληρώθηκε με επιτυχία.
-Δρομολογητές που εξήχθησαν: %1
-Ομάδες που εξήχθησαν: %2
-Κεντρικοί υπολογιστές που εξήχθησαν: %3</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1550"/>
         <location filename="../client/desktop/management_tab.cc" line="1577"/>
         <source>Import Address Book</source>
         <translation>Εισαγωγή βιβλίου διευθύνσεων</translation>
-    </message>
-    <message>
-        <source>Unlock</source>
-        <translation type="vanished">Ξεκλείδωμα</translation>
-    </message>
-    <message>
-        <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation type="vanished">Το βιβλίο διευθύνσεων είναι κρυπτογραφημένο. Για να το ανοίξετε, πρέπει να εισαγάγετε κωδικό πρόσβασης.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1596"/>
@@ -4468,29 +4291,9 @@ Hosts exported: %3</source>
         <translation>Μη υποστηριζόμενη έκδοση μορφής αρχείου.</translation>
     </message>
     <message>
-        <source>Nothing was imported.</source>
-        <translation type="vanished">Δεν έγινε εισαγωγή κανενός στοιχείου.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1613"/>
         <source>The file is not a valid address book.</source>
         <translation>Το αρχείο δεν είναι έγκυρο βιβλίο διευθύνσεων.</translation>
-    </message>
-    <message>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Groups skipped: %4
-Hosts added: %5
-Hosts skipped: %6</source>
-        <translation type="vanished">Η εισαγωγή ολοκληρώθηκε με επιτυχία.
-Δρομολογητές που προστέθηκαν: %1
-Δρομολογητές που παραλείφθηκαν: %2
-Ομάδες που προστέθηκαν: %3
-Ομάδες που παραλείφθηκαν: %4
-Κεντρικοί υπολογιστές που προστέθηκαν: %5
-Κεντρικοί υπολογιστές που παραλείφθηκαν: %6</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="2055"/>
@@ -4888,37 +4691,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="140"/>
         <source>User Name</source>
-        <translation type="unfinished">Όνομα χρήστη</translation>
+        <translation>Όνομα χρήστη</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="143"/>
         <source>Host ID</source>
-        <translation type="unfinished">ID κεντρικού υπολογιστή</translation>
+        <translation>ID κεντρικού υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="146"/>
         <source>Host Address</source>
-        <translation type="unfinished">Διεύθυνση κεντρικού υπολογιστή</translation>
+        <translation>Διεύθυνση κεντρικού υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="149"/>
         <source>Client Address</source>
-        <translation type="unfinished">Διεύθυνση πελάτη</translation>
+        <translation>Διεύθυνση πελάτη</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="152"/>
         <source>Transferred</source>
-        <translation type="unfinished">Μεταφέρθηκαν</translation>
+        <translation>Μεταφέρθηκαν</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="155"/>
         <source>Duration</source>
-        <translation type="unfinished">Διάρκεια</translation>
+        <translation>Διάρκεια</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/peer_list_model.cc" line="158"/>
         <source>Idle</source>
-        <translation type="unfinished">Αδρανής</translation>
+        <translation>Αδράνεια</translation>
     </message>
 </context>
 <context>
@@ -5026,37 +4829,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="141"/>
         <source>Address</source>
-        <translation type="unfinished">Διεύθυνση</translation>
+        <translation>Διεύθυνση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="144"/>
         <source>Connect Time</source>
-        <translation type="unfinished">Ώρα σύνδεσης</translation>
+        <translation>Ώρα σύνδεσης</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="147"/>
         <source>Pool Size</source>
-        <translation type="unfinished">Μέγεθος συγκέντρωσης κλειδιών</translation>
+        <translation>Μέγεθος pool</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="150"/>
         <source>Version</source>
-        <translation type="unfinished">Έκδοση</translation>
+        <translation>Έκδοση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="153"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Όνομα υπολογιστή</translation>
+        <translation>Όνομα υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="156"/>
         <source>Architecture</source>
-        <translation type="unfinished">Αρχιτεκτονική</translation>
+        <translation>Αρχιτεκτονική</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/relay_list_model.cc" line="159"/>
         <source>Operating System</source>
-        <translation type="unfinished">Λειτουργικό σύστημα</translation>
+        <translation>Λειτουργικό σύστημα</translation>
     </message>
 </context>
 <context>
@@ -5070,13 +4873,13 @@ Hosts skipped: %6</source>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>Show more</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση περισσότερων</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="826"/>
         <location filename="../client/android/remote_widget.cc" line="847"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 από %2</translation>
     </message>
     <message>
         <location filename="../client/android/remote_widget.cc" line="910"/>
@@ -5100,45 +4903,21 @@ Hosts skipped: %6</source>
         <location filename="../client/android/router_card.cc" line="176"/>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγωγή κωδικού</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="224"/>
         <source>Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποκλεισμένο</translation>
     </message>
     <message>
         <location filename="../client/android/router_card.cc" line="226"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση</translation>
     </message>
 </context>
 <context>
     <name>RouterClientsWidget</name>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Όνομα υπολογιστή</translation>
-    </message>
-    <message>
-        <source>IP Address</source>
-        <translation type="vanished">Διεύθυνση IP</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Ώρα σύνδεσης</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Έκδοση</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Αρχιτεκτονική</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Λειτουργικό σύστημα</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Save File</source>
@@ -5169,22 +4948,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect all clients?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους πελάτες;</translation>
     </message>
-    <message>
-        <source>Invalid client request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση πελάτη.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Μη έγκυρο ID καταχώρησης.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_clients_widget.cc" line="496"/>
         <source>%n client(s)</source>
@@ -5196,27 +4959,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="53"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="56"/>
         <source>Previous</source>
-        <translation type="unfinished">Προηγούμενο</translation>
+        <translation>Προηγούμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="70"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="73"/>
         <source>Next</source>
-        <translation type="unfinished">Επόμενο</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_clients_widget.ui" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Στοιχεία ανά σελίδα:</translation>
+        <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
 </context>
 <context>
@@ -5226,42 +4989,42 @@ Hosts skipped: %6</source>
         <location filename="../client/router_controller.cc" line="215"/>
         <location filename="../client/router_controller.cc" line="391"/>
         <source>Connecting to router %1...</source>
-        <translation type="unfinished">Σύνδεση με τον δρομολογητή %1...</translation>
+        <translation>Σύνδεση με τον δρομολογητή %1...</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="238"/>
         <source>Event history cleared.</source>
-        <translation type="unfinished">Το ιστορικό συμβάντων διαγράφηκε.</translation>
+        <translation>Το ιστορικό συμβάντων απαλείφθηκε.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="283"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
-        <translation type="unfinished"></translation>
+        <translation>Πάρα πολλές αποτυχημένες προσπάθειες. Ο δρομολογητής %1 θα δέχεται ξανά κωδικούς σε περίπου %2 λεπ.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="291"/>
         <source>The code was not accepted by router %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο κωδικός δεν έγινε δεκτός από τον δρομολογητή %1.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="294"/>
         <source>Router %1 is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο δρομολογητής %1 αναμένει κωδικό δύο παραγόντων.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="319"/>
         <source>Connection to router %1 established.</source>
-        <translation type="unfinished">Η σύνδεση με τον δρομολογητή %1 δημιουργήθηκε.</translation>
+        <translation>Η σύνδεση με τον δρομολογητή %1 πραγματοποιήθηκε.</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="364"/>
         <source>Network error: %1</source>
-        <translation type="unfinished">Σφάλμα δικτύου: %1</translation>
+        <translation>Σφάλμα δικτύου: %1</translation>
     </message>
     <message>
         <location filename="../client/router_controller.cc" line="378"/>
         <source>Disconnected from router %1.</source>
-        <translation type="unfinished">Αποσυνδέθηκε από τον δρομολογητή %1.</translation>
+        <translation>Έγινε αποσύνδεση από τον δρομολογητή %1.</translation>
     </message>
 </context>
 <context>
@@ -5317,18 +5080,14 @@ Hosts skipped: %6</source>
         <translation>Διαχειριστής λειτουργίας</translation>
     </message>
     <message>
-        <source>Client</source>
-        <translation type="vanished">Πελάτης</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Χειριστής</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/router_dialog.cc" line="94"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -5392,7 +5151,7 @@ Hosts skipped: %6</source>
     <message numerus="yes">
         <location filename="../client/android/router_editor.cc" line="146"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρες.</numerusform>
         </translation>
@@ -5439,67 +5198,67 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../common/desktop/router_error.cc" line="33"/>
         <source>The router rejected the request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο δρομολογητής απέρριψε την αίτηση.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="35"/>
         <source>Unknown internal error.</source>
-        <translation type="unfinished">Άγνωστο εσωτερικό σφάλμα.</translation>
+        <translation>Άγνωστο εσωτερικό σφάλμα.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="37"/>
         <source>Invalid entry id.</source>
-        <translation type="unfinished">Μη έγκυρο ID καταχώρησης.</translation>
+        <translation>Μη έγκυρο ID καταχώρησης.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="39"/>
         <source>Invalid data was passed.</source>
-        <translation type="unfinished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
+        <translation>Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="41"/>
         <source>A record with the specified name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπάρχει ήδη εγγραφή με το καθορισμένο όνομα.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="43"/>
         <source>Record not found. The list may be out of date.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η εγγραφή δεν βρέθηκε. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="45"/>
         <source>Access denied.</source>
-        <translation type="unfinished">Δεν επιτρέπεται η πρόσβαση.</translation>
+        <translation>Δεν επιτρέπεται η πρόσβαση.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="47"/>
         <source>The data has changed on the router. Refresh the list and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Τα δεδομένα άλλαξαν στον δρομολογητή. Ανανεώστε τη λίστα και δοκιμάστε ξανά.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="50"/>
         <source>Connection to the router lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η σύνδεση με τον δρομολογητή χάθηκε.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="52"/>
         <source>The host with the specified ID is not online.</source>
-        <translation type="unfinished">Ο κεντρικός υπολογιστής με το καθορισμένο ID δεν είναι σε σύνδεση.</translation>
+        <translation>Ο κεντρικός υπολογιστής με το καθορισμένο ID δεν είναι σε σύνδεση.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="54"/>
         <source>There are no relays available or the key pool is empty.</source>
-        <translation type="unfinished">Δεν υπάρχουν διαθέσιμοι αναμεταδότες ή η συγκέντρωση κλειδιών είναι κενή.</translation>
+        <translation>Δεν υπάρχουν διαθέσιμοι αναμεταδότες ή το pool κλειδιών είναι κενό.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="57"/>
         <source>Too many connection requests. Try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Πάρα πολλές αιτήσεις σύνδεσης. Δοκιμάστε ξανά αργότερα.</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
         <source>Unknown error type.</source>
-        <translation type="unfinished">Άγνωστος τύπος σφάλματος.</translation>
+        <translation>Άγνωστος τύπος σφάλματος.</translation>
     </message>
 </context>
 <context>
@@ -5542,32 +5301,12 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="90"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid group request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση ομάδας.</translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας ομάδων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="172"/>
         <source>Unknown internal error.</source>
         <translation>Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Δεν επιτρέπεται η πρόσβαση.</translation>
-    </message>
-    <message>
-        <source>Group not found.</source>
-        <translation type="vanished">Η ομάδα δεν βρέθηκε.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_dialog.cc" line="156"/>
@@ -5577,54 +5316,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterGroupWidget</name>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Εμφανιζόμενο όνομα</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID κεντρικού υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Όνομα υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Διεύθυνση</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Όνομα χρήστη</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Σχόλιο</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Λειτουργικό σύστημα</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Έκδοση</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Αρχιτεκτονική</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Τελευταία σύνδεση</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Τελευταία τροποποίηση</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Κατάσταση</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
         <source>%n host(s)</source>
@@ -5636,27 +5327,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="47"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="50"/>
         <source>Previous</source>
-        <translation type="unfinished">Προηγούμενο</translation>
+        <translation>Προηγούμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="64"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="67"/>
         <source>Next</source>
-        <translation type="unfinished">Επόμενο</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_group_widget.ui" line="78"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Στοιχεία ανά σελίδα:</translation>
+        <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
 </context>
 <context>
@@ -5679,11 +5370,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
         <source>Username:</source>
-        <translation type="unfinished">Όνομα χρήστη:</translation>
-    </message>
-    <message>
-        <source>User Name:</source>
-        <translation type="vanished">Όνομα χρήστη:</translation>
+        <translation>Όνομα χρήστη:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="55"/>
@@ -5693,7 +5380,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="67"/>
         <source>The username and the password are stored on this computer only and are not sent to the router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα χρήστη και ο κωδικός πρόσβασης αποθηκεύονται μόνο σε αυτόν τον υπολογιστή και δεν αποστέλλονται στον δρομολογητή.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="77"/>
@@ -5701,39 +5388,19 @@ Hosts skipped: %6</source>
         <translation>Σχόλιο:</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation type="vanished">Δεν επιτρέπεται η πρόσβαση.</translation>
-    </message>
-    <message>
-        <source>Host not found.</source>
-        <translation type="vanished">Ο κεντρικός υπολογιστής δεν βρέθηκε.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="121"/>
         <source>Failed to get list of groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας ομάδων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="178"/>
         <source>Enter both the username and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η αποθήκευση των διαπιστευτηρίων.</translation>
     </message>
 </context>
 <context>
@@ -5741,89 +5408,37 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>User Name</source>
-        <translation type="unfinished">Όνομα χρήστη</translation>
+        <translation>Όνομα χρήστη</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="51"/>
         <source>Password</source>
-        <translation type="unfinished">Κωδικός πρόσβασης</translation>
+        <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="58"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα χρήστη και ο κωδικός πρόσβασης αποθηκεύονται μόνο σε αυτήν τη συσκευή και δεν αποστέλλονται στον δρομολογητή. Αφήστε και τα δύο κενά για να διαγραφούν.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="63"/>
         <source>Save</source>
-        <translation type="unfinished">Αποθήκευση</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="132"/>
         <location filename="../client/android/router_host_editor.cc" line="162"/>
         <source>Failed to save the credentials.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η αποθήκευση των διαπιστευτηρίων.</translation>
     </message>
     <message>
         <location filename="../client/android/router_host_editor.cc" line="143"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostsWidget</name>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID κεντρικού υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Display Name</source>
-        <translation type="vanished">Εμφανιζόμενο όνομα</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Όνομα υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Διεύθυνση</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Όνομα χρήστη</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Σχόλιο</translation>
-    </message>
-    <message>
-        <source>Workspace</source>
-        <translation type="vanished">Χώρος εργασίας</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Λειτουργικό σύστημα</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Έκδοση</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Αρχιτεκτονική</translation>
-    </message>
-    <message>
-        <source>Last Connect</source>
-        <translation type="vanished">Τελευταία σύνδεση</translation>
-    </message>
-    <message>
-        <source>Last Modify</source>
-        <translation type="vanished">Τελευταία τροποποίηση</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="vanished">Κατάσταση</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_hosts_widget.ui" line="53"/>
         <source>Previous page</source>
@@ -5850,10 +5465,6 @@ Hosts skipped: %6</source>
         <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
     <message>
-        <source>The host is not assigned to any workspace.</source>
-        <translation type="vanished">Ο κεντρικός υπολογιστής δεν έχει αντιστοιχιστεί σε κανέναν χώρο εργασίας.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="335"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
@@ -5872,22 +5483,6 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="386"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Η διαγραφή ενός κεντρικού υπολογιστή θα έχει ως αποτέλεσμα τη διαγραφή όλων των ρυθμίσεών του για τη σύνδεση με τον δρομολογητή, ενώ η εφαρμογή θα απεγκατασταθεί από τον κεντρικό υπολογιστή. Αυτή η ενέργεια είναι μη αναστρέψιμη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
-    </message>
-    <message>
-        <source>Invalid host request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση κεντρικού υπολογιστή.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Μη έγκυρο ID καταχώρησης.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_hosts_widget.cc" line="634"/>
@@ -5920,62 +5515,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterRelaysWidget</name>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Διεύθυνση</translation>
-    </message>
-    <message>
-        <source>Connect Time</source>
-        <translation type="vanished">Ώρα σύνδεσης</translation>
-    </message>
-    <message>
-        <source>Pool Size</source>
-        <translation type="vanished">Μέγεθος συγκέντρωσης κλειδιών</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Έκδοση</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Όνομα υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Architecture</source>
-        <translation type="vanished">Αρχιτεκτονική</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Λειτουργικό σύστημα</translation>
-    </message>
-    <message>
-        <source>User Name</source>
-        <translation type="vanished">Όνομα χρήστη</translation>
-    </message>
-    <message>
-        <source>Host ID</source>
-        <translation type="vanished">ID κεντρικού υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Host Address</source>
-        <translation type="vanished">Διεύθυνση κεντρικού υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Client Address</source>
-        <translation type="vanished">Διεύθυνση πελάτη</translation>
-    </message>
-    <message>
-        <source>Transferred</source>
-        <translation type="vanished">Μεταφέρθηκαν</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="vanished">Διάρκεια</translation>
-    </message>
-    <message>
-        <source>Idle</source>
-        <translation type="vanished">Αδρανής</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_relays_widget.cc" line="241"/>
         <source>Save File</source>
@@ -6026,26 +5565,6 @@ Hosts skipped: %6</source>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε τον κόμβο &quot;%1&quot;;</translation>
     </message>
-    <message>
-        <source>Invalid relay request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση αναμεταδότη.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid entry id.</source>
-        <translation type="vanished">Μη έγκυρο ID καταχώρησης.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
-    <message>
-        <source>Relay session not found.</source>
-        <translation type="vanished">Η περίοδος λειτουργίας αναμετάδοσης δεν βρέθηκε.</translation>
-    </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_relays_widget.cc" line="593"/>
         <source>%n relay(s)</source>
@@ -6060,7 +5579,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/router_session.cc" line="163"/>
         <source>The router accepted the new password, but the record was not updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο δρομολογητής αποδέχτηκε τον νέο κωδικό πρόσβασης, αλλά η εγγραφή δεν ενημερώθηκε.</translation>
     </message>
 </context>
 <context>
@@ -6069,13 +5588,13 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
         <source>The router is waiting for a two-factor code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο δρομολογητής αναμένει κωδικό δύο παραγόντων.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
         <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
         <source>Enter Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγωγή κωδικού</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="94"/>
@@ -6098,65 +5617,45 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο έλεγχος ταυτότητας δύο παραγόντων αποκλείστηκε μετά από πάρα πολλές αποτυχημένες προσπάθειες.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
         <source>Two-factor authentication has to be set up for this router.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο έλεγχος ταυτότητας δύο παραγόντων πρέπει να ρυθμιστεί για αυτόν τον δρομολογητή.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
         <source>Set Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση</translation>
     </message>
 </context>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <source>ID</source>
-        <translation type="vanished">ID</translation>
-    </message>
-    <message>
-        <source>Computer Name</source>
-        <translation type="vanished">Όνομα υπολογιστή</translation>
-    </message>
-    <message>
-        <source>Operating System</source>
-        <translation type="vanished">Λειτουργικό σύστημα</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Έκδοση</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="vanished">Διεύθυνση</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="60"/>
         <source>Previous</source>
-        <translation type="unfinished">Προηγούμενο</translation>
+        <translation>Προηγούμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="61"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="65"/>
         <source>Next</source>
-        <translation type="unfinished">Επόμενο</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="66"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="84"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Στοιχεία ανά σελίδα:</translation>
+        <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
@@ -6237,30 +5736,6 @@ Hosts skipped: %6</source>
         <translation>Αποσύνδεση όλων</translation>
     </message>
     <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση χρήστη.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Υπάρχει ήδη χρήστης με το καθορισμένο όνομα.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Ο χρήστης δεν βρέθηκε. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Η επαναφορά του ελέγχου ταυτότητας δύο παραγόντων θα αποσυνδέσει αυτόν τον χρήστη από όλες τις περιόδους λειτουργίας και θα τον υποχρεώσει να εγγραφεί ξανά στην επόμενη είσοδο. Συνέχεια;</translation>
@@ -6276,18 +5751,6 @@ Hosts skipped: %6</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε αυτόν τον χρήστη από όλες τις περιόδους λειτουργίας;</translation>
     </message>
     <message>
-        <source>Session not found. The list may be out of date.</source>
-        <translation type="vanished">Η περίοδος λειτουργίας δεν βρέθηκε. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
-    </message>
-    <message>
-        <source>Invalid sign-out request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση αποσύνδεσης.</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες _, -, ., @</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
         <source>The username you entered already exists.</source>
         <translation>Το όνομα χρήστη που εισαγάγατε υπάρχει ήδη.</translation>
@@ -6300,27 +5763,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας χρηστών.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
         <source>The user was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο χρήστης διαγράφηκε από άλλη κονσόλα.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Η επαναφορά του ελέγχου ταυτότητας δύο παραγόντων θα σας αποσυνδέσει από όλες τις περιόδους λειτουργίας και θα σας υποχρεώσει να εγγραφείτε ξανά στην επόμενη είσοδο. Συνέχεια;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτό είναι το διακριτικό της τρέχουσας περιόδου λειτουργίας σας. Η ανάκλησή του θα σας αποσυνδέσει. Συνέχεια;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες _, -, ., @. Δεν μπορεί να αποτελείται μόνο από ψηφία.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
@@ -6366,7 +5829,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
         <source>The token of your current session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το διακριτικό της τρέχουσας περιόδου λειτουργίας σας.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
@@ -6381,11 +5844,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Πελάτης</translation>
+        <translation>Χειριστής</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
@@ -6395,18 +5854,6 @@ Hosts skipped: %6</source>
 </context>
 <context>
     <name>RouterUsersWidget</name>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Όνομα</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">Ενεργοποιημένο</translation>
-    </message>
-    <message>
-        <source>Session Types</source>
-        <translation type="vanished">Τύποι περιόδων λειτουργίας</translation>
-    </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="228"/>
         <source>You cannot delete a built-in user.</source>
@@ -6420,31 +5867,7 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid user request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση χρήστη.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>A user with the specified name already exists.</source>
-        <translation type="vanished">Υπάρχει ήδη χρήστης με το καθορισμένο όνομα.</translation>
-    </message>
-    <message>
-        <source>User not found. The list may be out of date.</source>
-        <translation type="vanished">Ο χρήστης δεν βρέθηκε. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας χρηστών.</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
@@ -6457,27 +5880,27 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="56"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="59"/>
         <source>Previous</source>
-        <translation type="unfinished">Προηγούμενο</translation>
+        <translation>Προηγούμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="73"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="76"/>
         <source>Next</source>
-        <translation type="unfinished">Επόμενο</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_users_widget.ui" line="87"/>
         <source>Items per page:</source>
-        <translation type="unfinished">Στοιχεία ανά σελίδα:</translation>
+        <translation>Στοιχεία ανά σελίδα:</translation>
     </message>
 </context>
 <context>
@@ -6544,28 +5967,28 @@ Hosts skipped: %6</source>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="191"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="283"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="133"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="194"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="286"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="143"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="204"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="296"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="146"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="207"/>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="299"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.ui" line="171"/>
@@ -6595,29 +6018,31 @@ Hosts skipped: %6</source>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="220"/>
         <source>Failed to get list of workspaces.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας χώρων εργασίας.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="247"/>
         <source>The workspace was deleted from another console.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο χώρος εργασίας διαγράφηκε από άλλη κονσόλα.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="288"/>
         <source>Failed to get list of users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν ήταν δυνατή η λήψη της λίστας χρηστών.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="410"/>
         <source>The workspace was changed from another console. The lists are being refreshed - check the changes and save again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο χώρος εργασίας άλλαξε από άλλη κονσόλα. Οι λίστες ανανεώνονται - ελέγξτε τις αλλαγές και αποθηκεύστε ξανά.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
         <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
 
 Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Η κατάργηση του κεντρικού υπολογιστή από τον χώρο εργασίας θα διαγράψει οριστικά το σχόλιό του. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.
+
+Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
@@ -6628,38 +6053,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Υπάρχει ήδη χώρος εργασίας με το καθορισμένο όνομα.</translation>
-    </message>
-    <message>
-        <source>Invalid workspace request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση χώρου εργασίας.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>Workspace not found.</source>
-        <translation type="vanished">Ο χώρος εργασίας δεν βρέθηκε.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
-    <message>
-        <source>Administrators cannot be removed from the workspace access list.</source>
-        <translation type="vanished">Οι διαχειριστές δεν μπορούν να αφαιρεθούν από τη λίστα πρόσβασης του χώρου εργασίας.</translation>
-    </message>
-    <message>
-        <source>Removing the host from the workspace will permanently clear its encrypted fields (comment, user name and password). This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation type="vanished">Η κατάργηση του κεντρικού υπολογιστή από τον χώρο εργασίας θα διαγράψει οριστικά τα κρυπτογραφημένα πεδία του (σχόλιο, όνομα χρήστη και κωδικός πρόσβασης). Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.
-
-Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
     </message>
 </context>
 <context>
@@ -6678,26 +6071,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/android/routers_widget.cc" line="240"/>
         <source>Edit Router</source>
         <translation>Επεξεργασία δρομολογητή</translation>
-    </message>
-    <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Σύνδεση με τον δρομολογητή %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Η σύνδεση με τον δρομολογητή %1 δημιουργήθηκε.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Αποσυνδέθηκε από τον δρομολογητή %1.</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Σφάλμα δικτύου: %1</translation>
-    </message>
-    <message>
-        <source>The router requires a password change, which is not supported here yet.</source>
-        <translation type="vanished">Ο δρομολογητής απαιτεί αλλαγή κωδικού πρόσβασης, η οποία δεν υποστηρίζεται ακόμα εδώ.</translation>
     </message>
 </context>
 <context>
@@ -6718,61 +6091,45 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
         <source>Name</source>
-        <translation type="unfinished">Όνομα</translation>
+        <translation>Όνομα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Διεύθυνση / ID</translation>
+        <translation>Διεύθυνση / ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Group</source>
-        <translation type="unfinished">Ομάδα</translation>
+        <translation>Ομάδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Comment</source>
-        <translation type="unfinished">Σχόλιο</translation>
+        <translation>Σχόλιο</translation>
     </message>
 </context>
 <context>
     <name>SearchWidget</name>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Όνομα</translation>
-    </message>
-    <message>
-        <source>Address / ID</source>
-        <translation type="vanished">Διεύθυνση / ID</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation type="vanished">Σχόλιο</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Ομάδα</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/search_widget.cc" line="296"/>
         <source>Previous</source>
-        <translation type="unfinished">Προηγούμενο</translation>
+        <translation>Προηγούμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="297"/>
         <source>Previous page</source>
-        <translation type="unfinished">Προηγούμενη σελίδα</translation>
+        <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="303"/>
         <source>Next</source>
-        <translation type="unfinished">Επόμενο</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/search_widget.cc" line="304"/>
         <source>Next page</source>
-        <translation type="unfinished">Επόμενη σελίδα</translation>
+        <translation>Επόμενη σελίδα</translation>
     </message>
     <message numerus="yes">
         <location filename="../client/desktop/management/search_widget.cc" line="801"/>
@@ -6790,7 +6147,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/search_widget.cc" line="240"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 από %2</translation>
     </message>
 </context>
 <context>
@@ -7481,22 +6838,6 @@ Are you sure you want to continue?</source>
         <translation>Τοπικά</translation>
     </message>
     <message>
-        <source>Connecting to router %1...</source>
-        <translation type="vanished">Σύνδεση με τον δρομολογητή %1...</translation>
-    </message>
-    <message>
-        <source>Connection to router %1 established.</source>
-        <translation type="vanished">Η σύνδεση με τον δρομολογητή %1 δημιουργήθηκε.</translation>
-    </message>
-    <message>
-        <source>Disconnected from router %1.</source>
-        <translation type="vanished">Αποσυνδέθηκε από τον δρομολογητή %1.</translation>
-    </message>
-    <message>
-        <source>To complete the migration from a previous version, you need to change your password.</source>
-        <translation type="vanished">Για να ολοκληρώσετε τη μετεγκατάσταση από προηγούμενη έκδοση, πρέπει να αλλάξετε τον κωδικό πρόσβασής σας.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/sidebar.cc" line="473"/>
         <source>Change Password</source>
         <translation>Αλλαγή κωδικού πρόσβασης</translation>
@@ -7530,31 +6871,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="509"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password updated. Waiting for new encryption keys...</source>
-        <translation type="vanished">Ο κωδικός πρόσβασης ενημερώθηκε. Αναμονή για νέα κλειδιά κρυπτογράφησης...</translation>
-    </message>
-    <message>
-        <source>Invalid password change request.</source>
-        <translation type="vanished">Μη έγκυρη αίτηση αλλαγής κωδικού πρόσβασης.</translation>
-    </message>
-    <message>
-        <source>Unknown internal error.</source>
-        <translation type="vanished">Άγνωστο εσωτερικό σφάλμα.</translation>
-    </message>
-    <message>
-        <source>Invalid data was passed.</source>
-        <translation type="vanished">Διαβιβάστηκαν μη έγκυρα δεδομένα.</translation>
-    </message>
-    <message>
-        <source>Unknown error type.</source>
-        <translation type="vanished">Άγνωστος τύπος σφάλματος.</translation>
-    </message>
-    <message>
-        <source>Event history cleared.</source>
-        <translation type="vanished">Το ιστορικό συμβάντων διαγράφηκε.</translation>
+        <translation>Αλλαγή κωδικού πρόσβασης. Αναμονή να συνδεθεί ξανά η περίοδος λειτουργίας...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="659"/>
@@ -7570,10 +6887,6 @@ Are you sure you want to continue?</source>
         <location filename="../client/desktop/management/sidebar.cc" line="736"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον δρομολογητή &quot;%1&quot;;</translation>
-    </message>
-    <message>
-        <source>Network error: %1</source>
-        <translation type="vanished">Σφάλμα δικτύου: %1</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="1299"/>
@@ -7663,18 +6976,11 @@ Are you sure you want to continue?</source>
     </message>
 </context>
 <context>
-    <name>StatusDialog</name>
-    <message>
-        <source>Connection Status</source>
-        <translation type="vanished">Κατάσταση σύνδεσης</translation>
-    </message>
-</context>
-<context>
     <name>StatusOverlay</name>
     <message>
         <location filename="../client/desktop/status_overlay.cc" line="46"/>
         <source>Close</source>
-        <translation type="unfinished">Κλείσιμο</translation>
+        <translation>Κλείσιμο</translation>
     </message>
 </context>
 <context>
@@ -11599,27 +10905,27 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="131"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="134"/>
         <source>Computer Name</source>
-        <translation type="unfinished">Όνομα υπολογιστή</translation>
+        <translation>Όνομα υπολογιστή</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="137"/>
         <source>Operating System</source>
-        <translation type="unfinished">Λειτουργικό σύστημα</translation>
+        <translation>Λειτουργικό σύστημα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="140"/>
         <source>Version</source>
-        <translation type="unfinished">Έκδοση</translation>
+        <translation>Έκδοση</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/temp_host_list_model.cc" line="143"/>
         <source>Address</source>
-        <translation type="unfinished">Διεύθυνση</translation>
+        <translation>Διεύθυνση</translation>
     </message>
 </context>
 <context>
@@ -11676,7 +10982,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_code_dialog.cc" line="40"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο προηγούμενος κωδικός δεν έγινε δεκτός.</translation>
     </message>
 </context>
 <context>
@@ -11699,7 +11005,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="68"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο προηγούμενος κωδικός δεν έγινε δεκτός.</translation>
     </message>
     <message>
         <location filename="../client/android/two_factor_dialog.cc" line="78"/>
@@ -11747,7 +11053,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../common/desktop/two_factor_enroll_dialog.cc" line="87"/>
         <source>The previous code was not accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο προηγούμενος κωδικός δεν έγινε δεκτός.</translation>
     </message>
 </context>
 <context>
@@ -11887,13 +11193,9 @@ Are you sure you want to continue?</source>
         <translation>Αποεπιλογή όλων</translation>
     </message>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
-        <translation type="vanished">Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες _, -, ., @</translation>
-    </message>
-    <message>
         <location filename="../host/ui/user_dialog.cc" line="181"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες _, -, ., @. Δεν μπορεί να αποτελείται μόνο από ψηφία.</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="199"/>
@@ -11962,10 +11264,6 @@ Are you sure you want to continue?</source>
         <location filename="../host/android/user_editor_widget.cc" line="276"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
-    </message>
-    <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters.</source>
-        <translation type="vanished">Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
@@ -12040,7 +11338,7 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Δεν μπορεί να αποτελείται μόνο από ψηφία.</translation>
     </message>
     <message>
         <location filename="../host/android/user_editor_widget.cc" line="268"/>
@@ -12131,65 +11429,42 @@ Are you sure you want to continue?</source>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="143"/>
         <source>Name</source>
-        <translation type="unfinished">Όνομα</translation>
+        <translation>Όνομα</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="146"/>
         <source>Enabled</source>
-        <translation type="unfinished">Ενεργοποιημένο</translation>
+        <translation>Ενεργοποιημένο</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="149"/>
         <source>Session Types</source>
-        <translation type="unfinished">Τύποι περιόδων λειτουργίας</translation>
+        <translation>Τύποι περιόδων λειτουργίας</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>Yes</source>
-        <translation type="unfinished">Ναι</translation>
+        <translation>Ναι</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="204"/>
         <source>No</source>
-        <translation type="unfinished">Όχι</translation>
+        <translation>Όχι</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="211"/>
         <source>Administrator</source>
-        <translation type="unfinished">Διαχειριστής</translation>
+        <translation>Διαχειριστής</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="213"/>
         <source>Manager</source>
-        <translation type="unfinished">Διαχειριστής λειτουργίας</translation>
+        <translation>Διαχειριστής λειτουργίας</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/user_list_model.cc" line="215"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserTreeItem</name>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Ναι</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Όχι</translation>
-    </message>
-    <message>
-        <source>Administrator</source>
-        <translation type="vanished">Διαχειριστής</translation>
-    </message>
-    <message>
-        <source>Client</source>
-        <translation type="vanished">Πελάτης</translation>
-    </message>
-    <message>
-        <source>Manager</source>
-        <translation type="vanished">Διαχειριστής λειτουργίας</translation>
+        <translation>Χειριστής</translation>
     </message>
 </context>
 <context>
