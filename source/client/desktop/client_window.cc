@@ -365,11 +365,10 @@ void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QV
     {
         is_legacy_mode_ = true;
 
-        // System information speaks a protocol an older host does not share (the field numbers of
-        // proto::system_info::SystemInfo were reassigned in 3.0.0), so it is not offered here.
         for (QAction* action : std::as_const(session_connect_actions_))
         {
-            if (action->data().toInt() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
+            const int type = action->data().toInt();
+            if (type == proto::peer::SESSION_TYPE_TERMINAL || type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
                 action->setVisible(false);
         }
     }

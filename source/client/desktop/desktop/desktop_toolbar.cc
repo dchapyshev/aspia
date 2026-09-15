@@ -245,6 +245,15 @@ void DesktopToolBar::enableTextChat(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enableTerminal(bool enable)
+{
+    LOG(INFO) << "enableTerminal:" << enable;
+    ui->action_terminal->setVisible(enable);
+    ui->action_terminal->setEnabled(enable);
+    updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableSystemInfo(bool enable)
 {
     LOG(INFO) << "enableSystemInfo:" << enable;
