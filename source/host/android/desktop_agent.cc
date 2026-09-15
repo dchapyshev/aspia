@@ -183,6 +183,8 @@ void DesktopAgent::onPreferredSizeChanged()
             max_size = size;
     }
 
+    // Hardware encoders require an even frame size.
+    max_size = QSize(max_size.width() & ~1, max_size.height() & ~1);
     if (preferred_size_ == max_size)
         return;
 

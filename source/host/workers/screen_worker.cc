@@ -321,10 +321,12 @@ void ScreenWorker::onSetPaused(bool paused)
 //--------------------------------------------------------------------------------------------------
 void ScreenWorker::onSetPreferredSize(const QSize& size)
 {
-    if (preferred_size_ == size)
+    // Hardware encoders require an even frame size.
+    const QSize even_size(size.width() & ~1, size.height() & ~1);
+    if (preferred_size_ == even_size)
         return;
 
-    preferred_size_ = size;
+    preferred_size_ = even_size;
 
     if (video_encoder_)
         video_encoder_->setKeyFrameRequired(true);
