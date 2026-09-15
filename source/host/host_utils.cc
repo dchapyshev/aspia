@@ -168,6 +168,10 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         quint16 value = root_object["RouterPort"].toString().toUShort();
         LOG(INFO) << "RouterPort:" << value;
+
+        if (value == 0 || value == DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT)
+            value = DEFAULT_ROUTER_HOST_TCP_PORT;
+
         router_address.setPort(value);
     }
 
