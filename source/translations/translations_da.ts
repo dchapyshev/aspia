@@ -1001,62 +1001,62 @@ Routere tilføjet: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="268"/>
         <source>Session started.</source>
         <translation>Sessionen er startet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="499"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angivne router er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="503"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is offline.</source>
         <translation>Den angivne router er offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="280"/>
         <source>Connecting to host %1...</source>
         <translation>Opretter forbindelse til værten %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="284"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Opretter forbindelse til værten %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="314"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Værten er ikke tilgængelig endnu. Venter på at oprette forbindelse igen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="77"/>
+        <location filename="../client/desktop/client_window.cc" line="75"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Timeout under ventning på genoprettelse af forbindelse til værten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="334"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Værtsversionen er nyere end klientversionen (%1 &gt; %2). Opdater venligst programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Forsøger at oprette forbindelse i kompatibilitetstilstand...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="510"/>
+        <location filename="../client/desktop/client_window.cc" line="508"/>
         <source>Requesting connection to the host...</source>
         <translation>Anmoder om forbindelse til værten...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
         <source>Connection offer received.</source>
         <translation>Forbindelsestilbud modtaget.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="533"/>
         <source>Error requesting connection via router.</source>
         <translation>Fejl ved anmodning om forbindelse via routeren.</translation>
     </message>
@@ -6036,21 +6036,17 @@ Importerede gemte adgangskoder: %4</translation>
         <translation>Arbejdsområdet blev ændret fra en anden konsol. Listerne opdateres - kontroller ændringerne, og gem igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
-        <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation>Hvis værten fjernes fra arbejdsområdet, slettes dens kommentar permanent. Denne handling kan ikke fortrydes.
-
-Er du sikker på, at du vil fortsætte?</translation>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="512"/>
+        <source>Are you sure you want to remove the host from the workspace?</source>
+        <translation>Er du sikker på, at du vil fjerne værten fra arbejdsområdet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="881"/>
         <source>Workspace name cannot be empty.</source>
         <translation>Arbejdsområdenavnet må ikke være tomt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="892"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Der findes allerede et arbejdsområde med det angivne navn.</translation>
     </message>

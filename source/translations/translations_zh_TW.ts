@@ -999,62 +999,62 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="268"/>
         <source>Session started.</source>
         <translation>工作階段已開始。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="499"/>
         <source>The specified router is unavailable.</source>
         <translation>指定的路由器無法使用。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="503"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is offline.</source>
         <translation>指定的路由器不在線上。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="280"/>
         <source>Connecting to host %1...</source>
         <translation>正在連線到主機 %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="284"/>
         <source>Connecting to host %1:%2...</source>
         <translation>正在連線到主機 %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="314"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>主機目前無法使用。正在等待重新連線...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="77"/>
+        <location filename="../client/desktop/client_window.cc" line="75"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>等待重新連線到主機逾時。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="334"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>主機版本比用戶端版本新（%1 &gt; %2）。請更新應用程式。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>正在嘗試以相容模式連線...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="510"/>
+        <location filename="../client/desktop/client_window.cc" line="508"/>
         <source>Requesting connection to the host...</source>
         <translation>正在要求連線到主機...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
         <source>Connection offer received.</source>
         <translation>已收到連線請求。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="533"/>
         <source>Error requesting connection via router.</source>
         <translation>透過路由器要求連線時發生錯誤。</translation>
     </message>
@@ -6008,21 +6008,17 @@ Saved passwords imported: %4</source>
         <translation>此工作區已在另一個主控台中變更。正在重新整理清單，請檢查變更後再次儲存。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
-        <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation>從工作區移除主機將永久清除其註解。此操作無法復原。
-
-確定要繼續嗎？</translation>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="512"/>
+        <source>Are you sure you want to remove the host from the workspace?</source>
+        <translation>確定要從工作區移除主機嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="881"/>
         <source>Workspace name cannot be empty.</source>
         <translation>工作區名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="892"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>已存在使用指定名稱的工作區。</translation>
     </message>

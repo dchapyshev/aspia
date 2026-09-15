@@ -1001,62 +1001,62 @@ Hinzugefügte Router: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="268"/>
         <source>Session started.</source>
         <translation>Sitzung gestartet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="499"/>
         <source>The specified router is unavailable.</source>
         <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="503"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is offline.</source>
         <translation>Der angegebene Router ist offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="280"/>
         <source>Connecting to host %1...</source>
         <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="284"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Verbindung mit Host %1:%2 wird hergestellt...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="314"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Der Host ist noch nicht verfügbar. Warten auf erneute Verbindung...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="77"/>
+        <location filename="../client/desktop/client_window.cc" line="75"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Zeitüberschreitung beim Warten auf die erneute Verbindung zum Host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="334"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Die Host-Version ist neuer als die Client-Version (%1 &gt; %2). Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Verbindungsversuch im Kompatibilitätsmodus...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="510"/>
+        <location filename="../client/desktop/client_window.cc" line="508"/>
         <source>Requesting connection to the host...</source>
         <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
         <source>Connection offer received.</source>
         <translation>Verbindungsangebot erhalten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="533"/>
         <source>Error requesting connection via router.</source>
         <translation>Fehler bei der Verbindungsanforderung über den Router.</translation>
     </message>
@@ -6036,21 +6036,17 @@ Importierte gespeicherte Kennwörter: %4</translation>
         <translation>Der Arbeitsbereich wurde von einer anderen Konsole geändert. Die Listen werden aktualisiert - prüfen Sie die Änderungen und speichern Sie erneut.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
-        <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation>Durch das Entfernen des Hosts aus dem Arbeitsbereich wird sein Kommentar dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.
-
-Möchten Sie wirklich fortfahren?</translation>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="512"/>
+        <source>Are you sure you want to remove the host from the workspace?</source>
+        <translation>Möchten Sie den Host wirklich aus dem Arbeitsbereich entfernen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="881"/>
         <source>Workspace name cannot be empty.</source>
         <translation>Der Name des Arbeitsbereichs darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="892"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>Ein Arbeitsbereich mit dem angegebenen Namen existiert bereits.</translation>
     </message>

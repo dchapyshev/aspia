@@ -1001,62 +1001,62 @@ Tillagda routrar: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="268"/>
         <source>Session started.</source>
         <translation>Sessionen har startat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="499"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angivna routern är inte tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="503"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is offline.</source>
         <translation>Den angivna routern är offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="280"/>
         <source>Connecting to host %1...</source>
         <translation>Ansluter till värden %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="284"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Ansluter till värden %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="314"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Värden är inte tillgänglig ännu. Väntar på återanslutning...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="77"/>
+        <location filename="../client/desktop/client_window.cc" line="75"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Tidsgränsen för återanslutning till värden överskreds.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="334"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Värdversionen är nyare än klientversionen (%1 &gt; %2). Uppdatera programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Försöker ansluta i kompatibilitetsläge...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="510"/>
+        <location filename="../client/desktop/client_window.cc" line="508"/>
         <source>Requesting connection to the host...</source>
         <translation>Begär anslutning till värden...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
         <source>Connection offer received.</source>
         <translation>Anslutningserbjudande mottaget.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="533"/>
         <source>Error requesting connection via router.</source>
         <translation>Fel vid begäran om anslutning via routern.</translation>
     </message>
@@ -6036,21 +6036,17 @@ Importerade sparade lösenord: %4</translation>
         <translation>Arbetsytan ändrades från en annan konsol. Listorna uppdateras - kontrollera ändringarna och spara igen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
-        <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation>Om värden tas bort från arbetsytan rensas dess kommentar permanent. Åtgärden kan inte ångras.
-
-Är du säker på att du vill fortsätta?</translation>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="512"/>
+        <source>Are you sure you want to remove the host from the workspace?</source>
+        <translation>Är du säker på att du vill ta bort värden från arbetsytan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="881"/>
         <source>Workspace name cannot be empty.</source>
         <translation>Arbetsytans namn får inte vara tomt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="892"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>En arbetsyta med det angivna namnet finns redan.</translation>
     </message>

@@ -999,62 +999,62 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="77"/>
+        <location filename="../client/desktop/client_window.cc" line="75"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>ホストへの再接続の待機がタイムアウトしました。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="270"/>
+        <location filename="../client/desktop/client_window.cc" line="268"/>
         <source>Session started.</source>
         <translation>セッションが開始されました。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="282"/>
+        <location filename="../client/desktop/client_window.cc" line="280"/>
         <source>Connecting to host %1...</source>
         <translation>ホスト %1 に接続しています...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="286"/>
+        <location filename="../client/desktop/client_window.cc" line="284"/>
         <source>Connecting to host %1:%2...</source>
         <translation>ホスト %1:%2 に接続しています...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="316"/>
+        <location filename="../client/desktop/client_window.cc" line="314"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>ホストはまだ利用できません。再接続を待機しています...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="336"/>
+        <location filename="../client/desktop/client_window.cc" line="334"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>ホストのバージョンがクライアントのバージョンより新しいです (%1 &gt; %2)。アプリケーションを更新してください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="342"/>
+        <location filename="../client/desktop/client_window.cc" line="340"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>互換モードで接続を試行しています...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="499"/>
         <source>The specified router is unavailable.</source>
         <translation>指定されたルーターは利用できません。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="503"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is offline.</source>
         <translation>指定されたルーターはオフラインです。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="510"/>
+        <location filename="../client/desktop/client_window.cc" line="508"/>
         <source>Requesting connection to the host...</source>
         <translation>ホストへの接続を要求しています...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="518"/>
+        <location filename="../client/desktop/client_window.cc" line="516"/>
         <source>Connection offer received.</source>
         <translation>接続オファーを受信しました。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="535"/>
+        <location filename="../client/desktop/client_window.cc" line="533"/>
         <source>Error requesting connection via router.</source>
         <translation>ルーター経由の接続要求でエラーが発生しました。</translation>
     </message>
@@ -6008,21 +6008,17 @@ Saved passwords imported: %4</source>
         <translation>このワークスペースは別のコンソールから変更されました。一覧を更新しています。変更内容を確認して、もう一度保存してください。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="513"/>
-        <source>Removing the host from the workspace will permanently clear its comment. This action cannot be undone.
-
-Are you sure you want to continue?</source>
-        <translation>ホストをワークスペースから削除すると、そのコメントは完全に消去されます。この操作は元に戻せません。
-
-続行してもよろしいですか？</translation>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="512"/>
+        <source>Are you sure you want to remove the host from the workspace?</source>
+        <translation>ホストをワークスペースから削除してもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="885"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="881"/>
         <source>Workspace name cannot be empty.</source>
         <translation>ワークスペース名を空にすることはできません。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="896"/>
+        <location filename="../client/desktop/management/router_workspace_dialog.cc" line="892"/>
         <source>A workspace with the specified name already exists.</source>
         <translation>指定した名前のワークスペースは既に存在します。</translation>
     </message>
