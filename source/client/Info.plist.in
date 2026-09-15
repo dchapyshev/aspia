@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>aspia.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>ru.aspia.client</string>
+	<string>org.aspia.client</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
@@ -34,7 +34,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>ru.aspia.client</string>
+			<string>org.aspia.client</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>aspia</string>
