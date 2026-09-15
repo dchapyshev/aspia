@@ -245,6 +245,15 @@ void DesktopToolBar::enableTextChat(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::enableSystemInfo(bool enable)
+{
+    LOG(INFO) << "enableSystemInfo:" << enable;
+    ui->action_system_info->setVisible(enable);
+    ui->action_system_info->setEnabled(enable);
+    updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableTaskManager(bool enable)
 {
     LOG(INFO) << "enableTaskManager:" << enable;

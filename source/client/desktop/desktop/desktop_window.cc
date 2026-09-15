@@ -319,6 +319,7 @@ void DesktopWindow::onSessionStarted()
 
     emit sig_showRequested();
     toolbar_->enableTextChat(true);
+    toolbar_->enableSystemInfo(!isLegacy());
 
     if (isLegacy())
         return;

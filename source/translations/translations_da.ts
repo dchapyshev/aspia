@@ -1001,62 +1001,62 @@ Routere tilføjet: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="261"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Sessionen er startet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="491"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angivne router er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="493"/>
+        <location filename="../client/desktop/client_window.cc" line="503"/>
         <source>The specified router is offline.</source>
         <translation>Den angivne router er offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="273"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Opretter forbindelse til værten %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="277"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Opretter forbindelse til værten %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Værten er ikke tilgængelig endnu. Venter på at oprette forbindelse igen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="75"/>
+        <location filename="../client/desktop/client_window.cc" line="77"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Timeout under ventning på genoprettelse af forbindelse til værten.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="327"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Værtsversionen er nyere end klientversionen (%1 &gt; %2). Opdater venligst programmet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="333"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Forsøger at oprette forbindelse i kompatibilitetstilstand...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="500"/>
+        <location filename="../client/desktop/client_window.cc" line="510"/>
         <source>Requesting connection to the host...</source>
         <translation>Anmoder om forbindelse til værten...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
         <source>Connection offer received.</source>
         <translation>Forbindelsestilbud modtaget.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="525"/>
+        <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Error requesting connection via router.</source>
         <translation>Fejl ved anmodning om forbindelse via routeren.</translation>
     </message>
@@ -1632,7 +1632,7 @@ Adgangskode: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
         <source>Scale</source>
         <translation>Skalering</translation>
     </message>
@@ -1722,7 +1722,7 @@ Adgangskode: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="551"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
         <source>Start recording</source>
         <translation>Start optagelse</translation>
     </message>
@@ -1744,69 +1744,69 @@ Adgangskode: %2</translation>
         <translation>Skift session</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
         <source>Resolution selection</source>
         <translation>Valg af opløsning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1</source>
         <translation>Session %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1 (%2)</source>
         <translation>Session %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="546"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Stop recording</source>
         <translation>Stop optagelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="459"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
         <source>Scripts</source>
         <translation>Skripter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Er du sikker på, at du vil køre skriptet &quot;%1&quot; på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Er du sikker på, at du vil lukke fjerncomputeren ned?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="793"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Confirmation</source>
         <translation>Bekræftelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="794"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="799"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="825"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
         <source>Wait for host</source>
         <translation>Vent på vært</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren i fejlsikret tilstand?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="845"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil afslutte brugersessionen på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil låse brugersessionen på fjerncomputeren?</translation>
     </message>
@@ -1837,17 +1837,17 @@ Adgangskode: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-billede (*.png);;BMP-billede (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Kunne ikke gemme billedet</translation>
     </message>
@@ -5736,57 +5736,57 @@ Importerede gemte adgangskoder: %4</translation>
         <translation>Log alle ud</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Nulstilling af tofaktorgodkendelse logger denne bruger ud af alle sessioner og tvinger vedkommende til at tilmelde sig igen ved næste login. Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="387"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="393"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Er du sikker på, at du vil logge denne bruger ud af denne session?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Er du sikker på, at du vil logge denne bruger ud af alle sessioner?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
         <source>The username you entered already exists.</source>
         <translation>Det indtastede brugernavn findes allerede.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="526"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="532"/>
         <source>The passwords you entered do not match.</source>
         <translation>De adgangskoder, du indtastede, stemmer ikke overens.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="201"/>
         <source>Failed to get list of users.</source>
         <translation>Kunne ikke hente listen over brugere.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="231"/>
         <source>The user was deleted from another console.</source>
         <translation>Brugeren blev slettet fra en anden konsol.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="336"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Nulstilling af tofaktorgodkendelse logger dig ud af alle sessioner og tvinger dig til at tilmelde dig igen ved næste login. Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="392"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Dette er tokenet for din nuværende session. Tilbagekaldelse af det afbryder din forbindelse. Vil du fortsætte?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="519"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Brugernavnet må ikke være tomt og må kun indeholde bogstaver, tal og tegnene _, -, ., @. Det må ikke bestå af tal alene.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="541"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Adgangskoden må ikke være tom og må ikke overstige %n tegn.</numerusform>
@@ -5794,12 +5794,12 @@ Importerede gemte adgangskoder: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="551"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Den indtastede adgangskode opfylder ikke sikkerhedskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Adgangskoden skal indeholde små og store bogstaver samt tal og må ikke være kortere end %n tegn.</numerusform>
@@ -5807,47 +5807,47 @@ Importerede gemte adgangskoder: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du indtaste en anden adgangskode?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="559"/>
         <source>Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="579"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Ukendt intern fejl under oprettelse eller ændring af en bruger.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="724"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
         <source>Double-click to change</source>
         <translation>Dobbeltklik for at ændre</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="788"/>
         <source>The token of your current session.</source>
         <translation>Tokenet for din nuværende session.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Administrator</source>
         <translation>Administrator</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="830"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="836"/>
         <source>Manager</source>
         <translation>Manager</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="840"/>
         <source>Operator</source>
         <translation>Operatør</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="858"/>
         <source>Never</source>
         <translation>Aldrig</translation>
     </message>
@@ -10631,6 +10631,11 @@ Er du sikker på, at du vil fortsætte?</translation>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Systemoplysninger</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
+        <source>System information is not available for hosts older than version 3.0.0.</source>
+        <translation>Systemoplysninger er ikke tilgængelige for værter, der er ældre end version 3.0.0.</translation>
     </message>
 </context>
 <context>

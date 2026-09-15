@@ -1001,62 +1001,62 @@ Toegevoegde routers: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="261"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Sessie gestart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="491"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is unavailable.</source>
         <translation>De opgegeven router is niet beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="493"/>
+        <location filename="../client/desktop/client_window.cc" line="503"/>
         <source>The specified router is offline.</source>
         <translation>De opgegeven router is offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="273"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Verbinden met host %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="277"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Verbinden met host %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Host is nog niet beschikbaar. Wachten op nieuwe verbinding...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="75"/>
+        <location filename="../client/desktop/client_window.cc" line="77"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Time-out tijdens het wachten op een nieuwe verbinding met de host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="327"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>De hostversie is nieuwer dan de clientversie (%1 &gt; %2). Werk de applicatie bij.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="333"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Poging tot verbinden in compatibiliteitsmodus...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="500"/>
+        <location filename="../client/desktop/client_window.cc" line="510"/>
         <source>Requesting connection to the host...</source>
         <translation>Verbinding met de host wordt aangevraagd...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
         <source>Connection offer received.</source>
         <translation>Verbindingsaanbod ontvangen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="525"/>
+        <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Error requesting connection via router.</source>
         <translation>Fout bij het aanvragen van een verbinding via de router.</translation>
     </message>
@@ -1632,7 +1632,7 @@ Wachtwoord: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
         <source>Scale</source>
         <translation>Schaal</translation>
     </message>
@@ -1722,7 +1722,7 @@ Wachtwoord: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="551"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
         <source>Start recording</source>
         <translation>Opname starten</translation>
     </message>
@@ -1744,69 +1744,69 @@ Wachtwoord: %2</translation>
         <translation>Sessie wisselen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
         <source>Resolution selection</source>
         <translation>Resolutieselectie</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1</source>
         <translation>Sessie %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1 (%2)</source>
         <translation>Sessie %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="546"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Stop recording</source>
         <translation>Opname stoppen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="459"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
         <source>Scripts</source>
         <translation>Scripts</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Weet u zeker dat u het script &quot;%1&quot; op de externe computer wilt uitvoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Weet u zeker dat u de externe computer wilt afsluiten?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="793"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Confirmation</source>
         <translation>Bevestiging</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="794"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Weet u zeker dat u de externe computer opnieuw wilt opstarten?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="799"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="825"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
         <source>Wait for host</source>
         <translation>Wachten op host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Weet u zeker dat u de externe computer opnieuw wilt opstarten in de veilige modus?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="845"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Weet u zeker dat u de gebruikerssessie op de externe computer wilt beëindigen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Weet u zeker dat u de gebruikerssessie op de externe computer wilt vergrendelen?</translation>
     </message>
@@ -1837,17 +1837,17 @@ Wachtwoord: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-afbeelding (*.png);;BMP-afbeelding (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Kon afbeelding niet opslaan</translation>
     </message>
@@ -5736,57 +5736,57 @@ Opgeslagen wachtwoorden geïmporteerd: %4</translation>
         <translation>Alles afmelden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Als u de tweefactorauthenticatie reset, wordt deze gebruiker bij alle sessies afgemeld en moet deze zich bij de volgende aanmelding opnieuw registreren. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="387"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="393"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Weet u zeker dat u deze gebruiker bij deze sessie wilt afmelden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Weet u zeker dat u deze gebruiker bij alle sessies wilt afmelden?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
         <source>The username you entered already exists.</source>
         <translation>De ingevoerde gebruikersnaam bestaat al.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="526"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="532"/>
         <source>The passwords you entered do not match.</source>
         <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="201"/>
         <source>Failed to get list of users.</source>
         <translation>Kan lijst met gebruikers niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="231"/>
         <source>The user was deleted from another console.</source>
         <translation>De gebruiker is vanuit een andere console verwijderd.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="336"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Als u de tweefactorauthenticatie reset, wordt u bij alle sessies afgemeld en moet u zich bij de volgende aanmelding opnieuw registreren. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="392"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Dit is het token van uw huidige sessie. Als u het intrekt, wordt uw verbinding verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="519"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>De gebruikersnaam mag niet leeg zijn en mag alleen letters, cijfers en de tekens _, -, ., @ bevatten. De naam mag niet alleen uit cijfers bestaan.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="541"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet leeg zijn en mag niet langer zijn dan %n teken.</numerusform>
@@ -5794,12 +5794,12 @@ Opgeslagen wachtwoorden geïmporteerd: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="551"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -5807,47 +5807,47 @@ Opgeslagen wachtwoorden geïmporteerd: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="559"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="579"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Onbekende interne fout bij het maken of wijzigen van een gebruiker.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="724"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
         <source>Double-click to change</source>
         <translation>Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="788"/>
         <source>The token of your current session.</source>
         <translation>Het token van uw huidige sessie.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Administrator</source>
         <translation>Beheerder</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="830"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="836"/>
         <source>Manager</source>
         <translation>Manager</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="840"/>
         <source>Operator</source>
         <translation>Operator</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="858"/>
         <source>Never</source>
         <translation>Nooit</translation>
     </message>
@@ -10631,6 +10631,11 @@ Weet u zeker dat u wilt doorgaan?</translation>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Systeeminformatie</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
+        <source>System information is not available for hosts older than version 3.0.0.</source>
+        <translation>Systeeminformatie is niet beschikbaar voor hosts ouder dan versie 3.0.0.</translation>
     </message>
 </context>
 <context>

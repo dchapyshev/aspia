@@ -1003,62 +1003,62 @@ Přidané routery: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="261"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Relace zahájena.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="491"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is unavailable.</source>
         <translation>Zadaný router není dostupný.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="493"/>
+        <location filename="../client/desktop/client_window.cc" line="503"/>
         <source>The specified router is offline.</source>
         <translation>Zadaný router je offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="273"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Připojování k hostiteli %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="277"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Připojování k hostiteli %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Hostitel zatím není dostupný. Čekání na opětovné připojení...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="75"/>
+        <location filename="../client/desktop/client_window.cc" line="77"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Vypršel časový limit čekání na opětovné připojení k hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="327"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Verze hostitele je novější než verze klienta (%1 &gt; %2). Aktualizujte prosím aplikaci.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="333"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Probíhá pokus o připojení v režimu kompatibility...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="500"/>
+        <location filename="../client/desktop/client_window.cc" line="510"/>
         <source>Requesting connection to the host...</source>
         <translation>Žádost o připojení k hostiteli...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
         <source>Connection offer received.</source>
         <translation>Přijata nabídka připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="525"/>
+        <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Error requesting connection via router.</source>
         <translation>Chyba při žádosti o připojení přes router.</translation>
     </message>
@@ -1636,7 +1636,7 @@ Heslo: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
         <source>Scale</source>
         <translation>Měřítko</translation>
     </message>
@@ -1726,7 +1726,7 @@ Heslo: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="551"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
         <source>Start recording</source>
         <translation>Spustit nahrávání</translation>
     </message>
@@ -1748,69 +1748,69 @@ Heslo: %2</translation>
         <translation>Přepnout relaci</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
         <source>Resolution selection</source>
         <translation>Výběr rozlišení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1</source>
         <translation>Relace %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1 (%2)</source>
         <translation>Relace %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="546"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Stop recording</source>
         <translation>Zastavit nahrávání</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="459"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
         <source>Scripts</source>
         <translation>Skripty</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Opravdu chcete spustit skript &quot;%1&quot; na vzdáleném počítači?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Opravdu chcete vypnout vzdálený počítač?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="793"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Confirmation</source>
         <translation>Potvrzení</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="794"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Opravdu chcete restartovat vzdálený počítač?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="799"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="825"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
         <source>Wait for host</source>
         <translation>Čekat na hostitele</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Opravdu chcete restartovat vzdálený počítač v nouzovém režimu?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="845"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Opravdu chcete ukončit relaci uživatele na vzdáleném počítači?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Opravdu chcete uzamknout relaci uživatele na vzdáleném počítači?</translation>
     </message>
@@ -1841,17 +1841,17 @@ Heslo: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Obrázek PNG (*.png);;Obrázek BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Nelze uložit obrázek</translation>
     </message>
@@ -5761,57 +5761,57 @@ Importovaná uložená hesla: %4</translation>
         <translation>Odhlásit vše</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Resetování dvoufaktorového ověřování odhlásí tohoto uživatele ze všech relací a při příštím přihlášení bude vyžadována nová registrace. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="387"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="393"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Opravdu chcete odhlásit tohoto uživatele z této relace?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Opravdu chcete odhlásit tohoto uživatele ze všech relací?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
         <source>The username you entered already exists.</source>
         <translation>Zadané uživatelské jméno již existuje.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="526"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="532"/>
         <source>The passwords you entered do not match.</source>
         <translation>Zadaná hesla se neshodují.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="201"/>
         <source>Failed to get list of users.</source>
         <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="231"/>
         <source>The user was deleted from another console.</source>
         <translation>Uživatel byl odstraněn z jiné konzole.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="336"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Resetování dvoufaktorového ověřování vás odhlásí ze všech relací a při příštím přihlášení bude vyžadována nová registrace. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="392"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Toto je token vaší aktuální relace. Jeho odvolání vás odpojí. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="519"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Uživatelské jméno nemůže být prázdné a může obsahovat pouze písmena, číslice a znaky _, -, ., @. Nemůže se skládat pouze z číslic.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="541"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Heslo nemůže být prázdné a nemělo by přesáhnout %n znak.</numerusform>
@@ -5820,12 +5820,12 @@ Importovaná uložená hesla: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="551"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -5834,47 +5834,47 @@ Importovaná uložená hesla: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="559"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="579"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Neznámá interní chyba při vytváření nebo změně uživatele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="724"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
         <source>Double-click to change</source>
         <translation>Dvojitým kliknutím změníte</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="788"/>
         <source>The token of your current session.</source>
         <translation>Token vaší aktuální relace.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Administrator</source>
         <translation>Administrátor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="830"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="836"/>
         <source>Manager</source>
         <translation>Správce</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="840"/>
         <source>Operator</source>
         <translation>Operátor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="858"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>
@@ -10663,6 +10663,11 @@ Opravdu chcete pokračovat?</translation>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Systémové informace</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
+        <source>System information is not available for hosts older than version 3.0.0.</source>
+        <translation>Systémové informace nejsou k dispozici pro hostitele starší než verze 3.0.0.</translation>
     </message>
 </context>
 <context>

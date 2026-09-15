@@ -126,6 +126,14 @@ void SystemInfoWindow::onSessionStarted()
 
     show();
     activateWindow();
+
+    if (isLegacy())
+    {
+        LOG(INFO) << "System info is not available for host" << sessionState()->hostVersion();
+        onErrorOccurred(tr("System information is not available for hosts older than version 3.0.0."));
+        return;
+    }
+
     view_->onRefresh();
 }
 

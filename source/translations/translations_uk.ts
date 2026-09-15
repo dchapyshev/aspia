@@ -1003,62 +1003,62 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="261"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Сесію розпочато.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="491"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is unavailable.</source>
         <translation>Вказаний маршрутизатор недоступний.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="493"/>
+        <location filename="../client/desktop/client_window.cc" line="503"/>
         <source>The specified router is offline.</source>
         <translation>Вказаний маршрутизатор не в мережі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="273"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>Підключення до хоста %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="277"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Підключення до хоста %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступний. Очікування повторного підключення...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="75"/>
+        <location filename="../client/desktop/client_window.cc" line="77"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Перевищено час очікування при спробі повторного підключення до хоста.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="327"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версія хоста новіша за версію клієнта (%1 &gt; %2). Будь ласка, оновіть застосунок.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="333"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Спроба підключення в режимі сумісності...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="500"/>
+        <location filename="../client/desktop/client_window.cc" line="510"/>
         <source>Requesting connection to the host...</source>
         <translation>Запит на підключення до хоста...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
         <source>Connection offer received.</source>
         <translation>Отримано пропозицію підключення.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="525"/>
+        <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Error requesting connection via router.</source>
         <translation>Помилка при запиті з&apos;єднання через маршрутизатор.</translation>
     </message>
@@ -1636,7 +1636,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -1726,7 +1726,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="551"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
         <source>Start recording</source>
         <translation>Почати запис</translation>
     </message>
@@ -1748,69 +1748,69 @@ Password: %2</source>
         <translation>Перемикання сесії</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
         <source>Resolution selection</source>
         <translation>Вибір роздільної здатності</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1</source>
         <translation>Сесія %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1 (%2)</source>
         <translation>Сесія %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="546"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Stop recording</source>
         <translation>Зупинити запис</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="459"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
         <source>Scripts</source>
         <translation>Скрипти</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Ви дійсно хочете запустити скрипт &quot;%1&quot; на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Ви дійсно хочете вимкнути віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="793"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="794"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="799"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="825"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
         <source>Wait for host</source>
         <translation>Очікування хоста</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Ви дійсно хочете перезавантажити віддалений комп&apos;ютер у безпечному режимі?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="845"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Ви дійсно хочете завершити сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Ви дійсно хочете заблокувати сеанс користувача на віддаленому комп&apos;ютері?</translation>
     </message>
@@ -1841,17 +1841,17 @@ Password: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG зображення (*.png);;BMP зображення (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Не вдалося зберегти зображення</translation>
     </message>
@@ -5762,57 +5762,57 @@ Saved passwords imported: %4</source>
         <translation>Завершити всі сеанси</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Скидання двофакторної автентифікації призведе до виходу користувача з усіх сеансів і вимагатиме повторного налаштування при наступному вході. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="387"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="393"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Ви впевнені, що хочете завершити цей сеанс користувача?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Ви впевнені, що хочете завершити всі сеанси цього користувача?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
         <source>The username you entered already exists.</source>
         <translation>Введене вами ім&apos;я користувача вже існує.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="526"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="532"/>
         <source>The passwords you entered do not match.</source>
         <translation>Введені паролі не збігаються.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="201"/>
         <source>Failed to get list of users.</source>
         <translation>Не вдалося отримати список користувачів.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="231"/>
         <source>The user was deleted from another console.</source>
         <translation>Користувача видалено з іншої консолі.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="336"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Скидання двофакторної автентифікації призведе до вашого виходу з усіх сеансів і вимагатиме повторного налаштування при наступному вході. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="392"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Це токен вашого поточного сеансу. Його відкликання відключить вас. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="519"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Ім&apos;я користувача не може бути порожнім і може містити тільки літери, цифри та символи _, -, ., @. Воно не може складатися лише з цифр.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="541"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>Пароль не може бути порожнім і не повинен перевищувати %n символ.</numerusform>
@@ -5821,12 +5821,12 @@ Saved passwords imported: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="551"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Введений пароль не відповідає вимогам безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Пароль повинен містити малі та великі літери, цифри і не повинен бути коротшим за %n символ.</numerusform>
@@ -5835,47 +5835,47 @@ Saved passwords imported: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Do you want to enter a different password?</source>
         <translation>Хочете ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="559"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="579"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Невідома внутрішня помилка при створенні або зміні користувача.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="724"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
         <source>Double-click to change</source>
         <translation>Подвійне клацання для зміни</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="788"/>
         <source>The token of your current session.</source>
         <translation>Токен вашого поточного сеансу.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Administrator</source>
         <translation>Адміністратор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="830"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="836"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="840"/>
         <source>Operator</source>
         <translation>Оператор</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="858"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
@@ -10664,6 +10664,11 @@ Are you sure you want to continue?</source>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Інформація про систему</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
+        <source>System information is not available for hosts older than version 3.0.0.</source>
+        <translation>Інформація про систему недоступна для хостів з версією нижче 3.0.0.</translation>
     </message>
 </context>
 <context>

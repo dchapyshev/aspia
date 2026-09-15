@@ -1001,62 +1001,62 @@ Routers adicionados: %4</translation>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="261"/>
+        <location filename="../client/desktop/client_window.cc" line="270"/>
         <source>Session started.</source>
         <translation>Sessão iniciada.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="491"/>
+        <location filename="../client/desktop/client_window.cc" line="501"/>
         <source>The specified router is unavailable.</source>
         <translation>O router especificado não está disponível.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="493"/>
+        <location filename="../client/desktop/client_window.cc" line="503"/>
         <source>The specified router is offline.</source>
         <translation>O router especificado está offline.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="273"/>
+        <location filename="../client/desktop/client_window.cc" line="282"/>
         <source>Connecting to host %1...</source>
         <translation>A ligar ao anfitrião %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="277"/>
+        <location filename="../client/desktop/client_window.cc" line="286"/>
         <source>Connecting to host %1:%2...</source>
         <translation>A ligar ao anfitrião %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="307"/>
+        <location filename="../client/desktop/client_window.cc" line="316"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>O anfitrião ainda não está disponível. A aguardar nova ligação...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="75"/>
+        <location filename="../client/desktop/client_window.cc" line="77"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Tempo limite excedido a aguardar a nova ligação ao anfitrião.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="327"/>
+        <location filename="../client/desktop/client_window.cc" line="336"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>A versão do anfitrião é mais recente do que a versão do cliente (%1 &gt; %2). Atualize a aplicação.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="333"/>
+        <location filename="../client/desktop/client_window.cc" line="342"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>A tentar ligar em modo de compatibilidade...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="500"/>
+        <location filename="../client/desktop/client_window.cc" line="510"/>
         <source>Requesting connection to the host...</source>
         <translation>A pedir ligação ao anfitrião...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="518"/>
         <source>Connection offer received.</source>
         <translation>Oferta de ligação recebida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="525"/>
+        <location filename="../client/desktop/client_window.cc" line="535"/>
         <source>Error requesting connection via router.</source>
         <translation>Erro ao pedir a ligação através do router.</translation>
     </message>
@@ -1632,7 +1632,7 @@ Palavra-passe: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -1722,7 +1722,7 @@ Palavra-passe: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="551"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
         <source>Start recording</source>
         <translation>Iniciar gravação</translation>
     </message>
@@ -1744,69 +1744,69 @@ Palavra-passe: %2</translation>
         <translation>Mudar de sessão</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="346"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
         <source>Resolution selection</source>
         <translation>Seleção de resolução</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1</source>
         <translation>Sessão %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1124"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
         <source>Session %1 (%2)</source>
         <translation>Sessão %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="546"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
         <source>Stop recording</source>
         <translation>Parar gravação</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="459"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
         <source>Scripts</source>
         <translation>Scripts</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="518"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Tem a certeza de que pretende executar o script &quot;%1&quot; no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="778"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Tem a certeza de que pretende encerrar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="793"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="819"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="794"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Tem a certeza de que pretende reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="799"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="825"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
         <source>Wait for host</source>
         <translation>Aguardar pelo anfitrião</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="820"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem a certeza de que pretende reiniciar o computador remoto em modo de segurança?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="845"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Tem a certeza de que pretende terminar a sessão do utilizador no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Tem a certeza de que pretende bloquear a sessão do utilizador no computador remoto?</translation>
     </message>
@@ -1837,17 +1837,17 @@ Palavra-passe: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="946"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
         <source>Save File</source>
         <translation>Guardar ficheiro</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Imagem PNG (*.png);;Imagem BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="979"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Não foi possível guardar a imagem</translation>
     </message>
@@ -5736,57 +5736,57 @@ Palavras-passe guardadas importadas: %4</translation>
         <translation>Terminar todas as sessões</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="338"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>Repor a autenticação de dois fatores terminará todas as sessões deste utilizador e obrigará a uma nova inscrição no próximo início de sessão. Continuar?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="387"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="393"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Tem a certeza de que pretende terminar esta sessão deste utilizador?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="412"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="418"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Tem a certeza de que pretende terminar todas as sessões deste utilizador?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="638"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
         <source>The username you entered already exists.</source>
         <translation>O nome de utilizador que introduziu já existe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="526"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="532"/>
         <source>The passwords you entered do not match.</source>
         <translation>As palavras-passe que introduziu não coincidem.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="195"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="201"/>
         <source>Failed to get list of users.</source>
         <translation>Falha ao obter a lista de utilizadores.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="225"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="231"/>
         <source>The user was deleted from another console.</source>
         <translation>O utilizador foi eliminado a partir de outra consola.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="330"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="336"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>Repor a autenticação de dois fatores terminará todas as suas sessões e obrigará a uma nova inscrição no próximo início de sessão. Continuar?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="386"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="392"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Este é o token da sua sessão atual. Revogá-lo irá desligá-lo. Continuar?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="513"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="519"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>O nome de utilizador não pode estar vazio e só pode conter letras, números e os caracteres _, -, ., @. Não pode ser composto apenas por dígitos.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="541"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>A palavra-passe não pode estar vazia e não deve exceder %n carácter.</numerusform>
@@ -5794,12 +5794,12 @@ Palavras-passe guardadas importadas: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="551"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A palavra-passe que introduziu não cumpre os requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A palavra-passe deve conter letras minúsculas e maiúsculas, números e não deve ter menos de %n carácter.</numerusform>
@@ -5807,47 +5807,47 @@ Palavras-passe guardadas importadas: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Do you want to enter a different password?</source>
         <translation>Pretende introduzir uma palavra-passe diferente?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="559"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="579"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erro interno desconhecido ao criar ou modificar um utilizador.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="724"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
         <source>Double-click to change</source>
         <translation>Duplo clique para alterar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="782"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="788"/>
         <source>The token of your current session.</source>
         <translation>O token da sua sessão atual.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="826"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="832"/>
         <source>Administrator</source>
         <translation>Administrador</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="830"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="836"/>
         <source>Manager</source>
         <translation>Gestor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="834"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="840"/>
         <source>Operator</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="852"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="858"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
@@ -10631,6 +10631,11 @@ Tem a certeza de que pretende continuar?</translation>
         <location filename="../host/ui/system_info_window.cc" line="46"/>
         <source>System Information</source>
         <translation>Informações do sistema</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="133"/>
+        <source>System information is not available for hosts older than version 3.0.0.</source>
+        <translation>As informações do sistema não estão disponíveis para anfitriões anteriores à versão 3.0.0.</translation>
     </message>
 </context>
 <context>

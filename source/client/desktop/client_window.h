@@ -120,6 +120,10 @@ protected:
     // incoming messages start arriving after this call returns.
     virtual void onSessionStarted() = 0;
 
+    // Replaces the window contents with an error message in the status overlay. The session stays
+    // open; the operator closes it or reconnects.
+    void onErrorOccurred(const QString& message);
+
     // Registers a worker. May be called only from onRegisterWorkers().
     void addWorker(std::unique_ptr<Worker> worker);
 
@@ -151,7 +155,6 @@ private:
     void saveHostCredentials(const HostConfig& host);
     void forgetRefusedCredentials();
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
-    void onErrorOccurred(const QString& message);
     void fetchConnectionOffer();
     void startNewSession();
 

@@ -199,6 +199,13 @@ void ClientWindow::restoreState(const QByteArray& /* state */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientWindow::onErrorOccurred(const QString& message)
+{
+    onInternalReset();
+    status_overlay_->setError(message);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientWindow::addWorker(std::unique_ptr<Worker> worker)
 {
     worker_manager_->add(std::move(worker));
@@ -357,6 +364,14 @@ void ClientWindow::onNetworkStatusChanged(NetworkWorker::Status status, const QV
     if (status == NetworkWorker::Status::LEGACY_HOST)
     {
         is_legacy_mode_ = true;
+
+        // System information speaks a protocol an older host does not share (the field numbers of
+        // proto::system_info::SystemInfo were reassigned in 3.0.0), so it is not offered here.
+        for (QAction* action : std::as_const(session_connect_actions_))
+        {
+            if (action->data().toInt() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
+                action->setVisible(false);
+        }
     }
     else if (status == NetworkWorker::Status::HOST_DISCONNECTED)
     {
@@ -469,13 +484,6 @@ void ClientWindow::setClientTitle(const HostConfig& host, proto::peer::SessionTy
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onErrorOccurred(const QString& message)
-{
-    onInternalReset();
-    status_overlay_->setError(message);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientWindow::fetchConnectionOffer()
 {
     // If auto-reconnect was disabled (e.g. Client's reconnect timeout elapsed), stop trying.
@@ -574,6 +582,7 @@ void ClientWindow::createSessionConnectActions()
             continue;
 
         QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
+        action->setData(QVariant::fromValue(static_cast<int>(type)));
         connect(action, &QAction::triggered, this, [this, type]()
         {
             emit sig_connectRequested(sessionState()->host(), type);
