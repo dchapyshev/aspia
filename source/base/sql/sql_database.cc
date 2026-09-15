@@ -155,6 +155,22 @@ bool SqlDatabase::open(const QString& file_path, MilliSeconds busy_timeout)
     if (timeout_result != SQLITE_OK)
         LOG(WARNING) << "Unable to set busy timeout:" << sqlite3_errstr(timeout_result);
 
+    // By default SQLite reads a double-quoted name that matches no column as a string literal.
+    // Our SQL quotes identifiers with double quotes and strings with single ones, so that
+    // fallback only ever hides a mistake: an index declared on a column that does not exist yet
+    // is silently built over two constants and corrupts the table for every later write. With
+    // the fallback off such a statement fails at once. A connection that cannot be set up this
+    // way is not used.
+    const int dqs_ddl = sqlite3_db_config(db_, SQLITE_DBCONFIG_DQS_DDL, 0, nullptr);
+    const int dqs_dml = sqlite3_db_config(db_, SQLITE_DBCONFIG_DQS_DML, 0, nullptr);
+    if (dqs_ddl != SQLITE_OK || dqs_dml != SQLITE_OK)
+    {
+        LOG(ERROR) << "Unable to disable double-quoted strings:" << sqlite3_errstr(dqs_ddl)
+                   << sqlite3_errstr(dqs_dml);
+        close();
+        return false;
+    }
+
     // Register a Unicode-aware casefold() so case-insensitive search works for non-ASCII text.
     // The stock sqlite LIKE folds ASCII only; casefold() folds via the platform Unicode API and
     // the search query folds both operands: casefold(col) LIKE casefold(?). See caseFold above.

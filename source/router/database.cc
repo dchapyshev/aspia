@@ -219,14 +219,6 @@ bool ensureSchema(SqlDatabase& db)
         return false;
     }
 
-    // Composite index for the dominant host list/count query (hosts of a given workspace and
-    // group). Without it list-by-group does a full table scan once hosts grows.
-    if (!run("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
-             "ON \"hosts\"(\"workspace_id\", \"group_id\")"))
-    {
-        return false;
-    }
-
     // workspace_access's PRIMARY KEY is (workspace_id, user_id), which indexes only the leading
     // column. workspaceAccessIdsForUser filters by user_id alone, so we need a dedicated index
     // on the trailing column.
@@ -349,6 +341,15 @@ bool ensureSchema(SqlDatabase& db)
         }
     }
 
+    // Composite index for the dominant host list/count query (hosts of a given workspace and
+    // group). Without it list-by-group does a full table scan once hosts grows. It follows the
+    // backfill above: on an upgraded database the columns it names exist only from there on.
+    if (!run("CREATE INDEX IF NOT EXISTS \"hosts_workspace_group\" "
+             "ON \"hosts\"(\"workspace_id\", \"group_id\")"))
+    {
+        return false;
+    }
+
     if (!transaction.commit())
     {
         LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
@@ -404,7 +405,9 @@ bool Database::open(const QString& file_path)
         return false;
 
     {
-        SqlQuery pragma(db_, "PRAGMA quick_check");
+        // The full check, not quick_check: only the full one compares every index with its
+        // table, and an index out of step with the table reads fine and fails every write.
+        SqlQuery pragma(db_, "PRAGMA integrity_check");
         if (pragma.next() == SqlQuery::StepResult::ROW)
         {
             const QString result = pragma.columnText(0);
@@ -413,7 +416,7 @@ bool Database::open(const QString& file_path)
         }
         else
         {
-            LOG(WARNING) << "Unable to run quick_check:" << db_.lastError();
+            LOG(WARNING) << "Unable to run integrity_check:" << db_.lastError();
         }
     }
 

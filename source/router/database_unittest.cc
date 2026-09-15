@@ -966,3 +966,40 @@ TEST(RouterDatabaseFreshTest, UpgradeFrom27GrantsManagerToAdministrators)
     EXPECT_EQ(user.sessions, quint32(proto::router::SESSION_TYPE_OPERATOR));
 }
 
+//--------------------------------------------------------------------------------------------------
+// The hosts table of 2.7.0 is (id, key); the columns of 3.0.0 are added on the upgrade, and the
+// index over two of them may be declared only once they exist. Declared earlier it was silently
+// built over two string constants (SQLite reads an unknown double-quoted name as a string), read
+// fine and failed every later write of the table. The upgraded table must pass the full
+// integrity check and take an edit.
+TEST(RouterDatabaseFreshTest, UpgradeFrom27KeepsHostsWritable)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+    const QString file_path = temp_dir.path() + "/router.db3";
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"hosts\" ("
+                             "\"id\" INTEGER UNIQUE,"
+                             "\"key\" BLOB NOT NULL UNIQUE,"
+                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+        ASSERT_TRUE(raw.exec("INSERT INTO hosts (key) VALUES (X'01')"));
+    }
+
+    Database db;
+    ASSERT_TRUE(db.open(file_path));
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        SqlQuery check(raw, "PRAGMA integrity_check");
+        ASSERT_EQ(check.next(), SqlQuery::StepResult::ROW);
+        EXPECT_EQ(check.columnText(0), "ok");
+    }
+
+    EXPECT_EQ(db.modifyHost(HostId(1), 1, 0, 0, "renamed", std::string_view()),
+              proto::router::kErrorOk);
+}
+

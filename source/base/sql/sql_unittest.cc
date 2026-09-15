@@ -349,3 +349,17 @@ TEST(SqliteTest, CaseFoldFunctionFoldsValue)
     ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(select.columnText(0), QString::fromUtf8("привет world"));
 }
+
+//--------------------------------------------------------------------------------------------------
+// A double-quoted name that matches no column is a string literal to a stock SQLite connection.
+// Our SQL quotes identifiers that way, so the fallback only ever hides a mistake - an index
+// declared before its column exists silently indexes a constant. The connection refuses it.
+TEST(SqliteTest, UnknownDoubleQuotedNameIsAnError)
+{
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(db.exec("CREATE TABLE t (a INTEGER)"));
+
+    EXPECT_FALSE(db.exec("CREATE INDEX i ON t(\"b\")"));
+    EXPECT_FALSE(db.exec("INSERT INTO t (a) SELECT \"b\""));
+}
