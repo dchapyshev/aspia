@@ -12,7 +12,7 @@ if "%ASPIA_ARCH%" == "" ( goto :USAGE )
 if "%ASPIA_SRC_DIR%" == "" ( goto :USAGE )
 if "%ASPIA_BIN_DIR%" == "" ( goto :USAGE )
 
-set SRC_DIR=%ASPIA_SRC_DIR%\installer
+set SRC_DIR=%ASPIA_SRC_DIR%\installer\windows
 set EN_US_POSTFIX=%ASPIA_VERSION%-%ASPIA_ARCH%
 
 if "%ASPIA_ARCH%" == "x86_64" ( set CANDLE_ARCH=x64 )
