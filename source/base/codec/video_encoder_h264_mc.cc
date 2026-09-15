@@ -202,10 +202,17 @@ VideoEncoder::Result VideoEncoderH264MC::encode(const Frame* frame, proto::video
     }
 
     const ssize_t input_index = AMediaCodec_dequeueInputBuffer(codec_, kInputTimeoutUs);
+    if (input_index == AMEDIACODEC_INFO_TRY_AGAIN_LATER)
+    {
+        LOG(WARNING) << "No MediaCodec input buffer available";
+        return Result::TEMPORARY_ERROR;
+    }
+
     if (input_index < 0)
     {
-        LOG(ERROR) << "No MediaCodec input buffer available";
-        return Result::TEMPORARY_ERROR;
+        LOG(ERROR) << "AMediaCodec_dequeueInputBuffer failed:" << input_index;
+        destroyEncoder();
+        return frame_counter_ > 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
 
     size_t input_capacity = 0;
@@ -223,7 +230,8 @@ VideoEncoder::Result VideoEncoderH264MC::encode(const Frame* frame, proto::video
                                      0) != AMEDIA_OK)
     {
         LOG(ERROR) << "AMediaCodec_queueInputBuffer failed";
-        return Result::TEMPORARY_ERROR;
+        destroyEncoder();
+        return frame_counter_ > 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
 
     AMediaCodecBufferInfo info;
@@ -284,7 +292,8 @@ VideoEncoder::Result VideoEncoderH264MC::encode(const Frame* frame, proto::video
         }
 
         LOG(ERROR) << "AMediaCodec_dequeueOutputBuffer failed:" << output_index;
-        return Result::TEMPORARY_ERROR;
+        destroyEncoder();
+        return frame_counter_ > 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
 }
 

@@ -239,10 +239,17 @@ VideoDecoder::Result VideoDecoderH264MC::decode(const proto::video::Packet& pack
     const std::string& data = packet.data();
 
     ssize_t input_index = AMediaCodec_dequeueInputBuffer(codec_, kInputTimeoutUs);
+    if (input_index == AMEDIACODEC_INFO_TRY_AGAIN_LATER)
+    {
+        LOG(WARNING) << "No MediaCodec input buffer available";
+        return Result::TEMPORARY_ERROR;
+    }
+
     if (input_index < 0)
     {
-        LOG(ERROR) << "No MediaCodec input buffer available";
-        return Result::TEMPORARY_ERROR;
+        LOG(ERROR) << "AMediaCodec_dequeueInputBuffer failed:" << input_index;
+        destroyDecoder();
+        return color_format_ != 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
 
     size_t input_capacity = 0;
@@ -260,7 +267,8 @@ VideoDecoder::Result VideoDecoderH264MC::decode(const proto::video::Packet& pack
                                      frame_counter_ * 1000, 0) != AMEDIA_OK)
     {
         LOG(ERROR) << "AMediaCodec_queueInputBuffer failed";
-        return Result::TEMPORARY_ERROR;
+        destroyDecoder();
+        return color_format_ != 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
     ++frame_counter_;
 
@@ -303,6 +311,7 @@ VideoDecoder::Result VideoDecoderH264MC::decode(const proto::video::Packet& pack
         }
 
         LOG(ERROR) << "AMediaCodec_dequeueOutputBuffer failed:" << output_index;
-        return Result::TEMPORARY_ERROR;
+        destroyDecoder();
+        return color_format_ != 0 ? Result::TEMPORARY_ERROR : Result::PERMANENT_ERROR;
     }
 }
