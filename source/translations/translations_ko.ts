@@ -366,106 +366,106 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="168"/>
         <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="296"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
         <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="316"/>
         <source>Remote</source>
         <translation>원격</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
         <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="344"/>
+        <location filename="../client/android/main_window.cc" line="306"/>
         <source>Routers</source>
         <translation>라우터</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="364"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="465"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="652"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>2단계 인증 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
-        <location filename="../client/android/main_window.cc" line="694"/>
-        <location filename="../client/android/main_window.cc" line="704"/>
-        <location filename="../client/android/main_window.cc" line="725"/>
-        <location filename="../client/android/main_window.cc" line="764"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
+        <location filename="../client/android/main_window.cc" line="844"/>
+        <location filename="../client/android/main_window.cc" line="854"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="914"/>
         <source>Connection by link</source>
         <translation>링크로 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
         <source>Invalid link.</source>
         <translation>잘못된 링크입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="695"/>
+        <location filename="../client/android/main_window.cc" line="845"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>다른 세션이 활성 상태입니다. 해당 세션을 닫고 링크를 다시 여십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="705"/>
+        <location filename="../client/android/main_window.cc" line="855"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>링크의 세션 유형은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="726"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The router referenced by the link was not found in the address book.</source>
         <translation>링크가 참조하는 라우터를 주소록에서 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="765"/>
+        <location filename="../client/android/main_window.cc" line="915"/>
         <source>The host referenced by the link was not found in the address book.</source>
         <translation>링크가 참조하는 호스트를 주소록에서 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="461"/>
+        <location filename="../host/android/main_window.cc" line="463"/>
         <source>Connection</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="335"/>
-        <location filename="../host/android/main_window.cc" line="370"/>
-        <location filename="../host/android/main_window.cc" line="402"/>
+        <location filename="../host/android/main_window.cc" line="337"/>
+        <location filename="../host/android/main_window.cc" line="372"/>
+        <location filename="../host/android/main_window.cc" line="404"/>
         <source>Permissions</source>
         <translation>권한</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="336"/>
+        <location filename="../host/android/main_window.cc" line="338"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>원격 키보드 및 마우스 제어를 허용하려면 접근성 서비스를 사용하도록 설정하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="339"/>
+        <location filename="../host/android/main_window.cc" line="374"/>
+        <location filename="../host/android/main_window.cc" line="407"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="371"/>
+        <location filename="../host/android/main_window.cc" line="373"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>세션 중에 화면 동작 버튼을 표시하려면 다른 앱 위에 표시를 허용하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="403"/>
+        <location filename="../host/android/main_window.cc" line="405"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>연결된 사용자가 이 장치의 파일을 탐색하고 전송할 수 있도록 모든 파일에 대한 액세스를 허용하십시오.</translation>
     </message>
@@ -482,7 +482,6 @@ Routers added: %4</source>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
-        <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Authorization</source>
         <translation>인증</translation>
     </message>
@@ -493,7 +492,6 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
-        <location filename="../client/android/authorization_dialog.cc" line="46"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
@@ -504,46 +502,86 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
-        <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
         <translation>자격 증명 저장</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="38"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation>호스트에 연결할 자격 증명을 입력하십시오.</translation>
+        <translation type="vanished">호스트에 연결할 자격 증명을 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="44"/>
         <source>Username</source>
-        <translation>사용자 이름</translation>
+        <translation type="vanished">사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="53"/>
         <source>One-time password</source>
-        <translation>일회용 암호</translation>
+        <translation type="vanished">일회용 암호</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="78"/>
         <source>Cancel</source>
-        <translation>취소</translation>
+        <translation type="vanished">취소</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="79"/>
         <source>Connect</source>
-        <translation>연결</translation>
+        <translation type="vanished">연결</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="128"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>사용자 이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="135"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="189"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>AuthorizationWindow</name>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="52"/>
+        <source>Authorization</source>
+        <translation type="unfinished">인증</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <source>Enter the credentials to connect to the host.</source>
+        <translation type="unfinished">호스트에 연결할 자격 증명을 입력하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="63"/>
+        <source>Username</source>
+        <translation type="unfinished">사용자 이름</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="66"/>
+        <source>Password</source>
+        <translation type="unfinished">암호</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="69"/>
+        <source>Connect</source>
+        <translation type="unfinished">연결</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <source>One-time password</source>
+        <translation type="unfinished">일회용 암호</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <source>Save credentials</source>
+        <translation type="unfinished">자격 증명 저장</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="148"/>
+        <source>Username cannot be empty.</source>
+        <translation type="unfinished">사용자 이름은 비워 둘 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="155"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">암호는 비워 둘 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -614,7 +652,7 @@ Routers added: %4</source>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="201"/>
+        <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
         <translation>메시지</translation>
     </message>
@@ -1034,27 +1072,27 @@ Routers added: %4</source>
         <translation>호환 모드로 연결을 시도하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="499"/>
+        <location filename="../client/desktop/client_window.cc" line="498"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="500"/>
         <source>The specified router is offline.</source>
         <translation>지정한 라우터가 오프라인 상태입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="507"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>Connection offer received.</source>
         <translation>연결 제안을 받았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="533"/>
+        <location filename="../client/desktop/client_window.cc" line="532"/>
         <source>Error requesting connection via router.</source>
         <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
@@ -1628,7 +1666,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
         <source>Scale</source>
         <translation>배율</translation>
     </message>
@@ -1718,7 +1756,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
         <source>Start recording</source>
         <translation>녹화 시작</translation>
     </message>
@@ -1740,69 +1778,69 @@ Password: %2</source>
         <translation>세션 전환</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
         <source>Resolution selection</source>
         <translation>해상도 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
         <source>Scripts</source>
         <translation>스크립트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>원격 컴퓨터에서 &quot;%1&quot; 스크립트를 실행하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
         <source>Stop recording</source>
         <translation>녹화 중지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>원격 컴퓨터를 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Confirmation</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>원격 컴퓨터를 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
         <source>Wait for host</source>
         <translation>호스트 대기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>원격 컴퓨터를 안전 모드로 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 끝내시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 잠그시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1</source>
         <translation>세션 %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1 (%2)</source>
         <translation>세션 %1 (%2)</translation>
     </message>
@@ -1984,17 +2022,17 @@ Password: %2</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 이미지 (*.png);;BMP 이미지 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
     </message>
@@ -2866,17 +2904,17 @@ Password: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="479"/>
+        <location filename="../base/gui_application.cc" line="484"/>
         <source>Dark</source>
         <translation>어둡게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="481"/>
+        <location filename="../base/gui_application.cc" line="486"/>
         <source>Light</source>
         <translation>밝게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="482"/>
+        <location filename="../base/gui_application.cc" line="487"/>
         <source>Auto</source>
         <translation>자동</translation>
     </message>
@@ -4791,6 +4829,14 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
         <translation>알 수 없는 프로세스</translation>
+    </message>
+</context>
+<context>
+    <name>QGuiApplication</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="73"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6773,24 +6819,24 @@ Saved passwords imported: %4</source>
         <translation>직접 연결이 불가능한 경우(NAT 우회) 컴퓨터에 연결하려면 라우터가 필요합니다. Aspia는 공용 라우터를 제공하지 않지만 직접 설치할 수 있습니다. 라우터는 &lt;a href=&quot;https://aspia.org&quot;&gt;공식 웹 사이트&lt;/a&gt;에서 다운로드할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>An error occurred while processing the password.</source>
         <translation>암호를 처리하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>

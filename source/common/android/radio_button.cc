@@ -158,7 +158,7 @@ void RadioButton::paintEvent(QPaintEvent* /* event */)
             text_rect.setLeft(ring.right() + kTextSpacing);
 
         painter.setPen(palette().color(QPalette::WindowText));
-        painter.drawText(text_rect, Qt::TextWordWrap | Qt::AlignVCenter |
+        painter.drawText(text_rect, Qt::TextWordWrap | Qt::AlignVCenter | Qt::AlignAbsolute |
                                         (rtl ? Qt::AlignRight : Qt::AlignLeft), text());
     }
 }

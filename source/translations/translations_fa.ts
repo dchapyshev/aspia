@@ -366,106 +366,106 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/main_window.cc" line="168"/>
         <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="296"/>
         <source>Local</source>
         <translation>محلی</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
         <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="316"/>
         <source>Remote</source>
         <translation>راه دور</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
         <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="344"/>
+        <location filename="../client/android/main_window.cc" line="306"/>
         <source>Routers</source>
         <translation>روترها</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="364"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="465"/>
         <source>Settings</source>
         <translation>تنظیمات</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="652"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>احراز هویت دومرحله‌ای - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
-        <location filename="../client/android/main_window.cc" line="694"/>
-        <location filename="../client/android/main_window.cc" line="704"/>
-        <location filename="../client/android/main_window.cc" line="725"/>
-        <location filename="../client/android/main_window.cc" line="764"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
+        <location filename="../client/android/main_window.cc" line="844"/>
+        <location filename="../client/android/main_window.cc" line="854"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="914"/>
         <source>Connection by link</source>
         <translation>اتصال با پیوند</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
         <source>Invalid link.</source>
         <translation>پیوند نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="695"/>
+        <location filename="../client/android/main_window.cc" line="845"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>نشست دیگری فعال است. آن را ببندید و پیوند را دوباره باز کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="705"/>
+        <location filename="../client/android/main_window.cc" line="855"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>نوع نشست موجود در پیوند در این دستگاه پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="726"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The router referenced by the link was not found in the address book.</source>
         <translation>روتری که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="765"/>
+        <location filename="../client/android/main_window.cc" line="915"/>
         <source>The host referenced by the link was not found in the address book.</source>
         <translation>میزبانی که پیوند به آن اشاره می‌کند در دفترچه آدرس پیدا نشد.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="461"/>
+        <location filename="../host/android/main_window.cc" line="463"/>
         <source>Connection</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="335"/>
-        <location filename="../host/android/main_window.cc" line="370"/>
-        <location filename="../host/android/main_window.cc" line="402"/>
+        <location filename="../host/android/main_window.cc" line="337"/>
+        <location filename="../host/android/main_window.cc" line="372"/>
+        <location filename="../host/android/main_window.cc" line="404"/>
         <source>Permissions</source>
         <translation>مجوزهای دسترسی</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="336"/>
+        <location filename="../host/android/main_window.cc" line="338"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>برای امکان کنترل صفحه‌کلید و ماوس از راه دور، سرویس دسترس‌پذیری را فعال کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="339"/>
+        <location filename="../host/android/main_window.cc" line="374"/>
+        <location filename="../host/android/main_window.cc" line="407"/>
         <source>Open</source>
         <translation>باز کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="371"/>
+        <location filename="../host/android/main_window.cc" line="373"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>برای نمایش دکمه عملیات روی صفحه در طول نشست، نمایش روی برنامه‌های دیگر را مجاز کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="403"/>
+        <location filename="../host/android/main_window.cc" line="405"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>برای اینکه کاربر متصل بتواند فایل‌های این دستگاه را مرور و منتقل کند، دسترسی به همه فایل‌ها را مجاز کنید.</translation>
     </message>
@@ -482,7 +482,6 @@ Routers added: %4</source>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
-        <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Authorization</source>
         <translation>احراز هویت</translation>
     </message>
@@ -493,7 +492,6 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
-        <location filename="../client/android/authorization_dialog.cc" line="46"/>
         <source>Password</source>
         <translation>گذرواژه</translation>
     </message>
@@ -504,46 +502,86 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
-        <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
         <translation>ذخیره اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="38"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation>برای اتصال به میزبان، اطلاعات ورود را وارد کنید.</translation>
+        <translation type="vanished">برای اتصال به میزبان، اطلاعات ورود را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="44"/>
         <source>Username</source>
-        <translation>نام کاربری</translation>
+        <translation type="vanished">نام کاربری</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="53"/>
         <source>One-time password</source>
-        <translation>گذرواژه یک‌بارمصرف</translation>
+        <translation type="vanished">گذرواژه یک‌بارمصرف</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="78"/>
         <source>Cancel</source>
-        <translation>لغو</translation>
+        <translation type="vanished">لغو</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="79"/>
         <source>Connect</source>
-        <translation>اتصال</translation>
+        <translation type="vanished">اتصال</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="128"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>نام کاربری نمی‌تواند خالی باشد.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="135"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="189"/>
         <source>Password cannot be empty.</source>
         <translation>گذرواژه نمی‌تواند خالی باشد.</translation>
+    </message>
+</context>
+<context>
+    <name>AuthorizationWindow</name>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="52"/>
+        <source>Authorization</source>
+        <translation type="unfinished">احراز هویت</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <source>Enter the credentials to connect to the host.</source>
+        <translation type="unfinished">برای اتصال به میزبان، اطلاعات ورود را وارد کنید.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="63"/>
+        <source>Username</source>
+        <translation type="unfinished">نام کاربری</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="66"/>
+        <source>Password</source>
+        <translation type="unfinished">گذرواژه</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="69"/>
+        <source>Connect</source>
+        <translation type="unfinished">اتصال</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <source>One-time password</source>
+        <translation type="unfinished">گذرواژه یک‌بارمصرف</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <source>Save credentials</source>
+        <translation type="unfinished">ذخیره اطلاعات ورود</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="148"/>
+        <source>Username cannot be empty.</source>
+        <translation type="unfinished">نام کاربری نمی‌تواند خالی باشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="155"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">گذرواژه نمی‌تواند خالی باشد.</translation>
     </message>
 </context>
 <context>
@@ -614,7 +652,7 @@ Routers added: %4</source>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="201"/>
+        <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
         <translation>پیام</translation>
     </message>
@@ -1004,12 +1042,12 @@ Routers added: %4</source>
         <translation>نشست شروع شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="499"/>
+        <location filename="../client/desktop/client_window.cc" line="498"/>
         <source>The specified router is unavailable.</source>
         <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="500"/>
         <source>The specified router is offline.</source>
         <translation>روتر مشخص‌شده آفلاین است.</translation>
     </message>
@@ -1044,17 +1082,17 @@ Routers added: %4</source>
         <translation>در حال تلاش برای اتصال در حالت سازگاری...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="507"/>
         <source>Requesting connection to the host...</source>
         <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>Connection offer received.</source>
         <translation>پیشنهاد اتصال دریافت شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="533"/>
+        <location filename="../client/desktop/client_window.cc" line="532"/>
         <source>Error requesting connection via router.</source>
         <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
@@ -1628,7 +1666,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
         <source>Scale</source>
         <translation>مقیاس</translation>
     </message>
@@ -1718,7 +1756,7 @@ Password: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
         <source>Start recording</source>
         <translation>شروع ضبط</translation>
     </message>
@@ -1740,69 +1778,69 @@ Password: %2</source>
         <translation>تعویض نشست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
         <source>Resolution selection</source>
         <translation>انتخاب وضوح</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1</source>
         <translation>نشست %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1 (%2)</source>
         <translation>نشست %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
         <source>Stop recording</source>
         <translation>توقف ضبط</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
         <source>Scripts</source>
         <translation>اسکریپت‌ها</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید اسکریپت &quot;%1&quot; را در رایانه راه دور اجرا کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را خاموش کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Confirmation</source>
         <translation>تأیید</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
         <source>Wait for host</source>
         <translation>انتظار برای میزبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>آیا مطمئن هستید که می‌خواهید رایانه راه دور را در حالت امن راه‌اندازی مجدد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور پایان دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>آیا مطمئن هستید که می‌خواهید نشست کاربر را در رایانه راه دور قفل کنید؟</translation>
     </message>
@@ -1833,17 +1871,17 @@ Password: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
         <source>Could not save image</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
@@ -2866,17 +2904,17 @@ Password: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="479"/>
+        <location filename="../base/gui_application.cc" line="484"/>
         <source>Dark</source>
         <translation>تیره</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="481"/>
+        <location filename="../base/gui_application.cc" line="486"/>
         <source>Light</source>
         <translation>روشن</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="482"/>
+        <location filename="../base/gui_application.cc" line="487"/>
         <source>Auto</source>
         <translation>خودکار</translation>
     </message>
@@ -4791,6 +4829,14 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
         <translation>فرایند ناشناخته</translation>
+    </message>
+</context>
+<context>
+    <name>QGuiApplication</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="73"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation>RTL</translation>
     </message>
 </context>
 <context>
@@ -6773,24 +6819,24 @@ Saved passwords imported: %4</source>
         <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href=&quot;https://aspia.org&quot;&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Error</source>
         <translation>خطا</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>An error occurred while processing the password.</source>
         <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Import</source>
         <translation>وارد کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>

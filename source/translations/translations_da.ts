@@ -366,106 +366,106 @@ Routere tilføjet: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="168"/>
         <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="296"/>
         <source>Local</source>
         <translation>Lokal</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
         <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="316"/>
         <source>Remote</source>
         <translation>Ekstern</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
         <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="344"/>
+        <location filename="../client/android/main_window.cc" line="306"/>
         <source>Routers</source>
         <translation>Routere</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="364"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="465"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="652"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Tofaktorgodkendelse - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
-        <location filename="../client/android/main_window.cc" line="694"/>
-        <location filename="../client/android/main_window.cc" line="704"/>
-        <location filename="../client/android/main_window.cc" line="725"/>
-        <location filename="../client/android/main_window.cc" line="764"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
+        <location filename="../client/android/main_window.cc" line="844"/>
+        <location filename="../client/android/main_window.cc" line="854"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="914"/>
         <source>Connection by link</source>
         <translation>Forbindelse via link</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
         <source>Invalid link.</source>
         <translation>Ugyldigt link.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="695"/>
+        <location filename="../client/android/main_window.cc" line="845"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>En anden session er aktiv. Luk den, og åbn linket igen.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="705"/>
+        <location filename="../client/android/main_window.cc" line="855"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Sessionstypen fra linket understøttes ikke på denne enhed.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="726"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The router referenced by the link was not found in the address book.</source>
         <translation>Routeren, som linket henviser til, blev ikke fundet i adressebogen.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="765"/>
+        <location filename="../client/android/main_window.cc" line="915"/>
         <source>The host referenced by the link was not found in the address book.</source>
         <translation>Værten, som linket henviser til, blev ikke fundet i adressebogen.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="461"/>
+        <location filename="../host/android/main_window.cc" line="463"/>
         <source>Connection</source>
         <translation>Forbindelse</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="335"/>
-        <location filename="../host/android/main_window.cc" line="370"/>
-        <location filename="../host/android/main_window.cc" line="402"/>
+        <location filename="../host/android/main_window.cc" line="337"/>
+        <location filename="../host/android/main_window.cc" line="372"/>
+        <location filename="../host/android/main_window.cc" line="404"/>
         <source>Permissions</source>
         <translation>Tilladelser</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="336"/>
+        <location filename="../host/android/main_window.cc" line="338"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Aktiver tilgængelighedstjenesten for at tillade fjernstyring af tastatur og mus.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="339"/>
+        <location filename="../host/android/main_window.cc" line="374"/>
+        <location filename="../host/android/main_window.cc" line="407"/>
         <source>Open</source>
         <translation>Åbn</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="371"/>
+        <location filename="../host/android/main_window.cc" line="373"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Tillad visning over andre apps for at vise handlingsknappen på skærmen under en session.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="403"/>
+        <location filename="../host/android/main_window.cc" line="405"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Tillad adgang til alle filer, så den forbundne bruger kan gennemse og overføre filer på denne enhed.</translation>
     </message>
@@ -482,7 +482,6 @@ Routere tilføjet: %4</translation>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
-        <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Authorization</source>
         <translation>Godkendelse</translation>
     </message>
@@ -493,7 +492,6 @@ Routere tilføjet: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
-        <location filename="../client/android/authorization_dialog.cc" line="46"/>
         <source>Password</source>
         <translation>Adgangskode</translation>
     </message>
@@ -504,46 +502,86 @@ Routere tilføjet: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
-        <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
         <translation>Gem legitimationsoplysninger</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="38"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation>Indtast legitimationsoplysningerne for at oprette forbindelse til værten.</translation>
+        <translation type="vanished">Indtast legitimationsoplysningerne for at oprette forbindelse til værten.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="44"/>
         <source>Username</source>
-        <translation>Brugernavn</translation>
+        <translation type="vanished">Brugernavn</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="53"/>
         <source>One-time password</source>
-        <translation>Engangsadgangskode</translation>
+        <translation type="vanished">Engangsadgangskode</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="78"/>
         <source>Cancel</source>
-        <translation>Annuller</translation>
+        <translation type="vanished">Annuller</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="79"/>
         <source>Connect</source>
-        <translation>Forbind</translation>
+        <translation type="vanished">Forbind</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="128"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>Brugernavnet må ikke være tomt.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="135"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="189"/>
         <source>Password cannot be empty.</source>
         <translation>Adgangskoden må ikke være tom.</translation>
+    </message>
+</context>
+<context>
+    <name>AuthorizationWindow</name>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="52"/>
+        <source>Authorization</source>
+        <translation type="unfinished">Godkendelse</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <source>Enter the credentials to connect to the host.</source>
+        <translation type="unfinished">Indtast legitimationsoplysningerne for at oprette forbindelse til værten.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="63"/>
+        <source>Username</source>
+        <translation type="unfinished">Brugernavn</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="66"/>
+        <source>Password</source>
+        <translation type="unfinished">Adgangskode</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="69"/>
+        <source>Connect</source>
+        <translation type="unfinished">Forbind</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <source>One-time password</source>
+        <translation type="unfinished">Engangsadgangskode</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <source>Save credentials</source>
+        <translation type="unfinished">Gem legitimationsoplysninger</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="148"/>
+        <source>Username cannot be empty.</source>
+        <translation type="unfinished">Brugernavnet må ikke være tomt.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="155"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">Adgangskoden må ikke være tom.</translation>
     </message>
 </context>
 <context>
@@ -614,7 +652,7 @@ Routere tilføjet: %4</translation>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="201"/>
+        <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
         <translation>Meddelelse</translation>
     </message>
@@ -1006,12 +1044,12 @@ Routere tilføjet: %4</translation>
         <translation>Sessionen er startet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="499"/>
+        <location filename="../client/desktop/client_window.cc" line="498"/>
         <source>The specified router is unavailable.</source>
         <translation>Den angivne router er ikke tilgængelig.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="500"/>
         <source>The specified router is offline.</source>
         <translation>Den angivne router er offline.</translation>
     </message>
@@ -1046,17 +1084,17 @@ Routere tilføjet: %4</translation>
         <translation>Forsøger at oprette forbindelse i kompatibilitetstilstand...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="507"/>
         <source>Requesting connection to the host...</source>
         <translation>Anmoder om forbindelse til værten...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>Connection offer received.</source>
         <translation>Forbindelsestilbud modtaget.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="533"/>
+        <location filename="../client/desktop/client_window.cc" line="532"/>
         <source>Error requesting connection via router.</source>
         <translation>Fejl ved anmodning om forbindelse via routeren.</translation>
     </message>
@@ -1632,7 +1670,7 @@ Adgangskode: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
         <source>Scale</source>
         <translation>Skalering</translation>
     </message>
@@ -1722,7 +1760,7 @@ Adgangskode: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
         <source>Start recording</source>
         <translation>Start optagelse</translation>
     </message>
@@ -1744,69 +1782,69 @@ Adgangskode: %2</translation>
         <translation>Skift session</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
         <source>Resolution selection</source>
         <translation>Valg af opløsning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1</source>
         <translation>Session %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1 (%2)</source>
         <translation>Session %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
         <source>Stop recording</source>
         <translation>Stop optagelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
         <source>Scripts</source>
         <translation>Skripter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Er du sikker på, at du vil køre skriptet &quot;%1&quot; på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Er du sikker på, at du vil lukke fjerncomputeren ned?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Confirmation</source>
         <translation>Bekræftelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
         <source>Wait for host</source>
         <translation>Vent på vært</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Er du sikker på, at du vil genstarte fjerncomputeren i fejlsikret tilstand?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil afslutte brugersessionen på fjerncomputeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Er du sikker på, at du vil låse brugersessionen på fjerncomputeren?</translation>
     </message>
@@ -1837,17 +1875,17 @@ Adgangskode: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-billede (*.png);;BMP-billede (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
         <source>Could not save image</source>
         <translation>Kunne ikke gemme billedet</translation>
     </message>
@@ -2874,17 +2912,17 @@ Adgangskode: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="479"/>
+        <location filename="../base/gui_application.cc" line="484"/>
         <source>Dark</source>
         <translation>Mørk</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="481"/>
+        <location filename="../base/gui_application.cc" line="486"/>
         <source>Light</source>
         <translation>Lys</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="482"/>
+        <location filename="../base/gui_application.cc" line="487"/>
         <source>Auto</source>
         <translation>Automatisk</translation>
     </message>
@@ -4809,6 +4847,14 @@ Importerede gemte adgangskoder: %4</translation>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
         <translation>Ukendt proces</translation>
+    </message>
+</context>
+<context>
+    <name>QGuiApplication</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="73"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6803,24 +6849,24 @@ Importerede gemte adgangskoder: %4</translation>
         <translation>En router er nødvendig for at oprette forbindelse til en computer, hvis der ikke er en direkte forbindelse (omgå NAT). Aspia stiller ikke en offentlig router til rådighed, men du kan installere din egen. Du kan downloade routeren på det &lt;a href=&quot;https://aspia.org&quot;&gt;officielle websted&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Error</source>
         <translation>Fejl</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>An error occurred while processing the password.</source>
         <translation>Der opstod en fejl under behandling af adgangskoden.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Import</source>
         <translation>Importer</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-filer (*.json)</translation>
     </message>

@@ -158,12 +158,12 @@ void Switch::paintEvent(QPaintEvent* /* event */)
     {
         QRectF text_rect = rect();
         if (rtl)
-            text_rect.setRight(track.left() - kTextSpacing);
-        else
             text_rect.setLeft(track.right() + kTextSpacing);
+        else
+            text_rect.setRight(track.left() - kTextSpacing);
 
         painter.setPen(palette().color(QPalette::WindowText));
-        painter.drawText(text_rect, Qt::TextWordWrap | Qt::AlignVCenter |
+        painter.drawText(text_rect, Qt::TextWordWrap | Qt::AlignVCenter | Qt::AlignAbsolute |
                                         (rtl ? Qt::AlignRight : Qt::AlignLeft), text());
     }
 }
@@ -200,9 +200,9 @@ QRectF Switch::trackRect() const
     QRectF track(0, 0, kTrackWidth, kTrackHeight);
     track.moveTop(rect().center().y() - kTrackHeight / 2.0);
     if (layoutDirection() == Qt::RightToLeft)
-        track.moveRight(rect().right());
+        track.moveLeft(0);
     else
-        track.moveLeft(rect().left());
+        track.moveRight(width());
     return track;
 }
 

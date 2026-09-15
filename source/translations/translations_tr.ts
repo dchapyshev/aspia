@@ -366,106 +366,106 @@ Eklenen yönlendiriciler: %4</translation>
     <message>
         <location filename="../client/android/main_window.cc" line="168"/>
         <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="296"/>
         <source>Local</source>
         <translation>Yerel</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
         <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="354"/>
+        <location filename="../client/android/main_window.cc" line="316"/>
         <source>Remote</source>
         <translation>Uzak</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
         <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="344"/>
+        <location filename="../client/android/main_window.cc" line="306"/>
         <source>Routers</source>
         <translation>Yönlendiriciler</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
         <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="364"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
-        <location filename="../host/android/main_window.cc" line="463"/>
+        <location filename="../host/android/main_window.cc" line="465"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="652"/>
+        <location filename="../client/android/main_window.cc" line="528"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>İki Faktörlü Kimlik Doğrulama - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
-        <location filename="../client/android/main_window.cc" line="694"/>
-        <location filename="../client/android/main_window.cc" line="704"/>
-        <location filename="../client/android/main_window.cc" line="725"/>
-        <location filename="../client/android/main_window.cc" line="764"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
+        <location filename="../client/android/main_window.cc" line="844"/>
+        <location filename="../client/android/main_window.cc" line="854"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="914"/>
         <source>Connection by link</source>
         <translation>Link ile bağlantı</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="687"/>
+        <location filename="../client/android/main_window.cc" line="837"/>
         <source>Invalid link.</source>
         <translation>Geçersiz link.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="695"/>
+        <location filename="../client/android/main_window.cc" line="845"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Başka bir oturum etkin. Oturumu kapatıp linki yeniden açın.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="705"/>
+        <location filename="../client/android/main_window.cc" line="855"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Linkteki oturum türü bu cihazda desteklenmiyor.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="726"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The router referenced by the link was not found in the address book.</source>
         <translation>Linkte belirtilen yönlendirici adres defterinde bulunamadı.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="765"/>
+        <location filename="../client/android/main_window.cc" line="915"/>
         <source>The host referenced by the link was not found in the address book.</source>
         <translation>Linkte belirtilen ana bilgisayar adres defterinde bulunamadı.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
-        <location filename="../host/android/main_window.cc" line="461"/>
+        <location filename="../host/android/main_window.cc" line="463"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="335"/>
-        <location filename="../host/android/main_window.cc" line="370"/>
-        <location filename="../host/android/main_window.cc" line="402"/>
+        <location filename="../host/android/main_window.cc" line="337"/>
+        <location filename="../host/android/main_window.cc" line="372"/>
+        <location filename="../host/android/main_window.cc" line="404"/>
         <source>Permissions</source>
         <translation>İzinler</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="336"/>
+        <location filename="../host/android/main_window.cc" line="338"/>
         <source>Enable the accessibility service to allow remote keyboard and mouse control.</source>
         <translation>Uzaktan klavye ve fare denetimine izin vermek için erişilebilirlik hizmetini etkinleştirin.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="337"/>
-        <location filename="../host/android/main_window.cc" line="372"/>
-        <location filename="../host/android/main_window.cc" line="405"/>
+        <location filename="../host/android/main_window.cc" line="339"/>
+        <location filename="../host/android/main_window.cc" line="374"/>
+        <location filename="../host/android/main_window.cc" line="407"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="371"/>
+        <location filename="../host/android/main_window.cc" line="373"/>
         <source>Allow display over other apps to show the on-screen action button during a session.</source>
         <translation>Oturum sırasında ekrandaki eylem düğmesini göstermek için diğer uygulamaların üzerinde görüntülemeye izin verin.</translation>
     </message>
     <message>
-        <location filename="../host/android/main_window.cc" line="403"/>
+        <location filename="../host/android/main_window.cc" line="405"/>
         <source>Allow access to all files so the connected user can browse and transfer files on this device.</source>
         <translation>Bağlanan kullanıcının bu cihazdaki dosyalara göz atabilmesi ve dosya aktarabilmesi için tüm dosyalara erişime izin verin.</translation>
     </message>
@@ -482,7 +482,6 @@ Eklenen yönlendiriciler: %4</translation>
     <name>AuthorizationDialog</name>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="14"/>
-        <location filename="../client/android/authorization_dialog.cc" line="37"/>
         <source>Authorization</source>
         <translation>Yetkilendirme</translation>
     </message>
@@ -493,7 +492,6 @@ Eklenen yönlendiriciler: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="46"/>
-        <location filename="../client/android/authorization_dialog.cc" line="46"/>
         <source>Password</source>
         <translation>Parola</translation>
     </message>
@@ -504,46 +502,86 @@ Eklenen yönlendiriciler: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="73"/>
-        <location filename="../client/android/authorization_dialog.cc" line="65"/>
         <source>Save credentials</source>
         <translation>Kimlik bilgilerini kaydet</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="38"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation>Ana bilgisayara bağlanmak için kimlik bilgilerini girin.</translation>
+        <translation type="vanished">Ana bilgisayara bağlanmak için kimlik bilgilerini girin.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="44"/>
         <source>Username</source>
-        <translation>Kullanıcı adı</translation>
+        <translation type="vanished">Kullanıcı adı</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="53"/>
         <source>One-time password</source>
-        <translation>Tek kullanımlık parola</translation>
+        <translation type="vanished">Tek kullanımlık parola</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="78"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="vanished">İptal</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="79"/>
         <source>Connect</source>
-        <translation>Bağlan</translation>
+        <translation type="vanished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="128"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>Kullanıcı adı boş olamaz.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_dialog.cc" line="135"/>
         <location filename="../client/desktop/authorization_dialog.cc" line="189"/>
         <source>Password cannot be empty.</source>
         <translation>Parola boş olamaz.</translation>
+    </message>
+</context>
+<context>
+    <name>AuthorizationWindow</name>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="52"/>
+        <source>Authorization</source>
+        <translation type="unfinished">Yetkilendirme</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <source>Enter the credentials to connect to the host.</source>
+        <translation type="unfinished">Ana bilgisayara bağlanmak için kimlik bilgilerini girin.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="63"/>
+        <source>Username</source>
+        <translation type="unfinished">Kullanıcı adı</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="66"/>
+        <source>Password</source>
+        <translation type="unfinished">Parola</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="69"/>
+        <source>Connect</source>
+        <translation type="unfinished">Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <source>One-time password</source>
+        <translation type="unfinished">Tek kullanımlık parola</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <source>Save credentials</source>
+        <translation type="unfinished">Kimlik bilgilerini kaydet</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="148"/>
+        <source>Username cannot be empty.</source>
+        <translation type="unfinished">Kullanıcı adı boş olamaz.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="155"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">Parola boş olamaz.</translation>
     </message>
 </context>
 <context>
@@ -614,7 +652,7 @@ Eklenen yönlendiriciler: %4</translation>
 <context>
     <name>ChatView</name>
     <message>
-        <location filename="../client/android/chat_view.cc" line="201"/>
+        <location filename="../client/android/chat_view.cc" line="199"/>
         <source>Message</source>
         <translation>Mesaj</translation>
     </message>
@@ -1004,12 +1042,12 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Oturum başladı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="499"/>
+        <location filename="../client/desktop/client_window.cc" line="498"/>
         <source>The specified router is unavailable.</source>
         <translation>Belirtilen yönlendirici kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="501"/>
+        <location filename="../client/desktop/client_window.cc" line="500"/>
         <source>The specified router is offline.</source>
         <translation>Belirtilen yönlendirici çevrimdışı.</translation>
     </message>
@@ -1044,17 +1082,17 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Uyumluluk modunda bağlanmaya çalışılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="508"/>
+        <location filename="../client/desktop/client_window.cc" line="507"/>
         <source>Requesting connection to the host...</source>
         <translation>Ana bilgisayara bağlantı isteniyor...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="516"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>Connection offer received.</source>
         <translation>Bağlantı teklifi alındı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="533"/>
+        <location filename="../client/desktop/client_window.cc" line="532"/>
         <source>Error requesting connection via router.</source>
         <translation>Yönlendirici üzerinden bağlantı isteğinde hata oluştu.</translation>
     </message>
@@ -1628,7 +1666,7 @@ Parola: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="958"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="967"/>
         <source>Scale</source>
         <translation>Ölçek</translation>
     </message>
@@ -1718,7 +1756,7 @@ Parola: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="560"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="569"/>
         <source>Start recording</source>
         <translation>Kaydı başlat</translation>
     </message>
@@ -1740,69 +1778,69 @@ Parola: %2</translation>
         <translation>Oturum Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="355"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="364"/>
         <source>Resolution selection</source>
         <translation>Çözünürlük seçimi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1</source>
         <translation>Oturum %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1133"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1142"/>
         <source>Session %1 (%2)</source>
         <translation>Oturum %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="555"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="564"/>
         <source>Stop recording</source>
         <translation>Kaydı durdur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="468"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="477"/>
         <source>Scripts</source>
         <translation>Betikler</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="527"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="536"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Uzak bilgisayarda &quot;%1&quot; betiğini çalıştırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="787"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="796"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Uzak bilgisayarı kapatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="802"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="811"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
         <source>Confirmation</source>
         <translation>Onay</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="803"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="812"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Uzak bilgisayarı yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="808"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="834"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="817"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
         <source>Wait for host</source>
         <translation>Ana bilgisayarı bekle</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="829"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="838"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Uzak bilgisayarı Güvenli Modda yeniden başlatmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="854"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="863"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu sonlandırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="869"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="878"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Uzak bilgisayardaki kullanıcı oturumunu kilitlemek istediğinizden emin misiniz?</translation>
     </message>
@@ -1833,17 +1871,17 @@ Parola: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="947"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Görüntüsü (*.png);;BMP Görüntüsü (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
         <source>Could not save image</source>
         <translation>Görüntü kaydedilemedi</translation>
     </message>
@@ -2866,17 +2904,17 @@ Parola: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="479"/>
+        <location filename="../base/gui_application.cc" line="484"/>
         <source>Dark</source>
         <translation>Koyu</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="481"/>
+        <location filename="../base/gui_application.cc" line="486"/>
         <source>Light</source>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="482"/>
+        <location filename="../base/gui_application.cc" line="487"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
@@ -4791,6 +4829,14 @@ Saved passwords imported: %4</source>
         <location filename="../client/desktop/desktop/task_manager_window.cc" line="91"/>
         <source>Unknown Process</source>
         <translation>Bilinmeyen İşlem</translation>
+    </message>
+</context>
+<context>
+    <name>QGuiApplication</name>
+    <message>
+        <location filename="../base/gui_application.cc" line="73"/>
+        <source>QT_LAYOUT_DIRECTION</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6773,24 +6819,24 @@ Saved passwords imported: %4</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="363"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>

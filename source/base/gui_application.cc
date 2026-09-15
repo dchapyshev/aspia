@@ -67,6 +67,11 @@ const char kOkMessage[] = "OK";
 
 const QString kTranslationsDir = ":/tr/";
 
+// Qt takes the layout direction from the translation of this string: "RTL" in the right-to-left
+// languages.
+[[maybe_unused]] const char* const kLayoutDirection =
+    QT_TRANSLATE_NOOP("QGuiApplication", "QT_LAYOUT_DIRECTION");
+
 class CustomStyle final : public QProxyStyle
 {
 public:
