@@ -280,7 +280,11 @@ void RouterUsersWidget::onUserListReceived(const proto::router::UserList& list)
         // An error reply carries no list; treating it as an empty one would remove every user
         // from the tree. Keep what is shown - the next notification triggers another fetch.
         LOG(ERROR) << "Unable to get the list of the users:" << list.error_code();
-        if (model_->rowCount() == 0 && !load_error_shown_)
+
+        // A lost session answers its requests after the status change already emptied the
+        // tree, and the disconnect itself is reported by the status.
+        if (list.error_code() != proto::router::kErrorLostConnection &&
+            model_->rowCount() == 0 && !load_error_shown_)
         {
             // With nothing loaded yet an empty tree would silently pass for "no users".
             load_error_shown_ = true;
