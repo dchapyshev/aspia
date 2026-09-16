@@ -132,7 +132,11 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
             // call, the way Qt dispatchers do, and the next tick belongs to the next call.
             reschedule_zero_timers();
 
-            if (!interrupted_.load(std::memory_order_relaxed) && !current_count)
+            // Only the first turn of this call is allowed to block. An event loop looks at its
+            // exit flag between the calls, so a call that already handled something has to give
+            // it that chance instead of parking again: an interrupt that arrived just before the
+            // call was cleared at the top of it, and its wakeup was eaten by the poll above.
+            if (!interrupted_.load(std::memory_order_relaxed) && !current_count && !total_count)
             {
                 emit aboutToBlock();
                 current_count = io_context_.run_one();

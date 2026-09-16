@@ -315,6 +315,55 @@ TEST(DispatcherTests, CrossThread_Quit_WakesBlockedLoop)
     EXPECT_LT(msSince(latency_start), 1000);
 }
 
+// The pair QEventLoop::exit() issues on quit(): the exit flag of the loop, then interrupt() on
+// the dispatcher. An interrupt that lands while the loop is between two processEvents calls must
+// not be swallowed by the next one: the loop looks at its exit flag only between the calls, so a
+// call that parks in the blocking wait after eating the wakeup never comes back.
+TEST(DispatcherTests, CrossThread_InterruptBeforeProcessEvents_Returns)
+{
+    Thread thread(Thread::AsioDispatcher);
+    thread.start();
+
+    QObject probe;
+    probe.moveToThread(&thread);
+
+    QSemaphore ready;
+    QSemaphore go;
+    QSemaphore returned;
+
+    QMetaObject::invokeMethod(&probe, [&]()
+    {
+        ready.release();
+        go.acquire();
+
+        // The interrupt is already delivered at this point, so this call must return.
+        QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
+        returned.release();
+    },
+    Qt::QueuedConnection);
+
+    ASSERT_TRUE(ready.tryAcquire(1, 5000));
+
+    QAbstractEventDispatcher* dispatcher = thread.eventDispatcher();
+    ASSERT_NE(dispatcher, nullptr);
+
+    dispatcher->interrupt();
+    go.release();
+
+    const bool came_back = returned.tryAcquire(1, 5000);
+    if (!came_back)
+    {
+        // The worker is parked for good. Free it with an interrupt it can see, so the failure is
+        // a failed test and not a hung run.
+        dispatcher->interrupt();
+        returned.tryAcquire(1, 5000);
+    }
+
+    EXPECT_TRUE(came_back);
+
+    thread.stop();
+}
+
 // Nested event loops
 TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
 {
