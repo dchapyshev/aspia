@@ -126,8 +126,15 @@
           <layout class="QHBoxLayout" name="layout_users_pagination">
            <item>
             <widget class="QToolButton" name="button_users_prev">
-             <property name="text">
-              <string>&lt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Previous page</string>
@@ -139,8 +146,15 @@
            </item>
            <item>
             <widget class="QToolButton" name="button_users_next">
-             <property name="text">
-              <string>&gt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Next page</string>
@@ -187,8 +201,15 @@
           <layout class="QHBoxLayout" name="layout_hosts_in_pagination">
            <item>
             <widget class="QToolButton" name="button_hosts_in_prev">
-             <property name="text">
-              <string>&lt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Previous page</string>
@@ -200,8 +221,15 @@
            </item>
            <item>
             <widget class="QToolButton" name="button_hosts_in_next">
-             <property name="text">
-              <string>&gt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Next page</string>
@@ -279,8 +307,15 @@
           <layout class="QHBoxLayout" name="layout_hosts_free_pagination">
            <item>
             <widget class="QToolButton" name="button_hosts_free_prev">
-             <property name="text">
-              <string>&lt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Previous page</string>
@@ -292,8 +327,15 @@
            </item>
            <item>
             <widget class="QToolButton" name="button_hosts_free_next">
-             <property name="text">
-              <string>&gt;</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
              </property>
              <property name="toolTip">
               <string>Next page</string>
@@ -337,6 +379,8 @@
    <header>common/desktop/dialog_button_box.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../common/resources/common.qrc"/>
+ </resources>
  <connections/>
 </ui>
