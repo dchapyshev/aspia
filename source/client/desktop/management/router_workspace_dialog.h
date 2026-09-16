@@ -29,6 +29,7 @@
 
 class QAbstractButton;
 class QComboBox;
+class QEvent;
 class QListWidget;
 class QToolButton;
 
@@ -50,6 +51,10 @@ public:
     // workspace_id == 0 means create mode; > 0 means modify mode.
     RouterWorkspaceDialog(qint64 router_id, qint64 workspace_id, QWidget* parent);
     ~RouterWorkspaceDialog() final;
+
+protected:
+    // QDialog implementation.
+    void changeEvent(QEvent* event) final;
 
 private slots:
     void onWorkspaceListReceived(const RouterWorkspaceList& list);
@@ -87,6 +92,7 @@ private:
                           const PageModel& page);
     void updateButtonsState();
     void updateLoadingState();
+    void updateArrowIcons();
 
     // The name of the form, checked the way the router checks it. Empty when it is not usable.
     QString validatedName();

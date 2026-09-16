@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QComboBox>
+#include <QEvent>
 #include <QIcon>
 #include <QListWidgetItem>
 #include <QPushButton>
@@ -55,6 +56,7 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
+    updateArrowIcons();
 
     // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
     ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
@@ -64,10 +66,10 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     hosts_free_page_.setPageSize(kPageSize);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
-    connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
-    connect(ui->button_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
-    connect(ui->button_host_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onHostAddClicked);
-    connect(ui->button_host_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onHostRemoveClicked);
+    connect(ui->button_add, &QToolButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
+    connect(ui->button_remove, &QToolButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
+    connect(ui->button_host_add, &QToolButton::clicked, this, &RouterWorkspaceDialog::onHostAddClicked);
+    connect(ui->button_host_remove, &QToolButton::clicked, this, &RouterWorkspaceDialog::onHostRemoveClicked);
     connect(ui->list_available, &QListWidget::itemSelectionChanged,
             this, &RouterWorkspaceDialog::updateButtonsState);
     connect(ui->list_with_access, &QListWidget::itemSelectionChanged,
@@ -197,6 +199,15 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 RouterWorkspaceDialog::~RouterWorkspaceDialog()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::changeEvent(QEvent* event)
+{
+    QDialog::changeEvent(event);
+
+    if (event->type() == QEvent::LayoutDirectionChange)
+        updateArrowIcons();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -868,6 +879,20 @@ void RouterWorkspaceDialog::updateLoadingState()
         ui->button_host_add->setEnabled(false);
         ui->button_host_remove->setEnabled(false);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::updateArrowIcons()
+{
+    const QIcon to_members(
+        isRightToLeft() ? ":/img/arrow-green-left.svg" : ":/img/arrow-green-right.svg");
+    const QIcon to_available(
+        isRightToLeft() ? ":/img/arrow-red-right.svg" : ":/img/arrow-red-left.svg");
+
+    ui->button_add->setIcon(to_members);
+    ui->button_host_add->setIcon(to_members);
+    ui->button_remove->setIcon(to_available);
+    ui->button_host_remove->setIcon(to_available);
 }
 
 //--------------------------------------------------------------------------------------------------

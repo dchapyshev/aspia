@@ -61,58 +61,6 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_left">
          <item>
-          <widget class="QLabel" name="label_with_access">
-           <property name="text">
-            <string>Users with access</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="list_with_access"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_buttons">
-         <item>
-          <spacer name="verticalSpacer_top">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="button_add">
-           <property name="text">
-            <string>&lt; Add</string>
-           </property>
-           <property name="toolTip">
-            <string>Grant access to the selected user</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="button_remove">
-           <property name="text">
-            <string>Remove &gt;</string>
-           </property>
-           <property name="toolTip">
-            <string>Revoke access from the selected user</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_bottom">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_right">
-         <item>
           <widget class="QLabel" name="label_available">
            <property name="text">
             <string>Available users</string>
@@ -178,6 +126,64 @@
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_buttons">
+         <item>
+          <spacer name="verticalSpacer_top">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_add">
+           <property name="toolTip">
+            <string>Grant access to the selected user</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_remove">
+           <property name="toolTip">
+            <string>Revoke access from the selected user</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_bottom">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_right">
+         <item>
+          <widget class="QLabel" name="label_with_access">
+           <property name="text">
+            <string>Users with access</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="list_with_access"/>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_hosts">
@@ -187,112 +193,6 @@
       <layout class="QHBoxLayout" name="horizontalLayout_hosts">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_hosts_left">
-         <item>
-          <widget class="QLabel" name="label_hosts_in_workspace">
-           <property name="text">
-            <string>Hosts in workspace</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="list_hosts_in_workspace"/>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="layout_hosts_in_pagination">
-           <item>
-            <widget class="QToolButton" name="button_hosts_in_prev">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../common/resources/common.qrc">
-               <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Previous page</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="combo_hosts_in_page"/>
-           </item>
-           <item>
-            <widget class="QToolButton" name="button_hosts_in_next">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="icon">
-              <iconset resource="../../../common/resources/common.qrc">
-               <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
-             </property>
-             <property name="toolTip">
-              <string>Next page</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="spacer_hosts_in_pagination">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_hosts_buttons">
-         <item>
-          <spacer name="verticalSpacer_hosts_top">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="button_host_add">
-           <property name="text">
-            <string>&lt; Add</string>
-           </property>
-           <property name="toolTip">
-            <string>Move the selected host into the workspace</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="button_host_remove">
-           <property name="text">
-            <string>Remove &gt;</string>
-           </property>
-           <property name="toolTip">
-            <string>Remove the selected host from the workspace</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_hosts_bottom">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_hosts_right">
          <item>
           <widget class="QLabel" name="label_hosts_available">
            <property name="text">
@@ -344,6 +244,118 @@
            </item>
            <item>
             <spacer name="spacer_hosts_free_pagination">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_hosts_buttons">
+         <item>
+          <spacer name="verticalSpacer_hosts_top">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_host_add">
+           <property name="toolTip">
+            <string>Move the selected host into the workspace</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="button_host_remove">
+           <property name="toolTip">
+            <string>Remove the selected host from the workspace</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_hosts_bottom">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_hosts_right">
+         <item>
+          <widget class="QLabel" name="label_hosts_in_workspace">
+           <property name="text">
+            <string>Hosts in workspace</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="list_hosts_in_workspace"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="layout_hosts_in_pagination">
+           <item>
+            <widget class="QToolButton" name="button_hosts_in_prev">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-left.svg</normaloff>:/img/arrow-left.svg</iconset>
+             </property>
+             <property name="toolTip">
+              <string>Previous page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combo_hosts_in_page"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="button_hosts_in_next">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../common/resources/common.qrc">
+               <normaloff>:/img/arrow-right.svg</normaloff>:/img/arrow-right.svg</iconset>
+             </property>
+             <property name="toolTip">
+              <string>Next page</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="spacer_hosts_in_pagination">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
              </property>

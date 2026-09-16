@@ -176,6 +176,10 @@
         <file>router-status.svg</file>
         <file>arrow-left.svg</file>
         <file>arrow-right.svg</file>
+        <file>arrow-green-right.svg</file>
+        <file>arrow-green-left.svg</file>
+        <file>arrow-red-left.svg</file>
+        <file>arrow-red-right.svg</file>
         <file>clean.svg</file>
         <file>user-disable.svg</file>
         <file>computer-unknown.svg</file>
