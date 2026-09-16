@@ -410,6 +410,19 @@ SidebarItem* Sidebar::currentItem() const
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 Sidebar::currentRouterId() const
+{
+    for (QTreeWidgetItem* item = tree_widget_->currentItem(); item; item = item->parent())
+    {
+        SidebarItem* sidebar_item = static_cast<SidebarItem*>(item);
+        if (sidebar_item->itemType() == SidebarItem::ROUTER)
+            return static_cast<SidebarRouter*>(sidebar_item)->routerId();
+    }
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 SidebarRouter* Sidebar::routerById(qint64 router_id) const
 {
     for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)

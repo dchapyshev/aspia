@@ -52,6 +52,7 @@ public:
                              const QList<RouterGroup>& groups);
     qint64 currentGroupId() const;
     SidebarItem* currentItem() const;
+    qint64 currentRouterId() const;
     SidebarRouter* routerById(qint64 router_id) const;
     QList<qint64> routerIds() const;
     QList<qint64> routerWorkspaceIds(qint64 router_id) const;

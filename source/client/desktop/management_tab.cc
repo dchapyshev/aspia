@@ -268,14 +268,12 @@ ManagementTab::ManagementTab(QWidget* parent)
         ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book
     });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
-    addActions(ActionRole::EDIT,
-    {
-        ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace
-    });
+    addActions(ActionRole::EDIT, { ui->action_edit_workspace, ui->action_delete_workspace });
     addActions(ActionRole::EDIT,
     {
         ui->action_add_router, ui->action_edit_router, ui->action_delete_router,
-        ui->action_change_router_password, ui->action_clear_router_events
+        ui->action_change_router_password, ui->action_clear_router_events,
+        ui->action_add_workspace
     });
     addActions(ActionRole::EDIT,
     {
@@ -1244,12 +1242,8 @@ void ManagementTab::onDeleteUserAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onAddWorkspaceAction()
 {
-    SidebarItem* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::ROUTER)
-        return;
-
-    const qint64 router_id = static_cast<SidebarRouter*>(sidebar_item)->routerId();
-    if (!RouterController::session(router_id))
+    const qint64 router_id = ui->sidebar->currentRouterId();
+    if (!router_id || !RouterController::session(router_id))
         return;
 
     RouterWorkspaceDialog dialog(router_id, 0, this);
@@ -1844,7 +1838,6 @@ void ManagementTab::updateActionsState()
     ui->action_edit_user->setVisible(false);
     ui->action_delete_user->setVisible(false);
 
-    ui->action_add_workspace->setVisible(false);
     ui->action_edit_workspace->setVisible(false);
     ui->action_delete_workspace->setVisible(false);
 
@@ -1982,16 +1975,16 @@ void ManagementTab::updateActionsState()
         ui->action_delete_router->setVisible(true);
         ui->action_clear_router_events->setVisible(true);
 
-        // Workspaces are managed from the sidebar tree. Adding one targets the whole router, so
-        // its action lives on the router node when connected as an administrator.
         SidebarRouter* router = static_cast<SidebarRouter*>(sidebar_item);
-        RouterSession* session = RouterController::session(router->routerId());
-        const bool is_online = session != nullptr;
-        const bool is_admin_online = is_online &&
-            session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
-        ui->action_add_workspace->setVisible(is_admin_online);
-        ui->action_change_router_password->setVisible(is_online);
+        ui->action_change_router_password->setVisible(
+            RouterController::session(router->routerId()) != nullptr);
     }
+
+    // Adding a workspace targets the whole router, so the action goes with every item of a router
+    // when connected as an administrator.
+    RouterSession* router_session = RouterController::session(ui->sidebar->currentRouterId());
+    ui->action_add_workspace->setVisible(router_session &&
+        router_session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN);
 
     bool show_session_types = (current_content_ == search_widget_);
     if (sidebar_item)
