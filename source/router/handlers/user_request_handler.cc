@@ -87,7 +87,9 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
     // The user update and the token revocation of a password rotation happen in one transaction
     // inside modifyUser, which decides authoritatively whether the rotation happened at all.
     bool password_changed = false;
-    const std::string_view error_code = database.modifyUser(new_user, &password_changed);
+    bool sessions_changed = false;
+    const std::string_view error_code =
+        database.modifyUser(new_user, &password_changed, &sessions_changed);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -96,11 +98,8 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
         return;
     }
 
-    // Both update paths of modifyUser write the flags of the request, so they are the stored state
-    // now. A disabled account must not keep the sessions it opened while it was enabled: the
-    // authenticator refuses its next login, but nothing would ever drop a session already running.
     const bool disabled = !(new_user.flags & User::ENABLED);
-    if (password_changed || disabled)
+    if (password_changed || sessions_changed || disabled)
         result->stop_user_id = new_user.entry_id;
 
     // The rotation answers a leaked password, and a half-done enrollment secret is part of what

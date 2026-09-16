@@ -64,9 +64,9 @@ struct DeviceToken
 
 // Invariants the write paths maintain, each enforced inside the mutating transaction. A change
 // to any user/workspace path must be checked against this list.
-// I1. users.sessions is written only by the INSERT of addUser, which stores the full session mask
-//     of the access level (RouterUser::expandSessionTypes): the access level of a user never
-//     changes after creation.
+// I1. users.sessions always holds the full session mask of the access level
+//     (RouterUser::expandSessionTypes): addUser and modifyUser expand the single level a client
+//     names, and a modify request without a level keeps the stored mask.
 // I2. An administrator sees every workspace by its session type alone (workspaceListForAdmin),
 //     so workspace_access holds the memberships of the regular users only.
 // I3. A workspace modification applies only on top of the state the client saw
@@ -114,15 +114,16 @@ public:
     // Adds a user record. Returns a proto::router error code.
     std::string_view addUser(const RouterUser& user);
 
-    // Updates a user record. The access level is set at the creation of the user and never changes
-    // afterwards, so the session mask of |user| is ignored. A request with empty salt/verifier
-    // changes only the flags: the stored credentials are kept, so a snapshot taken before a
-    // concurrent password change cannot roll that change back. If the change rotates the password
-    // (salt or verifier differ from the stored ones), every device token of the user is revoked.
-    // If |password_changed| is not null it is set to whether the rotation happened (the
+    // Updates a user record. A request with empty salt/verifier changes only the flags and the
+    // access level: the stored credentials are kept, so a snapshot taken before a concurrent
+    // password change cannot roll that change back. A zero session mask keeps the stored access
+    // level. If the change rotates the password (salt or verifier differ from the stored ones),
+    // every device token of the user is revoked. If |password_changed| and |sessions_changed| are
+    // not null they are set to whether the rotation and the level change happened (the
     // authoritative check against the stored record).
     // Returns a proto::router error code.
-    std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr);
+    std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr,
+                                bool* sessions_changed = nullptr);
 
     // Removes a user; its workspace_access rows go with it by cascade, and the revision of every
     // affected workspace is bumped in the same transaction (see I3).

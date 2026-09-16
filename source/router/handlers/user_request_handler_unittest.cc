@@ -168,6 +168,32 @@ TEST_F(UserRequestHandlerTest, DisablingAUserStopsTheirSessions)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The role of a session is fixed at login, so the sessions running with the old level are dropped
+// and the new one takes effect with the next login. The tokens stay: they are not bound to the
+// level.
+TEST_F(UserRequestHandlerTest, LevelChangeStopsTheSessions)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)),
+              proto::router::kErrorOk);
+    const qint64 user_id = findUser("bob").entry_id;
+    ASSERT_GT(issueToken(user_id), 0);
+
+    RouterUser promoted;
+    promoted.entry_id = user_id;
+    promoted.sessions = proto::router::SESSION_TYPE_MANAGER;
+    promoted.flags = User::ENABLED;
+
+    const RequestResult result = handle(makeRequest(proto::router::kCommandUserModify, promoted));
+
+    EXPECT_EQ(result.error_code, proto::router::kErrorOk);
+    EXPECT_EQ(result.stop_user_id, user_id);
+    EXPECT_EQ(result.notify_flags, quint32(ClientWorker::NOTIFY_USERS));
+    EXPECT_EQ(findUser(user_id).sessions,
+              proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
+    EXPECT_EQ(tokenCount(user_id), 1u);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The built-in administrator is the account that recovers the router, so it cannot be disabled.
 TEST_F(UserRequestHandlerTest, DisablingTheBuiltInUserIsRefused)
 {

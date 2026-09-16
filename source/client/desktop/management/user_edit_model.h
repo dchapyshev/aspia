@@ -23,6 +23,10 @@
 
 #include "base/peer/router_user.h"
 
+namespace proto::router {
+enum SessionType : int;
+} // namespace proto::router
+
 // The edit state of a user dialog, with no UI and no networking - unit-testable. The server
 // snapshot is written only by applySnapshot() (fed from list replies); the operator intents
 // live next to it and never overwrite it, so a failed save retries against the true server
@@ -53,6 +57,7 @@ public:
     const RouterUser& snapshot() const { return snapshot_; }
 
     bool snapshotEnabled() const;
+    proto::router::SessionType snapshotAccessLevel() const;
 
     //----------------------------------------------------------------------------------------------
     // Operator intents
@@ -74,6 +79,13 @@ public:
 
     bool enabledTouched() const { return enabled_intent_.has_value(); }
 
+    // The operator picked a level in the combo box. Dissolves the same way as the enabled intent.
+    void setAccessLevelIntent(proto::router::SessionType level);
+
+    // What the combo box must show: the operator intent while one is set, the server state
+    // otherwise (a new user starts as an operator).
+    proto::router::SessionType desiredAccessLevel() const;
+
     //----------------------------------------------------------------------------------------------
     // Save
     //----------------------------------------------------------------------------------------------
@@ -84,12 +96,14 @@ public:
     bool isNoOpSave() const;
 
     quint32 flagsForSave() const;
+    quint32 sessionsForSave() const;
 
 private:
     const qint64 entry_id_;
 
     RouterUser snapshot_;
     std::optional<bool> enabled_intent_;
+    std::optional<proto::router::SessionType> access_level_intent_;
     bool account_changed_ = true; // Create mode edits the account by definition.
     bool loaded_ = false;
 };

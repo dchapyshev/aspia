@@ -39,8 +39,8 @@
 
 namespace {
 
-// The built-in user created by the router's --create-config. The router refuses to delete it or to
-// disable it, because it is the only guaranteed way into the admin channel. Mirrored here so the
+// The built-in user created by the router's --create-config. The router refuses to delete, disable
+// or demote it, because it is the only guaranteed way into the admin channel. Mirrored here so the
 // dialog does not offer a change that will be rejected.
 constexpr qint64 kBuiltInUserId = 1;
 
@@ -88,9 +88,7 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     add_level(proto::router::SESSION_TYPE_ADMIN);
     add_level(proto::router::SESSION_TYPE_MANAGER);
     add_level(proto::router::SESSION_TYPE_OPERATOR);
-
-    if (entry_id_ == 0)
-        setAccessLevel(proto::router::SESSION_TYPE_OPERATOR);
+    setAccessLevel(model_.desiredAccessLevel());
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
@@ -103,6 +101,12 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
     connect(ui->checkbox_disable, &QCheckBox::clicked, this, [this]()
     {
         model_.setEnabledIntent(!ui->checkbox_disable->isChecked());
+    });
+
+    connect(ui->combo_access_level, &QComboBox::activated, this, [this](int index)
+    {
+        model_.setAccessLevelIntent(static_cast<proto::router::SessionType>(
+            ui->combo_access_level->itemData(index).toInt()));
     });
 
     connect(ui->button_reset_otp, &QPushButton::clicked,
@@ -235,20 +239,17 @@ void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
 
     if (entry_id_ > 0)
     {
-        // The widgets mirror the model: the checkbox shows the operator intent while one is
-        // set and the server state otherwise; the name follows the server only while the
-        // operator has not started editing the account.
+        // The widgets mirror the model: the checkbox and the combo box show the operator intent
+        // while one is set and the server state otherwise; the name follows the server only
+        // while the operator has not started editing the account.
         ui->checkbox_disable->setChecked(!model_.desiredEnabled());
+        setAccessLevel(model_.desiredAccessLevel());
         if (!model_.accountChanged() || initial_load)
             ui->edit_username->setText(model_.snapshot().name);
 
+        // The password fields must not be reset by a background refetch.
         if (initial_load)
-        {
-            // The access level never changes after creation (see I1 in router/database.h)
-            // and the password fields must not be reset by a background refetch.
-            setAccessLevel(accessLevelFromSessions(model_.snapshot().sessions));
             setAccountChanged(false);
-        }
     }
 
     updateLoadingState();
@@ -580,7 +581,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        request.sessions = ui->combo_access_level->currentData().toUInt();
+        request.sessions = model_.sessionsForSave();
         request.flags = model_.flagsForSave();
 
         submitWithNameCheck(request, username);
@@ -597,8 +598,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         request.verifier.clear();
     }
 
-    // Only the selected level is stored; the router expands it to the implied lower levels.
-    request.sessions = ui->combo_access_level->currentData().toUInt();
+    request.sessions = model_.sessionsForSave();
     request.flags = model_.flagsForSave();
 
     submitUser(request);
@@ -741,14 +741,12 @@ void RouterUserDialog::updateLoadingState()
 {
     const bool ready = model_.isLoaded();
 
-    // The built-in user cannot be disabled; its name and password remain editable.
+    // The built-in user cannot be disabled or demoted; its name and password remain editable.
     const bool built_in = entry_id_ == kBuiltInUserId;
 
     ui->edit_username->setEnabled(ready);
     ui->checkbox_disable->setEnabled(ready && !built_in);
-
-    // The access level is chosen when the user is created and is not editable afterwards.
-    ui->combo_access_level->setEnabled(ready && entry_id_ == 0);
+    ui->combo_access_level->setEnabled(ready && !built_in);
 
     ui->edit_password->setEnabled(ready && model_.accountChanged());
     ui->edit_password_retry->setEnabled(ready && model_.accountChanged());
@@ -807,17 +805,6 @@ void RouterUserDialog::setAccessLevel(proto::router::SessionType session_type)
     int index = ui->combo_access_level->findData(QVariant(session_type));
     if (index >= 0)
         ui->combo_access_level->setCurrentIndex(index);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-proto::router::SessionType RouterUserDialog::accessLevelFromSessions(quint32 sessions)
-{
-    if (sessions & proto::router::SESSION_TYPE_ADMIN)
-        return proto::router::SESSION_TYPE_ADMIN;
-    if (sessions & proto::router::SESSION_TYPE_MANAGER)
-        return proto::router::SESSION_TYPE_MANAGER;
-    return proto::router::SESSION_TYPE_OPERATOR;
 }
 
 //--------------------------------------------------------------------------------------------------

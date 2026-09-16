@@ -19,6 +19,7 @@
 #include "client/desktop/management/user_edit_model.h"
 
 #include "base/peer/user.h"
+#include "proto/router.h"
 
 //--------------------------------------------------------------------------------------------------
 UserEditModel::UserEditModel(qint64 entry_id)
@@ -41,6 +42,8 @@ bool UserEditModel::applySnapshot(const RouterUser& record, bool record_found)
         // an intent that now matches the server state dissolves into "no edit".
         if (enabled_intent_.has_value() && *enabled_intent_ == snapshotEnabled())
             enabled_intent_.reset();
+        if (access_level_intent_.has_value() && *access_level_intent_ == snapshotAccessLevel())
+            access_level_intent_.reset();
     }
 
     loaded_ = true;
@@ -51,6 +54,16 @@ bool UserEditModel::applySnapshot(const RouterUser& record, bool record_found)
 bool UserEditModel::snapshotEnabled() const
 {
     return (snapshot_.flags & User::ENABLED) != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::SessionType UserEditModel::snapshotAccessLevel() const
+{
+    if (snapshot_.sessions & proto::router::SESSION_TYPE_ADMIN)
+        return proto::router::SESSION_TYPE_ADMIN;
+    if (snapshot_.sessions & proto::router::SESSION_TYPE_MANAGER)
+        return proto::router::SESSION_TYPE_MANAGER;
+    return proto::router::SESSION_TYPE_OPERATOR;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -76,9 +89,32 @@ bool UserEditModel::desiredEnabled() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserEditModel::setAccessLevelIntent(proto::router::SessionType level)
+{
+    if (isModifyMode() && level == snapshotAccessLevel())
+    {
+        access_level_intent_.reset();
+        return;
+    }
+
+    access_level_intent_ = level;
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::SessionType UserEditModel::desiredAccessLevel() const
+{
+    if (access_level_intent_.has_value())
+        return *access_level_intent_;
+    if (isModifyMode())
+        return snapshotAccessLevel();
+    return proto::router::SESSION_TYPE_OPERATOR;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool UserEditModel::isNoOpSave() const
 {
-    return isModifyMode() && !account_changed_ && desiredEnabled() == snapshotEnabled();
+    return isModifyMode() && !account_changed_ && desiredEnabled() == snapshotEnabled() &&
+           desiredAccessLevel() == snapshotAccessLevel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,4 +124,12 @@ quint32 UserEditModel::flagsForSave() const
     if (desiredEnabled())
         flags |= User::ENABLED;
     return flags;
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 UserEditModel::sessionsForSave() const
+{
+    if (isModifyMode() && !access_level_intent_.has_value())
+        return 0;
+    return desiredAccessLevel();
 }

@@ -40,11 +40,10 @@
 namespace {
 
 // The user created by --create-config always gets id 1 (AUTOINCREMENT on an empty table). It is the
-// router's guaranteed way into the admin channel: the router has no CLI to restore administrator
-// access, so losing it means losing control over the installation. The record is therefore not
-// deletable and must stay enabled - a disabled account is refused by the authenticator, which would
-// lock everyone out. Its admin session mask needs no extra guard: the mask of every user is
-// immutable after creation (see I1 in database.h).
+// router's guaranteed way into the admin channel, because the router has no CLI to restore
+// administrator access, so losing it means losing control over the installation. The record is
+// therefore not deletable, must stay enabled and keeps the administrator level, since a disabled or
+// demoted account would lock everyone out of that channel.
 constexpr qint64 kBuiltInUserId = 1;
 
 constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
@@ -599,7 +598,8 @@ std::string_view Database::addUser(const RouterUser& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyUser(const RouterUser& user, bool* password_changed)
+std::string_view Database::modifyUser(const RouterUser& user, bool* password_changed,
+                                      bool* sessions_changed)
 {
     if (!isValid())
     {
@@ -618,14 +618,25 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         return proto::router::kErrorInvalidData;
     }
 
-    if (user.entry_id == kBuiltInUserId && !(user.flags & User::ENABLED))
+    if (user.entry_id == kBuiltInUserId)
     {
-        LOG(ERROR) << "Attempt to disable the built-in user";
-        return proto::router::kErrorAccessDenied;
+        if (!(user.flags & User::ENABLED))
+        {
+            LOG(ERROR) << "Attempt to disable the built-in user";
+            return proto::router::kErrorAccessDenied;
+        }
+
+        if (user.sessions && !(user.sessions & proto::router::SESSION_TYPE_ADMIN))
+        {
+            LOG(ERROR) << "Attempt to demote the built-in user";
+            return proto::router::kErrorAccessDenied;
+        }
     }
 
     if (password_changed)
         *password_changed = false;
+    if (sessions_changed)
+        *sessions_changed = false;
 
     SqlTransaction transaction(db_);
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
@@ -638,9 +649,10 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     // which must invalidate every device token.
     QByteArray old_salt;
     QByteArray old_verifier;
+    quint32 old_sessions = 0;
     bool user_found = false;
     {
-        SqlQuery select(db_, "SELECT salt, verifier FROM users WHERE id=?");
+        SqlQuery select(db_, "SELECT salt, verifier, sessions FROM users WHERE id=?");
         select.addInt64(user.entry_id);
 
         if (!select.isValid())
@@ -663,14 +675,16 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
             user_found = true;
             old_salt = select.columnBlob(0);
             old_verifier = select.columnBlob(1);
+            old_sessions = static_cast<quint32>(select.columnInt64(2));
         }
     }
 
     if (!user_found)
         return proto::router::kErrorNotFound;
 
-    // The sessions column is absent from the queries: the access level is set when the user is
-    // created and never changes afterwards (I1).
+    const quint32 sessions =
+        user.sessions ? RouterUser::expandSessionTypes(user.sessions) : old_sessions;
+
     if (has_credentials)
     {
         // Same reasoning as in addUser: a rename that lost a race must answer
@@ -693,12 +707,14 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         }
 
         const char kSql[] =
-            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, flags=? WHERE id=?";
+            "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=? "
+            "WHERE id=?";
         SqlQuery query(db_, kSql);
         query.addText(user.name);
         query.addText(user.group);
         query.addBlob(user.salt);
         query.addBlob(user.verifier);
+        query.addInt64(sessions);
         query.addInt64(user.flags);
         query.addInt64(user.entry_id);
 
@@ -710,10 +726,11 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     }
     else
     {
-        // Without the credentials only the flags can change: the name is not editable in the
-        // dialog without re-entering the password, and writing it from a possibly out of date
-        // snapshot would revert a concurrent rename the same way.
-        SqlQuery query(db_, "UPDATE users SET flags=? WHERE id=?");
+        // Without the credentials only the level and the flags can change: the name is not
+        // editable in the dialog without re-entering the password, and writing it from a possibly
+        // out of date snapshot would revert a concurrent rename the same way.
+        SqlQuery query(db_, "UPDATE users SET sessions=?, flags=? WHERE id=?");
+        query.addInt64(sessions);
         query.addInt64(user.flags);
         query.addInt64(user.entry_id);
 
@@ -728,6 +745,8 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         (old_salt != user.salt || old_verifier != user.verifier);
     if (password_changed)
         *password_changed = rotated;
+    if (sessions_changed)
+        *sessions_changed = sessions != old_sessions;
 
     if (rotated)
     {

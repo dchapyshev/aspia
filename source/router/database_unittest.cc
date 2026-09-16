@@ -258,7 +258,7 @@ TEST_F(RouterDatabaseTest, UserNamesAreCaseFolded)
     EXPECT_EQ(user.name, "bob");
 
     // A rename cannot take the folded name of somebody else either.
-    RouterUser renamed = makeUser("BOB", proto::router::SESSION_TYPE_OPERATOR);
+    RouterUser renamed = makeUser("BOB", kAllSessions);
     renamed.entry_id = admin_.entry_id;
     EXPECT_EQ(db_.modifyUser(renamed), proto::router::kErrorAlreadyExists);
 }
@@ -417,24 +417,31 @@ TEST_F(RouterDatabaseTest, HostPagesTileTheTable)
 }
 
 //--------------------------------------------------------------------------------------------------
-// I1: the session mask is written once at creation; modifyUser must ignore the mask of the
-// request even when the credentials are fully replaced.
-TEST_F(RouterDatabaseTest, ModifyUserIgnoresSessionMask)
+// I1: a modify names the new level as one bit and the row gets its full mask. The change is
+// reported, and the same level again is not a change.
+TEST_F(RouterDatabaseTest, ModifyUserStoresTheFullMaskOfTheNewLevel)
 {
     RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_EQ(db_.addUser(user), proto::router::kErrorOk);
     const qint64 user_id = findUser("bob").entry_id;
 
-    RouterUser modified = makeUser("bob", kAllSessions);
-    modified.entry_id = user_id;
-    ASSERT_EQ(db_.modifyUser(modified), proto::router::kErrorOk);
+    RouterUser promoted = makeUser("bob", proto::router::SESSION_TYPE_MANAGER);
+    promoted.entry_id = user_id;
 
-    EXPECT_EQ(findUser(user_id).sessions, proto::router::SESSION_TYPE_OPERATOR);
+    bool sessions_changed = false;
+    ASSERT_EQ(db_.modifyUser(promoted, nullptr, &sessions_changed), proto::router::kErrorOk);
+    EXPECT_TRUE(sessions_changed);
+    EXPECT_EQ(findUser(user_id).sessions,
+              proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR);
+
+    ASSERT_EQ(db_.modifyUser(promoted, nullptr, &sessions_changed), proto::router::kErrorOk);
+    EXPECT_FALSE(sessions_changed);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A request with empty credentials changes only the flags: the stored name and credentials
-// survive, so a stale snapshot cannot roll back a concurrent change.
+// A request with empty credentials changes only the level and the flags: the stored name and
+// credentials survive, so a stale snapshot cannot roll back a concurrent change. Without a level
+// the stored one survives too.
 TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
 {
     RouterUser user = makeUser("bob", proto::router::SESSION_TYPE_OPERATOR);
@@ -447,25 +454,64 @@ TEST_F(RouterDatabaseTest, FlagsOnlyModifyChangesOnlyFlags)
     request.flags = 0; // Disabled.
 
     bool password_changed = true;
-    ASSERT_EQ(db_.modifyUser(request, &password_changed),
+    bool sessions_changed = true;
+    ASSERT_EQ(db_.modifyUser(request, &password_changed, &sessions_changed),
               proto::router::kErrorOk);
     EXPECT_FALSE(password_changed);
+    EXPECT_FALSE(sessions_changed);
 
     const RouterUser after = findUser(stored.entry_id);
     EXPECT_EQ(after.flags, 0u);
+    EXPECT_EQ(after.sessions, stored.sessions);
     EXPECT_EQ(after.name, "bob");
     EXPECT_EQ(after.verifier, stored.verifier);
+
+    request.sessions = proto::router::SESSION_TYPE_ADMIN;
+    ASSERT_EQ(db_.modifyUser(request, &password_changed, &sessions_changed),
+              proto::router::kErrorOk);
+    EXPECT_TRUE(sessions_changed);
+    EXPECT_EQ(findUser(stored.entry_id).sessions, kAllSessions);
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledOrRemoved)
+TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledDemotedOrRemoved)
 {
     RouterUser request;
     request.entry_id = admin_.entry_id;
     request.flags = 0;
-
     EXPECT_EQ(db_.modifyUser(request), proto::router::kErrorAccessDenied);
+
+    request.flags = User::ENABLED;
+    request.sessions = proto::router::SESSION_TYPE_MANAGER;
+    EXPECT_EQ(db_.modifyUser(request), proto::router::kErrorAccessDenied);
+    EXPECT_EQ(findUser(admin_.entry_id).sessions, kAllSessions);
+
     EXPECT_EQ(db_.removeUser(admin_.entry_id), proto::router::kErrorAccessDenied);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The credentials path keeps the stored level for a request without one, the same way the
+// flags-only path does: the dialog sends zero for an untouched level with either.
+TEST_F(RouterDatabaseTest, RotationWithoutALevelKeepsTheStoredOne)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_MANAGER)),
+              proto::router::kErrorOk);
+    const RouterUser stored = findUser("bob");
+
+    RouterUser rotated = RouterUser::create("bob", SecureString("Rotated1234!"));
+    rotated.entry_id = stored.entry_id;
+    rotated.flags = User::ENABLED;
+
+    bool password_changed = false;
+    bool sessions_changed = true;
+    ASSERT_EQ(db_.modifyUser(rotated, &password_changed, &sessions_changed),
+              proto::router::kErrorOk);
+    EXPECT_TRUE(password_changed);
+    EXPECT_FALSE(sessions_changed);
+
+    const RouterUser after = findUser(stored.entry_id);
+    EXPECT_EQ(after.sessions, stored.sessions);
+    EXPECT_EQ(after.verifier, rotated.verifier);
 }
 
 //--------------------------------------------------------------------------------------------------

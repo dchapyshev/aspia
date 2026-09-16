@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 
 #include "base/peer/user.h"
+#include "proto/router.h"
 
 namespace {
 
@@ -327,6 +328,64 @@ TEST(UserEditModel, IntentSurvivesRefetchUntilServerMatches)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The level follows the refetches until the operator picks one, and a pick equal to the server
+// state is no edit. A picked level is sent as the single session type.
+TEST(UserEditModel, LevelFollowsTheServerUntilPicked)
+{
+    UserEditModel model(kClientId);
+    RouterUser record = makeRecord(User::ENABLED);
+    record.sessions = proto::router::SESSION_TYPE_OPERATOR;
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    model.setAccountChanged(false);
+
+    EXPECT_EQ(model.desiredAccessLevel(), proto::router::SESSION_TYPE_OPERATOR);
+    EXPECT_TRUE(model.isNoOpSave());
+
+    // Another console promoted the user; the router stores the full mask of the level.
+    record.sessions = proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    EXPECT_EQ(model.desiredAccessLevel(), proto::router::SESSION_TYPE_MANAGER);
+    EXPECT_TRUE(model.isNoOpSave());
+
+    model.setAccessLevelIntent(proto::router::SESSION_TYPE_ADMIN);
+    EXPECT_FALSE(model.isNoOpSave());
+    EXPECT_EQ(model.sessionsForSave(), quint32(proto::router::SESSION_TYPE_ADMIN));
+
+    model.setAccessLevelIntent(proto::router::SESSION_TYPE_MANAGER);
+    EXPECT_TRUE(model.isNoOpSave());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The scenario of the lost-update window: console A changes the level, console B saves something
+// else from a snapshot fetched before that. An untouched level goes out as zero, which the router
+// reads as "keep the stored one", so B cannot revert A. The zero stays after a refetch and after
+// an undone pick, and it is sent whether the credentials are edited or not.
+TEST(UserEditModel, UntouchedLevelIsSentAsZero)
+{
+    UserEditModel model(kClientId);
+    RouterUser record = makeRecord(User::ENABLED);
+    record.sessions = proto::router::SESSION_TYPE_OPERATOR;
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    model.setAccountChanged(false);
+
+    model.setEnabledIntent(false);
+    EXPECT_EQ(model.sessionsForSave(), 0u);
+
+    record.sessions = proto::router::SESSION_TYPE_MANAGER | proto::router::SESSION_TYPE_OPERATOR;
+    ASSERT_TRUE(model.applySnapshot(record, true));
+    EXPECT_EQ(model.sessionsForSave(), 0u);
+
+    model.setAccessLevelIntent(proto::router::SESSION_TYPE_ADMIN);
+    EXPECT_EQ(model.sessionsForSave(), quint32(proto::router::SESSION_TYPE_ADMIN));
+
+    model.setAccessLevelIntent(proto::router::SESSION_TYPE_MANAGER);
+    EXPECT_EQ(model.sessionsForSave(), 0u);
+
+    model.setAccountChanged(true);
+    EXPECT_EQ(model.sessionsForSave(), 0u);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(UserEditModel, DeletedRecordIsDetected)
 {
     UserEditModel model(kClientId);
@@ -342,6 +401,8 @@ TEST(UserEditModel, CreateModeDefaults)
 
     EXPECT_TRUE(model.accountChanged());
     EXPECT_TRUE(model.desiredEnabled());
+    EXPECT_EQ(model.desiredAccessLevel(), proto::router::SESSION_TYPE_OPERATOR);
+    EXPECT_EQ(model.sessionsForSave(), quint32(proto::router::SESSION_TYPE_OPERATOR));
     EXPECT_FALSE(model.isNoOpSave());
     EXPECT_EQ(model.flagsForSave(), quint32(User::ENABLED));
 
