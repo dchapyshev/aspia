@@ -506,26 +506,6 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Hitelesítő adatok mentése</translation>
     </message>
     <message>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation type="vanished">Adja meg a hitelesítő adatokat a gazdagéphez való csatlakozáshoz.</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">Felhasználónév</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">Egyszer használatos jelszó</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Mégse</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Csatlakozás</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>A felhasználónév nem lehet üres.</translation>
@@ -541,47 +521,47 @@ Hozzáadott útválasztók: %4</translation>
     <message>
         <location filename="../client/android/authorization_window.cc" line="52"/>
         <source>Authorization</source>
-        <translation type="unfinished">Hitelesítés</translation>
+        <translation>Hitelesítés</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished">Adja meg a hitelesítő adatokat a gazdagéphez való csatlakozáshoz.</translation>
+        <translation>Adja meg a hitelesítő adatokat a gazdagéphez való csatlakozáshoz.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="63"/>
         <source>Username</source>
-        <translation type="unfinished">Felhasználónév</translation>
+        <translation>Felhasználónév</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">Jelszó</translation>
+        <translation>Jelszó</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="69"/>
         <source>Connect</source>
-        <translation type="unfinished">Csatlakozás</translation>
+        <translation>Csatlakozás</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>One-time password</source>
-        <translation type="unfinished">Egyszer használatos jelszó</translation>
+        <translation>Egyszer használatos jelszó</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>Save credentials</source>
-        <translation type="unfinished">Hitelesítő adatok mentése</translation>
+        <translation>Hitelesítő adatok mentése</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="148"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">A felhasználónév nem lehet üres.</translation>
+        <translation>A felhasználónév nem lehet üres.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">A jelszó nem lehet üres.</translation>
+        <translation>A jelszó nem lehet üres.</translation>
     </message>
 </context>
 <context>
@@ -3043,9 +3023,9 @@ Jelszó: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="519"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
-        <location filename="../host/ui/host_window.cc" line="1012"/>
+        <location filename="../host/ui/host_window.cc" line="552"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
+        <location filename="../host/ui/host_window.cc" line="1053"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3061,7 +3041,7 @@ Jelszó: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="927"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>Az útválasztó le van tiltva</translation>
     </message>
@@ -3127,7 +3107,7 @@ Jelszó: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="711"/>
+        <location filename="../host/ui/host_window.cc" line="744"/>
         <source>Hide</source>
         <translation>Elrejtés</translation>
     </message>
@@ -3167,53 +3147,58 @@ Jelszó: %2</translation>
         <translation>Csevegés megjelenítése</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="282"/>
-        <location filename="../host/ui/host_window.cc" line="706"/>
+        <location filename="../host/ui/host_window.cc" line="287"/>
+        <location filename="../host/ui/host_window.cc" line="739"/>
         <source>Show</source>
         <translation>Megjelenítés</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="514"/>
+        <location filename="../host/ui/host_window.cc" line="547"/>
         <source>Screen recording has started.</source>
         <translation>A képernyőfelvétel elindult.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording stopped.</source>
         <translation>A képernyőfelvétel leállt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="695"/>
+        <location filename="../host/ui/host_window.cc" line="728"/>
         <source>Settings storage is unavailable.</source>
         <translation>A beállítástároló nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="765"/>
+        <location filename="../host/ui/host_window.cc" line="798"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Ha kilép az Aspiából, nem lehet csatlakozni ehhez a számítógéphez, amíg kézzel újra be nem kapcsolja a számítógépet vagy az Aspiát. Valóban kilép az alkalmazásból?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="932"/>
+        <location filename="../host/ui/host_window.cc" line="959"/>
+        <source>Not connected to service</source>
+        <translation>Nincs kapcsolat a szolgáltatással</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>Csatlakozás az útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="937"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>Csatlakoztatva az útválasztóhoz</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="942"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>Kapcsolati hiba</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1009"/>
+        <location filename="../host/ui/host_window.cc" line="1050"/>
         <source>IP addresses:</source>
         <translation>IP-címek:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1013"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4836,7 +4821,7 @@ Importált mentett jelszavak: %4</translation>
     <message>
         <location filename="../base/gui_application.cc" line="73"/>
         <source>QT_LAYOUT_DIRECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>LTR</translation>
     </message>
 </context>
 <context>
@@ -5884,12 +5869,12 @@ Importált mentett jelszavak: %4</translation>
         <translation>Biztosan törli a(z) &quot;%1&quot; felhasználót?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="291"/>
         <source>Failed to get list of users.</source>
         <translation>Nem sikerült lekérni a felhasználók listáját.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="434"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n felhasználó</numerusform>

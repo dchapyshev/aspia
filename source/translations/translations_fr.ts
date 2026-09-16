@@ -506,26 +506,6 @@ Routeurs ajoutés: %4</translation>
         <translation>Enregistrer les identifiants</translation>
     </message>
     <message>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation type="vanished">Saisissez les identifiants pour vous connecter à l&apos;hôte.</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">Nom d&apos;utilisateur</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">Mot de passe à usage unique</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuler</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Connecter</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>Le nom d&apos;utilisateur ne peut pas être vide.</translation>
@@ -541,47 +521,47 @@ Routeurs ajoutés: %4</translation>
     <message>
         <location filename="../client/android/authorization_window.cc" line="52"/>
         <source>Authorization</source>
-        <translation type="unfinished">Autorisation</translation>
+        <translation>Autorisation</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished">Saisissez les identifiants pour vous connecter à l&apos;hôte.</translation>
+        <translation>Saisissez les identifiants pour vous connecter à l&apos;hôte.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="63"/>
         <source>Username</source>
-        <translation type="unfinished">Nom d&apos;utilisateur</translation>
+        <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">Mot de passe</translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="69"/>
         <source>Connect</source>
-        <translation type="unfinished">Connecter</translation>
+        <translation>Connecter</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>One-time password</source>
-        <translation type="unfinished">Mot de passe à usage unique</translation>
+        <translation>Mot de passe à usage unique</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>Save credentials</source>
-        <translation type="unfinished">Enregistrer les identifiants</translation>
+        <translation>Enregistrer les identifiants</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="148"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">Le nom d&apos;utilisateur ne peut pas être vide.</translation>
+        <translation>Le nom d&apos;utilisateur ne peut pas être vide.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Le mot de passe ne peut pas être vide.</translation>
+        <translation>Le mot de passe ne peut pas être vide.</translation>
     </message>
 </context>
 <context>
@@ -3051,9 +3031,9 @@ Mot de passe: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="519"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
-        <location filename="../host/ui/host_window.cc" line="1012"/>
+        <location filename="../host/ui/host_window.cc" line="552"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
+        <location filename="../host/ui/host_window.cc" line="1053"/>
         <source>Aspia Host</source>
         <translation>Hôte Aspia</translation>
     </message>
@@ -3069,7 +3049,7 @@ Mot de passe: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="927"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>Le routeur est désactivé</translation>
     </message>
@@ -3135,7 +3115,7 @@ Mot de passe: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="711"/>
+        <location filename="../host/ui/host_window.cc" line="744"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
@@ -3175,53 +3155,58 @@ Mot de passe: %2</translation>
         <translation>Afficher le chat</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="282"/>
-        <location filename="../host/ui/host_window.cc" line="706"/>
+        <location filename="../host/ui/host_window.cc" line="287"/>
+        <location filename="../host/ui/host_window.cc" line="739"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="514"/>
+        <location filename="../host/ui/host_window.cc" line="547"/>
         <source>Screen recording has started.</source>
         <translation>L&apos;enregistrement de l&apos;écran a commencé.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording stopped.</source>
         <translation>L&apos;enregistrement de l&apos;écran est arrêté.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="695"/>
+        <location filename="../host/ui/host_window.cc" line="728"/>
         <source>Settings storage is unavailable.</source>
         <translation>Le stockage des paramètres n&apos;est pas disponible.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="765"/>
+        <location filename="../host/ui/host_window.cc" line="798"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Si vous quittez Aspia, il ne sera pas possible de se connecter à cet ordinateur tant que vous ne rallumerez pas l&apos;ordinateur ou Aspia manuellement. Voulez-vous vraiment quitter l&apos;application?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="932"/>
+        <location filename="../host/ui/host_window.cc" line="959"/>
+        <source>Not connected to service</source>
+        <translation>Non connecté au service</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>Connexion au routeur...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="937"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>Connecté au routeur</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="942"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>Erreur de connexion</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1009"/>
+        <location filename="../host/ui/host_window.cc" line="1050"/>
         <source>IP addresses:</source>
         <translation>Adresses IP:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1013"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4854,7 +4839,7 @@ Mots de passe enregistrés importés: %4</translation>
     <message>
         <location filename="../base/gui_application.cc" line="73"/>
         <source>QT_LAYOUT_DIRECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>LTR</translation>
     </message>
 </context>
 <context>
@@ -5911,12 +5896,12 @@ Mots de passe enregistrés importés: %4</translation>
         <translation>Voulez-vous vraiment supprimer l&apos;utilisateur &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="291"/>
         <source>Failed to get list of users.</source>
         <translation>Impossible d&apos;obtenir la liste des utilisateurs.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="434"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n utilisateur</numerusform>

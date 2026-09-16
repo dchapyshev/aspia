@@ -506,26 +506,6 @@ Routers added: %4</source>
         <translation>שמור פרטי כניסה</translation>
     </message>
     <message>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation type="vanished">הזן את פרטי הכניסה להתחברות למארח.</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">שם משתמש</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">סיסמה חד-פעמית</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">ביטול</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">התחבר</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>שם המשתמש אינו יכול להיות ריק.</translation>
@@ -541,47 +521,47 @@ Routers added: %4</source>
     <message>
         <location filename="../client/android/authorization_window.cc" line="52"/>
         <source>Authorization</source>
-        <translation type="unfinished">הרשאה</translation>
+        <translation>הרשאה</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished">הזן את פרטי הכניסה להתחברות למארח.</translation>
+        <translation>הזן את פרטי הכניסה להתחברות למארח.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="63"/>
         <source>Username</source>
-        <translation type="unfinished">שם משתמש</translation>
+        <translation>שם משתמש</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">סיסמה</translation>
+        <translation>סיסמה</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="69"/>
         <source>Connect</source>
-        <translation type="unfinished">התחבר</translation>
+        <translation>התחבר</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>One-time password</source>
-        <translation type="unfinished">סיסמה חד-פעמית</translation>
+        <translation>סיסמה חד-פעמית</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>Save credentials</source>
-        <translation type="unfinished">שמור פרטי כניסה</translation>
+        <translation>שמור פרטי כניסה</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="148"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">שם המשתמש אינו יכול להיות ריק.</translation>
+        <translation>שם המשתמש אינו יכול להיות ריק.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">הסיסמה אינה יכולה להיות ריקה.</translation>
+        <translation>הסיסמה אינה יכולה להיות ריקה.</translation>
     </message>
 </context>
 <context>
@@ -3051,9 +3031,9 @@ Password: %2</source>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="519"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
-        <location filename="../host/ui/host_window.cc" line="1012"/>
+        <location filename="../host/ui/host_window.cc" line="552"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
+        <location filename="../host/ui/host_window.cc" line="1053"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3069,7 +3049,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="927"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>הנתב מושבת</translation>
     </message>
@@ -3135,7 +3115,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="711"/>
+        <location filename="../host/ui/host_window.cc" line="744"/>
         <source>Hide</source>
         <translation>הסתר</translation>
     </message>
@@ -3175,53 +3155,58 @@ Password: %2</source>
         <translation>הצג צ&apos;אט</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="282"/>
-        <location filename="../host/ui/host_window.cc" line="706"/>
+        <location filename="../host/ui/host_window.cc" line="287"/>
+        <location filename="../host/ui/host_window.cc" line="739"/>
         <source>Show</source>
         <translation>הצג</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="514"/>
+        <location filename="../host/ui/host_window.cc" line="547"/>
         <source>Screen recording has started.</source>
         <translation>הקלטת המסך החלה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording stopped.</source>
         <translation>הקלטת המסך הופסקה.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="695"/>
+        <location filename="../host/ui/host_window.cc" line="728"/>
         <source>Settings storage is unavailable.</source>
         <translation>אחסון ההגדרות אינו זמין.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="765"/>
+        <location filename="../host/ui/host_window.cc" line="798"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>אם תצא מ-Aspia, לא ניתן יהיה להתחבר למחשב זה עד שתפעיל שוב את המחשב או את Aspia באופן ידני. האם אתה בטוח שברצונך לצאת מהיישום?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="932"/>
+        <location filename="../host/ui/host_window.cc" line="959"/>
+        <source>Not connected to service</source>
+        <translation>לא מחובר לשירות</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>מתחבר לנתב...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="937"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>מחובר לנתב</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="942"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>שגיאת חיבור</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1009"/>
+        <location filename="../host/ui/host_window.cc" line="1050"/>
         <source>IP addresses:</source>
         <translation>כתובות IP:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1013"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -5911,12 +5896,12 @@ Saved passwords imported: %4</source>
         <translation>האם אתה בטוח שברצונך למחוק את המשתמש &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="291"/>
         <source>Failed to get list of users.</source>
         <translation>קבלת רשימת המשתמשים נכשלה.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="434"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n משתמש</numerusform>

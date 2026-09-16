@@ -506,26 +506,6 @@ Přidané routery: %4</translation>
         <translation>Uložit přihlašovací údaje</translation>
     </message>
     <message>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation type="vanished">Zadejte přihlašovací údaje pro připojení k hostiteli.</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">Uživatelské jméno</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">Jednorázové heslo</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Zrušit</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Připojit</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>Uživatelské jméno nemůže být prázdné.</translation>
@@ -541,47 +521,47 @@ Přidané routery: %4</translation>
     <message>
         <location filename="../client/android/authorization_window.cc" line="52"/>
         <source>Authorization</source>
-        <translation type="unfinished">Autorizace</translation>
+        <translation>Autorizace</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished">Zadejte přihlašovací údaje pro připojení k hostiteli.</translation>
+        <translation>Zadejte přihlašovací údaje pro připojení k hostiteli.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="63"/>
         <source>Username</source>
-        <translation type="unfinished">Uživatelské jméno</translation>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">Heslo</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="69"/>
         <source>Connect</source>
-        <translation type="unfinished">Připojit</translation>
+        <translation>Připojit</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>One-time password</source>
-        <translation type="unfinished">Jednorázové heslo</translation>
+        <translation>Jednorázové heslo</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>Save credentials</source>
-        <translation type="unfinished">Uložit přihlašovací údaje</translation>
+        <translation>Uložit přihlašovací údaje</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="148"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">Uživatelské jméno nemůže být prázdné.</translation>
+        <translation>Uživatelské jméno nemůže být prázdné.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Heslo nemůže být prázdné.</translation>
+        <translation>Heslo nemůže být prázdné.</translation>
     </message>
 </context>
 <context>
@@ -3059,9 +3039,9 @@ Heslo: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="519"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
-        <location filename="../host/ui/host_window.cc" line="1012"/>
+        <location filename="../host/ui/host_window.cc" line="552"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
+        <location filename="../host/ui/host_window.cc" line="1053"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3077,7 +3057,7 @@ Heslo: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="927"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>Router je zakázán</translation>
     </message>
@@ -3143,7 +3123,7 @@ Heslo: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="711"/>
+        <location filename="../host/ui/host_window.cc" line="744"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
@@ -3183,53 +3163,58 @@ Heslo: %2</translation>
         <translation>Zobrazit chat</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="282"/>
-        <location filename="../host/ui/host_window.cc" line="706"/>
+        <location filename="../host/ui/host_window.cc" line="287"/>
+        <location filename="../host/ui/host_window.cc" line="739"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="514"/>
+        <location filename="../host/ui/host_window.cc" line="547"/>
         <source>Screen recording has started.</source>
         <translation>Nahrávání obrazovky bylo spuštěno.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording stopped.</source>
         <translation>Nahrávání obrazovky bylo zastaveno.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="695"/>
+        <location filename="../host/ui/host_window.cc" line="728"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="765"/>
+        <location filename="../host/ui/host_window.cc" line="798"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Pokud ukončíte Aspia, nebude možné se k tomuto počítači připojit, dokud počítač nebo Aspia znovu ručně nezapnete. Opravdu chcete aplikaci ukončit?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="932"/>
+        <location filename="../host/ui/host_window.cc" line="959"/>
+        <source>Not connected to service</source>
+        <translation>Nepřipojeno ke službě</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>Připojování k routeru...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="937"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>Připojeno k routeru</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="942"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>Chyba připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1009"/>
+        <location filename="../host/ui/host_window.cc" line="1050"/>
         <source>IP addresses:</source>
         <translation>IP adresy:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1013"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4872,7 +4857,7 @@ Importovaná uložená hesla: %4</translation>
     <message>
         <location filename="../base/gui_application.cc" line="73"/>
         <source>QT_LAYOUT_DIRECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>LTR</translation>
     </message>
 </context>
 <context>
@@ -5938,12 +5923,12 @@ Importovaná uložená hesla: %4</translation>
         <translation>Opravdu chcete odstranit uživatele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="291"/>
         <source>Failed to get list of users.</source>
         <translation>Nepodařilo se získat seznam uživatelů.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="434"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n uživatel</numerusform>

@@ -506,26 +506,6 @@ Rutere lagt til: %4</translation>
         <translation>Lagre påloggingsinformasjon</translation>
     </message>
     <message>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation type="vanished">Skriv inn påloggingsinformasjonen for å koble til verten.</translation>
-    </message>
-    <message>
-        <source>Username</source>
-        <translation type="vanished">Brukernavn</translation>
-    </message>
-    <message>
-        <source>One-time password</source>
-        <translation type="vanished">Engangspassord</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Avbryt</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Koble til</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="181"/>
         <source>Username cannot be empty.</source>
         <translation>Brukernavnet kan ikke være tomt.</translation>
@@ -541,47 +521,47 @@ Rutere lagt til: %4</translation>
     <message>
         <location filename="../client/android/authorization_window.cc" line="52"/>
         <source>Authorization</source>
-        <translation type="unfinished">Autorisasjon</translation>
+        <translation>Autorisasjon</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>Enter the credentials to connect to the host.</source>
-        <translation type="unfinished">Skriv inn påloggingsinformasjonen for å koble til verten.</translation>
+        <translation>Skriv inn påloggingsinformasjonen for å koble til verten.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="63"/>
         <source>Username</source>
-        <translation type="unfinished">Brukernavn</translation>
+        <translation>Brukernavn</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="66"/>
         <source>Password</source>
-        <translation type="unfinished">Passord</translation>
+        <translation>Passord</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="69"/>
         <source>Connect</source>
-        <translation type="unfinished">Koble til</translation>
+        <translation>Koble til</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>One-time password</source>
-        <translation type="unfinished">Engangspassord</translation>
+        <translation>Engangspassord</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="93"/>
         <source>Save credentials</source>
-        <translation type="unfinished">Lagre påloggingsinformasjon</translation>
+        <translation>Lagre påloggingsinformasjon</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="148"/>
         <source>Username cannot be empty.</source>
-        <translation type="unfinished">Brukernavnet kan ikke være tomt.</translation>
+        <translation>Brukernavnet kan ikke være tomt.</translation>
     </message>
     <message>
         <location filename="../client/android/authorization_window.cc" line="155"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Passordet kan ikke være tomt.</translation>
+        <translation>Passordet kan ikke være tomt.</translation>
     </message>
 </context>
 <context>
@@ -3051,9 +3031,9 @@ Passord: %2</translation>
     <name>HostWindow</name>
     <message>
         <location filename="../host/ui/host_window.ui" line="26"/>
-        <location filename="../host/ui/host_window.cc" line="519"/>
-        <location filename="../host/ui/host_window.cc" line="748"/>
-        <location filename="../host/ui/host_window.cc" line="1012"/>
+        <location filename="../host/ui/host_window.cc" line="552"/>
+        <location filename="../host/ui/host_window.cc" line="781"/>
+        <location filename="../host/ui/host_window.cc" line="1053"/>
         <source>Aspia Host</source>
         <translation>Aspia Host</translation>
     </message>
@@ -3069,7 +3049,7 @@ Passord: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="198"/>
-        <location filename="../host/ui/host_window.cc" line="927"/>
+        <location filename="../host/ui/host_window.cc" line="967"/>
         <source>Router is disabled</source>
         <translation>Ruteren er deaktivert</translation>
     </message>
@@ -3135,7 +3115,7 @@ Passord: %2</translation>
     </message>
     <message>
         <location filename="../host/ui/host_window.ui" line="329"/>
-        <location filename="../host/ui/host_window.cc" line="711"/>
+        <location filename="../host/ui/host_window.cc" line="744"/>
         <source>Hide</source>
         <translation>Skjul</translation>
     </message>
@@ -3175,53 +3155,58 @@ Passord: %2</translation>
         <translation>Vis chat</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="282"/>
-        <location filename="../host/ui/host_window.cc" line="706"/>
+        <location filename="../host/ui/host_window.cc" line="287"/>
+        <location filename="../host/ui/host_window.cc" line="739"/>
         <source>Show</source>
         <translation>Vis</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="514"/>
+        <location filename="../host/ui/host_window.cc" line="547"/>
         <source>Screen recording has started.</source>
         <translation>Skjermopptak er startet.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="516"/>
+        <location filename="../host/ui/host_window.cc" line="549"/>
         <source>Screen recording stopped.</source>
         <translation>Skjermopptak er stoppet.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="695"/>
+        <location filename="../host/ui/host_window.cc" line="728"/>
         <source>Settings storage is unavailable.</source>
         <translation>Innstillingslagringen er utilgjengelig.</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="765"/>
+        <location filename="../host/ui/host_window.cc" line="798"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Hvis du avslutter Aspia, vil det ikke være mulig å koble til denne datamaskinen før du slår på datamaskinen eller Aspia igjen manuelt. Vil du virkelig avslutte programmet?</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="932"/>
+        <location filename="../host/ui/host_window.cc" line="959"/>
+        <source>Not connected to service</source>
+        <translation>Ikke tilkoblet tjenesten</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/host_window.cc" line="972"/>
         <source>Connecting to router...</source>
         <translation>Kobler til ruter...</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="937"/>
+        <location filename="../host/ui/host_window.cc" line="977"/>
         <source>Connected to router</source>
         <translation>Tilkoblet ruter</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="942"/>
+        <location filename="../host/ui/host_window.cc" line="982"/>
         <source>Connection error</source>
         <translation>Tilkoblingsfeil</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1009"/>
+        <location filename="../host/ui/host_window.cc" line="1050"/>
         <source>IP addresses:</source>
         <translation>IP-adresser:</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_window.cc" line="1013"/>
+        <location filename="../host/ui/host_window.cc" line="1054"/>
         <source>ID: %1</source>
         <translation>ID: %1</translation>
     </message>
@@ -4854,7 +4839,7 @@ Lagrede passord importert: %4</translation>
     <message>
         <location filename="../base/gui_application.cc" line="73"/>
         <source>QT_LAYOUT_DIRECTION</source>
-        <translation type="unfinished"></translation>
+        <translation>LTR</translation>
     </message>
 </context>
 <context>
@@ -5911,12 +5896,12 @@ Lagrede passord importert: %4</translation>
         <translation>Er du sikker på at du vil slette brukeren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="287"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="291"/>
         <source>Failed to get list of users.</source>
         <translation>Kunne ikke hente listen over brukere.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="430"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="434"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n bruker</numerusform>
