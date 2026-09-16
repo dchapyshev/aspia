@@ -365,6 +365,7 @@ void HostWindow::onStatusChanged(UserIpcWorker::Status status)
 
         LOG(INFO) << "The connection to the service was successfully established.";
         connected_to_service_ = true;
+        updateStatusBar();
 
         QMetaObject::invokeMethod(ipc_worker_, &UserIpcWorker::onOneTimeSessions,
             Qt::QueuedConnection, calcOneTimeSessions());
@@ -406,6 +407,7 @@ void HostWindow::onStatusChanged(UserIpcWorker::Status status)
         LOG(INFO) << "The connection to the service has not been established. "
                      "The application works offline.";
         connected_to_service_ = false;
+        updateStatusBar();
     }
     else
     {
@@ -952,31 +954,39 @@ void HostWindow::updateStatusBar()
     QString message;
     QString icon;
 
-    switch (last_state_)
+    if (!connected_to_service_)
     {
-        case proto::user::RouterState::DISABLED:
-            message = tr("Router is disabled");
-            icon = ":/img/close.svg";
-            break;
+        message = tr("Not connected to service");
+        icon = ":/img/close.svg";
+    }
+    else
+    {
+        switch (last_state_)
+        {
+            case proto::user::RouterState::DISABLED:
+                message = tr("Router is disabled");
+                icon = ":/img/close.svg";
+                break;
 
-        case proto::user::RouterState::CONNECTING:
-            message = tr("Connecting to router...");
-            icon = ":/img/replay.svg";
-            break;
+            case proto::user::RouterState::CONNECTING:
+                message = tr("Connecting to router...");
+                icon = ":/img/replay.svg";
+                break;
 
-        case proto::user::RouterState::CONNECTED:
-            message = tr("Connected to router");
-            icon = ":/img/done.svg";
-            break;
+            case proto::user::RouterState::CONNECTED:
+                message = tr("Connected to router");
+                icon = ":/img/done.svg";
+                break;
 
-        case proto::user::RouterState::FAILED:
-            message = tr("Connection error");
-            icon = ":/img/close.svg";
-            break;
+            case proto::user::RouterState::FAILED:
+                message = tr("Connection error");
+                icon = ":/img/close.svg";
+                break;
 
-        default:
-            NOTREACHED();
-            return;
+            default:
+                NOTREACHED();
+                return;
+        }
     }
 
     ui->label_status->setText(message);
