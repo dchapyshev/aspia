@@ -57,7 +57,7 @@ void StunWorker::onPrepare()
         return;
     }
 
-    QString listen_interface = settings.listenInterface();
+    QString listen_interface = settings.stunListenInterface();
     if (!NetUtils::isValidListenInterface(listen_interface))
     {
         LOG(ERROR) << "Invalid listen interface address";

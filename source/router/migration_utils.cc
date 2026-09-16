@@ -130,9 +130,13 @@ bool doConfigMigrate(const QJsonDocument& doc)
 
     if (root_object.contains("ListenInterface"))
     {
+        // The old config bound every listener to the one address.
         QString value = root_object["ListenInterface"].toString();
         LOG(INFO) << "ListenInterface:" << value;
-        settings.setListenInterface(value);
+        settings.setClientListenInterface(value);
+        settings.setHostListenInterface(value);
+        settings.setRelayListenInterface(value);
+        settings.setStunListenInterface(value);
     }
 
     // Values the old configuration may lack; issue them while write access is available.

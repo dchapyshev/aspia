@@ -155,7 +155,7 @@ protected:
 
         Settings settings;
         settings.setHostPrivateKey(SecureByteArray(router_keys_.privateKey()));
-        settings.setListenInterface("127.0.0.1");
+        settings.setHostListenInterface("127.0.0.1");
         settings.setHostPort(host_port_);
         settings.setLegacyHostPort(pickFreePort());
         settings.sync();

@@ -81,7 +81,7 @@ void ClientWorker::onPrepare()
 
     Settings settings;
 
-    QString listen_interface = settings.listenInterface();
+    QString listen_interface = settings.clientListenInterface();
     if (!NetUtils::isValidListenInterface(listen_interface))
     {
         LOG(ERROR) << "Invalid listen interface address";

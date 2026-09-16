@@ -35,6 +35,7 @@ const QByteArray kRelaySection = "relay"_ba;
 const QByteArray kRouterSection = "router"_ba;
 const QByteArray kStunSection = "stun"_ba;
 
+const QByteArray kListenInterfaceKey = "listen_interface"_ba;
 const QByteArray kWhiteListKey = "white_list"_ba;
 
 // A semicolon starts a comment in an ini file.
@@ -93,11 +94,14 @@ bool Settings::hasError() const
 //--------------------------------------------------------------------------------------------------
 void Settings::reset()
 {
-    setListenInterface(QString());
     setHostPort(DEFAULT_ROUTER_HOST_TCP_PORT);
     setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
     setRelayPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
     setLegacyHostPort(DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT);
+    setClientListenInterface(QString());
+    setHostListenInterface(QString());
+    setRelayListenInterface(QString());
+    setStunListenInterface(QString());
     setHostPrivateKey(SecureByteArray());
     setRelayPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
@@ -111,18 +115,6 @@ void Settings::reset()
 bool Settings::sync()
 {
     return ini_.sync();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setListenInterface(const QString& iface)
-{
-    ini_.setStringValue(kRouterSection, "listen_interface", iface);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Settings::listenInterface() const
-{
-    return ini_.stringValue(kRouterSection, "listen_interface");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -171,6 +163,54 @@ void Settings::setRelayPort(quint16 port)
 quint16 Settings::relayPort() const
 {
     return ini_.uint16Value(kRelaySection, "port", DEFAULT_ROUTER_RELAY_TCP_PORT);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setClientListenInterface(const QString& iface)
+{
+    setListenInterface(kClientSection, iface);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::clientListenInterface() const
+{
+    return listenInterface(kClientSection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setHostListenInterface(const QString& iface)
+{
+    setListenInterface(kHostSection, iface);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::hostListenInterface() const
+{
+    return listenInterface(kHostSection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setRelayListenInterface(const QString& iface)
+{
+    setListenInterface(kRelaySection, iface);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::relayListenInterface() const
+{
+    return listenInterface(kRelaySection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setStunListenInterface(const QString& iface)
+{
+    setListenInterface(kStunSection, iface);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::stunListenInterface() const
+{
+    return listenInterface(kStunSection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -267,6 +307,18 @@ void Settings::setStunPort(quint16 port)
 quint16 Settings::stunPort() const
 {
     return ini_.uint16Value(kStunSection, "port", DEFAULT_STUN_PORT);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setListenInterface(const QByteArray& section, const QString& iface)
+{
+    ini_.setStringValue(section, kListenInterfaceKey, iface);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::listenInterface(const QByteArray& section) const
+{
+    return ini_.stringValue(section, kListenInterfaceKey);
 }
 
 //--------------------------------------------------------------------------------------------------

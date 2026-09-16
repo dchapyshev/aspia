@@ -39,9 +39,6 @@ public:
     void reset();
     bool sync();
 
-    void setListenInterface(const QString& iface);
-    QString listenInterface() const;
-
     void setLegacyHostPort(quint16 port);
     quint16 legacyHostPort() const;
 
@@ -53,6 +50,19 @@ public:
 
     void setRelayPort(quint16 port);
     quint16 relayPort() const;
+
+    // The address a listener binds to. Empty means every interface.
+    void setClientListenInterface(const QString& iface);
+    QString clientListenInterface() const;
+
+    void setHostListenInterface(const QString& iface);
+    QString hostListenInterface() const;
+
+    void setRelayListenInterface(const QString& iface);
+    QString relayListenInterface() const;
+
+    void setStunListenInterface(const QString& iface);
+    QString stunListenInterface() const;
 
     void setHostPrivateKey(const SecureByteArray& private_key);
     SecureByteArray hostPrivateKey() const;
@@ -81,6 +91,9 @@ public:
     quint16 stunPort() const;
 
 private:
+    void setListenInterface(const QByteArray& section, const QString& iface);
+    QString listenInterface(const QByteArray& section) const;
+
     void setWhiteList(const QByteArray& section, const WhiteList& value);
     WhiteList whiteList(const QByteArray& section) const;
 
