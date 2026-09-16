@@ -21,6 +21,10 @@
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
+#include <QCoreApplication>
+#include <QFileInfo>
+
+#include "base/session_id.h"
 #include "base/win/scoped_object.h"
 
 #include <qt_windows.h>
@@ -175,6 +179,29 @@ QString ProcessUtil::filePath(quint32 pid)
 }
 
 #if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+// static
+bool ProcessUtil::isLaunchedByService()
+{
+    const quint32 parent_pid = parentProcessId(currentProcessId());
+    if (!parent_pid)
+        return false;
+
+    DWORD parent_session_id = 0;
+    if (!ProcessIdToSessionId(parent_pid, &parent_session_id))
+    {
+        PLOG(ERROR) << "ProcessIdToSessionId failed (pid:" << parent_pid << ")";
+        return false;
+    }
+
+    if (parent_session_id != kServiceSessionId)
+        return false;
+
+    const QString parent_path = QFileInfo(filePath(parent_pid)).canonicalFilePath();
+    return !parent_path.isEmpty() &&
+           parent_path == QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
+}
+
 //--------------------------------------------------------------------------------------------------
 // static
 bool ProcessUtil::isProcessElevated()

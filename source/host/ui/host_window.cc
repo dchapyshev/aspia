@@ -32,6 +32,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/process_util.h"
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "common/clipboard.h"
@@ -85,6 +86,10 @@ HostWindow::HostWindow(QWidget* parent)
       elevate_util_(ElevateUtil::create())
 {
     LOG(INFO) << "Ctor";
+
+#if defined(Q_OS_WINDOWS)
+    launched_by_service_ = ProcessUtil::isLaunchedByService();
+#endif // defined(Q_OS_WINDOWS)
 
     UserSettings user_settings;
 
@@ -366,8 +371,34 @@ void HostWindow::onStatusChanged(UserIpcWorker::Status status)
     }
     else if (status == UserIpcWorker::Status::DISCONNECTED_FROM_SERVICE)
     {
-        LOG(INFO) << "The connection to the service is lost. The application will be closed.";
         connected_to_service_ = false;
+
+#if defined(Q_OS_WINDOWS)
+        if (!launched_by_service_)
+        {
+            LOG(INFO) << "The connection to the service is lost. The application works offline.";
+
+            last_state_ = proto::user::RouterState::DISABLED;
+            updateStatusBar();
+
+            ui->button_new_password->setEnabled(false);
+            ui->edit_id->setText(kUnknownValue);
+            ui->edit_password->setText(kUnknownValue);
+            updateTrayIconTooltip();
+
+            if (notifier_)
+                notifier_->closeNotifier();
+
+            if (clipboard_)
+                clipboard_->clearClipboard();
+            clipboard_.reset();
+
+            chat_widget_->setChatEnabled(false);
+            return;
+        }
+#endif // defined(Q_OS_WINDOWS)
+
+        LOG(INFO) << "The connection to the service is lost. The application will be closed.";
         realClose();
     }
     else if (status == UserIpcWorker::Status::SERVICE_NOT_AVAILABLE)

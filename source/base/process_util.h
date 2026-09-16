@@ -37,6 +37,7 @@ public:
     static QString filePath(quint32 pid);
 
 #if defined(Q_OS_WINDOWS)
+    static bool isLaunchedByService();
     static bool isProcessElevated();
 
     enum class ExecuteMode { NORMAL, ELEVATE };

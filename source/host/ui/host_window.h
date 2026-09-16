@@ -94,6 +94,9 @@ private:
 
     std::unique_ptr<Ui::HostWindow> ui;
     std::unique_ptr<ElevateUtil> elevate_util_;
+#if defined(Q_OS_WINDOWS)
+    bool launched_by_service_ = false;
+#endif // defined(Q_OS_WINDOWS)
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
     bool height_pinned_ = false;
