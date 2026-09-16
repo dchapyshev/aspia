@@ -268,12 +268,17 @@ ManagementTab::ManagementTab(QWidget* parent)
         ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book
     });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
-    addActions(ActionRole::EDIT, { ui->action_edit_workspace, ui->action_delete_workspace });
     addActions(ActionRole::EDIT,
     {
-        ui->action_add_router, ui->action_edit_router, ui->action_delete_router,
-        ui->action_change_router_password, ui->action_clear_router_events,
-        ui->action_add_workspace
+        ui->action_add_router, ui->action_edit_router, ui->action_delete_router
+    });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace
+    });
+    addActions(ActionRole::EDIT,
+    {
+        ui->action_change_router_password, ui->action_clear_router_events
     });
     addActions(ActionRole::EDIT,
     {
