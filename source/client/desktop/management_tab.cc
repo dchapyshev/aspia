@@ -1454,13 +1454,6 @@ void ManagementTab::onImportOldBookAction()
 {
     LOG(INFO) << "[ACTION] Import old address book";
 
-    SidebarItem* sidebar_item = ui->sidebar->currentItem();
-    if (!sidebar_item || sidebar_item->itemType() != SidebarItem::LOCAL_GROUP)
-    {
-        LOG(INFO) << "No current local group item";
-        return;
-    }
-
     QString file_path = QFileDialog::getOpenFileName(
         this,
         tr("Import Old Address Book"),
@@ -1857,9 +1850,6 @@ void ManagementTab::updateActionsState()
 
     ui->action_reload->setVisible(false);
     ui->action_save->setVisible(false);
-    ui->action_import_old_book->setVisible(false);
-    ui->action_export_book->setVisible(false);
-    ui->action_import_book->setVisible(false);
     ui->action_disconnect->setVisible(false);
     ui->action_disconnect_all->setVisible(false);
     ui->action_host_remove->setVisible(false);
@@ -1887,9 +1877,6 @@ void ManagementTab::updateActionsState()
     else if (sidebar_item && sidebar_item->itemType() == SidebarItem::LOCAL_GROUP)
     {
         ui->action_online_check->setVisible(true);
-        ui->action_import_old_book->setVisible(true);
-        ui->action_export_book->setVisible(true);
-        ui->action_import_book->setVisible(true);
 
         ui->action_add_group->setVisible(true);
         ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
@@ -1981,6 +1968,13 @@ void ManagementTab::updateActionsState()
         ui->action_system_info_connect->setVisible(has_host);
         ui->action_terminal_connect->setVisible(has_host);
     }
+
+    // The address book is saved and restored as a whole, routers included, so its actions go with
+    // every item of the sidebar.
+    const bool book_actions = sidebar_item && current_content_ != search_widget_;
+    ui->action_import_old_book->setVisible(book_actions);
+    ui->action_export_book->setVisible(book_actions);
+    ui->action_import_book->setVisible(book_actions);
 
     if (sidebar_item && sidebar_item->itemType() == SidebarItem::ROUTER)
     {
