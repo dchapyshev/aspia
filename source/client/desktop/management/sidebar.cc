@@ -198,7 +198,11 @@ void Sidebar::loadRouters()
 void Sidebar::reloadRouters()
 {
     QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
+    if (!Database::instance().routerList(&routers))
+    {
+        LOG(ERROR) << "Unable to read the router list";
+        return;
+    }
 
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());

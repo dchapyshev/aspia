@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_DESKTOP_MANAGEMENT_LOCAL_HOST_DIALOG_H
-#define CLIENT_DESKTOP_MANAGEMENT_LOCAL_HOST_DIALOG_H
+#ifndef CLIENT_DESKTOP_CREDENTIAL_DIALOG_H
+#define CLIENT_DESKTOP_CREDENTIAL_DIALOG_H
 
 #include <QDialog>
 
@@ -26,32 +26,29 @@
 class QAbstractButton;
 
 namespace Ui {
-class LocalHostDialog;
+class CredentialDialog;
 } // namespace Ui
 
-class LocalHostDialog final : public QDialog
+class CredentialDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* parent = nullptr);
-    ~LocalHostDialog() final;
+    // |credential_id| of -1 adds a record.
+    CredentialDialog(qint64 credential_id, QWidget* parent = nullptr);
+    ~CredentialDialog() final;
 
-    qint64 entryId() const { return entry_id_; }
+    // The record written, once the dialog is accepted.
+    qint64 credentialId() const { return credential_id_; }
 
 private slots:
-    void onRouterChanged(int index);
-    void onSharedToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    void updateAddressLabel();
+    std::unique_ptr<Ui::CredentialDialog> ui;
+    qint64 credential_id_ = -1;
 
-    std::unique_ptr<Ui::LocalHostDialog> ui;
-    qint64 entry_id_ = -1;
-    qint64 group_id_ = 0;
-
-    Q_DISABLE_COPY_MOVE(LocalHostDialog)
+    Q_DISABLE_COPY_MOVE(CredentialDialog)
 };
 
-#endif // CLIENT_DESKTOP_MANAGEMENT_LOCAL_HOST_DIALOG_H
+#endif // CLIENT_DESKTOP_CREDENTIAL_DIALOG_H

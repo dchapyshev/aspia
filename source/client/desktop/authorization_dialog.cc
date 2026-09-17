@@ -178,7 +178,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             if (ui->edit_username->text().isEmpty())
             {
                 LOG(ERROR) << "Empty user name";
-                MsgBox::warning(this, tr("Username cannot be empty."));
+                MsgBox::warning(this, tr("User name cannot be empty."));
                 return;
             }
         }

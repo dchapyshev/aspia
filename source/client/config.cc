@@ -44,6 +44,12 @@ QByteArray routerHostAad(qint64 router_id, HostId host_id)
            QByteArray::number(host_id);
 }
 
+//--------------------------------------------------------------------------------------------------
+QByteArray credentialAad(const QString& guid)
+{
+    return QByteArrayLiteral("credentials/") + guid.toUtf8();
+}
+
 SecureString toSecureString(const std::string& value)
 {
     return SecureString::fromUtf8(
@@ -171,12 +177,16 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
 bool RouterHostConfig::isValid() const
 {
     return router_id_ > 0 && host_id_ != kInvalidHostId && !isTempHostId(host_id_) &&
-           !username_.isEmpty() && !password_.isEmpty();
+           username_.isEmpty() == password_.isEmpty() &&
+           (!username_.isEmpty() || credential_id_ > 0);
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterHostConfig::encryptedData() const
 {
+    if (username_.isEmpty() && password_.isEmpty())
+        return QByteArray();
+
     proto::storage::HostBlob data;
     data.set_username(username_.toStdString());
 
@@ -274,6 +284,52 @@ bool LocalGroupConfig::isValid() const
 {
     return !name_.isEmpty() && name_.length() <= kMaxNameLength &&
            comment_.length() <= kMaxCommentLength;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialConfig::isValid() const
+{
+    return !display_name_.isEmpty() && display_name_.length() <= kMaxNameLength &&
+           !username_.isEmpty() && !password_.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<QByteArray> CredentialConfig::encryptedData() const
+{
+    proto::storage::HostBlob data;
+    data.set_username(username_.toStdString());
+
+    const SecureByteArray password = password_.toUtf8();
+    data.set_password(password.constData(), static_cast<size_t>(password.size()));
+
+    std::optional<QByteArray> sealed = sealMessage(data, credentialAad(guid_));
+
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return sealed;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialConfig::setEncryptedData(const QByteArray& blob)
+{
+    username_.clear();
+    password_.clear();
+
+    if (blob.isEmpty())
+        return true;
+
+    proto::storage::HostBlob data;
+    if (!unsealMessage(blob, credentialAad(guid_), &data))
+        return false;
+
+    username_ = QString::fromStdString(data.username());
+    password_ = toSecureString(data.password());
+
+    memZero(data.mutable_username());
+    memZero(data.mutable_password());
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

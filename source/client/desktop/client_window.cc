@@ -91,30 +91,24 @@ ClientWindow::~ClientWindow()
 bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
 {
     LOG(INFO) << "Connecting to host";
-
-    // Set the window title.
     setClientTitle(host, session_type_);
 
     bool can_save_credentials = host.entryId() > 0;
 
-    if (host.entryId() <= 0 && host.routerId() > 0)
-    {
-        const HostId host_id = stringToHostId(host.address());
-        if (!isTempHostId(host_id))
-        {
-            can_save_credentials = true;
+    if (host.entryId() <= 0 && host.routerId() > 0 && !isTempHostId(stringToHostId(host.address())))
+        can_save_credentials = true;
 
-            if (host.username().isEmpty() || host.password().isEmpty())
-            {
-                std::optional<RouterHostConfig> saved_credentials =
-                    Database::instance().findRouterHost(host.routerId(), host_id);
-                if (saved_credentials.has_value())
-                {
-                    LOG(INFO) << "Using saved credentials of host" << host_id;
-                    host.setUsername(saved_credentials->username());
-                    host.setPassword(saved_credentials->password());
-                }
-            }
+    if (can_save_credentials)
+    {
+        Database& db = Database::instance();
+        std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
+            db.localHostCredentials(host.entryId()) :
+            db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
+        if (credentials.has_value())
+        {
+            LOG(INFO) << "Using stored credentials of host" << host.address();
+            host.setUsername(credentials->first);
+            host.setPassword(credentials->second);
         }
     }
 

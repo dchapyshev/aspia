@@ -1525,9 +1525,10 @@ void ManagementTab::onExportBookAction()
            "Routers exported: %1\n"
            "Groups exported: %2\n"
            "Hosts exported: %3\n"
-           "Saved passwords exported: %4")
+           "Saved passwords exported: %4\n"
+           "Credentials exported: %5")
             .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts));
+            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1619,9 +1620,10 @@ void ManagementTab::onImportBookAction()
            "Routers imported: %1\n"
            "Groups imported: %2\n"
            "Hosts imported: %3\n"
-           "Saved passwords imported: %4")
+           "Saved passwords imported: %4\n"
+           "Credentials imported: %5")
             .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts));
+            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
 
     reloadRouters();
     ui->sidebar->reloadGroups();

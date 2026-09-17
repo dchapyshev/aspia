@@ -25,6 +25,7 @@ class Button;
 class ComboBox;
 class Label;
 class LineEdit;
+class Switch;
 class TextArea;
 
 // Full-screen editor for a local host. The router selector switches the address field between a
@@ -50,18 +51,22 @@ signals:
 
 private slots:
     void onRouterChanged();
+    void onSharedToggled(bool checked);
     void onSaveClicked();
     void onDeleteClicked();
 
 private:
     void loadRouters(qint64 selected_router_id);
+    void loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
     ComboBox* router_ = nullptr;
     LineEdit* name_ = nullptr;
     LineEdit* address_ = nullptr;
+    Switch* shared_ = nullptr;
     LineEdit* username_ = nullptr;
     LineEdit* password_ = nullptr;
+    ComboBox* credential_ = nullptr;
     TextArea* comment_ = nullptr;
     Label* error_ = nullptr;
     Button* delete_button_ = nullptr;

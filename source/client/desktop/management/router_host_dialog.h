@@ -47,6 +47,7 @@ public:
 private slots:
     void onGroupListReceived(const RouterGroupList& list);
     void onHostResultReceived(const proto::router::HostResult& result);
+    void onSharedToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

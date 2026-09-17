@@ -675,31 +675,23 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (desktop_ || file_transfer_ || chat_ || authorization_)
         return;
 
-    // A local host keeps the credentials in itself, so it always has somewhere to keep them.
     bool can_save_credentials = host.entryId() > 0;
 
-    if (host.entryId() <= 0 && host.routerId() > 0)
+    if (host.entryId() <= 0 && host.routerId() > 0 && !isTempHostId(stringToHostId(host.address())))
+        can_save_credentials = true;
+
+    if (can_save_credentials)
     {
-        const HostId host_id = stringToHostId(host.address());
-
-        // A temporary host id is handed out at random and comes back for another machine, so what
-        // was saved under it would be sent to a host the user never gave it to.
-        if (!isTempHostId(host_id))
+        Database& db = Database::instance();
+        std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
+            db.localHostCredentials(host.entryId()) :
+            db.routerHostCredentials(host.routerId(), stringToHostId(host.address()));
+        if (credentials.has_value())
         {
-            can_save_credentials = true;
+            LOG(INFO) << "Using stored credentials of host" << host.address();
 
-            if (host.username().isEmpty() || host.password().isEmpty())
-            {
-                std::optional<RouterHostConfig> saved_credentials =
-                    Database::instance().findRouterHost(host.routerId(), host_id);
-                if (saved_credentials.has_value())
-                {
-                    LOG(INFO) << "Using saved credentials of host" << host_id;
-
-                    host.setUsername(saved_credentials->username());
-                    host.setPassword(saved_credentials->password());
-                }
-            }
+            host.setUsername(credentials->first);
+            host.setPassword(credentials->second);
         }
     }
 

@@ -25,6 +25,10 @@ collect_sources(SOURCE_CLIENT_ANDROID
     chat_view.h
     chat_window.cc
     chat_window.h
+    credential_editor.cc
+    credential_editor.h
+    credentials_widget.cc
+    credentials_widget.h
     desktop_view.cc
     desktop_view.h
     desktop_window.cc

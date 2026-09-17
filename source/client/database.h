@@ -23,6 +23,7 @@
 #include <QString>
 
 #include <optional>
+#include <utility>
 
 #include "base/sql/sql_database.h"
 #include "client/config.h"
@@ -54,6 +55,7 @@ public:
     bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
     std::optional<LocalHostConfig> findLocalHost(qint64 entry_id) const;
     std::optional<LocalHostConfig> findLocalHostByGuid(const QString& guid) const;
+    std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
 
     // Local Search.
     bool searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
@@ -80,17 +82,28 @@ public:
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(qint64 router_id, HostId host_id);
     std::optional<RouterHostConfig> findRouterHost(qint64 router_id, HostId host_id) const;
+    std::optional<std::pair<QString, SecureString>> routerHostCredentials(
+        qint64 router_id, HostId host_id) const;
     bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
+
+    // Credentials.
+    bool credentialList(QList<CredentialConfig>* credentials) const;
+    bool addCredential(CredentialConfig& credential);
+    bool modifyCredential(const CredentialConfig& credential);
+    bool removeCredential(qint64 credential_id);
+    std::optional<CredentialConfig> findCredential(qint64 credential_id) const;
+    std::optional<CredentialConfig> findCredentialByGuid(const QString& guid) const;
 
     // Puts these records in place of the address book, all of them or none. Everything the book
     // held is deleted first. A record is named by a key of its own instead of an id, negative and
     // unique among the lists, and the records linking to it carry that key. A parent comes before
-    // the records naming it.
+    // the records naming it, and the credentials before the hosts entered with them.
     bool import(const QList<RouterConfig>& routers,
                 const QList<LocalGroupConfig>& local_groups,
                 const QList<LocalHostConfig>& local_hosts,
-                const QList<RouterHostConfig>& router_hosts);
+                const QList<RouterHostConfig>& router_hosts,
+                const QList<CredentialConfig>& credentials);
 
     // Settings.
     QString displayName() const;
@@ -111,6 +124,7 @@ public:
     bool reencryptAll(const QList<LocalHostConfig>& local_hosts,
                       const QList<RouterConfig>& routers,
                       const QList<RouterHostConfig>& router_hosts,
+                      const QList<CredentialConfig>& credentials,
                       const QByteArray& salt,
                       const QByteArray& verifier,
                       quint32 version);

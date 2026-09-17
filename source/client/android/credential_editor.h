@@ -16,53 +16,49 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ANDROID_ROUTER_HOST_EDITOR_H
-#define CLIENT_ANDROID_ROUTER_HOST_EDITOR_H
+#ifndef CLIENT_ANDROID_CREDENTIAL_EDITOR_H
+#define CLIENT_ANDROID_CREDENTIAL_EDITOR_H
 
 #include <QWidget>
 
-#include "base/peer/host_id.h"
-
-class ComboBox;
+class Button;
 class Label;
 class LineEdit;
-class Switch;
 
-class RouterHostEditor final : public QWidget
+class CredentialEditor final : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RouterHostEditor(QWidget* parent = nullptr);
-    ~RouterHostEditor() final;
+    explicit CredentialEditor(QWidget* parent = nullptr);
+    ~CredentialEditor() final;
 
-    // Loads what is kept for the host |host_id| of the router |router_id| into the form. Returns
-    // false when nothing can be kept for such a host; the form keeps its previous state and must
-    // not be shown.
-    bool prepareForEdit(qint64 router_id, HostId host_id);
+    // Resets the form for adding a new record.
+    void prepareForAdd();
+
+    // Loads the record |credential_id| into the form for editing. Returns false if the record does
+    // not exist; the form keeps its previous state and must not be shown.
+    bool prepareForEdit(qint64 credential_id);
 
 signals:
-    // Emitted after the credentials have been saved or forgotten.
+    // Emitted after the record has been saved to or removed from the database.
     void sig_accepted();
 
 private slots:
-    void onSharedToggled(bool checked);
     void onSaveClicked();
+    void onDeleteClicked();
 
 private:
-    void loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
-    Switch* shared_ = nullptr;
+    LineEdit* name_ = nullptr;
     LineEdit* username_ = nullptr;
     LineEdit* password_ = nullptr;
-    Label* note_ = nullptr;
-    ComboBox* credential_ = nullptr;
     Label* error_ = nullptr;
-    qint64 router_id_ = 0;
-    HostId host_id_ = kInvalidHostId;
+    Button* delete_button_ = nullptr;
+    qint64 credential_id_ = -1;
 
-    Q_DISABLE_COPY_MOVE(RouterHostEditor)
+    Q_DISABLE_COPY_MOVE(CredentialEditor)
 };
 
-#endif // CLIENT_ANDROID_ROUTER_HOST_EDITOR_H
+#endif // CLIENT_ANDROID_CREDENTIAL_EDITOR_H

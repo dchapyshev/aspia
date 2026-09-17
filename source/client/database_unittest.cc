@@ -19,6 +19,7 @@
 #include "client/database.h"
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QTemporaryDir>
 #include <QThread>
 
@@ -30,6 +31,8 @@
 #include "base/crypto/secure_byte_array.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
+#include "client/master_password.h"
+#include "client/router_test_fixture.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -175,6 +178,30 @@ protected:
         return hosts;
     }
 
+    CredentialConfig credential(const QString& name, const QString& username,
+                                const QString& password)
+    {
+        CredentialConfig config;
+        config.setDisplayName(name);
+        config.setUsername(username);
+        config.setPassword(SecureString(password));
+        return config;
+    }
+
+    qint64 addCredential(const QString& name, const QString& username, const QString& password)
+    {
+        CredentialConfig config = credential(name, username, password);
+        EXPECT_TRUE(db_.addCredential(config));
+        return config.id();
+    }
+
+    QList<CredentialConfig> credentialList()
+    {
+        QList<CredentialConfig> credentials;
+        EXPECT_TRUE(db_.credentialList(&credentials));
+        return credentials;
+    }
+
     QList<HostId> outdatedRouterHosts(qint64 router_id)
     {
         QList<HostId> hosts;
@@ -300,7 +327,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     // one that left it alone.
     QThread::msleep(1100);
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
     EXPECT_EQ(db_.findLocalHost(entry_id)->modifyTime(), modify_time);
@@ -554,7 +581,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     QList<LocalHostConfig> hosts = allLocalHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
     std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
@@ -580,7 +607,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
     QList<RouterConfig> routers = routerList();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(),
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
     const std::optional<RouterConfig> reread = db_.findRouter(router_id);
@@ -805,7 +832,7 @@ TEST_F(DatabaseTest, EditedRouterHostCredentialsKeepTheirCheckTime)
     QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts,
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
                                  "salt", "verifier", 1));
 
     EXPECT_EQ(outdatedRouterHosts(router_id), QList<HostId>({ HostId(100501) }));
@@ -822,7 +849,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
     QList<RouterHostConfig> router_hosts = allRouterHosts();
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
-    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts,
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
                                  "salt", "verifier", 1));
 
     std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
@@ -1041,7 +1068,7 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     credentials.setUsername("user");
     credentials.setPassword(SecureString(QString("secret")));
 
-    ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }));
+    ASSERT_TRUE(db_.import({ router }, { parent, child }, { host }, { credentials }, {}));
 
     const QList<RouterConfig> routers = routerList();
     ASSERT_EQ(routers.size(), 1);
@@ -1089,8 +1116,495 @@ TEST_F(DatabaseTest, BatchWithARecordThatCannotBeWrittenLeavesNothingBehind)
     broken.setUsername("user");
     broken.setGroupId(-1);
 
-    EXPECT_FALSE(db_.import({}, { group }, { host, broken }, {}));
+    EXPECT_FALSE(db_.import({}, { group }, { host, broken }, {}, {}));
 
     EXPECT_EQ(allLocalGroups().size(), 1);
     EXPECT_TRUE(allLocalHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A credential is named by its guid everywhere it is referred to, so every one gets a guid the
+// moment it is added, and no two share one.
+TEST_F(DatabaseTest, CredentialGetsAGuidOfItsOwn)
+{
+    const qint64 first = addCredential("first", "user", "secret");
+    const qint64 second = addCredential("second", "user", "secret");
+
+    const std::optional<CredentialConfig> stored = db_.findCredential(first);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_FALSE(stored->guid().isEmpty());
+
+    const std::optional<CredentialConfig> other = db_.findCredential(second);
+    ASSERT_TRUE(other.has_value());
+    EXPECT_NE(stored->guid(), other->guid());
+
+    CredentialConfig copy = credential("copy", "user", "secret");
+    copy.setGuid(stored->guid());
+    EXPECT_FALSE(db_.addCredential(copy));
+
+    EXPECT_EQ(credentialList().size(), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The pair goes to the database as one sealed column. What comes back out has to be what went in.
+TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
+{
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->id(), credential_id);
+    EXPECT_EQ(stored->type(), CredentialConfig::Type::HOST);
+    EXPECT_EQ(stored->displayName(), QString("office"));
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+
+    // The guid names the same record wherever it is referred to.
+    const std::optional<CredentialConfig> by_guid = db_.findCredentialByGuid(stored->guid());
+    ASSERT_TRUE(by_guid.has_value());
+    EXPECT_EQ(by_guid->id(), credential_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit changes the name and the pair and keeps the guid, since the records referring to it would
+// stop resolving otherwise. A record that was never added has no row to edit, and removing takes
+// the row out.
+TEST_F(DatabaseTest, CredentialIsEditedAndRemoved)
+{
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    const std::optional<CredentialConfig> before = db_.findCredential(credential_id);
+    ASSERT_TRUE(before.has_value());
+
+    // What the editor hands over: the fields of the form and the id, the guid is what the record
+    // already has.
+    CredentialConfig edited = credential("renamed", "other-user", "other-secret");
+    edited.setId(credential_id);
+    edited.setGuid(before->guid());
+    EXPECT_TRUE(db_.modifyCredential(edited));
+
+    CredentialConfig unknown = credential("unknown", "user", "secret");
+    unknown.setId(credential_id + 1);
+    EXPECT_FALSE(db_.modifyCredential(unknown));
+
+    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->guid(), before->guid());
+    EXPECT_EQ(stored->displayName(), QString("renamed"));
+    EXPECT_EQ(stored->username(), QString("other-user"));
+    EXPECT_EQ(stored->password().toString(), QString("other-secret"));
+    EXPECT_EQ(credentialList().size(), 1);
+
+    ASSERT_TRUE(db_.removeCredential(credential_id));
+    EXPECT_FALSE(db_.findCredential(credential_id).has_value());
+    EXPECT_TRUE(credentialList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid names the record from the moment it is added and is what its column is sealed for. An
+// edit changes neither: whatever guid the editor hands over, or none, the column is sealed for the
+// guid of the row, and the record opens after the edit as it did before.
+TEST_F(DatabaseTest, EditedCredentialStaysSealedForItsOwnGuid)
+{
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    const std::optional<CredentialConfig> before = db_.findCredential(credential_id);
+    ASSERT_TRUE(before.has_value());
+
+    CredentialConfig edited = credential("renamed", "other-user", "other-secret");
+    edited.setId(credential_id);
+    EXPECT_TRUE(db_.modifyCredential(edited));
+
+    std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->guid(), before->guid());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+
+    edited.setGuid("not-the-guid-of-the-row");
+    EXPECT_TRUE(db_.modifyCredential(edited));
+
+    stored = db_.findCredential(credential_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->guid(), before->guid());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every column of the table opens with the same key, so a column is sealed for its guid and does
+// not open under another one.
+TEST_F(DatabaseTest, CredentialDoesNotOpenForAnotherGuid)
+{
+    CredentialConfig config = credential("office", "user", "secret");
+    config.setGuid("first");
+
+    std::optional<QByteArray> sealed = config.encryptedData();
+    ASSERT_TRUE(sealed.has_value());
+
+    CredentialConfig other;
+    other.setGuid("second");
+
+    EXPECT_FALSE(other.setEncryptedData(*sealed));
+    EXPECT_TRUE(other.username().isEmpty());
+    EXPECT_TRUE(other.password().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A credential is a name and a whole pair. A record missing any of the three is not stored.
+TEST_F(DatabaseTest, CredentialWithoutANameOrHalfItsPairIsNotStored)
+{
+    CredentialConfig nameless = credential(QString(), "user", "secret");
+    EXPECT_FALSE(db_.addCredential(nameless));
+
+    CredentialConfig without_password = credential("office", "user", QString());
+    EXPECT_FALSE(db_.addCredential(without_password));
+
+    CredentialConfig without_user = credential("office", QString(), "secret");
+    EXPECT_FALSE(db_.addCredential(without_user));
+
+    EXPECT_TRUE(credentialList().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A change of the master password rewrites the credentials along with everything else.
+TEST_F(DatabaseTest, ReencryptionKeepsCredentialsReadable)
+{
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    QList<CredentialConfig> credentials = credentialList();
+    DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), allRouterHosts(),
+                                 credentials, "salt", "verifier", 1));
+
+    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(stored->password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The credentials of a batch are written with it and take the place of the ones the book held.
+TEST_F(DatabaseTest, BatchCarriesItsCredentials)
+{
+    addCredential("old", "user", "secret");
+
+    CredentialConfig config = credential("office", "user", "secret");
+    config.setGuid("guid-of-the-file");
+
+    ASSERT_TRUE(db_.import({}, {}, {}, {}, { config }));
+
+    const QList<CredentialConfig> stored = credentialList();
+    ASSERT_EQ(stored.size(), 1);
+    EXPECT_EQ(stored.front().guid(), QString("guid-of-the-file"));
+    EXPECT_EQ(stored.front().displayName(), QString("office"));
+    EXPECT_EQ(stored.front().password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host names the credentials it is entered with. The link is kept through an edit and comes back
+// with the record. A record of credentials that is removed leaves the host without one, and a host
+// that is removed leaves the record alone.
+TEST_F(DatabaseTest, LocalHostLinksItsCredentials)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setGroupId(group);
+    host.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addLocalHost(host));
+
+    std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->credentialId(), credential_id);
+
+    stored->setName("renamed");
+    ASSERT_TRUE(db_.modifyLocalHost(*stored));
+    EXPECT_EQ(db_.findLocalHost(host.id())->credentialId(), credential_id);
+
+    ASSERT_TRUE(db_.removeLocalHost(host.id()));
+    EXPECT_TRUE(db_.findCredential(credential_id).has_value());
+
+    LocalHostConfig other;
+    other.setName("other");
+    other.setAddress("192.168.0.2");
+    other.setGroupId(group);
+    other.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addLocalHost(other));
+
+    ASSERT_TRUE(db_.removeCredential(credential_id));
+    EXPECT_EQ(db_.findLocalHost(other.id())->credentialId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of a router host links credentials the same way. The record outlives the row and the
+// router: it belongs to the manager, and a host that is gone was only one of those entered with it.
+TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    RouterHostConfig host = routerHost(router_id, 100500, "user", "secret");
+    host.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(host));
+
+    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->credentialId(), credential_id);
+
+    ASSERT_TRUE(db_.removeCredential(credential_id));
+    EXPECT_EQ(db_.findRouterHost(router_id, 100500)->credentialId(), 0);
+
+    ASSERT_TRUE(db_.removeRouter(router_id));
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host of a router is remembered by a pair of its own or by the record of credentials it refers
+// to. A row with neither is refused, and a row with the link alone comes back with an empty pair.
+TEST_F(DatabaseTest, RouterHostIsKeptByItsLinkAlone)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    RouterHostConfig host = routerHost(router_id, 100500, QString(), QString());
+    EXPECT_FALSE(db_.addRouterHost(host));
+
+    host.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(host));
+
+    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->credentialId(), credential_id);
+    EXPECT_TRUE(stored->username().isEmpty());
+    EXPECT_TRUE(stored->password().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The hosts of a batch name the credentials of the batch by their keys, so the credentials are
+// written first and the hosts come out linked to the ids they were given.
+TEST_F(DatabaseTest, BatchLinksHostsToItsCredentials)
+{
+    CredentialConfig config = credential("office", "user", "secret");
+    config.setId(-1);
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setCredentialId(-1);
+
+    RouterConfig router;
+    router.setRouterId(-1);
+    router.setDisplayName("router");
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString(QString("router-secret")));
+
+    RouterHostConfig router_host = routerHost(-1, 100500, "user", "secret");
+    router_host.setCredentialId(-1);
+
+    ASSERT_TRUE(db_.import({ router }, {}, { host }, { router_host }, { config }));
+
+    const QList<CredentialConfig> credentials = credentialList();
+    ASSERT_EQ(credentials.size(), 1);
+
+    const QList<LocalHostConfig> hosts = allLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().credentialId(), credentials.front().id());
+
+    const QList<RouterHostConfig> router_hosts = allRouterHosts();
+    ASSERT_EQ(router_hosts.size(), 1);
+    EXPECT_EQ(router_hosts.front().credentialId(), credentials.front().id());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host is entered with the pair of the record of credentials it refers to, whatever pair of its
+// own it keeps, or with its own pair when it refers to none. Once the record is removed the host
+// refers to none and is entered with its own pair again.
+TEST_F(DatabaseTest, LocalHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "shared-user", "shared-secret");
+
+    LocalHostConfig own;
+    own.setName("own");
+    own.setAddress("192.168.0.1");
+    own.setGroupId(group);
+    own.setUsername("user");
+    own.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db_.addLocalHost(own));
+
+    LocalHostConfig linked;
+    linked.setName("linked");
+    linked.setAddress("192.168.0.2");
+    linked.setGroupId(group);
+    linked.setUsername("user");
+    linked.setPassword(SecureString("secret"));
+    linked.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addLocalHost(linked));
+
+    LocalHostConfig bare;
+    bare.setName("bare");
+    bare.setAddress("192.168.0.3");
+    bare.setGroupId(group);
+    ASSERT_TRUE(db_.addLocalHost(bare));
+
+    std::optional<std::pair<QString, SecureString>> credentials = db_.localHostCredentials(own.id());
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_EQ(credentials->first, QString("user"));
+    EXPECT_EQ(credentials->second.toString(), QString("secret"));
+
+    credentials = db_.localHostCredentials(linked.id());
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_EQ(credentials->first, QString("shared-user"));
+    EXPECT_EQ(credentials->second.toString(), QString("shared-secret"));
+
+    credentials = db_.localHostCredentials(bare.id());
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_TRUE(credentials->first.isEmpty());
+    EXPECT_TRUE(credentials->second.isEmpty());
+
+    EXPECT_FALSE(db_.localHostCredentials(bare.id() + 1).has_value());
+
+    ASSERT_TRUE(db_.removeCredential(credential_id));
+
+    credentials = db_.localHostCredentials(linked.id());
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_EQ(credentials->first, QString("user"));
+    EXPECT_EQ(credentials->second.toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for a host of a router. A host without a row is entered with nothing.
+TEST_F(DatabaseTest, RouterHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 credential_id = addCredential("office", "shared-user", "shared-secret");
+
+    ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
+
+    RouterHostConfig linked = routerHost(router_id, 100501, "user", "secret");
+    linked.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(linked));
+
+    std::optional<std::pair<QString, SecureString>> credentials =
+        db_.routerHostCredentials(router_id, 100500);
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_EQ(credentials->first, QString("user"));
+    EXPECT_EQ(credentials->second.toString(), QString("secret"));
+
+    credentials = db_.routerHostCredentials(router_id, 100501);
+    ASSERT_TRUE(credentials.has_value());
+    EXPECT_EQ(credentials->first, QString("shared-user"));
+    EXPECT_EQ(credentials->second.toString(), QString("shared-secret"));
+
+    EXPECT_FALSE(db_.routerHostCredentials(router_id, 100502).has_value());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A row of a router host exists for its credentials alone. Once the record it refers to is removed,
+// a row that kept no pair of its own goes with it, and one that kept a pair keeps that pair. The
+// book stays one a change of the master password walks through. A local host is a record in its
+// own right and stays, referring to nothing.
+TEST_F(DatabaseTest, RemovingARecordTakesTheRouterHostsRememberedByItAlone)
+{
+    const qint64 router_id = addRouter("router");
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "user", "secret");
+    const qint64 other_id = addCredential("other", "other-user", "other-secret");
+
+    RouterHostConfig link_only = routerHost(router_id, 100500, QString(), QString());
+    link_only.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(link_only));
+
+    RouterHostConfig with_pair = routerHost(router_id, 100501, "own-user", "own-secret");
+    with_pair.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addRouterHost(with_pair));
+
+    RouterHostConfig other_link = routerHost(router_id, 100502, QString(), QString());
+    other_link.setCredentialId(other_id);
+    ASSERT_TRUE(db_.addRouterHost(other_link));
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    local_host.setGroupId(group);
+    local_host.setCredentialId(credential_id);
+    ASSERT_TRUE(db_.addLocalHost(local_host));
+
+    ASSERT_TRUE(db_.removeCredential(credential_id));
+
+    EXPECT_FALSE(db_.findRouterHost(router_id, 100500).has_value());
+
+    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100501);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->credentialId(), 0);
+    EXPECT_EQ(stored->username(), QString("own-user"));
+    EXPECT_EQ(stored->password().toString(), QString("own-secret"));
+
+    stored = db_.findRouterHost(router_id, 100502);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->credentialId(), other_id);
+
+    std::optional<LocalHostConfig> stored_local = db_.findLocalHost(local_host.id());
+    ASSERT_TRUE(stored_local.has_value());
+    EXPECT_EQ(stored_local->credentialId(), 0);
+
+    EXPECT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), credentialList(),
+                                 QByteArray(32, 's'), QByteArray(32, 'v'), 1));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A change of the master password reads every record with the old key and writes it back with the
+// new one. A column that does not open comes back empty, and written back it would lose what it
+// held for good, so the change is refused. A host of a router keeps its own pair next to the
+// record of credentials it refers to, and that pair is no exception.
+TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOpen)
+{
+    const QString file_path = QFileInfo(file_path_).dir().filePath("singleton.db3");
+    DatabaseTestPeer::setFilePath(file_path);
+
+    Database& db = Database::instance();
+    ASSERT_TRUE(db.isValid());
+
+    RouterConfig router;
+    router.setDisplayName("router");
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString("router-secret"));
+    ASSERT_TRUE(db.addRouter(router));
+
+    CredentialConfig credential;
+    credential.setDisplayName("office");
+    credential.setUsername("user");
+    credential.setPassword(SecureString("secret"));
+    ASSERT_TRUE(db.addCredential(credential));
+
+    RouterHostConfig host = routerHost(router.routerId(), 100500, "own-user", "own-secret");
+    host.setCredentialId(credential.id());
+    ASSERT_TRUE(db.addRouterHost(host));
+
+    // A column rewritten behind the back of the book does not open.
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("UPDATE router_hosts SET data=X'00' WHERE host_id=100500"));
+    }
+
+    EXPECT_FALSE(MasterPassword::setNew(SecureString(QString("Password123"))));
+
+    // The column is left as it was, not emptied.
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+
+        SqlQuery query(raw, "SELECT length(data) FROM router_hosts WHERE host_id=100500");
+        ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+        EXPECT_EQ(query.columnInt64(0), 1);
+    }
+
+    // Closes the file before the directory goes.
+    DatabaseTestPeer::setFilePath(file_path);
 }

@@ -51,7 +51,7 @@ constexpr auto kSettingBiometricBlob = "biometric_blob";
 QString g_test_file_path;
 
 //--------------------------------------------------------------------------------------------------
-LocalHostConfig readHost(const SqlQuery& query)
+std::optional<LocalHostConfig> readHost(const SqlQuery& query)
 {
     LocalHostConfig host;
     host.setId(query.columnInt64(0));
@@ -63,9 +63,13 @@ LocalHostConfig readHost(const SqlQuery& query)
     host.setModifyTime(query.columnInt64(7));
     host.setConnectTime(query.columnInt64(8));
     host.setGuid(query.columnText(9));
+    host.setCredentialId(query.columnInt64(10));
 
     if (!host.setEncryptedData(query.columnBlob(5)))
+    {
         LOG(ERROR) << "Unable to read encrypted data of host" << host.id();
+        return std::nullopt;
+    }
 
     return host;
 }
@@ -83,7 +87,7 @@ LocalGroupConfig readGroup(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterConfig readRouter(const SqlQuery& query)
+std::optional<RouterConfig> readRouter(const SqlQuery& query)
 {
     RouterConfig router;
     router.setRouterId(query.columnInt64(0));
@@ -92,22 +96,47 @@ RouterConfig readRouter(const SqlQuery& query)
     router.setGuid(query.columnText(4));
 
     if (!router.setEncryptedData(query.columnBlob(3)))
+    {
         LOG(ERROR) << "Unable to read encrypted data of router" << router.routerId();
+        return std::nullopt;
+    }
 
     return router;
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterHostConfig readRouterHost(const SqlQuery& query)
+std::optional<RouterHostConfig> readRouterHost(const SqlQuery& query)
 {
     RouterHostConfig host;
     host.setRouterId(query.columnInt64(0));
     host.setHostId(query.columnUInt64(1));
+    host.setCredentialId(query.columnInt64(3));
 
     if (!host.setEncryptedData(query.columnBlob(2)))
+    {
         LOG(ERROR) << "Unable to read encrypted data of router host" << host.hostId();
+        return std::nullopt;
+    }
 
     return host;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<CredentialConfig> readCredential(const SqlQuery& query)
+{
+    CredentialConfig credential;
+    credential.setId(query.columnInt64(0));
+    credential.setType(static_cast<CredentialConfig::Type>(query.columnInt64(1)));
+    credential.setDisplayName(query.columnText(2));
+    credential.setGuid(query.columnText(4));
+
+    if (!credential.setEncryptedData(query.columnBlob(3)))
+    {
+        LOG(ERROR) << "Unable to read encrypted data of credential" << credential.id();
+        return std::nullopt;
+    }
+
+    return credential;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,6 +167,7 @@ bool createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
@@ -161,9 +191,22 @@ bool createTables(SqlDatabase& db)
                  "\"host_id\" INTEGER NOT NULL,"
                  "\"check_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"data\" BLOB DEFAULT X'',"
+                 "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "PRIMARY KEY(\"router_id\",\"host_id\"))"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"credentials\" ("
+                 "\"id\" INTEGER UNIQUE,"
+                 "\"type\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"name\" TEXT NOT NULL DEFAULT '',"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
         return false;
     }
 
@@ -255,9 +298,11 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
+
+    bool complete = true;
 
     for (;;)
     {
@@ -272,10 +317,17 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        hosts->append(readHost(query));
+        std::optional<LocalHostConfig> host = readHost(query);
+        if (!host.has_value())
+        {
+            complete = false;
+            continue;
+        }
+
+        hosts->append(*host);
     }
 
-    return true;
+    return complete;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -291,8 +343,10 @@ bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts");
+
+    bool complete = true;
 
     for (;;)
     {
@@ -307,10 +361,17 @@ bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        hosts->append(readHost(query));
+        std::optional<LocalHostConfig> host = readHost(query);
+        if (!host.has_value())
+        {
+            complete = false;
+            continue;
+        }
+
+        hosts->append(*host);
     }
 
-    return true;
+    return complete;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,8 +402,8 @@ bool Database::addLocalHost(LocalHostConfig& host)
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "create_time, modify_time, connect_time, guid, credential_id) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0))");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
@@ -352,6 +413,7 @@ bool Database::addLocalHost(LocalHostConfig& host)
     query.addInt64(host.modifyTime());
     query.addInt64(host.connectTime());
     query.addText(host.guid());
+    query.addInt64(host.credentialId());
 
     if (!query.exec())
     {
@@ -385,13 +447,14 @@ bool Database::modifyLocalHost(LocalHostConfig& host)
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), router_id=?, name=?, comment=?, "
-                        "data=?, modify_time=? WHERE id=?");
+                        "data=?, modify_time=?, credential_id=NULLIF(?, 0) WHERE id=?");
     query.addInt64(host.groupId());
     query.addInt64(host.routerId());
     query.addText(host.name());
     query.addText(host.comment());
     query.addBlob(*encrypted_data);
     query.addInt64(host.modifyTime());
+    query.addInt64(host.credentialId());
     query.addInt64(host.id());
 
     if (!query.exec())
@@ -456,7 +519,7 @@ std::optional<LocalHostConfig> Database::findLocalHost(qint64 entry_id) const
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
@@ -479,7 +542,7 @@ std::optional<LocalHostConfig> Database::findLocalHostByGuid(const QString& guid
         return std::nullopt;
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid "
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts WHERE guid=?");
     query.addText(guid);
 
@@ -487,6 +550,23 @@ std::optional<LocalHostConfig> Database::findLocalHostByGuid(const QString& guid
         return std::nullopt;
 
     return readHost(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id) const
+{
+    std::optional<LocalHostConfig> host = findLocalHost(entry_id);
+    if (!host.has_value())
+        return std::nullopt;
+
+    if (host->credentialId() <= 0)
+        return std::make_pair(host->username(), host->password());
+
+    std::optional<CredentialConfig> credential = findCredential(host->credentialId());
+    if (!credential.has_value())
+        return std::nullopt;
+
+    return std::make_pair(credential->username(), credential->password());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -502,7 +582,10 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
-                        "create_time, modify_time, connect_time, guid FROM local_hosts");
+                        "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
+                        "FROM local_hosts");
+
+    bool complete = true;
 
     for (;;)
     {
@@ -515,15 +598,21 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        LocalHostConfig host = readHost(query);
-        if (host.name().contains(query_text, Qt::CaseInsensitive) ||
-            host.address().contains(query_text, Qt::CaseInsensitive))
+        std::optional<LocalHostConfig> host = readHost(query);
+        if (!host.has_value())
         {
-            hosts->append(host);
+            complete = false;
+            continue;
+        }
+
+        if (host->name().contains(query_text, Qt::CaseInsensitive) ||
+            host->address().contains(query_text, Qt::CaseInsensitive))
+        {
+            hosts->append(*host);
         }
     }
 
-    return true;
+    return complete;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -753,6 +842,8 @@ bool Database::routerList(QList<RouterConfig>* routers) const
 
     SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
 
+    bool complete = true;
+
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
@@ -766,10 +857,17 @@ bool Database::routerList(QList<RouterConfig>* routers) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        routers->append(readRouter(query));
+        std::optional<RouterConfig> router = readRouter(query);
+        if (!router.has_value())
+        {
+            complete = false;
+            continue;
+        }
+
+        routers->append(*router);
     }
 
-    return true;
+    return complete;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -910,7 +1008,9 @@ bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
         return false;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data FROM router_hosts");
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts");
+
+    bool complete = true;
 
     for (;;)
     {
@@ -925,10 +1025,17 @@ bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        hosts->append(readRouterHost(query));
+        std::optional<RouterHostConfig> host = readRouterHost(query);
+        if (!host.has_value())
+        {
+            complete = false;
+            continue;
+        }
+
+        hosts->append(*host);
     }
 
-    return true;
+    return complete;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -950,10 +1057,12 @@ bool Database::addRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data) VALUES (?, ?, ?)");
+    SqlQuery query(db_, "INSERT INTO router_hosts (router_id, host_id, data, credential_id) "
+                        "VALUES (?, ?, ?, NULLIF(?, 0))");
     query.addInt64(host.routerId());
     query.addUInt64(host.hostId());
     query.addBlob(*encrypted_data);
+    query.addInt64(host.credentialId());
 
     if (!query.exec())
     {
@@ -983,8 +1092,10 @@ bool Database::modifyRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "UPDATE router_hosts SET data=? WHERE router_id=? AND host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0) "
+                        "WHERE router_id=? AND host_id=?");
     query.addBlob(*encrypted_data);
+    query.addInt64(host.credentialId());
     query.addInt64(host.routerId());
     query.addUInt64(host.hostId());
 
@@ -1035,7 +1146,7 @@ std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostI
         return std::nullopt;
     }
 
-    SqlQuery query(db_, "SELECT router_id, host_id, data FROM router_hosts "
+    SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts "
                         "WHERE router_id=? AND host_id=?");
     query.addInt64(router_id);
     query.addUInt64(host_id);
@@ -1044,6 +1155,24 @@ std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostI
         return std::nullopt;
 
     return readRouterHost(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
+    qint64 router_id, HostId host_id) const
+{
+    std::optional<RouterHostConfig> host = findRouterHost(router_id, host_id);
+    if (!host.has_value())
+        return std::nullopt;
+
+    if (host->credentialId() <= 0)
+        return std::make_pair(host->username(), host->password());
+
+    std::optional<CredentialConfig> credential = findCredential(host->credentialId());
+    if (!credential.has_value())
+        return std::nullopt;
+
+    return std::make_pair(credential->username(), credential->password());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1114,10 +1243,236 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::credentialList(QList<CredentialConfig>* credentials) const
+{
+    CHECK(credentials);
+    credentials->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials");
+
+    bool complete = true;
+
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            // A failed step must not pass for the end of the rows: a caller may treat what is
+            // missing from the list as deleted.
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            return false;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
+
+        std::optional<CredentialConfig> credential = readCredential(query);
+        if (!credential.has_value())
+        {
+            complete = false;
+            continue;
+        }
+
+        credentials->append(*credential);
+    }
+
+    return complete;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::addCredential(CredentialConfig& credential)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (!credential.isValid())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    // The column is sealed for the guid, so the guid comes first.
+    if (credential.guid().isEmpty())
+        credential.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(db_, "INSERT INTO credentials (id, type, name, data, guid) "
+                        "VALUES (NULL, ?, ?, ?, ?)");
+    query.addInt64(static_cast<int>(credential.type()));
+    query.addText(credential.displayName());
+    query.addBlob(*encrypted_data);
+    query.addText(credential.guid());
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    credential.setId(db_.lastInsertRowId());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::modifyCredential(const CredentialConfig& credential)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (!credential.isValid())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    SqlQuery row(db_, "SELECT guid FROM credentials WHERE id=?");
+    row.addInt64(credential.id());
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        else
+            LOG(ERROR) << "Credential" << credential.id() << "not found";
+        return false;
+    }
+
+    CredentialConfig sealed = credential;
+    sealed.setGuid(row.columnText(0));
+
+    std::optional<QByteArray> encrypted_data = sealed.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(db_, "UPDATE credentials SET type=?, name=?, data=? WHERE id=?");
+    query.addInt64(static_cast<int>(credential.type()));
+    query.addText(credential.displayName());
+    query.addBlob(*encrypted_data);
+    query.addInt64(credential.id());
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::removeCredential(qint64 credential_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    SqlQuery orphans(db_, "DELETE FROM router_hosts WHERE credential_id=? AND data=X''");
+    orphans.addInt64(credential_id);
+
+    if (!orphans.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    SqlQuery query(db_, "DELETE FROM credentials WHERE id=?");
+    query.addInt64(credential_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<CredentialConfig> Database::findCredential(qint64 credential_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return std::nullopt;
+    }
+
+    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials WHERE id=?");
+    query.addInt64(credential_id);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return std::nullopt;
+    }
+
+    return readCredential(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<CredentialConfig> Database::findCredentialByGuid(const QString& guid) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return std::nullopt;
+    }
+
+    if (guid.isEmpty())
+        return std::nullopt;
+
+    SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials WHERE guid=?");
+    query.addText(guid);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return std::nullopt;
+    }
+
+    return readCredential(query);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::import(const QList<RouterConfig>& routers,
                       const QList<LocalGroupConfig>& local_groups,
                       const QList<LocalHostConfig>& local_hosts,
-                      const QList<RouterHostConfig>& router_hosts)
+                      const QList<RouterHostConfig>& router_hosts,
+                      const QList<CredentialConfig>& credentials)
 {
     if (!isValid())
     {
@@ -1136,7 +1491,7 @@ bool Database::import(const QList<RouterConfig>& routers,
     // Saved credentials go with their routers, and hosts are deleted on their own, because the ones
     // at the root of the book lie in no group.
     if (!db_.exec("DELETE FROM local_groups") || !db_.exec("DELETE FROM routers") ||
-        !db_.exec("DELETE FROM local_hosts"))
+        !db_.exec("DELETE FROM local_hosts") || !db_.exec("DELETE FROM credentials"))
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -1144,6 +1499,18 @@ bool Database::import(const QList<RouterConfig>& routers,
 
     // The ids the keys of this call turned into. A link that is not one of the keys already names
     // what it means in the address book, so it is left as it is.
+    QHash<qint64, qint64> credential_ids;
+    for (const CredentialConfig& credential : credentials)
+    {
+        CredentialConfig config = credential;
+        config.setId(-1);
+
+        if (!addCredential(config))
+            return false;
+
+        credential_ids.insert(credential.id(), config.id());
+    }
+
     QHash<qint64, qint64> router_ids;
     for (const RouterConfig& router : routers)
     {
@@ -1171,6 +1538,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         LocalHostConfig config = host;
         config.setGroupId(group_ids.value(host.groupId(), host.groupId()));
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
+        config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
 
         if (!config.isValid())
         {
@@ -1186,8 +1554,8 @@ bool Database::import(const QList<RouterConfig>& routers,
             config.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
         SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, router_id, name, comment, data, "
-                            "create_time, modify_time, connect_time, guid) "
-                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?)");
+                            "create_time, modify_time, connect_time, guid, credential_id) "
+                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0))");
         query.addInt64(config.groupId());
         query.addInt64(config.routerId());
         query.addText(config.name());
@@ -1197,6 +1565,7 @@ bool Database::import(const QList<RouterConfig>& routers,
         query.addInt64(config.modifyTime());
         query.addInt64(config.connectTime());
         query.addText(config.guid());
+        query.addInt64(config.credentialId());
 
         if (!query.exec())
         {
@@ -1209,6 +1578,7 @@ bool Database::import(const QList<RouterConfig>& routers,
     {
         RouterHostConfig config = host;
         config.setRouterId(router_ids.value(host.routerId(), host.routerId()));
+        config.setCredentialId(credential_ids.value(host.credentialId(), host.credentialId()));
 
         if (!addRouterHost(config))
             return false;
@@ -1276,6 +1646,7 @@ bool Database::isMasterPasswordSet() const
 bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
                             const QList<RouterConfig>& routers,
                             const QList<RouterHostConfig>& router_hosts,
+                            const QList<CredentialConfig>& credentials,
                             const QByteArray& salt,
                             const QByteArray& verifier,
                             quint32 version)
@@ -1330,6 +1701,23 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
         if (!modifyRouterHost(router_host))
         {
             LOG(ERROR) << "Unable to re-encrypt credentials of router host:" << router_host.hostId();
+            return false;
+        }
+    }
+
+    for (const CredentialConfig& credential : credentials)
+    {
+        std::optional<QByteArray> encrypted_data = credential.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE credentials SET data=? WHERE id=?");
+        query.addBlob(*encrypted_data);
+        query.addInt64(credential.id());
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to re-encrypt credential" << credential.id() << ":" << db_.lastError();
             return false;
         }
     }

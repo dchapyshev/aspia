@@ -59,6 +59,7 @@ protected:
 
 private slots:
     void onAfterThemeChanged();
+    void onCredentials();
     void onSettings();
     void onHelp();
     void onAbout();
@@ -80,6 +81,7 @@ private:
     bool tabBarHitTest(const QPoint& global_pos) const;
     void hideCloseButtonForTab(int index);
     Tab* tabAt(int index);
+    bool activateTab(Tab::Type type);
     ManagementTab* managementTab() const;
     void showSearchDialog();
     void syncSearchField();

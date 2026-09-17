@@ -67,6 +67,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="action_credentials"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -122,6 +123,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_credentials"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
    <addaction name="action_help"/>
@@ -151,6 +153,15 @@
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="action_credentials">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/keys.svg</normaloff>:/img/keys.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Credentials...</string>
    </property>
   </action>
   <action name="action_settings">

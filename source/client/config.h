@@ -116,8 +116,6 @@ class RouterHostConfig final
 public:
     RouterHostConfig() = default;
 
-    // Credentials belong to one host of one router and are kept as a whole pair. A temporary host
-    // id comes back for another machine, so nothing is kept under one.
     bool isValid() const;
 
     qint64 routerId() const { return router_id_; }
@@ -125,6 +123,9 @@ public:
 
     HostId hostId() const { return host_id_; }
     void setHostId(HostId id) { host_id_ = id; }
+
+    qint64 credentialId() const { return credential_id_; }
+    void setCredentialId(qint64 id) { credential_id_ = id; }
 
     const QString& username() const { return username_; }
     void setUsername(const QString& value) { username_ = value; }
@@ -139,6 +140,7 @@ public:
 private:
     qint64 router_id_ = -1;
     HostId host_id_ = kInvalidHostId;
+    qint64 credential_id_ = 0;
     QString username_;
     SecureString password_;
 };
@@ -163,6 +165,9 @@ public:
 
     qint64 routerId() const { return router_id_; }
     void setRouterId(qint64 id) { router_id_ = id; }
+
+    qint64 credentialId() const { return credential_id_; }
+    void setCredentialId(qint64 id) { credential_id_ = id; }
 
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
@@ -199,6 +204,7 @@ private:
     qint64 id_ = -1;
     qint64 group_id_ = 0;
     qint64 router_id_ = 0;
+    qint64 credential_id_ = 0;
     QString guid_;
     qint64 create_time_ = 0;
     qint64 modify_time_ = 0;
@@ -241,6 +247,49 @@ private:
     QString guid_;
     QString name_;
     QString comment_;
+};
+
+class CredentialConfig final
+{
+public:
+    CredentialConfig() = default;
+
+    enum class Type { HOST = 0 };
+
+    static constexpr int kMaxNameLength = 64;
+
+    // The pair is kept whole, and a record is shown by its name.
+    bool isValid() const;
+
+    qint64 id() const { return id_; }
+    void setId(qint64 id) { id_ = id; }
+
+    const QString& guid() const { return guid_; }
+    void setGuid(const QString& value) { guid_ = value; }
+
+    Type type() const { return type_; }
+    void setType(Type value) { type_ = value; }
+
+    const QString& displayName() const { return display_name_; }
+    void setDisplayName(const QString& value) { display_name_ = value; }
+
+    const QString& username() const { return username_; }
+    void setUsername(const QString& value) { username_ = value; }
+
+    const SecureString& password() const { return password_; }
+    void setPassword(const SecureString& value) { password_ = value; }
+
+    // The sealed column for database I/O. See RouterConfig for what the two answer.
+    std::optional<QByteArray> encryptedData() const;
+    bool setEncryptedData(const QByteArray& blob);
+
+private:
+    qint64 id_ = -1;
+    QString guid_;
+    Type type_ = Type::HOST;
+    QString display_name_;
+    QString username_;
+    SecureString password_;
 };
 
 class HostConfig final

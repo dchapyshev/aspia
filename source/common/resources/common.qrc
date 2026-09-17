@@ -13,6 +13,7 @@
         <file>material/more_vert.svg</file>
         <file>material/monitor.svg</file>
         <file>material/info.svg</file>
+        <file>material/key.svg</file>
         <file>material/keyboard.svg</file>
         <file>material/lock.svg</file>
         <file>material/power.svg</file>
@@ -112,6 +113,7 @@
         <file>expand.svg</file>
         <file>done.svg</file>
         <file>settings.svg</file>
+        <file>keys.svg</file>
         <file>monitor-1.svg</file>
         <file>monitor-2.svg</file>
         <file>monitor-3.svg</file>

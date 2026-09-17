@@ -60,7 +60,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     error_->setWordWrap(true);
     error_->setVisible(false);
 
-    username_->setLabel(tr("Username"));
+    username_->setLabel(tr("User Name"));
     username_->setText(host.username());
 
     password_->setLabel(tr("Password"));
@@ -145,7 +145,7 @@ void AuthorizationWindow::onConnectClicked()
 
     if (!one_time && username_->text().isEmpty())
     {
-        showError(tr("Username cannot be empty."));
+        showError(tr("User name cannot be empty."));
         username_->setFocus();
         return;
     }

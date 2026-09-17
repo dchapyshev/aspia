@@ -41,6 +41,7 @@
 #include "client/router_controller.h"
 #include "client/settings.h"
 #include "client/desktop/client_tab.h"
+#include "client/desktop/credentials_tab.h"
 #include "client/desktop/client_window.h"
 #include "client/desktop/management_tab.h"
 #include "client/desktop/settings_tab.h"
@@ -120,6 +121,7 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowFlag(Qt::WindowStaysOnTopHint, always_on_top);
     connect(ui->action_always_on_top, &QAction::toggled, this, &MainWindow::onAlwaysOnTop);
 
+    connect(ui->action_credentials, &QAction::triggered, this, &MainWindow::onCredentials);
     connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
@@ -304,20 +306,23 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::onCredentials()
+{
+    LOG(INFO) << "[ACTION] Credentials clicked";
+
+    if (activateTab(Tab::Type::CREDENTIALS))
+        return;
+
+    addTab(new CredentialsTab(this), tr("Credentials"), QIcon(":/img/keys.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings clicked";
 
-    // If a settings tab is already open, just activate it.
-    for (int i = 0; i < ui->tabs->count(); ++i)
-    {
-        Tab* tab = tabAt(i);
-        if (tab && tab->tabType() == Tab::Type::SETTINGS)
-        {
-            ui->tabs->setCurrentIndex(i);
-            return;
-        }
-    }
+    if (activateTab(Tab::Type::SETTINGS))
+        return;
 
     SettingsTab* settings_tab = new SettingsTab(this);
 
@@ -789,6 +794,22 @@ void MainWindow::hideCloseButtonForTab(int index)
 Tab* MainWindow::tabAt(int index)
 {
     return dynamic_cast<Tab*>(ui->tabs->widget(index));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MainWindow::activateTab(Tab::Type type)
+{
+    for (int i = 0; i < ui->tabs->count(); ++i)
+    {
+        Tab* tab = tabAt(i);
+        if (tab && tab->tabType() == type)
+        {
+            ui->tabs->setCurrentIndex(i);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

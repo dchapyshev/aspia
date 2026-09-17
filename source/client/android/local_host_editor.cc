@@ -37,6 +37,7 @@
 #include "common/android/line_edit.h"
 #include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
+#include "common/android/switch.h"
 #include "common/android/text_area.h"
 
 namespace {
@@ -52,8 +53,10 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       router_(new ComboBox()),
       name_(new LineEdit()),
       address_(new LineEdit()),
+      shared_(new Switch(tr("Use existing"))),
       username_(new LineEdit()),
       password_(new LineEdit()),
+      credential_(new ComboBox()),
       comment_(new TextArea()),
       error_(new Label(QString(), Label::Role::CAPTION))
 {
@@ -63,6 +66,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     username_->setLabel(tr("User Name"));
     password_->setLabel(tr("Password"));
     password_->setEchoMode(QLineEdit::Password);
+    credential_->setLabel(tr("Credentials"));
     comment_->setLabel(tr("Comment"));
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
@@ -86,8 +90,10 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     form_layout->addWidget(name_);
     form_layout->addWidget(router_);
     form_layout->addWidget(address_);
+    form_layout->addWidget(shared_);
     form_layout->addWidget(username_);
     form_layout->addWidget(password_);
+    form_layout->addWidget(credential_);
     form_layout->addWidget(comment_);
     form_layout->addWidget(save);
     form_layout->addWidget(delete_button_);
@@ -103,6 +109,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
 
     connect(router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostEditor::onRouterChanged);
+    connect(shared_, &Switch::toggled, this, &LocalHostEditor::onSharedToggled);
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
     connect(delete_button_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
 }
@@ -126,6 +133,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 
     loadRouters(0);
     onRouterChanged();
+    loadCredentials(0);
     name_->setFocus();
 }
 
@@ -152,6 +160,7 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
 
     loadRouters(host->routerId());
     onRouterChanged();
+    loadCredentials(host->credentialId());
     name_->setFocus();
     return true;
 }
@@ -171,11 +180,38 @@ void LocalHostEditor::loadRouters(qint64 selected_router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalHostEditor::loadCredentials(qint64 selected_credential_id)
+{
+    credential_->clear();
+    QList<CredentialConfig> credentials;
+    Database::instance().credentialList(&credentials);
+    for (const CredentialConfig& credential : std::as_const(credentials))
+        credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
+
+    const int index = credential_->findData(QVariant::fromValue(selected_credential_id));
+    credential_->setCurrentIndex(index >= 0 ? index : 0);
+
+    // Nothing to share until a record of credentials is added.
+    shared_->setEnabled(!credentials.isEmpty());
+    shared_->setChecked(index >= 0);
+    onSharedToggled(shared_->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalHostEditor::onRouterChanged()
 {
     // Without a router the address is a host name or IP; through a router it is a host ID.
     const bool direct = (router_->currentData().toLongLong() == 0);
     address_->setLabel(direct ? tr("Address") : tr("ID"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostEditor::onSharedToggled(bool checked)
+{
+    // Entered with a record of credentials, the host shows the record in place of its own pair.
+    username_->setVisible(!checked);
+    password_->setVisible(!checked);
+    credential_->setVisible(checked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -230,6 +266,7 @@ void LocalHostEditor::onSaveClicked()
     const QString username = username_->text();
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
+        shared_->setChecked(false);
         showError(tr("The user name can not be empty and can contain only alphabet characters,"
                      " numbers and \"_\", \"-\", \".\" characters."));
         username_->setFocus();
@@ -239,6 +276,7 @@ void LocalHostEditor::onSaveClicked()
 
     if (username.isEmpty() != password_->text().isEmpty())
     {
+        shared_->setChecked(false);
         showError(tr("Enter both the user name and the password, or leave both empty."));
         return;
     }
@@ -249,6 +287,7 @@ void LocalHostEditor::onSaveClicked()
     data.setRouterId(router_id);
     data.setName(name);
     data.setAddress(address_text);
+    data.setCredentialId(shared_->isChecked() ? credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
     data.setPassword(SecureString(password_->text()));
     data.setComment(comment_->text());

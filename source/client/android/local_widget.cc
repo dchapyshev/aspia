@@ -360,9 +360,9 @@ void LocalWidget::onImport()
 
     MessageDialog::info(this, tr("Import"),
         tr("Routers imported: %1\nGroups imported: %2\nHosts imported: %3\n"
-           "Saved passwords imported: %4")
+           "Saved passwords imported: %4\nCredentials imported: %5")
             .arg(report.routers).arg(report.local_groups)
-            .arg(report.local_hosts).arg(report.router_hosts));
+            .arg(report.local_hosts).arg(report.router_hosts).arg(report.credentials));
 
     RouterController::instance().reload();
     reload();

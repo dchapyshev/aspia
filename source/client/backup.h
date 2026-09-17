@@ -51,8 +51,12 @@ public:
         int local_groups = 0;
         int local_hosts = 0;
         int router_hosts = 0;
+        int credentials = 0;
 
-        int total() const { return routers + local_groups + local_hosts + router_hosts; }
+        int total() const
+        {
+            return routers + local_groups + local_hosts + router_hosts + credentials;
+        }
     };
 
     // Writes the address book of |db| to |file_path|. |report| (optional) receives what was

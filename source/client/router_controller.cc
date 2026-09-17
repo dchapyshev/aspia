@@ -132,7 +132,6 @@ void RouterController::reload()
         return;
     }
 
-    // A record whose sealed column did not open comes back with empty credentials and is not served.
     QSet<qint64> present;
     present.reserve(configs.size());
     for (const RouterConfig& config : configs)

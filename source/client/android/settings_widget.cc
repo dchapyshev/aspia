@@ -29,6 +29,7 @@
 #include "client/database.h"
 #include "client/master_password.h"
 #include "client/android/biometric_gate.h"
+#include "client/android/credentials_widget.h"
 #include "client/android/master_password_dialog.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
@@ -52,19 +53,29 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     : QWidget(parent),
       stack_(new QStackedWidget(this)),
       settings_page_(new ScrollArea()),
+      credentials_page_(new CredentialsWidget()),
       about_page_(new AboutWidget()),
+      credentials_button_(new IconButton(":/img/material/key.svg", this)),
       about_button_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(settings_.desktopConfig()),
       udp_methods_(settings_.udpMethods())
 {
-    // The about action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
-    // default so it does not linger in this widget.
+    // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
+    // default so they do not linger in this widget.
+    credentials_button_->hide();
     about_button_->hide();
+    connect(credentials_button_, &IconButton::clicked, this, &SettingsWidget::showCredentials);
     connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+
+    connect(credentials_page_, &CredentialsWidget::sig_titleChanged,
+            this, &SettingsWidget::onCredentialsTitleChanged);
+    connect(credentials_page_, &CredentialsWidget::sig_appBarActionsChanged,
+            this, &SettingsWidget::onCredentialsActionsChanged);
 
     buildSettings();
 
     stack_->addWidget(settings_page_);
+    stack_->addWidget(credentials_page_);
     stack_->addWidget(about_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -78,15 +89,24 @@ SettingsWidget::~SettingsWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> SettingsWidget::appBarActions() const
 {
+    if (isCredentialsPage())
+        return credentials_page_->appBarActions();
     if (isAboutPage())
         return {};
-    return { about_button_ };
+    return { credentials_button_, about_button_ };
 }
 
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::goBack()
 {
-    if (!isAboutPage())
+    // The editor of the credentials screen is a page of its own below the list.
+    if (isCredentialsPage() && credentials_page_->isEditorPage())
+    {
+        credentials_page_->goBack();
+        return;
+    }
+
+    if (!isCredentialsPage() && !isAboutPage())
         return;
 
     stack_->setCurrentWidget(settings_page_);
@@ -97,7 +117,33 @@ void SettingsWidget::goBack()
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::resetToSettings()
 {
+    if (credentials_page_->isEditorPage())
+        credentials_page_->goBack();
+
     stack_->setCurrentWidget(settings_page_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onCredentialsTitleChanged(const QString& title)
+{
+    if (isCredentialsPage())
+        emit sig_titleChanged(title, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::onCredentialsActionsChanged()
+{
+    if (isCredentialsPage())
+        emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showCredentials()
+{
+    credentials_page_->reload();
+    stack_->setCurrentWidget(credentials_page_);
+    emit sig_titleChanged(tr("Credentials"), true);
+    emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,6 +152,12 @@ void SettingsWidget::showAbout()
     stack_->setCurrentWidget(about_page_);
     emit sig_titleChanged(tr("About"), true);
     emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isCredentialsPage() const
+{
+    return stack_->currentWidget() == credentials_page_;
 }
 
 //--------------------------------------------------------------------------------------------------

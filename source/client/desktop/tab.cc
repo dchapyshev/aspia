@@ -39,7 +39,7 @@ Tab::Type Tab::tabType() const
 //--------------------------------------------------------------------------------------------------
 bool Tab::isClosable() const
 {
-    return type_ == Type::SESSION || type_ == Type::SETTINGS;
+    return type_ == Type::SESSION || type_ == Type::SETTINGS || type_ == Type::CREDENTIALS;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,6 +59,17 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
         ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayLabel(), QVariant::fromValue(router.routerId()));
     }
 
+    QList<CredentialConfig> credentials;
+    Database::instance().credentialList(&credentials);
+    for (const CredentialConfig& credential : std::as_const(credentials))
+    {
+        ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
+                                      QVariant::fromValue(credential.id()));
+    }
+
+    // Nothing to share until a record of credentials is added.
+    ui->checkbox_shared->setEnabled(!credentials.isEmpty());
+
     qint64 selected_router_id = 0;
 
     if (entry_id_ != -1)
@@ -73,6 +84,14 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
             ui->edit_username->setText(host->username());
             ui->edit_password->setPassword(host->password());
             ui->edit_comment->setPlainText(host->comment());
+
+            if (host->credentialId() > 0)
+            {
+                ui->checkbox_shared->setChecked(true);
+                ui->combo_credential->setCurrentIndex(
+                    ui->combo_credential->findData(QVariant::fromValue(host->credentialId())));
+            }
+
             group_id_ = host->groupId();
             selected_router_id = host->routerId();
         }
@@ -122,7 +141,10 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostDialog::onRouterChanged);
+    connect(ui->checkbox_shared, &QCheckBox::toggled, this, &LocalHostDialog::onSharedToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
+
+    onSharedToggled(ui->checkbox_shared->isChecked());
 
     ui->edit_name->setFocus();
 }
@@ -137,6 +159,21 @@ LocalHostDialog::~LocalHostDialog()
 void LocalHostDialog::onRouterChanged(int /* index */)
 {
     updateAddressLabel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostDialog::onSharedToggled(bool checked)
+{
+    QWidget* page = checked ? ui->page_shared : ui->page_own;
+
+    // The stack is as high as its pages, so the page that is not shown steps out of the count.
+    for (QWidget* other : { ui->page_own, ui->page_shared })
+    {
+        other->setSizePolicy(QSizePolicy::Preferred,
+                             other == page ? QSizePolicy::Preferred : QSizePolicy::Ignored);
+    }
+
+    ui->stack_credentials->setCurrentWidget(page);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,9 +228,14 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    QString username = ui->edit_username->text();
+    // The pair of the host is kept whether it is entered with it or with the record it refers to,
+    // so it is checked either way, in sight when refused.
+    const QString username = ui->edit_username->text();
+    const SecureString password = ui->edit_password->password();
+
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
+        ui->checkbox_shared->setChecked(false);
         MsgBox::warning(this,
             tr("The user name can not be empty and can contain only"
                " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
@@ -202,8 +244,9 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (username.isEmpty() != ui->edit_password->password().isEmpty())
+    if (username.isEmpty() != password.isEmpty())
     {
+        ui->checkbox_shared->setChecked(false);
         MsgBox::warning(this, tr("Enter both the username and the password, or leave both empty."));
         return;
     }
@@ -240,8 +283,10 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host.setRouterId(router_id);
     host.setName(ui->edit_name->text());
     host.setAddress(ui->edit_address->text());
-    host.setUsername(ui->edit_username->text());
-    host.setPassword(ui->edit_password->password());
+    host.setCredentialId(
+        ui->checkbox_shared->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
+    host.setUsername(username);
+    host.setPassword(password);
     host.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();

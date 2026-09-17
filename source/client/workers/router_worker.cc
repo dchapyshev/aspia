@@ -154,8 +154,8 @@ void RouterWorker::startConnection(qint64 router_id)
 
     // The worker owns the connection, so it reads the credentials from the database itself (thread-
     // local connection) instead of shuttling them across threads on every connect. A record whose
-    // sealed column did not open (a master password change in flight) comes back with empty
-    // credentials and is retried, not connected with.
+    // sealed column did not open (a master password change in flight) is not handed out and is
+    // retried, not connected with.
     const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
     if (!config || !config->isValid())
     {

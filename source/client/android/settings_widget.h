@@ -30,12 +30,13 @@
 class QVBoxLayout;
 class QStackedWidget;
 class AboutWidget;
+class CredentialsWidget;
 class IconButton;
 class ScrollArea;
 
 // Settings screen for the Android client: the same preferences as the desktop client, applied
-// immediately on change. Backed by the shared Settings storage. The about screen is hosted as a
-// sub-page reached from the top app bar action.
+// immediately on change. Backed by the shared Settings storage. The credentials and the about
+// screens are hosted as sub-pages reached from the top app bar actions.
 class SettingsWidget final : public QWidget
 {
     Q_OBJECT
@@ -44,24 +45,31 @@ public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() final;
 
-    // The app bar action (opens the about screen). Empty while the about screen is shown.
+    // The app bar actions of the page shown: the credentials and the about actions on the
+    // settings page, those of the credentials screen on it, none on the about screen.
     QList<QWidget*> appBarActions() const;
 
-    // Returns to the settings page from the about screen. Driven by the app bar back button.
+    // Steps back one page. Driven by the app bar back button.
     void goBack();
 
     // Returns to the settings page without animation, used when the tab is left.
     void resetToSettings();
 
 signals:
-    // Requests the host bar to show |title| with a back button (about) or the default state.
+    // Requests the host bar to show |title| with a back button (a sub-page) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);
 
-    // Emitted when the set returned by appBarActions() changes (the about screen hides the action).
+    // Emitted when the set returned by appBarActions() changes (a sub-page has actions of its own).
     void sig_appBarActionsChanged();
 
+private slots:
+    void onCredentialsTitleChanged(const QString& title);
+    void onCredentialsActionsChanged();
+
 private:
+    void showCredentials();
     void showAbout();
+    bool isCredentialsPage() const;
     bool isAboutPage() const;
 
     void buildSettings();
@@ -79,7 +87,9 @@ private:
 
     QStackedWidget* stack_;
     ScrollArea* settings_page_;
+    CredentialsWidget* credentials_page_;
     AboutWidget* about_page_;
+    IconButton* credentials_button_;
     IconButton* about_button_;
 
     Settings settings_;
