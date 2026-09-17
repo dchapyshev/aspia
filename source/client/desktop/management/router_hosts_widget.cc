@@ -33,6 +33,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
+#include <QMouseEvent>
 #include <QSaveFile>
 #include <QSignalBlocker>
 #include <QStatusBar>
@@ -41,6 +42,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
+#include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "common/desktop/icon_text_button.h"
 #include "common/desktop/msg_box.h"
@@ -100,6 +102,7 @@ RouterHostsWidget::RouterHostsWidget(QWidget* parent)
             this, &RouterHostsWidget::onHeaderContextMenu);
 
     ui->tree_hosts->installEventFilter(this);
+    ui->tree_hosts->viewport()->installEventFilter(this);
 
     // The largest entry is the largest page the router serves (kMaxHostPageSize).
     ui->combo_hosts_page_size->addItem("25", QVariant::fromValue<qint64>(25));
@@ -160,6 +163,12 @@ void RouterHostsWidget::showRouter(qint64 router_id)
     // Workspaces are fetched first so the id -> name map is ready when the host list arrives.
     fetchWorkspaces();
     fetchHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::setMimeType(const QString& mime_type)
+{
+    mime_type_ = mime_type;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,6 +442,28 @@ bool RouterHostsWidget::eventFilter(QObject* watched, QEvent* event)
             return true;
         }
     }
+    else if (watched == ui->tree_hosts->viewport())
+    {
+        if (event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->button() == Qt::LeftButton)
+                start_pos_ = mouse_event->pos();
+        }
+        else if (event->type() == QEvent::MouseMove)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->buttons() & Qt::LeftButton)
+            {
+                const int distance = (mouse_event->pos() - start_pos_).manhattanLength();
+                if (distance > QApplication::startDragDistance())
+                {
+                    startDrag();
+                    return true;
+                }
+            }
+        }
+    }
 
     return ContentWidget::eventFilter(watched, event);
 }
@@ -632,6 +663,23 @@ void RouterHostsWidget::updateHostsPagination()
 void RouterHostsWidget::updateStatusLabel()
 {
     status_hosts_label_->setText(tr("%n host(s)", "", model_->rowCount()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostsWidget::startDrag()
+{
+    const QModelIndex index = ui->tree_hosts->indexAt(start_pos_);
+    const RouterHost* host = model_->hostAt(index.row());
+    if (!host)
+        return;
+
+    RouterHostDrag drag(this);
+    drag.setHost(router_id_, *host, mime_type_);
+
+    const QIcon icon = index.siblingAtColumn(0).data(Qt::DecorationRole).value<QIcon>();
+    drag.setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+    drag.exec(Qt::MoveAction);
 }
 
 //--------------------------------------------------------------------------------------------------

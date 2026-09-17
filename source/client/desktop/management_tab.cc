@@ -197,9 +197,11 @@ ManagementTab::ManagementTab(QWidget* parent)
     connect(router_relays_widget_, &RouterRelaysWidget::sig_contextMenu,
             this, &ManagementTab::onRelayContextMenu);
 
-    // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar.
+    // Setup drag-and-drop: pass the host mime types from the source widgets to Sidebar. The list
+    // of the approved hosts drags the same records as the group view, so it shares its type.
     ui->sidebar->setLocalHostMimeType(local_group_widget_->mimeType());
     ui->sidebar->setRouterHostMimeType(router_group_widget_->mimeType());
+    router_hosts_widget_->setMimeType(router_group_widget_->mimeType());
 
     // Connect signals.
     connect(ui->sidebar, &Sidebar::sig_switchContent, this, &ManagementTab::onSwitchContent);
@@ -241,6 +243,8 @@ ManagementTab::ManagementTab(QWidget* parent)
     {
         if (current_content_ == router_group_widget_)
             router_group_widget_->reload();
+        else if (current_content_ == router_hosts_widget_)
+            router_hosts_widget_->reload();
     });
     connect(ui->sidebar, &Sidebar::sig_routerGroupMoved, ui->sidebar, &Sidebar::onRefreshHostGroups);
     connect(ui->action_add_user, &QAction::triggered, this, &ManagementTab::onAddUserAction);

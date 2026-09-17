@@ -20,6 +20,7 @@
 #define CLIENT_DESKTOP_MANAGEMENT_ROUTER_HOSTS_WIDGET_H
 
 #include <QHash>
+#include <QPoint>
 
 #include <memory>
 
@@ -50,6 +51,7 @@ public:
 
     void showRouter(qint64 router_id);
     qint64 routerId() const { return router_id_; }
+    void setMimeType(const QString& mime_type);
     bool hasSelectedHost() const;
     bool isSelectedHostOnline() const;
     HostId selectedHostId() const;
@@ -100,12 +102,15 @@ private:
     void fetchWorkspaces();
     void updateHostsPagination();
     void updateStatusLabel();
+    void startDrag();
     QString workspaceNameById(qint64 workspace_id) const;
     const RouterHost* currentHost() const;
     void saveHostsToFile();
 
     std::unique_ptr<Ui::RouterHostsWidget> ui;
     qint64 router_id_ = 0;
+    QString mime_type_;
+    QPoint start_pos_;
     QLabel* status_hosts_label_ = nullptr;
 
     // Maps workspace entry_id -> name, kept in sync via onWorkspaceListReceived. Used to populate

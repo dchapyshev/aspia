@@ -48,6 +48,17 @@
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool isRouterAdmin(qint64 router_id)
+{
+    RouterSession* session = RouterController::session(router_id);
+    return session && session->config().sessionType() == proto::router::SESSION_TYPE_ADMIN;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
     : QWidget(parent),
@@ -1205,8 +1216,8 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         const RouterHost& host = host_mime_data->host();
 
         // The target is either a host group or the workspace item (move to the workspace root,
-        // group id 0). Cross-router or cross-workspace moves are forbidden by the server;
-        // reflect that in the UI by refusing the drop here.
+        // group id 0). A host stays within its router, and only an administrator moves it to
+        // another workspace, as the server refuses both for anybody else.
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
         qint64 target_router_id = 0;
         qint64 target_workspace_id = 0;
@@ -1230,11 +1241,14 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
             return true;
         }
 
-        if (target_router_id != host_mime_data->routerId() || target_workspace_id != host.workspace_id)
+        if (target_router_id != host_mime_data->routerId())
             return true;
 
-        // Don't allow drop to the same group.
-        if (target_group_id == host.group_id)
+        if (target_workspace_id != host.workspace_id && !isRouterAdmin(target_router_id))
+            return true;
+
+        // Don't allow drop to the place the host already sits in.
+        if (target_workspace_id == host.workspace_id && target_group_id == host.group_id)
             return true;
 
         tree_widget_->clearSelection();
@@ -1533,8 +1547,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         // Repeat the eligibility checks from onDragMove in case the user releases over a
         // target that wasn't validated (DragLeave without DragMove can happen).
         if (target_router_id != router_id ||
-            target_workspace_id != host.workspace_id ||
-            target_group_id == host.group_id)
+            (target_workspace_id != host.workspace_id && !isRouterAdmin(router_id)) ||
+            (target_workspace_id == host.workspace_id && target_group_id == host.group_id))
         {
             restoreSelection();
             return true;
@@ -1547,6 +1561,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
+        host.workspace_id = target_workspace_id;
         host.group_id = target_group_id;
         session->editHost(host, { this, [this, router_id](const proto::router::HostResult& result)
         {
