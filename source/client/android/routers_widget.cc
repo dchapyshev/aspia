@@ -83,7 +83,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
       cards_layout_(new QVBoxLayout(container_)),
       placeholder_(new RoutersEmptyView(this)),
       editor_(new RouterEditor(this)),
-      add_button_(new IconButton(":/img/material/add_2.svg", this))
+      button_add_(new IconButton(":/img/material/add_2.svg", this))
 {
     cards_layout_->setContentsMargins(0, 0, 0, 0);
     cards_layout_->setSpacing(0);
@@ -93,7 +93,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
 
     // The add action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
     // default so it does not linger in this widget.
-    add_button_->hide();
+    button_add_->hide();
 
     // List page: the scrollable cards with the empty-state hint overlaid on top.
     QWidget* list_page = new QWidget(stack_);
@@ -112,7 +112,7 @@ RoutersWidget::RoutersWidget(QWidget* parent)
     layout->setSpacing(0);
     layout->addWidget(stack_);
 
-    connect(add_button_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
+    connect(button_add_, &IconButton::clicked, this, &RoutersWidget::onAddRouter);
     connect(editor_, &RouterEditor::sig_accepted, this, &RoutersWidget::returnFromEditor);
 
     RouterController& controller = RouterController::instance();
@@ -138,7 +138,7 @@ QList<QWidget*> RoutersWidget::appBarActions() const
     if (isEditorPage())
         return {};
 
-    return { add_button_ };
+    return { button_add_ };
 }
 
 //--------------------------------------------------------------------------------------------------

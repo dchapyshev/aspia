@@ -140,12 +140,12 @@ private:
 
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
-    TreeWidget* host_tree_ = nullptr;
-    TreeWidget* temp_host_tree_ = nullptr;
+    TreeWidget* tree_host_ = nullptr;
+    TreeWidget* tree_temp_host_ = nullptr;
     SearchWidget* search_page_ = nullptr;
     RouterHostEditor* credentials_page_ = nullptr;
-    IconButton* search_button_ = nullptr;
-    IconButton* refresh_button_ = nullptr;
+    IconButton* button_search_ = nullptr;
+    IconButton* button_refresh_ = nullptr;
     qint64 host_router_id_ = -1;
     qint64 host_workspace_id_ = 0;
     qint64 host_group_id_ = 0;

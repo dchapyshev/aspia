@@ -103,7 +103,9 @@ private:
 
     // Keeps the credentials the user entered, in the local host the connection was built from or
     // in the row of a host of a router.
-    void saveHostCredentials(const HostConfig& host);
+    // Keeps what the host was entered with: the link to a record of the manager when one was
+    // chosen (|credential_id| above zero), the pair itself otherwise.
+    void saveHostCredentials(const HostConfig& host, qint64 credential_id);
 
     // Replaces the address book with a full-screen desktop view for the given host.
     // |credentials_saved| tells the screen that the credentials it was given were written here, so
@@ -120,11 +122,11 @@ private:
     // already active, the link is ignored with a notification.
     void connectToUrl(const QString& url);
 
-    QStackedWidget* root_stack_ = nullptr;
+    QStackedWidget* stack_root_ = nullptr;
     QWidget* shell_ = nullptr;
     AppBar* app_bar_ = nullptr;
-    QStackedWidget* content_ = nullptr;
-    BottomNavigationBar* navigation_ = nullptr;
+    QStackedWidget* stack_content_ = nullptr;
+    BottomNavigationBar* nav_bar_ = nullptr;
     DesktopWindow* desktop_ = nullptr;
     FileTransferWindow* file_transfer_ = nullptr;
     ChatWindow* chat_ = nullptr;

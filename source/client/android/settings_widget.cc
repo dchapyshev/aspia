@@ -55,17 +55,17 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       settings_page_(new ScrollArea()),
       credentials_page_(new CredentialsWidget()),
       about_page_(new AboutWidget()),
-      credentials_button_(new IconButton(":/img/material/key.svg", this)),
-      about_button_(new IconButton(":/img/material/info.svg", this)),
+      button_credentials_(new IconButton(":/img/material/key.svg", this)),
+      button_about_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(settings_.desktopConfig()),
       udp_methods_(settings_.udpMethods())
 {
     // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
     // default so they do not linger in this widget.
-    credentials_button_->hide();
-    about_button_->hide();
-    connect(credentials_button_, &IconButton::clicked, this, &SettingsWidget::showCredentials);
-    connect(about_button_, &IconButton::clicked, this, &SettingsWidget::showAbout);
+    button_credentials_->hide();
+    button_about_->hide();
+    connect(button_credentials_, &IconButton::clicked, this, &SettingsWidget::showCredentials);
+    connect(button_about_, &IconButton::clicked, this, &SettingsWidget::showAbout);
 
     connect(credentials_page_, &CredentialsWidget::sig_titleChanged,
             this, &SettingsWidget::onCredentialsTitleChanged);
@@ -93,7 +93,7 @@ QList<QWidget*> SettingsWidget::appBarActions() const
         return credentials_page_->appBarActions();
     if (isAboutPage())
         return {};
-    return { credentials_button_, about_button_ };
+    return { button_credentials_, button_about_ };
 }
 
 //--------------------------------------------------------------------------------------------------

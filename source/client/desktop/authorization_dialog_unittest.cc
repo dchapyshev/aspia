@@ -33,17 +33,17 @@
 class AuthorizationDialogTest : public testing::Test
 {
 public:
-    // The dialog takes the state of the one-time password box from the settings when it opens and
-    // writes it back when it closes, so every test says what it starts from.
+    // The dialog takes the one-time password choice from the settings when it opens and writes
+    // it back when it closes, so every test says what it starts from.
     static void rememberOneTimePassword(bool checked)
     {
         Settings settings;
         settings.setOneTimePasswordChecked(checked);
     }
 
-    static QCheckBox* oneTimePasswordBox(const AuthorizationDialog& dialog)
+    static QRadioButton* oneTimePasswordButton(const AuthorizationDialog& dialog)
     {
-        return dialog.findChild<QCheckBox*>("checkbox_one_time_password");
+        return dialog.findChild<QRadioButton*>("radio_one_time_password");
     }
 
     static QCheckBox* saveCredentialsBox(const AuthorizationDialog& dialog)
@@ -56,9 +56,9 @@ public:
         return dialog.findChild<QLineEdit*>("edit_username");
     }
 
-    static QRadioButton* sharedButton(const AuthorizationDialog& dialog)
+    static QRadioButton* savedCredentialsButton(const AuthorizationDialog& dialog)
     {
-        return dialog.findChild<QRadioButton*>("radio_shared");
+        return dialog.findChild<QRadioButton*>("radio_saved_credentials");
     }
 
     static QComboBox* credentialCombo(const AuthorizationDialog& dialog)
@@ -79,8 +79,8 @@ public:
 };
 
 //--------------------------------------------------------------------------------------------------
-// A record that carries a user name is a connection under that name, whatever the box was left at
-// the last time the dialog was open.
+// A record that carries a user name is a connection under that name, whatever was chosen the last
+// time the dialog was open.
 TEST_F(AuthorizationDialogTest, SavedUserNameTurnsOffTheOneTimePassword)
 {
     rememberOneTimePassword(true);
@@ -90,18 +90,18 @@ TEST_F(AuthorizationDialogTest, SavedUserNameTurnsOffTheOneTimePassword)
     dialog.setUserName("admin");
     dialog.show();
 
-    QCheckBox* one_time = oneTimePasswordBox(dialog);
+    QRadioButton* one_time = oneTimePasswordButton(dialog);
     QLineEdit* username = userNameEdit(dialog);
     ASSERT_TRUE(one_time && username);
 
     EXPECT_FALSE(one_time->isChecked());
-    EXPECT_TRUE(username->isVisible());
+    EXPECT_TRUE(username->isEnabled());
     EXPECT_EQ(dialog.userName(), "admin");
 }
 
 //--------------------------------------------------------------------------------------------------
-// Turning the one-time password on drops the name entered before it: the field goes away, and what
-// it held goes with it.
+// A one-time password is the host naming itself, so a connection made with it carries no user
+// name. The field keeps what was typed in it, because the pair it belongs to can be chosen again.
 TEST_F(AuthorizationDialogTest, TurningOnTheOneTimePasswordDropsTheUserName)
 {
     rememberOneTimePassword(false);
@@ -111,27 +111,27 @@ TEST_F(AuthorizationDialogTest, TurningOnTheOneTimePasswordDropsTheUserName)
     dialog.setUserName("admin");
     dialog.show();
 
-    QCheckBox* one_time = oneTimePasswordBox(dialog);
+    QRadioButton* one_time = oneTimePasswordButton(dialog);
     QLineEdit* username = userNameEdit(dialog);
     ASSERT_TRUE(one_time && username);
 
     QTest::mouseClick(one_time, Qt::LeftButton);
 
     EXPECT_TRUE(one_time->isChecked());
-    EXPECT_FALSE(username->isVisible());
-    EXPECT_TRUE(username->text().isEmpty());
+    EXPECT_FALSE(username->isEnabled());
+    EXPECT_EQ(username->text(), "admin");
     EXPECT_TRUE(dialog.userName().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
 // A one-time password is asked of the host itself, and the name of the record has nothing to do
-// with it. A name the field still holds while it is hidden is not the answer of the user: handed
-// over, it would send the connection under a user the host does not know.
+// with it. A name the field still holds is not the answer of the user: handed over, it would send
+// the connection under a user the host does not know.
 TEST_F(AuthorizationDialogTest, NameBehindTheHiddenFieldIsNotHandedOver)
 {
     rememberOneTimePassword(true);
 
-    // The box is ticked, but the host of this record is reached without a router, so the choice
+    // The choice is remembered, but the host of this record is reached without a router, so it
     // does not count yet and the name is asked for.
     AuthorizationDialog dialog;
     dialog.show();
@@ -142,10 +142,10 @@ TEST_F(AuthorizationDialogTest, NameBehindTheHiddenFieldIsNotHandedOver)
     QTest::keyClicks(username, "admin");
     ASSERT_EQ(dialog.userName(), "admin");
 
-    // The record turns out to be reached through a router, and the ticked box now counts.
+    // The record turns out to be reached through a router, and the remembered choice now counts.
     dialog.setOneTimePasswordEnabled(true);
 
-    EXPECT_FALSE(username->isVisible());
+    EXPECT_FALSE(username->isEnabled());
     EXPECT_EQ(username->text(), "admin");
     EXPECT_TRUE(dialog.userName().isEmpty());
 }
@@ -210,8 +210,8 @@ TEST_F(AuthorizationDialogTest, CredentialsAreNotOfferedWhenTheyAreNotAskedFor)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The box keeps its state between connections, and that state is what the user chose. A record
-// that carries a user name clears the box for the dialog it opens and for that dialog only.
+// The choice is kept between connections, and it is the one the user made. A record that carries
+// a user name puts the dialog back on the pair for that dialog only.
 TEST_F(AuthorizationDialogTest, SavedUserNameLeavesTheRememberedChoiceAlone)
 {
     rememberOneTimePassword(true);
@@ -222,7 +222,7 @@ TEST_F(AuthorizationDialogTest, SavedUserNameLeavesTheRememberedChoiceAlone)
         dialog.setUserName("admin");
         dialog.show();
 
-        QCheckBox* one_time = oneTimePasswordBox(dialog);
+        QRadioButton* one_time = oneTimePasswordButton(dialog);
         ASSERT_TRUE(one_time);
         EXPECT_FALSE(one_time->isChecked());
     }
@@ -232,7 +232,7 @@ TEST_F(AuthorizationDialogTest, SavedUserNameLeavesTheRememberedChoiceAlone)
 }
 
 //--------------------------------------------------------------------------------------------------
-// What the user does with the box is what comes back the next time the dialog opens.
+// What the user chose is what comes back the next time the dialog opens.
 TEST_F(AuthorizationDialogTest, ChoiceOfTheUserIsRemembered)
 {
     rememberOneTimePassword(false);
@@ -242,7 +242,7 @@ TEST_F(AuthorizationDialogTest, ChoiceOfTheUserIsRemembered)
         dialog.setOneTimePasswordEnabled(true);
         dialog.show();
 
-        QCheckBox* one_time = oneTimePasswordBox(dialog);
+        QRadioButton* one_time = oneTimePasswordButton(dialog);
         ASSERT_TRUE(one_time);
 
         QTest::mouseClick(one_time, Qt::LeftButton);
@@ -261,21 +261,21 @@ TEST_F(AuthorizationDialogTest, RecordOfTheManagerIsHandedOverInPlaceOfTheFields
     rememberOneTimePassword(false);
 
     AuthorizationDialog dialog;
-    dialog.setCredentials({ credential(1, "first", "first-user", "first-password"),
+    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password"),
                             credential(2, "second", "second-user", "second-password") });
     dialog.show();
 
     QLineEdit* username = userNameEdit(dialog);
-    QRadioButton* shared = sharedButton(dialog);
+    QRadioButton* saved = savedCredentialsButton(dialog);
     QComboBox* combo = credentialCombo(dialog);
-    ASSERT_TRUE(username && shared && combo);
+    ASSERT_TRUE(username && saved && combo);
 
     // What was typed before the record was chosen stays in the field it was typed in, and the
     // host is not entered with it any more.
     QTest::keyClicks(username, "typed");
 
-    EXPECT_TRUE(shared->isEnabled());
-    shared->setChecked(true);
+    EXPECT_TRUE(saved->isVisible());
+    saved->setChecked(true);
     combo->setCurrentIndex(combo->findData(QVariant::fromValue<qint64>(2)));
 
     EXPECT_FALSE(username->isEnabled());
@@ -291,7 +291,7 @@ TEST_F(AuthorizationDialogTest, PairTypedByHandLeavesNoLinkBehind)
     rememberOneTimePassword(false);
 
     AuthorizationDialog dialog;
-    dialog.setCredentials({ credential(1, "first", "first-user", "first-password") });
+    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password") });
     dialog.show();
 
     QLineEdit* username = userNameEdit(dialog);
@@ -313,33 +313,34 @@ TEST_F(AuthorizationDialogTest, ChoiceIsNotOfferedWithoutARecordToChoose)
     AuthorizationDialog dialog;
     dialog.show();
 
-    QRadioButton* shared = sharedButton(dialog);
-    ASSERT_TRUE(shared);
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    ASSERT_TRUE(saved);
 
-    shared->setChecked(true);
+    saved->setChecked(true);
 
-    EXPECT_FALSE(shared->isEnabled());
+    EXPECT_FALSE(saved->isVisible());
     EXPECT_EQ(dialog.credentialId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
-// A one-time password is the host naming itself, and no record of a user stands in for it. What
-// the user could not choose is not his answer.
-TEST_F(AuthorizationDialogTest, OneTimePasswordLeavesNoRecordToChoose)
+// A one-time password is the host naming itself: the record is still there to be chosen, but it
+// is not what the host is entered with while the password is.
+TEST_F(AuthorizationDialogTest, OneTimePasswordLeavesTheRecordUnchosen)
 {
     rememberOneTimePassword(true);
 
     AuthorizationDialog dialog;
-    dialog.setCredentials({ credential(1, "first", "first-user", "first-password") });
+    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password") });
     dialog.setOneTimePasswordEnabled(true);
     dialog.show();
 
-    QRadioButton* shared = sharedButton(dialog);
-    ASSERT_TRUE(shared);
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    QRadioButton* one_time = oneTimePasswordButton(dialog);
+    ASSERT_TRUE(saved && one_time);
 
-    shared->setChecked(true);
-
-    EXPECT_FALSE(shared->isEnabled());
+    EXPECT_TRUE(saved->isVisible());
+    EXPECT_TRUE(one_time->isChecked());
+    EXPECT_FALSE(saved->isChecked());
     EXPECT_TRUE(dialog.userName().isEmpty());
     EXPECT_EQ(dialog.credentialId(), 0);
 }

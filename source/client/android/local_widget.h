@@ -100,13 +100,13 @@ private:
 
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
-    TreeWidget* host_tree_ = nullptr;
+    TreeWidget* tree_host_ = nullptr;
     LocalGroupEditor* group_editor_ = nullptr;
     LocalHostEditor* host_editor_ = nullptr;
     SearchWidget* search_page_ = nullptr;
-    IconButton* search_button_ = nullptr;
-    IconButton* refresh_button_ = nullptr;
-    IconButton* overflow_button_ = nullptr;
+    IconButton* button_search_ = nullptr;
+    IconButton* button_refresh_ = nullptr;
+    IconButton* button_overflow_ = nullptr;
     OnlineChecker* online_checker_ = nullptr;
 
     // The group a new host is added to: the open group on the host page, or the root on the tree.

@@ -81,7 +81,7 @@ private:
     QVBoxLayout* cards_layout_ = nullptr;
     RoutersEmptyView* placeholder_ = nullptr;
     RouterEditor* editor_ = nullptr;
-    IconButton* add_button_ = nullptr;
+    IconButton* button_add_ = nullptr;
     qint64 expanded_router_id_ = -1;
 
     QHash<qint64, RouterCard*> cards_;

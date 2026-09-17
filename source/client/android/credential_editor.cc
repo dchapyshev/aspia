@@ -44,39 +44,39 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 CredentialEditor::CredentialEditor(QWidget* parent)
     : QWidget(parent),
-      name_(new LineEdit()),
-      username_(new LineEdit()),
-      password_(new LineEdit()),
-      error_(new Label(QString(), Label::Role::CAPTION))
+      edit_name_(new LineEdit()),
+      edit_username_(new LineEdit()),
+      edit_password_(new LineEdit()),
+      label_error_(new Label(QString(), Label::Role::CAPTION))
 {
-    name_->setLabel(tr("Name"));
-    username_->setLabel(tr("User Name"));
-    password_->setLabel(tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
+    edit_name_->setLabel(tr("Name"));
+    edit_username_->setLabel(tr("User Name"));
+    edit_password_->setLabel(tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
     // The delete action is destructive, so its text is tinted red and it shows only when editing.
-    delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
-    delete_button_->setAccentColor(Controls::errorColor());
-    delete_button_->hide();
+    button_delete_ = new Button(tr("Delete"), Button::Role::TEXT);
+    button_delete_->setAccentColor(Controls::errorColor());
+    button_delete_->hide();
 
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
-    form_layout->addWidget(error_);
-    form_layout->addWidget(name_);
-    form_layout->addWidget(username_);
-    form_layout->addWidget(password_);
+    form_layout->addWidget(label_error_);
+    form_layout->addWidget(edit_name_);
+    form_layout->addWidget(edit_username_);
+    form_layout->addWidget(edit_password_);
     form_layout->addWidget(save);
-    form_layout->addWidget(delete_button_);
+    form_layout->addWidget(button_delete_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -88,7 +88,7 @@ CredentialEditor::CredentialEditor(QWidget* parent)
     layout->addWidget(scroll);
 
     connect(save, &Button::clicked, this, &CredentialEditor::onSaveClicked);
-    connect(delete_button_, &Button::clicked, this, &CredentialEditor::onDeleteClicked);
+    connect(button_delete_, &Button::clicked, this, &CredentialEditor::onDeleteClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,13 +99,13 @@ void CredentialEditor::prepareForAdd()
 {
     credential_id_ = -1;
 
-    name_->clear();
-    username_->clear();
-    password_->clear();
-    error_->setVisible(false);
-    delete_button_->hide();
+    edit_name_->clear();
+    edit_username_->clear();
+    edit_password_->clear();
+    label_error_->setVisible(false);
+    button_delete_->hide();
 
-    name_->setFocus();
+    edit_name_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,24 +120,24 @@ bool CredentialEditor::prepareForEdit(qint64 credential_id)
 
     credential_id_ = credential_id;
 
-    name_->setText(credential->displayName());
-    username_->setText(credential->username());
-    password_->setText(credential->password().toString());
-    error_->setVisible(false);
-    delete_button_->show();
+    edit_name_->setText(credential->displayName());
+    edit_username_->setText(credential->username());
+    edit_password_->setText(credential->password().toString());
+    label_error_->setVisible(false);
+    button_delete_->show();
 
-    name_->setFocus();
+    edit_name_->setFocus();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void CredentialEditor::onSaveClicked()
 {
-    const QString name = name_->text();
+    const QString name = edit_name_->text();
     if (name.isEmpty())
     {
         showError(tr("Name cannot be empty."));
-        name_->setFocus();
+        edit_name_->setFocus();
         return;
     }
 
@@ -145,24 +145,24 @@ void CredentialEditor::onSaveClicked()
     {
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", CredentialConfig::kMaxNameLength));
-        name_->setFocus();
-        name_->selectAll();
+        edit_name_->setFocus();
+        edit_name_->selectAll();
         return;
     }
 
-    if (!User::isValidUserName(username_->text()))
+    if (!User::isValidUserName(edit_username_->text()))
     {
         showError(tr("The user name can not be empty and can contain only alphabet characters,"
                      " numbers and \"_\", \"-\", \".\" characters."));
-        username_->setFocus();
-        username_->selectAll();
+        edit_username_->setFocus();
+        edit_username_->selectAll();
         return;
     }
 
-    if (password_->text().isEmpty())
+    if (edit_password_->text().isEmpty())
     {
         showError(tr("Password cannot be empty."));
-        password_->setFocus();
+        edit_password_->setFocus();
         return;
     }
 
@@ -170,8 +170,8 @@ void CredentialEditor::onSaveClicked()
     credential.setId(credential_id_);
     credential.setType(CredentialConfig::Type::HOST);
     credential.setDisplayName(name);
-    credential.setUsername(username_->text());
-    credential.setPassword(SecureString(password_->text()));
+    credential.setUsername(edit_username_->text());
+    credential.setPassword(SecureString(edit_password_->text()));
 
     Database& db = Database::instance();
 
@@ -190,7 +190,7 @@ void CredentialEditor::onSaveClicked()
 void CredentialEditor::onDeleteClicked()
 {
     if (!MessageDialog::confirm(this, tr("Delete Credentials"),
-                                tr("Delete the credentials \"%1\"?").arg(name_->text()), tr("Delete")))
+                                tr("Delete the credentials \"%1\"?").arg(edit_name_->text()), tr("Delete")))
     {
         return;
     }
@@ -207,6 +207,6 @@ void CredentialEditor::onDeleteClicked()
 //--------------------------------------------------------------------------------------------------
 void CredentialEditor::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }

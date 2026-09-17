@@ -29,8 +29,8 @@
 PasswordDialog::PasswordDialog(Mode mode, QWidget* parent)
     : Dialog(parent),
       mode_(mode),
-      password_(new LineEdit(this)),
-      error_(new Label(QString(), Label::Role::CAPTION, this))
+      edit_password_(new LineEdit(this)),
+      label_error_(new Label(QString(), Label::Role::CAPTION, this))
 {
     if (mode_ == Mode::SET)
     {
@@ -43,22 +43,22 @@ PasswordDialog::PasswordDialog(Mode mode, QWidget* parent)
         setText(tr("Enter the password to decrypt the address book."));
     }
 
-    password_->setLabel(tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
+    edit_password_->setLabel(tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
 
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
-    contentLayout()->addWidget(error_);
-    contentLayout()->addWidget(password_);
+    contentLayout()->addWidget(label_error_);
+    contentLayout()->addWidget(edit_password_);
 
     if (mode_ == Mode::SET)
     {
-        confirm_ = new LineEdit(this);
-        confirm_->setLabel(tr("Confirm Password"));
-        confirm_->setEchoMode(QLineEdit::Password);
-        contentLayout()->addWidget(confirm_);
+        edit_confirm_ = new LineEdit(this);
+        edit_confirm_->setLabel(tr("Confirm Password"));
+        edit_confirm_->setEchoMode(QLineEdit::Password);
+        contentLayout()->addWidget(edit_confirm_);
     }
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
@@ -74,24 +74,24 @@ PasswordDialog::~PasswordDialog() = default;
 //--------------------------------------------------------------------------------------------------
 SecureString PasswordDialog::password() const
 {
-    return SecureString(password_->text());
+    return SecureString(edit_password_->text());
 }
 
 //--------------------------------------------------------------------------------------------------
 void PasswordDialog::onAcceptClicked()
 {
-    if (password_->text().isEmpty())
+    if (edit_password_->text().isEmpty())
     {
         showError(tr("Password cannot be empty."));
-        password_->setFocus();
+        edit_password_->setFocus();
         return;
     }
 
-    if (mode_ == Mode::SET && password_->text() != confirm_->text())
+    if (mode_ == Mode::SET && edit_password_->text() != edit_confirm_->text())
     {
         showError(tr("Passwords do not match."));
-        confirm_->setFocus();
-        confirm_->selectAll();
+        edit_confirm_->setFocus();
+        edit_confirm_->selectAll();
         return;
     }
 
@@ -101,6 +101,6 @@ void PasswordDialog::onAcceptClicked()
 //--------------------------------------------------------------------------------------------------
 void PasswordDialog::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }

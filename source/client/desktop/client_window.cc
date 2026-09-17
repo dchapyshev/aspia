@@ -127,7 +127,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
         if (!Database::instance().credentialList(&credentials))
             LOG(ERROR) << "Unable to read credentials";
 
-        auth_dialog.setCredentials(credentials);
+        auth_dialog.setSavedCredentials(credentials);
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {

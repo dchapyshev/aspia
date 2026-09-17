@@ -62,20 +62,20 @@ LocalWidget::LocalWidget(QWidget* parent)
     : QWidget(parent),
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
-      host_tree_(new TreeWidget(this)),
+      tree_host_(new TreeWidget(this)),
       group_editor_(new LocalGroupEditor(this)),
       host_editor_(new LocalHostEditor(this)),
       search_page_(new SearchWidget(this)),
-      search_button_(new IconButton(":/img/material/search.svg", this)),
-      refresh_button_(new IconButton(":/img/material/refresh.svg", this)),
-      overflow_button_(new IconButton(":/img/material/more_vert.svg", this)),
+      button_search_(new IconButton(":/img/material/search.svg", this)),
+      button_refresh_(new IconButton(":/img/material/refresh.svg", this)),
+      button_overflow_(new IconButton(":/img/material/more_vert.svg", this)),
       online_checker_(new OnlineChecker(this))
 {
     // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
     // receives. Hidden by default so they do not linger in this widget.
-    search_button_->hide();
-    refresh_button_->hide();
-    overflow_button_->hide();
+    button_search_->hide();
+    button_refresh_->hide();
+    button_overflow_->hide();
 
     // Two columns: the entry name and, for ungrouped hosts shown at the root, its address.
     tree_->setColumnCount(2);
@@ -96,13 +96,13 @@ LocalWidget::LocalWidget(QWidget* parent)
     host_layout->setContentsMargins(0, 0, 0, 0);
     host_layout->setSpacing(0);
 
-    host_tree_->setRootIsDecorated(false);
-    host_tree_->setColumnCount(2);
-    host_tree_->header()->setStretchLastSection(false);
-    host_tree_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    host_tree_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    tree_host_->setRootIsDecorated(false);
+    tree_host_->setColumnCount(2);
+    tree_host_->header()->setStretchLastSection(false);
+    tree_host_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tree_host_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-    host_layout->addWidget(host_tree_, 1);
+    host_layout->addWidget(tree_host_, 1);
 
     stack_->addWidget(tree_page);
     stack_->addWidget(host_page);
@@ -119,19 +119,19 @@ LocalWidget::LocalWidget(QWidget* parent)
 
     // A tap on a host opens the session-type chooser. The group tree is routed through
     // onItemActivated (it must also open groups); the host list has only hosts.
-    connect(host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
+    connect(tree_host_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         if (item && item->data(0, kHostIdRole).isValid())
             showSessionMenu(item->data(0, kHostIdRole).toLongLong());
     });
 
-    connect(search_button_, &IconButton::clicked, this, &LocalWidget::showSearch);
-    connect(refresh_button_, &IconButton::clicked, this, &LocalWidget::onRefreshClicked);
+    connect(button_search_, &IconButton::clicked, this, &LocalWidget::showSearch);
+    connect(button_refresh_, &IconButton::clicked, this, &LocalWidget::onRefreshClicked);
     connect(search_page_, &SearchWidget::sig_activated, this, [this](const QVariant& data)
     {
         showSessionMenu(data.toLongLong());
     });
-    connect(overflow_button_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
+    connect(button_overflow_, &IconButton::clicked, this, &LocalWidget::onShowMenu);
     connect(host_editor_, &LocalHostEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
     connect(group_editor_, &LocalGroupEditor::sig_accepted, this, &LocalWidget::returnFromEditor);
 
@@ -144,7 +144,7 @@ LocalWidget::LocalWidget(QWidget* parent)
         else
             editGroup(item->data(0, kGroupIdRole).toLongLong());
     });
-    connect(host_tree_, &TreeWidget::sig_itemLongPressed, this, [this](QTreeWidgetItem* item)
+    connect(tree_host_, &TreeWidget::sig_itemLongPressed, this, [this](QTreeWidgetItem* item)
     {
         editHost(item->data(0, kHostIdRole).toLongLong());
     });
@@ -165,7 +165,7 @@ QList<QWidget*> LocalWidget::appBarActions() const
     if (isEditorPage() || isSearchPage())
         return {};
 
-    return { search_button_, refresh_button_, overflow_button_ };
+    return { button_search_, button_refresh_, button_overflow_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ void LocalWidget::onShowMenu()
     });
 
     // Anchor the menu to the button; it drops from the button's near edge per layout direction.
-    menu->popup(QRect(overflow_button_->mapToGlobal(QPoint(0, 0)), overflow_button_->size()));
+    menu->popup(QRect(button_overflow_->mapToGlobal(QPoint(0, 0)), button_overflow_->size()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -436,7 +436,7 @@ void LocalWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
         online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg");
 
     // The host may be shown in the root tree (ungrouped) or in an opened group's list.
-    for (TreeWidget* tree : { tree_, host_tree_ })
+    for (TreeWidget* tree : { tree_, tree_host_ })
     {
         for (int i = 0; i < tree->topLevelItemCount(); ++i)
         {
@@ -470,7 +470,7 @@ void LocalWidget::onRefreshClicked()
     // Reset the probed hosts to the neutral icon before starting, so it is visible that the statuses
     // are being refreshed instead of leaving the stale online/offline marks during the recheck.
     const QIcon neutral_icon = GuiApplication::svgIcon(":/img/computer.svg");
-    for (TreeWidget* tree : { tree_, host_tree_ })
+    for (TreeWidget* tree : { tree_, tree_host_ })
     {
         for (int i = 0; i < tree->topLevelItemCount(); ++i)
         {
@@ -566,7 +566,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     current_group_id_ = group_id;
     current_title_ = title;
 
-    host_tree_->clear();
+    tree_host_->clear();
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
@@ -575,7 +575,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     Database::instance().localHostList(group_id, &group_hosts);
     for (const LocalHostConfig& host : std::as_const(group_hosts))
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(host_tree_, { host.name(), host.address() });
+        QTreeWidgetItem* item = new QTreeWidgetItem(tree_host_, { host.name(), host.address() });
         item->setIcon(0, icon);
         item->setData(0, kHostIdRole, host.id());
         hosts.append(host);

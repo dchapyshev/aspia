@@ -53,7 +53,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, bool credentials_
       host_(host),
       credentials_saved_(credentials_saved),
       app_bar_(new AppBar(this)),
-      status_(new Label(QString(), Label::Role::CAPTION, this)),
+      label_status_(new Label(QString(), Label::Role::CAPTION, this)),
       local_panel_(new FilePanelWidget(FileTask::Target::LOCAL, this)),
       remote_panel_(new FilePanelWidget(FileTask::Target::REMOTE, this))
 {
@@ -73,7 +73,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, bool credentials_
     local_panel_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
     remote_panel_->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
-    status_->setAlignment(Qt::AlignCenter);
+    label_status_->setAlignment(Qt::AlignCenter);
 
     // Switcher shown only on a narrow screen.
     tab_bar_ = new TabBar(this);
@@ -91,7 +91,7 @@ FileTransferWindow::FileTransferWindow(const HostConfig& host, bool credentials_
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(app_bar_);
-    layout->addWidget(status_);
+    layout->addWidget(label_status_);
     layout->addWidget(panels, 1);
     layout->addWidget(tab_bar_);
 
@@ -148,7 +148,7 @@ void FileTransferWindow::onStatusChanged(NetworkWorker::Status status, const QVa
 
         case NetworkWorker::Status::HOST_CONNECTED:
             connected_ = true;
-            status_->setVisible(false);
+            label_status_->setVisible(false);
             local_panel_->refresh();
             remote_panel_->refresh();
             break;
@@ -241,6 +241,7 @@ void FileTransferWindow::forgetHostCredentials()
             return;
         }
 
+        local_host->setCredentialId(0);
         local_host->setUsername(QString());
         local_host->setPassword(SecureString());
 
@@ -573,6 +574,6 @@ void FileTransferWindow::applyLayout()
 //--------------------------------------------------------------------------------------------------
 void FileTransferWindow::setStatusText(const QString& text)
 {
-    status_->setText(text);
-    status_->setVisible(true);
+    label_status_->setText(text);
+    label_status_->setVisible(true);
 }

@@ -43,9 +43,9 @@ signals:
     void sig_cancel();
 
 private:
-    Label* item_ = nullptr;
-    Label* speed_ = nullptr;
-    QProgressBar* bar_ = nullptr;
+    Label* label_item_ = nullptr;
+    Label* label_speed_ = nullptr;
+    QProgressBar* progress_bar_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(FileProgressSheet)
 };

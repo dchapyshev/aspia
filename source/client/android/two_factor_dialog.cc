@@ -57,7 +57,7 @@ QString groupedSecret(const QString& otpauth_uri)
 //--------------------------------------------------------------------------------------------------
 TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, QWidget* parent)
     : Dialog(parent),
-      code_(new LineEdit(this))
+      edit_code_(new LineEdit(this))
 {
     const bool enroll = !otpauth_uri.isEmpty();
 
@@ -81,12 +81,12 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
         content->addWidget(secret);
     }
 
-    code_->setLabel(tr("Code"));
-    code_->setMaxLength(Totp::kDefaultDigits);
-    code_->setInputMethodHints(Qt::ImhDigitsOnly | Qt::ImhPreferNumbers);
-    code_->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d*"), code_));
-    content->addWidget(code_);
-    code_->setFocus();
+    edit_code_->setLabel(tr("Code"));
+    edit_code_->setMaxLength(Totp::kDefaultDigits);
+    edit_code_->setInputMethodHints(Qt::ImhDigitsOnly | Qt::ImhPreferNumbers);
+    edit_code_->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d*"), edit_code_));
+    content->addWidget(edit_code_);
+    edit_code_->setFocus();
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     Button* ok = addButton(tr("OK"), Button::Role::FILLED);
@@ -95,7 +95,7 @@ TwoFactorDialog::TwoFactorDialog(const QString& otpauth_uri, bool code_refused, 
     // never leaves here.
     ok->setEnabled(false);
 
-    connect(code_, &QLineEdit::textChanged, this, [ok](const QString& text)
+    connect(edit_code_, &QLineEdit::textChanged, this, [ok](const QString& text)
     {
         ok->setEnabled(text.trimmed().size() == Totp::kDefaultDigits);
     });
@@ -110,5 +110,5 @@ TwoFactorDialog::~TwoFactorDialog() = default;
 //--------------------------------------------------------------------------------------------------
 QString TwoFactorDialog::code() const
 {
-    return code_->text().trimmed();
+    return edit_code_->text().trimmed();
 }

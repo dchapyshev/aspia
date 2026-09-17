@@ -62,12 +62,12 @@ signals:
     void sig_nextPage();
 
 private:
-    TreeWidget* results_;
+    TreeWidget* tree_results_;
     SearchHighlightDelegate* delegate_;
-    Label* empty_label_;
-    Label* page_label_;
-    IconButton* prev_button_;
-    IconButton* next_button_;
+    Label* label_empty_;
+    Label* label_page_;
+    IconButton* button_prev_;
+    IconButton* button_next_;
     QWidget* page_bar_;
 
     Q_DISABLE_COPY_MOVE(SearchWidget)

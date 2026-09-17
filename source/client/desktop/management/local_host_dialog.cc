@@ -72,7 +72,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     }
 
     // Nothing to share until a record of credentials is added.
-    ui->checkbox_shared->setEnabled(!credentials.isEmpty());
+    ui->checkbox_saved_credentials->setEnabled(!credentials.isEmpty());
 
     qint64 selected_router_id = 0;
 
@@ -91,7 +91,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
             if (host->credentialId() > 0)
             {
-                ui->checkbox_shared->setChecked(true);
+                ui->checkbox_saved_credentials->setChecked(true);
                 ui->combo_credential->setCurrentIndex(
                     ui->combo_credential->findData(QVariant::fromValue(host->credentialId())));
             }
@@ -145,10 +145,10 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostDialog::onRouterChanged);
-    connect(ui->checkbox_shared, &QCheckBox::toggled, this, &LocalHostDialog::onSharedToggled);
+    connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
 
-    onSharedToggled(ui->checkbox_shared->isChecked());
+    onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
     ui->edit_name->setFocus();
 }
@@ -169,7 +169,7 @@ void LocalHostDialog::onRouterChanged(int /* index */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostDialog::onSharedToggled(bool checked)
+void LocalHostDialog::onSavedCredentialsToggled(bool checked)
 {
     if (checked && ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
     {
@@ -177,10 +177,10 @@ void LocalHostDialog::onSharedToggled(bool checked)
         ui->edit_password->clear();
     }
 
-    QWidget* page = checked ? ui->page_shared : ui->page_own;
+    QWidget* page = checked ? ui->page_saved_credentials : ui->page_own;
 
     // The stack is as high as its pages, so the page that is not shown steps out of the count.
-    for (QWidget* other : { ui->page_own, ui->page_shared })
+    for (QWidget* other : { ui->page_own, ui->page_saved_credentials })
     {
         other->setSizePolicy(QSizePolicy::Preferred,
                              other == page ? QSizePolicy::Preferred : QSizePolicy::Ignored);
@@ -293,7 +293,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host.setName(ui->edit_name->text());
     host.setAddress(ui->edit_address->text());
     host.setCredentialId(
-        ui->checkbox_shared->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
+        ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
     host.setUsername(username);
     host.setPassword(password);
     host.setComment(ui->edit_comment->toPlainText());

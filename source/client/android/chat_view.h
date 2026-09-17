@@ -66,9 +66,9 @@ private:
 
     QVBoxLayout* messages_layout_ = nullptr;
     QScrollArea* scroll_ = nullptr;
-    Label* status_ = nullptr;
-    QTextEdit* input_ = nullptr;
-    IconButton* send_button_ = nullptr;
+    Label* label_status_ = nullptr;
+    QTextEdit* edit_input_ = nullptr;
+    IconButton* button_send_ = nullptr;
 
     // Message bubbles, kept so their maximum width can be re-clamped on resize.
     QList<QWidget*> bubbles_;

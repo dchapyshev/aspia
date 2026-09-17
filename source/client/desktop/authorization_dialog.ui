@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>240</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0" colspan="2">
-      <widget class="QRadioButton" name="radio_typed">
+      <widget class="QRadioButton" name="radio_user_password">
        <property name="text">
         <string>Enter user name and password</string>
        </property>
@@ -26,14 +26,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="checkbox_one_time_password">
-       <property name="text">
-        <string>One-time password connection</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="label_username">
        <property name="text">
         <string>User Name:</string>
@@ -43,10 +36,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="1" column="1">
       <widget class="QLineEdit" name="edit_username"/>
      </item>
-     <item row="3" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label_password">
        <property name="text">
         <string>Password:</string>
@@ -56,7 +49,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="2" column="1">
       <widget class="PasswordEdit" name="edit_password">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -66,14 +59,41 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QRadioButton" name="radio_shared">
+     <item row="3" column="0" colspan="2">
+      <widget class="QRadioButton" name="radio_one_time_password">
+       <property name="text">
+        <string>One-time password connection</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_one_time_password">
+       <property name="text">
+        <string>Password:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="PasswordEdit" name="edit_one_time_password">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QRadioButton" name="radio_saved_credentials">
        <property name="text">
         <string>Use saved credentials</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_credential">
        <property name="text">
         <string>Credentials:</string>
@@ -83,7 +103,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <widget class="QComboBox" name="combo_credential">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -93,14 +113,14 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="2">
+     <item row="7" column="0" colspan="2">
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="2">
+     <item row="8" column="0" colspan="2">
       <widget class="QCheckBox" name="checkbox_save_credentials">
        <property name="text">
         <string>Save credentials</string>

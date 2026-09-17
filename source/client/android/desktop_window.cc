@@ -95,17 +95,17 @@ DesktopWindow::DesktopWindow(const HostConfig& host, bool credentials_saved, QWi
       host_(host),
       credentials_saved_(credentials_saved),
       view_(new DesktopView()),
-      status_(new Label(QString(), Label::Role::BODY))
+      label_status_(new Label(QString(), Label::Role::BODY))
 {
     // The status text floats centered over the desktop area until the first frame arrives.
-    status_->setAlignment(Qt::AlignCenter);
-    status_->setWordWrap(true);
-    status_->setStyleSheet("color: white;");
+    label_status_->setAlignment(Qt::AlignCenter);
+    label_status_->setWordWrap(true);
+    label_status_->setStyleSheet("color: white;");
 
     QGridLayout* layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(view_, 0, 0);
-    layout->addWidget(status_, 0, 0, Qt::AlignCenter);
+    layout->addWidget(label_status_, 0, 0, Qt::AlignCenter);
 
     fab_ = new FloatingActionButton(":/img/material/more_vert.svg", this);
     connect(fab_, &FloatingActionButton::sig_clicked, this, &DesktopWindow::onShowActions);
@@ -147,8 +147,8 @@ void DesktopWindow::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
 
-    if (status_)
-        status_->setFixedWidth(qRound(width() * kStatusWidthFactor));
+    if (label_status_)
+        label_status_->setFixedWidth(qRound(width() * kStatusWidthFactor));
 
     if (fab_)
         fab_->move(width() - fab_->width() - kFabMargin, height() - fab_->height() - kFabMargin);
@@ -239,7 +239,7 @@ void DesktopWindow::onClipboardMessage(const QByteArray& buffer)
 void DesktopWindow::onFrameChanged(const QSize& /* screen_size */, SharedFrame frame)
 {
     view_->setFrame(std::move(frame));
-    status_->setVisible(false);
+    label_status_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -484,6 +484,7 @@ void DesktopWindow::forgetHostCredentials()
             return;
         }
 
+        local_host->setCredentialId(0);
         local_host->setUsername(QString());
         local_host->setPassword(SecureString());
 
@@ -754,8 +755,8 @@ void DesktopWindow::triggerPowerAction(
 //--------------------------------------------------------------------------------------------------
 void DesktopWindow::setStatusText(const QString& text)
 {
-    status_->setText(text);
-    status_->setVisible(true);
+    label_status_->setText(text);
+    label_status_->setVisible(true);
 }
 
 //--------------------------------------------------------------------------------------------------

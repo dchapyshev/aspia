@@ -161,23 +161,23 @@ RouterCard::RouterCard(qint64 router_id, const QString& name, QWidget* parent)
       router_id_(router_id)
 {
     // Header: status icon and name.
-    status_icon_ = new QLabel();
-    status_icon_->setFixedSize(kStatusIconSize, kStatusIconSize);
-    headerLayout()->addWidget(status_icon_);
+    label_status_icon_ = new QLabel();
+    label_status_icon_->setFixedSize(kStatusIconSize, kStatusIconSize);
+    headerLayout()->addWidget(label_status_icon_);
 
-    name_label_ = new Label(name, Label::Role::BODY);
-    headerLayout()->addWidget(name_label_, 1);
+    label_name_ = new Label(name, Label::Role::BODY);
+    headerLayout()->addWidget(label_name_, 1);
 
     // Panel: the connection event log on a lifted surface.
     contentLayout()->setContentsMargins(kContentHMargin, 0, kContentHMargin, kContentHMargin);
 
     // The way to answer the two-factor stage: shown only while the session stands at it, so the
     // panel of a working router is the event log alone.
-    two_factor_button_ = new Button(tr("Enter Code"), Button::Role::FILLED);
-    two_factor_button_->setVisible(false);
-    connect(two_factor_button_, &Button::clicked, this,
+    button_two_factor_ = new Button(tr("Enter Code"), Button::Role::FILLED);
+    button_two_factor_->setVisible(false);
+    connect(button_two_factor_, &Button::clicked, this,
             [this]() { emit sig_twoFactorClicked(router_id_); });
-    contentLayout()->addWidget(two_factor_button_);
+    contentLayout()->addWidget(button_two_factor_);
 
     Card* card = new Card(Card::Role::FILLED);
 
@@ -200,7 +200,7 @@ RouterCard::~RouterCard() = default;
 //--------------------------------------------------------------------------------------------------
 void RouterCard::setStatus(RouterStatus status)
 {
-    status_icon_->setPixmap(GuiApplication::svgPixmap(statusIconPath(status),
+    label_status_icon_->setPixmap(GuiApplication::svgPixmap(statusIconPath(status),
                                                       QSize(kStatusIconSize, kStatusIconSize)));
     updateTwoFactorButton();
 }
@@ -212,18 +212,18 @@ void RouterCard::updateTwoFactorButton()
     // but it stays on the card. A hidden button would read as if no question existed, and the
     // journal line naming the wait can be pushed out by the reconnect noise of the blocked stage.
     TwoFactorPrompt* prompt = RouterController::twoFactorPrompt(router_id_);
-    two_factor_button_->setVisible(prompt != nullptr);
+    button_two_factor_->setVisible(prompt != nullptr);
 
     if (prompt)
     {
         const bool blocked = prompt->blockedSeconds() > 0;
-        two_factor_button_->setEnabled(!blocked);
+        button_two_factor_->setEnabled(!blocked);
 
         // An account with no secret yet is walked through the enrollment first, and the button says so.
         if (blocked)
-            two_factor_button_->setText(tr("Blocked"));
+            button_two_factor_->setText(tr("Blocked"));
         else
-            two_factor_button_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
+            button_two_factor_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
     }
 
     contentChanged();

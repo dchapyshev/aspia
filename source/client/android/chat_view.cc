@@ -157,8 +157,8 @@ protected:
 //--------------------------------------------------------------------------------------------------
 ChatView::ChatView(QWidget* parent)
     : QWidget(parent),
-      input_(new QTextEdit(this)),
-      send_button_(new IconButton(":/img/material/send.svg", this))
+      edit_input_(new QTextEdit(this)),
+      button_send_(new IconButton(":/img/material/send.svg", this))
 {
     scroll_ = new QScrollArea(this);
     scroll_->setWidgetResizable(true);
@@ -191,31 +191,31 @@ ChatView::ChatView(QWidget* parent)
     scroll_->setWidget(content);
 
     // A borderless multi-line field on the bar's own surface; it grows with its content.
-    input_->setFont(Controls::scaledFont(font(), Controls::kFontScale));
-    input_->setFrameShape(QFrame::NoFrame);
-    input_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    input_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    input_->setAcceptRichText(false);
-    input_->setPlaceholderText(tr("Message"));
+    edit_input_->setFont(Controls::scaledFont(font(), Controls::kFontScale));
+    edit_input_->setFrameShape(QFrame::NoFrame);
+    edit_input_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    edit_input_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    edit_input_->setAcceptRichText(false);
+    edit_input_->setPlaceholderText(tr("Message"));
     // A symmetric document margin pads the field to a comfortable touch height and keeps a single
     // line vertically centered (top margin equals bottom margin).
-    input_->document()->setDocumentMargin(kInputDocumentMargin);
-    input_->installEventFilter(this);
+    edit_input_->document()->setDocumentMargin(kInputDocumentMargin);
+    edit_input_->installEventFilter(this);
 
-    QPalette input_palette = input_->palette();
+    QPalette input_palette = edit_input_->palette();
     input_palette.setColor(QPalette::Base, Qt::transparent);
     QColor placeholder_color = input_palette.color(QPalette::WindowText);
     placeholder_color.setAlphaF(0.5);
     input_palette.setColor(QPalette::PlaceholderText, placeholder_color);
-    input_->setPalette(input_palette);
+    edit_input_->setPalette(input_palette);
 
-    new TouchScroller(input_);
+    new TouchScroller(edit_input_);
 
-    connect(input_, &QTextEdit::textChanged, this, &ChatView::updateInputHeight);
-    connect(input_, &QTextEdit::textChanged, this, [this]()
+    connect(edit_input_, &QTextEdit::textChanged, this, &ChatView::updateInputHeight);
+    connect(edit_input_, &QTextEdit::textChanged, this, [this]()
     {
         // Skip the programmatic clear after sending; only a real edit means the user is typing.
-        if (!input_->document()->isEmpty())
+        if (!edit_input_->document()->isEmpty())
             emit sig_typing();
     });
 
@@ -223,27 +223,27 @@ ChatView::ChatView(QWidget* parent)
     QHBoxLayout* bar_layout = new QHBoxLayout(input_bar);
     bar_layout->setContentsMargins(6, 2, 4, 2);
     bar_layout->setSpacing(0);
-    bar_layout->addWidget(input_, 1);
-    bar_layout->addWidget(send_button_, 0, Qt::AlignBottom);
+    bar_layout->addWidget(edit_input_, 1);
+    bar_layout->addWidget(button_send_, 0, Qt::AlignBottom);
 
     QHBoxLayout* input_row = new QHBoxLayout();
     input_row->setContentsMargins(8, 4, 8, 12);
     input_row->addWidget(input_bar);
 
-    status_ = new Label(QString(), Label::Role::CAPTION, this);
-    status_->setTextFormat(Qt::PlainText);
-    status_->setAlignment(Qt::AlignCenter);
+    label_status_ = new Label(QString(), Label::Role::CAPTION, this);
+    label_status_->setTextFormat(Qt::PlainText);
+    label_status_->setAlignment(Qt::AlignCenter);
     // Reserve one line so the status text appears and disappears without shifting the messages.
-    status_->setMinimumHeight(QFontMetrics(status_->font()).height());
+    label_status_->setMinimumHeight(QFontMetrics(label_status_->font()).height());
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(scroll_, 1);
-    layout->addWidget(status_);
+    layout->addWidget(label_status_);
     layout->addLayout(input_row);
 
-    connect(send_button_, &IconButton::clicked, this, &ChatView::onSend);
+    connect(button_send_, &IconButton::clicked, this, &ChatView::onSend);
 
     updateInputHeight();
     setInputEnabled(false);
@@ -311,21 +311,21 @@ void ChatView::clear()
 //--------------------------------------------------------------------------------------------------
 void ChatView::setStatusText(const QString& text)
 {
-    status_->setText(text);
+    label_status_->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ChatView::setInputEnabled(bool enabled)
 {
-    input_->setEnabled(enabled);
-    send_button_->setEnabled(enabled);
+    edit_input_->setEnabled(enabled);
+    button_send_->setEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ChatView::eventFilter(QObject* watched, QEvent* event)
 {
     // Enter sends the message; Shift+Enter inserts a line break.
-    if (watched == input_ && event->type() == QEvent::KeyPress)
+    if (watched == edit_input_ && event->type() == QEvent::KeyPress)
     {
         QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
         if ((key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) &&
@@ -338,7 +338,7 @@ bool ChatView::eventFilter(QObject* watched, QEvent* event)
 
     // Hides the Android text handles, which live in activity-owned popup windows and would
     // otherwise outlive the field; see LineEdit::focusOutEvent().
-    if (watched == input_ && event->type() == QEvent::FocusOut)
+    if (watched == edit_input_ && event->type() == QEvent::FocusOut)
         QGuiApplication::inputMethod()->reset();
 
     // When the viewport shrinks (the keyboard opens), keep following the bottom if we were there;
@@ -368,12 +368,12 @@ void ChatView::resizeEvent(QResizeEvent* event)
 //--------------------------------------------------------------------------------------------------
 void ChatView::onSend()
 {
-    const QString text = input_->toPlainText().trimmed();
+    const QString text = edit_input_->toPlainText().trimmed();
     if (text.isEmpty())
         return;
 
     emit sig_sendText(text);
-    input_->clear();
+    edit_input_->clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -382,23 +382,23 @@ void ChatView::updateInputHeight()
     // The field hugs its content, growing with each line up to kInputMaxLines, then scrolls. The
     // maximum is derived from the rendered line height (document()->size() over-estimates it, which
     // let an extra line peek in).
-    const int line_spacing = QFontMetrics(input_->font()).lineSpacing();
-    const int margins = 2 * static_cast<int>(input_->document()->documentMargin());
+    const int line_spacing = QFontMetrics(edit_input_->font()).lineSpacing();
+    const int margins = 2 * static_cast<int>(edit_input_->document()->documentMargin());
     const int max_height = kInputMaxLines * line_spacing + margins;
 
-    const int content_height = static_cast<int>(input_->document()->size().height());
-    input_->setFixedHeight(std::clamp(content_height, kInputMinHeight, max_height));
+    const int content_height = static_cast<int>(edit_input_->document()->size().height());
+    edit_input_->setFixedHeight(std::clamp(content_height, kInputMinHeight, max_height));
 
     // setFixedHeight resets the scroll to the top. While typing the caret is at the end, so scroll
     // all the way down to show the last line with its bottom margin.
-    QScrollBar* bar = input_->verticalScrollBar();
+    QScrollBar* bar = edit_input_->verticalScrollBar();
     bar->setValue(bar->maximum());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ChatView::appendRow(QWidget* row)
 {
-    const bool input_had_focus = input_->hasFocus();
+    const bool input_had_focus = edit_input_->hasFocus();
 
     // Follow the new row only if the list is already at the bottom, so reading earlier history is
     // not interrupted.
@@ -410,6 +410,6 @@ void ChatView::appendRow(QWidget* row)
 
     // Adding a row must not pull focus off the input, which would drop the keyboard and leave the
     // window in a half-resized state on the next tap.
-    if (input_had_focus && !input_->hasFocus())
-        input_->setFocus();
+    if (input_had_focus && !edit_input_->hasFocus())
+        edit_input_->setFocus();
 }

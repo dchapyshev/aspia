@@ -56,9 +56,9 @@ private:
     void clearEvents();
 
     qint64 router_id_;
-    QLabel* status_icon_ = nullptr;
-    Label* name_label_ = nullptr;
-    Button* two_factor_button_ = nullptr;
+    QLabel* label_status_icon_ = nullptr;
+    Label* label_name_ = nullptr;
+    Button* button_two_factor_ = nullptr;
     QVBoxLayout* events_layout_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterCard)

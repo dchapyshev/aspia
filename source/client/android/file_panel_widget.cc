@@ -93,46 +93,46 @@ const char* driveIconPath(proto::file_transfer::DriveList::Item::Type type)
 FilePanelWidget::FilePanelWidget(FileTask::Target target, QWidget* parent)
     : QWidget(parent),
       target_(target),
-      path_combo_(new ComboBox(this)),
-      up_button_(new IconButton(":/img/material/arrow_upward.svg", this)),
-      list_(new TreeWidget(this))
+      combo_path_(new ComboBox(this)),
+      button_up_(new IconButton(":/img/material/arrow_upward.svg", this)),
+      tree_list_(new TreeWidget(this))
 {
     IconButton* refresh_button = new IconButton(":/img/material/refresh.svg", this);
 
-    new_folder_button_ = new IconButton(":/img/material/create_new_folder.svg", this);
-    delete_button_ = new IconButton(":/img/material/delete.svg", this);
+    button_new_folder_ = new IconButton(":/img/material/create_new_folder.svg", this);
+    button_delete_ = new IconButton(":/img/material/delete.svg", this);
 
     // All actions are grouped at the leading edge, in the same order as the desktop toolbar:
     // up, refresh, new folder, delete.
     QHBoxLayout* toolbar = new QHBoxLayout();
     toolbar->setContentsMargins(0, 0, 0, 0);
-    toolbar->addWidget(up_button_);
+    toolbar->addWidget(button_up_);
     toolbar->addWidget(refresh_button);
-    toolbar->addWidget(new_folder_button_);
-    toolbar->addWidget(delete_button_);
+    toolbar->addWidget(button_new_folder_);
+    toolbar->addWidget(button_delete_);
     toolbar->addStretch();
 
-    list_->setColumnCount(1);
+    tree_list_->setColumnCount(1);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(path_combo_);
+    layout->addWidget(combo_path_);
     layout->addLayout(toolbar);
-    layout->addWidget(list_, 1);
+    layout->addWidget(tree_list_, 1);
 
-    connect(list_, &QTreeWidget::itemClicked, this, &FilePanelWidget::onItemClicked);
-    connect(list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateActions);
-    connect(list_, &TreeWidget::sig_itemLongPressed, this, &FilePanelWidget::showItemActions);
-    connect(up_button_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
-    connect(new_folder_button_, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
+    connect(tree_list_, &QTreeWidget::itemClicked, this, &FilePanelWidget::onItemClicked);
+    connect(tree_list_, &QTreeWidget::itemSelectionChanged, this, &FilePanelWidget::updateActions);
+    connect(tree_list_, &TreeWidget::sig_itemLongPressed, this, &FilePanelWidget::showItemActions);
+    connect(button_up_, &IconButton::clicked, this, &FilePanelWidget::onUpClicked);
+    connect(button_new_folder_, &IconButton::clicked, this, &FilePanelWidget::onNewFolderClicked);
     connect(refresh_button, &IconButton::clicked, this, &FilePanelWidget::refresh);
-    connect(delete_button_, &IconButton::clicked, this, &FilePanelWidget::onDeleteClicked);
-    connect(path_combo_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
+    connect(button_delete_, &IconButton::clicked, this, &FilePanelWidget::onDeleteClicked);
+    connect(combo_path_, &QComboBox::activated, this, &FilePanelWidget::onLocationActivated);
 
-    up_button_->setEnabled(false);
-    new_folder_button_->setEnabled(false);
-    delete_button_->setEnabled(false);
+    button_up_->setEnabled(false);
+    button_new_folder_->setEnabled(false);
+    button_delete_->setEnabled(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,8 +142,8 @@ FilePanelWidget::~FilePanelWidget() = default;
 void FilePanelWidget::setTitle(const QString& title)
 {
     root_name_ = title;
-    if (path_combo_->count() > 0)
-        path_combo_->setItemText(0, root_name_);
+    if (combo_path_->count() > 0)
+        combo_path_->setItemText(0, root_name_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,10 +156,10 @@ void FilePanelWidget::onDriveList(
         return;
     }
 
-    list_->clear();
+    tree_list_->clear();
 
-    path_combo_->clear();
-    path_combo_->addItem(GuiApplication::svgIcon(":/img/computer.svg"), root_name_, QString());
+    combo_path_->clear();
+    combo_path_->addItem(GuiApplication::svgIcon(":/img/computer.svg"), root_name_, QString());
 
     for (int i = 0; i < drive_list.item_size(); ++i)
     {
@@ -209,12 +209,12 @@ void FilePanelWidget::onDriveList(
 
         const QIcon icon = GuiApplication::svgIcon(driveIconPath(drive.type()));
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(list_, { name });
+        QTreeWidgetItem* item = new QTreeWidgetItem(tree_list_, { name });
         item->setIcon(0, icon);
         item->setData(0, kPathRole, path);
 
-        path_combo_->addItem(icon, name, path);
-        path_combo_->setItemIndented(path_combo_->count() - 1);
+        combo_path_->addItem(icon, name, path);
+        combo_path_->setItemIndented(combo_path_->count() - 1);
     }
 
     // clear()/addItem reset the selection, so reselect the current location.
@@ -232,7 +232,7 @@ void FilePanelWidget::onFileList(
         return;
     }
 
-    list_->clear();
+    tree_list_->clear();
 
     const QIcon folder_icon = GuiApplication::svgIcon(":/img/folder.svg");
 
@@ -243,7 +243,7 @@ void FilePanelWidget::onFileList(
         if (!entry.is_directory())
             continue;
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(list_, { QString::fromStdString(entry.name()) });
+        QTreeWidgetItem* item = new QTreeWidgetItem(tree_list_, { QString::fromStdString(entry.name()) });
         item->setIcon(0, folder_icon);
         item->setData(0, kNameRole, QString::fromStdString(entry.name()));
         item->setData(0, kIsDirRole, true);
@@ -256,7 +256,7 @@ void FilePanelWidget::onFileList(
             continue;
 
         const QString name = QString::fromStdString(entry.name());
-        QTreeWidgetItem* item = new QTreeWidgetItem(list_, { name });
+        QTreeWidgetItem* item = new QTreeWidgetItem(tree_list_, { name });
         item->setIcon(0, FilePlatformUtil::fileTypeInfo(name).first);
         item->setData(0, kNameRole, name);
         item->setData(0, kIsDirRole, false);
@@ -316,7 +316,7 @@ void FilePanelWidget::onItemClicked(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onLocationActivated(int index)
 {
-    setPath(path_combo_->itemData(index).toString());
+    setPath(combo_path_->itemData(index).toString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,7 +370,7 @@ void FilePanelWidget::onNewFolderClicked()
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::onDeleteClicked()
 {
-    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
+    const QList<QTreeWidgetItem*> selected = tree_list_->selectedItems();
 
     FileRemover::TaskList items;
     for (QTreeWidgetItem* item : selected)
@@ -414,10 +414,10 @@ void FilePanelWidget::setPath(const QString& path)
     if (!path.isEmpty() && !isLocationRoot(path))
         field_icon = GuiApplication::svgIcon(":/img/folder.svg");
 
-    path_combo_->setFieldText(field, field_icon);
+    combo_path_->setFieldText(field, field_icon);
 
-    up_button_->setEnabled(!path.isEmpty());
-    new_folder_button_->setEnabled(!path.isEmpty());
+    button_up_->setEnabled(!path.isEmpty());
+    button_new_folder_->setEnabled(!path.isEmpty());
 
     emit sig_pathChanged(path);
     refresh();
@@ -431,9 +431,9 @@ void FilePanelWidget::selectCurrentLocation()
     int best_index = 0;
     int best_length = -1;
 
-    for (int i = 1; i < path_combo_->count(); ++i)
+    for (int i = 1; i < combo_path_->count(); ++i)
     {
-        const QString location = path_combo_->itemData(i).toString();
+        const QString location = combo_path_->itemData(i).toString();
         if (current_path_.startsWith(location) && location.length() > best_length)
         {
             best_index = i;
@@ -441,7 +441,7 @@ void FilePanelWidget::selectCurrentLocation()
         }
     }
 
-    path_combo_->setCurrentIndex(best_index);
+    combo_path_->setCurrentIndex(best_index);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -451,9 +451,9 @@ bool FilePanelWidget::isLocationRoot(const QString& path) const
     if (trimmed.endsWith('/'))
         trimmed.chop(1);
 
-    for (int i = 1; i < path_combo_->count(); ++i)
+    for (int i = 1; i < combo_path_->count(); ++i)
     {
-        QString location = path_combo_->itemData(i).toString();
+        QString location = combo_path_->itemData(i).toString();
         if (location.endsWith('/'))
             location.chop(1);
 
@@ -477,7 +477,7 @@ QString FilePanelWidget::itemPath(const QString& name) const
 //--------------------------------------------------------------------------------------------------
 void FilePanelWidget::updateActions()
 {
-    const QList<QTreeWidgetItem*> selected = list_->selectedItems();
+    const QList<QTreeWidgetItem*> selected = tree_list_->selectedItems();
 
     bool has_selection = false;
     for (QTreeWidgetItem* item : selected)
@@ -490,7 +490,7 @@ void FilePanelWidget::updateActions()
         }
     }
 
-    delete_button_->setEnabled(has_selection);
+    button_delete_->setEnabled(has_selection);
 }
 
 //--------------------------------------------------------------------------------------------------

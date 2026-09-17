@@ -43,11 +43,11 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget()),
       editor_(new CredentialEditor(this)),
-      add_button_(new IconButton(":/img/material/add_2.svg", this))
+      button_add_(new IconButton(":/img/material/add_2.svg", this))
 {
     // The add action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
     // default so it does not linger in this widget.
-    add_button_->hide();
+    button_add_->hide();
 
     // Two columns: the name of the record and its user name.
     tree_->setRootIsDecorated(false);
@@ -70,7 +70,7 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
     layout->setSpacing(0);
     layout->addWidget(stack_);
 
-    connect(add_button_, &IconButton::clicked, this, &CredentialsWidget::onAddCredential);
+    connect(button_add_, &IconButton::clicked, this, &CredentialsWidget::onAddCredential);
     connect(tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         onItemClicked(item);
@@ -87,7 +87,7 @@ QList<QWidget*> CredentialsWidget::appBarActions() const
     // The editor screen has its own form; no list actions there.
     if (isEditorPage())
         return {};
-    return { add_button_ };
+    return { button_add_ };
 }
 
 //--------------------------------------------------------------------------------------------------

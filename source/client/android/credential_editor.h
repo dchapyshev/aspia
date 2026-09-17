@@ -51,11 +51,11 @@ private slots:
 private:
     void showError(const QString& message);
 
-    LineEdit* name_ = nullptr;
-    LineEdit* username_ = nullptr;
-    LineEdit* password_ = nullptr;
-    Label* error_ = nullptr;
-    Button* delete_button_ = nullptr;
+    LineEdit* edit_name_ = nullptr;
+    LineEdit* edit_username_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    Label* label_error_ = nullptr;
+    Button* button_delete_ = nullptr;
     qint64 credential_id_ = -1;
 
     Q_DISABLE_COPY_MOVE(CredentialEditor)

@@ -41,7 +41,7 @@ public:
 
 private slots:
     void onRouterChanged(int index);
-    void onSharedToggled(bool checked);
+    void onSavedCredentialsToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

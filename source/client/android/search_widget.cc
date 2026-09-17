@@ -163,48 +163,48 @@ private:
 //--------------------------------------------------------------------------------------------------
 SearchWidget::SearchWidget(QWidget* parent)
     : QWidget(parent),
-      results_(new TreeWidget()),
+      tree_results_(new TreeWidget()),
       delegate_(new SearchHighlightDelegate(this)),
-      empty_label_(new Label(QString(), Label::Role::CAPTION)),
-      page_label_(new Label(QString(), Label::Role::CAPTION)),
-      prev_button_(new IconButton(":/img/arrow-left.svg")),
-      next_button_(new IconButton(":/img/arrow-right.svg")),
+      label_empty_(new Label(QString(), Label::Role::CAPTION)),
+      label_page_(new Label(QString(), Label::Role::CAPTION)),
+      button_prev_(new IconButton(":/img/arrow-left.svg")),
+      button_next_(new IconButton(":/img/arrow-right.svg")),
       page_bar_(new QWidget())
 {
-    results_->setColumnCount(2);
-    results_->setRootIsDecorated(false);
-    results_->setItemDelegate(delegate_);
-    results_->header()->setStretchLastSection(false);
-    results_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    results_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    tree_results_->setColumnCount(2);
+    tree_results_->setRootIsDecorated(false);
+    tree_results_->setItemDelegate(delegate_);
+    tree_results_->header()->setStretchLastSection(false);
+    tree_results_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tree_results_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-    empty_label_->setText(tr("Nothing found"));
-    empty_label_->setAlignment(Qt::AlignCenter);
-    empty_label_->setVisible(false);
+    label_empty_->setText(tr("Nothing found"));
+    label_empty_->setAlignment(Qt::AlignCenter);
+    label_empty_->setVisible(false);
 
-    page_label_->setAlignment(Qt::AlignCenter);
+    label_page_->setAlignment(Qt::AlignCenter);
 
     QHBoxLayout* page_layout = new QHBoxLayout(page_bar_);
     page_layout->setContentsMargins(0, 0, 0, 0);
     page_layout->addStretch();
-    page_layout->addWidget(prev_button_);
-    page_layout->addWidget(page_label_);
-    page_layout->addWidget(next_button_);
+    page_layout->addWidget(button_prev_);
+    page_layout->addWidget(label_page_);
+    page_layout->addWidget(button_next_);
     page_layout->addStretch();
 
     page_bar_->setVisible(false);
 
-    connect(prev_button_, &IconButton::clicked, this, &SearchWidget::sig_prevPage);
-    connect(next_button_, &IconButton::clicked, this, &SearchWidget::sig_nextPage);
+    connect(button_prev_, &IconButton::clicked, this, &SearchWidget::sig_prevPage);
+    connect(button_next_, &IconButton::clicked, this, &SearchWidget::sig_nextPage);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(empty_label_);
-    layout->addWidget(results_, 1);
+    layout->addWidget(label_empty_);
+    layout->addWidget(tree_results_, 1);
     layout->addWidget(page_bar_);
 
-    connect(results_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int)
+    connect(tree_results_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int)
     {
         if (item)
             emit sig_activated(item->data(0, kDataRole));
@@ -218,35 +218,35 @@ SearchWidget::~SearchWidget() = default;
 void SearchWidget::setResults(const QList<Result>& results, const QString& query)
 {
     delegate_->setQuery(query);
-    results_->clear();
+    tree_results_->clear();
 
     for (const Result& result : results)
     {
         QTreeWidgetItem* item =
-            new QTreeWidgetItem(results_, { result.title, result.subtitle });
+            new QTreeWidgetItem(tree_results_, { result.title, result.subtitle });
         if (!result.icon_file_path.isEmpty())
             item->setIcon(0, GuiApplication::svgIcon(result.icon_file_path));
         item->setData(0, kDataRole, result.data);
     }
 
     // The hint distinguishes "no matches" from the initial empty field.
-    empty_label_->setVisible(results.isEmpty() && !query.isEmpty());
+    label_empty_->setVisible(results.isEmpty() && !query.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::setPage(qint64 current_page, qint64 page_count)
 {
     page_bar_->setVisible(page_count > 1);
-    page_label_->setText(tr("%1 of %2").arg(current_page + 1).arg(page_count));
-    prev_button_->setEnabled(current_page > 0);
-    next_button_->setEnabled(current_page < page_count - 1);
+    label_page_->setText(tr("%1 of %2").arg(current_page + 1).arg(page_count));
+    button_prev_->setEnabled(current_page > 0);
+    button_next_->setEnabled(current_page < page_count - 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::reset()
 {
     delegate_->setQuery(QString());
-    results_->clear();
-    empty_label_->setVisible(false);
+    tree_results_->clear();
+    label_empty_->setVisible(false);
     page_bar_->setVisible(false);
 }

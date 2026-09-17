@@ -128,16 +128,16 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     : QWidget(parent),
       stack_(new QStackedWidget(this)),
       tree_(new TreeWidget(this)),
-      host_tree_(new TreeWidget(this)),
-      temp_host_tree_(new TreeWidget(this)),
+      tree_host_(new TreeWidget(this)),
+      tree_temp_host_(new TreeWidget(this)),
       search_page_(new SearchWidget(this)),
-      search_button_(new IconButton(":/img/material/search.svg", this)),
-      refresh_button_(new IconButton(":/img/material/refresh.svg", this))
+      button_search_(new IconButton(":/img/material/search.svg", this)),
+      button_refresh_(new IconButton(":/img/material/refresh.svg", this))
 {
     // The action buttons live in the app bar; AppBar::setActions() reparents and shows the ones it
     // receives. Hidden by default so they do not linger in this widget.
-    search_button_->hide();
-    refresh_button_->hide();
+    button_search_->hide();
+    button_refresh_->hide();
 
     // Tree page: the router/workspace/group accordion.
     QWidget* tree_page = new QWidget(stack_);
@@ -152,13 +152,13 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     host_layout->setContentsMargins(0, 0, 0, 0);
     host_layout->setSpacing(0);
 
-    host_tree_->setRootIsDecorated(false);
-    host_tree_->setColumnCount(2);
-    host_tree_->header()->setStretchLastSection(false);
-    host_tree_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    host_tree_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    tree_host_->setRootIsDecorated(false);
+    tree_host_->setColumnCount(2);
+    tree_host_->header()->setStretchLastSection(false);
+    tree_host_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tree_host_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-    host_layout->addWidget(host_tree_, 1);
+    host_layout->addWidget(tree_host_, 1);
 
     // Temporary hosts page: the same two-column layout as the host page, fed by the temp-host list.
     QWidget* temp_host_page = new QWidget(stack_);
@@ -166,13 +166,13 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     temp_host_layout->setContentsMargins(0, 0, 0, 0);
     temp_host_layout->setSpacing(0);
 
-    temp_host_tree_->setRootIsDecorated(false);
-    temp_host_tree_->setColumnCount(2);
-    temp_host_tree_->header()->setStretchLastSection(false);
-    temp_host_tree_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-    temp_host_tree_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    tree_temp_host_->setRootIsDecorated(false);
+    tree_temp_host_->setColumnCount(2);
+    tree_temp_host_->header()->setStretchLastSection(false);
+    tree_temp_host_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tree_temp_host_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-    temp_host_layout->addWidget(temp_host_tree_, 1);
+    temp_host_layout->addWidget(tree_temp_host_, 1);
 
     credentials_page_ = new RouterHostEditor(stack_);
 
@@ -190,7 +190,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     connect(tree_, &QTreeWidget::itemClicked, this, &RemoteWidget::onItemActivated);
 
     // A tap on a host opens the session-type chooser.
-    connect(host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
+    connect(tree_host_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         if (item && item->data(0, kMoreRole).toBool())
         {
@@ -204,7 +204,7 @@ RemoteWidget::RemoteWidget(QWidget* parent)
     });
 
     // A tap on a temporary host opens the same session-type chooser.
-    connect(temp_host_tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
+    connect(tree_temp_host_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
         if (item && item->data(0, kMoreRole).toBool())
         {
@@ -217,11 +217,11 @@ RemoteWidget::RemoteWidget(QWidget* parent)
             showSessionMenu(config);
     });
 
-    connect(host_tree_, &TreeWidget::sig_itemLongPressed, this, &RemoteWidget::onHostLongPressed);
+    connect(tree_host_, &TreeWidget::sig_itemLongPressed, this, &RemoteWidget::onHostLongPressed);
     connect(credentials_page_, &RouterHostEditor::sig_accepted, this, &RemoteWidget::showTree);
 
-    connect(refresh_button_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
-    connect(search_button_, &IconButton::clicked, this, &RemoteWidget::showSearch);
+    connect(button_refresh_, &IconButton::clicked, this, &RemoteWidget::onRefreshClicked);
+    connect(button_search_, &IconButton::clicked, this, &RemoteWidget::showSearch);
 
     connect(search_page_, &SearchWidget::sig_prevPage, this, [this]()
     {
@@ -303,7 +303,7 @@ QList<QWidget*> RemoteWidget::appBarActions() const
     // The search screen has its own field; no browsing actions there.
     if (isSearchPage())
         return {};
-    return { search_button_, refresh_button_ };
+    return { button_search_, button_refresh_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -600,7 +600,7 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 
         // Clear at once so a previous router's temporary hosts are not left on screen while the
         // request is in flight.
-        temp_host_tree_->clear();
+        tree_temp_host_->clear();
         stack_->setCurrentIndex(kPageTempHosts);
         emit sig_titleChanged(item->text(0), true);
 
@@ -618,7 +618,7 @@ void RemoteWidget::onItemActivated(QTreeWidgetItem* item, int /* column */)
 
     // Clear at once so the previous group's hosts are not left on screen while a request is in
     // flight; a cached selection refills synchronously below.
-    host_tree_->clear();
+    tree_host_->clear();
 
     stack_->setCurrentIndex(kPageHosts);
     emit sig_titleChanged(item->text(0), true);
@@ -806,14 +806,14 @@ void RemoteWidget::fetchTempHosts(bool append)
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::rebuildHostRows()
 {
-    host_tree_->clear();
+    tree_host_->clear();
 
     for (const RouterHost& host : std::as_const(hosts_))
     {
         const QString name = host.display_name.isEmpty() ? host.computer_name : host.display_name;
 
         QTreeWidgetItem* item =
-            new QTreeWidgetItem(host_tree_, { name, QString("ID %1").arg(host.host_id) });
+            new QTreeWidgetItem(tree_host_, { name, QString("ID %1").arg(host.host_id) });
         item->setIcon(0, GuiApplication::svgIcon(host.online ? ":/img/computer-online.svg"
                                                              : ":/img/computer-offline.svg"));
         item->setData(0, kHostIdRole, QVariant::fromValue(host.host_id));
@@ -823,19 +823,19 @@ void RemoteWidget::rebuildHostRows()
         return;
 
     QTreeWidgetItem* more = new QTreeWidgetItem(
-        host_tree_, { tr("Show more"), tr("%1 of %2").arg(hosts_.size()).arg(hosts_total_count_) });
+        tree_host_, { tr("Show more"), tr("%1 of %2").arg(hosts_.size()).arg(hosts_total_count_) });
     more->setData(0, kMoreRole, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RemoteWidget::rebuildTempHostRows()
 {
-    temp_host_tree_->clear();
+    tree_temp_host_->clear();
 
     for (const RouterTempHost& host : std::as_const(temp_hosts_))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(
-            temp_host_tree_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
+            tree_temp_host_, { host.computer_name, QString("ID %1").arg(host.temp_id) });
         item->setIcon(0, GuiApplication::svgIcon(":/img/computer.svg"));
         item->setData(0, kHostIdRole, QVariant::fromValue(host.temp_id));
     }
@@ -843,7 +843,7 @@ void RemoteWidget::rebuildTempHostRows()
     if (temp_hosts_.size() >= temp_hosts_total_count_)
         return;
 
-    QTreeWidgetItem* more = new QTreeWidgetItem(temp_host_tree_,
+    QTreeWidgetItem* more = new QTreeWidgetItem(tree_temp_host_,
         { tr("Show more"), tr("%1 of %2").arg(temp_hosts_.size()).arg(temp_hosts_total_count_) });
     more->setData(0, kMoreRole, true);
 }

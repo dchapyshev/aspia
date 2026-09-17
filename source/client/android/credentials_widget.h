@@ -63,7 +63,7 @@ private:
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;
     CredentialEditor* editor_ = nullptr;
-    IconButton* add_button_ = nullptr;
+    IconButton* button_add_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(CredentialsWidget)
 };

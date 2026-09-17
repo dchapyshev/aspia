@@ -401,6 +401,7 @@ void ChatWindow::forgetHostCredentials()
             return;
         }
 
+        local_host->setCredentialId(0);
         local_host->setUsername(QString());
         local_host->setPassword(SecureString());
 

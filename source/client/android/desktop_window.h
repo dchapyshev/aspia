@@ -164,7 +164,7 @@ private:
     QPointer<StatisticsDialog> statistics_dialog_;
 
     DesktopView* view_ = nullptr;
-    Label* status_ = nullptr;
+    Label* label_status_ = nullptr;
     FloatingActionButton* fab_ = nullptr;
     KeyBar* key_bar_ = nullptr;
     bool connected_ = false;

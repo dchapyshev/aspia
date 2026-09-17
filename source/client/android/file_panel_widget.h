@@ -104,11 +104,11 @@ private:
 
     const FileTask::Target target_;
 
-    ComboBox* path_combo_ = nullptr;
-    IconButton* up_button_ = nullptr;
-    IconButton* new_folder_button_ = nullptr;
-    IconButton* delete_button_ = nullptr;
-    TreeWidget* list_ = nullptr;
+    ComboBox* combo_path_ = nullptr;
+    IconButton* button_up_ = nullptr;
+    IconButton* button_new_folder_ = nullptr;
+    IconButton* button_delete_ = nullptr;
+    TreeWidget* tree_list_ = nullptr;
 
     // Shown as the root entry of the path combo box (the side's name, e.g. "This Device").
     QString root_name_;

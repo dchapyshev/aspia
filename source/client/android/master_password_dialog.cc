@@ -34,10 +34,10 @@
 //--------------------------------------------------------------------------------------------------
 MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     : Dialog(parent),
-      current_(nullptr),
-      password_(new LineEdit(this)),
-      confirm_(nullptr),
-      error_(new Label(QString(), Label::Role::CAPTION, this)),
+      edit_current_(nullptr),
+      edit_password_(new LineEdit(this)),
+      edit_confirm_(nullptr),
+      label_error_(new Label(QString(), Label::Role::CAPTION, this)),
       mode_(mode)
 {
     const bool create = (mode_ == Mode::CREATE);
@@ -63,34 +63,34 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
             break;
     }
 
-    password_->setLabel(change ? tr("New Password") : tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
+    edit_password_->setLabel(change ? tr("New Password") : tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
 
     // A fixed hex keeps the error color readable on both light and dark cards and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
     QVBoxLayout* content = contentLayout();
-    content->addWidget(error_);
+    content->addWidget(label_error_);
 
     if (change)
     {
-        current_ = new LineEdit(this);
-        current_->setLabel(tr("Current Password"));
-        current_->setEchoMode(QLineEdit::Password);
-        content->addWidget(current_);
+        edit_current_ = new LineEdit(this);
+        edit_current_->setLabel(tr("Current Password"));
+        edit_current_->setEchoMode(QLineEdit::Password);
+        content->addWidget(edit_current_);
     }
 
-    content->addWidget(password_);
+    content->addWidget(edit_password_);
 
     if (create || change)
     {
-        confirm_ = new LineEdit(this);
-        confirm_->setLabel(tr("Confirm Password"));
-        confirm_->setEchoMode(QLineEdit::Password);
-        content->addWidget(confirm_);
+        edit_confirm_ = new LineEdit(this);
+        edit_confirm_->setLabel(tr("Confirm Password"));
+        edit_confirm_->setEchoMode(QLineEdit::Password);
+        content->addWidget(edit_confirm_);
     }
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
@@ -112,7 +112,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     {
         // Typing can start right away. With the biometric prompt the focus stays away so the
         // keyboard does not pop under the system sheet.
-        (change ? current_ : password_)->setFocus();
+        (change ? edit_current_ : edit_password_)->setFocus();
     }
 }
 
@@ -124,11 +124,11 @@ void MasterPasswordDialog::onAccept()
 {
     if (mode_ == Mode::UNLOCK)
     {
-        if (!MasterPassword::unlock(SecureString(password_->text())))
+        if (!MasterPassword::unlock(SecureString(edit_password_->text())))
         {
             showError(tr("Invalid master password."));
-            password_->setFocus();
-            password_->selectAll();
+            edit_password_->setFocus();
+            edit_password_->selectAll();
             return;
         }
 
@@ -137,24 +137,24 @@ void MasterPasswordDialog::onAccept()
     }
 
     // CREATE and CHANGE both set a new password and require a matching confirmation.
-    if (password_->text().isEmpty())
+    if (edit_password_->text().isEmpty())
     {
         showError(tr("Password cannot be empty."));
-        password_->setFocus();
+        edit_password_->setFocus();
         return;
     }
 
-    if (password_->text() != confirm_->text())
+    if (edit_password_->text() != edit_confirm_->text())
     {
         showError(tr("The entered passwords do not match."));
-        confirm_->setFocus();
-        confirm_->selectAll();
+        edit_confirm_->setFocus();
+        edit_confirm_->selectAll();
         return;
     }
 
     if (mode_ == Mode::CREATE)
     {
-        if (!MasterPassword::setNew(SecureString(password_->text())))
+        if (!MasterPassword::setNew(SecureString(edit_password_->text())))
         {
             showError(tr("Unable to set master password."));
             return;
@@ -162,12 +162,12 @@ void MasterPasswordDialog::onAccept()
     }
     else
     {
-        if (!MasterPassword::change(SecureString(current_->text()),
-                                    SecureString(password_->text())))
+        if (!MasterPassword::change(SecureString(edit_current_->text()),
+                                    SecureString(edit_password_->text())))
         {
             showError(tr("Invalid current password or unable to change it."));
-            current_->setFocus();
-            current_->selectAll();
+            edit_current_->setFocus();
+            edit_current_->selectAll();
             return;
         }
     }
@@ -224,14 +224,14 @@ void MasterPasswordDialog::tryBiometricUnlock()
     }
 
     // Every path past the switch falls back to manual entry.
-    password_->setFocus();
+    edit_password_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
 void MasterPasswordDialog::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }
 
 //--------------------------------------------------------------------------------------------------

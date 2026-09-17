@@ -39,7 +39,7 @@ public:
     QString code() const;
 
 private:
-    LineEdit* code_ = nullptr;
+    LineEdit* edit_code_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(TwoFactorDialog)
 };

@@ -116,7 +116,7 @@ private:
     SessionKeeper* session_keeper_ = nullptr;
 
     AppBar* app_bar_ = nullptr;
-    Label* status_ = nullptr;
+    Label* label_status_ = nullptr;
     FilePanelWidget* local_panel_ = nullptr;
     FilePanelWidget* remote_panel_ = nullptr;
     TabBar* tab_bar_ = nullptr;

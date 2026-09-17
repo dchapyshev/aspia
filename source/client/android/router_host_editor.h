@@ -46,19 +46,19 @@ signals:
     void sig_accepted();
 
 private slots:
-    void onSharedToggled(bool checked);
+    void onSavedCredentialsToggled(bool checked);
     void onSaveClicked();
 
 private:
     void loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
-    Switch* shared_ = nullptr;
-    LineEdit* username_ = nullptr;
-    LineEdit* password_ = nullptr;
-    Label* note_ = nullptr;
-    ComboBox* credential_ = nullptr;
-    Label* error_ = nullptr;
+    Switch* switch_saved_credentials_ = nullptr;
+    LineEdit* edit_username_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    Label* label_note_ = nullptr;
+    ComboBox* combo_credential_ = nullptr;
+    Label* label_error_ = nullptr;
     qint64 router_id_ = 0;
     HostId host_id_ = kInvalidHostId;
 

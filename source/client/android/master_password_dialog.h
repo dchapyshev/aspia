@@ -52,10 +52,10 @@ private:
     // Discards a broken or invalidated biometric enrollment and reports the reason to the user.
     void dropBiometric(const QString& message);
 
-    LineEdit* current_ = nullptr;
-    LineEdit* password_ = nullptr;
-    LineEdit* confirm_ = nullptr;
-    Label* error_ = nullptr;
+    LineEdit* edit_current_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    LineEdit* edit_confirm_ = nullptr;
+    Label* label_error_ = nullptr;
     Mode mode_ = Mode::UNLOCK;
 
     Q_DISABLE_COPY_MOVE(MasterPasswordDialog)

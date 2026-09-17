@@ -28,21 +28,21 @@
 //--------------------------------------------------------------------------------------------------
 FileProgressSheet::FileProgressSheet(const QString& title, QWidget* parent)
     : Dialog(parent),
-      item_(new Label(QString(), Label::Role::CAPTION, this)),
-      speed_(new Label(QString(), Label::Role::CAPTION, this)),
-      bar_(new QProgressBar(this))
+      label_item_(new Label(QString(), Label::Role::CAPTION, this)),
+      label_speed_(new Label(QString(), Label::Role::CAPTION, this)),
+      progress_bar_(new QProgressBar(this))
 {
     setTitle(title);
 
-    item_->setWordWrap(true);
-    speed_->hide();
+    label_item_->setWordWrap(true);
+    label_speed_->hide();
 
-    bar_->setRange(0, 100);
-    bar_->setTextVisible(false);
+    progress_bar_->setRange(0, 100);
+    progress_bar_->setTextVisible(false);
 
-    contentLayout()->addWidget(item_);
-    contentLayout()->addWidget(bar_);
-    contentLayout()->addWidget(speed_);
+    contentLayout()->addWidget(label_item_);
+    contentLayout()->addWidget(progress_bar_);
+    contentLayout()->addWidget(label_speed_);
 
     Button* cancel = addButton(tr("Cancel"), Button::Role::TEXT);
     connect(cancel, &Button::clicked, this, [this]()
@@ -57,18 +57,18 @@ FileProgressSheet::~FileProgressSheet() = default;
 //--------------------------------------------------------------------------------------------------
 void FileProgressSheet::setCurrentItem(const QString& text)
 {
-    item_->setText(text);
+    label_item_->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileProgressSheet::setProgress(int percentage)
 {
-    bar_->setValue(percentage);
+    progress_bar_->setValue(percentage);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileProgressSheet::setSpeed(qint64 bytes_per_second)
 {
-    speed_->setText(Formatter::transferSpeedToString(bytes_per_second));
-    speed_->show();
+    label_speed_->setText(Formatter::transferSpeedToString(bytes_per_second));
+    label_speed_->show();
 }

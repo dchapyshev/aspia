@@ -89,8 +89,8 @@ private:
     ScrollArea* settings_page_;
     CredentialsWidget* credentials_page_;
     AboutWidget* about_page_;
-    IconButton* credentials_button_;
-    IconButton* about_button_;
+    IconButton* button_credentials_;
+    IconButton* button_about_;
 
     Settings settings_;
     proto::control::Config desktop_config_;

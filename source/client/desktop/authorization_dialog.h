@@ -42,7 +42,7 @@ public:
 
     void setOneTimePasswordEnabled(bool enable);
 
-    void setCredentials(const QList<CredentialConfig>& credentials);
+    void setSavedCredentials(const QList<CredentialConfig>& credentials);
     qint64 credentialId() const;
 
     void setSaveCredentialsVisible(bool visible);
@@ -59,20 +59,20 @@ protected:
     void showEvent(QShowEvent* event) final;
 
 private slots:
-    void onSharedToggled(bool checked);
-    void onOneTimePasswordToggled(bool checked);
-    void onOneTimePasswordClicked(bool checked);
+    void onModeToggled(bool checked);
+    void onModeClicked(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
     void fitSize();
 
-    bool isOneTimePassword() const;
     bool isSaveCredentialsOffered() const;
-    bool isSharedOffered() const;
-    bool isShared() const;
+    bool usesOneTimePassword() const;
+    bool isOneTimePasswordOffered() const;
+    bool usesSavedCredentials() const;
+    bool hasSavedCredentials() const;
     const CredentialConfig* selectedCredential() const;
-    void updateCredentialsState();
+    void updateModes();
 
     std::unique_ptr<Ui::AuthorizationDialog> ui;
     QList<CredentialConfig> credentials_;

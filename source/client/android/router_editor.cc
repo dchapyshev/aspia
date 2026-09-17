@@ -47,42 +47,42 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 RouterEditor::RouterEditor(QWidget* parent)
     : QWidget(parent),
-      name_(new LineEdit()),
-      address_(new LineEdit()),
-      username_(new LineEdit()),
-      password_(new LineEdit()),
-      error_(new Label(QString(), Label::Role::CAPTION))
+      edit_name_(new LineEdit()),
+      edit_address_(new LineEdit()),
+      edit_username_(new LineEdit()),
+      edit_password_(new LineEdit()),
+      label_error_(new Label(QString(), Label::Role::CAPTION))
 {
-    name_->setLabel(tr("Name"));
-    address_->setLabel(tr("Address"));
-    username_->setLabel(tr("User Name"));
-    password_->setLabel(tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
+    edit_name_->setLabel(tr("Name"));
+    edit_address_->setLabel(tr("Address"));
+    edit_username_->setLabel(tr("User Name"));
+    edit_password_->setLabel(tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
     // The delete action is destructive, so its text is tinted red and it shows only when editing.
-    delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
-    delete_button_->setAccentColor(Controls::errorColor());
-    delete_button_->hide();
+    button_delete_ = new Button(tr("Delete"), Button::Role::TEXT);
+    button_delete_->setAccentColor(Controls::errorColor());
+    button_delete_->hide();
 
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
-    form_layout->addWidget(error_);
-    form_layout->addWidget(name_);
-    form_layout->addWidget(address_);
-    form_layout->addWidget(username_);
-    form_layout->addWidget(password_);
+    form_layout->addWidget(label_error_);
+    form_layout->addWidget(edit_name_);
+    form_layout->addWidget(edit_address_);
+    form_layout->addWidget(edit_username_);
+    form_layout->addWidget(edit_password_);
     form_layout->addWidget(save);
-    form_layout->addWidget(delete_button_);
+    form_layout->addWidget(button_delete_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -94,7 +94,7 @@ RouterEditor::RouterEditor(QWidget* parent)
     layout->addWidget(scroll);
 
     connect(save, &Button::clicked, this, &RouterEditor::onSaveClicked);
-    connect(delete_button_, &Button::clicked, this, &RouterEditor::onDeleteClicked);
+    connect(button_delete_, &Button::clicked, this, &RouterEditor::onDeleteClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,14 +105,14 @@ void RouterEditor::prepareForAdd()
 {
     router_id_ = -1;
 
-    name_->clear();
-    address_->clear();
-    username_->clear();
-    password_->clear();
-    error_->setVisible(false);
-    delete_button_->hide();
+    edit_name_->clear();
+    edit_address_->clear();
+    edit_username_->clear();
+    edit_password_->clear();
+    label_error_->setVisible(false);
+    button_delete_->hide();
 
-    name_->setFocus();
+    edit_name_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,61 +127,61 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
 
     router_id_ = router_id;
 
-    name_->setText(router->displayName());
-    address_->setText(router->address());
-    username_->setText(router->username());
-    password_->setText(router->password().toString());
-    error_->setVisible(false);
-    delete_button_->show();
+    edit_name_->setText(router->displayName());
+    edit_address_->setText(router->address());
+    edit_username_->setText(router->username());
+    edit_password_->setText(router->password().toString());
+    label_error_->setVisible(false);
+    button_delete_->show();
 
-    name_->setFocus();
+    edit_name_->setFocus();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterEditor::onSaveClicked()
 {
-    if (name_->text().length() > RouterConfig::kMaxNameLength)
+    if (edit_name_->text().length() > RouterConfig::kMaxNameLength)
     {
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", RouterConfig::kMaxNameLength));
-        name_->setFocus();
-        name_->selectAll();
+        edit_name_->setFocus();
+        edit_name_->selectAll();
         return;
     }
 
-    const QString address_text = address_->text();
+    const QString address_text = edit_address_->text();
     Address address = Address::fromString(address_text, DEFAULT_ROUTER_CLIENT_TCP_PORT);
     if (!address.isValid())
     {
         showError(tr("An invalid router address was entered."));
-        address_->setFocus();
-        address_->selectAll();
+        edit_address_->setFocus();
+        edit_address_->selectAll();
         return;
     }
 
-    const QString username = username_->text();
+    const QString username = edit_username_->text();
     if (!User::isValidUserName(username))
     {
         showError(tr("The user name can not be empty and can contain only alphabet characters,"
                      " numbers and \"_\", \"-\", \".\" characters."));
-        username_->setFocus();
-        username_->selectAll();
+        edit_username_->setFocus();
+        edit_username_->selectAll();
         return;
     }
 
-    SecureString password(password_->text());
+    SecureString password(edit_password_->text());
     if (!User::isValidPassword(password))
     {
         showError(tr("Password cannot be empty."));
-        password_->setFocus();
-        password_->selectAll();
+        edit_password_->setFocus();
+        edit_password_->selectAll();
         return;
     }
 
     RouterConfig data;
     data.setRouterId(router_id_);
-    data.setDisplayName(name_->text());
+    data.setDisplayName(edit_name_->text());
     data.setAddress(address_text);
     data.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     data.setUsername(username);
@@ -221,7 +221,7 @@ void RouterEditor::onSaveClicked()
 void RouterEditor::onDeleteClicked()
 {
     if (!MessageDialog::confirm(this, tr("Delete Router"),
-                                tr("Delete the router \"%1\"?").arg(name_->text()), tr("Delete")))
+                                tr("Delete the router \"%1\"?").arg(edit_name_->text()), tr("Delete")))
     {
         return;
     }
@@ -238,6 +238,6 @@ void RouterEditor::onDeleteClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterEditor::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }

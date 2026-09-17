@@ -50,9 +50,9 @@ private:
     void showError(const QString& message);
 
     Mode mode_;
-    LineEdit* password_ = nullptr;
-    LineEdit* confirm_ = nullptr;
-    Label* error_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    LineEdit* edit_confirm_ = nullptr;
+    Label* label_error_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(PasswordDialog)
 };

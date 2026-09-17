@@ -50,53 +50,53 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 LocalHostEditor::LocalHostEditor(QWidget* parent)
     : QWidget(parent),
-      router_(new ComboBox()),
-      name_(new LineEdit()),
-      address_(new LineEdit()),
-      shared_(new Switch(tr("Use existing"))),
-      username_(new LineEdit()),
-      password_(new LineEdit()),
-      credential_(new ComboBox()),
-      comment_(new TextArea()),
-      error_(new Label(QString(), Label::Role::CAPTION))
+      combo_router_(new ComboBox()),
+      edit_name_(new LineEdit()),
+      edit_address_(new LineEdit()),
+      switch_saved_credentials_(new Switch(tr("Use existing"))),
+      edit_username_(new LineEdit()),
+      edit_password_(new LineEdit()),
+      combo_credential_(new ComboBox()),
+      edit_comment_(new TextArea()),
+      label_error_(new Label(QString(), Label::Role::CAPTION))
 {
-    name_->setLabel(tr("Name"));
-    router_->setLabel(tr("Router"));
-    address_->setLabel(tr("Address"));
-    username_->setLabel(tr("User Name"));
-    password_->setLabel(tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
-    credential_->setLabel(tr("Credentials"));
-    comment_->setLabel(tr("Comment"));
+    edit_name_->setLabel(tr("Name"));
+    combo_router_->setLabel(tr("Router"));
+    edit_address_->setLabel(tr("Address"));
+    edit_username_->setLabel(tr("User Name"));
+    edit_password_->setLabel(tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
+    combo_credential_->setLabel(tr("Credentials"));
+    edit_comment_->setLabel(tr("Comment"));
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
     // The delete action is destructive, so its text is tinted red and it shows only when editing.
-    delete_button_ = new Button(tr("Delete"), Button::Role::TEXT);
-    delete_button_->setAccentColor(Controls::errorColor());
-    delete_button_->hide();
+    button_delete_ = new Button(tr("Delete"), Button::Role::TEXT);
+    button_delete_->setAccentColor(Controls::errorColor());
+    button_delete_->hide();
 
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
-    form_layout->addWidget(error_);
-    form_layout->addWidget(name_);
-    form_layout->addWidget(router_);
-    form_layout->addWidget(address_);
-    form_layout->addWidget(shared_);
-    form_layout->addWidget(username_);
-    form_layout->addWidget(password_);
-    form_layout->addWidget(credential_);
-    form_layout->addWidget(comment_);
+    form_layout->addWidget(label_error_);
+    form_layout->addWidget(edit_name_);
+    form_layout->addWidget(combo_router_);
+    form_layout->addWidget(edit_address_);
+    form_layout->addWidget(switch_saved_credentials_);
+    form_layout->addWidget(edit_username_);
+    form_layout->addWidget(edit_password_);
+    form_layout->addWidget(combo_credential_);
+    form_layout->addWidget(edit_comment_);
     form_layout->addWidget(save);
-    form_layout->addWidget(delete_button_);
+    form_layout->addWidget(button_delete_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -107,11 +107,11 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
-    connect(router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(combo_router_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalHostEditor::onRouterChanged);
-    connect(shared_, &Switch::toggled, this, &LocalHostEditor::onSharedToggled);
+    connect(switch_saved_credentials_, &Switch::toggled, this, &LocalHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
-    connect(delete_button_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
+    connect(button_delete_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,18 +123,18 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
     entry_id_ = -1;
     group_id_ = group_id;
 
-    name_->clear();
-    address_->clear();
-    username_->clear();
-    password_->clear();
-    comment_->clear();
-    error_->setVisible(false);
-    delete_button_->hide();
+    edit_name_->clear();
+    edit_address_->clear();
+    edit_username_->clear();
+    edit_password_->clear();
+    edit_comment_->clear();
+    label_error_->setVisible(false);
+    button_delete_->hide();
 
     loadRouters(0);
     onRouterChanged();
     loadCredentials(0);
-    name_->setFocus();
+    edit_name_->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,84 +150,84 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     entry_id_ = host_id;
     group_id_ = host->groupId();
 
-    name_->setText(host->name());
-    address_->setText(host->address());
-    username_->setText(host->username());
-    password_->setText(host->password().toString());
-    comment_->setText(host->comment());
-    error_->setVisible(false);
-    delete_button_->show();
+    edit_name_->setText(host->name());
+    edit_address_->setText(host->address());
+    edit_username_->setText(host->username());
+    edit_password_->setText(host->password().toString());
+    edit_comment_->setText(host->comment());
+    label_error_->setVisible(false);
+    button_delete_->show();
 
     loadRouters(host->routerId());
     onRouterChanged();
     loadCredentials(host->credentialId());
-    name_->setFocus();
+    edit_name_->setFocus();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::loadRouters(qint64 selected_router_id)
 {
-    router_->clear();
-    router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
+    combo_router_->clear();
+    combo_router_->addItem(tr("Without Router"), QVariant::fromValue<qint64>(0));
     QList<RouterConfig> routers;
     Database::instance().routerList(&routers);
     for (const RouterConfig& router : std::as_const(routers))
-        router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
+        combo_router_->addItem(router.displayLabel(), QVariant::fromValue(router.routerId()));
 
-    const int index = router_->findData(QVariant::fromValue(selected_router_id));
-    router_->setCurrentIndex(index >= 0 ? index : 0);
+    const int index = combo_router_->findData(QVariant::fromValue(selected_router_id));
+    combo_router_->setCurrentIndex(index >= 0 ? index : 0);
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::loadCredentials(qint64 selected_credential_id)
 {
-    credential_->clear();
+    combo_credential_->clear();
     QList<CredentialConfig> credentials;
     Database::instance().credentialList(&credentials);
     for (const CredentialConfig& credential : std::as_const(credentials))
-        credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
+        combo_credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
 
-    const int index = credential_->findData(QVariant::fromValue(selected_credential_id));
-    credential_->setCurrentIndex(index >= 0 ? index : 0);
+    const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
+    combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
 
     // Nothing to share until a record of credentials is added.
-    shared_->setEnabled(!credentials.isEmpty());
-    shared_->setChecked(index >= 0);
-    onSharedToggled(shared_->isChecked());
+    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
+    switch_saved_credentials_->setChecked(index >= 0);
+    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::onRouterChanged()
 {
     // Without a router the address is a host name or IP; through a router it is a host ID.
-    const bool direct = (router_->currentData().toLongLong() == 0);
-    address_->setLabel(direct ? tr("Address") : tr("ID"));
+    const bool direct = (combo_router_->currentData().toLongLong() == 0);
+    edit_address_->setLabel(direct ? tr("Address") : tr("ID"));
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostEditor::onSharedToggled(bool checked)
+void LocalHostEditor::onSavedCredentialsToggled(bool checked)
 {
-    if (checked && username_->text().isEmpty() != password_->text().isEmpty())
+    if (checked && edit_username_->text().isEmpty() != edit_password_->text().isEmpty())
     {
-        username_->clear();
-        password_->clear();
+        edit_username_->clear();
+        edit_password_->clear();
     }
 
     // Entered with a record of credentials, the host shows the record in place of its own pair.
-    username_->setVisible(!checked);
-    password_->setVisible(!checked);
-    credential_->setVisible(checked);
+    edit_username_->setVisible(!checked);
+    edit_password_->setVisible(!checked);
+    combo_credential_->setVisible(checked);
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::onSaveClicked()
 {
-    const QString name = name_->text();
+    const QString name = edit_name_->text();
     if (name.isEmpty())
     {
         showError(tr("Name cannot be empty."));
-        name_->setFocus();
+        edit_name_->setFocus();
         return;
     }
 
@@ -235,49 +235,49 @@ void LocalHostEditor::onSaveClicked()
     {
         showError(tr("Too long name. The maximum length of the name is %n characters.",
                      "", LocalHostConfig::kMaxNameLength));
-        name_->setFocus();
-        name_->selectAll();
+        edit_name_->setFocus();
+        edit_name_->selectAll();
         return;
     }
 
-    if (comment_->text().length() > LocalHostConfig::kMaxCommentLength)
+    if (edit_comment_->text().length() > LocalHostConfig::kMaxCommentLength)
     {
         showError(tr("Too long comment. The maximum length of the comment is %n characters.",
                      "", LocalHostConfig::kMaxCommentLength));
-        comment_->setFocus();
+        edit_comment_->setFocus();
         return;
     }
 
-    const qint64 router_id = router_->currentData().toLongLong();
-    const QString address_text = address_->text();
+    const qint64 router_id = combo_router_->currentData().toLongLong();
+    const QString address_text = edit_address_->text();
 
     if (router_id == 0)
     {
         if (!Address::fromString(address_text, DEFAULT_HOST_TCP_PORT).isValid())
         {
             showError(tr("An invalid host address was entered."));
-            address_->setFocus();
-            address_->selectAll();
+            edit_address_->setFocus();
+            edit_address_->selectAll();
             return;
         }
     }
     else if (!isHostId(address_text))
     {
         showError(tr("An invalid host ID was entered."));
-        address_->setFocus();
-        address_->selectAll();
+        edit_address_->setFocus();
+        edit_address_->selectAll();
         return;
     }
 
-    const QString username = username_->text();
-    const QString password = password_->text();
+    const QString username = edit_username_->text();
+    const QString password = edit_password_->text();
 
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
         showError(tr("The user name can not be empty and can contain only alphabet characters,"
                      " numbers and \"_\", \"-\", \".\" characters."));
-        username_->setFocus();
-        username_->selectAll();
+        edit_username_->setFocus();
+        edit_username_->selectAll();
         return;
     }
 
@@ -293,10 +293,10 @@ void LocalHostEditor::onSaveClicked()
     data.setRouterId(router_id);
     data.setName(name);
     data.setAddress(address_text);
-    data.setCredentialId(shared_->isChecked() ? credential_->currentData().toLongLong() : 0);
+    data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
     data.setPassword(SecureString(password));
-    data.setComment(comment_->text());
+    data.setComment(edit_comment_->text());
 
     Database& db = Database::instance();
     const bool saved = (entry_id_ < 0) ? db.addLocalHost(data) : db.modifyLocalHost(data);
@@ -313,7 +313,7 @@ void LocalHostEditor::onSaveClicked()
 void LocalHostEditor::onDeleteClicked()
 {
     if (!MessageDialog::confirm(this, tr("Delete Host"),
-                                tr("Delete the host \"%1\"?").arg(name_->text()), tr("Delete")))
+                                tr("Delete the host \"%1\"?").arg(edit_name_->text()), tr("Delete")))
     {
         return;
     }
@@ -330,6 +330,6 @@ void LocalHostEditor::onDeleteClicked()
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }

@@ -44,27 +44,27 @@ constexpr int kFormSpacing = 8;
 //--------------------------------------------------------------------------------------------------
 RouterHostEditor::RouterHostEditor(QWidget* parent)
     : QWidget(parent),
-      shared_(new Switch(tr("Use existing"))),
-      username_(new LineEdit()),
-      password_(new LineEdit()),
-      note_(new Label(tr("The user name and the password are stored on this device only and "
+      switch_saved_credentials_(new Switch(tr("Use existing"))),
+      edit_username_(new LineEdit()),
+      edit_password_(new LineEdit()),
+      label_note_(new Label(tr("The user name and the password are stored on this device only and "
                          "are not sent to the router. Leave both empty to forget them."),
                       Label::Role::CAPTION)),
-      credential_(new ComboBox()),
-      error_(new Label(QString(), Label::Role::CAPTION))
+      combo_credential_(new ComboBox()),
+      label_error_(new Label(QString(), Label::Role::CAPTION))
 {
-    username_->setLabel(tr("User Name"));
+    edit_username_->setLabel(tr("User Name"));
 
-    password_->setLabel(tr("Password"));
-    password_->setEchoMode(QLineEdit::Password);
+    edit_password_->setLabel(tr("Password"));
+    edit_password_->setEchoMode(QLineEdit::Password);
 
-    credential_->setLabel(tr("Credentials"));
+    combo_credential_->setLabel(tr("Credentials"));
 
-    error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
-    error_->setWordWrap(true);
-    error_->setVisible(false);
+    label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
+    label_error_->setWordWrap(true);
+    label_error_->setVisible(false);
 
-    note_->setWordWrap(true);
+    label_note_->setWordWrap(true);
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
@@ -72,12 +72,12 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
-    form_layout->addWidget(error_);
-    form_layout->addWidget(shared_);
-    form_layout->addWidget(username_);
-    form_layout->addWidget(password_);
-    form_layout->addWidget(note_);
-    form_layout->addWidget(credential_);
+    form_layout->addWidget(label_error_);
+    form_layout->addWidget(switch_saved_credentials_);
+    form_layout->addWidget(edit_username_);
+    form_layout->addWidget(edit_password_);
+    form_layout->addWidget(label_note_);
+    form_layout->addWidget(combo_credential_);
     form_layout->addWidget(save);
     form_layout->addStretch();
 
@@ -89,7 +89,7 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
-    connect(shared_, &Switch::toggled, this, &RouterHostEditor::onSharedToggled);
+    connect(switch_saved_credentials_, &Switch::toggled, this, &RouterHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &RouterHostEditor::onSaveClicked);
 }
 
@@ -110,9 +110,9 @@ bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
     router_id_ = router_id;
     host_id_ = host_id;
 
-    username_->clear();
-    password_->clear();
-    error_->setVisible(false);
+    edit_username_->clear();
+    edit_password_->clear();
+    label_error_->setVisible(false);
 
     qint64 credential_id = 0;
 
@@ -120,55 +120,56 @@ bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
         Database::instance().findRouterHost(router_id_, host_id_);
     if (credentials.has_value())
     {
-        username_->setText(credentials->username());
-        password_->setText(credentials->password().toString());
+        edit_username_->setText(credentials->username());
+        edit_password_->setText(credentials->password().toString());
         credential_id = credentials->credentialId();
     }
 
     loadCredentials(credential_id);
-    username_->setFocus();
+    edit_username_->setFocus();
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterHostEditor::loadCredentials(qint64 selected_credential_id)
 {
-    credential_->clear();
+    combo_credential_->clear();
     QList<CredentialConfig> credentials;
     Database::instance().credentialList(&credentials);
     for (const CredentialConfig& credential : std::as_const(credentials))
-        credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
+        combo_credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
 
-    const int index = credential_->findData(QVariant::fromValue(selected_credential_id));
-    credential_->setCurrentIndex(index >= 0 ? index : 0);
+    const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
+    combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
 
     // Nothing to share until a record of credentials is added.
-    shared_->setEnabled(!credentials.isEmpty());
-    shared_->setChecked(index >= 0);
-    onSharedToggled(shared_->isChecked());
+    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
+    switch_saved_credentials_->setChecked(index >= 0);
+    onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostEditor::onSharedToggled(bool checked)
+void RouterHostEditor::onSavedCredentialsToggled(bool checked)
 {
-    if (checked && username_->text().isEmpty() != password_->text().isEmpty())
+    if (checked && edit_username_->text().isEmpty() != edit_password_->text().isEmpty())
     {
-        username_->clear();
-        password_->clear();
+        edit_username_->clear();
+        edit_password_->clear();
     }
 
-    username_->setVisible(!checked);
-    password_->setVisible(!checked);
-    note_->setVisible(!checked);
-    credential_->setVisible(checked);
+    edit_username_->setVisible(!checked);
+    edit_password_->setVisible(!checked);
+    label_note_->setVisible(!checked);
+    combo_credential_->setVisible(checked);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterHostEditor::onSaveClicked()
 {
-    const qint64 credential_id = shared_->isChecked() ? credential_->currentData().toLongLong() : 0;
-    const QString username = username_->text();
-    const QString password = password_->text();
+    const qint64 credential_id =
+        switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0;
+    const QString username = edit_username_->text();
+    const QString password = edit_password_->text();
 
     if (username.isEmpty() != password.isEmpty())
     {
@@ -216,6 +217,6 @@ void RouterHostEditor::onSaveClicked()
 //--------------------------------------------------------------------------------------------------
 void RouterHostEditor::showError(const QString& message)
 {
-    error_->setText(message);
-    error_->setVisible(true);
+    label_error_->setText(message);
+    label_error_->setVisible(true);
 }

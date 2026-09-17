@@ -19,6 +19,7 @@
 #ifndef CLIENT_ANDROID_AUTHORIZATION_WINDOW_H
 #define CLIENT_ANDROID_AUTHORIZATION_WINDOW_H
 
+#include <QList>
 #include <QWidget>
 
 #include "client/config.h"
@@ -28,8 +29,11 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class AppBar;
+class ComboBox;
 class Label;
 class LineEdit;
+class QWidget;
+class RadioButton;
 class Switch;
 
 // Asks for the credentials of a host before its session is opened. A screen rather than a dialog:
@@ -41,13 +45,17 @@ class AuthorizationWindow final : public QWidget
 public:
     // |save_credentials_available| enables the switch that keeps the credentials on the device.
     AuthorizationWindow(const HostConfig& host, proto::peer::SessionType session_type,
-                        bool save_credentials_available, QWidget* parent = nullptr);
+                        bool save_credentials_available,
+                        const QList<CredentialConfig>& credentials, QWidget* parent = nullptr);
     ~AuthorizationWindow() final;
 
     // The host with the entered credentials. The user name is empty when a one-time password is
     // used; the caller then connects by host id.
     HostConfig host() const;
     proto::peer::SessionType sessionType() const { return session_type_; }
+
+    // The record the user chose, 0 when the user name and the password were typed here.
+    qint64 credentialId() const;
 
     bool isSaveCredentialsChecked() const;
 
@@ -57,7 +65,7 @@ signals:
 
 private slots:
     void onConnectClicked();
-    void onOneTimePasswordToggled(bool checked);
+    void onModeToggled(bool checked);
 
     // Lifts the content by however much the on-screen keyboard overlaps the window. Android's
     // adjustResize is unreliable here (it sometimes leaves the window full height with the keyboard
@@ -67,15 +75,30 @@ private slots:
 private:
     void showError(const QString& message);
 
+    bool usesOneTimePassword() const;
+    bool isOneTimePasswordOffered() const;
+    bool usesSavedCredentials() const;
+    bool hasSavedCredentials() const;
+    const CredentialConfig* selectedCredential() const;
+    void updateModes();
+
     const HostConfig host_;
     const proto::peer::SessionType session_type_;
+    const QList<CredentialConfig> credentials_;
 
     AppBar* app_bar_ = nullptr;
-    LineEdit* username_ = nullptr;
-    LineEdit* password_ = nullptr;
-    Switch* one_time_password_ = nullptr;
-    Switch* save_credentials_ = nullptr;
-    Label* error_ = nullptr;
+    RadioButton* radio_user_password_ = nullptr;
+    RadioButton* radio_one_time_password_ = nullptr;
+    RadioButton* radio_saved_credentials_ = nullptr;
+    QWidget* user_password_block_ = nullptr;
+    QWidget* one_time_password_block_ = nullptr;
+    QWidget* saved_credentials_block_ = nullptr;
+    LineEdit* edit_username_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    LineEdit* edit_one_time_password_ = nullptr;
+    ComboBox* combo_credential_ = nullptr;
+    Switch* switch_save_credentials_ = nullptr;
+    Label* label_error_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AuthorizationWindow)
 };

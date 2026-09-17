@@ -133,8 +133,8 @@ QString startUrlFromIntent()
 AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     : QWidget(parent),
       app_bar_(new AppBar(this)),
-      content_(new QStackedWidget(this)),
-      navigation_(new BottomNavigationBar(this))
+      stack_content_(new QStackedWidget(this)),
+      nav_bar_(new BottomNavigationBar(this))
 {
     RouterController* router_controller = new RouterController(this);
     connect(router_controller, &RouterController::sig_twoFactorRequired,
@@ -145,10 +145,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     RemoteWidget* remote = new RemoteWidget(this);
     SettingsWidget* settings = new SettingsWidget(this);
 
-    content_->addWidget(local);
-    content_->addWidget(remote);
-    content_->addWidget(routers);
-    content_->addWidget(settings);
+    stack_content_->addWidget(local);
+    stack_content_->addWidget(remote);
+    stack_content_->addWidget(routers);
+    stack_content_->addWidget(settings);
 
     connect(routers, &RoutersWidget::sig_twoFactorClicked, this, &AndroidMainWindow::onTwoFactorRequired);
     connect(routers, &RoutersWidget::sig_appBarActionsChanged, this, &AndroidMainWindow::onRouterActionsChanged);
@@ -165,10 +165,10 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
     connect(app_bar_, &AppBar::sig_searchTextChanged, this, &AndroidMainWindow::onSearchTextChanged);
 
-    navigation_->addItem(tr("Local"), ":/img/folder.svg");
-    navigation_->addItem(tr("Remote"), ":/img/workspace.svg");
-    navigation_->addItem(tr("Routers"), ":/img/stack.svg");
-    navigation_->addItem(tr("Settings"), ":/img/settings.svg");
+    nav_bar_->addItem(tr("Local"), ":/img/folder.svg");
+    nav_bar_->addItem(tr("Remote"), ":/img/workspace.svg");
+    nav_bar_->addItem(tr("Routers"), ":/img/stack.svg");
+    nav_bar_->addItem(tr("Settings"), ":/img/settings.svg");
 
     // The address book shell. While a desktop connection is active it is replaced by the desktop view.
     shell_ = new QWidget(this);
@@ -176,21 +176,21 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     shell_layout->setContentsMargins(0, 0, 0, 0);
     shell_layout->setSpacing(0);
     shell_layout->addWidget(app_bar_);
-    shell_layout->addWidget(content_, 1);
-    shell_layout->addWidget(navigation_);
+    shell_layout->addWidget(stack_content_, 1);
+    shell_layout->addWidget(nav_bar_);
 
-    root_stack_ = new QStackedWidget(this);
-    root_stack_->addWidget(shell_);
+    stack_root_ = new QStackedWidget(this);
+    stack_root_->addWidget(shell_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(root_stack_);
+    layout->addWidget(stack_root_);
 
-    connect(navigation_, &BottomNavigationBar::sig_currentChanged,
+    connect(nav_bar_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
 
-    onSectionChanged(navigation_->currentIndex());
+    onSectionChanged(nav_bar_->currentIndex());
 
     connect(GuiApplication::instance(), &QGuiApplication::applicationStateChanged,
             this, &AndroidMainWindow::onApplicationStateChanged);
@@ -211,18 +211,18 @@ AndroidMainWindow::~AndroidMainWindow()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSectionChanged(int index)
 {
-    content_->setCurrentIndex(index);
+    stack_content_->setCurrentIndex(index);
 
     // The back button belongs to the remote host view; any tab switch clears it.
     app_bar_->setBackVisible(false);
 
-    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
+    RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS));
     if (index != SECTION_ROUTERS && routers)
         routers->resetToList();
 
-    LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
-    RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE));
-    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
+    LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL));
+    RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE));
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
 
     if (index != SECTION_SETTINGS && settings)
         settings->resetToSettings();
@@ -274,23 +274,23 @@ void AndroidMainWindow::onSectionChanged(int index)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRouterActionsChanged()
 {
-    RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS));
-    if (navigation_->currentIndex() == SECTION_ROUTERS && routers)
+    RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS));
+    if (nav_bar_->currentIndex() == SECTION_ROUTERS && routers)
         app_bar_->setActions(routers->appBarActions());
 }
 
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onLocalActionsChanged()
 {
-    LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL));
-    if (navigation_->currentIndex() == SECTION_LOCAL && local)
+    LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL));
+    if (nav_bar_->currentIndex() == SECTION_LOCAL && local)
         app_bar_->setActions(local->appBarActions());
 }
 
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visible)
 {
-    if (navigation_->currentIndex() != SECTION_LOCAL)
+    if (nav_bar_->currentIndex() != SECTION_LOCAL)
         return;
 
     app_bar_->setTitle(title.isEmpty() ? tr("Local") : title);
@@ -300,7 +300,7 @@ void AndroidMainWindow::onLocalTitleChanged(const QString& title, bool back_visi
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRoutersTitleChanged(const QString& title, bool back_visible)
 {
-    if (navigation_->currentIndex() != SECTION_ROUTERS)
+    if (nav_bar_->currentIndex() != SECTION_ROUTERS)
         return;
 
     app_bar_->setTitle(title.isEmpty() ? tr("Routers") : title);
@@ -310,7 +310,7 @@ void AndroidMainWindow::onRoutersTitleChanged(const QString& title, bool back_vi
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_visible)
 {
-    if (navigation_->currentIndex() != SECTION_REMOTE)
+    if (nav_bar_->currentIndex() != SECTION_REMOTE)
         return;
 
     app_bar_->setTitle(title.isEmpty() ? tr("Remote") : title);
@@ -320,7 +320,7 @@ void AndroidMainWindow::onRemoteTitleChanged(const QString& title, bool back_vis
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSettingsTitleChanged(const QString& title, bool back_visible)
 {
-    if (navigation_->currentIndex() != SECTION_SETTINGS)
+    if (nav_bar_->currentIndex() != SECTION_SETTINGS)
         return;
 
     app_bar_->setTitle(title.isEmpty() ? tr("Settings") : title);
@@ -330,8 +330,8 @@ void AndroidMainWindow::onSettingsTitleChanged(const QString& title, bool back_v
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSettingsActionsChanged()
 {
-    SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS));
-    if (navigation_->currentIndex() == SECTION_SETTINGS && settings)
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
+    if (nav_bar_->currentIndex() == SECTION_SETTINGS && settings)
         app_bar_->setActions(settings->appBarActions());
 }
 
@@ -349,22 +349,22 @@ void AndroidMainWindow::onSearchModeChanged(bool active)
     {
         app_bar_->setSearchMode(false);
         // Restore the bar to the current tab's default state.
-        onSectionChanged(navigation_->currentIndex());
+        onSectionChanged(nav_bar_->currentIndex());
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onSearchTextChanged(const QString& text)
 {
-    switch (navigation_->currentIndex())
+    switch (nav_bar_->currentIndex())
     {
         case SECTION_LOCAL:
-            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+            if (LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL)))
                 local->searchQuery(text);
             break;
 
         case SECTION_REMOTE:
-            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE)))
                 remote->searchQuery(text);
             break;
 
@@ -376,25 +376,25 @@ void AndroidMainWindow::onSearchTextChanged(const QString& text)
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onBackClicked()
 {
-    switch (navigation_->currentIndex())
+    switch (nav_bar_->currentIndex())
     {
         case SECTION_LOCAL:
-            if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+            if (LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL)))
                 local->goBack();
             break;
 
         case SECTION_REMOTE:
-            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+            if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE)))
                 remote->goBack();
             break;
 
         case SECTION_ROUTERS:
-            if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
+            if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS)))
                 routers->goBack();
             break;
 
         case SECTION_SETTINGS:
-            if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(content_->widget(SECTION_SETTINGS)))
+            if (SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS)))
                 settings->goBack();
             break;
 
@@ -425,8 +425,8 @@ void AndroidMainWindow::onDesktopClosed()
     if (!desktop_)
         return;
 
-    root_stack_->setCurrentWidget(shell_);
-    root_stack_->removeWidget(desktop_);
+    stack_root_->setCurrentWidget(shell_);
+    stack_root_->removeWidget(desktop_);
     desktop_->deleteLater();
     desktop_ = nullptr;
 
@@ -441,8 +441,8 @@ void AndroidMainWindow::onFileTransferClosed()
     if (!file_transfer_)
         return;
 
-    root_stack_->setCurrentWidget(shell_);
-    root_stack_->removeWidget(file_transfer_);
+    stack_root_->setCurrentWidget(shell_);
+    stack_root_->removeWidget(file_transfer_);
     file_transfer_->deleteLater();
     file_transfer_ = nullptr;
 }
@@ -453,8 +453,8 @@ void AndroidMainWindow::onChatClosed()
     if (!chat_)
         return;
 
-    root_stack_->setCurrentWidget(shell_);
-    root_stack_->removeWidget(chat_);
+    stack_root_->setCurrentWidget(shell_);
+    stack_root_->removeWidget(chat_);
     chat_->deleteLater();
     chat_ = nullptr;
 }
@@ -468,6 +468,7 @@ void AndroidMainWindow::onAuthorizationAccepted()
     const HostConfig host = authorization_->host();
     const proto::peer::SessionType session_type = authorization_->sessionType();
     const bool save_credentials = authorization_->isSaveCredentialsChecked();
+    const qint64 credential_id = authorization_->credentialId();
 
     onAuthorizationClosed();
 
@@ -476,7 +477,7 @@ void AndroidMainWindow::onAuthorizationAccepted()
     bool credentials_saved = false;
     if (save_credentials && !host.username().isEmpty())
     {
-        saveHostCredentials(host);
+        saveHostCredentials(host, credential_id);
         credentials_saved = true;
     }
 
@@ -489,8 +490,8 @@ void AndroidMainWindow::onAuthorizationClosed()
     if (!authorization_)
         return;
 
-    root_stack_->setCurrentWidget(shell_);
-    root_stack_->removeWidget(authorization_);
+    stack_root_->setCurrentWidget(shell_);
+    stack_root_->removeWidget(authorization_);
     authorization_->deleteLater();
     authorization_ = nullptr;
 }
@@ -617,7 +618,7 @@ void AndroidMainWindow::runMasterPasswordGate()
 
     // The data cryptor is invalid until the dialog unlocks it, so quit if the user cancels. The
     // dialog is anchored to the content stack so only it is blurred, not the bars.
-    MasterPasswordDialog dialog(mode, content_);
+    MasterPasswordDialog dialog(mode, stack_content_);
     if (dialog.exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
@@ -631,13 +632,13 @@ void AndroidMainWindow::runMasterPasswordGate()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onUnlocked()
 {
-    if (LocalWidget* local = qobject_cast<LocalWidget*>(content_->widget(SECTION_LOCAL)))
+    if (LocalWidget* local = qobject_cast<LocalWidget*>(stack_content_->widget(SECTION_LOCAL)))
         local->reload();
 
-    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(content_->widget(SECTION_ROUTERS)))
+    if (RoutersWidget* routers = qobject_cast<RoutersWidget*>(stack_content_->widget(SECTION_ROUTERS)))
         routers->reload();
 
-    if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(content_->widget(SECTION_REMOTE)))
+    if (RemoteWidget* remote = qobject_cast<RemoteWidget*>(stack_content_->widget(SECTION_REMOTE)))
         remote->reload();
 
     unlocked_ = true;
@@ -655,7 +656,7 @@ void AndroidMainWindow::relock()
     relocking_ = true;
 
     // The data cryptor stays open; this only re-verifies the user (password or fingerprint).
-    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, content_);
+    MasterPasswordDialog dialog(MasterPasswordDialog::Mode::UNLOCK, stack_content_);
     if (dialog.exec() != QDialog::Accepted)
     {
         QCoreApplication::quit();
@@ -697,14 +698,19 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
 
     if (host.username().isEmpty() || host.password().isEmpty())
     {
-        authorization_ = new AuthorizationWindow(host, session_type, can_save_credentials);
+        QList<CredentialConfig> credentials;
+        if (!Database::instance().credentialList(&credentials))
+            LOG(ERROR) << "Unable to read credentials";
+
+        authorization_ =
+            new AuthorizationWindow(host, session_type, can_save_credentials, credentials);
         connect(authorization_, &AuthorizationWindow::sig_accepted,
                 this, &AndroidMainWindow::onAuthorizationAccepted);
         connect(authorization_, &AuthorizationWindow::sig_closed,
                 this, &AndroidMainWindow::onAuthorizationClosed);
 
-        root_stack_->addWidget(authorization_);
-        root_stack_->setCurrentWidget(authorization_);
+        stack_root_->addWidget(authorization_);
+        stack_root_->setCurrentWidget(authorization_);
         return;
     }
 
@@ -735,9 +741,13 @@ void AndroidMainWindow::startSession(const HostConfig& host, proto::peer::Sessio
 }
 
 //--------------------------------------------------------------------------------------------------
-void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
+void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 credential_id)
 {
     Database& db = Database::instance();
+
+    // The pair belongs to the record, so a host entered with one keeps the link alone.
+    const QString username = credential_id > 0 ? QString() : host.username();
+    const SecureString password = credential_id > 0 ? SecureString() : host.password();
 
     if (host.entryId() > 0)
     {
@@ -748,8 +758,9 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
             return;
         }
 
-        local_host->setUsername(host.username());
-        local_host->setPassword(host.password());
+        local_host->setCredentialId(credential_id);
+        local_host->setUsername(username);
+        local_host->setPassword(password);
 
         if (!db.modifyLocalHost(*local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
@@ -761,8 +772,9 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host)
     RouterHostConfig credentials;
     credentials.setRouterId(host.routerId());
     credentials.setHostId(host_id);
-    credentials.setUsername(host.username());
-    credentials.setPassword(host.password());
+    credentials.setCredentialId(credential_id);
+    credentials.setUsername(username);
+    credentials.setPassword(password);
 
     bool saved = false;
 
@@ -786,8 +798,8 @@ void AndroidMainWindow::openDesktop(const HostConfig& host, bool credentials_sav
     desktop_ = new DesktopWindow(host, credentials_saved);
     connect(desktop_, &DesktopWindow::sig_closed, this, &AndroidMainWindow::onDesktopClosed);
 
-    root_stack_->addWidget(desktop_);
-    root_stack_->setCurrentWidget(desktop_);
+    stack_root_->addWidget(desktop_);
+    stack_root_->setCurrentWidget(desktop_);
 
     // Hide the system bars and let the desktop view fill the whole screen, including the camera
     // cutout: allow drawing into the cutout and stop the layout from reserving the safe area.
@@ -804,8 +816,8 @@ void AndroidMainWindow::openFileTransfer(const HostConfig& host, bool credential
     file_transfer_ = new FileTransferWindow(host, credentials_saved);
     connect(file_transfer_, &FileTransferWindow::sig_closed, this, &AndroidMainWindow::onFileTransferClosed);
 
-    root_stack_->addWidget(file_transfer_);
-    root_stack_->setCurrentWidget(file_transfer_);
+    stack_root_->addWidget(file_transfer_);
+    stack_root_->setCurrentWidget(file_transfer_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -814,8 +826,8 @@ void AndroidMainWindow::openChat(const HostConfig& host, bool credentials_saved)
     chat_ = new ChatWindow(host, credentials_saved);
     connect(chat_, &ChatWindow::sig_closed, this, &AndroidMainWindow::onChatClosed);
 
-    root_stack_->addWidget(chat_);
-    root_stack_->setCurrentWidget(chat_);
+    stack_root_->addWidget(chat_);
+    stack_root_->setCurrentWidget(chat_);
 }
 
 //--------------------------------------------------------------------------------------------------

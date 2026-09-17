@@ -51,7 +51,7 @@ signals:
 
 private slots:
     void onRouterChanged();
-    void onSharedToggled(bool checked);
+    void onSavedCredentialsToggled(bool checked);
     void onSaveClicked();
     void onDeleteClicked();
 
@@ -60,16 +60,16 @@ private:
     void loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
-    ComboBox* router_ = nullptr;
-    LineEdit* name_ = nullptr;
-    LineEdit* address_ = nullptr;
-    Switch* shared_ = nullptr;
-    LineEdit* username_ = nullptr;
-    LineEdit* password_ = nullptr;
-    ComboBox* credential_ = nullptr;
-    TextArea* comment_ = nullptr;
-    Label* error_ = nullptr;
-    Button* delete_button_ = nullptr;
+    ComboBox* combo_router_ = nullptr;
+    LineEdit* edit_name_ = nullptr;
+    LineEdit* edit_address_ = nullptr;
+    Switch* switch_saved_credentials_ = nullptr;
+    LineEdit* edit_username_ = nullptr;
+    LineEdit* edit_password_ = nullptr;
+    ComboBox* combo_credential_ = nullptr;
+    TextArea* edit_comment_ = nullptr;
+    Label* label_error_ = nullptr;
+    Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
     qint64 group_id_ = 0;
 

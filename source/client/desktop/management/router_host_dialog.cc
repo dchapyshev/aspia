@@ -57,16 +57,16 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
-    QList<CredentialConfig> shared_credentials;
-    Database::instance().credentialList(&shared_credentials);
-    for (const CredentialConfig& credential : std::as_const(shared_credentials))
+    QList<CredentialConfig> saved_credentials;
+    Database::instance().credentialList(&saved_credentials);
+    for (const CredentialConfig& credential : std::as_const(saved_credentials))
     {
         ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
                                       QVariant::fromValue(credential.id()));
     }
 
     // Nothing to share until a record of credentials is added.
-    ui->checkbox_shared->setEnabled(!shared_credentials.isEmpty());
+    ui->checkbox_saved_credentials->setEnabled(!saved_credentials.isEmpty());
 
     // A temporary host id is handed out at random and comes back for another machine, so what was
     // saved under it would be sent to a host the user never gave it to. Such a host is edited like
@@ -86,17 +86,17 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
             if (credentials->credentialId() > 0)
             {
-                ui->checkbox_shared->setChecked(true);
+                ui->checkbox_saved_credentials->setChecked(true);
                 ui->combo_credential->setCurrentIndex(ui->combo_credential->findData(
                     QVariant::fromValue(credentials->credentialId())));
             }
         }
     }
 
-    connect(ui->checkbox_shared, &QCheckBox::toggled, this, &RouterHostDialog::onSharedToggled);
+    connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &RouterHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
 
-    onSharedToggled(ui->checkbox_shared->isChecked());
+    onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
     connect(&RouterController::instance(), &RouterController::sig_statusChanged, this,
             [this](qint64 router_id, RouterStatus status)
@@ -181,7 +181,7 @@ void RouterHostDialog::onHostResultReceived(const proto::router::HostResult& res
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostDialog::onSharedToggled(bool checked)
+void RouterHostDialog::onSavedCredentialsToggled(bool checked)
 {
     if (checked && ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
     {
@@ -189,10 +189,10 @@ void RouterHostDialog::onSharedToggled(bool checked)
         ui->edit_password->clear();
     }
 
-    QWidget* page = checked ? ui->page_shared : ui->page_own;
+    QWidget* page = checked ? ui->page_saved_credentials : ui->page_own;
 
     // The stack is as high as its pages, so the page that is not shown steps out of the count.
-    for (QWidget* other : { ui->page_own, ui->page_shared })
+    for (QWidget* other : { ui->page_own, ui->page_saved_credentials })
     {
         other->setSizePolicy(QSizePolicy::Preferred,
                              other == page ? QSizePolicy::Preferred : QSizePolicy::Ignored);
@@ -254,7 +254,7 @@ bool RouterHostDialog::saveCredentials()
     Database& db = Database::instance();
 
     const qint64 credential_id =
-        ui->checkbox_shared->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0;
+        ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0;
     const QString username = ui->edit_username->text();
     const SecureString password = ui->edit_password->password();
 

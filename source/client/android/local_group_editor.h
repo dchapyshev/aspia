@@ -53,10 +53,10 @@ private slots:
 private:
     void showError(const QString& message);
 
-    LineEdit* name_ = nullptr;
-    TextArea* comment_ = nullptr;
-    Label* error_ = nullptr;
-    Button* delete_button_ = nullptr;
+    LineEdit* edit_name_ = nullptr;
+    TextArea* edit_comment_ = nullptr;
+    Label* label_error_ = nullptr;
+    Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
     qint64 parent_id_ = 0;
 
