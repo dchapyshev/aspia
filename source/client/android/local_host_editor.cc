@@ -208,6 +208,12 @@ void LocalHostEditor::onRouterChanged()
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::onSharedToggled(bool checked)
 {
+    if (checked && username_->text().isEmpty() != password_->text().isEmpty())
+    {
+        username_->clear();
+        password_->clear();
+    }
+
     // Entered with a record of credentials, the host shows the record in place of its own pair.
     username_->setVisible(!checked);
     password_->setVisible(!checked);
@@ -264,9 +270,10 @@ void LocalHostEditor::onSaveClicked()
     }
 
     const QString username = username_->text();
+    const QString password = password_->text();
+
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
-        shared_->setChecked(false);
         showError(tr("The user name can not be empty and can contain only alphabet characters,"
                      " numbers and \"_\", \"-\", \".\" characters."));
         username_->setFocus();
@@ -274,9 +281,8 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
-    if (username.isEmpty() != password_->text().isEmpty())
+    if (username.isEmpty() != password.isEmpty())
     {
-        shared_->setChecked(false);
         showError(tr("Enter both the user name and the password, or leave both empty."));
         return;
     }
@@ -289,7 +295,7 @@ void LocalHostEditor::onSaveClicked()
     data.setAddress(address_text);
     data.setCredentialId(shared_->isChecked() ? credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
-    data.setPassword(SecureString(password_->text()));
+    data.setPassword(SecureString(password));
     data.setComment(comment_->text());
 
     Database& db = Database::instance();

@@ -171,6 +171,12 @@ void LocalHostDialog::onRouterChanged(int /* index */)
 //--------------------------------------------------------------------------------------------------
 void LocalHostDialog::onSharedToggled(bool checked)
 {
+    if (checked && ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
+    {
+        ui->edit_username->clear();
+        ui->edit_password->clear();
+    }
+
     QWidget* page = checked ? ui->page_shared : ui->page_own;
 
     // The stack is as high as its pages, so the page that is not shown steps out of the count.
@@ -235,14 +241,11 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    // The pair of the host is kept whether it is entered with it or with the record it refers to,
-    // so it is checked either way, in sight when refused.
     const QString username = ui->edit_username->text();
     const SecureString password = ui->edit_password->password();
 
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
-        ui->checkbox_shared->setChecked(false);
         MsgBox::warning(this,
             tr("The user name can not be empty and can contain only"
                " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
@@ -253,7 +256,6 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (username.isEmpty() != password.isEmpty())
     {
-        ui->checkbox_shared->setChecked(false);
         MsgBox::warning(this, tr("Enter both the user name and the password, or leave both empty."));
         return;
     }

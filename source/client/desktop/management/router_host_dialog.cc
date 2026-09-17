@@ -183,6 +183,12 @@ void RouterHostDialog::onHostResultReceived(const proto::router::HostResult& res
 //--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onSharedToggled(bool checked)
 {
+    if (checked && ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
+    {
+        ui->edit_username->clear();
+        ui->edit_password->clear();
+    }
+
     QWidget* page = checked ? ui->page_shared : ui->page_own;
 
     // The stack is as high as its pages, so the page that is not shown steps out of the count.
@@ -217,7 +223,6 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
     {
-        ui->checkbox_shared->setChecked(false);
         MsgBox::warning(this, tr("Enter both the user name and the password, or leave both empty."));
         return;
     }

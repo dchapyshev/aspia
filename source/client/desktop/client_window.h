@@ -152,7 +152,7 @@ private slots:
     void onNetworkConnected();
 
 private:
-    void saveHostCredentials(const HostConfig& host);
+    void saveHostCredentials(const HostConfig& host, qint64 credential_id);
     void forgetRefusedCredentials();
     void setClientTitle(const HostConfig& host, proto::peer::SessionType session_type);
     void fetchConnectionOffer();

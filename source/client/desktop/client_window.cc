@@ -123,6 +123,12 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
         auth_dialog.setUserName(host.username());
         auth_dialog.setPassword(host.password());
 
+        QList<CredentialConfig> credentials;
+        if (!Database::instance().credentialList(&credentials))
+            LOG(ERROR) << "Unable to read credentials";
+
+        auth_dialog.setCredentials(credentials);
+
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
             LOG(INFO) << "Authorization rejected by user";
@@ -134,7 +140,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
 
         if (can_save_credentials && auth_dialog.isSaveCredentialsChecked() && !host.username().isEmpty())
         {
-            saveHostCredentials(host);
+            saveHostCredentials(host, auth_dialog.credentialId());
             credentials_saved_ = true;
         }
     }
@@ -392,9 +398,12 @@ void ClientWindow::onNetworkConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::saveHostCredentials(const HostConfig& host)
+void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential_id)
 {
     Database& db = Database::instance();
+
+    const QString username = credential_id > 0 ? QString() : host.username();
+    const SecureString password = credential_id > 0 ? SecureString() : host.password();
 
     if (host.entryId() > 0)
     {
@@ -405,8 +414,9 @@ void ClientWindow::saveHostCredentials(const HostConfig& host)
             return;
         }
 
-        local_host->setUsername(host.username());
-        local_host->setPassword(host.password());
+        local_host->setCredentialId(credential_id);
+        local_host->setUsername(username);
+        local_host->setPassword(password);
 
         if (!db.modifyLocalHost(*local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
@@ -418,8 +428,9 @@ void ClientWindow::saveHostCredentials(const HostConfig& host)
     RouterHostConfig credentials;
     credentials.setRouterId(host.routerId());
     credentials.setHostId(host_id);
-    credentials.setUsername(host.username());
-    credentials.setPassword(host.password());
+    credentials.setCredentialId(credential_id);
+    credentials.setUsername(username);
+    credentials.setPassword(password);
 
     bool saved = false;
 
@@ -453,6 +464,7 @@ void ClientWindow::forgetRefusedCredentials()
             return;
         }
 
+        local_host->setCredentialId(0);
         local_host->setUsername(QString());
         local_host->setPassword(SecureString());
 

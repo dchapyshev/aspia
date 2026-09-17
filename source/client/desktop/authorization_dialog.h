@@ -20,11 +20,13 @@
 #define CLIENT_DESKTOP_AUTHORIZATION_DIALOG_H
 
 #include <QDialog>
+#include <QList>
 
 #include <memory>
 
+#include "client/config.h"
+
 class QAbstractButton;
-class SecureString;
 
 namespace Ui {
 class AuthorizationDialog;
@@ -40,8 +42,9 @@ public:
 
     void setOneTimePasswordEnabled(bool enable);
 
-    // Shows the checkbox that asks to keep the credentials of this host on the machine. Hidden by
-    // default: only a host of a router has somewhere to keep them.
+    void setCredentials(const QList<CredentialConfig>& credentials);
+    qint64 credentialId() const;
+
     void setSaveCredentialsVisible(bool visible);
     bool isSaveCredentialsChecked() const;
 
@@ -56,6 +59,7 @@ protected:
     void showEvent(QShowEvent* event) final;
 
 private slots:
+    void onSharedToggled(bool checked);
     void onOneTimePasswordToggled(bool checked);
     void onOneTimePasswordClicked(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
@@ -63,12 +67,15 @@ private slots:
 private:
     void fitSize();
 
-    // A one-time password is asked for only where it can be used, and the checkbox keeps its state
-    // between connections, so its state means nothing where it is not offered.
     bool isOneTimePassword() const;
     bool isSaveCredentialsOffered() const;
+    bool isSharedOffered() const;
+    bool isShared() const;
+    const CredentialConfig* selectedCredential() const;
+    void updateCredentialsState();
 
     std::unique_ptr<Ui::AuthorizationDialog> ui;
+    QList<CredentialConfig> credentials_;
     bool one_time_password_enabled_ = false;
     bool one_time_password_choice_ = false;
     bool save_credentials_visible_ = false;

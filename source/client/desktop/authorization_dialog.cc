@@ -18,6 +18,9 @@
 
 #include "client/desktop/authorization_dialog.h"
 
+#include <QComboBox>
+#include <QIcon>
+#include <QRadioButton>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -51,8 +54,10 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
             this, &AuthorizationDialog::onOneTimePasswordToggled);
     connect(ui->checkbox_one_time_password, &QCheckBox::clicked,
             this, &AuthorizationDialog::onOneTimePasswordClicked);
+    connect(ui->radio_shared, &QRadioButton::toggled,
+            this, &AuthorizationDialog::onSharedToggled);
 
-    fitSize();
+    updateCredentialsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,26 +73,36 @@ AuthorizationDialog::~AuthorizationDialog()
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
     one_time_password_enabled_ = enable;
+    updateCredentialsState();
+}
 
-    ui->checkbox_one_time_password->setVisible(enable);
+//--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::setCredentials(const QList<CredentialConfig>& credentials)
+{
+    credentials_ = credentials;
 
-    const bool one_time = isOneTimePassword();
+    ui->combo_credential->clear();
+    for (const CredentialConfig& credential : std::as_const(credentials_))
+    {
+        ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
+                                      QVariant::fromValue(credential.id()));
+    }
 
-    ui->label_username->setVisible(!one_time);
-    ui->edit_username->setVisible(!one_time);
-    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
+    updateCredentialsState();
+}
 
-    fitSize();
+//--------------------------------------------------------------------------------------------------
+qint64 AuthorizationDialog::credentialId() const
+{
+    const CredentialConfig* credential = selectedCredential();
+    return credential ? credential->id() : 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setSaveCredentialsVisible(bool visible)
 {
     save_credentials_visible_ = visible;
-
-    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
-
-    fitSize();
+    updateCredentialsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,6 +120,10 @@ QString AuthorizationDialog::userName() const
     if (isOneTimePassword())
         return QString();
 
+    const CredentialConfig* credential = selectedCredential();
+    if (credential)
+        return credential->username();
+
     return ui->edit_username->text();
 }
 
@@ -121,6 +140,10 @@ void AuthorizationDialog::setUserName(const QString& username)
 //--------------------------------------------------------------------------------------------------
 SecureString AuthorizationDialog::password() const
 {
+    const CredentialConfig* credential = selectedCredential();
+    if (credential)
+        return credential->password();
+
     return ui->edit_password->password();
 }
 
@@ -135,7 +158,9 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 {
     LOG(INFO) << "Show event detected";
 
-    if (ui->edit_username->text().isEmpty() && !isOneTimePassword())
+    if (isShared())
+        ui->combo_credential->setFocus();
+    else if (ui->edit_username->text().isEmpty() && !isOneTimePassword())
         ui->edit_username->setFocus();
     else
         ui->edit_password->setFocus();
@@ -144,20 +169,21 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::onSharedToggled(bool checked)
+{
+    LOG(INFO) << "[ACTION] Saved credentials chosen:" << checked;
+    updateCredentialsState();
+}
+
+//--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 {
     LOG(INFO) << "[ACTION] One time password toggled:" << checked;
 
-    ui->label_username->setVisible(!checked);
-    ui->edit_username->setVisible(!checked);
-
     if (checked)
         ui->edit_username->clear();
 
-    // A one-time password is good for one connection, so there is nothing to keep.
-    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
-
-    fitSize();
+    updateCredentialsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,21 +199,21 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        if (!isOneTimePassword())
+        if (!isShared())
         {
-            if (ui->edit_username->text().isEmpty())
+            if (!isOneTimePassword() && ui->edit_username->text().isEmpty())
             {
                 LOG(ERROR) << "Empty user name";
                 MsgBox::warning(this, tr("User name cannot be empty."));
                 return;
             }
-        }
 
-        if (ui->edit_password->password().isEmpty())
-        {
-            LOG(ERROR) << "Empty password";
-            MsgBox::warning(this, tr("Password cannot be empty."));
-            return;
+            if (ui->edit_password->password().isEmpty())
+            {
+                LOG(ERROR) << "Empty password";
+                MsgBox::warning(this, tr("Password cannot be empty."));
+                return;
+            }
         }
 
         accept();
@@ -220,4 +246,67 @@ bool AuthorizationDialog::isOneTimePassword() const
 bool AuthorizationDialog::isSaveCredentialsOffered() const
 {
     return save_credentials_visible_ && !isOneTimePassword();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isSharedOffered() const
+{
+    return !credentials_.isEmpty() && !isOneTimePassword();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AuthorizationDialog::isShared() const
+{
+    return isSharedOffered() && ui->radio_shared->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
+const CredentialConfig* AuthorizationDialog::selectedCredential() const
+{
+    if (!isShared())
+        return nullptr;
+
+    const qint64 credential_id = ui->combo_credential->currentData().toLongLong();
+    for (const CredentialConfig& credential : std::as_const(credentials_))
+    {
+        if (credential.id() == credential_id)
+            return &credential;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void AuthorizationDialog::updateCredentialsState()
+{
+    const bool shared_offered = isSharedOffered();
+
+    ui->radio_shared->setEnabled(shared_offered);
+
+    if (!shared_offered && ui->radio_shared->isChecked())
+    {
+        const QSignalBlocker blocker(ui->radio_shared);
+        ui->radio_typed->setChecked(true);
+    }
+
+    const bool shared = isShared();
+    const bool one_time = isOneTimePassword();
+
+    ui->checkbox_one_time_password->setVisible(one_time_password_enabled_);
+    ui->checkbox_one_time_password->setEnabled(!shared);
+
+    ui->label_username->setVisible(!one_time);
+    ui->edit_username->setVisible(!one_time);
+
+    ui->label_username->setEnabled(!shared);
+    ui->edit_username->setEnabled(!shared);
+    ui->label_password->setEnabled(!shared);
+    ui->edit_password->setEnabled(!shared);
+
+    ui->label_credential->setEnabled(shared);
+    ui->combo_credential->setEnabled(shared);
+
+    ui->checkbox_save_credentials->setVisible(isSaveCredentialsOffered());
+
+    fitSize();
 }

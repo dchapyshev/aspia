@@ -151,6 +151,12 @@ void RouterHostEditor::loadCredentials(qint64 selected_credential_id)
 //--------------------------------------------------------------------------------------------------
 void RouterHostEditor::onSharedToggled(bool checked)
 {
+    if (checked && username_->text().isEmpty() != password_->text().isEmpty())
+    {
+        username_->clear();
+        password_->clear();
+    }
+
     username_->setVisible(!checked);
     password_->setVisible(!checked);
     note_->setVisible(!checked);
@@ -166,7 +172,6 @@ void RouterHostEditor::onSaveClicked()
 
     if (username.isEmpty() != password.isEmpty())
     {
-        shared_->setChecked(false);
         showError(tr("Enter both the user name and the password, or leave both empty."));
         return;
     }
