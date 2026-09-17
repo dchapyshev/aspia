@@ -222,6 +222,58 @@ bool createTables(SqlDatabase& db)
 }
 
 //--------------------------------------------------------------------------------------------------
+// TEMPORARY
+bool addCredentialColumns(SqlDatabase& db)
+{
+    static const struct
+    {
+        const char* table;
+        const char* sql;
+    } kColumns[] =
+    {
+        { "local_hosts",
+          "ALTER TABLE \"local_hosts\" ADD COLUMN "
+          "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL" },
+        { "router_hosts",
+          "ALTER TABLE \"router_hosts\" ADD COLUMN "
+          "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL" },
+    };
+
+    SqlTransaction transaction(db);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    for (const auto& column : kColumns)
+    {
+        SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name='credential_id' LIMIT 1");
+        query.addText(std::string_view(column.table));
+
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the schema of table" << column.table << ":" << db.lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::ROW)
+            continue;
+
+        LOG(INFO) << "Adding the credential column to" << column.table;
+
+        if (!db.exec(column.sql))
+        {
+            LOG(ERROR) << "Unable to add the credential column:" << db.lastError();
+            return false;
+        }
+    }
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
 // True when the new parent is the group itself or one of the groups below it. Such a move closes a
 // loop: the group and everything under it drop out of the tree, which is walked from the root down,
 // and a path built by walking parents upward from a host inside the loop never ends.
@@ -1846,6 +1898,13 @@ bool Database::open(const QString& file_path)
     }
 
     if (!createTables(db_))
+    {
+        db_.close();
+        return false;
+    }
+
+    // TEMPORARY
+    if (!addCredentialColumns(db_))
     {
         db_.close();
         return false;
