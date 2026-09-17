@@ -125,7 +125,7 @@
    <item>
     <widget class="QLabel" name="label_credentials_note">
      <property name="text">
-      <string>The username and the password are stored on this computer only and are not sent to the router.</string>
+      <string>The user name and the password are stored on this computer only and are not sent to the router.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

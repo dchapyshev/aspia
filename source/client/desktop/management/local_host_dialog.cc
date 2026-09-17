@@ -247,7 +247,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     if (username.isEmpty() != password.isEmpty())
     {
         ui->checkbox_shared->setChecked(false);
-        MsgBox::warning(this, tr("Enter both the username and the password, or leave both empty."));
+        MsgBox::warning(this, tr("Enter both the user name and the password, or leave both empty."));
         return;
     }
 

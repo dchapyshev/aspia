@@ -211,7 +211,7 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     if (ui->edit_username->text().isEmpty() != ui->edit_password->password().isEmpty())
     {
         ui->checkbox_shared->setChecked(false);
-        MsgBox::warning(this, tr("Enter both the username and the password, or leave both empty."));
+        MsgBox::warning(this, tr("Enter both the user name and the password, or leave both empty."));
         return;
     }
 
