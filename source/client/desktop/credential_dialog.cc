@@ -22,6 +22,7 @@
 #include <QPushButton>
 
 #include "base/logging.h"
+#include "base/peer/user.h"
 #include "client/database.h"
 #include "common/desktop/msg_box.h"
 #include "ui_credential_dialog.h"
@@ -95,10 +96,13 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (ui->edit_username->text().isEmpty())
+    if (!User::isValidUserName(ui->edit_username->text()))
     {
-        MsgBox::warning(this, tr("User name cannot be empty."));
+        MsgBox::warning(this,
+            tr("The user name can not be empty and can contain only"
+               " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
         ui->edit_username->setFocus();
+        ui->edit_username->selectAll();
         return;
     }
 

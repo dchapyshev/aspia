@@ -24,6 +24,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "base/peer/user.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/button.h"
@@ -149,10 +150,12 @@ void CredentialEditor::onSaveClicked()
         return;
     }
 
-    if (username_->text().isEmpty())
+    if (!User::isValidUserName(username_->text()))
     {
-        showError(tr("User name cannot be empty."));
+        showError(tr("The user name can not be empty and can contain only alphabet characters,"
+                     " numbers and \"_\", \"-\", \".\" characters."));
         username_->setFocus();
+        username_->selectAll();
         return;
     }
 
