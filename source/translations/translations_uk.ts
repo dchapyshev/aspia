@@ -518,8 +518,8 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="126"/>
-        <source>Save credentials</source>
-        <translation>Зберегти облікові дані</translation>
+        <source>Save sign-in data</source>
+        <translation>Зберегти дані для входу</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="201"/>
@@ -556,39 +556,39 @@ Routers added: %4</source>
         <translation>Авторизація</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="78"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>User Name</source>
         <translation>Ім&apos;я користувача</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="222"/>
+        <location filename="../client/android/authorization_window.cc" line="120"/>
+        <source>Save sign-in data</source>
+        <translation>Зберегти дані для входу</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="218"/>
         <source>User name cannot be empty.</source>
         <translation>Ім&apos;я користувача не може бути порожнім.</translation>
     </message>
     <message>
+        <location filename="../client/android/authorization_window.cc" line="78"/>
         <location filename="../client/android/authorization_window.cc" line="81"/>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="87"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Credentials</source>
         <translation>Облікові дані</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="91"/>
+        <location filename="../client/android/authorization_window.cc" line="88"/>
         <source>Connect</source>
         <translation>Підключитися</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="124"/>
-        <source>Save credentials</source>
-        <translation>Зберегти облікові дані</translation>
-    </message>
-    <message>
-        <location filename="../client/android/authorization_window.cc" line="213"/>
-        <location filename="../client/android/authorization_window.cc" line="229"/>
+        <location filename="../client/android/authorization_window.cc" line="209"/>
+        <location filename="../client/android/authorization_window.cc" line="225"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не може бути порожнім.</translation>
     </message>

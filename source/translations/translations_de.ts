@@ -518,8 +518,8 @@ Hinzugefügte Router: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="126"/>
-        <source>Save credentials</source>
-        <translation>Anmeldedaten speichern</translation>
+        <source>Save sign-in data</source>
+        <translation>Zugangsdaten speichern</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="201"/>
@@ -556,39 +556,39 @@ Hinzugefügte Router: %4</translation>
         <translation>Autorisierung</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="78"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>User Name</source>
         <translation>Benutzername</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="222"/>
+        <location filename="../client/android/authorization_window.cc" line="120"/>
+        <source>Save sign-in data</source>
+        <translation>Zugangsdaten speichern</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="218"/>
         <source>User name cannot be empty.</source>
         <translation>Der Benutzername darf nicht leer sein.</translation>
     </message>
     <message>
+        <location filename="../client/android/authorization_window.cc" line="78"/>
         <location filename="../client/android/authorization_window.cc" line="81"/>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Password</source>
         <translation>Kennwort</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="87"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Credentials</source>
         <translation>Anmeldedaten</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="91"/>
+        <location filename="../client/android/authorization_window.cc" line="88"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="124"/>
-        <source>Save credentials</source>
-        <translation>Anmeldedaten speichern</translation>
-    </message>
-    <message>
-        <location filename="../client/android/authorization_window.cc" line="213"/>
-        <location filename="../client/android/authorization_window.cc" line="229"/>
+        <location filename="../client/android/authorization_window.cc" line="209"/>
+        <location filename="../client/android/authorization_window.cc" line="225"/>
         <source>Password cannot be empty.</source>
         <translation>Das Kennwort darf nicht leer sein.</translation>
     </message>

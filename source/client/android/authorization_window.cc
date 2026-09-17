@@ -117,7 +117,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
 
     if (save_credentials_available)
     {
-        switch_save_credentials_ = new Switch(tr("Save credentials"));
+        switch_save_credentials_ = new Switch(tr("Save sign-in data"));
         switch_save_credentials_->setChecked(true);
         form_layout->addWidget(switch_save_credentials_);
     }

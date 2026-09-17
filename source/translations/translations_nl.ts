@@ -518,8 +518,8 @@ Toegevoegde routers: %4</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.ui" line="126"/>
-        <source>Save credentials</source>
-        <translation>Aanmeldgegevens opslaan</translation>
+        <source>Save sign-in data</source>
+        <translation>Inloggegevens opslaan</translation>
     </message>
     <message>
         <location filename="../client/desktop/authorization_dialog.cc" line="201"/>
@@ -556,39 +556,39 @@ Toegevoegde routers: %4</translation>
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="78"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>User Name</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="222"/>
+        <location filename="../client/android/authorization_window.cc" line="120"/>
+        <source>Save sign-in data</source>
+        <translation>Inloggegevens opslaan</translation>
+    </message>
+    <message>
+        <location filename="../client/android/authorization_window.cc" line="218"/>
         <source>User name cannot be empty.</source>
         <translation>Gebruikersnaam mag niet leeg zijn.</translation>
     </message>
     <message>
+        <location filename="../client/android/authorization_window.cc" line="78"/>
         <location filename="../client/android/authorization_window.cc" line="81"/>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="87"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Credentials</source>
         <translation>Aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="91"/>
+        <location filename="../client/android/authorization_window.cc" line="88"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="124"/>
-        <source>Save credentials</source>
-        <translation>Aanmeldgegevens opslaan</translation>
-    </message>
-    <message>
-        <location filename="../client/android/authorization_window.cc" line="213"/>
-        <location filename="../client/android/authorization_window.cc" line="229"/>
+        <location filename="../client/android/authorization_window.cc" line="209"/>
+        <location filename="../client/android/authorization_window.cc" line="225"/>
         <source>Password cannot be empty.</source>
         <translation>Wachtwoord mag niet leeg zijn.</translation>
     </message>
