@@ -641,7 +641,7 @@ void RouterUserDialog::submitWithNameCheck(const RouterUser& request, const QStr
         {
             LOG(ERROR) << "User name already exists";
             setEnabled(true);
-            MsgBox::warning(this, tr("The username you entered already exists."));
+            MsgBox::warning(this, tr("The user name you entered already exists."));
             ui->edit_username->selectAll();
             ui->edit_username->setFocus();
             return;
