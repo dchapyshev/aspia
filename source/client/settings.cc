@@ -53,6 +53,7 @@ const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
 const QString kUdpMethodsParam = "udp_methods";
 const QString kTabStateParam = "tab_state";
+const QString kDialogGeometryParam = "dialog_geometry";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
 const QString kWorkspaceExpandedParam = "workspace_expanded";
 const QString kRouterGroupExpandedParam = "router_group_expanded";
@@ -340,6 +341,18 @@ QByteArray Settings::tabState(const QString& name) const
 void Settings::setTabState(const QString& name, const QByteArray& state)
 {
     settings_.setValue(kTabStateParam + "/" + name, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Settings::dialogGeometry(const QString& name) const
+{
+    return settings_.value(kDialogGeometryParam + "/" + name).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setDialogGeometry(const QString& name, const QByteArray& geometry)
+{
+    settings_.setValue(kDialogGeometryParam + "/" + name, geometry);
 }
 
 //--------------------------------------------------------------------------------------------------

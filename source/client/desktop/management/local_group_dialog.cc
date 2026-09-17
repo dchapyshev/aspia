@@ -24,6 +24,7 @@
 
 #include "base/logging.h"
 #include "client/database.h"
+#include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
 #include "ui_local_group_dialog.h"
@@ -43,6 +44,9 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+
+    Settings settings;
+    restoreGeometry(settings.dialogGeometry(objectName()));
 
     if (group_id_ != -1)
     {
@@ -91,6 +95,9 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
 LocalGroupDialog::~LocalGroupDialog()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+    settings.setDialogGeometry(objectName(), saveGeometry());
 }
 
 //--------------------------------------------------------------------------------------------------

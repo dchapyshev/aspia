@@ -30,6 +30,7 @@
 
 #include "base/logging.h"
 #include "client/router_controller.h"
+#include "client/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -57,6 +58,9 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
     updateArrowIcons();
+
+    Settings settings;
+    restoreGeometry(settings.dialogGeometry(objectName()));
 
     // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
     ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
@@ -199,6 +203,9 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 RouterWorkspaceDialog::~RouterWorkspaceDialog()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+    settings.setDialogGeometry(objectName(), saveGeometry());
 }
 
 //--------------------------------------------------------------------------------------------------

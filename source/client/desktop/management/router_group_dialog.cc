@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "client/router_controller.h"
+#include "client/settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
@@ -42,6 +43,9 @@ RouterGroupDialog::RouterGroupDialog(
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
+
+    Settings settings;
+    restoreGeometry(settings.dialogGeometry(objectName()));
 
     setWindowTitle(entry_id_ > 0 ? tr("Edit Group") : tr("Add Group"));
 
@@ -77,6 +81,9 @@ RouterGroupDialog::RouterGroupDialog(
 RouterGroupDialog::~RouterGroupDialog()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+    settings.setDialogGeometry(objectName(), saveGeometry());
 }
 
 //--------------------------------------------------------------------------------------------------

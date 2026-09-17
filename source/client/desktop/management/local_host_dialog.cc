@@ -29,6 +29,7 @@
 #include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
@@ -49,6 +50,9 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+
+    Settings settings;
+    restoreGeometry(settings.dialogGeometry(objectName()));
 
     ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
 
@@ -153,6 +157,9 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 LocalHostDialog::~LocalHostDialog()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+    settings.setDialogGeometry(objectName(), saveGeometry());
 }
 
 //--------------------------------------------------------------------------------------------------

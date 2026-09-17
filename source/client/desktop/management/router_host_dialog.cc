@@ -28,6 +28,7 @@
 #include "base/peer/host_id.h"
 #include "client/database.h"
 #include "client/router_controller.h"
+#include "client/settings.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -47,6 +48,9 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
+
+    Settings settings;
+    restoreGeometry(settings.dialogGeometry(objectName()));
 
     ui->edit_display_name->setText(host_.display_name);
     ui->edit_comment->setPlainText(host_.comment);
@@ -128,6 +132,9 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 RouterHostDialog::~RouterHostDialog()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+    settings.setDialogGeometry(objectName(), saveGeometry());
 }
 
 //--------------------------------------------------------------------------------------------------
