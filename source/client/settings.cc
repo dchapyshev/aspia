@@ -49,6 +49,7 @@ const QString kOnlineCheckParam = "online_check";
 const QString kAlwaysOnTopParam = "always_on_top";
 const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
 const QString kRecordingPathParam = "recording_path";
+const QString kLastDirectoryParam = "last_directory";
 const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
 const QString kUdpMethodsParam = "udp_methods";
@@ -293,6 +294,18 @@ QString Settings::recordingPath() const
 void Settings::setRecordingPath(const QString& path)
 {
     settings_.setValue(kRecordingPathParam, path);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::lastDirectory() const
+{
+    return settings_.value(kLastDirectoryParam).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setLastDirectory(const QString& path)
+{
+    settings_.setValue(kLastDirectoryParam, path);
 }
 
 //--------------------------------------------------------------------------------------------------

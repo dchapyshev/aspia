@@ -86,6 +86,9 @@ public:
     QString recordingPath() const;
     void setRecordingPath(const QString& path);
 
+    QString lastDirectory() const;
+    void setLastDirectory(const QString& path);
+
     bool recordSessions() const;
     void setRecordSessions(bool enable);
 

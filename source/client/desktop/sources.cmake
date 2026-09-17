@@ -32,6 +32,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP
     credentials_tab.cc
     credentials_tab.h
     credentials_tab.ui
+    file_dialog.cc
+    file_dialog.h
     management_tab.cc
     management_tab.h
     management_tab.ui

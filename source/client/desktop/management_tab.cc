@@ -23,7 +23,7 @@
 #include <QClipboard>
 #include <QDateTime>
 #include <QEvent>
-#include <QFileDialog>
+#include <QIODevice>
 #include <QMenu>
 #include <QStatusBar>
 
@@ -41,6 +41,7 @@
 #include "client/host_url.h"
 #include "client/router_controller.h"
 #include "client/settings.h"
+#include "client/desktop/file_dialog.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_group_widget.h"
 #include "client/desktop/management/local_host_dialog.h"
@@ -1457,10 +1458,9 @@ void ManagementTab::onImportOldBookAction()
 {
     LOG(INFO) << "[ACTION] Import old address book";
 
-    QString file_path = QFileDialog::getOpenFileName(
+    QString file_path = FileDialog::getOpenFileName(
         this,
         tr("Import Old Address Book"),
-        QString(),
         tr("Address Book (*.aab);;All files (*)"));
 
     if (file_path.isEmpty())
@@ -1488,10 +1488,9 @@ void ManagementTab::onExportBookAction()
         return;
     }
 
-    const QString file_path = QFileDialog::getSaveFileName(
+    const QString file_path = FileDialog::getSaveFileName(
         this,
         tr("Export Address Book"),
-        QString(),
         tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())
@@ -1542,10 +1541,9 @@ void ManagementTab::onImportBookAction()
         return;
     }
 
-    const QString file_path = QFileDialog::getOpenFileName(
+    const QString file_path = FileDialog::getOpenFileName(
         this,
         tr("Import Address Book"),
-        QString(),
         tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())

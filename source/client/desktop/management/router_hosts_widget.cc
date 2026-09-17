@@ -24,7 +24,6 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
-#include <QFileDialog>
 #include <QHeaderView>
 #include <QIODevice>
 #include <QJsonArray>
@@ -42,6 +41,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router_controller.h"
+#include "client/desktop/file_dialog.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/router_host_dialog.h"
 #include "common/desktop/icon_text_button.h"
@@ -703,8 +703,8 @@ void RouterHostsWidget::saveHostsToFile()
     LOG(INFO) << "[ACTION] Save hosts to file";
 
     QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
+    QString file_path = FileDialog::getSaveFileName(
+        this, tr("Save File"), tr("JSON files (*.json)"), &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
         LOG(INFO) << "No selected path";

@@ -24,7 +24,6 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
-#include <QFileDialog>
 #include <QHeaderView>
 #include <QIODevice>
 #include <QJsonArray>
@@ -38,6 +37,7 @@
 
 #include "base/logging.h"
 #include "client/router_controller.h"
+#include "client/desktop/file_dialog.h"
 #include "common/desktop/formatter.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -237,8 +237,8 @@ void RouterRelaysWidget::save()
     LOG(INFO) << "[ACTION] Save relays to file";
 
     QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(
-        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
+    QString file_path = FileDialog::getSaveFileName(
+        this, tr("Save File"), tr("JSON files (*.json)"), &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
         LOG(INFO) << "No selected path";

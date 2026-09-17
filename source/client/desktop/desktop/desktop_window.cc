@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QBrush>
 #include <QClipboard>
-#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QPalette>
 #include <QResizeEvent>
@@ -40,6 +39,7 @@
 #include "client/desktop/desktop/desktop_widget.h"
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
+#include "client/desktop/file_dialog.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -944,11 +944,10 @@ void DesktopWindow::onAutosizeWindow()
 void DesktopWindow::onTakeScreenshot()
 {
     QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(this,
-                                                     tr("Save File"),
-                                                     QString(),
-                                                     tr("PNG Image (*.png);;BMP Image (*.bmp)"),
-                                                     &selected_filter);
+    QString file_path = FileDialog::getSaveFileName(this,
+                                                    tr("Save File"),
+                                                    tr("PNG Image (*.png);;BMP Image (*.bmp)"),
+                                                    &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
         LOG(INFO) << "[ACTION] File path not selected";
