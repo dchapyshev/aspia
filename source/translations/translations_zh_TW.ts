@@ -556,11 +556,6 @@ Routers added: %4</source>
         <translation>授權</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>輸入連線到主機所需的認證。</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>使用者名稱</translation>

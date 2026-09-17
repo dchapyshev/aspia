@@ -556,11 +556,6 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Hitelesítés</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Adja meg a hitelesítő adatokat a gazdagéphez való csatlakozáshoz.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>

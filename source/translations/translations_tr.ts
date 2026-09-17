@@ -556,11 +556,6 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>Yetkilendirme</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Ana bilgisayara bağlanmak için kimlik bilgilerini girin.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Kullanıcı Adı</translation>

@@ -68,9 +68,6 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     app_bar_->setBackVisible(true);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AuthorizationWindow::sig_closed);
 
-    Label* text = new Label(tr("Enter the credentials to connect to the host."), Label::Role::BODY);
-    text->setWordWrap(true);
-
     label_error_->setStyleSheet(QString("color: %1;").arg(Controls::errorColor().name()));
     label_error_->setWordWrap(true);
     label_error_->setVisible(false);
@@ -110,7 +107,6 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
     form_layout->setSpacing(kFormSpacing);
-    form_layout->addWidget(text);
     form_layout->addWidget(label_error_);
     form_layout->addWidget(radio_user_password_);
     form_layout->addWidget(user_password_block_);

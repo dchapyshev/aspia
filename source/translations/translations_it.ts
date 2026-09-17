@@ -556,11 +556,6 @@ Router aggiunti: %4</translation>
         <translation>Autorizzazione</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Inserisci le credenziali per connetterti all&apos;host.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Nome utente</translation>

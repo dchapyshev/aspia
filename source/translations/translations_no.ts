@@ -556,11 +556,6 @@ Rutere lagt til: %4</translation>
         <translation>Autorisasjon</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Skriv inn påloggingsinformasjonen for å koble til verten.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Brukernavn</translation>

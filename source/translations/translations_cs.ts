@@ -556,11 +556,6 @@ Přidané routery: %4</translation>
         <translation>Autorizace</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Zadejte přihlašovací údaje pro připojení k hostiteli.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Uživatelské jméno</translation>

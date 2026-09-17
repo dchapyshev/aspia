@@ -556,11 +556,6 @@ Routers added: %4</source>
         <translation>인증</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>호스트에 연결할 자격 증명을 입력하십시오.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>

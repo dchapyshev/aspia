@@ -556,11 +556,6 @@ Routere tilføjet: %4</translation>
         <translation>Godkendelse</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Indtast legitimationsoplysningerne for at oprette forbindelse til værten.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Brugernavn</translation>

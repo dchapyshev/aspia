@@ -556,11 +556,6 @@ Tillagda routrar: %4</translation>
         <translation>Auktorisering</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Ange inloggningsuppgifterna för att ansluta till värden.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Användarnamn</translation>

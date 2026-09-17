@@ -556,11 +556,6 @@ Routers added: %4</source>
         <translation>Εξουσιοδότηση</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Εισαγάγετε τα διαπιστευτήρια για τη σύνδεση με τον κεντρικό υπολογιστή.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>

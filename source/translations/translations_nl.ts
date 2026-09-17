@@ -556,11 +556,6 @@ Toegevoegde routers: %4</translation>
         <translation>Authorisatie</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Voer de aanmeldgegevens in om verbinding te maken met de host.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Gebruikersnaam</translation>

@@ -556,11 +556,6 @@ Routeurs ajoutés: %4</translation>
         <translation>Autorisation</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="71"/>
-        <source>Enter the credentials to connect to the host.</source>
-        <translation>Saisissez les identifiants pour vous connecter à l&apos;hôte.</translation>
-    </message>
-    <message>
         <location filename="../client/android/authorization_window.cc" line="78"/>
         <source>User Name</source>
         <translation>Nom d&apos;utilisateur</translation>
