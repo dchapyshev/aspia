@@ -289,6 +289,23 @@ TEST_F(HostDatabaseTest, ClearedPasswordVerifiesAgainstNothing)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The protection is carried to another host as the stored hash and its salt, and the password
+// still verifies against them there.
+TEST_F(HostDatabaseTest, PasswordHashIsCarriedToAnotherDatabase)
+{
+    ASSERT_TRUE(db_->setPassword(kPassword));
+
+    std::unique_ptr<Database> other = Database::openForTesting(temp_dir_.path() + "/other.db3");
+    ASSERT_TRUE(other);
+    ASSERT_TRUE(other->setPasswordHash(db_->passwordHash()));
+    ASSERT_TRUE(other->setPasswordHashSalt(db_->passwordHashSalt()));
+
+    EXPECT_EQ(other->passwordProtectionState(), Database::PasswordProtection::ENABLED);
+    EXPECT_TRUE(other->verifyPassword(kPassword));
+    EXPECT_FALSE(other->verifyPassword(SecureString("s3cret-passwor")));
+}
+
+//--------------------------------------------------------------------------------------------------
 // An empty password would protect nothing, so it is refused and what was there stays.
 TEST_F(HostDatabaseTest, EmptyPasswordIsRefused)
 {

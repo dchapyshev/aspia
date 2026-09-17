@@ -124,6 +124,10 @@ public:
     bool setPassword(const SecureString& password);
     void clearPassword();
     bool verifyPassword(const SecureString& password) const;
+    QByteArray passwordHash() const;
+    bool setPasswordHash(const QByteArray& hash);
+    QByteArray passwordHashSalt() const;
+    bool setPasswordHashSalt(const QByteArray& salt);
 
 private:
     Database() = default;
@@ -133,9 +137,6 @@ private:
 
     QString readSetting(const QString& name) const;
     bool writeSetting(const QString& name, const QString& value);
-
-    QByteArray passwordHash() const;
-    QByteArray passwordHashSalt() const;
 
     mutable SqlDatabase db_;
 

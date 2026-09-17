@@ -62,6 +62,8 @@ const char kOneTimePassword[] = "one_time_password";
 const char kOneTimePasswordExpire[] = "one_time_password_expire";
 const char kOneTimePasswordLength[] = "one_time_password_length";
 const char kOneTimePasswordCharacters[] = "one_time_password_characters";
+const char kPasswordHash[] = "password_hash";
+const char kPasswordHashSalt[] = "password_hash_salt";
 const char kUsers[] = "users";
 
 const char kUserName[] = "name";
@@ -103,6 +105,8 @@ QJsonObject exportDatabase()
     obj[kOneTimePasswordExpire] = static_cast<qint64>(db.oneTimePasswordExpire().count());
     obj[kOneTimePasswordLength] = db.oneTimePasswordLength();
     obj[kOneTimePasswordCharacters] = static_cast<qint64>(db.oneTimePasswordCharacters());
+    obj[kPasswordHash] = QString::fromLatin1(db.passwordHash().toHex());
+    obj[kPasswordHashSalt] = QString::fromLatin1(db.passwordHashSalt().toHex());
 
     QJsonArray users_array;
     const QVector<User> users = db.userList();
@@ -175,6 +179,10 @@ bool importDatabase(const QJsonObject& obj)
         db.setOneTimePasswordLength(obj[kOneTimePasswordLength].toInt());
     if (obj.contains(kOneTimePasswordCharacters))
         db.setOneTimePasswordCharacters(static_cast<quint32>(obj[kOneTimePasswordCharacters].toInteger()));
+    if (obj.contains(kPasswordHash))
+        db.setPasswordHash(QByteArray::fromHex(obj[kPasswordHash].toString().toLatin1()));
+    if (obj.contains(kPasswordHashSalt))
+        db.setPasswordHashSalt(QByteArray::fromHex(obj[kPasswordHashSalt].toString().toLatin1()));
 
     if (obj.contains(kUsers))
     {

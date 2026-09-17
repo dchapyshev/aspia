@@ -687,6 +687,30 @@ bool Database::verifyPassword(const SecureString& password) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray Database::passwordHash() const
+{
+    return QByteArray::fromHex(readSetting(kSettingPasswordHash).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setPasswordHash(const QByteArray& hash)
+{
+    return writeSetting(kSettingPasswordHash, QString::fromLatin1(hash.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::passwordHashSalt() const
+{
+    return QByteArray::fromHex(readSetting(kSettingPasswordHashSalt).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setPasswordHashSalt(const QByteArray& salt)
+{
+    return writeSetting(kSettingPasswordHashSalt, QString::fromLatin1(salt.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::open(const QString& file_path)
 {
     if (file_path.isEmpty())
@@ -804,16 +828,4 @@ bool Database::writeSetting(const QString& name, const QString& value)
     }
 
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::passwordHash() const
-{
-    return QByteArray::fromHex(readSetting(kSettingPasswordHash).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::passwordHashSalt() const
-{
-    return QByteArray::fromHex(readSetting(kSettingPasswordHashSalt).toLatin1());
 }
