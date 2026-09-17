@@ -37,6 +37,8 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 
     ui->setupUi(this);
 
+    ui->edit_password->setShowPasswordButtonVisible(true);
+
     if (credential_id_ != -1)
     {
         setWindowTitle(tr("Edit Credentials"));
