@@ -18,9 +18,12 @@
 
 #include "client/online_checker/online_checker.h"
 
+#include <optional>
+
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/config.h"
+#include "client/database.h"
 
 namespace {
 
@@ -80,9 +83,29 @@ void OnlineChecker::start(const HostList& hosts)
         }
 
         if (isHostId(host.address()))
+        {
             router_hosts_.emplace_back(host);
-        else
-            direct_hosts_.emplace_back(host);
+            continue;
+        }
+
+        LocalHostConfig direct_host = host;
+
+        if (direct_host.credentialId() > 0)
+        {
+            std::optional<std::pair<QString, SecureString>> credentials =
+                Database::instance().localHostCredentials(id);
+            if (credentials.has_value())
+            {
+                direct_host.setUsername(credentials->first);
+                direct_host.setPassword(credentials->second);
+            }
+            else
+            {
+                LOG(ERROR) << "Unable to read credentials of host" << id;
+            }
+        }
+
+        direct_hosts_.emplace_back(std::move(direct_host));
     }
 
     if (!router_hosts_.isEmpty())
