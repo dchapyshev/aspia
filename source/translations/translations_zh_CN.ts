@@ -425,13 +425,13 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="880"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>在通讯簿中找不到链接所指的路由器。</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>在已保存的路由器中找不到链接所指的路由器。</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="919"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>在通讯簿中找不到链接所指的主机。</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>在已保存的主机中找不到链接所指的主机。</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
@@ -3934,27 +3934,6 @@ Password: %2</source>
         <translation>添加主机</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="281"/>
-        <location filename="../client/android/local_widget.cc" line="308"/>
-        <location filename="../client/android/local_widget.cc" line="310"/>
-        <location filename="../client/android/local_widget.cc" line="357"/>
-        <location filename="../client/android/local_widget.cc" line="361"/>
-        <source>Import</source>
-        <translation>导入</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="282"/>
-        <location filename="../client/android/local_widget.cc" line="403"/>
-        <location filename="../client/android/local_widget.cc" line="407"/>
-        <source>Export</source>
-        <translation>导出</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <source>Import Address Book</source>
-        <translation>导入通讯簿</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>密码无效。</translation>
@@ -3963,11 +3942,6 @@ Password: %2</source>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>该文件由较新版本创建，无法导入。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="351"/>
-        <source>Failed to import the address book.</source>
-        <translation>无法导入通讯簿。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -3983,30 +3957,10 @@ Credentials imported: %5</source>
 已导入凭据：%5</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="375"/>
-        <source>Export Address Book</source>
-        <translation>导出通讯簿</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Aspia 备份 (*.aspia-backup)</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="309"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation>通讯簿将被替换为文件中的通讯簿。其当前包含的所有内容都将被删除。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="347"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>该文件不包含通讯簿，因此未做任何更改。</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="389"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>通讯簿为空。没有可保存的内容。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
@@ -4014,14 +3968,56 @@ Credentials imported: %5</source>
         <translation>无法写入文件。</translation>
     </message>
     <message>
+        <location filename="../client/android/local_widget.cc" line="281"/>
+        <location filename="../client/android/local_widget.cc" line="304"/>
+        <location filename="../client/android/local_widget.cc" line="308"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
+        <location filename="../client/android/local_widget.cc" line="361"/>
+        <source>Restore from Backup</source>
+        <translation>从备份恢复</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="282"/>
+        <location filename="../client/android/local_widget.cc" line="375"/>
+        <location filename="../client/android/local_widget.cc" line="403"/>
+        <location filename="../client/android/local_widget.cc" line="407"/>
+        <source>Create Backup</source>
+        <translation>创建备份</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="309"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds.</source>
+        <translation>当前存储的所有内容都将被删除，并替换为备份中的内容。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="310"/>
+        <source>Restore</source>
+        <translation>恢复</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="347"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>该备份不包含任何数据，因此未做任何更改。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="351"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>无法从备份恢复。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="389"/>
+        <source>There is nothing to save.</source>
+        <translation>没有可保存的内容。</translation>
+    </message>
+    <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
-        <source>Failed to export the address book.</source>
-        <translation>无法导出通讯簿。</translation>
+        <source>Failed to create the backup.</source>
+        <translation>无法创建备份。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
-        <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation>文件已写入 %1。要在其他位置打开该文件，需要此通讯簿的主密码。</translation>
+        <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
+        <translation>文件已写入 %1。要在其他位置打开该文件，需要此应用安装的主密码。</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4165,13 +4161,18 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="225"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>在通讯簿中找不到链接所指的路由器。</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>在已保存的路由器中找不到链接所指的路由器。</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="264"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>在通讯簿中找不到链接所指的主机。</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>在已保存的主机中找不到链接所指的主机。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="454"/>
+        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
+        <translation>主机属性中指定了按 ID 连接，但尚未配置路由器。请检查主机属性中的路由器参数。</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="270"/>
@@ -4187,11 +4188,6 @@ Credentials imported: %5</source>
         <location filename="../client/desktop/main_window.cc" line="342"/>
         <source>Settings</source>
         <translation>设置</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="454"/>
-        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>主机属性中指定了按 ID 连接，但尚未配置路由器。请检查通讯簿属性中的路由器参数。</translation>
     </message>
 </context>
 <context>
@@ -4370,13 +4366,13 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
-        <source>Export Address Book...</source>
-        <translation>导出通讯簿...</translation>
+        <source>Create Backup...</source>
+        <translation>创建备份...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
-        <source>Import Address Book...</source>
-        <translation>导入通讯簿...</translation>
+        <source>Restore from Backup...</source>
+        <translation>从备份恢复...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
@@ -4458,9 +4454,56 @@ Credentials imported: %5</source>
         <translation>通讯簿 (*.aab);;所有文件 (*)</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <source>The database is not available.</source>
+        <translation>数据库不可用。</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management_tab.cc" line="1493"/>
-        <source>Export Address Book</source>
-        <translation>导出通讯簿</translation>
+        <source>Create Backup</source>
+        <translation>创建备份</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1510"/>
+        <source>There is nothing to save.</source>
+        <translation>没有可保存的内容。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <source>Failed to create the backup.</source>
+        <translation>无法创建备份。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1546"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <source>Restore from Backup</source>
+        <translation>从备份恢复</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
+        <translation>当前存储的所有内容都将被删除，并替换为备份中的内容。要继续吗？</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <source>The backup was made on another installation. Enter the master password used there.</source>
+        <translation>该备份创建自另一个应用安装。请输入该安装使用的主密码。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>该备份不包含任何数据，因此未做任何更改。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <source>The file is not a valid backup.</source>
+        <translation>该文件不是有效的备份。</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>无法从备份恢复。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1494"/>
@@ -4469,50 +4512,14 @@ Credentials imported: %5</source>
         <translation>Aspia 备份 (*.aspia-backup);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1510"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>通讯簿为空。没有可保存的内容。</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1514"/>
         <source>Unable to write the file.</source>
         <translation>无法写入文件。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation>通讯簿将被替换为文件中的通讯簿。其当前包含的所有内容都将被删除。要继续吗？</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
-        <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation>该文件保存自另一个通讯簿。请输入该通讯簿的主密码。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>该文件不包含通讯簿，因此未做任何更改。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Unable to read the file.</source>
         <translation>无法读取文件。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1612"/>
-        <source>Failed to import the address book.</source>
-        <translation>无法导入通讯簿。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
-        <source>Address book database is not available.</source>
-        <translation>通讯簿数据库不可用。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
-        <source>Failed to export the address book.</source>
-        <translation>无法导出通讯簿。</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
@@ -4530,12 +4537,6 @@ Credentials exported: %5</source>
 已导出凭据：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1546"/>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
-        <source>Import Address Book</source>
-        <translation>导入通讯簿</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>无法使用指定的密码解密文件。</translation>
@@ -4546,12 +4547,7 @@ Credentials exported: %5</source>
         <translation>不支持的文件格式版本。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1608"/>
-        <source>The file is not a valid address book.</source>
-        <translation>该文件不是有效的通讯簿。</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1616"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4566,30 +4562,30 @@ Credentials imported: %5</source>
 已导入凭据：%5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2051"/>
-        <location filename="../client/desktop/management_tab.cc" line="2082"/>
+        <location filename="../client/desktop/management_tab.cc" line="2050"/>
+        <location filename="../client/desktop/management_tab.cc" line="2081"/>
         <source>Copy Link</source>
         <translation>复制链接</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2070"/>
-        <location filename="../client/desktop/management_tab.cc" line="2101"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2069"/>
+        <location filename="../client/desktop/management_tab.cc" line="2100"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>无法为此主机创建链接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2133"/>
+        <location filename="../client/desktop/management_tab.cc" line="2132"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>与此主机关联的路由器已被删除。请编辑主机以选择其他路由器，或改用直接连接。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2140"/>
+        <location filename="../client/desktop/management_tab.cc" line="2139"/>
         <source>The host has an invalid host ID.</source>
         <translation>主机的 ID 无效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
+        <location filename="../client/desktop/management_tab.cc" line="2148"/>
         <source>The host has an incorrect address.</source>
         <translation>主机的地址不正确。</translation>
     </message>
@@ -4880,20 +4876,20 @@ Credentials imported: %5</source>
         <translation>设置密码</translation>
     </message>
     <message>
-        <location filename="../client/android/password_dialog.cc" line="38"/>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation>输入用于加密通讯簿的密码。</translation>
-    </message>
-    <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
         <translation>输入密码</translation>
     </message>
     <message>
+        <location filename="../client/android/password_dialog.cc" line="38"/>
+        <source>Enter a password to encrypt your data.</source>
+        <translation>输入用于加密数据的密码。</translation>
+    </message>
+    <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
-        <source>Enter the password to decrypt the address book.</source>
-        <translation>输入用于解密通讯簿的密码。</translation>
+        <source>Enter the password to decrypt the backup.</source>
+        <translation>输入用于解密备份的密码。</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
@@ -5592,7 +5588,7 @@ Credentials imported: %5</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n 个主机</numerusform>

@@ -425,13 +425,13 @@ Přidané routery: %4</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="880"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>Router, na který odkaz odkazuje, nebyl v adresáři nalezen.</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>Router, na který odkaz odkazuje, není mezi uloženými routery.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="919"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>Hostitel, na kterého odkaz odkazuje, nebyl v adresáři nalezen.</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>Hostitel, na kterého odkaz odkazuje, není mezi uloženými hostiteli.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
@@ -3974,27 +3974,6 @@ Heslo: %2</translation>
         <translation>Přidat hostitele</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="281"/>
-        <location filename="../client/android/local_widget.cc" line="308"/>
-        <location filename="../client/android/local_widget.cc" line="310"/>
-        <location filename="../client/android/local_widget.cc" line="357"/>
-        <location filename="../client/android/local_widget.cc" line="361"/>
-        <source>Import</source>
-        <translation>Importovat</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="282"/>
-        <location filename="../client/android/local_widget.cc" line="403"/>
-        <location filename="../client/android/local_widget.cc" line="407"/>
-        <source>Export</source>
-        <translation>Exportovat</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <source>Import Address Book</source>
-        <translation>Importovat adresář</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Neplatné heslo.</translation>
@@ -4003,11 +3982,6 @@ Heslo: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Soubor byl vytvořen novější verzí a nelze jej importovat.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="351"/>
-        <source>Failed to import the address book.</source>
-        <translation>Nepodařilo se importovat adresář.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -4023,30 +3997,10 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="375"/>
-        <source>Export Address Book</source>
-        <translation>Exportovat adresář</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Záloha Aspia (*.aspia-backup)</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="309"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation>Adresář bude nahrazen adresářem ze souboru. Vše, co nyní obsahuje, bude odstraněno.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="347"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>Soubor neobsahuje žádný adresář, takže nebylo nic změněno.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="389"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>Adresář je prázdný. Není co uložit.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
@@ -4054,14 +4008,56 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
+        <location filename="../client/android/local_widget.cc" line="281"/>
+        <location filename="../client/android/local_widget.cc" line="304"/>
+        <location filename="../client/android/local_widget.cc" line="308"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
+        <location filename="../client/android/local_widget.cc" line="361"/>
+        <source>Restore from Backup</source>
+        <translation>Obnovit ze zálohy</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="282"/>
+        <location filename="../client/android/local_widget.cc" line="375"/>
+        <location filename="../client/android/local_widget.cc" line="403"/>
+        <location filename="../client/android/local_widget.cc" line="407"/>
+        <source>Create Backup</source>
+        <translation>Vytvořit zálohu</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="309"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds.</source>
+        <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="310"/>
+        <source>Restore</source>
+        <translation>Obnovit</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="347"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="351"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>Nepodařilo se obnovit ze zálohy.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="389"/>
+        <source>There is nothing to save.</source>
+        <translation>Není co uložit.</translation>
+    </message>
+    <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
-        <source>Failed to export the address book.</source>
-        <translation>Nepodařilo se exportovat adresář.</translation>
+        <source>Failed to create the backup.</source>
+        <translation>Nepodařilo se vytvořit zálohu.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
-        <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation>Soubor byl zapsán do %1. K jeho otevření jinde je potřeba hlavní heslo tohoto adresáře.</translation>
+        <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
+        <translation>Soubor byl zapsán do %1. K jeho otevření jinde je potřeba hlavní heslo této instalace.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4205,13 +4201,18 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="225"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>Router, na který odkaz odkazuje, nebyl v adresáři nalezen.</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>Router, na který odkaz odkazuje, není mezi uloženými routery.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="264"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>Hostitel, na kterého odkaz odkazuje, nebyl v adresáři nalezen.</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>Hostitel, na kterého odkaz odkazuje, není mezi uloženými hostiteli.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="454"/>
+        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
+        <translation>Ve vlastnostech hostitele je zadáno připojení podle ID, ale router není nakonfigurován. Zkontrolujte parametry routeru ve vlastnostech hostitele.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="270"/>
@@ -4227,11 +4228,6 @@ Importované přihlašovací údaje: %5</translation>
         <location filename="../client/desktop/main_window.cc" line="342"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="454"/>
-        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>Ve vlastnostech hostitele je zadáno připojení podle ID, ale router není nakonfigurován. Zkontrolujte parametry routeru ve vlastnostech adresáře.</translation>
     </message>
 </context>
 <context>
@@ -4410,13 +4406,13 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
-        <source>Export Address Book...</source>
-        <translation>Exportovat adresář...</translation>
+        <source>Create Backup...</source>
+        <translation>Vytvořit zálohu...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
-        <source>Import Address Book...</source>
-        <translation>Importovat adresář...</translation>
+        <source>Restore from Backup...</source>
+        <translation>Obnovit ze zálohy...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
@@ -4498,9 +4494,56 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Adresář (*.aab);;Všechny soubory (*)</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <source>The database is not available.</source>
+        <translation>Databáze není k dispozici.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management_tab.cc" line="1493"/>
-        <source>Export Address Book</source>
-        <translation>Exportovat adresář</translation>
+        <source>Create Backup</source>
+        <translation>Vytvořit zálohu</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1510"/>
+        <source>There is nothing to save.</source>
+        <translation>Není co uložit.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <source>Failed to create the backup.</source>
+        <translation>Nepodařilo se vytvořit zálohu.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1546"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <source>Restore from Backup</source>
+        <translation>Obnovit ze zálohy</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
+        <translation>Vše, co je nyní uloženo, bude odstraněno a nahrazeno obsahem zálohy. Pokračovat?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <source>The backup was made on another installation. Enter the master password used there.</source>
+        <translation>Záloha byla vytvořena v jiné instalaci. Zadejte hlavní heslo dané instalace.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>Záloha neobsahuje žádná data, takže nebylo nic změněno.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <source>The file is not a valid backup.</source>
+        <translation>Soubor není platná záloha.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>Nepodařilo se obnovit ze zálohy.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1494"/>
@@ -4509,50 +4552,14 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Záloha Aspia (*.aspia-backup);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1510"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>Adresář je prázdný. Není co uložit.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1514"/>
         <source>Unable to write the file.</source>
         <translation>Nelze zapsat soubor.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation>Adresář bude nahrazen adresářem ze souboru. Vše, co nyní obsahuje, bude odstraněno. Pokračovat?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
-        <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation>Soubor byl uložen z jiného adresáře. Zadejte hlavní heslo daného adresáře.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>Soubor neobsahuje žádný adresář, takže nebylo nic změněno.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Unable to read the file.</source>
         <translation>Nelze číst soubor.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1612"/>
-        <source>Failed to import the address book.</source>
-        <translation>Nepodařilo se importovat adresář.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
-        <source>Address book database is not available.</source>
-        <translation>Databáze adresáře není k dispozici.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
-        <source>Failed to export the address book.</source>
-        <translation>Nepodařilo se exportovat adresář.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
@@ -4570,12 +4577,6 @@ Exportovaná uložená hesla: %4
 Exportované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1546"/>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
-        <source>Import Address Book</source>
-        <translation>Importovat adresář</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Soubor nelze zadaným heslem dešifrovat.</translation>
@@ -4586,12 +4587,7 @@ Exportované přihlašovací údaje: %5</translation>
         <translation>Nepodporovaná verze formátu souboru.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1608"/>
-        <source>The file is not a valid address book.</source>
-        <translation>Soubor není platný adresář.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1616"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4606,30 +4602,30 @@ Importovaná uložená hesla: %4
 Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2051"/>
-        <location filename="../client/desktop/management_tab.cc" line="2082"/>
+        <location filename="../client/desktop/management_tab.cc" line="2050"/>
+        <location filename="../client/desktop/management_tab.cc" line="2081"/>
         <source>Copy Link</source>
         <translation>Kopírovat odkaz</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2070"/>
-        <location filename="../client/desktop/management_tab.cc" line="2101"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2069"/>
+        <location filename="../client/desktop/management_tab.cc" line="2100"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nelze vytvořit odkaz pro tohoto hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2133"/>
+        <location filename="../client/desktop/management_tab.cc" line="2132"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2140"/>
+        <location filename="../client/desktop/management_tab.cc" line="2139"/>
         <source>The host has an invalid host ID.</source>
         <translation>Hostitel má neplatné ID hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
+        <location filename="../client/desktop/management_tab.cc" line="2148"/>
         <source>The host has an incorrect address.</source>
         <translation>Hostitel má nesprávnou adresu.</translation>
     </message>
@@ -4920,20 +4916,20 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Nastavit heslo</translation>
     </message>
     <message>
-        <location filename="../client/android/password_dialog.cc" line="38"/>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation>Zadejte heslo pro zašifrování adresáře.</translation>
-    </message>
-    <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
         <translation>Zadejte heslo</translation>
     </message>
     <message>
+        <location filename="../client/android/password_dialog.cc" line="38"/>
+        <source>Enter a password to encrypt your data.</source>
+        <translation>Zadejte heslo pro zašifrování vašich dat.</translation>
+    </message>
+    <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
-        <source>Enter the password to decrypt the address book.</source>
-        <translation>Zadejte heslo pro dešifrování adresáře.</translation>
+        <source>Enter the password to decrypt the backup.</source>
+        <translation>Zadejte heslo pro dešifrování zálohy.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
@@ -5638,7 +5634,7 @@ Importované přihlašovací údaje: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n hostitel</numerusform>

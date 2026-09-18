@@ -425,13 +425,13 @@ Router aggiunti: %4</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="880"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>Il router a cui fa riferimento il collegamento non è stato trovato nella rubrica.</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>Il router a cui fa riferimento il collegamento non è tra i router salvati.</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="919"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>L&apos;host a cui fa riferimento il collegamento non è stato trovato nella rubrica.</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>L&apos;host a cui fa riferimento il collegamento non è tra gli host salvati.</translation>
     </message>
     <message>
         <location filename="../host/android/main_window.cc" line="81"/>
@@ -3954,27 +3954,6 @@ Password: %2</translation>
         <translation>Aggiungi host</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="281"/>
-        <location filename="../client/android/local_widget.cc" line="308"/>
-        <location filename="../client/android/local_widget.cc" line="310"/>
-        <location filename="../client/android/local_widget.cc" line="357"/>
-        <location filename="../client/android/local_widget.cc" line="361"/>
-        <source>Import</source>
-        <translation>Importa</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="282"/>
-        <location filename="../client/android/local_widget.cc" line="403"/>
-        <location filename="../client/android/local_widget.cc" line="407"/>
-        <source>Export</source>
-        <translation>Esporta</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <source>Import Address Book</source>
-        <translation>Importa rubrica</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="339"/>
         <source>Invalid password.</source>
         <translation>Password non valida.</translation>
@@ -3983,11 +3962,6 @@ Password: %2</translation>
         <location filename="../client/android/local_widget.cc" line="343"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Il file è stato creato da una versione più recente e non può essere importato.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="351"/>
-        <source>Failed to import the address book.</source>
-        <translation>Impossibile importare la rubrica.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="362"/>
@@ -4003,30 +3977,10 @@ Password salvate importate: %4
 Credenziali importate: %5</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="375"/>
-        <source>Export Address Book</source>
-        <translation>Esporta rubrica</translation>
-    </message>
-    <message>
         <location filename="../client/android/local_widget.cc" line="304"/>
         <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Backup Aspia (*.aspia-backup)</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="309"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted.</source>
-        <translation>La rubrica verrà sostituita con quella contenuta nel file. Tutto il suo contenuto attuale verrà eliminato.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="347"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>Il file non contiene alcuna rubrica, quindi non è stato modificato nulla.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_widget.cc" line="389"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>La rubrica è vuota. Non c&apos;è nulla da salvare.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="393"/>
@@ -4034,14 +3988,56 @@ Credenziali importate: %5</translation>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
+        <location filename="../client/android/local_widget.cc" line="281"/>
+        <location filename="../client/android/local_widget.cc" line="304"/>
+        <location filename="../client/android/local_widget.cc" line="308"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
+        <location filename="../client/android/local_widget.cc" line="361"/>
+        <source>Restore from Backup</source>
+        <translation>Ripristina da backup</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="282"/>
+        <location filename="../client/android/local_widget.cc" line="375"/>
+        <location filename="../client/android/local_widget.cc" line="403"/>
+        <location filename="../client/android/local_widget.cc" line="407"/>
+        <source>Create Backup</source>
+        <translation>Crea backup</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="309"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds.</source>
+        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="310"/>
+        <source>Restore</source>
+        <translation>Ripristina</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="347"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="351"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>Impossibile ripristinare dal backup.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="389"/>
+        <source>There is nothing to save.</source>
+        <translation>Non c&apos;è nulla da salvare.</translation>
+    </message>
+    <message>
         <location filename="../client/android/local_widget.cc" line="397"/>
-        <source>Failed to export the address book.</source>
-        <translation>Impossibile esportare la rubrica.</translation>
+        <source>Failed to create the backup.</source>
+        <translation>Impossibile creare il backup.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="408"/>
-        <source>The file is written to %1. To open it elsewhere the master password of this address book is needed.</source>
-        <translation>Il file è stato scritto in %1. Per aprirlo altrove è necessaria la password principale di questa rubrica.</translation>
+        <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
+        <translation>Il file è stato scritto in %1. Per aprirlo altrove è necessaria la password principale di questa installazione.</translation>
     </message>
     <message>
         <location filename="../client/android/local_widget.cc" line="494"/>
@@ -4185,13 +4181,18 @@ Credenziali importate: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="225"/>
-        <source>The router referenced by the link was not found in the address book.</source>
-        <translation>Il router a cui fa riferimento il collegamento non è stato trovato nella rubrica.</translation>
+        <source>The router referenced by the link is not among the saved routers.</source>
+        <translation>Il router a cui fa riferimento il collegamento non è tra i router salvati.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="264"/>
-        <source>The host referenced by the link was not found in the address book.</source>
-        <translation>L&apos;host a cui fa riferimento il collegamento non è stato trovato nella rubrica.</translation>
+        <source>The host referenced by the link is not among the saved hosts.</source>
+        <translation>L&apos;host a cui fa riferimento il collegamento non è tra gli host salvati.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="454"/>
+        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
+        <translation>La connessione tramite ID è specificata nelle proprietà dell&apos;host, ma il router non è configurato. Verifica i parametri del router nelle proprietà dell&apos;host.</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.cc" line="270"/>
@@ -4207,11 +4208,6 @@ Credenziali importate: %5</translation>
         <location filename="../client/desktop/main_window.cc" line="342"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/main_window.cc" line="454"/>
-        <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>La connessione tramite ID è specificata nelle proprietà dell&apos;host, ma il router non è configurato. Verifica i parametri del router nelle proprietà della rubrica.</translation>
     </message>
 </context>
 <context>
@@ -4390,13 +4386,13 @@ Credenziali importate: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="407"/>
-        <source>Export Address Book...</source>
-        <translation>Esporta rubrica...</translation>
+        <source>Create Backup...</source>
+        <translation>Crea backup...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="416"/>
-        <source>Import Address Book...</source>
-        <translation>Importa rubrica...</translation>
+        <source>Restore from Backup...</source>
+        <translation>Ripristina da backup...</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="424"/>
@@ -4478,9 +4474,56 @@ Credenziali importate: %5</translation>
         <translation>Rubrica (*.aab);;Tutti i file (*)</translation>
     </message>
     <message>
+        <location filename="../client/desktop/management_tab.cc" line="1487"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <source>The database is not available.</source>
+        <translation>Il database non è disponibile.</translation>
+    </message>
+    <message>
         <location filename="../client/desktop/management_tab.cc" line="1493"/>
-        <source>Export Address Book</source>
-        <translation>Esporta rubrica</translation>
+        <source>Create Backup</source>
+        <translation>Crea backup</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1510"/>
+        <source>There is nothing to save.</source>
+        <translation>Non c&apos;è nulla da salvare.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <source>Failed to create the backup.</source>
+        <translation>Impossibile creare il backup.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1546"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <source>Restore from Backup</source>
+        <translation>Ripristina da backup</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
+        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup. Continuare?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <source>The backup was made on another installation. Enter the master password used there.</source>
+        <translation>Il backup è stato creato su un&apos;altra installazione. Inserire la password principale utilizzata su di essa.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <source>The backup carries no data, so nothing was changed.</source>
+        <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <source>The file is not a valid backup.</source>
+        <translation>Il file non è un backup valido.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <source>Failed to restore from the backup.</source>
+        <translation>Impossibile ripristinare dal backup.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1494"/>
@@ -4489,50 +4532,14 @@ Credenziali importate: %5</translation>
         <translation>Backup Aspia (*.aspia-backup);;Tutti i file (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1510"/>
-        <source>The address book is empty. There is nothing to save.</source>
-        <translation>La rubrica è vuota. Non c&apos;è nulla da salvare.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1514"/>
         <source>Unable to write the file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
-        <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
-        <translation>La rubrica verrà sostituita con quella contenuta nel file. Tutto il suo contenuto attuale verrà eliminato. Continuare?</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
-        <source>The file was saved from another address book. Enter the master password of that address book.</source>
-        <translation>Il file è stato salvato da un&apos;altra rubrica. Inserire la password principale di quella rubrica.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
-        <source>The file carries no address book, so nothing was changed.</source>
-        <translation>Il file non contiene alcuna rubrica, quindi non è stato modificato nulla.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1604"/>
+        <location filename="../client/desktop/management_tab.cc" line="1603"/>
         <source>Unable to read the file.</source>
         <translation>Impossibile leggere il file.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1612"/>
-        <source>Failed to import the address book.</source>
-        <translation>Impossibile importare la rubrica.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
-        <source>Address book database is not available.</source>
-        <translation>Il database della rubrica non è disponibile.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
-        <source>Failed to export the address book.</source>
-        <translation>Impossibile esportare la rubrica.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1523"/>
@@ -4550,12 +4557,6 @@ Password salvate esportate: %4
 Credenziali esportate: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1546"/>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
-        <source>Import Address Book</source>
-        <translation>Importa rubrica</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Impossibile decifrare il file con la password specificata.</translation>
@@ -4566,12 +4567,7 @@ Credenziali esportate: %5</translation>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1608"/>
-        <source>The file is not a valid address book.</source>
-        <translation>Il file non è una rubrica valida.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1617"/>
+        <location filename="../client/desktop/management_tab.cc" line="1616"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4586,30 +4582,30 @@ Password salvate importate: %4
 Credenziali importate: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2051"/>
-        <location filename="../client/desktop/management_tab.cc" line="2082"/>
+        <location filename="../client/desktop/management_tab.cc" line="2050"/>
+        <location filename="../client/desktop/management_tab.cc" line="2081"/>
         <source>Copy Link</source>
         <translation>Copia collegamento</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2070"/>
-        <location filename="../client/desktop/management_tab.cc" line="2101"/>
-        <location filename="../client/desktop/management_tab.cc" line="2108"/>
+        <location filename="../client/desktop/management_tab.cc" line="2069"/>
+        <location filename="../client/desktop/management_tab.cc" line="2100"/>
+        <location filename="../client/desktop/management_tab.cc" line="2107"/>
         <source>Unable to create a link for this host.</source>
         <translation>Impossibile creare un collegamento per questo host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2133"/>
+        <location filename="../client/desktop/management_tab.cc" line="2132"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Il router associato a questo host è stato eliminato. Modifica l&apos;host per selezionare un altro router o passa alla connessione diretta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2140"/>
+        <location filename="../client/desktop/management_tab.cc" line="2139"/>
         <source>The host has an invalid host ID.</source>
         <translation>L&apos;host ha un ID host non valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2149"/>
+        <location filename="../client/desktop/management_tab.cc" line="2148"/>
         <source>The host has an incorrect address.</source>
         <translation>L&apos;host ha un indirizzo errato.</translation>
     </message>
@@ -4900,20 +4896,20 @@ Credenziali importate: %5</translation>
         <translation>Imposta password</translation>
     </message>
     <message>
-        <location filename="../client/android/password_dialog.cc" line="38"/>
-        <source>Enter a password to encrypt the address book.</source>
-        <translation>Inserisci una password per cifrare la rubrica.</translation>
-    </message>
-    <message>
         <location filename="../client/android/password_dialog.cc" line="42"/>
         <location filename="../host/android/password_dialog.cc" line="51"/>
         <source>Enter Password</source>
         <translation>Inserisci password</translation>
     </message>
     <message>
+        <location filename="../client/android/password_dialog.cc" line="38"/>
+        <source>Enter a password to encrypt your data.</source>
+        <translation>Inserisci una password per cifrare i tuoi dati.</translation>
+    </message>
+    <message>
         <location filename="../client/android/password_dialog.cc" line="43"/>
-        <source>Enter the password to decrypt the address book.</source>
-        <translation>Inserisci la password per decifrare la rubrica.</translation>
+        <source>Enter the password to decrypt the backup.</source>
+        <translation>Inserisci la password per decifrare il backup.</translation>
     </message>
     <message>
         <location filename="../client/android/password_dialog.cc" line="46"/>
@@ -5615,7 +5611,7 @@ Credenziali importate: %5</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="426"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="440"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
