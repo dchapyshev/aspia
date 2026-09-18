@@ -23,6 +23,9 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPalette>
+#include <QProxyStyle>
+#include <QRegion>
 #include <QStyle>
 #include <QTimer>
 #include <QToolButton>
@@ -38,6 +41,24 @@ constexpr MilliSeconds kPulseTick{ 33 };
 constexpr MilliSeconds kPulsePeriod{ 800 };
 constexpr int kPulseMaxAlpha = 220;
 constexpr int kPulseFrameWidthPx = 2;
+
+// The Windows 11 style of Qt paints the current tab like the rest of them, so everything around it
+// is shaded instead. Every other style tells the tabs apart by itself.
+constexpr int kTabBarShadeLight = 20;
+constexpr int kTabBarShadeDark = 40;
+
+// The style keeps the tab it draws inside the rect it is given, so the cutout follows the drawing
+// and not the rect.
+constexpr int kTabMarginPx = 2;
+
+//--------------------------------------------------------------------------------------------------
+bool isWindows11Style(const QStyle* style)
+{
+    const QProxyStyle* proxy = qobject_cast<const QProxyStyle*>(style);
+    const QStyle* base_style = proxy ? proxy->baseStyle() : style;
+
+    return base_style && base_style->objectName().compare("windows11", Qt::CaseInsensitive) == 0;
+}
 
 } // namespace
 
@@ -123,6 +144,22 @@ void TabBar::mouseReleaseEvent(QMouseEvent* event)
 void TabBar::paintEvent(QPaintEvent* event)
 {
     QTabBar::paintEvent(event);
+
+    if (isWindows11Style(style()))
+    {
+        const bool is_dark = palette().color(QPalette::Window).lightness() < 128;
+        const QColor shade(0, 0, 0, is_dark ? kTabBarShadeDark : kTabBarShadeLight);
+
+        QRegion around(rect());
+        const int current_index = currentIndex();
+        if (current_index >= 0 && isTabVisible(current_index))
+            around -= QRegion(tabRect(current_index)
+                                  .adjusted(kTabMarginPx, kTabMarginPx, -kTabMarginPx, 0));
+
+        QPainter painter(this);
+        painter.setClipRegion(around);
+        painter.fillRect(rect(), shade);
+    }
 
     if (drop_target_index_ < 0 || drop_target_index_ >= count())
         return;

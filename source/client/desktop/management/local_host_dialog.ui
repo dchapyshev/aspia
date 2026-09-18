@@ -63,88 +63,44 @@
      <item row="3" column="1">
       <widget class="QLineEdit" name="edit_address"/>
      </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkbox_saved_credentials">
+       <property name="text">
+        <string>Use saved credentials</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_username">
+       <property name="text">
+        <string>User Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="edit_username"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_password">
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="PasswordEdit" name="edit_password"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_credential">
+       <property name="text">
+        <string>Credentials:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QComboBox" name="combo_credential"/>
+     </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupbox_credentials">
-     <property name="title">
-      <string>Credentials</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_credentials">
-      <item>
-       <widget class="QCheckBox" name="checkbox_saved_credentials">
-        <property name="text">
-         <string>Use existing</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QStackedWidget" name="stack_credentials">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <widget class="QWidget" name="page_own">
-         <layout class="QGridLayout" name="gridLayout_own">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_username">
-            <property name="text">
-             <string>User Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="edit_username"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_password">
-            <property name="text">
-             <string>Password:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="PasswordEdit" name="edit_password"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_saved_credentials">
-         <layout class="QVBoxLayout" name="verticalLayout_saved_credentials">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QComboBox" name="combo_credential"/>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_comment">

@@ -20,7 +20,10 @@
 
 #include <QAbstractButton>
 #include <QIcon>
+#include <QLabel>
 #include <QPushButton>
+
+#include <algorithm>
 
 #include "base/logging.h"
 #include "base/net/address.h"
@@ -148,6 +151,16 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalHostDialog::onButtonBoxClicked);
 
+    int label_width = 0;
+    for (const QLabel* label : { ui->label_group, ui->label_name, ui->label_router,
+                                 ui->label_address, ui->label_username, ui->label_password,
+                                 ui->label_credential })
+    {
+        label_width = std::max(label_width, label->sizeHint().width());
+    }
+
+    ui->gridLayout->setColumnMinimumWidth(0, label_width);
+
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
     ui->edit_name->setFocus();
@@ -177,16 +190,12 @@ void LocalHostDialog::onSavedCredentialsToggled(bool checked)
         ui->edit_password->clear();
     }
 
-    QWidget* page = checked ? ui->page_saved_credentials : ui->page_own;
-
-    // The stack is as high as its pages, so the page that is not shown steps out of the count.
-    for (QWidget* other : { ui->page_own, ui->page_saved_credentials })
-    {
-        other->setSizePolicy(QSizePolicy::Preferred,
-                             other == page ? QSizePolicy::Preferred : QSizePolicy::Ignored);
-    }
-
-    ui->stack_credentials->setCurrentWidget(page);
+    ui->label_username->setVisible(!checked);
+    ui->edit_username->setVisible(!checked);
+    ui->label_password->setVisible(!checked);
+    ui->edit_password->setVisible(!checked);
+    ui->label_credential->setVisible(checked);
+    ui->combo_credential->setVisible(checked);
 }
 
 //--------------------------------------------------------------------------------------------------
