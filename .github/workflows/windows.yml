@@ -85,7 +85,6 @@ jobs:
       # Step 5
       - name: Get version
         id: version
-        shell: pwsh
         working-directory: ${{ github.workspace }}
         run: |
           $text = Get-Content CMakeLists.txt -Raw
@@ -93,7 +92,8 @@ jobs:
           $minor = [regex]::Match($text, 'set\(ASPIA_VERSION_MINOR\s+(\d+)\)').Groups[1].Value
           $patch = [regex]::Match($text, 'set\(ASPIA_VERSION_PATCH\s+(\d+)\)').Groups[1].Value
           if (!$major -or !$minor -or !$patch) { echo "version not found in CMakeLists.txt"; exit 1 }
-          echo "version=$major.$minor.$patch" >> $env:GITHUB_OUTPUT
+          $line = "version=$major.$minor.$patch"
+          [System.IO.File]::AppendAllText($env:GITHUB_OUTPUT, "$line`n", [System.Text.UTF8Encoding]::new($false))
 
       # Step 6
       - name: Build MSI packages
