@@ -83,13 +83,26 @@ jobs:
           ctest --preset ci-${{ matrix.build_type }}
 
       # Step 5
+      - name: Get version
+        id: version
+        shell: pwsh
+        working-directory: ${{ github.workspace }}
+        run: |
+          $text = Get-Content CMakeLists.txt -Raw
+          $major = [regex]::Match($text, 'set\(ASPIA_VERSION_MAJOR\s+(\d+)\)').Groups[1].Value
+          $minor = [regex]::Match($text, 'set\(ASPIA_VERSION_MINOR\s+(\d+)\)').Groups[1].Value
+          $patch = [regex]::Match($text, 'set\(ASPIA_VERSION_PATCH\s+(\d+)\)').Groups[1].Value
+          if (!$major -or !$minor -or !$patch) { echo "version not found in CMakeLists.txt"; exit 1 }
+          echo "version=$major.$minor.$patch" >> $env:GITHUB_OUTPUT
+
+      # Step 6
       - name: Build MSI packages
         run: |
-          installer/windows/build.cmd 3.0.2 ${{ matrix.arch }} ${{ github.workspace }} ${{ github.workspace }}/builds/ci/${{ matrix.build_type }}
+          installer/windows/build.cmd ${{ steps.version.outputs.version }} ${{ matrix.arch }} ${{ github.workspace }} ${{ github.workspace }}/builds/ci/${{ matrix.build_type }}
         shell: cmd
         working-directory: ${{ github.workspace }}
 
-      # Step 6
+      # Step 7
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
