@@ -2091,12 +2091,12 @@ Senha: %2</translation>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Imagem PNG (*.png);;Imagem BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
@@ -3639,67 +3639,67 @@ Senha: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="340"/>
         <source>Address:</source>
         <translation>Endereço:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="71"/>
-        <source>Credentials</source>
-        <translation>Credenciais</translation>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
+        <source>Use saved credentials</source>
+        <translation>Usar credenciais salvas</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="77"/>
-        <source>Use existing</source>
-        <translation>Usar existentes</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="106"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="76"/>
         <source>User Name:</source>
         <translation>Nome de usuário:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="116"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="86"/>
         <source>Password:</source>
         <translation>Senha:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="96"/>
+        <source>Credentials:</source>
+        <translation>Credenciais:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="110"/>
         <source>Comment:</source>
         <translation>Comentário:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="57"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="60"/>
         <source>Without Router</source>
         <translation>Sem roteador</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="81"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="84"/>
         <source>Edit Host</source>
         <translation>Editar host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="109"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="112"/>
         <source>Add Host</source>
         <translation>Adicionar host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="122"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;roteador excluído&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="142"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="204"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Name cannot be empty.</source>
         <translation>O nome não pode estar vazio.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="212"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="221"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome muito longo. O comprimento máximo do nome é de %n caractere.</numerusform>
@@ -3707,27 +3707,27 @@ Senha: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="227"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="236"/>
         <source>An invalid host address was entered.</source>
         <translation>Foi inserido um endereço de host inválido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="237"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>An invalid host ID was entered.</source>
         <translation>Foi inserido um ID de host inválido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>O nome de usuário não pode estar vazio e pode conter apenas letras, números e os caracteres &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="268"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Digite o nome de usuário e a senha, ou deixe ambos vazios.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="267"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Comentário muito longo. O comprimento máximo do comentário é de %n caractere.</numerusform>
@@ -3735,32 +3735,32 @@ Senha: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="283"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="292"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Já existe um host com este nome no grupo selecionado.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="307"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="316"/>
         <source>Unable to add host</source>
         <translation>Não foi possível adicionar o host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="317"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="326"/>
         <source>Unable to modify host</source>
         <translation>Não foi possível modificar o host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="341"/>
         <source>Host name or IP address</source>
         <translation>Nome do host ou endereço IP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="336"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="345"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="346"/>
         <source>Host ID</source>
         <translation>ID do host</translation>
     </message>
@@ -4404,71 +4404,71 @@ Credenciais importadas: %5</translation>
         <translation>Atualizar status automaticamente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1010"/>
+        <location filename="../client/desktop/management_tab.cc" line="1011"/>
         <source>(copy)</source>
         <translation>(cópia)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="717"/>
-        <location filename="../client/desktop/management_tab.cc" line="746"/>
-        <location filename="../client/desktop/management_tab.cc" line="796"/>
-        <location filename="../client/desktop/management_tab.cc" line="975"/>
-        <location filename="../client/desktop/management_tab.cc" line="1006"/>
-        <location filename="../client/desktop/management_tab.cc" line="1050"/>
+        <location filename="../client/desktop/management_tab.cc" line="718"/>
+        <location filename="../client/desktop/management_tab.cc" line="747"/>
+        <location filename="../client/desktop/management_tab.cc" line="797"/>
+        <location filename="../client/desktop/management_tab.cc" line="976"/>
+        <location filename="../client/desktop/management_tab.cc" line="1007"/>
+        <location filename="../client/desktop/management_tab.cc" line="1051"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Falha ao obter as informações do host no banco de dados local.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1015"/>
+        <location filename="../client/desktop/management_tab.cc" line="1016"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Falha ao adicionar o host ao banco de dados local.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1054"/>
+        <location filename="../client/desktop/management_tab.cc" line="1055"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Tem certeza de que deseja excluir o host &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1064"/>
+        <location filename="../client/desktop/management_tab.cc" line="1065"/>
         <source>Unable to remove host</source>
         <translation>Não foi possível remover o host</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1121"/>
-        <location filename="../client/desktop/management_tab.cc" line="1164"/>
-        <location filename="../client/desktop/management_tab.cc" line="1189"/>
-        <source>Copy Row</source>
-        <translation>Copiar linha</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1165"/>
         <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <source>Copy Row</source>
+        <translation>Copiar linha</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1123"/>
+        <location filename="../client/desktop/management_tab.cc" line="1166"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
         <source>Copy Value</source>
         <translation>Copiar valor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1289"/>
+        <location filename="../client/desktop/management_tab.cc" line="1290"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Tem certeza de que deseja excluir o espaço de trabalho &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1309"/>
+        <location filename="../client/desktop/management_tab.cc" line="1310"/>
         <source>Failed to delete the workspace.</source>
         <translation>Falha ao excluir o espaço de trabalho.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1404"/>
+        <location filename="../client/desktop/management_tab.cc" line="1405"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Tem certeza de que deseja excluir o grupo &quot;%1&quot;? Os hosts atribuídos a este grupo ou a seus subgrupos serão movidos para a raiz do espaço de trabalho.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1423"/>
+        <location filename="../client/desktop/management_tab.cc" line="1424"/>
         <source>Failed to delete the group.</source>
         <translation>Falha ao excluir o grupo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1462"/>
+        <location filename="../client/desktop/management_tab.cc" line="1463"/>
         <source>Import Old Address Book</source>
         <translation>Importar catálogo de endereços antigo</translation>
     </message>
@@ -4483,59 +4483,59 @@ Credenciais importadas: %5</translation>
         <translation>Exportar catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1495"/>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <location filename="../client/desktop/management_tab.cc" line="1494"/>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Backup do Aspia (*.aspia-backup);;Todos os arquivos (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1511"/>
+        <location filename="../client/desktop/management_tab.cc" line="1510"/>
         <source>The address book is empty. There is nothing to save.</source>
         <translation>O catálogo de endereços está vazio. Não há nada para salvar.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1515"/>
+        <location filename="../client/desktop/management_tab.cc" line="1514"/>
         <source>Unable to write the file.</source>
         <translation>Não foi possível gravar o arquivo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1557"/>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
         <translation>O catálogo de endereços será substituído pelo que está no arquivo. Tudo o que ele contém agora será excluído. Continuar?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1576"/>
+        <location filename="../client/desktop/management_tab.cc" line="1574"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
         <translation>O arquivo foi salvo a partir de outro catálogo de endereços. Digite a senha mestra desse catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
         <source>The file carries no address book, so nothing was changed.</source>
         <translation>O arquivo não contém um catálogo de endereços, portanto nada foi alterado.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Unable to read the file.</source>
         <translation>Não foi possível ler o arquivo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Failed to import the address book.</source>
         <translation>Falha ao importar o catálogo de endereços.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
         <source>Address book database is not available.</source>
         <translation>O banco de dados do catálogo de endereços não está disponível.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1519"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Failed to export the address book.</source>
         <translation>Falha ao exportar o catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1524"/>
+        <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4550,28 +4550,28 @@ Senhas salvas exportadas: %4
 Credenciais exportadas: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <location filename="../client/desktop/management_tab.cc" line="1546"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
         <source>Import Address Book</source>
         <translation>Importar catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Não foi possível descriptografar o arquivo com a senha especificada.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1595"/>
         <source>Unsupported file format version.</source>
         <translation>Versão do formato de arquivo não suportada.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1610"/>
+        <location filename="../client/desktop/management_tab.cc" line="1608"/>
         <source>The file is not a valid address book.</source>
         <translation>O arquivo não é um catálogo de endereços válido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1619"/>
+        <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4586,30 +4586,30 @@ Senhas salvas importadas: %4
 Credenciais importadas: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2053"/>
-        <location filename="../client/desktop/management_tab.cc" line="2084"/>
+        <location filename="../client/desktop/management_tab.cc" line="2051"/>
+        <location filename="../client/desktop/management_tab.cc" line="2082"/>
         <source>Copy Link</source>
         <translation>Copiar link</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2072"/>
-        <location filename="../client/desktop/management_tab.cc" line="2103"/>
-        <location filename="../client/desktop/management_tab.cc" line="2110"/>
+        <location filename="../client/desktop/management_tab.cc" line="2070"/>
+        <location filename="../client/desktop/management_tab.cc" line="2101"/>
+        <location filename="../client/desktop/management_tab.cc" line="2108"/>
         <source>Unable to create a link for this host.</source>
         <translation>Não foi possível criar um link para este host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2135"/>
+        <location filename="../client/desktop/management_tab.cc" line="2133"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>O roteador associado a este host foi excluído. Edite o host para selecionar outro roteador ou mude para conexão direta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2142"/>
+        <location filename="../client/desktop/management_tab.cc" line="2140"/>
         <source>The host has an invalid host ID.</source>
         <translation>O host tem um ID de host inválido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2151"/>
+        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The host has an incorrect address.</source>
         <translation>O host tem um endereço incorreto.</translation>
     </message>
@@ -5666,47 +5666,47 @@ Credenciais importadas: %5</translation>
         <translation>Nome de exibição:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="47"/>
-        <source>Credentials</source>
-        <translation>Credenciais</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="53"/>
-        <source>Use existing</source>
-        <translation>Usar existentes</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="82"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="52"/>
         <source>User Name:</source>
         <translation>Nome de usuário:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="82"/>
         <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
         <translation>O nome de usuário e a senha são armazenados apenas neste computador e não são enviados ao roteador.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="92"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="62"/>
         <source>Password:</source>
         <translation>Senha:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="138"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
+        <source>Use saved credentials</source>
+        <translation>Usar credenciais salvas</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="72"/>
+        <source>Credentials:</source>
+        <translation>Credenciais:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="94"/>
         <source>Comment:</source>
         <translation>Comentário:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="148"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="166"/>
         <source>Failed to get list of groups.</source>
         <translation>Falha ao obter a lista de grupos.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="226"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="240"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Digite o nome de usuário e a senha, ou deixe ambos vazios.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="239"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="253"/>
         <source>Failed to save the credentials.</source>
         <translation>Falha ao salvar as credenciais.</translation>
     </message>

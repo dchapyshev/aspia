@@ -2085,12 +2085,12 @@ Password: %2</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="950"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="981"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
         <source>Could not save image</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
@@ -3623,126 +3623,126 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="340"/>
         <source>Address:</source>
         <translation>آدرس:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="71"/>
-        <source>Credentials</source>
-        <translation>اطلاعات ورود</translation>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="69"/>
+        <source>Use saved credentials</source>
+        <translation>استفاده از اطلاعات ورود ذخیره‌شده</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="77"/>
-        <source>Use existing</source>
-        <translation>استفاده از اطلاعات ورود موجود</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="106"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="76"/>
         <source>User Name:</source>
         <translation>نام کاربری:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="116"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="86"/>
         <source>Password:</source>
         <translation>گذرواژه:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.ui" line="154"/>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="96"/>
+        <source>Credentials:</source>
+        <translation>اطلاعات ورود:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.ui" line="110"/>
         <source>Comment:</source>
         <translation>توضیح:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="57"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="60"/>
         <source>Without Router</source>
         <translation>بدون روتر</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="81"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="84"/>
         <source>Edit Host</source>
         <translation>ویرایش میزبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="109"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="112"/>
         <source>Add Host</source>
         <translation>افزودن میزبان</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="119"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="122"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;روتر حذف‌شده&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="142"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
         <source>Local</source>
         <translation>محلی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="204"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
         <source>Name cannot be empty.</source>
         <translation>نام نمی‌تواند خالی باشد.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="212"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="221"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>نام خیلی طولانی است. حداکثر طول نام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="227"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="236"/>
         <source>An invalid host address was entered.</source>
         <translation>آدرس میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="237"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>An invalid host ID was entered.</source>
         <translation>ID میزبان واردشده نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>نام کاربری نمی‌تواند خالی باشد و فقط می‌تواند شامل حروف الفبا، اعداد و نویسه‌های &quot;_&quot;، &quot;-&quot;، &quot;.&quot; باشد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="268"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="267"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>توضیح خیلی طولانی است. حداکثر طول توضیح %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="283"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="292"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>میزبانی با این نام از قبل در گروه انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="307"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="316"/>
         <source>Unable to add host</source>
         <translation>افزودن میزبان ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="317"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="326"/>
         <source>Unable to modify host</source>
         <translation>تغییر میزبان ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="332"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="341"/>
         <source>Host name or IP address</source>
         <translation>نام میزبان یا آدرس IP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="336"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="345"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="346"/>
         <source>Host ID</source>
         <translation>ID میزبان</translation>
     </message>
@@ -4384,71 +4384,71 @@ Credentials imported: %5</source>
         <translation>به‌روزرسانی خودکار وضعیت</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1010"/>
+        <location filename="../client/desktop/management_tab.cc" line="1011"/>
         <source>(copy)</source>
         <translation>(کپی)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="717"/>
-        <location filename="../client/desktop/management_tab.cc" line="746"/>
-        <location filename="../client/desktop/management_tab.cc" line="796"/>
-        <location filename="../client/desktop/management_tab.cc" line="975"/>
-        <location filename="../client/desktop/management_tab.cc" line="1006"/>
-        <location filename="../client/desktop/management_tab.cc" line="1050"/>
+        <location filename="../client/desktop/management_tab.cc" line="718"/>
+        <location filename="../client/desktop/management_tab.cc" line="747"/>
+        <location filename="../client/desktop/management_tab.cc" line="797"/>
+        <location filename="../client/desktop/management_tab.cc" line="976"/>
+        <location filename="../client/desktop/management_tab.cc" line="1007"/>
+        <location filename="../client/desktop/management_tab.cc" line="1051"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>دریافت اطلاعات میزبان از پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1015"/>
+        <location filename="../client/desktop/management_tab.cc" line="1016"/>
         <source>Failed to add the host to the local database.</source>
         <translation>افزودن میزبان به پایگاه داده محلی ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1054"/>
+        <location filename="../client/desktop/management_tab.cc" line="1055"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید میزبان &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1064"/>
+        <location filename="../client/desktop/management_tab.cc" line="1065"/>
         <source>Unable to remove host</source>
         <translation>حذف میزبان ممکن نیست</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management_tab.cc" line="1121"/>
-        <location filename="../client/desktop/management_tab.cc" line="1164"/>
-        <location filename="../client/desktop/management_tab.cc" line="1189"/>
-        <source>Copy Row</source>
-        <translation>کپی سطر</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1122"/>
         <location filename="../client/desktop/management_tab.cc" line="1165"/>
         <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <source>Copy Row</source>
+        <translation>کپی سطر</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1123"/>
+        <location filename="../client/desktop/management_tab.cc" line="1166"/>
+        <location filename="../client/desktop/management_tab.cc" line="1191"/>
         <source>Copy Value</source>
         <translation>کپی مقدار</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1289"/>
+        <location filename="../client/desktop/management_tab.cc" line="1290"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید فضای کاری &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1309"/>
+        <location filename="../client/desktop/management_tab.cc" line="1310"/>
         <source>Failed to delete the workspace.</source>
         <translation>حذف فضای کاری ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1404"/>
+        <location filename="../client/desktop/management_tab.cc" line="1405"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟ میزبان‌های اختصاص‌یافته به این گروه یا زیرگروه‌های آن به ریشه فضای کاری منتقل خواهند شد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1423"/>
+        <location filename="../client/desktop/management_tab.cc" line="1424"/>
         <source>Failed to delete the group.</source>
         <translation>حذف گروه ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1462"/>
+        <location filename="../client/desktop/management_tab.cc" line="1463"/>
         <source>Import Old Address Book</source>
         <translation>وارد کردن دفترچه آدرس قدیمی</translation>
     </message>
@@ -4463,59 +4463,59 @@ Credentials imported: %5</source>
         <translation>صادر کردن دفترچه آدرس</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1495"/>
-        <location filename="../client/desktop/management_tab.cc" line="1549"/>
+        <location filename="../client/desktop/management_tab.cc" line="1494"/>
+        <location filename="../client/desktop/management_tab.cc" line="1547"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>پشتیبان Aspia (*.aspia-backup);;همه فایل‌ها (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1511"/>
+        <location filename="../client/desktop/management_tab.cc" line="1510"/>
         <source>The address book is empty. There is nothing to save.</source>
         <translation>دفترچه آدرس خالی است. چیزی برای ذخیره وجود ندارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1515"/>
+        <location filename="../client/desktop/management_tab.cc" line="1514"/>
         <source>Unable to write the file.</source>
         <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1557"/>
+        <location filename="../client/desktop/management_tab.cc" line="1555"/>
         <source>The address book will be replaced with the one in the file. Everything it holds now is deleted. Continue?</source>
         <translation>دفترچه آدرس با دفترچه آدرس موجود در فایل جایگزین می‌شود. همه محتوای فعلی آن حذف می‌شود. ادامه می‌دهید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1576"/>
+        <location filename="../client/desktop/management_tab.cc" line="1574"/>
         <source>The file was saved from another address book. Enter the master password of that address book.</source>
         <translation>این فایل از دفترچه آدرس دیگری ذخیره شده است. گذرواژه اصلی آن دفترچه آدرس را وارد کنید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1601"/>
+        <location filename="../client/desktop/management_tab.cc" line="1599"/>
         <source>The file carries no address book, so nothing was changed.</source>
         <translation>این فایل حاوی دفترچه آدرس نیست، بنابراین چیزی تغییر نکرد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1606"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Unable to read the file.</source>
         <translation>خواندن فایل ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1614"/>
+        <location filename="../client/desktop/management_tab.cc" line="1612"/>
         <source>Failed to import the address book.</source>
         <translation>وارد کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1541"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
         <source>Address book database is not available.</source>
         <translation>پایگاه داده دفترچه آدرس در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1519"/>
+        <location filename="../client/desktop/management_tab.cc" line="1518"/>
         <source>Failed to export the address book.</source>
         <translation>صادر کردن دفترچه آدرس ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1524"/>
+        <location filename="../client/desktop/management_tab.cc" line="1523"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4530,28 +4530,28 @@ Credentials exported: %5</source>
 اطلاعات ورود صادرشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <location filename="../client/desktop/management_tab.cc" line="1546"/>
+        <location filename="../client/desktop/management_tab.cc" line="1572"/>
         <source>Import Address Book</source>
         <translation>وارد کردن دفترچه آدرس</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1591"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>رمزگشایی فایل با گذرواژه مشخص‌شده ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1597"/>
+        <location filename="../client/desktop/management_tab.cc" line="1595"/>
         <source>Unsupported file format version.</source>
         <translation>نسخه قالب فایل پشتیبانی نمی‌شود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1610"/>
+        <location filename="../client/desktop/management_tab.cc" line="1608"/>
         <source>The file is not a valid address book.</source>
         <translation>این فایل یک دفترچه آدرس معتبر نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1619"/>
+        <location filename="../client/desktop/management_tab.cc" line="1617"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4566,30 +4566,30 @@ Credentials imported: %5</source>
 اطلاعات ورود واردشده: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2053"/>
-        <location filename="../client/desktop/management_tab.cc" line="2084"/>
+        <location filename="../client/desktop/management_tab.cc" line="2051"/>
+        <location filename="../client/desktop/management_tab.cc" line="2082"/>
         <source>Copy Link</source>
         <translation>کپی پیوند</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2072"/>
-        <location filename="../client/desktop/management_tab.cc" line="2103"/>
-        <location filename="../client/desktop/management_tab.cc" line="2110"/>
+        <location filename="../client/desktop/management_tab.cc" line="2070"/>
+        <location filename="../client/desktop/management_tab.cc" line="2101"/>
+        <location filename="../client/desktop/management_tab.cc" line="2108"/>
         <source>Unable to create a link for this host.</source>
         <translation>ایجاد پیوند برای این میزبان ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2135"/>
+        <location filename="../client/desktop/management_tab.cc" line="2133"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>روتر مرتبط با این میزبان حذف شده است. میزبان را ویرایش کنید تا روتر دیگری انتخاب کنید یا به اتصال مستقیم تغییر دهید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2142"/>
+        <location filename="../client/desktop/management_tab.cc" line="2140"/>
         <source>The host has an invalid host ID.</source>
         <translation>ID میزبان نامعتبر است.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2151"/>
+        <location filename="../client/desktop/management_tab.cc" line="2149"/>
         <source>The host has an incorrect address.</source>
         <translation>آدرس میزبان نادرست است.</translation>
     </message>
@@ -5642,47 +5642,47 @@ Credentials imported: %5</source>
         <translation>نام نمایشی:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="47"/>
-        <source>Credentials</source>
-        <translation>اطلاعات ورود</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="53"/>
-        <source>Use existing</source>
-        <translation>استفاده از اطلاعات ورود موجود</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="82"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="52"/>
         <source>User Name:</source>
         <translation>نام کاربری:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="128"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="82"/>
         <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
         <translation>نام کاربری و گذرواژه فقط در این رایانه ذخیره می‌شوند و به روتر ارسال نمی‌شوند.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="92"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="62"/>
         <source>Password:</source>
         <translation>گذرواژه:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="138"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="45"/>
+        <source>Use saved credentials</source>
+        <translation>استفاده از اطلاعات ورود ذخیره‌شده</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="72"/>
+        <source>Credentials:</source>
+        <translation>اطلاعات ورود:</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="94"/>
         <source>Comment:</source>
         <translation>توضیح:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="148"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="166"/>
         <source>Failed to get list of groups.</source>
         <translation>دریافت فهرست گروه‌ها ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="226"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="240"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>نام کاربری و گذرواژه را هر دو وارد کنید، یا هر دو را خالی بگذارید.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="239"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="253"/>
         <source>Failed to save the credentials.</source>
         <translation>ذخیره اطلاعات ورود ناموفق بود.</translation>
     </message>
