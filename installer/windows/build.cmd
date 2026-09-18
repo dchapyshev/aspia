@@ -51,9 +51,13 @@ set ALL_LCIDS=1033,1029,1030,1031,1032,1034,1036,1037,1038,1040,1041,1042,1043,1
 set WISUBSTG="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 set WILANGID="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"
 
-rem Build multilingual MSI for Client, and Host.
-call :BUILD_MULTILINGUAL_MSI client
+rem Build multilingual MSI for Host, and Client.
 call :BUILD_MULTILINGUAL_MSI host
+
+rem Only the host is supported on 32-bit Windows.
+if "%ASPIA_ARCH%" == "x86" ( goto :SHA256 )
+
+call :BUILD_MULTILINGUAL_MSI client
 
 echo "##################################################"
 echo "Creating MSI packages for Aspia Router"
@@ -65,6 +69,7 @@ echo "Creating MSI packages for Aspia Relay"
 "%WIX%\bin\candle" -out "%ASPIA_BIN_DIR%\\" -arch %CANDLE_ARCH% -ext WixUtilExtension -ext WixUIExtension relay.wxs
 "%WIX%\bin\light" -sval -out "%ASPIA_BIN_DIR%\aspia-relay-%ASPIA_VERSION%-%ASPIA_ARCH%.msi" -cultures:en-us -ext WixUtilExtension -ext WixUIExtension -loc translations\relay.en-us.wxl "%ASPIA_BIN_DIR%\relay.wixobj"
 
+:SHA256
 echo "##################################################"
 echo "Calculate SHA256 for binaries"
 %ASPIA_BIN_DIR%\aspia_sha256.exe > %ASPIA_BIN_DIR%\windows-%ASPIA_ARCH%-sha256.txt

@@ -219,17 +219,28 @@ message(STATUS "Git branch: ${GIT_CURRENT_BRANCH}")
 message(STATUS "Git commit: ${GIT_COMMIT_HASH}")
 message(STATUS "Git commit count: ${GIT_COMMIT_COUNT}")
 
+if (WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(ASPIA_HOST_ONLY TRUE)
+    message(STATUS "Host-only build")
+endif()
+
 add_subdirectory(tools)
 add_subdirectory(base)
-add_subdirectory(client)
 add_subdirectory(common)
 add_subdirectory(proto)
 add_subdirectory(third_party)
 
+if (NOT ASPIA_HOST_ONLY)
+    add_subdirectory(client)
+endif()
+
 if (NOT ANDROID)
     add_subdirectory(drivers)
-    add_subdirectory(relay)
-    add_subdirectory(router)
+
+    if (NOT ASPIA_HOST_ONLY)
+        add_subdirectory(relay)
+        add_subdirectory(router)
+    endif()
 endif()
 
 if (WIN32 OR LINUX OR APPLE OR ANDROID)
@@ -322,7 +333,7 @@ endif()
 # Client
 #--------------------------------------------------------------------------------------------------
 
-if (NOT ANDROID)
+if (NOT ANDROID AND NOT ASPIA_HOST_ONLY)
     install(TARGETS aspia_client
         BUNDLE DESTINATION . COMPONENT client
         RUNTIME DESTINATION bin COMPONENT client)
