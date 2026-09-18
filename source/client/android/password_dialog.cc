@@ -35,12 +35,12 @@ PasswordDialog::PasswordDialog(Mode mode, QWidget* parent)
     if (mode_ == Mode::SET)
     {
         setTitle(tr("Set Password"));
-        setText(tr("Enter a password to encrypt the address book."));
+        setText(tr("Enter a password to encrypt your data."));
     }
     else
     {
         setTitle(tr("Enter Password"));
-        setText(tr("Enter the password to decrypt the address book."));
+        setText(tr("Enter the password to decrypt the backup."));
     }
 
     edit_password_->setLabel(tr("Password"));

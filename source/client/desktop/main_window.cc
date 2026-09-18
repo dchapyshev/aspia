@@ -222,7 +222,7 @@ void MainWindow::connectToUrl(const QString& url)
         if (router_id <= 0)
         {
             MsgBox::warning(this,
-                tr("The router referenced by the link was not found in the address book."));
+                tr("The router referenced by the link is not among the saved routers."));
             return;
         }
 
@@ -261,7 +261,7 @@ void MainWindow::connectToUrl(const QString& url)
         if (!entry.has_value())
         {
             MsgBox::warning(this,
-                tr("The host referenced by the link was not found in the address book."));
+                tr("The host referenced by the link is not among the saved hosts."));
             return;
         }
 
@@ -453,7 +453,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
         MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the host, "
                "but the router is not configured. Check the parameters of the "
-               "router in the properties of the address book."));
+               "router in the properties of the host."));
         return;
     }
 

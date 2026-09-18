@@ -877,7 +877,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         if (router_id <= 0)
         {
             MessageDialog::info(this, tr("Connection by link"),
-                tr("The router referenced by the link was not found in the address book."));
+                tr("The router referenced by the link is not among the saved routers."));
             return;
         }
 
@@ -916,7 +916,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         if (!entry.has_value())
         {
             MessageDialog::info(this, tr("Connection by link"),
-                tr("The host referenced by the link was not found in the address book."));
+                tr("The host referenced by the link is not among the saved hosts."));
             return;
         }
 

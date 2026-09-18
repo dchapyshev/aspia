@@ -404,7 +404,7 @@
      <normaloff>:/img/export.svg</normaloff>:/img/export.svg</iconset>
    </property>
    <property name="text">
-    <string>Export Address Book...</string>
+    <string>Create Backup...</string>
    </property>
   </action>
   <action name="action_import_book">
@@ -413,7 +413,7 @@
      <normaloff>:/img/import.svg</normaloff>:/img/import.svg</iconset>
    </property>
    <property name="text">
-    <string>Import Address Book...</string>
+    <string>Restore from Backup...</string>
    </property>
   </action>
   <action name="action_online_check">

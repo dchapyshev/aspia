@@ -278,8 +278,8 @@ void LocalWidget::onShowMenu()
     Menu* menu = new Menu(this);
     menu->addItem(tr("Add Group"), ":/img/material/create_new_folder.svg");
     menu->addItem(tr("Add Host"), ":/img/material/add_2.svg");
-    menu->addItem(tr("Import"), ":/img/material/download.svg");
-    menu->addItem(tr("Export"), ":/img/material/upload.svg");
+    menu->addItem(tr("Restore from Backup"), ":/img/material/download.svg");
+    menu->addItem(tr("Create Backup"), ":/img/material/upload.svg");
 
     connect(menu, &Menu::sig_triggered, this, [this](int index)
     {
@@ -301,19 +301,19 @@ void LocalWidget::onShowMenu()
 void LocalWidget::onImport()
 {
     const QString path = QFileDialog::getOpenFileName(
-        this, tr("Import Address Book"), QString(), tr("Aspia Backup (*.aspia-backup)"));
+        this, tr("Restore from Backup"), QString(), tr("Aspia Backup (*.aspia-backup)"));
     if (path.isEmpty())
         return;
 
-    if (!MessageDialog::confirm(this, tr("Import"),
-                                tr("The address book will be replaced with the one in the file. "
-                                   "Everything it holds now is deleted."), tr("Import")))
+    if (!MessageDialog::confirm(this, tr("Restore from Backup"),
+                                tr("Everything stored now is deleted and replaced with what the "
+                                   "backup holds."), tr("Restore")))
     {
         return;
     }
 
-    // A file saved from this address book opens with the key it is already open with. One saved
-    // from another book takes the master password of that book.
+    // A backup made here opens with the key the data is already open with. One made elsewhere
+    // takes the master password of that installation.
     SecureString password;
     Backup::Report report;
     Backup::Result result = Backup::importFromFile(Database::instance(), path, password, &report);
@@ -344,21 +344,21 @@ void LocalWidget::onImport()
             break;
 
         case Backup::Result::NOTHING_IMPORTED:
-            message = tr("The file carries no address book, so nothing was changed.");
+            message = tr("The backup carries no data, so nothing was changed.");
             break;
 
         default:
-            message = tr("Failed to import the address book.");
+            message = tr("Failed to restore from the backup.");
             break;
     }
 
     if (!message.isEmpty())
     {
-        MessageDialog::info(this, tr("Import"), message);
+        MessageDialog::info(this, tr("Restore from Backup"), message);
         return;
     }
 
-    MessageDialog::info(this, tr("Import"),
+    MessageDialog::info(this, tr("Restore from Backup"),
         tr("Routers imported: %1\nGroups imported: %2\nHosts imported: %3\n"
            "Saved passwords imported: %4\nCredentials imported: %5")
             .arg(report.routers).arg(report.local_groups)
@@ -372,7 +372,7 @@ void LocalWidget::onImport()
 void LocalWidget::onExport()
 {
     const QString path = QFileDialog::getSaveFileName(
-        this, tr("Export Address Book"), "address_book.aspia-backup",
+        this, tr("Create Backup"), "aspia_backup.aspia-backup",
         tr("Aspia Backup (*.aspia-backup)"));
     if (path.isEmpty())
         return;
@@ -386,7 +386,7 @@ void LocalWidget::onExport()
             break;
 
         case Backup::Result::NOTHING_EXPORTED:
-            message = tr("The address book is empty. There is nothing to save.");
+            message = tr("There is nothing to save.");
             break;
 
         case Backup::Result::FILE_ERROR:
@@ -394,19 +394,19 @@ void LocalWidget::onExport()
             break;
 
         default:
-            message = tr("Failed to export the address book.");
+            message = tr("Failed to create the backup.");
             break;
     }
 
     if (!message.isEmpty())
     {
-        MessageDialog::info(this, tr("Export"), message);
+        MessageDialog::info(this, tr("Create Backup"), message);
         return;
     }
 
-    MessageDialog::info(this, tr("Export"),
-        tr("The file is written to %1. To open it elsewhere the master password of this address "
-           "book is needed.").arg(path));
+    MessageDialog::info(this, tr("Create Backup"),
+        tr("The file is written to %1. To open it elsewhere the master password of this "
+           "installation is needed.").arg(path));
 }
 
 //--------------------------------------------------------------------------------------------------

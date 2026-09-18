@@ -1480,17 +1480,17 @@ void ManagementTab::onImportOldBookAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onExportBookAction()
 {
-    LOG(INFO) << "[ACTION] Export address book";
+    LOG(INFO) << "[ACTION] Create backup";
 
     if (!Database::instance().isValid())
     {
-        MsgBox::warning(this, tr("Address book database is not available."));
+        MsgBox::warning(this, tr("The database is not available."));
         return;
     }
 
     const QString file_path = FileDialog::getSaveFileName(
         this,
-        tr("Export Address Book"),
+        tr("Create Backup"),
         tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())
@@ -1507,7 +1507,7 @@ void ManagementTab::onExportBookAction()
             break;
 
         case Backup::Result::NOTHING_EXPORTED:
-            MsgBox::information(this, tr("The address book is empty. There is nothing to save."));
+            MsgBox::information(this, tr("There is nothing to save."));
             return;
 
         case Backup::Result::FILE_ERROR:
@@ -1515,7 +1515,7 @@ void ManagementTab::onExportBookAction()
             return;
 
         default:
-            MsgBox::warning(this, tr("Failed to export the address book."));
+            MsgBox::warning(this, tr("Failed to create the backup."));
             return;
     }
 
@@ -1533,17 +1533,17 @@ void ManagementTab::onExportBookAction()
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onImportBookAction()
 {
-    LOG(INFO) << "[ACTION] Import address book";
+    LOG(INFO) << "[ACTION] Restore from backup";
 
     if (!Database::instance().isValid())
     {
-        MsgBox::warning(this, tr("Address book database is not available."));
+        MsgBox::warning(this, tr("The database is not available."));
         return;
     }
 
     const QString file_path = FileDialog::getOpenFileName(
         this,
-        tr("Import Address Book"),
+        tr("Restore from Backup"),
         tr("Aspia Backup (*.aspia-backup);;All files (*)"));
 
     if (file_path.isEmpty())
@@ -1552,15 +1552,15 @@ void ManagementTab::onImportBookAction()
         return;
     }
 
-    if (MsgBox::question(this, tr("The address book will be replaced with the one in the file. "
-                                  "Everything it holds now is deleted. Continue?")) == MsgBox::No)
+    if (MsgBox::question(this, tr("Everything stored now is deleted and replaced with what the "
+                                  "backup holds. Continue?")) == MsgBox::No)
     {
         LOG(INFO) << "[ACTION] Cancelled by user";
         return;
     }
 
-    // A file saved from this address book opens with the key it is already open with. One saved
-    // from another book takes the master password of that book.
+    // A backup made here opens with the key the data is already open with. One made elsewhere
+    // takes the master password of that installation.
     SecureString password;
     Backup::Report report;
     Backup::Result result =
@@ -1569,10 +1569,10 @@ void ManagementTab::onImportBookAction()
     if (result == Backup::Result::WRONG_PASSWORD)
     {
         CredentialsDialog dialog(CredentialsDialog::Type::ENTER_PASSWORD, this);
-        dialog.setWindowTitle(tr("Import Address Book"));
+        dialog.setWindowTitle(tr("Restore from Backup"));
         dialog.setHeaderIcon(":/img/lock.svg");
-        dialog.setHeaderText(tr("The file was saved from another address book. Enter the master "
-                                "password of that address book."));
+        dialog.setHeaderText(tr("The backup was made on another installation. Enter the master "
+                                "password used there."));
         dialog.setShowPasswordButtonVisible(true);
 
         if (dialog.exec() != QDialog::Accepted)
@@ -1596,8 +1596,7 @@ void ManagementTab::onImportBookAction()
             return;
 
         case Backup::Result::NOTHING_IMPORTED:
-            MsgBox::information(this, tr("The file carries no address book, so nothing was "
-                                         "changed."));
+            MsgBox::information(this, tr("The backup carries no data, so nothing was changed."));
             return;
 
         case Backup::Result::FILE_ERROR:
@@ -1605,11 +1604,11 @@ void ManagementTab::onImportBookAction()
             return;
 
         case Backup::Result::INVALID_FORMAT:
-            MsgBox::warning(this, tr("The file is not a valid address book."));
+            MsgBox::warning(this, tr("The file is not a valid backup."));
             return;
 
         default:
-            MsgBox::warning(this, tr("Failed to import the address book."));
+            MsgBox::warning(this, tr("Failed to restore from the backup."));
             return;
     }
 
