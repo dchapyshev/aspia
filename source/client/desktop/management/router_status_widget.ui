@@ -84,7 +84,7 @@
       <bool>true</bool>
      </property>
      <attribute name="headerDefaultSectionSize">
-      <number>160</number>
+      <number>200</number>
      </attribute>
      <attribute name="headerShowSortIndicator" stdset="0">
       <bool>true</bool>
