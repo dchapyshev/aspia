@@ -156,7 +156,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
-        if (UpdateDialog(Database::instance().updateServer(), "client", UpdateDialog::Action::ASK,
+        if (UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK,
                          this).exec() == QDialog::Accepted)
         {
             GuiApplication::quit();

@@ -42,7 +42,7 @@ const qint64 kRouterHostRecheckInterval = 7 * 24 * 60 * 60;
 
 constexpr auto kSettingDisplayName   = "display_name";
 constexpr auto kSettingCheckUpdates  = "check_updates";
-constexpr auto kSettingUpdateServer  = "update_server";
+constexpr auto kSettingUpdateChannel = "update_channel";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -1667,18 +1667,18 @@ bool Database::setCheckUpdatesEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString Database::updateServer() const
+QString Database::updateChannel() const
 {
-    QString value = readSetting(kSettingUpdateServer).toLower();
-    if (value.isEmpty() || value == kLegacyUpdateServerOrg || value == kLegacyUpdateServerNet)
-        value = kDefaultUpdateServer;
+    QString value = readSetting(kSettingUpdateChannel);
+    if (value.isEmpty())
+        value = kStableUpdateChannel;
     return value;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setUpdateServer(const QString& server)
+bool Database::setUpdateChannel(const QString& channel)
 {
-    return writeSetting(kSettingUpdateServer, server);
+    return writeSetting(kSettingUpdateChannel, channel);
 }
 
 //--------------------------------------------------------------------------------------------------

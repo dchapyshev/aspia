@@ -51,7 +51,7 @@ public:
     static constexpr int kInstalledExitCode = 0;
     static constexpr int kClosedExitCode = 1;
 
-    UpdateDialog(const QString& server, const QString& package, Action action,
+    UpdateDialog(const QString& channel, const QString& package, Action action,
                  QWidget* parent = nullptr);
     ~UpdateDialog() final;
 
@@ -72,7 +72,7 @@ private:
     void destroyChecker();
 
     std::unique_ptr<Ui::UpdateDialog> ui;
-    const QString server_;
+    const QString channel_;
     const Action action_;
     UpdateInfo update_info_;
 

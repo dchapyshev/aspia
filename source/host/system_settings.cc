@@ -30,7 +30,7 @@ const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
 const QString kWaylandRestoreToken = "wayland_restore_token";
 
-const QString kUpdateServer = "update/server";
+const QString kUpdateChannel = "update/channel";
 const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
 
@@ -72,19 +72,19 @@ void SystemSettings::sync()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SystemSettings::updateServer() const
+QString SystemSettings::updateChannel() const
 {
-    QString value = settings_.value(kUpdateServer).toString();
-    if (value.isEmpty() || value == kLegacyUpdateServerOrg || value == kLegacyUpdateServerNet)
-        value = kDefaultUpdateServer;
+    QString value = settings_.value(kUpdateChannel).toString();
+    if (value.isEmpty())
+        value = kStableUpdateChannel;
 
     return value;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemSettings::setUpdateServer(const QString& server)
+void SystemSettings::setUpdateChannel(const QString& channel)
 {
-    settings_.setValue(kUpdateServer, server);
+    settings_.setValue(kUpdateChannel, channel);
 }
 
 //--------------------------------------------------------------------------------------------------

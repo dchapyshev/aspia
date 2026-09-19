@@ -34,6 +34,17 @@ namespace {
 const long kMaxFileSize = 1024 * 1024;
 
 //--------------------------------------------------------------------------------------------------
+QString serverUrl(const QString& channel)
+{
+    QString name = kStableUpdateChannel;
+
+    if (channel == kBetaUpdateChannel || channel == kAlphaUpdateChannel)
+        name = channel;
+
+    return kUpdateServer + "/" + name;
+}
+
+//--------------------------------------------------------------------------------------------------
 size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* buffer)
 {
     size_t append_size = size * nmemb;
@@ -69,9 +80,9 @@ int debugFunc(CURL* /* handle */, curl_infotype type, char* data, size_t size, v
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UpdateChecker::UpdateChecker(const QString& server, const QString& package, QObject* parent)
+UpdateChecker::UpdateChecker(const QString& channel, const QString& package, QObject* parent)
     : QThread(parent),
-      server_(server),
+      server_(serverUrl(channel)),
       package_(package)
 {
     LOG(TRACE) << "Ctor";
@@ -87,6 +98,12 @@ UpdateChecker::~UpdateChecker()
 
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateChecker::setServerForTesting(const QString& server)
+{
+    server_ = server;
 }
 
 //--------------------------------------------------------------------------------------------------

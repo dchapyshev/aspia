@@ -30,8 +30,13 @@ class UpdateChecker final : public QThread
     Q_OBJECT
 
 public:
-    UpdateChecker(const QString& server, const QString& package, QObject* parent = nullptr);
+    // Reads what |channel| offers for |package|. A name that is not a channel of ours is read as
+    // the stable one, so that a setting of another version cannot send the check elsewhere.
+    UpdateChecker(const QString& channel, const QString& package, QObject* parent = nullptr);
     ~UpdateChecker();
+
+    // Replaces the address the files are read from, so that tests can serve their own.
+    void setServerForTesting(const QString& server);
 
     // Replaces the keys the files are checked against with |public_keys|, so that tests can sign
     // with a key of their own.
@@ -49,7 +54,7 @@ private:
     QByteArray downloadSigned(const QString& url);
     QByteArray download(const QString& url);
 
-    const QString server_;
+    QString server_;
     const QString package_;
     QList<QByteArray> public_keys_;
     std::atomic_bool interrupted_ { false };

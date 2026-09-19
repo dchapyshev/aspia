@@ -516,23 +516,16 @@
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkbox_custom_server">
-               <property name="text">
-                <string>Use custom update server</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QLabel" name="label_server">
+                <widget class="QLabel" name="label_update_channel">
                  <property name="text">
-                  <string>Server:</string>
+                  <string>Update channel:</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="edit_update_server"/>
+                <widget class="QComboBox" name="combobox_update_channel"/>
                </item>
               </layout>
              </item>

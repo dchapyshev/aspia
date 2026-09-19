@@ -63,8 +63,7 @@ private slots:
     void onSelectRecordingPath();
     void onChangeMasterPassword();
     void onCheckUpdatesChanged();
-    void onCustomServerToggled(bool checked);
-    void onUpdateServerChanged();
+    void onUpdateChannelChanged();
     void onCheckForUpdatesClicked();
 
 private:

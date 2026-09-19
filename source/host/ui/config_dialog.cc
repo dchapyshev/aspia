@@ -116,6 +116,10 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui->combobox_update_check_freq->addItem(tr("Once a week"), 7);
     ui->combobox_update_check_freq->addItem(tr("Once a month"), 30);
 
+    ui->combobox_update_channel->addItem(tr("Stable"), kStableUpdateChannel);
+    ui->combobox_update_channel->addItem(tr("Beta"), kBetaUpdateChannel);
+    ui->combobox_update_channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
+
     connect(ui->combobox_update_check_freq, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this](int /* index */)
     {
@@ -130,23 +134,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         ui->combobox_update_check_freq->setEnabled(checked);
     });
 
-    connect(ui->checkbox_use_custom_server, &QCheckBox::toggled, this, [this](bool checked)
-    {
-        setConfigChanged(FROM_HERE, true);
-
-        ui->label_update_server->setEnabled(checked);
-        ui->edit_update_server->setEnabled(checked);
-
-        if (!checked)
-            ui->edit_update_server->setText(kDefaultUpdateServer);
-    });
-
-    connect(ui->edit_update_server, &QLineEdit::textEdited,
+    connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ConfigDialog::onConfigChanged);
 
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        if (UpdateDialog(SystemSettings().updateServer(), "host", UpdateDialog::Action::ASK,
+        if (UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK,
                          this).exec() == QDialog::Accepted)
             GuiApplication::quit();
     });
@@ -600,8 +593,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         db.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
-        settings.setUpdateServer(ui->checkbox_use_custom_server->isChecked() ?
-                                 ui->edit_update_server->text() : QString());
+        settings.setUpdateChannel(ui->combobox_update_channel->currentData().toString());
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
 
         db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
@@ -730,10 +722,9 @@ void ConfigDialog::reloadAll()
     reloadUserList();
 
     ui->spinbox_port->setValue(db.tcpPort());
-    ui->checkbox_use_custom_server->setChecked(settings.updateServer() != kDefaultUpdateServer);
-    ui->edit_update_server->setText(settings.updateServer());
 
-    ui->edit_update_server->setEnabled(ui->checkbox_use_custom_server->isChecked());
+    int channel_index = ui->combobox_update_channel->findData(settings.updateChannel());
+    ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
 
     switch (db.passwordProtectionState())
     {

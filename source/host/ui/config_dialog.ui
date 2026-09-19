@@ -83,7 +83,7 @@
        <item>
         <widget class="QGroupBox" name="groupbox_update_server">
          <property name="title">
-          <string>Update Server</string>
+          <string>Updates</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -108,30 +108,16 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkbox_use_custom_server">
-            <property name="text">
-             <string>Use custom update server</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLabel" name="label_update_server">
+             <widget class="QLabel" name="label_update_channel">
               <property name="text">
-               <string>Server:</string>
+               <string>Update channel:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="edit_update_server">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string notr="true">update.aspia.org</string>
-              </property>
-             </widget>
+             <widget class="QComboBox" name="combobox_update_channel"/>
             </item>
            </layout>
           </item>

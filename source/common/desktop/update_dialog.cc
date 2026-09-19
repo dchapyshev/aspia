@@ -42,11 +42,11 @@ QString makeUrl(const QUrl& url)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UpdateDialog::UpdateDialog(const QString& server, const QString& package, Action action,
+UpdateDialog::UpdateDialog(const QString& channel, const QString& package, Action action,
                            QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
-      server_(server),
+      channel_(channel),
       action_(action)
 {
     LOG(INFO) << "Ctor";
@@ -61,7 +61,7 @@ UpdateDialog::UpdateDialog(const QString& server, const QString& package, Action
     ui->label_current->setText(kCurrentVersion.toString());
     ui->label_available->setText(tr("Receiving information..."));
 
-    checker_ = std::make_unique<UpdateChecker>(server, package);
+    checker_ = std::make_unique<UpdateChecker>(channel, package);
 
     connect(checker_.get(), &UpdateChecker::sig_checkFinished,
             this, &UpdateDialog::onUpdateCheckFinished);
@@ -207,7 +207,7 @@ void UpdateDialog::startPrivilegedInstance()
     }
 
     QStringList arguments;
-    arguments << "--update=" + server_;
+    arguments << "--channel=" + channel_;
     arguments << "--locale=" + GuiApplication::instance()->locale();
 
     // The started instance has its own windows and reports what went wrong itself.

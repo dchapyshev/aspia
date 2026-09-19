@@ -198,13 +198,6 @@ void doHostMigrate(const QJsonDocument& doc)
         settings.setUpdateCheckFrequency(value);
     }
 
-    if (root_object.contains("UpdateServer"))
-    {
-        QString value = root_object["UpdateServer"].toString();
-        LOG(INFO) << "UpdateServer:" << value;
-        settings.setUpdateServer(value);
-    }
-
     LOG(INFO) << "====== Migrate user list ======";
 
     if (root_object.contains("SeedKey"))

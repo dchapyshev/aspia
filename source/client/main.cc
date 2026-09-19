@@ -106,10 +106,10 @@ int main(int argc, char* argv[])
             return QString::fromLocal8Bit(argument + length);
         };
 
-        QString server = option_value(argv[1], "--update=");
+        QString channel = option_value(argv[1], "--channel=");
         QString locale = option_value(argv[2], "--locale=");
 
-        if (!server.isEmpty() && !locale.isEmpty())
+        if (!channel.isEmpty() && !locale.isEmpty())
         {
 #if defined(Q_OS_LINUX)
             qputenv("QT_QPA_PLATFORM", "xcb");
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
             GuiApplication application(argc, argv);
             application.setLocale(locale);
 
-            UpdateDialog dialog(server, "client", UpdateDialog::Action::INSTALL);
+            UpdateDialog dialog(channel, "client", UpdateDialog::Action::INSTALL);
 
             return dialog.exec() == QDialog::Accepted ?
                 UpdateDialog::kInstalledExitCode : UpdateDialog::kClosedExitCode;

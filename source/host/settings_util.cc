@@ -44,7 +44,7 @@ namespace {
 const char kSystem[] = "system";
 const char kDatabase[] = "database";
 
-const char kUpdateServer[] = "update_server";
+const char kUpdateChannel[] = "update_channel";
 const char kPreferredVideoCapturer[] = "preferred_video_capturer";
 const char kApplicationShutdownDisabled[] = "application_shutdown_disabled";
 const char kAutoUpdateEnabled[] = "auto_update_enabled";
@@ -79,7 +79,7 @@ QJsonObject exportSystemSettings()
     SystemSettings settings;
 
     QJsonObject obj;
-    obj[kUpdateServer] = settings.updateServer();
+    obj[kUpdateChannel] = settings.updateChannel();
     obj[kPreferredVideoCapturer] = static_cast<qint64>(settings.preferredVideoCapturer());
     obj[kApplicationShutdownDisabled] = settings.isApplicationShutdownDisabled();
     obj[kAutoUpdateEnabled] = settings.isAutoUpdateEnabled();
@@ -131,8 +131,8 @@ void importSystemSettings(const QJsonObject& obj)
 {
     SystemSettings settings;
 
-    if (obj.contains(kUpdateServer))
-        settings.setUpdateServer(obj[kUpdateServer].toString());
+    if (obj.contains(kUpdateChannel))
+        settings.setUpdateChannel(obj[kUpdateChannel].toString());
     if (obj.contains(kPreferredVideoCapturer))
         settings.setPreferredVideoCapturer(static_cast<quint32>(obj[kPreferredVideoCapturer].toInteger()));
     if (obj.contains(kApplicationShutdownDisabled))

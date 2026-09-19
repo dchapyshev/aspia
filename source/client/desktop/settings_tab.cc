@@ -214,19 +214,12 @@ SettingsTab::SettingsTab(QWidget* parent)
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
 
-    QString update_server = db.updateServer();
-    ui->edit_update_server->setText(update_server);
+    ui->combobox_update_channel->addItem(tr("Stable"), kStableUpdateChannel);
+    ui->combobox_update_channel->addItem(tr("Beta"), kBetaUpdateChannel);
+    ui->combobox_update_channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
 
-    if (update_server == kDefaultUpdateServer)
-    {
-        ui->checkbox_custom_server->setChecked(false);
-        ui->edit_update_server->setEnabled(false);
-    }
-    else
-    {
-        ui->checkbox_custom_server->setChecked(true);
-        ui->edit_update_server->setEnabled(true);
-    }
+    int channel_index = ui->combobox_update_channel->findData(db.updateChannel());
+    ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
 #endif
 
     // Wire signals after initial values are loaded to avoid spurious saves.
@@ -264,8 +257,8 @@ SettingsTab::SettingsTab(QWidget* parent)
 
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
-    connect(ui->checkbox_custom_server, &QCheckBox::toggled, this, &SettingsTab::onCustomServerToggled);
-    connect(ui->edit_update_server, &QLineEdit::editingFinished, this, &SettingsTab::onUpdateServerChanged);
+    connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &SettingsTab::onUpdateChannelChanged);
     connect(ui->button_check_for_updates, &QPushButton::clicked, this, &SettingsTab::onCheckForUpdatesClicked);
 #endif
 
@@ -469,27 +462,12 @@ void SettingsTab::onCheckUpdatesChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::onCustomServerToggled(bool checked)
+void SettingsTab::onUpdateChannelChanged()
 {
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
-    LOG(INFO) << "[ACTION] Custom server checkbox:" << checked;
-    ui->edit_update_server->setEnabled(checked);
-
-    if (!checked)
-    {
-        QSignalBlocker blocker(ui->edit_update_server);
-        ui->edit_update_server->setText(kDefaultUpdateServer);
-        Database::instance().setUpdateServer(QString());
-    }
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-void SettingsTab::onUpdateServerChanged()
-{
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
-    LOG(INFO) << "[ACTION] Update server changed";
-    Database::instance().setUpdateServer(ui->edit_update_server->text().toLower());
+    QString channel = ui->combobox_update_channel->currentData().toString();
+    LOG(INFO) << "[ACTION] Update channel changed:" << channel;
+    Database::instance().setUpdateChannel(channel);
 #endif
 }
 
@@ -498,8 +476,8 @@ void SettingsTab::onCheckForUpdatesClicked()
 {
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Check for updates";
-    if (UpdateDialog(ui->edit_update_server->text(), "client", UpdateDialog::Action::ASK,
-                     this).exec() == QDialog::Accepted)
+    if (UpdateDialog(ui->combobox_update_channel->currentData().toString(), "client",
+                     UpdateDialog::Action::ASK, this).exec() == QDialog::Accepted)
         GuiApplication::quit();
 #endif
 }

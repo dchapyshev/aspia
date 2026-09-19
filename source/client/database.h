@@ -112,8 +112,8 @@ public:
     bool isCheckUpdatesEnabled() const;
     bool setCheckUpdatesEnabled(bool enable);
 
-    QString updateServer() const;
-    bool setUpdateServer(const QString& server);
+    QString updateChannel() const;
+    bool setUpdateChannel(const QString& channel);
 
     // Master password.
     bool isMasterPasswordSet() const;

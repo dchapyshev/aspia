@@ -38,8 +38,8 @@ public:
     bool isWritable() const;
     void sync();
 
-    QString updateServer() const;
-    void setUpdateServer(const QString& server);
+    QString updateChannel() const;
+    void setUpdateChannel(const QString& channel);
 
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);

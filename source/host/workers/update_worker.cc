@@ -54,7 +54,7 @@ void UpdateWorker::onCheckUpdates()
         return;
     }
 
-    update_checker_ = new UpdateChecker(SystemSettings().updateServer(), "host", this);
+    update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), "host", this);
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);

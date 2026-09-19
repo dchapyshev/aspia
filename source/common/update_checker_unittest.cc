@@ -27,6 +27,7 @@
 
 #include <memory>
 
+#include "base/build_config.h"
 #include "base/version_constants.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/signature.h"
@@ -159,8 +160,9 @@ QHash<QString, QByteArray> withSignatures(const QHash<QString, QByteArray>& file
 std::unique_ptr<UpdateChecker> checkerFor(const FileServer& server)
 {
     std::unique_ptr<UpdateChecker> checker =
-        std::make_unique<UpdateChecker>(server.url(), "host");
+        std::make_unique<UpdateChecker>(kStableUpdateChannel, "host");
 
+    checker->setServerForTesting(server.url());
     checker->setPublicKeysForTesting({ Signature::publicKey(privateKey()) });
     return checker;
 }

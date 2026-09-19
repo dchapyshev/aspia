@@ -47,7 +47,7 @@ void UpdateWorker::onPrepare()
         return;
     }
 
-    update_checker_ = new UpdateChecker(db.updateServer(), "client", this);
+    update_checker_ = new UpdateChecker(db.updateChannel(), "client", this);
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);
