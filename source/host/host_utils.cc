@@ -144,6 +144,13 @@ void doHostMigrate(const QJsonDocument& doc)
     if (root_object.contains("OneTimePasswordLength"))
     {
         int value = root_object["OneTimePasswordLength"].toString().toInt();
+
+        if (value < 8)
+        {
+            LOG(INFO) << "OneTimePasswordLength" << value << "is too short, raised to 8";
+            value = 8;
+        }
+
         LOG(INFO) << "OneTimePasswordLength:" << value;
         db.setOneTimePasswordLength(value);
     }

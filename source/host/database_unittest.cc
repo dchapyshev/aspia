@@ -246,7 +246,7 @@ TEST_F(HostDatabaseTest, OneTimePasswordSettingsAreKeptInBounds)
     EXPECT_EQ(db_->oneTimePasswordExpire(), MilliSeconds(0));
 
     ASSERT_TRUE(db_->setOneTimePasswordLength(2));
-    EXPECT_EQ(db_->oneTimePasswordLength(), 6);
+    EXPECT_EQ(db_->oneTimePasswordLength(), 8);
 
     ASSERT_TRUE(db_->setOneTimePasswordLength(100));
     EXPECT_EQ(db_->oneTimePasswordLength(), 16);

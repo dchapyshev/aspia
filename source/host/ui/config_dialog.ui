@@ -285,7 +285,7 @@
             <item row="2" column="1">
              <widget class="QSpinBox" name="spinbox_onetime_pass_char_count">
               <property name="minimum">
-               <number>6</number>
+               <number>8</number>
               </property>
               <property name="maximum">
                <number>16</number>

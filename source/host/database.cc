@@ -530,7 +530,7 @@ bool Database::setOneTimePasswordExpire(MilliSeconds interval)
 int Database::oneTimePasswordLength() const
 {
     static const int kDefaultValue = 8;
-    static const int kMinValue = 6;
+    static const int kMinValue = 8;
     static const int kMaxValue = 16;
 
     bool ok = false;
