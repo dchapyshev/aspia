@@ -321,6 +321,20 @@ bool UpdateInstaller::startInstaller()
         emit sig_finished(exit_code == 0, error);
     });
 
+    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error)
+    {
+        if (error != QProcess::FailedToStart)
+            return;
+
+        QString error_string = process->errorString();
+        LOG(ERROR) << "Unable to start installer:" << error_string;
+
+        process->deleteLater();
+        cleanup();
+
+        emit sig_finished(false, error_string);
+    });
+
     QString program = arguments.takeFirst();
 
     process->start(program, arguments);
