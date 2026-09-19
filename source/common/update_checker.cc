@@ -248,7 +248,7 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
 {
     LOG(INFO) << "Reading" << unicode_url;
 
-    QByteArray url = unicode_url.toLocal8Bit();
+    QByteArray url = unicode_url.toUtf8();
 
     ScopedCURL curl;
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
