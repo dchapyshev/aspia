@@ -22,11 +22,11 @@
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
+#include "common/update_installer.h"
 
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 #include <ctime>
 
-#include "common/update_installer.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 #endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
@@ -112,6 +112,12 @@ void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
         }
 
         LOG(INFO) << "New version available:" << update_info.version().toString();
+
+        if (!UpdateInstaller::isSupported(update_info.format()))
+        {
+            LOG(ERROR) << "Package of format" << update_info.format() << "cannot be installed here";
+            break;
+        }
 
         update_installer_ = new UpdateInstaller(UpdateInstaller::Mode::SERVICE, this);
 

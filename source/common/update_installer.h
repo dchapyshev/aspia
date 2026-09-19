@@ -47,8 +47,9 @@ public:
     explicit UpdateInstaller(Mode mode, QObject* parent = nullptr);
     ~UpdateInstaller() final;
 
-    // True when this system lets the application install an update.
-    static bool isSupported();
+    // True when this system installs a package of |format| itself. The manifest names a format
+    // the system may know nothing about, and then the update is left to the user.
+    static bool isSupported(const QString& format);
 
     // Creates the file the package of |update_info| is to be downloaded into and returns its path.
     // An empty string is returned when it could not be created.

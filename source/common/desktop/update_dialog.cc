@@ -117,7 +117,7 @@ void UpdateDialog::onUpdateNow()
 {
     LOG(INFO) << "[ACTION] Update now";
 
-    if (!UpdateInstaller::isSupported())
+    if (!UpdateInstaller::isSupported(update_info_.format()))
     {
         MsgBox::information(this, tr("Install the update yourself: %1").arg(update_info_.url()));
         return;

@@ -155,15 +155,21 @@ UpdateInstaller::~UpdateInstaller()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool UpdateInstaller::isSupported()
+bool UpdateInstaller::isSupported(const QString& format)
 {
 #if defined(Q_OS_WINDOWS)
-    return true;
+    return format == "msi";
 #elif defined(Q_OS_LINUX)
-    // The package is handed to one of the package managers of the system.
-    return !QStandardPaths::findExecutable("apt-get").isEmpty() ||
-           !QStandardPaths::findExecutable("dnf").isEmpty();
+    // The package is handed to the manager that knows its format, and only that one.
+    if (format == "deb")
+        return !QStandardPaths::findExecutable("apt-get").isEmpty();
+
+    if (format == "rpm")
+        return !QStandardPaths::findExecutable("dnf").isEmpty();
+
+    return false;
 #else
+    Q_UNUSED(format);
     return false;
 #endif
 }
@@ -274,10 +280,15 @@ bool UpdateInstaller::startInstaller()
     QStringList arguments;
 
     // Both managers install a local file and pull in what it depends on.
-    if (update_info_.format() == "rpm")
+    if (update_info_.format() == "deb")
+        arguments << "apt-get" << "install" << "-y" << file_path_;
+    else if (update_info_.format() == "rpm")
         arguments << "dnf" << "install" << "-y" << file_path_;
     else
-        arguments << "apt-get" << "install" << "-y" << file_path_;
+    {
+        LOG(ERROR) << "No package manager for format:" << update_info_.format();
+        return false;
+    }
 
     if (mode_ == Mode::SERVICE)
     {
