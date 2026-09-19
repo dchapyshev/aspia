@@ -104,8 +104,6 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
     if (checker_)
     {
         LOG(INFO) << "Distroy checker...";
-        ui->label_available->setText(tr("Cancel checking for updates. Please wait."));
-        ui->button_close->setEnabled(false);
         checker_.reset();
     }
 

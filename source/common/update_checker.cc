@@ -269,12 +269,26 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
     }
     while (still_running);
 
-    curl_multi_remove_handle(multi_curl.get(), curl.get());
+    // How the transfer itself ended is a message in the queue of the multi handle, and there is
+    // only one transfer in it. Removing the easy handle takes the message away, so it is read first.
+    CURLcode result = CURLE_OK;
+    int messages_left = 0;
+    CURLMsg* message = curl_multi_info_read(multi_curl.get(), &messages_left);
+
+    if (message && message->msg == CURLMSG_DONE)
+        result = message->data.result;
 
     long response_code = 0;
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
 
-    if (response_code != 200)
+    curl_multi_remove_handle(multi_curl.get(), curl.get());
+
+    if (result != CURLE_OK)
+    {
+        LOG(ERROR) << "Transfer failed:" << curl_easy_strerror(result);
+        response.clear();
+    }
+    else if (response_code != 200)
     {
         LOG(ERROR) << "Unexpected response code:" << response_code;
         response.clear();
