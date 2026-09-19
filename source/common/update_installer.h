@@ -51,6 +51,11 @@ public:
     // the system may know nothing about, and then the update is left to the user.
     static bool isSupported(const QString& format);
 
+    // True when the system lets this application install a package right now. Where it does not,
+    // the user has to allow it first, and openInstallPermission takes them where that is done.
+    static bool canInstall();
+    static void openInstallPermission();
+
     // Creates the file the package of |update_info| is to be downloaded into and returns its path.
     // An empty string is returned when it could not be created.
     QString createPackageFile(const UpdateInfo& update_info);
