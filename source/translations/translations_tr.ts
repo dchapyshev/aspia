@@ -11432,70 +11432,70 @@ Credentials imported: %5</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="62"/>
+        <location filename="../common/desktop/update_dialog.cc" line="63"/>
         <source>Receiving information...</source>
         <translation>Bilgiler alınıyor...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="132"/>
         <source>Install the update yourself: %1</source>
         <translation>Güncellemeyi kendiniz yükleyin: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="138"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Bir güncelleme indirilecek. İndirme tamamlandıktan sonra uygulama otomatik olarak kapanacak.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="139"/>
+        <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Bağlı tüm oturumlar sonlandırılacak. Güncelleme tamamlanana kadar bağlantı kuramazsınız.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="141"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>All unsaved data will be lost.</source>
         <translation>Kaydedilmemiş tüm veriler kaybolacak.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="142"/>
+        <location filename="../common/desktop/update_dialog.cc" line="143"/>
         <source>Continue?</source>
         <translation>Devam edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="177"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Güncelleme yüklenirken bir hata oluştu: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="185"/>
-        <location filename="../common/desktop/update_dialog.cc" line="206"/>
-        <location filename="../common/desktop/update_dialog.cc" line="216"/>
-        <location filename="../common/desktop/update_dialog.cc" line="238"/>
+        <location filename="../common/desktop/update_dialog.cc" line="186"/>
+        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <location filename="../common/desktop/update_dialog.cc" line="217"/>
+        <location filename="../common/desktop/update_dialog.cc" line="239"/>
         <source>An error occurred while installing the update.</source>
         <translation>Güncelleme yüklenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="204"/>
+        <location filename="../common/desktop/update_dialog.cc" line="205"/>
         <source>The downloaded file is damaged.</source>
         <translation>İndirilen dosya hasarlı.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Unknown</source>
         <translation>Bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="286"/>
         <source>Error retrieving update information.</source>
         <translation>Güncelleme bilgileri alınırken hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="295"/>
+        <location filename="../common/desktop/update_dialog.cc" line="296"/>
         <source>Installing the update. Please wait.</source>
         <translation>Güncelleme yükleniyor. Lütfen bekleyin.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="260"/>
+        <location filename="../common/desktop/update_dialog.cc" line="261"/>
         <source>No updates available.</source>
         <translation>Kullanılabilir güncelleme yok.</translation>
     </message>

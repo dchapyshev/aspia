@@ -11432,70 +11432,70 @@ Credentials imported: %5</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="62"/>
+        <location filename="../common/desktop/update_dialog.cc" line="63"/>
         <source>Receiving information...</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="132"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="138"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>업데이트가 다운로드됩니다. 다운로드가 완료되면 응용 프로그램이 자동으로 닫힙니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="139"/>
+        <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>연결된 모든 세션이 종료됩니다. 업데이트가 완료될 때까지 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="141"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>All unsaved data will be lost.</source>
         <translation>저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="142"/>
+        <location filename="../common/desktop/update_dialog.cc" line="143"/>
         <source>Continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="177"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="185"/>
-        <location filename="../common/desktop/update_dialog.cc" line="206"/>
-        <location filename="../common/desktop/update_dialog.cc" line="216"/>
-        <location filename="../common/desktop/update_dialog.cc" line="238"/>
+        <location filename="../common/desktop/update_dialog.cc" line="186"/>
+        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <location filename="../common/desktop/update_dialog.cc" line="217"/>
+        <location filename="../common/desktop/update_dialog.cc" line="239"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="204"/>
+        <location filename="../common/desktop/update_dialog.cc" line="205"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="286"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="295"/>
+        <location filename="../common/desktop/update_dialog.cc" line="296"/>
         <source>Installing the update. Please wait.</source>
         <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="260"/>
+        <location filename="../common/desktop/update_dialog.cc" line="261"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>

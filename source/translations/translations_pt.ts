@@ -11466,70 +11466,70 @@ Credenciais importadas: %5</translation>
         <translation>Fechar</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="62"/>
+        <location filename="../common/desktop/update_dialog.cc" line="63"/>
         <source>Receiving information...</source>
         <translation>A receber informações...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="132"/>
         <source>Install the update yourself: %1</source>
         <translation>Instale a atualização manualmente: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="138"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Será transferida uma atualização. Após a conclusão da transferência, a aplicação será fechada automaticamente.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="139"/>
+        <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Todas as sessões ligadas serão terminadas. Não é possível estabelecer uma ligação até que a atualização esteja concluída.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="141"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>All unsaved data will be lost.</source>
         <translation>Todos os dados não guardados serão perdidos.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="142"/>
+        <location filename="../common/desktop/update_dialog.cc" line="143"/>
         <source>Continue?</source>
         <translation>Continuar?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="177"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Ocorreu um erro ao instalar a atualização: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="185"/>
-        <location filename="../common/desktop/update_dialog.cc" line="206"/>
-        <location filename="../common/desktop/update_dialog.cc" line="216"/>
-        <location filename="../common/desktop/update_dialog.cc" line="238"/>
+        <location filename="../common/desktop/update_dialog.cc" line="186"/>
+        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <location filename="../common/desktop/update_dialog.cc" line="217"/>
+        <location filename="../common/desktop/update_dialog.cc" line="239"/>
         <source>An error occurred while installing the update.</source>
         <translation>Ocorreu um erro ao instalar a atualização.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="204"/>
+        <location filename="../common/desktop/update_dialog.cc" line="205"/>
         <source>The downloaded file is damaged.</source>
         <translation>O ficheiro transferido está danificado.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Unknown</source>
         <translation>Desconhecido</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="286"/>
         <source>Error retrieving update information.</source>
         <translation>Erro ao obter as informações de atualização.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="295"/>
+        <location filename="../common/desktop/update_dialog.cc" line="296"/>
         <source>Installing the update. Please wait.</source>
         <translation>A instalar a atualização. Aguarde, por favor.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="260"/>
+        <location filename="../common/desktop/update_dialog.cc" line="261"/>
         <source>No updates available.</source>
         <translation>Não existem atualizações disponíveis.</translation>
     </message>

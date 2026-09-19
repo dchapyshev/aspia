@@ -11432,70 +11432,70 @@ Credentials imported: %5</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="62"/>
+        <location filename="../common/desktop/update_dialog.cc" line="63"/>
         <source>Receiving information...</source>
         <translation>情報を受信しています...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="132"/>
         <source>Install the update yourself: %1</source>
         <translation>更新を手動でインストールしてください: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="137"/>
+        <location filename="../common/desktop/update_dialog.cc" line="138"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>更新がダウンロードされます。ダウンロードの完了後、アプリケーションは自動的に終了します。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="139"/>
+        <location filename="../common/desktop/update_dialog.cc" line="140"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>接続中のすべてのセッションが終了します。更新が完了するまで接続を確立できません。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="141"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>All unsaved data will be lost.</source>
         <translation>保存されていないデータはすべて失われます。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="142"/>
+        <location filename="../common/desktop/update_dialog.cc" line="143"/>
         <source>Continue?</source>
         <translation>続行しますか？</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="177"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>更新のインストール中にエラーが発生しました: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="185"/>
-        <location filename="../common/desktop/update_dialog.cc" line="206"/>
-        <location filename="../common/desktop/update_dialog.cc" line="216"/>
-        <location filename="../common/desktop/update_dialog.cc" line="238"/>
+        <location filename="../common/desktop/update_dialog.cc" line="186"/>
+        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <location filename="../common/desktop/update_dialog.cc" line="217"/>
+        <location filename="../common/desktop/update_dialog.cc" line="239"/>
         <source>An error occurred while installing the update.</source>
         <translation>更新のインストール中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="204"/>
+        <location filename="../common/desktop/update_dialog.cc" line="205"/>
         <source>The downloaded file is damaged.</source>
         <translation>ダウンロードしたファイルが破損しています。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Unknown</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="286"/>
         <source>Error retrieving update information.</source>
         <translation>更新情報の取得中にエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="295"/>
+        <location filename="../common/desktop/update_dialog.cc" line="296"/>
         <source>Installing the update. Please wait.</source>
         <translation>更新をインストールしています。お待ちください。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="260"/>
+        <location filename="../common/desktop/update_dialog.cc" line="261"/>
         <source>No updates available.</source>
         <translation>利用可能な更新はありません。</translation>
     </message>
