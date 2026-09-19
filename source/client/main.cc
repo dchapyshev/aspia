@@ -119,7 +119,9 @@ int main(int argc, char* argv[])
             application.setLocale(locale);
 
             UpdateDialog dialog(server, "client", UpdateDialog::Action::INSTALL);
-            return dialog.exec() == QDialog::Accepted ? 0 : 1;
+
+            return dialog.exec() == QDialog::Accepted ?
+                UpdateDialog::kInstalledExitCode : UpdateDialog::kClosedExitCode;
         }
     }
 #endif // !defined(Q_OS_ANDROID)

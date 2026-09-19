@@ -175,6 +175,10 @@ public:
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
+// What pkexec returns when the user dismissed the authentication dialog. Everything else it
+// returns for itself, 127 among it, is a failure to report.
+const int kPkexecDismissed = 126;
+
 //--------------------------------------------------------------------------------------------------
 // Grants or revokes access to the running X display for the root user via the X SECURITY extension
 // (the same operation as "xhost +SI:localuser:root"). wlroots/labwc Xwayland authorizes clients by the
@@ -228,7 +232,21 @@ public:
 
             setRootDisplayAccess(false);
             process->deleteLater();
-            on_finished(exit_code);
+
+            if (exit_code == kPkexecDismissed)
+            {
+                // pkexec never started the application, this code is its own.
+                on_finished(kDeclinedExitCode);
+            }
+            else if (exit_status != QProcess::NormalExit)
+            {
+                // A process killed by a signal reports the signal instead of a code of its own.
+                on_finished(kNoExitCode);
+            }
+            else
+            {
+                on_finished(exit_code);
+            }
         });
 
         // A process that failed to start reports no exit code and emits nothing else, so the caller

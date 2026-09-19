@@ -217,13 +217,16 @@ void UpdateDialog::startPrivilegedInstance()
     {
         LOG(INFO) << "Privileged instance finished with code:" << exit_code;
 
-        if (exit_code == 0)
+        if (exit_code == kInstalledExitCode)
         {
             accept();
             return;
         }
 
         setInstalling(false);
+
+        if (exit_code != kClosedExitCode && exit_code != ElevateUtil::kDeclinedExitCode)
+            MsgBox::warning(this, tr("An error occurred while installing the update."));
     });
 
     if (!started)

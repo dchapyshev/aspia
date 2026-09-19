@@ -46,6 +46,11 @@ public:
         INSTALL // Install it. The user has decided already, in the process that started this one.
     };
 
+    // What the process started to install an update returns to the one that started it. Any other
+    // code means it never got as far as its own window and has reported nothing to the user.
+    static constexpr int kInstalledExitCode = 0;
+    static constexpr int kClosedExitCode = 1;
+
     UpdateDialog(const QString& server, const QString& package, Action action,
                  QWidget* parent = nullptr);
     ~UpdateDialog() final;

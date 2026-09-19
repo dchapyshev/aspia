@@ -40,6 +40,10 @@ public:
     // read. On macOS the mechanism reports completion without a code, so it is always this.
     static constexpr int kNoExitCode = -1;
 
+    // Reported instead of an exit code when the user refused to give the privileges. On Windows
+    // this never reaches |on_finished|, the launch itself fails and runElevated returns false.
+    static constexpr int kDeclinedExitCode = -2;
+
     // Creates the implementation for the current platform, or nullptr if elevation is not supported.
     static ScopedQPointer<ElevateUtil> create(QObject* parent = nullptr);
 
