@@ -192,7 +192,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     ui->combobox_onetime_pass_change->addItem(tr("Every 1 hour"), 60);
     ui->combobox_onetime_pass_change->addItem(tr("Every 6 hours"), 360);
     ui->combobox_onetime_pass_change->addItem(tr("Every 12 hours"), 720);
-    ui->combobox_onetime_pass_change->addItem(tr("Every 24 hours"), 1440);
 
     connect(ui->combobox_onetime_pass_change, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()

@@ -240,7 +240,7 @@ TEST_F(HostDatabaseTest, SettingsSurviveAWriteAndRead)
 TEST_F(HostDatabaseTest, OneTimePasswordSettingsAreKeptInBounds)
 {
     ASSERT_TRUE(db_->setOneTimePasswordExpire(Hours(48)));
-    EXPECT_EQ(db_->oneTimePasswordExpire(), Hours(24));
+    EXPECT_EQ(db_->oneTimePasswordExpire(), Hours(12));
 
     ASSERT_TRUE(db_->setOneTimePasswordExpire(MilliSeconds(-1)));
     EXPECT_EQ(db_->oneTimePasswordExpire(), MilliSeconds(0));

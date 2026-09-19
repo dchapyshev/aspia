@@ -137,6 +137,13 @@ void doHostMigrate(const QJsonDocument& doc)
     if (root_object.contains("OneTimePasswordExpire"))
     {
         qint64 value = root_object["OneTimePasswordExpire"].toString().toLongLong();
+
+        if (value > 12 * 60 * 60 * 1000)
+        {
+            LOG(INFO) << "OneTimePasswordExpire" << value << "is too long, lowered to 12 hours";
+            value = 12 * 60 * 60 * 1000;
+        }
+
         LOG(INFO) << "OneTimePasswordExpire:" << value;
         db.setOneTimePasswordExpire(MilliSeconds(value));
     }

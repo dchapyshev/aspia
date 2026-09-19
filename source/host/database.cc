@@ -503,7 +503,7 @@ MilliSeconds Database::oneTimePasswordExpire() const
 {
     static const MilliSeconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
     static const MilliSeconds kMinValue { 0 };
-    static const MilliSeconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
+    static const MilliSeconds kMaxValue { 12 * 60 * 60 * 1000 }; // 12 hours.
 
     bool ok = false;
     qint64 value = readSetting(kSettingOneTimePasswordExpire).toLongLong(&ok);

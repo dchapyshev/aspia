@@ -174,7 +174,7 @@ bool importDatabase(const QJsonObject& obj)
     if (obj.contains(kOneTimePassword))
         db.setOneTimePassword(obj[kOneTimePassword].toBool());
     if (obj.contains(kOneTimePasswordExpire))
-        db.setOneTimePasswordExpire(MilliSeconds(obj[kOneTimePasswordExpire].toInteger()));
+        db.setOneTimePasswordExpire(qMin(MilliSeconds(obj[kOneTimePasswordExpire].toInteger()), MilliSeconds(Hours(12))));
     if (obj.contains(kOneTimePasswordLength))
         db.setOneTimePasswordLength(qMax(obj[kOneTimePasswordLength].toInt(), 8));
     if (obj.contains(kOneTimePasswordCharacters))
