@@ -47,6 +47,7 @@
     <CustomAction Id="RollbackInstallService" FileKey="aspia_relay.exe" ExeCommand="--remove" Execute="rollback" Impersonate="no" Return="ignore" />
     <CustomAction Id="RemoveService" FileKey="aspia_relay.exe" ExeCommand="--remove" Execute="deferred" Impersonate="no" Return="ignore" />
     <CustomAction Id="RollbackRemoveService" FileKey="aspia_relay.exe" ExeCommand="--install" Execute="rollback" Impersonate="no" Return="ignore" />
+    <CustomAction Id="StartService" FileKey="aspia_relay.exe" ExeCommand="--start" Execute="deferred" Impersonate="no" Return="ignore" />
 
     <InstallExecuteSequence>
         <!-- Remove the service while its files are still on disk. -->
@@ -55,6 +56,11 @@
         <!-- Install the service once its files have been laid down. -->
         <Custom Action="RollbackInstallService" Before="InstallService">NOT Installed</Custom>
         <Custom Action="InstallService" After="InstallFiles">NOT Installed</Custom>
+        <!-- An update takes the service down together with the package it replaces, so it is
+             started again. A first installation leaves it stopped: there is no configuration yet
+             and the administrator starts the service once there is one. WIX_UPGRADE_DETECTED is
+             set by MajorUpgrade when an older version is found. -->
+        <Custom Action="StartService" After="InstallService">NOT Installed AND WIX_UPGRADE_DETECTED</Custom>
     </InstallExecuteSequence>
 
     <!-- Product features -->
