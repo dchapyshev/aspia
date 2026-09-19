@@ -373,6 +373,8 @@ bool UpdateInstaller::startInstaller()
     QString program = arguments.takeFirst();
 
     process->start(program, arguments);
+    process->closeWriteChannel();
+
     return true;
 #else
     return false;
