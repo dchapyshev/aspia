@@ -44,6 +44,10 @@ UpdateWidget::UpdateWidget(const QString& package, QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
+    // The package of the update installed before this run is still in the private directory of the
+    // application, and nothing is reading it any more.
+    UpdateInstaller::removeLeftovers();
+
     label_status_ = new Label(QString(), Label::Role::BODY);
     label_status_->setWordWrap(true);
 

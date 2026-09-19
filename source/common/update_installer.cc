@@ -52,6 +52,11 @@ namespace {
 
 const qint64 kHashBlockSize = 1024 * 1024;
 
+#if defined(Q_OS_ANDROID)
+// Every package waits in a directory of its own named after this.
+const char kPackagePrefix[] = "aspia_update_";
+#endif // defined(Q_OS_ANDROID)
+
 //--------------------------------------------------------------------------------------------------
 bool hasExpectedHash(const QString& file_path, const QString& expected)
 {
@@ -120,16 +125,12 @@ QString createPrivateDirectory()
 
     return path;
 #elif defined(Q_OS_ANDROID)
-    QDir directory(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-
-    // The installer of the system reads the package after this process has let it go, so the
-    // package of the previous update is still there and is taken away here.
-    for (const QString& name : directory.entryList({ "aspia_update_*" }, QDir::Dirs))
-        QDir(directory.filePath(name)).removeRecursively();
+    UpdateInstaller::removeLeftovers();
 
     // The private directory of the application is private by construction, and the package is
     // handed to the installer of the system through the file provider and not by its path.
-    QString path = directory.filePath("aspia_update_" + QString::fromLatin1(Random::byteArray(16).toHex()));
+    QString path = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+        .filePath(kPackagePrefix + QString::fromLatin1(Random::byteArray(16).toHex()));
 
     if (!QDir().mkpath(path))
     {
@@ -256,6 +257,21 @@ void UpdateInstaller::openInstallPermission()
     // FLAG_ACTIVITY_NEW_TASK, required to start an activity from a non-activity context.
     intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", 0x10000000);
     context.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
+#endif // defined(Q_OS_ANDROID)
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void UpdateInstaller::removeLeftovers()
+{
+#if defined(Q_OS_ANDROID)
+    QDir directory(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+    for (const QString& name : directory.entryList({ QString(kPackagePrefix) + "*" }, QDir::Dirs))
+    {
+        LOG(INFO) << "Removing the package of a previous update:" << name;
+        QDir(directory.filePath(name)).removeRecursively();
+    }
 #endif // defined(Q_OS_ANDROID)
 }
 

@@ -56,6 +56,11 @@ public:
     static bool canInstall();
     static void openInstallPermission();
 
+    // Removes the packages the updates before this one left behind. The installer of the system
+    // reads the package after this process has let it go, so it cannot be taken away when the
+    // installation starts.
+    static void removeLeftovers();
+
     // Creates the file the package of |update_info| is to be downloaded into and returns its path.
     // An empty string is returned when it could not be created.
     QString createPackageFile(const UpdateInfo& update_info);
