@@ -11541,11 +11541,6 @@ Credentials imported: %5</source>
         <translation>下载更新时发生错误：%1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>正在安装更新。请稍候。</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>下载的文件已损坏。</translation>

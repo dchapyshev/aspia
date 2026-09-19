@@ -11575,11 +11575,6 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Det oppstod en feil under nedlasting av oppdateringen: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Installerer oppdateringen. Vent litt.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Den nedlastede filen er skadet.</translation>

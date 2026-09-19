@@ -11575,11 +11575,6 @@ Credentials imported: %5</source>
         <translation>Παρουσιάστηκε σφάλμα κατά τη λήψη της ενημέρωσης: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Εγκατάσταση ενημέρωσης. Περιμένετε.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Το αρχείο που λήφθηκε είναι κατεστραμμένο.</translation>

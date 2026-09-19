@@ -11575,11 +11575,6 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Beim Herunterladen des Updates ist ein Fehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Das Update wird installiert. Bitte warten.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Die heruntergeladene Datei ist beschädigt.</translation>

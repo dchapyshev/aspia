@@ -188,14 +188,13 @@ void UpdateWidget::onDownloadCompleted()
     UpdateInstaller::Result result = installer_->install();
     installer_.reset();
 
+    button_update_->setEnabled(true);
+
     if (result == UpdateInstaller::Result::STARTED)
     {
-        // The installer of the system is in front now and asks for the rest by itself.
-        label_status_->setText(tr("Installing the update. Please wait."));
+        label_status_->setText(tr("Version %1 is available.").arg(update_info_.version().toString()));
         return;
     }
-
-    button_update_->setEnabled(true);
 
     if (result == UpdateInstaller::Result::DAMAGED)
         label_status_->setText(tr("The downloaded file is damaged."));

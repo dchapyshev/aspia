@@ -11575,11 +11575,6 @@ Credenciais importadas: %5</translation>
         <translation>Ocorreu um erro ao baixar a atualização: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Instalando a atualização. Aguarde.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>O arquivo baixado está corrompido.</translation>

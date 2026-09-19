@@ -11575,11 +11575,6 @@ Credenciales importadas: %5</translation>
         <translation>Se produjo un error al descargar la actualización: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Instalando la actualización. Espere.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>El archivo descargado está dañado.</translation>

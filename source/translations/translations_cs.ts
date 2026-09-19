@@ -11609,11 +11609,6 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Při stahování aktualizace došlo k chybě: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Probíhá instalace aktualizace. Čekejte prosím.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Stažený soubor je poškozen.</translation>

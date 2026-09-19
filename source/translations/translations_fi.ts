@@ -11575,11 +11575,6 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Päivityksen latauksessa tapahtui virhe: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Asennetaan päivitystä. Odota hetki.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Ladattu tiedosto on vioittunut.</translation>

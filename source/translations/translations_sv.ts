@@ -11575,11 +11575,6 @@ Importerade inloggningsuppgifter: %5</translation>
         <translation>Ett fel uppstod vid nedladdning av uppdateringen: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Installerar uppdateringen. Vänligen vänta.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Den nedladdade filen är skadad.</translation>

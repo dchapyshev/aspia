@@ -11575,11 +11575,6 @@ Importerede legitimationsoplysninger: %5</translation>
         <translation>Der opstod en fejl under download af opdateringen: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Installerer opdateringen. Vent venligst.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Den downloadede fil er beskadiget.</translation>

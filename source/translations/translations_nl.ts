@@ -11575,11 +11575,6 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Er is een fout opgetreden bij het downloaden van de update: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>De update wordt geïnstalleerd. Even geduld.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Het gedownloade bestand is beschadigd.</translation>

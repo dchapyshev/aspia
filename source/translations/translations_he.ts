@@ -11575,11 +11575,6 @@ Credentials imported: %5</source>
         <translation>אירעה שגיאה בעת הורדת העדכון: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>מתקין את העדכון. נא להמתין.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>הקובץ שהורד פגום.</translation>

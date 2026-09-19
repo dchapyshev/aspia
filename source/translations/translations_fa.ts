@@ -11541,11 +11541,6 @@ Credentials imported: %5</source>
         <translation>هنگام دانلود به‌روزرسانی خطایی رخ داد: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>در حال نصب به‌روزرسانی. لطفاً صبر کنید.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>فایل دانلودشده آسیب دیده است.</translation>

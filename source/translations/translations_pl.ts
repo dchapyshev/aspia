@@ -11609,11 +11609,6 @@ Zaimportowane dane logowania: %5</translation>
         <translation>Wystąpił błąd podczas pobierania aktualizacji: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="178"/>
-        <source>Installing the update. Please wait.</source>
-        <translation>Instalowanie aktualizacji. Proszę czekać.</translation>
-    </message>
-    <message>
         <location filename="../common/android/update_widget.cc" line="185"/>
         <source>The downloaded file is damaged.</source>
         <translation>Pobrany plik jest uszkodzony.</translation>
