@@ -58,6 +58,11 @@ public:
     virtual bool runElevated(const QStringList& arguments, quintptr parent_window,
                              std::function<void(int)> on_finished) = 0;
 
+    // The other half of runElevated, called in the process it started. Where the mechanism of the
+    // platform carries the exit code by itself this does nothing; where it does not, as on macOS,
+    // this is how runElevated gets the code it reports.
+    static void reportExitCode(int exit_code);
+
 private:
     Q_DISABLE_COPY_MOVE(ElevateUtil)
 };

@@ -55,6 +55,9 @@ public:
                  QWidget* parent = nullptr);
     ~UpdateDialog() final;
 
+    // QDialog implementation.
+    void done(int result) final;
+
 protected:
     // QDialog implementation.
     void keyPressEvent(QKeyEvent* event) final;

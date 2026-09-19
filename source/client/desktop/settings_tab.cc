@@ -125,9 +125,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
     add_button(button_id++, ":/img/workstation.svg", tr("Desktop"));
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
-#endif
 
     // Limit content width and center horizontally.
     constexpr int kMaxContentWidth = 960;
@@ -211,7 +209,6 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_record_dir->setText(settings.recordingPath());
 
     // Update page.
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
 
     ui->combobox_update_channel->addItem(tr("Stable"), kStableUpdateChannel);
@@ -220,7 +217,6 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     int channel_index = ui->combobox_update_channel->findData(db.updateChannel());
     ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
-#endif
 
     // Wire signals after initial values are loaded to avoid spurious saves.
     connect(category_group_, &QButtonGroup::idClicked, this, &SettingsTab::onCategoryChanged);
@@ -255,12 +251,10 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
 
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onUpdateChannelChanged);
     connect(ui->button_check_for_updates, &QPushButton::clicked, this, &SettingsTab::onCheckForUpdatesClicked);
-#endif
 
     if (QAbstractButton* first = category_group_->button(0))
         first->setChecked(true);
@@ -455,31 +449,25 @@ void SettingsTab::onChangeMasterPassword()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onCheckUpdatesChanged()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Check updates changed";
     Database::instance().setCheckUpdatesEnabled(ui->checkbox_check_updates->isChecked());
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onUpdateChannelChanged()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     QString channel = ui->combobox_update_channel->currentData().toString();
     LOG(INFO) << "[ACTION] Update channel changed:" << channel;
     Database::instance().setUpdateChannel(channel);
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onCheckForUpdatesClicked()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Check for updates";
     if (UpdateDialog(ui->combobox_update_channel->currentData().toString(), "client",
                      UpdateDialog::Action::ASK, this).exec() == QDialog::Accepted)
         GuiApplication::quit();
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------

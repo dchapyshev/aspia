@@ -34,11 +34,12 @@
 #include "base/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 #include <sys/stat.h>
+#include <unistd.h>
 #include <cstdlib>
 #include <QProcess>
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 
 namespace {
 
@@ -111,7 +112,7 @@ QString createPrivateDirectory()
     }
 
     return path;
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     QByteArray name = "/var/tmp/aspia_update_XXXXXX";
     if (!mkdtemp(name.data()))
     {
@@ -168,6 +169,8 @@ bool UpdateInstaller::isSupported(const QString& format)
         return !QStandardPaths::findExecutable("dnf").isEmpty();
 
     return false;
+#elif defined(Q_OS_MACOS)
+    return format == "pkg";
 #else
     Q_UNUSED(format);
     return false;
@@ -276,9 +279,13 @@ bool UpdateInstaller::startInstaller()
     });
 
     return true;
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     QStringList arguments;
 
+#if defined(Q_OS_MACOS)
+    // The installer of the system puts the package where the package itself says it goes.
+    arguments << "installer" << "-pkg" << file_path_ << "-target" << "/";
+#else
     // Both managers install a local file and pull in what it depends on.
     if (update_info_.format() == "deb")
         arguments << "apt-get" << "install" << "-y" << file_path_;
@@ -289,9 +296,11 @@ bool UpdateInstaller::startInstaller()
         LOG(ERROR) << "No package manager for format:" << update_info_.format();
         return false;
     }
+#endif // defined(Q_OS_MACOS)
 
     if (mode_ == Mode::SERVICE)
     {
+#if defined(Q_OS_LINUX)
         // The package restarts the service, and systemd kills the whole control group of a unit
         // it stops, so the installer dies with it. A transient unit of its own outlives that and
         // the install finishes even though it is the updated service that started it.
@@ -300,6 +309,7 @@ bool UpdateInstaller::startInstaller()
             arguments = QStringList() << "systemd-run" << "--collect" << "--quiet"
                                       << "--unit=aspia-host-update" << arguments;
         }
+#endif // defined(Q_OS_LINUX)
 
         QString program = arguments.takeFirst();
 
@@ -331,7 +341,14 @@ bool UpdateInstaller::startInstaller()
         LOG(INFO) << "Installer finished with exit code:" << exit_code
                   << "(status:" << exit_status << ")";
 
+        // The package managers of Linux report the failure on the standard error, the installer
+        // of macOS on the standard output, where its last line is the one that matters.
         QString error = QString::fromLocal8Bit(process->readAllStandardError()).trimmed();
+        if (error.isEmpty())
+        {
+            error = QString::fromLocal8Bit(process->readAllStandardOutput())
+                .trimmed().section('\n', -1);
+        }
 
         process->deleteLater();
         cleanup();

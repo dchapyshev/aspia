@@ -78,6 +78,17 @@ UpdateDialog::~UpdateDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
+void UpdateDialog::done(int result)
+{
+    // An installation is what another process started this one for, so that process is told how it
+    // ended before the answer is gone.
+    if (action_ == Action::INSTALL)
+        ElevateUtil::reportExitCode(result == Accepted ? kInstalledExitCode : kClosedExitCode);
+
+    QDialog::done(result);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UpdateDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)

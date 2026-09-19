@@ -24,12 +24,12 @@
 #include "common/update_info.h"
 #include "common/update_installer.h"
 
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#if !defined(Q_OS_ANDROID)
 #include <ctime>
 
 #include "host/host_storage.h"
 #include "host/system_settings.h"
-#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#endif // !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()
@@ -47,7 +47,7 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onCheckUpdates()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#if !defined(Q_OS_ANDROID)
     if (update_checker_)
     {
         LOG(INFO) << "Update check already in progress";
@@ -63,7 +63,7 @@ void UpdateWorker::onCheckUpdates()
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
-#endif // defined(Q_OS_WINDOWS)
+#endif // !defined(Q_OS_ANDROID)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,13 +172,13 @@ void UpdateWorker::onFileDownloaderCompleted()
 {
     CHECK(update_downloader_);
 
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#if !defined(Q_OS_ANDROID)
     CHECK(update_installer_);
 
     // Nothing waits for the installer here. The package restarts the service that started it.
     update_installer_->install();
     update_installer_.reset();
-#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#endif // !defined(Q_OS_ANDROID)
 
     update_downloader_->disconnect(this);
     update_downloader_.reset();

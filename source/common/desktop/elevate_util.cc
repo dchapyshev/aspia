@@ -42,6 +42,7 @@
 
 #if defined(Q_OS_MACOS)
 #include <unistd.h>
+#include <cstdio>
 #include <vector>
 #include <QSocketNotifier>
 #include <Security/Authorization.h>
@@ -278,6 +279,27 @@ public:
 
 #if defined(Q_OS_MACOS)
 
+// What the started process writes into the pipe to say how it ended.
+const char kExitCodeMark[] = "aspia exit code ";
+
+//--------------------------------------------------------------------------------------------------
+int exitCodeFromOutput(const QByteArray& output)
+{
+    qsizetype position = output.lastIndexOf(kExitCodeMark);
+    if (position < 0)
+        return ElevateUtil::kNoExitCode;
+
+    QByteArray tail = output.mid(position + static_cast<qsizetype>(qstrlen(kExitCodeMark)));
+    qsizetype end = tail.indexOf('\n');
+    if (end >= 0)
+        tail.truncate(end);
+
+    bool converted = false;
+    int exit_code = tail.trimmed().toInt(&converted);
+
+    return converted ? exit_code : ElevateUtil::kNoExitCode;
+}
+
 //--------------------------------------------------------------------------------------------------
 class MacElevateUtil final : public ElevateUtil
 {
@@ -343,23 +365,27 @@ public:
             return false;
         }
 
-        // The privileged tool's stdout is connected to |pipe|; it and the config dialog that inherits
-        // the descriptor keep it open until the dialog closes. Watch for EOF to learn when it finished.
+        // The privileged tool's stdout is connected to |pipe|; it and the dialog that inherits the
+        // descriptor keep it open until the dialog closes. Watch for EOF to learn when it finished,
+        // and keep what was written, because the exit code is in there.
         QSocketNotifier* notifier = new QSocketNotifier(fileno(pipe), QSocketNotifier::Read, this);
         connect(notifier, &QSocketNotifier::activated, this,
-                [notifier, pipe, authorization, on_finished]()
+                [notifier, pipe, authorization, on_finished, output = QByteArray()]() mutable
         {
             char buffer[256];
-            if (::read(fileno(pipe), buffer, sizeof(buffer)) > 0)
-                return; // Drain any output and keep waiting for EOF.
+            ssize_t read_size = ::read(fileno(pipe), buffer, sizeof(buffer));
+            if (read_size > 0)
+            {
+                output.append(buffer, read_size);
+                return;
+            }
 
             notifier->setEnabled(false);
             notifier->deleteLater();
             fclose(pipe);
             AuthorizationFree(authorization, kAuthorizationFlagDefaults);
 
-            // Completion arrives as the end of the pipe, so there is no exit code to report.
-            on_finished(kNoExitCode);
+            on_finished(exitCodeFromOutput(output));
         });
 
         return true;
@@ -407,4 +433,18 @@ bool ElevateUtil::isPrivileged()
 #else
     return false;
 #endif // defined(Q_OS_*)
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void ElevateUtil::reportExitCode(int exit_code)
+{
+#if defined(Q_OS_MACOS)
+    // The mechanism of macOS ends with the pipe of this process and carries nothing else, so the
+    // code goes into that pipe.
+    std::printf("%s%d\n", kExitCodeMark, exit_code);
+    std::fflush(stdout);
+#else
+    Q_UNUSED(exit_code);
+#endif // defined(Q_OS_MACOS)
 }
