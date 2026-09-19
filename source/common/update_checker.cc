@@ -136,6 +136,8 @@ void UpdateChecker::check()
     QString format;
 #if defined(Q_OS_WINDOWS)
     format = "msi";
+#elif defined(Q_OS_ANDROID)
+    format = "apk";
 #elif defined(Q_OS_LINUX)
     if (!QStandardPaths::findExecutable("apt-get").isEmpty())
         format = "deb";
@@ -143,8 +145,6 @@ void UpdateChecker::check()
         format = "rpm";
 #elif defined(Q_OS_MACOS)
     format = "pkg";
-#elif defined(Q_OS_ANDROID)
-    format = "apk";
 #endif
 
     QByteArray rules = downloadSigned(server_ + "/latest.json");

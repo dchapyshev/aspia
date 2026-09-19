@@ -38,7 +38,7 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onPrepare()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#if defined(Q_OS_WINDOWS) || (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID))
     Database& db = Database::instance();
 
     if (!db.isCheckUpdatesEnabled())
@@ -53,19 +53,19 @@ void UpdateWorker::onPrepare()
             this, &UpdateWorker::onUpdateCheckFinished);
     connect(update_checker_, &UpdateChecker::sig_checkFailed,
             this, &UpdateWorker::onUpdateCheckFailed);
-#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#endif // defined(Q_OS_WINDOWS) || (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID))
 }
 
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onStart()
 {
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#if defined(Q_OS_WINDOWS) || (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID))
     if (!update_checker_)
         return;
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
-#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+#endif // defined(Q_OS_WINDOWS) || (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID))
 }
 
 //--------------------------------------------------------------------------------------------------
