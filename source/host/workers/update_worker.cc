@@ -176,7 +176,13 @@ void UpdateWorker::onFileDownloaderCompleted()
     CHECK(update_installer_);
 
     // Nothing waits for the installer here. The package restarts the service that started it.
-    update_installer_->install();
+    UpdateInstaller::Result result = update_installer_->install();
+
+    if (result == UpdateInstaller::Result::DAMAGED)
+        LOG(ERROR) << "Update package does not match the manifest";
+    else if (result == UpdateInstaller::Result::FAILED)
+        LOG(ERROR) << "Unable to start the installation of the update";
+
     update_installer_.reset();
 #endif // !defined(Q_OS_ANDROID)
 
