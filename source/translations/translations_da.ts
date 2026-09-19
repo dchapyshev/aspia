@@ -3243,11 +3243,6 @@ Adgangskode: %2</translation>
         <translation>Vis ingen meddelelser under import og eksport.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Åbner dialogboksen for søgning efter opdateringer.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Åbner dialogboksen med indstillinger.</translation>

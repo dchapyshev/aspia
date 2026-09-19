@@ -20,11 +20,11 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "proto/key_exchange.h"
@@ -166,7 +166,7 @@ void RouterWorker::startConnection(qint64 router_id)
 
     LOG(INFO) << "Connecting to router" << router_id << config->address();
 
-    const Address addr = Address::fromString(config->address(), DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    const Address addr = Address::fromString(config->address(), kDefaultRouterClientTcpPort);
 
     auto* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);

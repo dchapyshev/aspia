@@ -3243,11 +3243,6 @@ Wachtwoord: %2</translation>
         <translation>Geen berichten weergeven tijdens importeren en exporteren.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Het dialoogvenster voor updatecontrole openen.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Het instellingenvenster openen.</translation>

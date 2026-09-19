@@ -3243,11 +3243,6 @@ Password: %2</source>
         <translation>Να μην εμφανίζονται μηνύματα κατά την εισαγωγή και την εξαγωγή.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Κλήση του παραθύρου διαλόγου ελέγχου ενημερώσεων.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Κλήση του παραθύρου διαλόγου ρυθμίσεων.</translation>

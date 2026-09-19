@@ -25,4 +25,4 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_relay.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Relay Service"
 
-#include "build/version.rc"
+#include "version.rc"

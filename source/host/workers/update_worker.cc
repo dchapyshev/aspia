@@ -19,24 +19,17 @@
 #include "host/workers/update_worker.h"
 
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
 
-#if defined(Q_OS_WINDOWS)
-#include <QDir>
-#include <QFile>
-#include <QStandardPaths>
-
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 #include <ctime>
 
-#include "base/process_util.h"
-#include "base/crypto/random.h"
-#include "base/files/file_util.h"
+#include "common/update_installer.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
-#endif // defined(Q_OS_WINDOWS)
+#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()
@@ -54,7 +47,7 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onCheckUpdates()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     if (update_checker_)
     {
         LOG(INFO) << "Update check already in progress";
@@ -63,8 +56,10 @@ void UpdateWorker::onCheckUpdates()
 
     update_checker_ = new UpdateChecker(SystemSettings().updateServer(), "host", this);
 
-    connect(update_checker_, &UpdateChecker::sig_checkedFinished,
-            this, &UpdateWorker::onUpdateCheckedFinished);
+    connect(update_checker_, &UpdateChecker::sig_checkFinished,
+            this, &UpdateWorker::onUpdateCheckFinished);
+    connect(update_checker_, &UpdateChecker::sig_checkFailed,
+            this, &UpdateWorker::onUpdateCheckFailed);
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
@@ -93,6 +88,8 @@ void UpdateWorker::onStop()
         update_downloader_->disconnect(this);
         update_downloader_.reset();
     }
+
+    update_installer_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,37 +99,30 @@ void UpdateWorker::onTimer(TimePoint /* now */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWorker::onUpdateCheckedFinished(const QByteArray& result)
+void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
 {
     CHECK(update_checker_);
 
     do
     {
-        if (result.isEmpty())
-        {
-            LOG(ERROR) << "Error while retrieving update information";
-            break;
-        }
-
-        UpdateInfo update_info = UpdateInfo::fromXml(result);
         if (!update_info.isValid())
         {
             LOG(INFO) << "No updates available";
             break;
         }
 
-        const QVersionNumber& current_version = kCurrentVersion;
-        const QVersionNumber& update_version = update_info.version();
+        LOG(INFO) << "New version available:" << update_info.version().toString();
 
-        if (update_version <= current_version)
+        update_installer_ = new UpdateInstaller(UpdateInstaller::Mode::SERVICE, this);
+
+        QString file_path = update_installer_->createPackageFile(update_info);
+        if (file_path.isEmpty())
         {
-            LOG(INFO) << "No available updates";
+            update_installer_.reset();
             break;
         }
 
-        LOG(INFO) << "New version available:" << update_version.toString();
-
-        update_downloader_ = new HttpFileDownloader(update_info.url(), this);
+        update_downloader_ = new HttpFileDownloader(update_info.url(), file_path, this);
 
         connect(update_downloader_, &HttpFileDownloader::sig_downloadError,
                 this, &UpdateWorker::onFileDownloaderError);
@@ -150,13 +140,25 @@ void UpdateWorker::onUpdateCheckedFinished(const QByteArray& result)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWorker::onFileDownloaderError(int error_code)
+void UpdateWorker::onUpdateCheckFailed()
 {
-    LOG(ERROR) << "Unable to download update:" << error_code;
+    CHECK(update_checker_);
+
+    LOG(ERROR) << "Error while retrieving update information";
+
+    update_checker_->disconnect(this);
+    update_checker_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWorker::onFileDownloaderError(const QString& error)
+{
+    LOG(ERROR) << "Unable to download update:" << error;
     CHECK(update_downloader_);
 
     update_downloader_->disconnect(this);
     update_downloader_.reset();
+    update_installer_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -164,49 +166,13 @@ void UpdateWorker::onFileDownloaderCompleted()
 {
     CHECK(update_downloader_);
 
-#if defined(Q_OS_WINDOWS)
-    do
-    {
-        QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        if (file_path.isEmpty())
-        {
-            LOG(ERROR) << "Unable to get temp directory";
-            break;
-        }
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
+    CHECK(update_installer_);
 
-        QDir().mkpath(file_path);
-
-        QString file_name =
-            "/aspia_host_" + QString::fromLatin1(Random::byteArray(16).toHex()) + ".msi";
-
-        file_path = QDir::toNativeSeparators(file_path.append(file_name));
-
-        if (!writeFile(file_path, update_downloader_->data()))
-        {
-            LOG(ERROR) << "Unable to write file" << file_path;
-            break;
-        }
-
-        QString arguments;
-
-        arguments += "/i "; // Normal install.
-        arguments += file_path; // MSI package file.
-        arguments += " /qn"; // No UI during the installation process.
-
-        if (!ProcessUtil::createProcess("msiexec", arguments, ProcessUtil::ExecuteMode::ELEVATE))
-        {
-            LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
-
-            // If the update fails, delete the temporary file.
-            if (!QFile::remove(file_path))
-                LOG(ERROR) << "Unable to remove installer file";
-            break;
-        }
-
-        LOG(INFO) << "Update process started (cmd:" << arguments << ")";
-    }
-    while (false);
-#endif // defined(Q_OS_WINDOWS)
+    // Nothing waits for the installer here. The package restarts the service that started it.
+    update_installer_->install();
+    update_installer_.reset();
+#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 
     update_downloader_->disconnect(this);
     update_downloader_.reset();

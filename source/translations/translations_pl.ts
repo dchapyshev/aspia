@@ -3253,11 +3253,6 @@ Hasło: %2</translation>
         <translation>Nie wyświetlaj żadnych komunikatów podczas importu i eksportu.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Wywołanie okna sprawdzania aktualizacji.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Wywołanie okna ustawień.</translation>

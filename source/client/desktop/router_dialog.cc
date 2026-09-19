@@ -21,11 +21,11 @@
 #include <QAbstractButton>
 #include <QComboBox>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "common/desktop/msg_box.h"
@@ -99,7 +99,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     QString address_text = ui->edit_address->text();
-    Address address = Address::fromString(address_text, DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    Address address = Address::fromString(address_text, kDefaultRouterClientTcpPort);
     if (!address.isValid())
     {
         LOG(ERROR) << "Invalid router address entered";

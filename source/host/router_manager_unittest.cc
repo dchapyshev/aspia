@@ -37,6 +37,7 @@
 #include <thread>
 #include <vector>
 
+#include "base/build_config.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
@@ -45,7 +46,6 @@
 #include "base/peer/relay_peer.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
-#include "build/build_config.h"
 #include "host/database.h"
 #include "host/host_storage.h"
 #include "proto/key_exchange.h"
@@ -531,7 +531,7 @@ protected:
 
             // The default port must differ from the stand port, or toString() would omit the
             // port and the read would put the standard one back.
-            Address address(DEFAULT_ROUTER_HOST_TCP_PORT);
+            Address address(kDefaultRouterHostTcpPort);
             address.setHost("127.0.0.1");
             address.setPort(router_port_);
 

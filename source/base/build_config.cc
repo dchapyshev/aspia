@@ -1,4 +1,3 @@
-<?php
 //
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
@@ -16,18 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
-?>
 
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Aspia Update Server</title>
-	</head>
-	<body>
-		<table>
-			<tr>
-				<td>Welcome to Aspia Update Server</td>
-			</tr>
-		</table>
-	</body>
-</html>
+#include "base/build_config.h"
+
+const std::array<QByteArrayView, 1> kUpdatePublicKeys =
+{
+    QByteArrayView("\xb3\xe3\xf0\x61\x84\x2f\x1b\x29\x72\x65\x78\xe0\x9b\xcb\x1c\x5f"
+                   "\x13\xa5\xe0\x65\xce\x97\xc3\xec\x53\x90\x0e\xbd\x67\xcf\x76\x0a", 32)
+};

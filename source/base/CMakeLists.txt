@@ -21,6 +21,8 @@ list(APPEND SOURCE_BASE
     aligned_memory.h
     bitset.h
     bucket_pool.h
+    build_config.cc
+    build_config.h
     core_application.cc
     core_application.h
     cpuid_util.cc

@@ -3233,11 +3233,6 @@ Password: %2</source>
         <translation>导入和导出期间不显示任何消息。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>调用更新检查对话框。</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>调用设置对话框。</translation>

@@ -20,7 +20,6 @@
 #define COMMON_DESKTOP_DOWNLOAD_DIALOG_H
 
 #include <QDialog>
-#include <QFile>
 
 #include <memory>
 
@@ -35,18 +34,17 @@ class DownloadDialog final : public QDialog
     Q_OBJECT
 
 public:
-    DownloadDialog(const QString& url, QFile& file, QWidget* parent = nullptr);
+    DownloadDialog(const QString& url, const QString& file_path, QWidget* parent = nullptr);
     ~DownloadDialog() final;
 
 private slots:
-    void onFileDownloaderError(int error_code);
+    void onFileDownloaderError(const QString& error);
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
 
 private:
     std::unique_ptr<Ui::DownloadDialog> ui;
     std::unique_ptr<HttpFileDownloader> downloader_ = nullptr;
-    QFile& file_;
 
     Q_DISABLE_COPY_MOVE(DownloadDialog)
 };

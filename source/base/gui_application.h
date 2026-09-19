@@ -69,6 +69,7 @@ public:
     using LocaleList = QList<Locale>;
 
     LocaleList localeList() const;
+    QString locale() const { return locale_; }
     void setLocale(const QString& locale);
     bool hasLocale(const QString& locale);
 
@@ -109,6 +110,7 @@ private:
 
     ScopedQPointer<WorkerManager> worker_manager_;
 
+    QString locale_;
     QHash<QString, QStringList> locale_list_;
     QList<QTranslator*> translator_list_;
 

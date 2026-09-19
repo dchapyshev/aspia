@@ -25,10 +25,10 @@
 #include <QJsonObject>
 #include <QSaveFile>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "host/database.h"
 #include "host/system_settings.h"
 
@@ -162,7 +162,7 @@ bool importDatabase(const QJsonObject& obj)
     if (obj.contains(kRouterEnabled))
         db.setRouterEnabled(obj[kRouterEnabled].toBool());
     if (obj.contains(kRouterAddress))
-        db.setRouterAddress(Address::fromString(obj[kRouterAddress].toString(), DEFAULT_ROUTER_HOST_TCP_PORT));
+        db.setRouterAddress(Address::fromString(obj[kRouterAddress].toString(), kDefaultRouterHostTcpPort));
     if (obj.contains(kRouterPublicKey))
         db.setRouterPublicKey(QByteArray::fromHex(obj[kRouterPublicKey].toString().toLatin1()));
     if (obj.contains(kConnectConfirmation))

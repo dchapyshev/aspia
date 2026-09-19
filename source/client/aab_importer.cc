@@ -20,6 +20,7 @@
 
 #include <QFile>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
@@ -29,7 +30,6 @@
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
-#include "build/build_config.h"
 #include "client/database.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -65,9 +65,9 @@ QString combineHostAndPort(const QString& host, quint32 port)
     if (isHostId(host))
         return host;
 
-    Address address(DEFAULT_HOST_TCP_PORT);
+    Address address(kDefaultHostTcpPort);
     address.setHost(host);
-    address.setPort(port == 0 ? DEFAULT_HOST_TCP_PORT : static_cast<quint16>(port));
+    address.setPort(port == 0 ? kDefaultHostTcpPort : static_cast<quint16>(port));
 
     return address.toString();
 }
@@ -78,10 +78,10 @@ QString routerAddress(const QString& host, quint32 port)
     // The old book always carries the port explicitly, and its default was the single router port
     // of that time. That port now serves legacy hosts only, so it is moved to the client port; a
     // port the user set by hand is kept.
-    if (port == 0 || port == DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT)
-        port = DEFAULT_ROUTER_CLIENT_TCP_PORT;
+    if (port == 0 || port == kDefaultRouterLegacyHostTcpPort)
+        port = kDefaultRouterClientTcpPort;
 
-    Address address(DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    Address address(kDefaultRouterClientTcpPort);
     address.setHost(host);
     address.setPort(static_cast<quint16>(port));
 

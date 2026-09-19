@@ -3,7 +3,7 @@
 # Builds the macOS artifacts for distribution out of already-built bundles:
 #
 #   aspia-host-<version>-universal.pkg
-#   aspia-client-<version>-universal.dmg
+#   aspia-client-<version>-universal.pkg
 #
 # The executable of each bundle is merged from the per-architecture builds with lipo, so a single
 # artifact runs on both Apple Silicon and Intel. The rest of a bundle (Info.plist, icon, localized
@@ -30,7 +30,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 HOST_APP_NAME="aspia_host.app"
-CLIENT_APP_NAME="Aspia Client.app"
+CLIENT_APP_NAME="aspia_client.app"
 
 #--------------------------------------------------------------------------------------------------
 die() { echo "error: $*" >&2; exit 1; }
@@ -113,7 +113,7 @@ VERSION="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" \
     "$WORK_DIR/$HOST_APP_NAME/Contents/Info.plist")"
 
 HOST_PKG="$OUTPUT_DIR/aspia-host-${VERSION}-${ARCH_TAG}.pkg"
-CLIENT_DMG="$OUTPUT_DIR/aspia-client-${VERSION}-${ARCH_TAG}.dmg"
+CLIENT_PKG="$OUTPUT_DIR/aspia-client-${VERSION}-${ARCH_TAG}.pkg"
 
 #--------------------------------------------------------------------------------------------------
 # Package, sign and notarize.
@@ -121,7 +121,7 @@ CLIENT_DMG="$OUTPUT_DIR/aspia-client-${VERSION}-${ARCH_TAG}.dmg"
 echo
 "$SCRIPT_DIR/build_host_pkg.sh" "$WORK_DIR/$HOST_APP_NAME" --output "$HOST_PKG"
 echo
-"$SCRIPT_DIR/build_client_dmg.sh" "$WORK_DIR/$CLIENT_APP_NAME" --output "$CLIENT_DMG"
+"$SCRIPT_DIR/build_client_pkg.sh" "$WORK_DIR/$CLIENT_APP_NAME" --output "$CLIENT_PKG"
 
 #--------------------------------------------------------------------------------------------------
 # Check the artifacts the way Gatekeeper does on the machine that receives them.
@@ -129,9 +129,9 @@ echo
 echo
 if [ -n "${NOTARIZE_KEYCHAIN_PROFILE:-}" ]; then
     xcrun stapler validate "$HOST_PKG"
-    xcrun stapler validate "$CLIENT_DMG"
+    xcrun stapler validate "$CLIENT_PKG"
     spctl --assess --type install --verbose=2 "$HOST_PKG"
-    spctl --assess --type open --context context:primary-signature --verbose=2 "$CLIENT_DMG"
+    spctl --assess --type install --verbose=2 "$CLIENT_PKG"
 else
     echo "WARNING: NOTARIZE_KEYCHAIN_PROFILE was not set, the artifacts are not notarized and"
     echo "         Gatekeeper rejects them on every Mac except this one."
@@ -140,4 +140,4 @@ fi
 echo
 echo "Done:"
 echo "  $HOST_PKG"
-echo "  $CLIENT_DMG"
+echo "  $CLIENT_PKG"

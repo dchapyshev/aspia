@@ -234,10 +234,11 @@ bool ProcessUtil::createProcess(const QString& program, const QString& arguments
 
     sei.cbSize = sizeof(sei);
     sei.lpVerb = ((mode == ExecuteMode::ELEVATE) ? L"runas" : L"open");
-    sei.lpFile = qUtf16Printable(program);
+    sei.lpFile = reinterpret_cast<const wchar_t*>(program.utf16());
     sei.hwnd = nullptr;
     sei.nShow = SW_SHOW;
-    sei.lpParameters = qUtf16Printable(arguments);
+    sei.lpParameters = reinterpret_cast<const wchar_t*>(arguments.utf16());
+    sei.fMask = SEE_MASK_NOASYNC;
 
     if (!ShellExecuteExW(&sei))
     {

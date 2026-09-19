@@ -25,9 +25,9 @@
 
 #include <algorithm>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
-#include "build/build_config.h"
 #include "relay/settings.h"
 
 namespace {
@@ -63,8 +63,8 @@ bool doConfigMigrate(const QJsonDocument& doc)
 
     // Nothing to migrate here: the old value was the port of the single listener the old router
     // used for everyone, while relays now have a listener of their own. Set the new port explicitly.
-    LOG(INFO) << "RouterPort:" << DEFAULT_ROUTER_RELAY_TCP_PORT;
-    settings.setRouterPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
+    LOG(INFO) << "RouterPort:" << kDefaultRouterRelayTcpPort;
+    settings.setRouterPort(kDefaultRouterRelayTcpPort);
 
     if (root_object.contains("RouterPublicKey"))
     {

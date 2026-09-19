@@ -23,6 +23,7 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
 #include "base/time_types.h"
@@ -30,7 +31,6 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "build/build_config.h"
 #include "host/host_user_list.h"
 #include "proto/user.h"
 
@@ -99,7 +99,7 @@ private:
     RelayPeerManager* peer_manager_ = nullptr;
     TimePoint reconnect_time_ = TimePoint::max();
 
-    Address router_address_ { DEFAULT_ROUTER_HOST_TCP_PORT };
+    Address router_address_ { kDefaultRouterHostTcpPort };
     QByteArray public_key_;
 
     TimePoint password_expire_time_ = TimePoint::max();

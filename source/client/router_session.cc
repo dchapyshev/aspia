@@ -18,11 +18,11 @@
 
 #include "client/router_session.h"
 
+#include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
 #include "base/serialization.h"
-#include "build/build_config.h"
 #include "client/database.h"
 #include "client/router_controller.h"
 #include "client/workers/router_worker.h"

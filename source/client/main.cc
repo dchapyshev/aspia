@@ -18,9 +18,9 @@
 
 #include <QSysInfo>
 
+#include "version.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
-#include "build/version.h"
 #include "client/application.h"
 
 #if defined(Q_OS_ANDROID)
@@ -38,6 +38,7 @@
 #include "client/desktop/main_window.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
+#include "common/desktop/update_dialog.h"
 #endif // defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
@@ -93,6 +94,36 @@ int main(int argc, char* argv[])
     ScopedLogging scoped_logging(logging_settings);
 
     Application::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
+#if !defined(Q_OS_ANDROID)
+    if (argc == 3)
+    {
+        auto option_value = [](const char* argument, const char* option)
+        {
+            size_t length = qstrlen(option);
+            if (qstrncmp(argument, option, length) != 0)
+                return QString();
+            return QString::fromLocal8Bit(argument + length);
+        };
+
+        QString server = option_value(argv[1], "--update=");
+        QString locale = option_value(argv[2], "--locale=");
+
+        if (!server.isEmpty() && !locale.isEmpty())
+        {
+#if defined(Q_OS_LINUX)
+            qputenv("QT_QPA_PLATFORM", "xcb");
+#endif // defined(Q_OS_LINUX)
+
+            GuiApplication application(argc, argv);
+            application.setLocale(locale);
+
+            UpdateDialog dialog(server, "client", UpdateDialog::Action::INSTALL);
+            return dialog.exec() == QDialog::Accepted ? 0 : 1;
+        }
+    }
+#endif // !defined(Q_OS_ANDROID)
+
     Application application(argc, argv);
 
     LOG(INFO) << "Version:" << ASPIA_VERSION_STRING << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";

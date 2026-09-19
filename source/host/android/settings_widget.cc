@@ -25,10 +25,10 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
 #include "base/net/address.h"
-#include "build/build_config.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -316,7 +316,7 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
     {
         Database& db = Database::instance();
 
-        const Address parsed = Address::fromString(address->text().trimmed(), DEFAULT_ROUTER_HOST_TCP_PORT);
+        const Address parsed = Address::fromString(address->text().trimmed(), kDefaultRouterHostTcpPort);
 
         QSignalBlocker blocker(address);
         if (parsed.isValid())

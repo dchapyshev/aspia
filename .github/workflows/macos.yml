@@ -95,9 +95,6 @@ jobs:
           # Run tests
           ctest --preset ci-${{ matrix.build_type }}
 
-          # Create dmg packages
-          cpack --config ${{ github.workspace }}/builds/ci/CPackConfig.cmake -C ${{ matrix.build_type }}
-
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f vcpkg4aspia/vcpkg ]; then
             echo "Backup vcpkg executable"
@@ -112,17 +109,21 @@ jobs:
           security delete-keychain "$RUNNER_TEMP/aspia-ci.keychain-db" || true
 
       # Step 4
-      - name: Build host installer (.pkg)
+      - name: Build installers (.pkg)
         run: |
           case "${{ matrix.build_type }}" in
-            release) HOST_CONFIG=Release ;;
-            debug)   HOST_CONFIG=Debug ;;
+            release) CONFIG=Release ;;
+            debug)   CONFIG=Debug ;;
             *) echo "Unknown build_type: ${{ matrix.build_type }}"; exit 1 ;;
           esac
 
           "${{ github.workspace }}/installer/macos/build_host_pkg.sh" \
-            "${{ github.workspace }}/builds/ci/${HOST_CONFIG}/aspia_host.app" \
+            "${{ github.workspace }}/builds/ci/${CONFIG}/aspia_host.app" \
             --output "${{ github.workspace }}/aspia-host-${{ matrix.arch }}-${{ matrix.build_type }}.pkg"
+
+          "${{ github.workspace }}/installer/macos/build_client_pkg.sh" \
+            "${{ github.workspace }}/builds/ci/${CONFIG}/aspia_client.app" \
+            --output "${{ github.workspace }}/aspia-client-${{ matrix.arch }}-${{ matrix.build_type }}.pkg"
 
       # Step 5
       - name: Upload Artifacts
@@ -130,7 +131,6 @@ jobs:
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
-            ${{ github.workspace }}/*.dmg
             ${{ github.workspace }}/*.pkg
           if-no-files-found: error
           retention-days: 7

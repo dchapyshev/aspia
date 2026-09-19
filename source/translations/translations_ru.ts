@@ -3253,11 +3253,6 @@ Password: %2</source>
         <translation>Не показывать никакие сообщения при импорте и экспорте.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Вызов диалога проверки обновлений.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Вызов диалога параметров.</translation>

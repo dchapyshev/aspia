@@ -25,11 +25,10 @@
 #include "ui_download_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
-DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
+DownloadDialog::DownloadDialog(const QString& url, const QString& file_path, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DownloadDialog>()),
-      downloader_(std::make_unique<HttpFileDownloader>(url)),
-      file_(file)
+      downloader_(std::make_unique<HttpFileDownloader>(url, file_path))
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -58,11 +57,11 @@ DownloadDialog::~DownloadDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DownloadDialog::onFileDownloaderError(int error_code)
+void DownloadDialog::onFileDownloaderError(const QString& error)
 {
-    LOG(ERROR) << "Error while downloading update:" << error_code;
+    LOG(ERROR) << "Error while downloading update:" << error;
     MsgBox::warning(this,
-                         tr("An error occurred while downloading the update: %1").arg(error_code));
+                         tr("An error occurred while downloading the update: %1").arg(error));
     reject();
     close();
 }
@@ -71,10 +70,6 @@ void DownloadDialog::onFileDownloaderError(int error_code)
 void DownloadDialog::onFileDownloaderCompleted()
 {
     LOG(INFO) << "File downloaded";
-    const QByteArray& buffer = downloader_->data();
-
-    file_.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
-    file_.flush();
 
     accept();
     close();

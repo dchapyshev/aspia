@@ -22,6 +22,7 @@
 #include <QSysInfo>
 #include <QStandardPaths>
 
+#include "version.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
@@ -32,7 +33,6 @@
 #include "base/files/file_util.h"
 #include "base/peer/router_user.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "build/version.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
 #include "router/migration_utils.h"

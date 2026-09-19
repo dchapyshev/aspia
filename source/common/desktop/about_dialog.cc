@@ -21,7 +21,7 @@
 #include <QDesktopServices>
 #include <QSysInfo>
 
-#include "build/version.h"
+#include "version.h"
 #include "base/logging.h"
 #include "ui_about_dialog.h"
 

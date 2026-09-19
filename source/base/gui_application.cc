@@ -326,6 +326,7 @@ void GuiApplication::setLocale(const QString& locale)
     removeTranslators();
 
     LOG(INFO) << "Install translators for:" << locale;
+    locale_ = locale;
 
     auto file_list = locale_list_.constFind(locale);
     if (file_list == locale_list_.constEnd())

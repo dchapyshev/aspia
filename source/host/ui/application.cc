@@ -23,9 +23,9 @@
 #include <QIcon>
 #include <QSessionManager>
 
+#include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
-#include "build/build_config.h"
-#include "build/version.h"
 #include "host/user_settings.h"
 #include "host/workers/user_ipc_worker.h"
 
@@ -127,7 +127,7 @@ Application::Application(int& argc, char* argv[])
     // create a root-owned host.ini.
     QString locale = user_settings.locale();
     if (!hasLocale(locale))
-        locale = DEFAULT_LOCALE;
+        locale = kDefaultLocale;
 
     setTheme(user_settings.theme());
     setLocale(locale);

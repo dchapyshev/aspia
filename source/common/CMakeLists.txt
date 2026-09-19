@@ -44,7 +44,9 @@ list(APPEND SOURCE_COMMON
     update_checker.cc
     update_checker.h
     update_info.cc
-    update_info.h)
+    update_info.h
+    update_installer.cc
+    update_installer.h)
 
 if (WIN32)
     list(APPEND SOURCE_COMMON
@@ -80,6 +82,7 @@ list(APPEND SOURCE_COMMON_TESTS
     file_depacketizer_unittest.cc
     file_packetizer_unittest.cc
     tests_main.cc
+    update_checker_unittest.cc
     update_info_unittest.cc)
 
 include(desktop/sources.cmake)
@@ -151,6 +154,7 @@ target_link_libraries(aspia_common_tests PRIVATE
     aspia_base
     aspia_proto
     GTest::gtest
+    Qt6::Test
     ${COMMON_TESTS_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS}
     ${QT_COMMON_LIBS}

@@ -21,9 +21,11 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
+#include "common/update_info.h"
 
 class HttpFileDownloader;
 class UpdateChecker;
+class UpdateInstaller;
 
 class UpdateWorker final : public Worker
 {
@@ -44,8 +46,9 @@ protected:
     void onTimer(TimePoint now) final;
 
 private slots:
-    void onUpdateCheckedFinished(const QByteArray& result);
-    void onFileDownloaderError(int error_code);
+    void onUpdateCheckFinished(const UpdateInfo& update_info);
+    void onUpdateCheckFailed();
+    void onFileDownloaderError(const QString& error);
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
 
@@ -54,6 +57,7 @@ private:
 
     ScopedQPointer<UpdateChecker> update_checker_;
     ScopedQPointer<HttpFileDownloader> update_downloader_;
+    ScopedQPointer<UpdateInstaller> update_installer_;
 
     Q_DISABLE_COPY_MOVE(UpdateWorker)
 };

@@ -3243,11 +3243,6 @@ Lösenord: %2</translation>
         <translation>Visa inga meddelanden under import och export.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Öppnar dialogrutan för uppdateringskontroll.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Öppnar inställningsdialogen.</translation>

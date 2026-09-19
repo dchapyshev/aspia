@@ -22,7 +22,7 @@
 #include <QSysInfo>
 #include <QVBoxLayout>
 
-#include "build/version.h"
+#include "version.h"
 #include "common/android/controls.h"
 
 namespace {

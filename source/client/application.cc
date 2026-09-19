@@ -18,9 +18,9 @@
 
 #include "client/application.h"
 
+#include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
-#include "build/build_config.h"
-#include "build/version.h"
 #include "client/host_url.h"
 #include "client/settings.h"
 #include "client/workers/router_worker.h"
@@ -93,7 +93,7 @@ Application::Application(int& argc, char* argv[])
     if (!hasLocale(settings.locale()))
     {
         LOG(INFO) << "Set default locale";
-        settings.setLocale(DEFAULT_LOCALE);
+        settings.setLocale(kDefaultLocale);
     }
 
     setLocale(settings.locale());

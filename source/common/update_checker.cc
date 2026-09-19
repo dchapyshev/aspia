@@ -18,31 +18,23 @@
 
 #include "common/update_checker.h"
 
+#include <QStandardPaths>
 #include <QVersionNumber>
 
+#include <utility>
+
+#include "base/build_config.h"
 #include "base/logging.h"
+#include "base/version_constants.h"
+#include "base/crypto/signature.h"
 #include "base/net/curl_util.h"
 
-//--------------------------------------------------------------------------------------------------
-UpdateChecker::UpdateChecker(const QString& server, const QString& package, QObject* parent)
-    : QThread(parent),
-      server_(server),
-      package_(package)
-{
-    LOG(TRACE) << "Ctor";
-}
+namespace {
+
+const long kMaxFileSize = 1024 * 1024;
 
 //--------------------------------------------------------------------------------------------------
-UpdateChecker::~UpdateChecker()
-{
-    LOG(TRACE) << "Dtor";
-
-    interrupted_.store(true, std::memory_order_relaxed);
-    wait();
-}
-
-//--------------------------------------------------------------------------------------------------
-static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* buffer)
+size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* buffer)
 {
     size_t append_size = size * nmemb;
     buffer->append(reinterpret_cast<char*>(ptr), static_cast<qsizetype>(append_size));
@@ -50,8 +42,7 @@ static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* bu
 }
 
 //--------------------------------------------------------------------------------------------------
-static int debugFunc(
-    CURL* /* handle */, curl_infotype type, char* data, size_t size, void* /* clientp */)
+int debugFunc(CURL* /* handle */, curl_infotype type, char* data, size_t size, void* /* clientp */)
 {
     switch (type)
     {
@@ -75,12 +66,47 @@ static int debugFunc(
     return 0;
 }
 
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+UpdateChecker::UpdateChecker(const QString& server, const QString& package, QObject* parent)
+    : QThread(parent),
+      server_(server),
+      package_(package)
+{
+    LOG(TRACE) << "Ctor";
+
+    for (QByteArrayView public_key : kUpdatePublicKeys)
+        public_keys_.append(public_key.toByteArray());
+}
+
+//--------------------------------------------------------------------------------------------------
+UpdateChecker::~UpdateChecker()
+{
+    LOG(TRACE) << "Dtor";
+
+    interrupted_.store(true, std::memory_order_relaxed);
+    wait();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateChecker::setPublicKeysForTesting(const QList<QByteArray>& public_keys)
+{
+    public_keys_ = public_keys;
+}
+
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
     LOG(TRACE) << "run BEGIN";
     interrupted_.store(false, std::memory_order_relaxed);
+    check();
+    LOG(TRACE) << "run END";
+}
 
+//--------------------------------------------------------------------------------------------------
+void UpdateChecker::check()
+{
     QString os;
 #if defined(Q_OS_WINDOWS)
     os = "windows";
@@ -107,33 +133,92 @@ void UpdateChecker::run()
 #error Unknown architecture
 #endif
 
-    QVersionNumber version({ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH});
-    QString unicode_url(server_);
+    QString format;
+#if defined(Q_OS_WINDOWS)
+    format = "msi";
+#elif defined(Q_OS_LINUX)
+    if (!QStandardPaths::findExecutable("apt-get").isEmpty())
+        format = "deb";
+    else if (!QStandardPaths::findExecutable("dnf").isEmpty())
+        format = "rpm";
+#elif defined(Q_OS_MACOS)
+    format = "pkg";
+#elif defined(Q_OS_ANDROID)
+    format = "apk";
+#endif
 
-    unicode_url += "/update.php?";
-    unicode_url += "package=" + package_;
-    unicode_url += '&';
-    unicode_url += "version=" + version.toString();
+    QByteArray rules = downloadSigned(server_ + "/latest.json");
+    if (interrupted_.load(std::memory_order_relaxed))
+        return;
 
-    if (!os.isEmpty())
+    if (rules.isEmpty())
     {
-        unicode_url += '&';
-        unicode_url += "os=" + os;
+        emit sig_checkFailed();
+        return;
     }
 
-    if (!arch.isEmpty())
+    QVersionNumber target_version = UpdateInfo::targetVersion(rules, kCurrentVersion);
+    if (target_version.isNull() || target_version <= kCurrentVersion)
     {
-        unicode_url += '&';
-        unicode_url += "arch=" + arch;
+        LOG(INFO) << "No updates for version" << kCurrentVersion.toString();
+        emit sig_checkFinished(UpdateInfo());
+        return;
     }
+
+    QByteArray manifest = downloadSigned(server_ + "/" + target_version.toString() + ".json");
+    if (interrupted_.load(std::memory_order_relaxed))
+        return;
+
+    if (manifest.isEmpty())
+    {
+        emit sig_checkFailed();
+        return;
+    }
+
+    UpdateInfo update_info = UpdateInfo::fromManifest(manifest, package_, os, arch, format);
+
+    if (update_info.isValid() && update_info.version() != target_version)
+    {
+        LOG(ERROR) << "Manifest of version" << target_version.toString()
+                   << "carries version" << update_info.version().toString();
+        update_info = UpdateInfo();
+    }
+
+    emit sig_checkFinished(update_info);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UpdateChecker::downloadSigned(const QString& url)
+{
+    QByteArray data = download(url);
+    if (data.isEmpty())
+        return QByteArray();
+
+    QByteArray signature = QByteArray::fromBase64(download(url + ".sig").trimmed());
+    if (signature.isEmpty())
+        return QByteArray();
+
+    for (const QByteArray& public_key : std::as_const(public_keys_))
+    {
+        if (Signature::verify(public_key, data, signature))
+            return data;
+    }
+
+    LOG(ERROR) << "File is not signed with a key we know:" << url;
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UpdateChecker::download(const QString& unicode_url)
+{
+    LOG(INFO) << "Reading" << unicode_url;
 
     QByteArray url = unicode_url.toLocal8Bit();
-
-    LOG(INFO) << "Start checking for updates. Url:" << unicode_url;
 
     ScopedCURL curl;
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_MAXFILESIZE, kMaxFileSize);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1);
@@ -168,7 +253,7 @@ void UpdateChecker::run()
         if (error_code)
         {
             LOG(ERROR) << "curl_multi_poll failed:" << curl_multi_strerror(error_code)
-                          << "(" << error_code << ")";
+                       << "(" << error_code << ")";
             response.clear();
             break;
         }
@@ -184,11 +269,14 @@ void UpdateChecker::run()
 
     curl_multi_remove_handle(multi_curl.get(), curl.get());
 
-    if (!interrupted_.load(std::memory_order_relaxed))
+    long response_code = 0;
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
+
+    if (response_code != 200)
     {
-        LOG(INFO) << "Checking is finished:" << response;
-        emit sig_checkedFinished(response);
+        LOG(ERROR) << "Unexpected response code:" << response_code;
+        response.clear();
     }
 
-    LOG(TRACE) << "run END";
+    return response;
 }

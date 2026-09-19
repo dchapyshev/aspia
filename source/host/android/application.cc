@@ -20,9 +20,9 @@
 
 #include <QIcon>
 
+#include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
-#include "build/build_config.h"
-#include "build/version.h"
 #include "host/user_settings.h"
 #include "host/android/server_worker.h"
 
@@ -40,7 +40,7 @@ Application::Application(int& argc, char* argv[])
     UserSettings settings;
 
     if (!hasLocale(settings.locale()))
-        settings.setLocale(DEFAULT_LOCALE);
+        settings.setLocale(kDefaultLocale);
 
     setLocale(settings.locale());
     setTheme(settings.theme());

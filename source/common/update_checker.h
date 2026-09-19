@@ -20,7 +20,10 @@
 #define COMMON_UPDATE_CHECKER_H
 
 #include <QByteArray>
+#include <QList>
 #include <QThread>
+
+#include "common/update_info.h"
 
 class UpdateChecker final : public QThread
 {
@@ -30,15 +33,25 @@ public:
     UpdateChecker(const QString& server, const QString& package, QObject* parent = nullptr);
     ~UpdateChecker();
 
+    // Replaces the keys the files are checked against with |public_keys|, so that tests can sign
+    // with a key of their own.
+    void setPublicKeysForTesting(const QList<QByteArray>& public_keys);
+
 signals:
-    void sig_checkedFinished(const QByteArray& result);
+    void sig_checkFinished(const UpdateInfo& update_info);
+    void sig_checkFailed();
 
 protected:
     void run() final;
 
 private:
+    void check();
+    QByteArray downloadSigned(const QString& url);
+    QByteArray download(const QString& url);
+
     const QString server_;
     const QString package_;
+    QList<QByteArray> public_keys_;
     std::atomic_bool interrupted_ { false };
 
     Q_DISABLE_COPY_MOVE(UpdateChecker)

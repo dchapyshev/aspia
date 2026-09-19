@@ -3243,11 +3243,6 @@ Salasana: %2</translation>
         <translation>Älä näytä viestejä tuonnin ja viennin aikana.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Avaa päivitysten tarkistuksen valintaikkunan.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Avaa asetusten valintaikkunan.</translation>

@@ -30,15 +30,16 @@
 #include <QTimer>
 #include <QUrl>
 
+#include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/peer/host_id.h"
-#include "build/build_config.h"
 #include "common/clipboard.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/chat_widget.h"
 #include "common/desktop/language_action.h"
+#include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 #include "host/database.h"
 #include "host/system_settings.h"
@@ -47,7 +48,6 @@
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
 #include "host/ui/connect_confirm_dialog.h"
-#include "host/ui/elevate_util.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/security_log_dialog.h"
 #include "proto/desktop_clipboard.h"
@@ -676,7 +676,7 @@ void HostWindow::onSecurityLog()
 {
     LOG(INFO) << "[ACTION] Security Log";
 
-    if (elevate_util_ && elevate_util_->runElevated("--security-log", winId(), [this]()
+    if (elevate_util_ && elevate_util_->runElevated({ "--security-log" }, winId(), [this](int /* exit_code */)
     {
         ui->action_security_log->setEnabled(true);
     }))
@@ -693,7 +693,7 @@ void HostWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings";
 
-    if (elevate_util_ && elevate_util_->runElevated("--config", winId(), [this]()
+    if (elevate_util_ && elevate_util_->runElevated({ "--config" }, winId(), [this](int /* exit_code */)
     {
         ui->action_settings->setEnabled(true);
         onSettingsChanged();
@@ -760,7 +760,7 @@ void HostWindow::onAboutSystem()
 
     // Reading the health of a drive is a privileged operation, so the report is built by a process
     // that has the rights for it.
-    if (elevate_util_ && elevate_util_->runElevated("--sys-info", winId(), [this]()
+    if (elevate_util_ && elevate_util_->runElevated({ "--sys-info" }, winId(), [this](int /* exit_code */)
     {
         ui->action_about_system->setEnabled(true);
     }))

@@ -3233,11 +3233,6 @@ Password: %2</source>
         <translation>가져오기 및 내보내기 중에 메시지를 표시하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>업데이트 확인 대화 상자를 호출합니다.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>설정 대화 상자를 호출합니다.</translation>

@@ -33,11 +33,11 @@
 
 #include <algorithm>
 
+#include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/udp_channel.h"
-#include "build/build_config.h"
 #include "client/application.h"
 #include "client/database.h"
 #include "client/master_password.h"
@@ -125,7 +125,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     int button_id = 0;
     add_button(button_id++, ":/img/gear.svg", tr("General"));
     add_button(button_id++, ":/img/workstation.svg", tr("Desktop"));
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     add_button(button_id++, ":/img/restart.svg", tr("Update"));
 #endif
 
@@ -211,13 +211,13 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->edit_record_dir->setText(settings.recordingPath());
 
     // Update page.
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
 
     QString update_server = db.updateServer();
     ui->edit_update_server->setText(update_server);
 
-    if (update_server == DEFAULT_UPDATE_SERVER)
+    if (update_server == kDefaultUpdateServer)
     {
         ui->checkbox_custom_server->setChecked(false);
         ui->edit_update_server->setEnabled(false);
@@ -262,7 +262,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onRecordingPathChanged);
     connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
 
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->checkbox_custom_server, &QCheckBox::toggled, this, &SettingsTab::onCustomServerToggled);
     connect(ui->edit_update_server, &QLineEdit::editingFinished, this, &SettingsTab::onUpdateServerChanged);
@@ -462,7 +462,7 @@ void SettingsTab::onChangeMasterPassword()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onCheckUpdatesChanged()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Check updates changed";
     Database::instance().setCheckUpdatesEnabled(ui->checkbox_check_updates->isChecked());
 #endif
@@ -471,15 +471,15 @@ void SettingsTab::onCheckUpdatesChanged()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onCustomServerToggled(bool checked)
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Custom server checkbox:" << checked;
     ui->edit_update_server->setEnabled(checked);
 
     if (!checked)
     {
         QSignalBlocker blocker(ui->edit_update_server);
-        ui->edit_update_server->setText(DEFAULT_UPDATE_SERVER);
-        Database::instance().setUpdateServer(QString(DEFAULT_UPDATE_SERVER).toLower());
+        ui->edit_update_server->setText(kDefaultUpdateServer);
+        Database::instance().setUpdateServer(QString());
     }
 #endif
 }
@@ -487,7 +487,7 @@ void SettingsTab::onCustomServerToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onUpdateServerChanged()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Update server changed";
     Database::instance().setUpdateServer(ui->edit_update_server->text().toLower());
 #endif
@@ -496,9 +496,11 @@ void SettingsTab::onUpdateServerChanged()
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onCheckForUpdatesClicked()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     LOG(INFO) << "[ACTION] Check for updates";
-    UpdateDialog(ui->edit_update_server->text(), "client", this).exec();
+    if (UpdateDialog(ui->edit_update_server->text(), "client", UpdateDialog::Action::ASK,
+                     this).exec() == QDialog::Accepted)
+        GuiApplication::quit();
 #endif
 }
 

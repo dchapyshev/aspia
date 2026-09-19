@@ -93,7 +93,7 @@ private:
     quint32 calcOneTimeSessions();
 
     std::unique_ptr<Ui::HostWindow> ui;
-    std::unique_ptr<ElevateUtil> elevate_util_;
+    ScopedQPointer<ElevateUtil> elevate_util_;
 #if defined(Q_OS_WINDOWS)
     bool launched_by_service_ = false;
 #endif // defined(Q_OS_WINDOWS)

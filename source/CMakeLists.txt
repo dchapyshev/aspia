@@ -323,10 +323,6 @@ if (LINUX)
         set(CPACK_RPM_HOST_FILE_NAME
             "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
     endif()
-
-    if (APPLE)
-        set(CPACK_DMG_HOST_FILE_NAME "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}")
-    endif()
 endif()
 
 #--------------------------------------------------------------------------------------------------
@@ -351,16 +347,16 @@ if (LINUX)
     install(FILES common/resources/aspia.svg
         DESTINATION share/icons/hicolor/scalable/apps RENAME aspia-client.svg COMPONENT client)
 
+    # PolicyKit action for the elevated instance that installs an update.
+    install(FILES client/linux/org.aspia.client.policy
+        DESTINATION share/polkit-1/actions COMPONENT client)
+
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 
     set(CPACK_RPM_CLIENT_PACKAGE_NAME "${CPACK_COMPONENT_CLIENT_NAME}")
     set(CPACK_RPM_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.rpm")
-endif()
-
-if (APPLE)
-    set(CPACK_DMG_CLIENT_FILE_NAME "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}")
 endif()
 
 #--------------------------------------------------------------------------------------------------
@@ -453,13 +449,6 @@ if (LINUX)
         "/usr/share/icons/hicolor/128x128" "/usr/share/icons/hicolor/128x128/apps")
 
     set(CPACK_COMPONENTS_ALL host client router relay)
-endif()
-
-if (APPLE)
-    set(CPACK_GENERATOR "DragNDrop")
-
-    set(CPACK_COMPONENTS_GROUPING "IGNORE")
-    set(CPACK_COMPONENTS_ALL client)
 endif()
 
 include(CPack)

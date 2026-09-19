@@ -26,4 +26,4 @@ IDI_ICON1 ICON "common/resources/aspia.ico"
 #define ASPIA_ORIGINAL_FILE_NAME "aspia_client.exe"
 #define ASPIA_FILE_DESCRIPTION "Aspia Client"
 
-#include "build/version.rc"
+#include "version.rc"

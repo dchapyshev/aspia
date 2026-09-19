@@ -18,11 +18,11 @@
 
 #include "router/settings.h"
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/files/base_paths.h"
 #include "base/net/net_utils.h"
-#include "build/build_config.h"
 
 namespace {
 
@@ -94,10 +94,10 @@ bool Settings::hasError() const
 //--------------------------------------------------------------------------------------------------
 void Settings::reset()
 {
-    setHostPort(DEFAULT_ROUTER_HOST_TCP_PORT);
-    setClientPort(DEFAULT_ROUTER_CLIENT_TCP_PORT);
-    setRelayPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
-    setLegacyHostPort(DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT);
+    setHostPort(kDefaultRouterHostTcpPort);
+    setClientPort(kDefaultRouterClientTcpPort);
+    setRelayPort(kDefaultRouterRelayTcpPort);
+    setLegacyHostPort(kDefaultRouterLegacyHostTcpPort);
     setClientListenInterface(QString());
     setHostListenInterface(QString());
     setRelayListenInterface(QString());
@@ -108,7 +108,7 @@ void Settings::reset()
     setHostWhiteList(WhiteList());
     setRelayWhiteList(WhiteList());
     setEnableStun(true);
-    setStunPort(DEFAULT_STUN_PORT);
+    setStunPort(kDefaultStunPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ void Settings::setLegacyHostPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::legacyHostPort() const
 {
-    return ini_.uint16Value(kHostSection, "legacy_port", DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT);
+    return ini_.uint16Value(kHostSection, "legacy_port", kDefaultRouterLegacyHostTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ void Settings::setHostPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::hostPort() const
 {
-    return ini_.uint16Value(kHostSection, "port", DEFAULT_ROUTER_HOST_TCP_PORT);
+    return ini_.uint16Value(kHostSection, "port", kDefaultRouterHostTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ void Settings::setClientPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::clientPort() const
 {
-    return ini_.uint16Value(kClientSection, "port", DEFAULT_ROUTER_CLIENT_TCP_PORT);
+    return ini_.uint16Value(kClientSection, "port", kDefaultRouterClientTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ void Settings::setRelayPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::relayPort() const
 {
-    return ini_.uint16Value(kRelaySection, "port", DEFAULT_ROUTER_RELAY_TCP_PORT);
+    return ini_.uint16Value(kRelaySection, "port", kDefaultRouterRelayTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ void Settings::setStunPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::stunPort() const
 {
-    return ini_.uint16Value(kStunSection, "port", DEFAULT_STUN_PORT);
+    return ini_.uint16Value(kStunSection, "port", kDefaultStunPort);
 }
 
 //--------------------------------------------------------------------------------------------------

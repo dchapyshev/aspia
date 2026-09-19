@@ -52,6 +52,8 @@ collect_sources(SOURCE_BASE_CRYPTO
     secure_memory.h
     secure_string.cc
     secure_string.h
+    signature.cc
+    signature.h
     srp_math.cc
     srp_math.h
     totp.cc
@@ -81,5 +83,6 @@ collect_sources(SOURCE_BASE_CRYPTO_TESTS
     os_crypt_unittest.cc
     password_generator_unittest.cc
     password_hash_unittest.cc
+    signature_unittest.cc
     srp_math_unittest.cc
     totp_unittest.cc)

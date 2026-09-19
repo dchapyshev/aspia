@@ -20,13 +20,13 @@
 
 #include <QTimer>
 
+#include "base/build_config.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/time_types.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "build/build_config.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 
@@ -86,7 +86,7 @@ OnlineCheckerDirect::Instance::~Instance()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::start()
 {
-    Address address = Address::fromString(host_.address(), DEFAULT_HOST_TCP_PORT);
+    Address address = Address::fromString(host_.address(), kDefaultHostTcpPort);
 
     LOG(TRACE) << "Starting connection to" << address.host() << ":" << address.port()
                << "(host:" << host_.id() << ")";

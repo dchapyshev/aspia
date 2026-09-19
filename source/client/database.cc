@@ -24,11 +24,11 @@
 #include <QHash>
 #include <QUuid>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
-#include "build/build_config.h"
 
 namespace {
 
@@ -1671,7 +1671,7 @@ QString Database::updateServer() const
 {
     QString value = readSetting(kSettingUpdateServer);
     if (value.isEmpty())
-        value = QString::fromLatin1(DEFAULT_UPDATE_SERVER);
+        value = kDefaultUpdateServer;
     return value.toLower();
 }
 

@@ -29,12 +29,12 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "client/aab_importer.h"
 #include "client/backup.h"
 #include "client/database.h"
@@ -2142,7 +2142,7 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
     }
     else
     {
-        Address address = Address::fromString(host.address(), DEFAULT_HOST_TCP_PORT);
+        Address address = Address::fromString(host.address(), kDefaultHostTcpPort);
         if (!address.isValid())
         {
             MsgBox::warning(this, tr("The host has an incorrect address."));

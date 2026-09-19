@@ -23,21 +23,31 @@
 
 #include <memory>
 
+#include "base/scoped_qpointer.h"
 #include "common/update_info.h"
 
 namespace Ui {
 class UpdateDialog;
 } // namespace Ui
 
+class ElevateUtil;
 class UpdateChecker;
+class UpdateInstaller;
 
 class UpdateDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    UpdateDialog(const QString& server, const QString& package, QWidget* parent = nullptr);
-    UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
+    // What to do with an update once the check has found one.
+    enum class Action
+    {
+        ASK,    // Show it and wait for the user to decide.
+        INSTALL // Install it. The user has decided already, in the process that started this one.
+    };
+
+    UpdateDialog(const QString& server, const QString& package, Action action,
+                 QWidget* parent = nullptr);
     ~UpdateDialog() final;
 
 protected:
@@ -47,16 +57,25 @@ protected:
 
 private slots:
     void onUpdateNow();
-    void onUpdateCheckedFinished(const QByteArray& result);
+    void onUpdateCheckFinished(const UpdateInfo& update_info);
+    void onUpdateCheckFailed();
 
 private:
-    void initialize();
+    void startInstall();
+    void startPrivilegedInstance();
+    void setInstalling(bool installing);
+    void destroyChecker();
 
     std::unique_ptr<Ui::UpdateDialog> ui;
+    const QString server_;
+    const Action action_;
     UpdateInfo update_info_;
 
     std::unique_ptr<UpdateChecker> checker_;
     bool checker_finished_ = true;
+
+    ScopedQPointer<UpdateInstaller> installer_;
+    ScopedQPointer<ElevateUtil> elevate_util_;
 
     Q_DISABLE_COPY_MOVE(UpdateDialog)
 };

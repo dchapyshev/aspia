@@ -3233,11 +3233,6 @@ Password: %2</source>
         <translation>インポートおよびエクスポート中にメッセージを表示しません。</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>更新確認ダイアログを呼び出します。</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>設定ダイアログを呼び出します。</translation>

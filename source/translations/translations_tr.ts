@@ -3233,11 +3233,6 @@ Parola: %2</translation>
         <translation>İçe ve dışa aktarma sırasında hiçbir mesaj göstermez.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Güncelleme denetimi iletişim kutusunu açar.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Ayarlar iletişim kutusunu açar.</translation>

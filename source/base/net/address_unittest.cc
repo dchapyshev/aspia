@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "build/build_config.h"
+#include "base/build_config.h"
 #include "base/net/address.h"
 
 #include <gtest/gtest.h>
@@ -82,7 +82,7 @@ TEST(AddressTest, ValidAddress)
     Address addr1 = Address::fromString("192.168.1.1", 8050);
     EXPECT_TRUE(addr1.isValid());
     EXPECT_EQ(addr1.host(), "192.168.1.1");
-    EXPECT_EQ(addr1.port(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(addr1.port(), kDefaultHostTcpPort);
     EXPECT_EQ(addr1.toString(), "192.168.1.1");
 
     Address addr2 = Address::fromString("192.168.1.1:8080", 8050);
@@ -94,7 +94,7 @@ TEST(AddressTest, ValidAddress)
     Address addr3 = Address::fromString("test.com", 8050);
     EXPECT_TRUE(addr3.isValid());
     EXPECT_EQ(addr3.host(), "test.com");
-    EXPECT_EQ(addr3.port(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(addr3.port(), kDefaultHostTcpPort);
     EXPECT_EQ(addr3.toString(), "test.com");
 
     Address addr4 = Address::fromString("test.com:8080", 8050);
@@ -106,7 +106,7 @@ TEST(AddressTest, ValidAddress)
     Address addr5 = Address::fromString("test", 8050);
     EXPECT_TRUE(addr5.isValid());
     EXPECT_EQ(addr5.host(), "test");
-    EXPECT_EQ(addr5.port(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(addr5.port(), kDefaultHostTcpPort);
     EXPECT_EQ(addr5.toString(), "test");
 
     Address addr6 = Address::fromString("test:8080", 8050);
@@ -118,7 +118,7 @@ TEST(AddressTest, ValidAddress)
     Address addr7 = Address::fromString("[2001:db8:1f70::999:de8:7648:6e8]", 8050);
     EXPECT_TRUE(addr7.isValid());
     EXPECT_EQ(addr7.host(), "2001:db8:1f70::999:de8:7648:6e8");
-    EXPECT_EQ(addr7.port(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(addr7.port(), kDefaultHostTcpPort);
     EXPECT_EQ(addr7.toString(), "[2001:db8:1f70::999:de8:7648:6e8]");
 
     Address addr8 = Address::fromString("[2001:db8:1f70::999:de8:7648:6e8]:8080", 8050);
@@ -130,7 +130,7 @@ TEST(AddressTest, ValidAddress)
     Address addr9 = Address::fromString("[::ffff:192.0.2.1]", 8050);
     EXPECT_TRUE(addr9.isValid());
     EXPECT_EQ(addr9.host(), "::ffff:192.0.2.1");
-    EXPECT_EQ(addr9.port(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(addr9.port(), kDefaultHostTcpPort);
     EXPECT_EQ(addr9.toString(), "[::ffff:192.0.2.1]");
 
     Address addr10 = Address::fromString("[::ffff:192.0.2.1]:8080", 8050);
@@ -142,7 +142,7 @@ TEST(AddressTest, ValidAddress)
 
 TEST(AddressTest, TestVector)
 {
-    static_assert(DEFAULT_HOST_TCP_PORT == 8050);
+    static_assert(kDefaultHostTcpPort == 8050);
 
     Address addr = Address::fromString("192.168.1.1:8050", 8050);
 

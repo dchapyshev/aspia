@@ -45,7 +45,8 @@ protected:
     void onStop() final;
 
 private slots:
-    void onUpdateCheckedFinished(const QByteArray& result);
+    void onUpdateCheckFinished(const UpdateInfo& update_info);
+    void onUpdateCheckFailed();
 
 private:
     ScopedQPointer<UpdateChecker> update_checker_;

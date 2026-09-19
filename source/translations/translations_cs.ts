@@ -3253,11 +3253,6 @@ Heslo: %2</translation>
         <translation>Nezobrazovat žádné zprávy během importu a exportu.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Otevře dialog kontroly aktualizací.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Otevře dialog nastavení.</translation>

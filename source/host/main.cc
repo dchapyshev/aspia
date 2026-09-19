@@ -23,6 +23,8 @@
 #include <QTextStream>
 #include <QThread>
 
+#include "version.h"
+#include "base/build_config.h"
 #include "base/core_application.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -30,16 +32,12 @@
 #include "base/ipc/ipc_server.h"
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/threading/worker.h"
-#include "build/build_config.h"
-#include "build/version.h"
 #include "common/desktop/msg_box.h"
-#include "common/desktop/update_dialog.h"
 #include "host/database.h"
 #include "host/file_agent.h"
 #include "host/host_utils.h"
 #include "host/service.h"
 #include "host/settings_util.h"
-#include "host/system_settings.h"
 #include "host/terminal_agent.h"
 #include "host/user_settings.h"
 #include "host/ui/application.h"
@@ -307,7 +305,7 @@ int runSysInfo(int& argc, char* argv[])
 
     QString locale = user_settings.locale();
     if (!application.hasLocale(locale))
-        locale = DEFAULT_LOCALE;
+        locale = kDefaultLocale;
 
     application.setTheme(user_settings.theme());
     application.setLocale(locale);
@@ -544,8 +542,6 @@ int main(int argc, char* argv[])
         GuiApplication::translate("HostMain", "Import parameters from file."), "import");
     QCommandLineOption silent_option("silent",
         GuiApplication::translate("HostMain", "Do not display any messages during import and export."));
-    QCommandLineOption update_option("update",
-        GuiApplication::translate("HostMain", "Calling the update check dialog."));
     QCommandLineOption config_option("config",
         GuiApplication::translate("HostMain", "Calling the settings dialog."));
     QCommandLineOption security_log_option("security-log",
@@ -556,7 +552,6 @@ int main(int argc, char* argv[])
     parser.addOption(export_option);
     parser.addOption(import_option);
     parser.addOption(silent_option);
-    parser.addOption(update_option);
     parser.addOption(config_option);
     parser.addOption(security_log_option);
     parser.addHelpOption();
@@ -573,14 +568,6 @@ int main(int argc, char* argv[])
     {
         if (!SettingsUtil::exportToFile(parser.value(export_option), parser.isSet(silent_option)))
             return 1;
-    }
-    else if (parser.isSet(update_option))
-    {
-        UpdateDialog dialog(SystemSettings().updateServer(), "host");
-        dialog.show();
-        dialog.activateWindow();
-
-        return application.exec();
     }
     else if (parser.isSet(config_option))
     {

@@ -3233,11 +3233,6 @@ Jelszó: %2</translation>
         <translation>Ne jelenjen meg üzenet az importálás és exportálás során.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>A frissítéskeresési párbeszédablak megnyitása.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>A beállítások párbeszédablak megnyitása.</translation>

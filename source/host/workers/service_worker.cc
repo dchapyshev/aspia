@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 
+#include "base/build_config.h"
 #include "base/core_application.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -30,7 +31,6 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
-#include "build/build_config.h"
 #include "host/database.h"
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
@@ -584,7 +584,7 @@ void ServiceWorker::onRemoveHost()
 
     Database& db = Database::instance();
     db.setRouterEnabled(false);
-    db.setRouterAddress(Address(DEFAULT_ROUTER_HOST_TCP_PORT));
+    db.setRouterAddress(Address(kDefaultRouterHostTcpPort));
     db.setRouterPublicKey(QByteArray());
     db.setHostKey(QByteArray());
 

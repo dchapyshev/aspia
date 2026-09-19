@@ -24,298 +24,257 @@
 
 namespace {
 
-const char kUrl[] = "https://aspia.org/download/aspia-host-2.7.0-x86_64.msi";
+const char kUrl[] = "https://aspia.org/download/aspia-host-3.0.6-x86_64.msi";
+const char kSha256[] = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
 //--------------------------------------------------------------------------------------------------
-// The answer of the update server (common/web/update.php) for a package that has an update: an XML
-// declaration and one space of indentation per level, as PHP xmlwriter emits it.
-QByteArray serverXml(const QString& version, const QString& description, const QString& url)
+// latest.json: which version each released one is offered. A target may name a label
+// instead of a version.
+QByteArray rulesJson()
 {
-    QString xml = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") +
-        "<update>\n"
-        " <version>" + version + "</version>\n"
-        " <description>" + description + "</description>\n"
-        " <url>" + url + "</url>\n"
-        "</update>\n";
-    return xml.toUtf8();
+    return QByteArray(R"({
+        "format": 1,
+        "targets": { "latest": "3.0.6" },
+        "updates": [
+            { "source": "2.6.0", "target": "3.0.0" },
+            { "source": "3.0.0", "target": "@latest" }
+        ]
+    })");
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray serverXml()
+// <version>.json: the files of one release.
+QByteArray manifestJson(const QString& version, const QString& description, const QString& url,
+                        const QString& sha256)
 {
-    return serverXml("2.7.0", "A new version of the program.", kUrl);
+    QString json = QString(R"({
+        "format": 1,
+        "version": "%1",
+        "description": "%2",
+        "packages": {
+            "host": {
+                "windows": {
+                    "x86_64": [ { "format": "msi", "url": "%3", "sha256": "%4" } ]
+                },
+                "linux": {
+                    "x86_64": [
+                        { "format": "deb", "url": "https://aspia.org/d/host.deb", "sha256": "%4" },
+                        { "format": "rpm", "url": "https://aspia.org/d/host.rpm", "sha256": "%4" }
+                    ]
+                }
+            }
+        }
+    })").arg(version, description, url, sha256);
+
+    return json.toUtf8();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray manifestJson()
+{
+    return manifestJson("3.0.6", "A new version of the program.", kUrl, kSha256);
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, ServerAnswerIsParsed)
+TEST(UpdateInfoTest, TargetIsTakenFromRules)
 {
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml());
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.version(), QVersionNumber(2, 7, 0));
-    EXPECT_EQ(update_info.description(), QString("A new version of the program."));
-    EXPECT_EQ(update_info.url(), QString(kUrl));
+    EXPECT_EQ(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(2, 6, 0)),
+              QVersionNumber(3, 0, 0));
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, EmptyAnswerIsNotAnUpdate)
+// The label is where the current version is written down, so a rule pointing at it resolves to
+// whatever the label holds.
+TEST(UpdateInfoTest, LabelIsResolved)
 {
-    UpdateInfo update_info = UpdateInfo::fromXml(QByteArray());
-
-    EXPECT_FALSE(update_info.isValid());
-    EXPECT_TRUE(update_info.version().isNull());
-    EXPECT_TRUE(update_info.description().isEmpty());
-    EXPECT_TRUE(update_info.url().isEmpty());
+    EXPECT_EQ(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(3, 0, 0)),
+              QVersionNumber(3, 0, 6));
 }
 
 //--------------------------------------------------------------------------------------------------
-// Every failure of the update server is a plain text message from die(), not XML - including the
-// normal "there is nothing to update" answer.
-TEST(UpdateInfoTest, ServerErrorMessagesAreNotUpdates)
+// A version nobody wrote a rule for gets nothing, and so does the version the label names: no rule
+// has it as a source until the next release is out.
+TEST(UpdateInfoTest, VersionWithoutRuleIsNotOffered)
 {
-    const char* kMessages[] =
+    EXPECT_TRUE(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(2, 7, 0)).isNull());
+    EXPECT_TRUE(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(3, 0, 6)).isNull());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(UpdateInfoTest, UnknownLabelIsNotOffered)
+{
+    QByteArray rules = R"({
+        "format": 1,
+        "targets": { "latest": "3.0.6" },
+        "updates": [ { "source": "3.0.0", "target": "@stable" } ]
+    })";
+
+    EXPECT_TRUE(UpdateInfo::targetVersion(rules, QVersionNumber(3, 0, 0)).isNull());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trailing zeros do not make another version: 3.0 and 3.0.0 are the same release.
+TEST(UpdateInfoTest, SourceIsComparedAsVersion)
+{
+    QByteArray rules = R"({
+        "format": 1,
+        "updates": [ { "source": "3.0", "target": "3.0.6" } ]
+    })";
+
+    EXPECT_EQ(UpdateInfo::targetVersion(rules, QVersionNumber(3, 0, 0)), QVersionNumber(3, 0, 6));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(UpdateInfoTest, BrokenRulesAreNotOffered)
+{
+    const char* kAnswers[] =
     {
-        "No updates available",
-        "No releases available",
-        "Download url not found.",
-        "Empty URL for download",
-        "Empty target version",
-        "Invalid request received.",
-        "Could not connect to database: Access denied for user",
-        "Failed to execute database query: Table 'updates' doesn't exist"
+        "",
+        "not a json at all",
+        "[]",
+        "<html><body>404 Not Found</body></html>",
+        R"({ "format": 2, "updates": [ { "source": "3.0.0", "target": "3.0.6" } ] })",
+        R"({ "updates": [ { "source": "3.0.0", "target": "3.0.6" } ] })",
+        R"({ "format": 1 })",
+        R"({ "format": 1, "updates": [ { "source": "3.0.0", "target": "" } ] })"
     };
 
-    for (const char* message : kMessages)
-        EXPECT_FALSE(UpdateInfo::fromXml(QByteArray(message)).isValid()) << message;
+    for (const char* answer : kAnswers)
+    {
+        EXPECT_TRUE(UpdateInfo::targetVersion(QByteArray(answer), QVersionNumber(3, 0, 0)).isNull())
+            << answer;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-// The welcome page of the update server (common/web/index.php) - what a request that missed
-// update.php gets back. It has a blank line in front of the markup, so it is not even taken for XML.
-TEST(UpdateInfoTest, WelcomePageIsNotAnUpdate)
+TEST(UpdateInfoTest, ManifestIsParsed)
 {
-    const QByteArray page =
-        "\n\n<html>\n\t<head>\n\t\t<title>Aspia Update Server</title>\n\t</head>\n</html>";
-
-    EXPECT_FALSE(UpdateInfo::fromXml(page).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// Anything in front of the declaration - a byte order mark, a stray newline printed by a PHP file
-// past its closing tag - makes the whole answer unusable.
-TEST(UpdateInfoTest, LeadingCharactersAreNotAccepted)
-{
-    EXPECT_FALSE(UpdateInfo::fromXml("\n" + serverXml()).isValid());
-    EXPECT_FALSE(UpdateInfo::fromXml("\xEF\xBB\xBF" + serverXml()).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The description is written with xmlwriter_text(), which escapes the markup characters.
-TEST(UpdateInfoTest, EscapedDescriptionIsDecoded)
-{
-    UpdateInfo update_info = UpdateInfo::fromXml(
-        serverXml("2.7.0", "Fixes &lt;b&gt;R&amp;D&lt;/b&gt; issues", kUrl));
+    UpdateInfo update_info =
+        UpdateInfo::fromManifest(manifestJson(), "host", "windows", "x86_64", "msi");
 
     ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.description(), QString("Fixes <b>R&D</b> issues"));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The description column is a text field, so it holds whatever the release notes were written as.
-TEST(UpdateInfoTest, MultilineDescriptionIsKept)
-{
-    UpdateInfo update_info = UpdateInfo::fromXml(
-        serverXml("2.7.0", "First line.\nSecond line.\nThird line.", kUrl));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.description(), QString("First line.\nSecond line.\nThird line."));
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, NonAsciiDescriptionIsDecoded)
-{
-    const QString description = QString::fromUtf8("Nouvelle version. Neue Version.");
-
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0", description, kUrl));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.description(), description);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A release with no notes at all: the column is empty, so the element carries no text.
-TEST(UpdateInfoTest, EmptyDescriptionIsAccepted)
-{
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0", QString(), kUrl));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_TRUE(update_info.description().isEmpty());
-    EXPECT_EQ(update_info.version(), QVersionNumber(2, 7, 0));
-    EXPECT_EQ(update_info.url(), QString(kUrl));
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, SelfClosingElementIsAccepted)
-{
-    const QByteArray xml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<update>\n"
-        " <version>2.7.0</version>\n"
-        " <description/>\n"
-        " <url>" + QByteArray(kUrl) + "</url>\n"
-        "</update>\n";
-
-    UpdateInfo update_info = UpdateInfo::fromXml(xml);
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_TRUE(update_info.description().isEmpty());
-    EXPECT_EQ(update_info.url(), QString(kUrl));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A field the server learns to send later must not disturb the fields that are known.
-TEST(UpdateInfoTest, UnknownElementsAreIgnored)
-{
-    const QByteArray xml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<update>\n"
-        " <version>2.7.0</version>\n"
-        " <signature>3045022100</signature>\n"
-        " <description>A new version of the program.</description>\n"
-        " <url>" + QByteArray(kUrl) + "</url>\n"
-        "</update>\n";
-
-    UpdateInfo update_info = UpdateInfo::fromXml(xml);
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.version(), QVersionNumber(2, 7, 0));
+    EXPECT_EQ(update_info.version(), QVersionNumber(3, 0, 6));
     EXPECT_EQ(update_info.description(), QString("A new version of the program."));
     EXPECT_EQ(update_info.url(), QString(kUrl));
+    EXPECT_EQ(update_info.sha256(), QString(kSha256));
 }
 
 //--------------------------------------------------------------------------------------------------
-// The version column of the server holds any string; the request is cut to three groups, the
-// release version is not.
-TEST(UpdateInfoTest, VersionWithFourGroupsIsParsed)
+// A release built for other platforms carries no files for this one, and that is not an error.
+TEST(UpdateInfoTest, PlatformWithoutFilesIsNotOffered)
 {
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0.1234", "Release", kUrl));
+    EXPECT_FALSE(
+        UpdateInfo::fromManifest(manifestJson(), "host", "windows", "x86", "msi").isValid());
+    EXPECT_FALSE(
+        UpdateInfo::fromManifest(manifestJson(), "host", "macosx", "arm64", QString()).isValid());
+    EXPECT_FALSE(
+        UpdateInfo::fromManifest(manifestJson(), "client", "windows", "x86_64", "msi").isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Where a platform has several formats, the preferred one is taken; without a preference, or with
+// one the manifest does not carry, the first file listed is.
+TEST(UpdateInfoTest, PreferredFormatIsTaken)
+{
+    UpdateInfo rpm = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "rpm");
+    ASSERT_TRUE(rpm.isValid());
+    EXPECT_EQ(rpm.url(), QString("https://aspia.org/d/host.rpm"));
+
+    UpdateInfo any = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", QString());
+    ASSERT_TRUE(any.isValid());
+    EXPECT_EQ(any.url(), QString("https://aspia.org/d/host.deb"));
+
+    UpdateInfo missing = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "msi");
+    ASSERT_TRUE(missing.isValid());
+    EXPECT_EQ(missing.url(), QString("https://aspia.org/d/host.deb"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(UpdateInfoTest, ManifestWithoutDescriptionIsValid)
+{
+    UpdateInfo update_info =
+        UpdateInfo::fromManifest(manifestJson("3.0.6", QString(), kUrl, kSha256),
+                                 "host", "windows", "x86_64", "msi");
 
     ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.version(), QVersionNumber({ 2, 7, 0, 1234 }));
+    EXPECT_TRUE(update_info.description().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// The answer is taken as an update even when the version is missing or unreadable: only the lengths
-// of the description and of the URL are checked. The caller compares the version with its own, and
-// a null version never looks newer.
-TEST(UpdateInfoTest, VersionIsNotValidated)
+TEST(UpdateInfoTest, TooLongDescriptionIsRejected)
 {
-    const QByteArray xml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<update>\n"
-        " <description>A new version of the program.</description>\n"
-        " <url>" + QByteArray(kUrl) + "</url>\n"
-        "</update>\n";
+    QString description = QString("a").repeated(4097);
 
-    UpdateInfo update_info = UpdateInfo::fromXml(xml);
-
-    EXPECT_TRUE(update_info.isValid());
-    EXPECT_TRUE(update_info.version().isNull());
+    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", description, kUrl, kSha256),
+                                          "host", "windows", "x86_64", "msi").isValid());
 }
 
 //--------------------------------------------------------------------------------------------------
-// An answer without a download link is useless, and the empty URL is shorter than the minimum.
-TEST(UpdateInfoTest, MissingUrlIsNotAnUpdate)
+TEST(UpdateInfoTest, BrokenUrlIsRejected)
 {
-    const QByteArray xml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<update>\n"
-        " <version>2.7.0</version>\n"
-        " <description>A new version of the program.</description>\n"
-        "</update>\n";
+    const char* kUrls[] = { "", "http://a." };
 
-    EXPECT_FALSE(UpdateInfo::fromXml(xml).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, TooShortUrlIsNotAnUpdate)
-{
-    // Nine characters, one below the minimum.
-    EXPECT_FALSE(UpdateInfo::fromXml(serverXml("2.7.0", "Release", "http://a.")).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, UrlOfMinimumLengthIsAccepted)
-{
-    const QString url("http://a.b");
-    ASSERT_EQ(url.size(), 10);
-
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0", "Release", url));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.url(), url);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The url column of the server is a varchar(256), so a link of exactly that length can be stored
-// and must still be taken.
-TEST(UpdateInfoTest, UrlOfMaximumLengthIsAccepted)
-{
-    const QString url = QString("https://aspia.org/") + QString(238, 'a');
-    ASSERT_EQ(url.size(), 256);
-
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0", "Release", url));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.url(), url);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, TooLongUrlIsNotAnUpdate)
-{
-    const QString url = QString("https://aspia.org/") + QString(239, 'a');
-    ASSERT_EQ(url.size(), 257);
-
-    EXPECT_FALSE(UpdateInfo::fromXml(serverXml("2.7.0", "Release", url)).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, DescriptionOfMaximumLengthIsAccepted)
-{
-    const QString description(4096, 'a');
-
-    UpdateInfo update_info = UpdateInfo::fromXml(serverXml("2.7.0", description, kUrl));
-
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.description(), description);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The description column of the server is a text field, which holds far more than the client takes.
-// Release notes past the limit make the whole update disappear for the user.
-TEST(UpdateInfoTest, TooLongDescriptionIsNotAnUpdate)
-{
-    const QString description(4097, 'a');
-
-    EXPECT_FALSE(UpdateInfo::fromXml(serverXml("2.7.0", description, kUrl)).isValid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The answer of the server can arrive cut short - a dropped connection, a proxy that gave up. The
-// document then has no closing element for the field being read.
-TEST(UpdateInfoTest, TruncatedAnswerIsNotAnUpdate)
-{
-    const QByteArray kAnswers[] =
+    for (const char* url : kUrls)
     {
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n <version>2.7.0</version>\n "
-            "<description>A new version",
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n <version>",
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n <ver",
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+        EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", url, kSha256),
+                                              "host", "windows", "x86_64", "msi").isValid()) << url;
+    }
+
+    QString long_url = QString("https://aspia.org/") + QString("a").repeated(256);
+
+    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", long_url, kSha256),
+                                          "host", "windows", "x86_64", "msi").isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A file nobody can check is not offered: the hash is what proves the download is the release.
+TEST(UpdateInfoTest, BrokenSha256IsRejected)
+{
+    const char* kHashes[] =
+    {
+        "",
+        "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0",
+        "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a088",
+        "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00zzz"
     };
 
-    for (const QByteArray& answer : kAnswers)
-        EXPECT_FALSE(UpdateInfo::fromXml(answer).isValid()) << answer.constData();
+    for (const char* sha256 : kHashes)
+    {
+        EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", kUrl, sha256),
+                                              "host", "windows", "x86_64", "msi").isValid())
+            << sha256;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// The hash is written in either case, and the parsed record keeps one of them.
+TEST(UpdateInfoTest, Sha256IsLowerCased)
+{
+    UpdateInfo update_info =
+        UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", kUrl, QString(kSha256).toUpper()),
+                                 "host", "windows", "x86_64", "msi");
+
+    ASSERT_TRUE(update_info.isValid());
+    EXPECT_EQ(update_info.sha256(), QString(kSha256));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST(UpdateInfoTest, BrokenManifestIsNotOffered)
+{
+    const char* kAnswers[] =
+    {
+        "",
+        "not a json at all",
+        "<html><body>404 Not Found</body></html>",
+        R"({ "format": 2, "version": "3.0.6", "packages": {} })",
+        R"({ "format": 1, "packages": {} })"
+    };
+
+    for (const char* answer : kAnswers)
+    {
+        EXPECT_FALSE(UpdateInfo::fromManifest(QByteArray(answer), "host", "windows", "x86_64",
+                                              "msi").isValid()) << answer;
+    }
 }

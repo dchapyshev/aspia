@@ -266,7 +266,6 @@ if (NOT ANDROID)
 endif()
 
 if (APPLE)
-    set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "Aspia Client")
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
 
     # Localized bundle display name.

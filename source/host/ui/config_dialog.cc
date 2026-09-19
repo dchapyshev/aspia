@@ -24,12 +24,13 @@
 #include <QTimer>
 #include <QTranslator>
 
+#include "base/build_config.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "host/database.h"
@@ -137,7 +138,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         ui->edit_update_server->setEnabled(checked);
 
         if (!checked)
-            ui->edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+            ui->edit_update_server->setText(kDefaultUpdateServer);
     });
 
     connect(ui->edit_update_server, &QLineEdit::textEdited,
@@ -145,7 +146,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        UpdateDialog(SystemSettings().updateServer(), "host", this).exec();
+        if (UpdateDialog(SystemSettings().updateServer(), "host", UpdateDialog::Action::ASK,
+                         this).exec() == QDialog::Accepted)
+            GuiApplication::quit();
     });
 
     ui->combo_video_capturer->addItem(
@@ -564,7 +567,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
-                ui->edit_router_address->text(), DEFAULT_ROUTER_HOST_TCP_PORT);
+                ui->edit_router_address->text(), kDefaultRouterHostTcpPort);
             if (!router_address.isValid())
             {
                 MsgBox::warning(this, tr("Incorrect router address entered."));
@@ -597,7 +600,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         db.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
-        settings.setUpdateServer(ui->edit_update_server->text());
+        settings.setUpdateServer(ui->checkbox_use_custom_server->isChecked() ?
+                                 ui->edit_update_server->text() : QString());
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
 
         db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
@@ -726,7 +730,7 @@ void ConfigDialog::reloadAll()
     reloadUserList();
 
     ui->spinbox_port->setValue(db.tcpPort());
-    ui->checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
+    ui->checkbox_use_custom_server->setChecked(settings.updateServer() != kDefaultUpdateServer);
     ui->edit_update_server->setText(settings.updateServer());
 
     ui->edit_update_server->setEnabled(ui->checkbox_use_custom_server->isChecked());

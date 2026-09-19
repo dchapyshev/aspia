@@ -18,7 +18,7 @@
 
 #include "host/system_settings.h"
 
-#include "build/build_config.h"
+#include "base/build_config.h"
 #include "host/screen_capturer.h"
 
 namespace {
@@ -74,7 +74,11 @@ void SystemSettings::sync()
 //--------------------------------------------------------------------------------------------------
 QString SystemSettings::updateServer() const
 {
-    return settings_.value(kUpdateServer, QString(DEFAULT_UPDATE_SERVER)).toString();
+    QString value = settings_.value(kUpdateServer).toString();
+    if (value.isEmpty())
+        value = kDefaultUpdateServer;
+
+    return value;
 }
 
 //--------------------------------------------------------------------------------------------------

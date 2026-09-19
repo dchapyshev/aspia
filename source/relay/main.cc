@@ -20,11 +20,11 @@
 #include <QIODevice>
 #include <QSysInfo>
 
+#include "version.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/files/base_paths.h"
 #include "base/threading/asio_event_dispatcher.h"
-#include "build/version.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
 #include "relay/settings.h"

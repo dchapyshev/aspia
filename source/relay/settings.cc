@@ -18,8 +18,8 @@
 
 #include "relay/settings.h"
 
+#include "base/build_config.h"
 #include "base/files/base_paths.h"
-#include "build/build_config.h"
 
 namespace {
 
@@ -75,11 +75,11 @@ bool Settings::hasError() const
 void Settings::reset()
 {
     setRouterAddress("127.0.0.1");
-    setRouterPort(DEFAULT_ROUTER_RELAY_TCP_PORT);
+    setRouterPort(kDefaultRouterRelayTcpPort);
     setRouterPublicKey(QByteArray());
     setListenInterface(QString());
     setPeerAddress(QString());
-    setPeerPort(DEFAULT_RELAY_PEER_TCP_PORT);
+    setPeerPort(kDefaultRelayPeerTcpPort);
     setPeerIdleTimeout(Minutes(5));
     setMaxPeerCount(100);
 }
@@ -111,7 +111,7 @@ void Settings::setRouterPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::routerPort() const
 {
-    return ini_.uint16Value(kRouterSection, "port", DEFAULT_ROUTER_RELAY_TCP_PORT);
+    return ini_.uint16Value(kRouterSection, "port", kDefaultRouterRelayTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ void Settings::setPeerPort(quint16 port)
 //--------------------------------------------------------------------------------------------------
 quint16 Settings::peerPort() const
 {
-    return ini_.uint16Value(kPeerSection, "port", DEFAULT_RELAY_PEER_TCP_PORT);
+    return ini_.uint16Value(kPeerSection, "port", kDefaultRelayPeerTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------

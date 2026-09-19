@@ -3243,11 +3243,6 @@ Password: %2</source>
         <translation>אל תציג הודעות במהלך ייבוא וייצוא.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>פתיחת תיבת הדו-שיח של בדיקת העדכונים.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>פתיחת תיבת הדו-שיח של ההגדרות.</translation>

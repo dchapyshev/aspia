@@ -20,9 +20,9 @@
 #include <QJniObject>
 #include <QSysInfo>
 
+#include "version.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
-#include "build/version.h"
 #include "host/android/application.h"
 #include "host/android/main_window.h"
 

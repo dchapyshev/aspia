@@ -22,12 +22,12 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "common/android/button.h"
@@ -253,7 +253,7 @@ void LocalHostEditor::onSaveClicked()
 
     if (router_id == 0)
     {
-        if (!Address::fromString(address_text, DEFAULT_HOST_TCP_PORT).isValid())
+        if (!Address::fromString(address_text, kDefaultHostTcpPort).isValid())
         {
             showError(tr("An invalid host address was entered."));
             edit_address_->setFocus();

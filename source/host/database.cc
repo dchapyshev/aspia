@@ -21,6 +21,7 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
@@ -29,7 +30,6 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
-#include "build/build_config.h"
 
 namespace {
 
@@ -381,7 +381,7 @@ quint16 Database::tcpPort() const
     bool ok = false;
     uint value = readSetting(kSettingTcpPort).toUInt(&ok);
     if (!ok)
-        return DEFAULT_HOST_TCP_PORT;
+        return kDefaultHostTcpPort;
     return static_cast<quint16>(value);
 }
 
@@ -406,7 +406,7 @@ bool Database::setRouterEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 Address Database::routerAddress() const
 {
-    return Address::fromString(readSetting(kSettingRouterAddress), DEFAULT_ROUTER_HOST_TCP_PORT);
+    return Address::fromString(readSetting(kSettingRouterAddress), kDefaultRouterHostTcpPort);
 }
 
 //--------------------------------------------------------------------------------------------------

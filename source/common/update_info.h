@@ -32,18 +32,31 @@ public:
     UpdateInfo& operator=(const UpdateInfo& other) = default;
     ~UpdateInfo() = default;
 
-    static UpdateInfo fromXml(const QByteArray& buffer);
+    // The version latest.json offers to |current|, or a null version when it names none.
+    static QVersionNumber targetVersion(const QByteArray& buffer, const QVersionNumber& current);
+
+    // The file of |package| built for this OS and architecture, taken from the manifest of one
+    // version. |format| is the package format to prefer; with an empty one, or when the manifest
+    // has no file of that format, the first file listed is taken.
+    static UpdateInfo fromManifest(const QByteArray& buffer, const QString& package,
+                                   const QString& os, const QString& arch, const QString& format);
 
     bool isValid() const { return valid_; }
     const QVersionNumber& version() const { return version_; }
     const QString& description() const { return description_; }
     const QString& url() const { return url_; }
+    const QString& sha256() const { return sha256_; }
+
+    // Package format of the file: what the system is asked to install (msi, deb, rpm, pkg, apk).
+    const QString& format() const { return format_; }
 
 private:
     bool valid_ = false;
     QVersionNumber version_;
     QString description_;
     QString url_;
+    QString sha256_;
+    QString format_;
 };
 
 Q_DECLARE_METATYPE(UpdateInfo)

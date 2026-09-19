@@ -19,7 +19,6 @@
 #include "client/workers/update_worker.h"
 
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "client/database.h"
 #include "common/update_checker.h"
 
@@ -39,7 +38,7 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onPrepare()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     Database& db = Database::instance();
 
     if (!db.isCheckUpdatesEnabled())
@@ -50,21 +49,23 @@ void UpdateWorker::onPrepare()
 
     update_checker_ = new UpdateChecker(db.updateServer(), "client", this);
 
-    connect(update_checker_, &UpdateChecker::sig_checkedFinished,
-            this, &UpdateWorker::onUpdateCheckedFinished);
-#endif // defined(Q_OS_WINDOWS)
+    connect(update_checker_, &UpdateChecker::sig_checkFinished,
+            this, &UpdateWorker::onUpdateCheckFinished);
+    connect(update_checker_, &UpdateChecker::sig_checkFailed,
+            this, &UpdateWorker::onUpdateCheckFailed);
+#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onStart()
 {
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
     if (!update_checker_)
         return;
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
-#endif // defined(Q_OS_WINDOWS)
+#endif // defined(Q_OS_WINDOWS) || defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,33 +79,26 @@ void UpdateWorker::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UpdateWorker::onUpdateCheckedFinished(const QByteArray& result)
+void UpdateWorker::onUpdateCheckFinished(const UpdateInfo& update_info)
 {
     update_checker_->disconnect(this);
     update_checker_.reset();
 
-    if (result.isEmpty())
-    {
-        LOG(ERROR) << "Error while retrieving update information";
-        return;
-    }
-
-    UpdateInfo update_info = UpdateInfo::fromXml(result);
     if (!update_info.isValid())
     {
         LOG(INFO) << "No updates available";
         return;
     }
 
-    const QVersionNumber& current_version = kCurrentVersion;
-    const QVersionNumber& update_version = update_info.version();
-
-    if (update_version <= current_version)
-    {
-        LOG(INFO) << "No available updates";
-        return;
-    }
-
-    LOG(INFO) << "New version available:" << update_version.toString();
+    LOG(INFO) << "New version available:" << update_info.version().toString();
     emit sig_updateAvailable(update_info);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWorker::onUpdateCheckFailed()
+{
+    update_checker_->disconnect(this);
+    update_checker_.reset();
+
+    LOG(ERROR) << "Error while retrieving update information";
 }

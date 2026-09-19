@@ -26,6 +26,7 @@
 
 #include <optional>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
@@ -33,7 +34,6 @@
 #include "base/net/tcp_server.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
-#include "build/build_config.h"
 #include "host/client.h"
 #include "host/database.h"
 #include "host/host_user_list.h"
@@ -270,7 +270,7 @@ void ServerWorker::onRouterStateChanged(const proto::user::RouterState& state)
 
     if (state.state() != proto::user::RouterState::DISABLED)
     {
-        Address address(DEFAULT_ROUTER_HOST_TCP_PORT);
+        Address address(kDefaultRouterHostTcpPort);
         address.setHost(QString::fromStdString(state.host_name()));
         address.setPort(static_cast<quint16>(state.host_port()));
         router = address.toString();

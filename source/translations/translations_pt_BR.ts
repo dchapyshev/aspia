@@ -3243,11 +3243,6 @@ Senha: %2</translation>
         <translation>Não exibir nenhuma mensagem durante a importação e exportação.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Chamando a caixa de diálogo de verificação de atualizações.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Chamando a caixa de diálogo de configurações.</translation>

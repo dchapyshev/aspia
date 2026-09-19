@@ -154,9 +154,13 @@ MainWindow::MainWindow(QWidget* parent)
     connect(find_shortcut, &QShortcut::activated, this, &MainWindow::onFindAction);
 
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
-            this, [this](const UpdateInfo& update_info)
+            this, [this](const UpdateInfo& /* update_info */)
     {
-        UpdateDialog(update_info, this).exec();
+        if (UpdateDialog(Database::instance().updateServer(), "client", UpdateDialog::Action::ASK,
+                         this).exec() == QDialog::Accepted)
+        {
+            GuiApplication::quit();
+        }
     }, Qt::QueuedConnection);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,

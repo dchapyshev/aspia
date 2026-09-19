@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/elevate_util.h"
+#include "common/desktop/elevate_util.h"
 
 #include <QCoreApplication>
-#include <QString>
+#include <QStringList>
 
 #include "base/logging.h"
 
@@ -32,27 +32,66 @@
 #include "base/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include <unistd.h>
-
 #include <QGuiApplication>
 #include <QProcess>
 #include <QtGui/qguiapplication_platform.h>
-
 #include <xcb/xcb.h>
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_MACOS)
 #include <unistd.h>
-
+#include <vector>
 #include <QSocketNotifier>
-
 #include <Security/Authorization.h>
 #endif // defined(Q_OS_MACOS)
 
 namespace {
 
 #if defined(Q_OS_WINDOWS)
+
+//--------------------------------------------------------------------------------------------------
+// Quotes an argument the way the C runtime of the new process expects to find it. Windows passes the
+// command line as a single string and every process splits it on its own.
+QString quoteArgument(const QString& argument)
+{
+    if (!argument.isEmpty() && !argument.contains(' ') && !argument.contains('\t') &&
+        !argument.contains('"'))
+    {
+        return argument;
+    }
+
+    QString result('"');
+
+    for (qsizetype i = 0; i < argument.size(); ++i)
+    {
+        qsizetype backslashes = 0;
+        while (i < argument.size() && argument[i] == '\\')
+        {
+            ++backslashes;
+            ++i;
+        }
+
+        if (i == argument.size())
+        {
+            // The backslashes in front of the closing quote are doubled, so that they do not turn
+            // it into a quote of their own.
+            result += QString(backslashes * 2, '\\');
+            break;
+        }
+
+        if (argument[i] == '"')
+            result += QString(backslashes * 2 + 1, '\\');
+        else
+            result += QString(backslashes, '\\');
+
+        result += argument[i];
+    }
+
+    result += '"';
+    return result;
+}
 
 //--------------------------------------------------------------------------------------------------
 class WinElevateUtil final : public ElevateUtil
@@ -65,10 +104,10 @@ public:
     }
 
     // ElevateUtil implementation.
-    bool runElevated(const QString& argument, quintptr parent_window,
-                     std::function<void()> on_finished) final
+    bool runElevated(const QStringList& arguments, quintptr parent_window,
+                     std::function<void(int)> on_finished) final
     {
-        if (ProcessUtil::isProcessElevated())
+        if (isPrivileged())
             return false;
 
         LOG(INFO) << "Process not elevated";
@@ -80,15 +119,26 @@ public:
             return false;
         }
 
+        // Both strings have to outlive the call, so they are taken from objects of our own and not
+        // from temporaries.
+        QString parameters;
+        for (const QString& argument : arguments)
+        {
+            if (!parameters.isEmpty())
+                parameters += ' ';
+
+            parameters += quoteArgument(argument);
+        }
+
         SHELLEXECUTEINFOW sei;
         memset(&sei, 0, sizeof(sei));
 
         sei.cbSize = sizeof(sei);
         sei.lpVerb = L"runas";
-        sei.lpFile = qUtf16Printable(exec_file);
+        sei.lpFile = reinterpret_cast<const wchar_t*>(exec_file.utf16());
         sei.hwnd = reinterpret_cast<HWND>(parent_window);
         sei.nShow = SW_SHOW;
-        sei.lpParameters = qUtf16Printable(argument);
+        sei.lpParameters = reinterpret_cast<const wchar_t*>(parameters.utf16());
         sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 
         if (!ShellExecuteExW(&sei))
@@ -102,9 +152,17 @@ public:
         {
             watcher->setEnabled(false);
             watcher->deleteLater();
+
+            DWORD exit_code = 0;
+            if (!GetExitCodeProcess(process, &exit_code))
+            {
+                PLOG(ERROR) << "GetExitCodeProcess failed";
+                exit_code = static_cast<DWORD>(kNoExitCode);
+            }
+
             // SEE_MASK_NOCLOSEPROCESS hands the process handle to the caller.
             CloseHandle(process);
-            on_finished();
+            on_finished(static_cast<int>(exit_code));
         });
 
         watcher->setHandle(sei.hProcess);
@@ -115,7 +173,7 @@ public:
 
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 // Grants or revokes access to the running X display for the root user via the X SECURITY extension
@@ -152,11 +210,11 @@ public:
     }
 
     // ElevateUtil implementation.
-    bool runElevated(const QString& argument, quintptr /* parent_window */,
-                     std::function<void()> on_finished) final
+    bool runElevated(const QStringList& arguments, quintptr /* parent_window */,
+                     std::function<void(int)> on_finished) final
     {
-        // Already root, or running setuid: edit the configuration in-process.
-        if (getuid() == 0 || getuid() != geteuid())
+        // Already root, or running setuid: do the work in-process.
+        if (isPrivileged())
             return false;
 
         LOG(INFO) << "Start dialog as super user";
@@ -170,7 +228,22 @@ public:
 
             setRootDisplayAccess(false);
             process->deleteLater();
-            on_finished();
+            on_finished(exit_code);
+        });
+
+        // A process that failed to start reports no exit code and emits nothing else, so the caller
+        // hears about it here or waits forever.
+        connect(process, &QProcess::errorOccurred, this,
+                [process, on_finished](QProcess::ProcessError error)
+        {
+            if (error != QProcess::FailedToStart)
+                return;
+
+            LOG(ERROR) << "Unable to start process:" << process->errorString();
+
+            setRootDisplayAccess(false);
+            process->deleteLater();
+            on_finished(kNoExitCode);
         });
 
         // Run the application itself as root so its dialog can edit the system configuration. It is the
@@ -178,12 +251,12 @@ public:
         // DISPLAY/XAUTHORITY where the desktop issues an X cookie; on cookie-less Wayland compositors
         // (wlroots/labwc) setRootDisplayAccess grants the root helper access to the display instead.
         setRootDisplayAccess(true);
-        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << argument);
+        process->start("pkexec", QStringList() << QCoreApplication::applicationFilePath() << arguments);
         return true;
     }
 };
 
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
 #if defined(Q_OS_MACOS)
 
@@ -198,11 +271,11 @@ public:
     }
 
     // ElevateUtil implementation.
-    bool runElevated(const QString& argument, quintptr /* parent_window */,
-                     std::function<void()> on_finished) final
+    bool runElevated(const QStringList& arguments, quintptr /* parent_window */,
+                     std::function<void(int)> on_finished) final
     {
-        // Already root, or running setuid: edit the configuration in-process.
-        if (getuid() == 0 || getuid() != geteuid())
+        // Already root, or running setuid: do the work in-process.
+        if (isPrivileged())
             return false;
 
         LOG(INFO) << "Start dialog as super user";
@@ -216,15 +289,24 @@ public:
             return false;
         }
 
-        // Run the application itself as root (for the root-owned config) but inside the console user's
-        // Aqua session via "launchctl asuser <uid>" so its dialog reaches the WindowServer - a plain
-        // privileged process runs outside the GUI session and cannot show UI. Requesting the right from
-        // the application (not through an osascript helper) makes the system authentication prompt name
-        // the host rather than the interpreter.
-        QByteArray uid = QByteArray::number(getuid());
-        QByteArray app = QCoreApplication::applicationFilePath().toLocal8Bit();
-        QByteArray arg = argument.toLocal8Bit();
-        char* arguments[] = { const_cast<char*>("asuser"), uid.data(), app.data(), arg.data(), nullptr };
+        // A privileged process runs outside the GUI session and cannot show windows, so the
+        // application is started by "launchctl asuser" inside the session of the console user.
+        // Asking for the right from the application makes the system prompt name the host and not
+        // an interpreter.
+        QList<QByteArray> argument_data;
+        argument_data.append("asuser");
+        argument_data.append(QByteArray::number(getuid()));
+        argument_data.append(QCoreApplication::applicationFilePath().toLocal8Bit());
+
+        for (const QString& argument : arguments)
+            argument_data.append(argument.toLocal8Bit());
+
+        std::vector<char*> argument_pointers;
+
+        for (QByteArray& argument : argument_data)
+            argument_pointers.push_back(argument.data());
+
+        argument_pointers.push_back(nullptr);
 
         FILE* pipe = nullptr;
 
@@ -232,7 +314,7 @@ public:
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         // No non-deprecated replacement exists without shipping a signed SMJobBless helper.
         status = AuthorizationExecuteWithPrivileges(
-            authorization, "/bin/launchctl", kAuthorizationFlagDefaults, arguments, &pipe);
+            authorization, "/bin/launchctl", kAuthorizationFlagDefaults, argument_pointers.data(), &pipe);
 #pragma clang diagnostic pop
 
         if (status != errAuthorizationSuccess)
@@ -257,7 +339,9 @@ public:
             notifier->deleteLater();
             fclose(pipe);
             AuthorizationFree(authorization, kAuthorizationFlagDefaults);
-            on_finished();
+
+            // Completion arrives as the end of the pipe, so there is no exit code to report.
+            on_finished(kNoExitCode);
         });
 
         return true;
@@ -280,16 +364,29 @@ ElevateUtil::~ElevateUtil() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<ElevateUtil> ElevateUtil::create(QObject* parent)
+ScopedQPointer<ElevateUtil> ElevateUtil::create(QObject* parent)
 {
 #if defined(Q_OS_WINDOWS)
-    return std::make_unique<WinElevateUtil>(parent);
-#elif defined(Q_OS_LINUX)
-    return std::make_unique<LinuxElevateUtil>(parent);
+    return ScopedQPointer<ElevateUtil>(new WinElevateUtil(parent));
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    return ScopedQPointer<ElevateUtil>(new LinuxElevateUtil(parent));
 #elif defined(Q_OS_MACOS)
-    return std::make_unique<MacElevateUtil>(parent);
+    return ScopedQPointer<ElevateUtil>(new MacElevateUtil(parent));
 #else
     Q_UNUSED(parent);
-    return nullptr;
+    return ScopedQPointer<ElevateUtil>();
+#endif // defined(Q_OS_*)
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool ElevateUtil::isPrivileged()
+{
+#if defined(Q_OS_WINDOWS)
+    return ProcessUtil::isProcessElevated();
+#elif (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
+    return getuid() == 0 || getuid() != geteuid();
+#else
+    return false;
 #endif // defined(Q_OS_*)
 }

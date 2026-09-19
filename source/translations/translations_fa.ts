@@ -3233,11 +3233,6 @@ Password: %2</source>
         <translation>در طول وارد کردن و صادر کردن هیچ پیامی نمایش داده نشود.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>فراخوانی پنجره بررسی به‌روزرسانی.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>فراخوانی پنجره تنظیمات.</translation>

@@ -39,8 +39,8 @@
 #include "base/win/window_station.h"
 #endif // defined(Q_OS_WINDOWS)
 
-#include "build/build_config.h"
-#include "build/version.h"
+#include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
@@ -148,7 +148,7 @@ void doHostMigrate(const QJsonDocument& doc)
         db.setOneTimePasswordLength(value);
     }
 
-    Address router_address(DEFAULT_ROUTER_HOST_TCP_PORT);
+    Address router_address(kDefaultRouterHostTcpPort);
 
     if (root_object.contains("RouterAddress"))
     {
@@ -169,8 +169,8 @@ void doHostMigrate(const QJsonDocument& doc)
         quint16 value = root_object["RouterPort"].toString().toUShort();
         LOG(INFO) << "RouterPort:" << value;
 
-        if (value == 0 || value == DEFAULT_ROUTER_LEGACY_HOST_TCP_PORT)
-            value = DEFAULT_ROUTER_HOST_TCP_PORT;
+        if (value == 0 || value == kDefaultRouterLegacyHostTcpPort)
+            value = kDefaultRouterHostTcpPort;
 
         router_address.setPort(value);
     }

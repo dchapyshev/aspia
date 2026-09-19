@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
+#include "base/build_config.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
-#include "build/build_config.h"
 
 namespace {
 
@@ -190,7 +190,7 @@ TEST_F(HostDatabaseTest, FailedReplaceKeepsTheStoredUsers)
 // A fresh database answers with the defaults of the host instead of empty values.
 TEST_F(HostDatabaseTest, FreshDatabaseAnswersWithDefaults)
 {
-    EXPECT_EQ(db_->tcpPort(), DEFAULT_HOST_TCP_PORT);
+    EXPECT_EQ(db_->tcpPort(), kDefaultHostTcpPort);
     EXPECT_FALSE(db_->isRouterEnabled());
     EXPECT_TRUE(db_->oneTimePassword());
     EXPECT_EQ(db_->oneTimePasswordExpire(), Minutes(5));
@@ -205,7 +205,7 @@ TEST_F(HostDatabaseTest, FreshDatabaseAnswersWithDefaults)
 // Settings come back as they were written, including the ones stored as hex.
 TEST_F(HostDatabaseTest, SettingsSurviveAWriteAndRead)
 {
-    Address address(DEFAULT_ROUTER_HOST_TCP_PORT);
+    Address address(kDefaultRouterHostTcpPort);
     address.setHost("router.example.com");
     address.setPort(8061);
 

@@ -19,7 +19,7 @@
 #ifndef COMMON_HTTP_FILE_DOWNLOADER_H
 #define COMMON_HTTP_FILE_DOWNLOADER_H
 
-#include <QByteArray>
+#include <QFile>
 #include <QThread>
 
 #include <curl/curl.h>
@@ -29,13 +29,12 @@ class HttpFileDownloader final : public QThread
     Q_OBJECT
 
 public:
-    explicit HttpFileDownloader(const QString& url, QObject* parent = nullptr);
+    // Downloads |url| into |file_path|, replacing whatever is in that file.
+    HttpFileDownloader(const QString& url, const QString& file_path, QObject* parent = nullptr);
     ~HttpFileDownloader();
 
-    const QByteArray& data() const;
-
 signals:
-    void sig_downloadError(int error_code);
+    void sig_downloadError(const QString& error);
     void sig_downloadCompleted();
     void sig_downloadProgress(int percentage);
 
@@ -50,7 +49,8 @@ private:
 
     std::atomic_bool interrupted_ { false };
     const QString url_;
-    QByteArray data_;
+    const QString file_path_;
+    QFile file_;
 
     Q_DISABLE_COPY_MOVE(HttpFileDownloader)
 };

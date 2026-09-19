@@ -25,11 +25,11 @@
 
 #include <algorithm>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
-#include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
 #include "client/settings.h"
@@ -230,7 +230,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     if (router_id == 0)
     {
         Address address =
-            Address::fromString(ui->edit_address->text(), DEFAULT_HOST_TCP_PORT);
+            Address::fromString(ui->edit_address->text(), kDefaultHostTcpPort);
         if (!address.isValid())
         {
             MsgBox::warning(this, tr("An invalid host address was entered."));

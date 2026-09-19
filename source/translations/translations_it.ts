@@ -3243,11 +3243,6 @@ Password: %2</translation>
         <translation>Non mostrare messaggi durante l&apos;importazione e l&apos;esportazione.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
-        <source>Calling the update check dialog.</source>
-        <translation>Apre la finestra di controllo degli aggiornamenti.</translation>
-    </message>
-    <message>
         <location filename="../host/main.cc" line="550"/>
         <source>Calling the settings dialog.</source>
         <translation>Apre la finestra delle impostazioni.</translation>

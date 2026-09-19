@@ -22,9 +22,10 @@
 #include "base/net/curl_util.h"
 
 //--------------------------------------------------------------------------------------------------
-HttpFileDownloader::HttpFileDownloader(const QString& url, QObject* parent)
+HttpFileDownloader::HttpFileDownloader(const QString& url, const QString& file_path, QObject* parent)
     : QThread(parent),
-      url_(url)
+      url_(url),
+      file_path_(file_path)
 {
     LOG(INFO) << "Ctor";
 }
@@ -35,12 +36,6 @@ HttpFileDownloader::~HttpFileDownloader()
     LOG(INFO) << "Dtor";
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
-}
-
-//--------------------------------------------------------------------------------------------------
-const QByteArray& HttpFileDownloader::data() const
-{
-    return data_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,6 +69,14 @@ void HttpFileDownloader::run()
 {
     LOG(INFO) << "Starting http file downloader:" << url_;
     interrupted_.store(false, std::memory_order_relaxed);
+
+    file_.setFileName(file_path_);
+    if (!file_.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        LOG(ERROR) << "Unable to open file:" << file_.errorString();
+        emit sig_downloadError(file_.errorString());
+        return;
+    }
 
     ScopedCURL curl;
 
@@ -131,15 +134,25 @@ void HttpFileDownloader::run()
 
     curl_multi_remove_handle(multi_curl.get(), curl.get());
 
+    qint64 size = file_.size();
+    QFileDevice::FileError file_error = file_.error();
+    QString file_error_string = file_.errorString();
+
+    file_.close();
+
     if (!interrupted_.load(std::memory_order_relaxed))
     {
         if (error_code != CURLM_OK)
         {
-            emit sig_downloadError(error_code);
+            emit sig_downloadError(QString::fromLatin1(curl_multi_strerror(error_code)));
+        }
+        else if (file_error != QFileDevice::NoError)
+        {
+            emit sig_downloadError(file_error_string);
         }
         else
         {
-            LOG(INFO) << "Download is finished:" << data_.size() << "bytes";
+            LOG(INFO) << "Download is finished:" << size << "bytes";
             emit sig_downloadCompleted();
         }
     }
@@ -163,7 +176,13 @@ size_t HttpFileDownloader::writeDataCallback(
         }
 
         result = size * nmemb;
-        self->data_.append(reinterpret_cast<char*>(ptr), static_cast<qsizetype>(result));
+
+        if (self->file_.write(reinterpret_cast<char*>(ptr), static_cast<qint64>(result)) !=
+            static_cast<qint64>(result))
+        {
+            LOG(ERROR) << "Unable to write file:" << self->file_.errorString();
+            return 0;
+        }
     }
 
     return result;
