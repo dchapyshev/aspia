@@ -21,7 +21,7 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 class HttpFileDownloader;
 class UpdateChecker;

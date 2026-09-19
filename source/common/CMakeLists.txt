@@ -35,18 +35,10 @@ list(APPEND SOURCE_COMMON
     file_task.h
     file_task_factory.cc
     file_task_factory.h
-    http_file_downloader.cc
-    http_file_downloader.h
     keycode_converter.cc
     keycode_converter.h
     system_info_constants.cc
-    system_info_constants.h
-    update_checker.cc
-    update_checker.h
-    update_info.cc
-    update_info.h
-    update_installer.cc
-    update_installer.h)
+    system_info_constants.h)
 
 if (WIN32)
     list(APPEND SOURCE_COMMON
@@ -81,9 +73,7 @@ endif()
 list(APPEND SOURCE_COMMON_TESTS
     file_depacketizer_unittest.cc
     file_packetizer_unittest.cc
-    tests_main.cc
-    update_checker_unittest.cc
-    update_info_unittest.cc)
+    tests_main.cc)
 
 include(desktop/sources.cmake)
 

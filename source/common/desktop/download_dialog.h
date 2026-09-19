@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "common/http_file_downloader.h"
+#include "base/net/http_file_downloader.h"
 
 namespace Ui {
 class DownloadDialog;

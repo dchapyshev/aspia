@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/update_checker.h"
+#include "base/update/update_checker.h"
 
 #include <QHash>
 #include <QSignalSpy>

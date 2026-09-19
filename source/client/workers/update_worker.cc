@@ -19,8 +19,8 @@
 #include "client/workers/update_worker.h"
 
 #include "base/logging.h"
+#include "base/update/update_checker.h"
 #include "client/database.h"
-#include "common/update_checker.h"
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()

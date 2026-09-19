@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UPDATE_INFO_H
-#define COMMON_UPDATE_INFO_H
+#ifndef BASE_UPDATE_UPDATE_INFO_H
+#define BASE_UPDATE_UPDATE_INFO_H
 
 #include <QByteArray>
 #include <QMetaType>
@@ -67,4 +67,4 @@ private:
 
 Q_DECLARE_METATYPE(UpdateInfo)
 
-#endif // COMMON_UPDATE_INFO_H
+#endif // BASE_UPDATE_UPDATE_INFO_H

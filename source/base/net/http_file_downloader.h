@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_HTTP_FILE_DOWNLOADER_H
-#define COMMON_HTTP_FILE_DOWNLOADER_H
+#ifndef BASE_NET_HTTP_FILE_DOWNLOADER_H
+#define BASE_NET_HTTP_FILE_DOWNLOADER_H
 
 #include <QFile>
 #include <QThread>
@@ -55,4 +55,4 @@ private:
     Q_DISABLE_COPY_MOVE(HttpFileDownloader)
 };
 
-#endif // COMMON_HTTP_FILE_DOWNLOADER_H
+#endif // BASE_NET_HTTP_FILE_DOWNLOADER_H

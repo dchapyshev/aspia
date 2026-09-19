@@ -149,6 +149,7 @@ include(net/sources.cmake)
 include(peer/sources.cmake)
 include(sql/sources.cmake)
 include(threading/sources.cmake)
+include(update/sources.cmake)
 
 if (WIN32)
     include(win/sources.cmake)
@@ -172,6 +173,7 @@ source_group(net FILES ${SOURCE_BASE_NET} ${SOURCE_BASE_NET_TESTS})
 source_group(peer FILES ${SOURCE_BASE_PEER} ${SOURCE_BASE_PEER_TESTS})
 source_group(sql FILES ${SOURCE_BASE_SQL} ${SOURCE_BASE_SQL_TESTS})
 source_group(threading FILES ${SOURCE_BASE_THREADING} ${SOURCE_BASE_THREADING_TESTS})
+source_group(update FILES ${SOURCE_BASE_UPDATE} ${SOURCE_BASE_UPDATE_TESTS})
 
 if (WIN32)
     source_group(win FILES ${SOURCE_BASE_WIN} ${SOURCE_BASE_WIN_TESTS})
@@ -198,6 +200,7 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_PEER}
     ${SOURCE_BASE_SQL}
     ${SOURCE_BASE_THREADING}
+    ${SOURCE_BASE_UPDATE}
     ${SOURCE_BASE_WIN})
 
 set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
@@ -256,11 +259,13 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_PEER_TESTS}
     ${SOURCE_BASE_SQL_TESTS}
     ${SOURCE_BASE_THREADING_TESTS}
+    ${SOURCE_BASE_UPDATE_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
     aspia_base
     aspia_proto
     GTest::gtest
+    Qt6::Test
     ${BASE_TESTS_PLATFORM_LIBS}
     ${THIRD_PARTY_LIBS}
     ${QT_COMMON_LIBS}

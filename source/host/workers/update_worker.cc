@@ -19,10 +19,10 @@
 #include "host/workers/update_worker.h"
 
 #include "base/logging.h"
-#include "common/http_file_downloader.h"
-#include "common/update_checker.h"
-#include "common/update_info.h"
-#include "common/update_installer.h"
+#include "base/net/http_file_downloader.h"
+#include "base/update/update_checker.h"
+#include "base/update/update_info.h"
+#include "base/update/update_installer.h"
 
 #if !defined(Q_OS_ANDROID)
 #include <ctime>

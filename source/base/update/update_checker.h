@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UPDATE_CHECKER_H
-#define COMMON_UPDATE_CHECKER_H
+#ifndef BASE_UPDATE_UPDATE_CHECKER_H
+#define BASE_UPDATE_UPDATE_CHECKER_H
 
 #include <QByteArray>
 #include <QList>
 #include <QThread>
 
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 class UpdateChecker final : public QThread
 {
@@ -62,4 +62,4 @@ private:
     Q_DISABLE_COPY_MOVE(UpdateChecker)
 };
 
-#endif // COMMON_UPDATE_CHECKER_H
+#endif // BASE_UPDATE_UPDATE_CHECKER_H

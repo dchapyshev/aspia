@@ -23,9 +23,9 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "common/http_file_downloader.h"
-#include "common/update_checker.h"
-#include "common/update_installer.h"
+#include "base/net/http_file_downloader.h"
+#include "base/update/update_checker.h"
+#include "base/update/update_installer.h"
 #include "common/android/button.h"
 #include "common/android/label.h"
 #include "common/android/message_dialog.h"

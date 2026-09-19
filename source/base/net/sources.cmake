@@ -27,6 +27,8 @@ collect_sources(SOURCE_BASE_NET
     flood_guard.h
     gateway_port_mapper.cc
     gateway_port_mapper.h
+    http_file_downloader.cc
+    http_file_downloader.h
     net_utils.cc
     net_utils.h
     pcp_port_mapper.cc

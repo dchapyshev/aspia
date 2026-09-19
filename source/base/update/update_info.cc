@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>

@@ -24,7 +24,7 @@
 #include <QWidget>
 
 #include "base/time_types.h"
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 namespace proto::peer {
 enum SessionType : int;

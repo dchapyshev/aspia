@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/http_file_downloader.h"
+#include "base/net/http_file_downloader.h"
 
 #include "base/logging.h"
 #include "base/net/curl_util.h"

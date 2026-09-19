@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "base/scoped_qpointer.h"
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 namespace Ui {
 class UpdateDialog;

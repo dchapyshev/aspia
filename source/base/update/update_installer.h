@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UPDATE_INSTALLER_H
-#define COMMON_UPDATE_INSTALLER_H
+#ifndef BASE_UPDATE_UPDATE_INSTALLER_H
+#define BASE_UPDATE_UPDATE_INSTALLER_H
 
 #include <QObject>
 
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 
 class UpdateInstaller final : public QObject
 {
@@ -90,4 +90,4 @@ private:
     Q_DISABLE_COPY_MOVE(UpdateInstaller)
 };
 
-#endif // COMMON_UPDATE_INSTALLER_H
+#endif // BASE_UPDATE_UPDATE_INSTALLER_H

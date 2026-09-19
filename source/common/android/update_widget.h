@@ -20,7 +20,7 @@
 #define COMMON_ANDROID_UPDATE_WIDGET_H
 
 #include "base/scoped_qpointer.h"
-#include "common/update_info.h"
+#include "base/update/update_info.h"
 #include "common/android/scroll_area.h"
 
 class QProgressBar;
