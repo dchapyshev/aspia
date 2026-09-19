@@ -26,7 +26,6 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
-#include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"

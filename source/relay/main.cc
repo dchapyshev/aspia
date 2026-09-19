@@ -21,10 +21,12 @@
 #include <QSysInfo>
 
 #include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
 #include "base/files/base_paths.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/update/console_updater.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
 #include "relay/settings.h"
@@ -194,6 +196,10 @@ int main(int argc, char* argv[])
     QCommandLineOption remove_option("remove", "Remove service.");
     QCommandLineOption start_option("start", "Start service.");
     QCommandLineOption stop_option("stop", "Stop service.");
+    QCommandLineOption check_update_option("check-update", "Checks for updates.");
+    QCommandLineOption install_update_option("install-update", "Installs the available update.");
+    QCommandLineOption channel_option("update-channel",
+        "Channel the update is taken from: stable, beta or alpha.", "channel", kStableUpdateChannel);
 
     QCommandLineParser parser;
     parser.addOption(create_config_option);
@@ -201,6 +207,9 @@ int main(int argc, char* argv[])
     parser.addOption(remove_option);
     parser.addOption(start_option);
     parser.addOption(stop_option);
+    parser.addOption(check_update_option);
+    parser.addOption(install_update_option);
+    parser.addOption(channel_option);
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -221,6 +230,10 @@ int main(int argc, char* argv[])
         return startService(out);
     else if (parser.isSet(stop_option))
         return stopService(out);
+    else if (parser.isSet(check_update_option))
+        return ConsoleUpdater(kRelayUpdatePackage, out).check(parser.value(channel_option));
+    else if (parser.isSet(install_update_option))
+        return ConsoleUpdater(kRelayUpdatePackage, out).install(parser.value(channel_option));
 
     // The workers read the configuration as soon as they start, so any pending migration must
     // complete before them.
