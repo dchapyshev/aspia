@@ -84,7 +84,7 @@ int ConsoleUpdater::install(const QString& channel)
         return 1;
     }
 
-    UpdateInstaller installer(UpdateInstaller::Mode::USER);
+    UpdateInstaller installer(UpdateInstaller::Mode::ADMIN);
 
     QString file_path = installer.createPackageFile(*update_info);
     if (file_path.isEmpty())

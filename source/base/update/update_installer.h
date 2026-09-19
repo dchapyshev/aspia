@@ -29,11 +29,12 @@ class UpdateInstaller final : public QObject
 
 public:
     // Who the installer of the system is started for. The process already has the rights the
-    // installation takes in both cases.
+    // installation takes in every case.
     enum class Mode
     {
-        USER,   // A person asked for the update and is watching it.
-        SERVICE // The service updates itself and nobody is watching.
+        USER,    // A person asked for the update in the application and is watching it.
+        SERVICE, // The service updates itself and nobody is watching.
+        ADMIN    // The one who administers the machine asked for the update and has the rights.
     };
 
     // What came of starting the installation.

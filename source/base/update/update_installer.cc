@@ -46,6 +46,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <QProcess>
+#include <QProcessEnvironment>
 #endif // (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
 
 namespace {
@@ -347,11 +348,16 @@ void UpdateInstaller::cleanup()
 bool UpdateInstaller::startInstaller()
 {
 #if defined(Q_OS_WINDOWS)
-    // Normal install. A person watching gets a basic UI with no modal dialog boxes, the service
-    // installs with no UI at all.
+    // A person watching gets a basic UI with no modal dialog boxes, the service and the one who
+    // administers the machine install with no UI at all.
     QString arguments = "/i \"" + file_path_ + "\"" + (mode_ == Mode::USER ? " /qb-!" : " /qn");
 
-    if (!ProcessUtil::createProcess("msiexec", arguments, ProcessUtil::ExecuteMode::ELEVATE))
+    // The one who administers the machine already has the rights and they were checked before the
+    // download, so the shell is not asked for them a second time.
+    ProcessUtil::ExecuteMode execute_mode = (mode_ == Mode::ADMIN) ?
+        ProcessUtil::ExecuteMode::NORMAL : ProcessUtil::ExecuteMode::ELEVATE;
+
+    if (!ProcessUtil::createProcess("msiexec", arguments, execute_mode))
     {
         LOG(ERROR) << "Unable to start msiexec process (cmd:" << arguments << ")";
         return false;
@@ -369,8 +375,9 @@ bool UpdateInstaller::startInstaller()
     file_path_.clear();
     directory_.clear();
 
-    // msiexec replaces the files of the running application, so there is nothing left to wait for.
-    // The result is reported once the caller has control back.
+    // msiexec replaces the files of the running application, this one among them, so it is not
+    // waited for: the file is free only after this process is gone. The result is reported once the
+    // caller has control back.
     QTimer::singleShot(MilliSeconds(0), this, [this]()
     {
         emit sig_finished(true, QString());
@@ -499,6 +506,17 @@ bool UpdateInstaller::startInstaller()
     }
 
     QProcess* process = new QProcess(this);
+
+#if defined(Q_OS_LINUX)
+    if (update_info_.format() == "deb")
+    {
+        // The package manager stops on a question about a configuration file it did not put there,
+        // and there is nobody to answer it.
+        QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+        environment.insert("DEBIAN_FRONTEND", "noninteractive");
+        process->setProcessEnvironment(environment);
+    }
+#endif // defined(Q_OS_LINUX)
 
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
             [this, process](int exit_code, QProcess::ExitStatus exit_status)
