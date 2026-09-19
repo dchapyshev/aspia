@@ -27,6 +27,7 @@
 #include "base/time_types.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "base/files/file_util.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -251,7 +252,13 @@ bool UpdateInstaller::startInstaller()
 
     LOG(INFO) << "msiexec is started (cmd:" << arguments << ")";
 
-    // The package is msiexec's from here on.
+    // The package is msiexec's from here on, and it is still holding it when this process ends.
+    if (!removeAtNextStart(file_path_))
+        PLOG(ERROR) << "Unable to remove file at the next start:" << file_path_;
+
+    if (!removeAtNextStart(directory_))
+        PLOG(ERROR) << "Unable to remove directory at the next start:" << directory_;
+
     file_path_.clear();
     directory_.clear();
 

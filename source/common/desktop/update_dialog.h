@@ -72,7 +72,6 @@ private:
     UpdateInfo update_info_;
 
     std::unique_ptr<UpdateChecker> checker_;
-    bool checker_finished_ = true;
 
     ScopedQPointer<UpdateInstaller> installer_;
     ScopedQPointer<ElevateUtil> elevate_util_;

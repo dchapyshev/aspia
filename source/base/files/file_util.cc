@@ -21,6 +21,11 @@
 #include <QFile>
 #include <QSaveFile>
 
+#if defined(Q_OS_WINDOWS)
+#include <QDir>
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -91,4 +96,18 @@ bool readFile(const QString& filename, QByteArray* buffer)
 bool readFile(const QString& filename, std::string* buffer)
 {
     return readFileT<std::string>(filename, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool removeAtNextStart(const QString& filename)
+{
+#if defined(Q_OS_WINDOWS)
+    QString native_filename = QDir::toNativeSeparators(filename);
+
+    return MoveFileExW(reinterpret_cast<const wchar_t*>(native_filename.utf16()), nullptr,
+                       MOVEFILE_DELAY_UNTIL_REBOOT) != 0;
+#else
+    Q_UNUSED(filename);
+    return false;
+#endif // defined(Q_OS_WINDOWS)
 }

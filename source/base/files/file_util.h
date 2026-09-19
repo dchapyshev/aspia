@@ -31,4 +31,9 @@ bool writeFile(const QString& filename, std::string_view buffer);
 bool readFile(const QString& filename, QByteArray* buffer);
 bool readFile(const QString& filename, std::string* buffer);
 
+// Asks the system to remove |filename| at its next start, for a file that something else is still
+// holding. A directory is removed only when it is empty, so its files are registered first. False
+// is returned where the system cannot do this at all.
+bool removeAtNextStart(const QString& filename);
+
 #endif // BASE_FILES_FILE_UTIL_H

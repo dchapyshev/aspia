@@ -24,7 +24,6 @@
 #include <memory>
 
 #include "base/location.h"
-#include "common/update_info.h"
 
 class QAbstractButton;
 class QTreeWidgetItem;
