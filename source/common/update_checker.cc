@@ -221,6 +221,8 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
     curl_easy_setopt(curl.get(), CURLOPT_MAXFILESIZE, kMaxFileSize);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_PROTOCOLS_STR, "http,https");
+    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
     curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1);
     curl_easy_setopt(curl.get(), CURLOPT_DEBUGFUNCTION, debugFunc);
 

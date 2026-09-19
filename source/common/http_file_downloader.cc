@@ -86,6 +86,8 @@ void HttpFileDownloader::run()
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_PROTOCOLS_STR, "http,https");
+    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
 
     long verify_peer = 1;
     if (qEnvironmentVariableIsSet("ASPIA_NO_VERIFY_TLS_PEER"))
