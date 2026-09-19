@@ -365,29 +365,29 @@ Routeurs ajoutés: %4</translation>
     <name>AndroidMainWindow</name>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="271"/>
-        <location filename="../client/android/main_window.cc" line="313"/>
+        <location filename="../client/android/main_window.cc" line="269"/>
+        <location filename="../client/android/main_window.cc" line="311"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="275"/>
-        <location filename="../client/android/main_window.cc" line="333"/>
+        <location filename="../client/android/main_window.cc" line="273"/>
+        <location filename="../client/android/main_window.cc" line="331"/>
         <source>Remote</source>
         <translation>Distant</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="279"/>
-        <location filename="../client/android/main_window.cc" line="323"/>
+        <location filename="../client/android/main_window.cc" line="277"/>
+        <location filename="../client/android/main_window.cc" line="321"/>
         <source>Routers</source>
         <translation>Routeurs</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="283"/>
-        <location filename="../client/android/main_window.cc" line="343"/>
+        <location filename="../client/android/main_window.cc" line="281"/>
+        <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,51 +395,51 @@ Routeurs ajoutés: %4</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="197"/>
+        <location filename="../client/android/main_window.cc" line="684"/>
         <source>Update</source>
         <translation>Mise à jour</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <source>Version %1 is available.</source>
         <translation>La version %1 est disponible.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="546"/>
+        <location filename="../client/android/main_window.cc" line="544"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Authentification à deux facteurs - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="865"/>
-        <location filename="../client/android/main_window.cc" line="875"/>
-        <location filename="../client/android/main_window.cc" line="896"/>
-        <location filename="../client/android/main_window.cc" line="935"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
+        <location filename="../client/android/main_window.cc" line="892"/>
+        <location filename="../client/android/main_window.cc" line="902"/>
+        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="962"/>
         <source>Connection by link</source>
         <translation>Connexion par lien</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
         <source>Invalid link.</source>
         <translation>Lien non valide.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="866"/>
+        <location filename="../client/android/main_window.cc" line="893"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Une autre session est active. Fermez-la et ouvrez à nouveau le lien.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="876"/>
+        <location filename="../client/android/main_window.cc" line="903"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Le type de session du lien n&apos;est pas pris en charge sur cet appareil.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="897"/>
+        <location filename="../client/android/main_window.cc" line="924"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Le routeur référencé par le lien ne fait pas partie des routeurs enregistrés.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="936"/>
+        <location filename="../client/android/main_window.cc" line="963"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>L&apos;hôte référencé par le lien ne fait pas partie des hôtes enregistrés.</translation>
     </message>
@@ -463,7 +463,7 @@ Routeurs ajoutés: %4</translation>
         <translation>Activez le service d&apos;accessibilité pour permettre le contrôle à distance du clavier et de la souris.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -11537,81 +11537,87 @@ Identifiants importés: %5</translation>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="59"/>
-        <location filename="../common/android/update_widget.cc" line="197"/>
-        <location filename="../common/android/update_widget.cc" line="206"/>
-        <location filename="../common/android/update_widget.cc" line="216"/>
+        <location filename="../common/android/update_widget.cc" line="63"/>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="227"/>
+        <location filename="../common/android/update_widget.cc" line="237"/>
+        <location filename="../common/android/update_widget.cc" line="305"/>
         <source>Update</source>
         <translation>Mise à jour</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="69"/>
+        <location filename="../common/android/update_widget.cc" line="73"/>
         <source>Installed version: %1</source>
         <translation>Version installée: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="96"/>
+        <location filename="../common/android/update_widget.cc" line="111"/>
         <source>Receiving information...</source>
         <translation>Réception des informations...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="117"/>
+        <location filename="../common/android/update_widget.cc" line="132"/>
         <source>No updates available.</source>
         <translation>Aucune mise à jour disponible.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="123"/>
+        <location filename="../common/android/update_widget.cc" line="298"/>
         <source>Version %1 is available.</source>
         <translation>La version %1 est disponible.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="137"/>
+        <location filename="../common/android/update_widget.cc" line="150"/>
         <source>Error retrieving update information.</source>
         <translation>Erreur lors de la récupération des informations de mise à jour.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="161"/>
+        <location filename="../common/android/update_widget.cc" line="174"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Une erreur s&apos;est produite lors du téléchargement de la mise à jour: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
         <source>The downloaded file is damaged.</source>
         <translation>Le fichier téléchargé est endommagé.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="187"/>
-        <location filename="../common/android/update_widget.cc" line="236"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
+        <location filename="../common/android/update_widget.cc" line="257"/>
         <source>An error occurred while installing the update.</source>
         <translation>Une erreur s&apos;est produite lors de l&apos;installation de la mise à jour.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="219"/>
         <source>Install the update yourself: %1</source>
         <translation>Installez la mise à jour vous-même: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="207"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>Pour installer la mise à jour, autorisez cette application à installer des applications inconnues sur l&apos;écran suivant.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="208"/>
+        <location filename="../common/android/update_widget.cc" line="229"/>
         <source>Allow</source>
         <translation>Autoriser</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="217"/>
+        <location filename="../common/android/update_widget.cc" line="238"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>Une mise à jour va être téléchargée. Toutes les sessions connectées seront fermées et toutes les données non enregistrées seront perdues.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="239"/>
         <source>Continue</source>
         <translation>Continuer</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="253"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="274"/>
         <source>Downloading the update. Please wait.</source>
         <translation>Téléchargement de la mise à jour. Veuillez patienter.</translation>
     </message>

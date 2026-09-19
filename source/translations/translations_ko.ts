@@ -365,29 +365,29 @@ Routers added: %4</source>
     <name>AndroidMainWindow</name>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="271"/>
-        <location filename="../client/android/main_window.cc" line="313"/>
+        <location filename="../client/android/main_window.cc" line="269"/>
+        <location filename="../client/android/main_window.cc" line="311"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="275"/>
-        <location filename="../client/android/main_window.cc" line="333"/>
+        <location filename="../client/android/main_window.cc" line="273"/>
+        <location filename="../client/android/main_window.cc" line="331"/>
         <source>Remote</source>
         <translation>원격</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="279"/>
-        <location filename="../client/android/main_window.cc" line="323"/>
+        <location filename="../client/android/main_window.cc" line="277"/>
+        <location filename="../client/android/main_window.cc" line="321"/>
         <source>Routers</source>
         <translation>라우터</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="283"/>
-        <location filename="../client/android/main_window.cc" line="343"/>
+        <location filename="../client/android/main_window.cc" line="281"/>
+        <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,51 +395,51 @@ Routers added: %4</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="197"/>
+        <location filename="../client/android/main_window.cc" line="684"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <source>Version %1 is available.</source>
         <translation>%1 버전을 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="546"/>
+        <location filename="../client/android/main_window.cc" line="544"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>2단계 인증 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="865"/>
-        <location filename="../client/android/main_window.cc" line="875"/>
-        <location filename="../client/android/main_window.cc" line="896"/>
-        <location filename="../client/android/main_window.cc" line="935"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
+        <location filename="../client/android/main_window.cc" line="892"/>
+        <location filename="../client/android/main_window.cc" line="902"/>
+        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="962"/>
         <source>Connection by link</source>
         <translation>링크로 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
         <source>Invalid link.</source>
         <translation>잘못된 링크입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="866"/>
+        <location filename="../client/android/main_window.cc" line="893"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>다른 세션이 활성 상태입니다. 해당 세션을 닫고 링크를 다시 여십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="876"/>
+        <location filename="../client/android/main_window.cc" line="903"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>링크의 세션 유형은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="897"/>
+        <location filename="../client/android/main_window.cc" line="924"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>링크가 참조하는 라우터가 저장된 라우터 중에 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="936"/>
+        <location filename="../client/android/main_window.cc" line="963"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>링크가 참조하는 호스트가 저장된 호스트 중에 없습니다.</translation>
     </message>
@@ -463,7 +463,7 @@ Routers added: %4</source>
         <translation>원격 키보드 및 마우스 제어를 허용하려면 접근성 서비스를 사용하도록 설정하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -11503,81 +11503,87 @@ Credentials imported: %5</source>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="59"/>
-        <location filename="../common/android/update_widget.cc" line="197"/>
-        <location filename="../common/android/update_widget.cc" line="206"/>
-        <location filename="../common/android/update_widget.cc" line="216"/>
+        <location filename="../common/android/update_widget.cc" line="63"/>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="227"/>
+        <location filename="../common/android/update_widget.cc" line="237"/>
+        <location filename="../common/android/update_widget.cc" line="305"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="69"/>
+        <location filename="../common/android/update_widget.cc" line="73"/>
         <source>Installed version: %1</source>
         <translation>설치된 버전: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="96"/>
+        <location filename="../common/android/update_widget.cc" line="111"/>
         <source>Receiving information...</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="117"/>
+        <location filename="../common/android/update_widget.cc" line="132"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="123"/>
+        <location filename="../common/android/update_widget.cc" line="298"/>
         <source>Version %1 is available.</source>
         <translation>%1 버전을 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="137"/>
+        <location filename="../common/android/update_widget.cc" line="150"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="161"/>
+        <location filename="../common/android/update_widget.cc" line="174"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="187"/>
-        <location filename="../common/android/update_widget.cc" line="236"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
+        <location filename="../common/android/update_widget.cc" line="257"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="219"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="207"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>업데이트를 설치하려면 다음 화면에서 이 응용 프로그램이 알 수 없는 앱을 설치하도록 허용하십시오.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="208"/>
+        <location filename="../common/android/update_widget.cc" line="229"/>
         <source>Allow</source>
         <translation>허용</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="217"/>
+        <location filename="../common/android/update_widget.cc" line="238"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>업데이트가 다운로드됩니다. 연결된 모든 세션이 종료되고 저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="239"/>
         <source>Continue</source>
         <translation>계속</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="253"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="274"/>
         <source>Downloading the update. Please wait.</source>
         <translation>업데이트를 다운로드하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>

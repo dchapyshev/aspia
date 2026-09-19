@@ -365,29 +365,29 @@ Hozzáadott útválasztók: %4</translation>
     <name>AndroidMainWindow</name>
     <message>
         <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="271"/>
-        <location filename="../client/android/main_window.cc" line="313"/>
+        <location filename="../client/android/main_window.cc" line="269"/>
+        <location filename="../client/android/main_window.cc" line="311"/>
         <source>Local</source>
         <translation>Helyi</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="275"/>
-        <location filename="../client/android/main_window.cc" line="333"/>
+        <location filename="../client/android/main_window.cc" line="273"/>
+        <location filename="../client/android/main_window.cc" line="331"/>
         <source>Remote</source>
         <translation>Távoli</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="279"/>
-        <location filename="../client/android/main_window.cc" line="323"/>
+        <location filename="../client/android/main_window.cc" line="277"/>
+        <location filename="../client/android/main_window.cc" line="321"/>
         <source>Routers</source>
         <translation>Útválasztók</translation>
     </message>
     <message>
         <location filename="../client/android/main_window.cc" line="172"/>
-        <location filename="../client/android/main_window.cc" line="283"/>
-        <location filename="../client/android/main_window.cc" line="343"/>
+        <location filename="../client/android/main_window.cc" line="281"/>
+        <location filename="../client/android/main_window.cc" line="341"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,51 +395,51 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="197"/>
+        <location filename="../client/android/main_window.cc" line="684"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <source>Version %1 is available.</source>
         <translation>A(z) %1 verzió elérhető.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="546"/>
+        <location filename="../client/android/main_window.cc" line="544"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Kétfaktoros hitelesítés - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="865"/>
-        <location filename="../client/android/main_window.cc" line="875"/>
-        <location filename="../client/android/main_window.cc" line="896"/>
-        <location filename="../client/android/main_window.cc" line="935"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
+        <location filename="../client/android/main_window.cc" line="892"/>
+        <location filename="../client/android/main_window.cc" line="902"/>
+        <location filename="../client/android/main_window.cc" line="923"/>
+        <location filename="../client/android/main_window.cc" line="962"/>
         <source>Connection by link</source>
         <translation>Csatlakozás hivatkozással</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="858"/>
+        <location filename="../client/android/main_window.cc" line="885"/>
         <source>Invalid link.</source>
         <translation>Érvénytelen hivatkozás.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="866"/>
+        <location filename="../client/android/main_window.cc" line="893"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Egy másik munkamenet aktív. Zárja be, majd nyissa meg újra a hivatkozást.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="876"/>
+        <location filename="../client/android/main_window.cc" line="903"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>A hivatkozásban szereplő munkamenet-típus nem támogatott ezen az eszközön.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="897"/>
+        <location filename="../client/android/main_window.cc" line="924"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>A hivatkozásban szereplő útválasztó nincs a mentett útválasztók között.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="936"/>
+        <location filename="../client/android/main_window.cc" line="963"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>A hivatkozásban szereplő gazdagép nincs a mentett gazdagépek között.</translation>
     </message>
@@ -463,7 +463,7 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Engedélyezze a kisegítő lehetőségek szolgáltatást a távoli billentyűzet- és egérvezérléshez.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="198"/>
+        <location filename="../client/android/main_window.cc" line="685"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -11503,81 +11503,87 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>UpdateWidget</name>
     <message>
-        <location filename="../common/android/update_widget.cc" line="59"/>
-        <location filename="../common/android/update_widget.cc" line="197"/>
-        <location filename="../common/android/update_widget.cc" line="206"/>
-        <location filename="../common/android/update_widget.cc" line="216"/>
+        <location filename="../common/android/update_widget.cc" line="63"/>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="227"/>
+        <location filename="../common/android/update_widget.cc" line="237"/>
+        <location filename="../common/android/update_widget.cc" line="305"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="69"/>
+        <location filename="../common/android/update_widget.cc" line="73"/>
         <source>Installed version: %1</source>
         <translation>Telepített verzió: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="96"/>
+        <location filename="../common/android/update_widget.cc" line="111"/>
         <source>Receiving information...</source>
         <translation>Információk fogadása...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="117"/>
+        <location filename="../common/android/update_widget.cc" line="132"/>
         <source>No updates available.</source>
         <translation>Nincs elérhető frissítés.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="123"/>
+        <location filename="../common/android/update_widget.cc" line="298"/>
         <source>Version %1 is available.</source>
         <translation>A(z) %1 verzió elérhető.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="137"/>
+        <location filename="../common/android/update_widget.cc" line="150"/>
         <source>Error retrieving update information.</source>
         <translation>Hiba a frissítési információk lekérésekor.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="161"/>
+        <location filename="../common/android/update_widget.cc" line="174"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Hiba történt a frissítés letöltése közben: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
         <source>The downloaded file is damaged.</source>
         <translation>A letöltött fájl sérült.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="187"/>
-        <location filename="../common/android/update_widget.cc" line="236"/>
+        <location filename="../common/android/update_widget.cc" line="199"/>
+        <location filename="../common/android/update_widget.cc" line="257"/>
         <source>An error occurred while installing the update.</source>
         <translation>Hiba történt a frissítés telepítése közben.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="198"/>
+        <location filename="../common/android/update_widget.cc" line="219"/>
         <source>Install the update yourself: %1</source>
         <translation>Telepítse a frissítést kézzel: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="207"/>
+        <location filename="../common/android/update_widget.cc" line="228"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>A frissítés telepítéséhez engedélyezze ennek az alkalmazásnak az ismeretlen alkalmazások telepítését a következő képernyőn.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="208"/>
+        <location filename="../common/android/update_widget.cc" line="229"/>
         <source>Allow</source>
         <translation>Engedélyezés</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="217"/>
+        <location filename="../common/android/update_widget.cc" line="238"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>A frissítés letöltésre kerül. Minden csatlakoztatott munkamenet megszakad, és minden nem mentett adat elvész.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="218"/>
+        <location filename="../common/android/update_widget.cc" line="239"/>
         <source>Continue</source>
         <translation>Folytatás</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="253"/>
+        <location filename="../common/android/update_widget.cc" line="270"/>
+        <source>Cancel</source>
+        <translation>Mégse</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="274"/>
         <source>Downloading the update. Please wait.</source>
         <translation>Frissítés letöltése. Kérjük, várjon.</translation>
     </message>
