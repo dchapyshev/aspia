@@ -1379,114 +1379,109 @@ Router aggiunti: %4</translation>
         <translation>Ogni 12 ore</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="195"/>
-        <source>Every 24 hours</source>
-        <translation>Ogni 24 ore</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="203"/>
+        <location filename="../host/ui/config_dialog.cc" line="202"/>
         <source>Letters and digits</source>
         <translation>Lettere e cifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="205"/>
         <source>Letters</source>
         <translation>Lettere</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Digits</source>
         <translation>Cifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="224"/>
         <source>Never</source>
         <translation>Mai</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="225"/>
         <source>15 seconds</source>
         <translation>15 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="226"/>
         <source>30 seconds</source>
         <translation>30 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="227"/>
         <source>45 seconds</source>
         <translation>45 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="229"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>60 seconds</source>
         <translation>60 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Accept connection</source>
         <translation>Accetta connessione</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Reject connection</source>
         <translation>Rifiuta connessione</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="437"/>
+        <location filename="../host/ui/config_dialog.cc" line="436"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="464"/>
-        <location filename="../host/ui/config_dialog.cc" line="497"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
+        <location filename="../host/ui/config_dialog.cc" line="496"/>
         <source>An error occurred while processing the password.</source>
         <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="481"/>
+        <location filename="../host/ui/config_dialog.cc" line="480"/>
         <source>Settings storage is unavailable.</source>
         <translation>L&apos;archivio delle impostazioni non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="511"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="511"/>
-        <location filename="../host/ui/config_dialog.cc" line="528"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>JSON-files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="528"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="553"/>
+        <location filename="../host/ui/config_dialog.cc" line="552"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>La configurazione non può essere scritta. Assicurati di avere diritti di scrittura sufficienti.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="566"/>
+        <location filename="../host/ui/config_dialog.cc" line="565"/>
         <source>Incorrect router address entered.</source>
         <translation>Indirizzo router inserito errato.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="576"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
         <source>Incorrect router public key entered.</source>
         <translation>Chiave pubblica del router inserita errata.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="732"/>
+        <location filename="../host/ui/config_dialog.cc" line="731"/>
         <source>Install</source>
         <translation>Installa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="737"/>
+        <location filename="../host/ui/config_dialog.cc" line="736"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>

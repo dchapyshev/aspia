@@ -1379,114 +1379,109 @@ Routers added: %4</source>
         <translation>Κάθε 12 ώρες</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="195"/>
-        <source>Every 24 hours</source>
-        <translation>Κάθε 24 ώρες</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="203"/>
+        <location filename="../host/ui/config_dialog.cc" line="202"/>
         <source>Letters and digits</source>
         <translation>Γράμματα και ψηφία</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="205"/>
         <source>Letters</source>
         <translation>Γράμματα</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Digits</source>
         <translation>Ψηφία</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="224"/>
         <source>Never</source>
         <translation>Ποτέ</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="225"/>
         <source>15 seconds</source>
         <translation>15 δευτερόλεπτα</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="226"/>
         <source>30 seconds</source>
         <translation>30 δευτερόλεπτα</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="227"/>
         <source>45 seconds</source>
         <translation>45 δευτερόλεπτα</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="229"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>60 seconds</source>
         <translation>60 δευτερόλεπτα</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Accept connection</source>
         <translation>Αποδοχή σύνδεσης</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Reject connection</source>
         <translation>Απόρριψη σύνδεσης</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="437"/>
+        <location filename="../host/ui/config_dialog.cc" line="436"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον χρήστη &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="464"/>
-        <location filename="../host/ui/config_dialog.cc" line="497"/>
+        <location filename="../host/ui/config_dialog.cc" line="463"/>
+        <location filename="../host/ui/config_dialog.cc" line="496"/>
         <source>An error occurred while processing the password.</source>
         <translation>Παρουσιάστηκε σφάλμα κατά την επεξεργασία του κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="481"/>
+        <location filename="../host/ui/config_dialog.cc" line="480"/>
         <source>Settings storage is unavailable.</source>
         <translation>Ο χώρος αποθήκευσης ρυθμίσεων δεν είναι διαθέσιμος.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="511"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
         <source>Import</source>
         <translation>Εισαγωγή</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="511"/>
-        <location filename="../host/ui/config_dialog.cc" line="528"/>
+        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>JSON-files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="528"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
         <source>Export</source>
         <translation>Εξαγωγή</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="553"/>
+        <location filename="../host/ui/config_dialog.cc" line="552"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Δεν είναι δυνατή η εγγραφή των ρυθμίσεων. Βεβαιωθείτε ότι έχετε επαρκή δικαιώματα εγγραφής.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="566"/>
+        <location filename="../host/ui/config_dialog.cc" line="565"/>
         <source>Incorrect router address entered.</source>
         <translation>Εισαγάγατε εσφαλμένη διεύθυνση δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="576"/>
+        <location filename="../host/ui/config_dialog.cc" line="575"/>
         <source>Incorrect router public key entered.</source>
         <translation>Εισαγάγατε εσφαλμένο δημόσιο κλειδί δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="732"/>
+        <location filename="../host/ui/config_dialog.cc" line="731"/>
         <source>Install</source>
         <translation>Εγκατάσταση</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="737"/>
+        <location filename="../host/ui/config_dialog.cc" line="736"/>
         <source>Remove</source>
         <translation>Κατάργηση</translation>
     </message>
