@@ -21,6 +21,16 @@
 #include "base/logging.h"
 #include "base/net/curl_util.h"
 
+namespace {
+
+// A package is large and the link can be slow, so a deadline for the whole transfer would cut off
+// downloads that are merely slow. What is dropped is a transfer that has stopped moving.
+const long kConnectTimeout = 30; // Seconds.
+const long kMinSpeed = 1024; // Bytes per second.
+const long kMinSpeedTime = 60; // Seconds.
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 HttpFileDownloader::HttpFileDownloader(const QString& url, const QString& file_path, QObject* parent)
     : QThread(parent),
@@ -85,6 +95,9 @@ void HttpFileDownloader::run()
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
+    curl_easy_setopt(curl.get(), CURLOPT_CONNECTTIMEOUT, kConnectTimeout);
+    curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_LIMIT, kMinSpeed);
+    curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_TIME, kMinSpeedTime);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(curl.get(), CURLOPT_PROTOCOLS_STR, "http,https");
     curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS_STR, "http,https");

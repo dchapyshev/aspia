@@ -33,6 +33,12 @@ namespace {
 
 const long kMaxFileSize = 1024 * 1024;
 
+// Seconds. A server that takes the connection and then says nothing holds this thread until the
+// check is canceled, and nothing cancels a check nobody is waiting for. The files read here are
+// small, so the whole request is given a deadline of its own.
+const long kConnectTimeout = 30;
+const long kRequestTimeout = 60;
+
 //--------------------------------------------------------------------------------------------------
 QString serverUrl(const QString& channel)
 {
@@ -236,6 +242,8 @@ QByteArray UpdateChecker::download(const QString& unicode_url)
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.data());
     curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 1);
     curl_easy_setopt(curl.get(), CURLOPT_MAXFILESIZE, kMaxFileSize);
+    curl_easy_setopt(curl.get(), CURLOPT_CONNECTTIMEOUT, kConnectTimeout);
+    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, kRequestTimeout);
     curl_easy_setopt(curl.get(), CURLOPT_MAXREDIRS, 15);
     curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(curl.get(), CURLOPT_PROTOCOLS_STR, "http,https");
