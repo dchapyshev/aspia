@@ -132,13 +132,25 @@ void HttpFileDownloader::run()
     }
     while (still_running);
 
+    // How the transfer itself ended is a message in the queue of the multi handle, and there is
+    // only one transfer in it. Removing the easy handle takes the message away, so it is read first.
+    CURLcode result = CURLE_OK;
+    int messages_left = 0;
+    CURLMsg* message = curl_multi_info_read(multi_curl.get(), &messages_left);
+
+    if (message && message->msg == CURLMSG_DONE)
+        result = message->data.result;
+
+    long response_code = 0;
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
+
     curl_multi_remove_handle(multi_curl.get(), curl.get());
+
+    // The last written block is flushed by close, so what it could not do is known only after it.
+    file_.close();
 
     qint64 size = file_.size();
     QFileDevice::FileError file_error = file_.error();
-    QString file_error_string = file_.errorString();
-
-    file_.close();
 
     if (!interrupted_.load(std::memory_order_relaxed))
     {
@@ -146,9 +158,17 @@ void HttpFileDownloader::run()
         {
             emit sig_downloadError(QString::fromLatin1(curl_multi_strerror(error_code)));
         }
+        else if (result != CURLE_OK)
+        {
+            emit sig_downloadError(QString::fromLatin1(curl_easy_strerror(result)));
+        }
+        else if (response_code != 200)
+        {
+            emit sig_downloadError(QString("HTTP %1").arg(response_code));
+        }
         else if (file_error != QFileDevice::NoError)
         {
-            emit sig_downloadError(file_error_string);
+            emit sig_downloadError(file_.errorString());
         }
         else
         {
