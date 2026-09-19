@@ -364,30 +364,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="168"/>
-        <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
+        <location filename="../client/android/main_window.cc" line="169"/>
+        <location filename="../client/android/main_window.cc" line="271"/>
+        <location filename="../client/android/main_window.cc" line="313"/>
         <source>Local</source>
         <translation>本地</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
+        <location filename="../client/android/main_window.cc" line="170"/>
+        <location filename="../client/android/main_window.cc" line="275"/>
+        <location filename="../client/android/main_window.cc" line="333"/>
         <source>Remote</source>
         <translation>远程</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
+        <location filename="../client/android/main_window.cc" line="171"/>
+        <location filename="../client/android/main_window.cc" line="279"/>
+        <location filename="../client/android/main_window.cc" line="323"/>
         <source>Routers</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="172"/>
+        <location filename="../client/android/main_window.cc" line="283"/>
+        <location filename="../client/android/main_window.cc" line="343"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,41 +395,51 @@ Routers added: %4</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="197"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
+        <source>Version %1 is available.</source>
+        <translation>版本 %1 可用。</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>双重验证 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
-        <location filename="../client/android/main_window.cc" line="848"/>
         <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="879"/>
-        <location filename="../client/android/main_window.cc" line="918"/>
+        <location filename="../client/android/main_window.cc" line="865"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="896"/>
+        <location filename="../client/android/main_window.cc" line="935"/>
         <source>Connection by link</source>
         <translation>通过链接连接</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
+        <location filename="../client/android/main_window.cc" line="858"/>
         <source>Invalid link.</source>
         <translation>无效链接。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="849"/>
+        <location filename="../client/android/main_window.cc" line="866"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>另一个会话正在使用中。请先关闭它，再重新打开链接。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="859"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>此设备不支持链接中的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="880"/>
+        <location filename="../client/android/main_window.cc" line="897"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>在已保存的路由器中找不到链接所指的路由器。</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="919"/>
+        <location filename="../client/android/main_window.cc" line="936"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>在已保存的主机中找不到链接所指的主机。</translation>
     </message>
@@ -453,6 +463,7 @@ Routers added: %4</source>
         <translation>启用无障碍服务，以允许远程控制键盘和鼠标。</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -6710,7 +6721,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
-        <location filename="../client/desktop/settings_tab.cc" line="129"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -6740,64 +6751,64 @@ Credentials imported: %5</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="191"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Stable</source>
         <translation>稳定版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Beta</source>
         <translation>公测版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="219"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Alpha</source>
         <translation>内测版</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>新语言将在应用程序重新启动后生效。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="404"/>
+        <location filename="../client/desktop/settings_tab.cc" line="398"/>
         <source>Choose path</source>
         <translation>选择路径</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="424"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
         <source>Change Master Password</source>
         <translation>更改主密码</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="426"/>
+        <location filename="../client/desktop/settings_tab.cc" line="420"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>输入您的当前密码并选择新密码。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="428"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="429"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字母和数字，且长度不能少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
+        <location filename="../client/desktop/settings_tab.cc" line="432"/>
         <source>Do you want to enter a different password?</source>
         <translation>要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="447"/>
+        <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>当前密码无效或无法更改。</translation>
     </message>
@@ -6880,223 +6891,270 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
+        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="159"/>
         <source>Credentials</source>
         <translation>凭据</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
-        <location filename="../host/android/settings_widget.cc" line="144"/>
+        <location filename="../client/android/settings_widget.cc" line="167"/>
+        <location filename="../host/android/settings_widget.cc" line="148"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="214"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
+        <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Interface</source>
         <translation>界面</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="213"/>
-        <location filename="../host/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="234"/>
+        <location filename="../host/android/settings_widget.cc" line="240"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="226"/>
+        <location filename="../client/android/settings_widget.cc" line="247"/>
         <source>Display name when connected</source>
         <translation>连接时的显示名称</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="238"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="259"/>
+        <location filename="../host/android/settings_widget.cc" line="256"/>
         <source>Security</source>
         <translation>安全</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
         <source>Change Master Password</source>
         <translation>更改主密码</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="252"/>
+        <location filename="../client/android/settings_widget.cc" line="273"/>
         <source>Unlock with biometrics</source>
         <translation>使用生物识别解锁</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>请在系统设置中设置指纹，才能使用此功能。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Biometrics are not available on this device.</source>
         <translation>此设备不支持生物识别。</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="290"/>
+        <location filename="../client/android/settings_widget.cc" line="311"/>
         <source>UDP Connections</source>
         <translation>UDP 连接</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="304"/>
+        <location filename="../client/android/settings_widget.cc" line="325"/>
         <source>Allow direct connections</source>
         <translation>允许直接连接</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="326"/>
         <source>Allow UDP Hole Punching</source>
         <translation>允许 UDP 打洞</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="306"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow PCP protocol</source>
         <translation>允许 PCP 协议</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="307"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>允许 NAT-PMP 协议</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="308"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow UPnP protocol</source>
         <translation>允许 UPnP 协议</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="314"/>
+        <location filename="../client/android/settings_widget.cc" line="335"/>
         <source>Remote Desktop</source>
         <translation>远程桌面</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Enable audio</source>
         <translation>启用音频</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="321"/>
+        <location filename="../client/android/settings_widget.cc" line="342"/>
         <source>Enable clipboard</source>
         <translation>启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="347"/>
         <source>Show shape of remote cursor</source>
         <translation>显示远程光标的形状</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="332"/>
+        <location filename="../client/android/settings_widget.cc" line="353"/>
         <source>Show position of remote cursor</source>
         <translation>显示远程光标的位置</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="338"/>
+        <location filename="../client/android/settings_widget.cc" line="359"/>
         <source>Disable desktop effects</source>
         <translation>禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="344"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>Disable desktop wallpaper</source>
         <translation>禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="350"/>
+        <location filename="../client/android/settings_widget.cc" line="371"/>
         <source>Lock computer at disconnect</source>
         <translation>断开连接时锁定计算机</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="377"/>
         <source>Block remote input</source>
         <translation>阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="388"/>
+        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <source>Updates</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <source>Check for updates on startup</source>
+        <translation>启动时检查更新</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="399"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <source>Update channel</source>
+        <translation>更新通道</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="400"/>
+        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <source>Stable</source>
+        <translation>稳定版</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <source>Beta</source>
+        <translation>公测版</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <source>Alpha</source>
+        <translation>内测版</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <source>Check for updates</source>
+        <translation>检查更新</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="434"/>
         <source>Enable biometric unlock</source>
         <translation>启用生物识别解锁</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="153"/>
+        <location filename="../host/android/settings_widget.cc" line="157"/>
         <source>Users</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Edit User</source>
         <translation>编辑用户</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Add User</source>
         <translation>添加用户</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Manage users</source>
         <translation>管理用户</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="245"/>
+        <location filename="../host/android/settings_widget.cc" line="266"/>
         <source>Change password</source>
         <translation>更改密码</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="249"/>
+        <location filename="../host/android/settings_widget.cc" line="270"/>
         <source>Disable password protection</source>
         <translation>禁用密码保护</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="279"/>
         <source>Enable password protection</source>
         <translation>启用密码保护</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="278"/>
+        <location filename="../host/android/settings_widget.cc" line="299"/>
         <source>Enable the use of a router</source>
         <translation>启用路由器</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="304"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="289"/>
+        <location filename="../host/android/settings_widget.cc" line="310"/>
         <source>Public Key</source>
         <translation>公钥</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="315"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>当无法直接连接到计算机（绕过 NAT）时，需要通过路由器进行连接。Aspia 不提供公共路由器，但您可以自行搭建。您可以在&lt;a href=&quot;https://aspia.org&quot;&gt;官方网站&lt;/a&gt;下载路由器。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>An error occurred while processing the password.</source>
         <translation>处理密码时发生错误。</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 文件 (*.json)</translation>
     </message>
@@ -11379,67 +11437,154 @@ Credentials imported: %5</source>
         <translation>正在接收信息...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="120"/>
+        <location filename="../common/desktop/update_dialog.cc" line="131"/>
         <source>Install the update yourself: %1</source>
         <translation>请自行安装更新：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="137"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>将下载更新。下载完成后，应用程序将自动关闭。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="128"/>
+        <location filename="../common/desktop/update_dialog.cc" line="139"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>所有已连接的会话将被终止。更新完成前无法建立连接。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="130"/>
+        <location filename="../common/desktop/update_dialog.cc" line="141"/>
         <source>All unsaved data will be lost.</source>
         <translation>所有未保存的数据将丢失。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>Continue?</source>
         <translation>要继续吗？</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="165"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>安装更新时发生错误：%1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="174"/>
-        <location filename="../common/desktop/update_dialog.cc" line="195"/>
-        <location filename="../common/desktop/update_dialog.cc" line="205"/>
-        <location filename="../common/desktop/update_dialog.cc" line="227"/>
+        <location filename="../common/desktop/update_dialog.cc" line="185"/>
+        <location filename="../common/desktop/update_dialog.cc" line="206"/>
+        <location filename="../common/desktop/update_dialog.cc" line="216"/>
+        <location filename="../common/desktop/update_dialog.cc" line="238"/>
         <source>An error occurred while installing the update.</source>
         <translation>安装更新时发生错误。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="204"/>
         <source>The downloaded file is damaged.</source>
         <translation>下载的文件已损坏。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="273"/>
+        <location filename="../common/desktop/update_dialog.cc" line="284"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="274"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Error retrieving update information.</source>
         <translation>获取更新信息时发生错误。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="295"/>
         <source>Installing the update. Please wait.</source>
         <translation>正在安装更新。请稍候。</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="249"/>
+        <location filename="../common/desktop/update_dialog.cc" line="260"/>
         <source>No updates available.</source>
         <translation>没有可用更新。</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateWidget</name>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="59"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="206"/>
+        <location filename="../common/android/update_widget.cc" line="216"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="69"/>
+        <source>Installed version: %1</source>
+        <translation>已安装版本：%1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="96"/>
+        <source>Receiving information...</source>
+        <translation>正在接收信息...</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="117"/>
+        <source>No updates available.</source>
+        <translation>没有可用更新。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="123"/>
+        <source>Version %1 is available.</source>
+        <translation>版本 %1 可用。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="137"/>
+        <source>Error retrieving update information.</source>
+        <translation>获取更新信息时发生错误。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="161"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>下载更新时发生错误：%1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="178"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>正在安装更新。请稍候。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="185"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>下载的文件已损坏。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="187"/>
+        <location filename="../common/android/update_widget.cc" line="236"/>
+        <source>An error occurred while installing the update.</source>
+        <translation>安装更新时发生错误。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <source>Install the update yourself: %1</source>
+        <translation>请自行安装更新：%1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="207"/>
+        <source>To install the update, allow this application to install unknown apps on the next screen.</source>
+        <translation>要安装更新，请在下一个屏幕允许此应用安装未知应用。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="208"/>
+        <source>Allow</source>
+        <translation>允许</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="217"/>
+        <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
+        <translation>将下载更新。所有已连接的会话将被终止，所有未保存的数据将丢失。</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <source>Continue</source>
+        <translation>继续</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="253"/>
+        <source>Downloading the update. Please wait.</source>
+        <translation>正在下载更新。请稍候。</translation>
     </message>
 </context>
 <context>

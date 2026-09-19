@@ -407,7 +407,7 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     });
     layout->addWidget(channel);
 
-    Button* check = new Button(tr("Check for Updates"), Button::Role::FILLED);
+    Button* check = new Button(tr("Check for updates"), Button::Role::FILLED);
     connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);
     layout->addWidget(check);
 }

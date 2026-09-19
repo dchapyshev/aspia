@@ -364,30 +364,30 @@ Toegevoegde routers: %4</translation>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="168"/>
-        <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
+        <location filename="../client/android/main_window.cc" line="169"/>
+        <location filename="../client/android/main_window.cc" line="271"/>
+        <location filename="../client/android/main_window.cc" line="313"/>
         <source>Local</source>
         <translation>Lokaal</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
+        <location filename="../client/android/main_window.cc" line="170"/>
+        <location filename="../client/android/main_window.cc" line="275"/>
+        <location filename="../client/android/main_window.cc" line="333"/>
         <source>Remote</source>
         <translation>Extern</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
+        <location filename="../client/android/main_window.cc" line="171"/>
+        <location filename="../client/android/main_window.cc" line="279"/>
+        <location filename="../client/android/main_window.cc" line="323"/>
         <source>Routers</source>
         <translation>Routers</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="172"/>
+        <location filename="../client/android/main_window.cc" line="283"/>
+        <location filename="../client/android/main_window.cc" line="343"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,41 +395,51 @@ Toegevoegde routers: %4</translation>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="197"/>
+        <source>Update</source>
+        <translation>Update</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
+        <source>Version %1 is available.</source>
+        <translation>Versie %1 is beschikbaar.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Tweefactorauthenticatie - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
-        <location filename="../client/android/main_window.cc" line="848"/>
         <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="879"/>
-        <location filename="../client/android/main_window.cc" line="918"/>
+        <location filename="../client/android/main_window.cc" line="865"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="896"/>
+        <location filename="../client/android/main_window.cc" line="935"/>
         <source>Connection by link</source>
         <translation>Verbinding via link</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
+        <location filename="../client/android/main_window.cc" line="858"/>
         <source>Invalid link.</source>
         <translation>Ongeldige link.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="849"/>
+        <location filename="../client/android/main_window.cc" line="866"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Er is al een andere sessie actief. Sluit deze en open de link opnieuw.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="859"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Het sessietype uit de link wordt niet ondersteund op dit apparaat.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="880"/>
+        <location filename="../client/android/main_window.cc" line="897"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>De router waarnaar de link verwijst, staat niet bij de opgeslagen routers.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="919"/>
+        <location filename="../client/android/main_window.cc" line="936"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>De host waarnaar de link verwijst, staat niet bij de opgeslagen hosts.</translation>
     </message>
@@ -453,6 +463,7 @@ Toegevoegde routers: %4</translation>
         <translation>Schakel de toegankelijkheidsservice in om externe bediening van toetsenbord en muis toe te staan.</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -6741,7 +6752,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
-        <location filename="../client/desktop/settings_tab.cc" line="129"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Update</translation>
     </message>
@@ -6771,52 +6782,52 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Bureaublad</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="191"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Stable</source>
         <translation>Stabiel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Beta</source>
         <translation>Bèta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="219"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>De nieuwe taal wordt toegepast nadat de applicatie opnieuw is gestart.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="404"/>
+        <location filename="../client/desktop/settings_tab.cc" line="398"/>
         <source>Choose path</source>
         <translation>Pad kiezen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="424"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
         <source>Change Master Password</source>
         <translation>Hoofdwachtwoord wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="426"/>
+        <location filename="../client/desktop/settings_tab.cc" line="420"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Voer uw huidige wachtwoord in en kies een nieuw wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="428"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="429"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -6824,12 +6835,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
+        <location filename="../client/desktop/settings_tab.cc" line="432"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="447"/>
+        <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Ongeldig huidig wachtwoord of het kan niet worden gewijzigd.</translation>
     </message>
@@ -6912,223 +6923,270 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
+        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <source>Update</source>
+        <translation>Update</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="159"/>
         <source>Credentials</source>
         <translation>Aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
-        <location filename="../host/android/settings_widget.cc" line="144"/>
+        <location filename="../client/android/settings_widget.cc" line="167"/>
+        <location filename="../host/android/settings_widget.cc" line="148"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="214"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
+        <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="213"/>
-        <location filename="../host/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="234"/>
+        <location filename="../host/android/settings_widget.cc" line="240"/>
         <source>Theme</source>
         <translation>Thema</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="226"/>
+        <location filename="../client/android/settings_widget.cc" line="247"/>
         <source>Display name when connected</source>
         <translation>Weergavenaam bij verbinding</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="238"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="259"/>
+        <location filename="../host/android/settings_widget.cc" line="256"/>
         <source>Security</source>
         <translation>Beveiliging</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
         <source>Change Master Password</source>
         <translation>Hoofdwachtwoord wijzigen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="252"/>
+        <location filename="../client/android/settings_widget.cc" line="273"/>
         <source>Unlock with biometrics</source>
         <translation>Ontgrendelen met biometrie</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Stel een vingerafdruk in via de systeeminstellingen om dit te gebruiken.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Biometrie is niet beschikbaar op dit apparaat.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="290"/>
+        <location filename="../client/android/settings_widget.cc" line="311"/>
         <source>UDP Connections</source>
         <translation>UDP-verbindingen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="304"/>
+        <location filename="../client/android/settings_widget.cc" line="325"/>
         <source>Allow direct connections</source>
         <translation>Directe verbindingen toestaan</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="326"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP hole punching toestaan</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="306"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow PCP protocol</source>
         <translation>PCP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="307"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="308"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP-protocol toestaan</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="314"/>
+        <location filename="../client/android/settings_widget.cc" line="335"/>
         <source>Remote Desktop</source>
         <translation>Extern bureaublad</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Enable audio</source>
         <translation>Audio inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="321"/>
+        <location filename="../client/android/settings_widget.cc" line="342"/>
         <source>Enable clipboard</source>
         <translation>Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="347"/>
         <source>Show shape of remote cursor</source>
         <translation>Vorm van externe cursor weergeven</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="332"/>
+        <location filename="../client/android/settings_widget.cc" line="353"/>
         <source>Show position of remote cursor</source>
         <translation>Positie van externe cursor weergeven</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="338"/>
+        <location filename="../client/android/settings_widget.cc" line="359"/>
         <source>Disable desktop effects</source>
         <translation>Bureaubladeffecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="344"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>Disable desktop wallpaper</source>
         <translation>Bureaubladachtergrond uitschakelen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="350"/>
+        <location filename="../client/android/settings_widget.cc" line="371"/>
         <source>Lock computer at disconnect</source>
         <translation>Computer vergrendelen bij verbreken van verbinding</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="377"/>
         <source>Block remote input</source>
         <translation>Externe invoer blokkeren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="388"/>
+        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <source>Updates</source>
+        <translation>Updates</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <source>Check for updates on startup</source>
+        <translation>Bij opstarten controleren op updates</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="399"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <source>Update channel</source>
+        <translation>Updatekanaal</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="400"/>
+        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <source>Stable</source>
+        <translation>Stabiel</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <source>Beta</source>
+        <translation>Bèta</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <source>Alpha</source>
+        <translation>Alfa</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <source>Check for updates</source>
+        <translation>Controleer op updates</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="434"/>
         <source>Enable biometric unlock</source>
         <translation>Biometrisch ontgrendelen inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="153"/>
+        <location filename="../host/android/settings_widget.cc" line="157"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Edit User</source>
         <translation>Gebruiker bewerken</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Add User</source>
         <translation>Gebruiker toevoegen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Manage users</source>
         <translation>Gebruikers beheren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="245"/>
+        <location filename="../host/android/settings_widget.cc" line="266"/>
         <source>Change password</source>
         <translation>Wachtwoord wijzigen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="249"/>
+        <location filename="../host/android/settings_widget.cc" line="270"/>
         <source>Disable password protection</source>
         <translation>Wachtwoordbeveiliging uitschakelen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="279"/>
         <source>Enable password protection</source>
         <translation>Wachtwoordbeveiliging inschakelen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="278"/>
+        <location filename="../host/android/settings_widget.cc" line="299"/>
         <source>Enable the use of a router</source>
         <translation>Gebruik een router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="304"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="289"/>
+        <location filename="../host/android/settings_widget.cc" line="310"/>
         <source>Public Key</source>
         <translation>Public Key</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="315"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Een router is vereist om verbinding te maken met een computer als er geen directe verbinding mogelijk is (NAT omzeilen). Aspia biedt geen publieke router, maar u kunt uw eigen router installeren. U kunt de router downloaden op de &lt;a href=&quot;https://aspia.org&quot;&gt;officiële website&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>An error occurred while processing the password.</source>
         <translation>Er is een fout opgetreden bij het verwerken van het wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>Import</source>
         <translation>Importeren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-bestanden (*.json)</translation>
     </message>
@@ -11413,67 +11471,154 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Informatie ontvangen...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="120"/>
+        <location filename="../common/desktop/update_dialog.cc" line="131"/>
         <source>Install the update yourself: %1</source>
         <translation>Installeer de update zelf: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="137"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Er wordt een update gedownload. Nadat de download is voltooid, wordt de applicatie automatisch gesloten.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="128"/>
+        <location filename="../common/desktop/update_dialog.cc" line="139"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle verbonden sessies worden beëindigd. U kunt geen verbinding maken totdat de update is voltooid.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="130"/>
+        <location filename="../common/desktop/update_dialog.cc" line="141"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle niet-opgeslagen gegevens gaan verloren.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>Continue?</source>
         <translation>Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="165"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Er is een fout opgetreden bij het installeren van de update: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="174"/>
-        <location filename="../common/desktop/update_dialog.cc" line="195"/>
-        <location filename="../common/desktop/update_dialog.cc" line="205"/>
-        <location filename="../common/desktop/update_dialog.cc" line="227"/>
+        <location filename="../common/desktop/update_dialog.cc" line="185"/>
+        <location filename="../common/desktop/update_dialog.cc" line="206"/>
+        <location filename="../common/desktop/update_dialog.cc" line="216"/>
+        <location filename="../common/desktop/update_dialog.cc" line="238"/>
         <source>An error occurred while installing the update.</source>
         <translation>Er is een fout opgetreden bij het installeren van de update.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="204"/>
         <source>The downloaded file is damaged.</source>
         <translation>Het gedownloade bestand is beschadigd.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="273"/>
+        <location filename="../common/desktop/update_dialog.cc" line="284"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="274"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Error retrieving update information.</source>
         <translation>Fout bij het ophalen van update-informatie.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="295"/>
         <source>Installing the update. Please wait.</source>
         <translation>De update wordt geïnstalleerd. Even geduld.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="249"/>
+        <location filename="../common/desktop/update_dialog.cc" line="260"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateWidget</name>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="59"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="206"/>
+        <location filename="../common/android/update_widget.cc" line="216"/>
+        <source>Update</source>
+        <translation>Update</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="69"/>
+        <source>Installed version: %1</source>
+        <translation>Geïnstalleerde versie: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="96"/>
+        <source>Receiving information...</source>
+        <translation>Informatie ontvangen...</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="117"/>
+        <source>No updates available.</source>
+        <translation>Geen updates beschikbaar.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="123"/>
+        <source>Version %1 is available.</source>
+        <translation>Versie %1 is beschikbaar.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="137"/>
+        <source>Error retrieving update information.</source>
+        <translation>Fout bij het ophalen van update-informatie.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="161"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>Er is een fout opgetreden bij het downloaden van de update: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="178"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>De update wordt geïnstalleerd. Even geduld.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="185"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>Het gedownloade bestand is beschadigd.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="187"/>
+        <location filename="../common/android/update_widget.cc" line="236"/>
+        <source>An error occurred while installing the update.</source>
+        <translation>Er is een fout opgetreden bij het installeren van de update.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <source>Install the update yourself: %1</source>
+        <translation>Installeer de update zelf: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="207"/>
+        <source>To install the update, allow this application to install unknown apps on the next screen.</source>
+        <translation>Om de update te installeren, moet u deze applicatie op het volgende scherm toestaan om onbekende apps te installeren.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="208"/>
+        <source>Allow</source>
+        <translation>Toestaan</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="217"/>
+        <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
+        <translation>Er wordt een update gedownload. Alle verbonden sessies worden beëindigd en alle niet-opgeslagen gegevens gaan verloren.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <source>Continue</source>
+        <translation>Doorgaan</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="253"/>
+        <source>Downloading the update. Please wait.</source>
+        <translation>De update wordt gedownload. Even geduld.</translation>
     </message>
 </context>
 <context>

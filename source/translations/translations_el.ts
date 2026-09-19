@@ -364,30 +364,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="168"/>
-        <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
+        <location filename="../client/android/main_window.cc" line="169"/>
+        <location filename="../client/android/main_window.cc" line="271"/>
+        <location filename="../client/android/main_window.cc" line="313"/>
         <source>Local</source>
         <translation>Τοπικά</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
+        <location filename="../client/android/main_window.cc" line="170"/>
+        <location filename="../client/android/main_window.cc" line="275"/>
+        <location filename="../client/android/main_window.cc" line="333"/>
         <source>Remote</source>
         <translation>Απομακρυσμένα</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
+        <location filename="../client/android/main_window.cc" line="171"/>
+        <location filename="../client/android/main_window.cc" line="279"/>
+        <location filename="../client/android/main_window.cc" line="323"/>
         <source>Routers</source>
         <translation>Δρομολογητές</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="172"/>
+        <location filename="../client/android/main_window.cc" line="283"/>
+        <location filename="../client/android/main_window.cc" line="343"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,41 +395,51 @@ Routers added: %4</source>
         <translation>Ρυθμίσεις</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="197"/>
+        <source>Update</source>
+        <translation>Ενημέρωση</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
+        <source>Version %1 is available.</source>
+        <translation>Η έκδοση %1 είναι διαθέσιμη.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Έλεγχος ταυτότητας δύο παραγόντων - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
-        <location filename="../client/android/main_window.cc" line="848"/>
         <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="879"/>
-        <location filename="../client/android/main_window.cc" line="918"/>
+        <location filename="../client/android/main_window.cc" line="865"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="896"/>
+        <location filename="../client/android/main_window.cc" line="935"/>
         <source>Connection by link</source>
         <translation>Σύνδεση μέσω συνδέσμου</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
+        <location filename="../client/android/main_window.cc" line="858"/>
         <source>Invalid link.</source>
         <translation>Μη έγκυρος σύνδεσμος.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="849"/>
+        <location filename="../client/android/main_window.cc" line="866"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Μια άλλη περίοδος λειτουργίας είναι ενεργή. Κλείστε την και ανοίξτε ξανά τον σύνδεσμο.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="859"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Ο τύπος περιόδου λειτουργίας από τον σύνδεσμο δεν υποστηρίζεται σε αυτήν τη συσκευή.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="880"/>
+        <location filename="../client/android/main_window.cc" line="897"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ο δρομολογητής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων δρομολογητών.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="919"/>
+        <location filename="../client/android/main_window.cc" line="936"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Ο κεντρικός υπολογιστής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων κεντρικών υπολογιστών.</translation>
     </message>
@@ -453,6 +463,7 @@ Routers added: %4</source>
         <translation>Ενεργοποιήστε την υπηρεσία προσβασιμότητας για να επιτρέψετε τον απομακρυσμένο έλεγχο πληκτρολογίου και ποντικιού.</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -6741,7 +6752,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
-        <location filename="../client/desktop/settings_tab.cc" line="129"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>Ενημέρωση</translation>
     </message>
@@ -6771,52 +6782,52 @@ Credentials imported: %5</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="191"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>None</source>
         <translation>Κανένα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Stable</source>
         <translation>Σταθερό</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Beta</source>
         <translation>Βήτα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="219"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Alpha</source>
         <translation>Άλφα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>Η νέα γλώσσα θα εφαρμοστεί μετά την επανεκκίνηση της εφαρμογής.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="404"/>
+        <location filename="../client/desktop/settings_tab.cc" line="398"/>
         <source>Choose path</source>
         <translation>Επιλογή διαδρομής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="424"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
         <source>Change Master Password</source>
         <translation>Αλλαγή κύριου κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="426"/>
+        <location filename="../client/desktop/settings_tab.cc" line="420"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Εισαγάγετε τον τρέχοντα κωδικό πρόσβασης και επιλέξτε έναν νέο.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="428"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="429"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -6824,12 +6835,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
+        <location filename="../client/desktop/settings_tab.cc" line="432"/>
         <source>Do you want to enter a different password?</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="447"/>
+        <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης ή δεν είναι δυνατή η αλλαγή του.</translation>
     </message>
@@ -6912,223 +6923,270 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
+        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <source>Update</source>
+        <translation>Ενημέρωση</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="159"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
-        <location filename="../host/android/settings_widget.cc" line="144"/>
+        <location filename="../client/android/settings_widget.cc" line="167"/>
+        <location filename="../host/android/settings_widget.cc" line="148"/>
         <source>About</source>
         <translation>Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="214"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
+        <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Interface</source>
         <translation>Περιβάλλον εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="213"/>
-        <location filename="../host/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="234"/>
+        <location filename="../host/android/settings_widget.cc" line="240"/>
         <source>Theme</source>
         <translation>Θέμα</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="226"/>
+        <location filename="../client/android/settings_widget.cc" line="247"/>
         <source>Display name when connected</source>
         <translation>Εμφανιζόμενο όνομα κατά τη σύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="238"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="259"/>
+        <location filename="../host/android/settings_widget.cc" line="256"/>
         <source>Security</source>
         <translation>Ασφάλεια</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
         <source>Change Master Password</source>
         <translation>Αλλαγή κύριου κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="252"/>
+        <location filename="../client/android/settings_widget.cc" line="273"/>
         <source>Unlock with biometrics</source>
         <translation>Ξεκλείδωμα με βιομετρικά στοιχεία</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Ρυθμίστε ένα δακτυλικό αποτύπωμα στις ρυθμίσεις του συστήματος για να το χρησιμοποιήσετε.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Τα βιομετρικά στοιχεία δεν είναι διαθέσιμα σε αυτήν τη συσκευή.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="290"/>
+        <location filename="../client/android/settings_widget.cc" line="311"/>
         <source>UDP Connections</source>
         <translation>Συνδέσεις UDP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="304"/>
+        <location filename="../client/android/settings_widget.cc" line="325"/>
         <source>Allow direct connections</source>
         <translation>Να επιτρέπονται απευθείας συνδέσεις</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="326"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Να επιτρέπεται το UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="306"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow PCP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="307"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="308"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow UPnP protocol</source>
         <translation>Να επιτρέπεται το πρωτόκολλο UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="314"/>
+        <location filename="../client/android/settings_widget.cc" line="335"/>
         <source>Remote Desktop</source>
         <translation>Απομακρυσμένη επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Enable audio</source>
         <translation>Ενεργοποίηση ήχου</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="321"/>
+        <location filename="../client/android/settings_widget.cc" line="342"/>
         <source>Enable clipboard</source>
         <translation>Ενεργοποίηση προχείρου</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="347"/>
         <source>Show shape of remote cursor</source>
         <translation>Εμφάνιση σχήματος απομακρυσμένου δρομέα</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="332"/>
+        <location filename="../client/android/settings_widget.cc" line="353"/>
         <source>Show position of remote cursor</source>
         <translation>Εμφάνιση θέσης απομακρυσμένου δρομέα</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="338"/>
+        <location filename="../client/android/settings_widget.cc" line="359"/>
         <source>Disable desktop effects</source>
         <translation>Απενεργοποίηση εφέ επιφάνειας εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="344"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>Disable desktop wallpaper</source>
         <translation>Απενεργοποίηση ταπετσαρίας επιφάνειας εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="350"/>
+        <location filename="../client/android/settings_widget.cc" line="371"/>
         <source>Lock computer at disconnect</source>
         <translation>Κλείδωμα υπολογιστή κατά την αποσύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="377"/>
         <source>Block remote input</source>
         <translation>Αποκλεισμός απομακρυσμένης εισόδου</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="388"/>
+        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <source>Updates</source>
+        <translation>Ενημερώσεις</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <source>Check for updates on startup</source>
+        <translation>Έλεγχος για ενημερώσεις κατά την εκκίνηση</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="399"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <source>Update channel</source>
+        <translation>Κανάλι ενημερώσεων</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="400"/>
+        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <source>Stable</source>
+        <translation>Σταθερό</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <source>Beta</source>
+        <translation>Βήτα</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <source>Alpha</source>
+        <translation>Άλφα</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <source>Check for updates</source>
+        <translation>Έλεγχος για ενημερώσεις</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="434"/>
         <source>Enable biometric unlock</source>
         <translation>Ενεργοποίηση βιομετρικού ξεκλειδώματος</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="153"/>
+        <location filename="../host/android/settings_widget.cc" line="157"/>
         <source>Users</source>
         <translation>Χρήστες</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Edit User</source>
         <translation>Επεξεργασία χρήστη</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Add User</source>
         <translation>Προσθήκη χρήστη</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Manage users</source>
         <translation>Διαχείριση χρηστών</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="245"/>
+        <location filename="../host/android/settings_widget.cc" line="266"/>
         <source>Change password</source>
         <translation>Αλλαγή κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="249"/>
+        <location filename="../host/android/settings_widget.cc" line="270"/>
         <source>Disable password protection</source>
         <translation>Απενεργοποίηση προστασίας με κωδικό πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="279"/>
         <source>Enable password protection</source>
         <translation>Ενεργοποίηση προστασίας με κωδικό πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>Router</source>
         <translation>Δρομολογητής</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="278"/>
+        <location filename="../host/android/settings_widget.cc" line="299"/>
         <source>Enable the use of a router</source>
         <translation>Ενεργοποίηση χρήσης δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="304"/>
         <source>Address</source>
         <translation>Διεύθυνση</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="289"/>
+        <location filename="../host/android/settings_widget.cc" line="310"/>
         <source>Public Key</source>
         <translation>Δημόσιο κλειδί</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="315"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Απαιτείται δρομολογητής για τη σύνδεση με έναν υπολογιστή όταν δεν υπάρχει απευθείας σύνδεση (παράκαμψη NAT). Η Aspia δεν παρέχει δημόσιο δρομολογητή, αλλά μπορείτε να εγκαταστήσετε τον δικό σας. Μπορείτε να κάνετε λήψη του δρομολογητή από τον &lt;a href=&quot;https://aspia.org&quot;&gt;επίσημο ιστότοπο&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>An error occurred while processing the password.</source>
         <translation>Παρουσιάστηκε σφάλμα κατά την επεξεργασία του κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>Import</source>
         <translation>Εισαγωγή</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
@@ -11413,67 +11471,154 @@ Credentials imported: %5</source>
         <translation>Λήψη πληροφοριών...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="120"/>
+        <location filename="../common/desktop/update_dialog.cc" line="131"/>
         <source>Install the update yourself: %1</source>
         <translation>Εγκαταστήστε μόνοι σας την ενημέρωση: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="137"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Θα γίνει λήψη μιας ενημέρωσης. Μετά την ολοκλήρωση της λήψης, η εφαρμογή θα κλείσει αυτόματα.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="128"/>
+        <location filename="../common/desktop/update_dialog.cc" line="139"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Όλες οι συνδεδεμένες περίοδοι λειτουργίας θα τερματιστούν. Δεν μπορείτε να δημιουργήσετε σύνδεση μέχρι να ολοκληρωθεί η ενημέρωση.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="130"/>
+        <location filename="../common/desktop/update_dialog.cc" line="141"/>
         <source>All unsaved data will be lost.</source>
         <translation>Όλα τα μη αποθηκευμένα δεδομένα θα χαθούν.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>Continue?</source>
         <translation>Συνέχεια;</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="165"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Παρουσιάστηκε σφάλμα κατά την εγκατάσταση της ενημέρωσης: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="174"/>
-        <location filename="../common/desktop/update_dialog.cc" line="195"/>
-        <location filename="../common/desktop/update_dialog.cc" line="205"/>
-        <location filename="../common/desktop/update_dialog.cc" line="227"/>
+        <location filename="../common/desktop/update_dialog.cc" line="185"/>
+        <location filename="../common/desktop/update_dialog.cc" line="206"/>
+        <location filename="../common/desktop/update_dialog.cc" line="216"/>
+        <location filename="../common/desktop/update_dialog.cc" line="238"/>
         <source>An error occurred while installing the update.</source>
         <translation>Παρουσιάστηκε σφάλμα κατά την εγκατάσταση της ενημέρωσης.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="204"/>
         <source>The downloaded file is damaged.</source>
         <translation>Το αρχείο που λήφθηκε είναι κατεστραμμένο.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="273"/>
+        <location filename="../common/desktop/update_dialog.cc" line="284"/>
         <source>Unknown</source>
         <translation>Άγνωστο</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="274"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Error retrieving update information.</source>
         <translation>Σφάλμα κατά την ανάκτηση πληροφοριών ενημέρωσης.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="295"/>
         <source>Installing the update. Please wait.</source>
         <translation>Εγκατάσταση ενημέρωσης. Περιμένετε.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="249"/>
+        <location filename="../common/desktop/update_dialog.cc" line="260"/>
         <source>No updates available.</source>
         <translation>Δεν υπάρχουν διαθέσιμες ενημερώσεις.</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateWidget</name>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="59"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="206"/>
+        <location filename="../common/android/update_widget.cc" line="216"/>
+        <source>Update</source>
+        <translation>Ενημέρωση</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="69"/>
+        <source>Installed version: %1</source>
+        <translation>Εγκατεστημένη έκδοση: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="96"/>
+        <source>Receiving information...</source>
+        <translation>Λήψη πληροφοριών...</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="117"/>
+        <source>No updates available.</source>
+        <translation>Δεν υπάρχουν διαθέσιμες ενημερώσεις.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="123"/>
+        <source>Version %1 is available.</source>
+        <translation>Η έκδοση %1 είναι διαθέσιμη.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="137"/>
+        <source>Error retrieving update information.</source>
+        <translation>Σφάλμα κατά την ανάκτηση πληροφοριών ενημέρωσης.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="161"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>Παρουσιάστηκε σφάλμα κατά τη λήψη της ενημέρωσης: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="178"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>Εγκατάσταση ενημέρωσης. Περιμένετε.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="185"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>Το αρχείο που λήφθηκε είναι κατεστραμμένο.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="187"/>
+        <location filename="../common/android/update_widget.cc" line="236"/>
+        <source>An error occurred while installing the update.</source>
+        <translation>Παρουσιάστηκε σφάλμα κατά την εγκατάσταση της ενημέρωσης.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <source>Install the update yourself: %1</source>
+        <translation>Εγκαταστήστε μόνοι σας την ενημέρωση: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="207"/>
+        <source>To install the update, allow this application to install unknown apps on the next screen.</source>
+        <translation>Για να εγκαταστήσετε την ενημέρωση, επιτρέψτε σε αυτήν την εφαρμογή να εγκαθιστά άγνωστες εφαρμογές στην επόμενη οθόνη.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="208"/>
+        <source>Allow</source>
+        <translation>Να επιτραπεί</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="217"/>
+        <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
+        <translation>Θα γίνει λήψη μιας ενημέρωσης. Όλες οι συνδεδεμένες περίοδοι λειτουργίας θα τερματιστούν και όλα τα μη αποθηκευμένα δεδομένα θα χαθούν.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <source>Continue</source>
+        <translation>Συνέχεια</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="253"/>
+        <source>Downloading the update. Please wait.</source>
+        <translation>Λήψη ενημέρωσης. Περιμένετε.</translation>
     </message>
 </context>
 <context>

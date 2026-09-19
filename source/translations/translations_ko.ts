@@ -364,30 +364,30 @@ Routers added: %4</source>
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="168"/>
-        <location filename="../client/android/main_window.cc" line="254"/>
-        <location filename="../client/android/main_window.cc" line="296"/>
+        <location filename="../client/android/main_window.cc" line="169"/>
+        <location filename="../client/android/main_window.cc" line="271"/>
+        <location filename="../client/android/main_window.cc" line="313"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="169"/>
-        <location filename="../client/android/main_window.cc" line="258"/>
-        <location filename="../client/android/main_window.cc" line="316"/>
+        <location filename="../client/android/main_window.cc" line="170"/>
+        <location filename="../client/android/main_window.cc" line="275"/>
+        <location filename="../client/android/main_window.cc" line="333"/>
         <source>Remote</source>
         <translation>원격</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="170"/>
-        <location filename="../client/android/main_window.cc" line="262"/>
-        <location filename="../client/android/main_window.cc" line="306"/>
+        <location filename="../client/android/main_window.cc" line="171"/>
+        <location filename="../client/android/main_window.cc" line="279"/>
+        <location filename="../client/android/main_window.cc" line="323"/>
         <source>Routers</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="171"/>
-        <location filename="../client/android/main_window.cc" line="266"/>
-        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="172"/>
+        <location filename="../client/android/main_window.cc" line="283"/>
+        <location filename="../client/android/main_window.cc" line="343"/>
         <location filename="../host/android/main_window.cc" line="82"/>
         <location filename="../host/android/main_window.cc" line="98"/>
         <location filename="../host/android/main_window.cc" line="465"/>
@@ -395,41 +395,51 @@ Routers added: %4</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="529"/>
+        <location filename="../client/android/main_window.cc" line="197"/>
+        <source>Update</source>
+        <translation>업데이트</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
+        <source>Version %1 is available.</source>
+        <translation>%1 버전을 사용할 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="546"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>2단계 인증 - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
-        <location filename="../client/android/main_window.cc" line="848"/>
         <location filename="../client/android/main_window.cc" line="858"/>
-        <location filename="../client/android/main_window.cc" line="879"/>
-        <location filename="../client/android/main_window.cc" line="918"/>
+        <location filename="../client/android/main_window.cc" line="865"/>
+        <location filename="../client/android/main_window.cc" line="875"/>
+        <location filename="../client/android/main_window.cc" line="896"/>
+        <location filename="../client/android/main_window.cc" line="935"/>
         <source>Connection by link</source>
         <translation>링크로 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="841"/>
+        <location filename="../client/android/main_window.cc" line="858"/>
         <source>Invalid link.</source>
         <translation>잘못된 링크입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="849"/>
+        <location filename="../client/android/main_window.cc" line="866"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>다른 세션이 활성 상태입니다. 해당 세션을 닫고 링크를 다시 여십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="859"/>
+        <location filename="../client/android/main_window.cc" line="876"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>링크의 세션 유형은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="880"/>
+        <location filename="../client/android/main_window.cc" line="897"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>링크가 참조하는 라우터가 저장된 라우터 중에 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="919"/>
+        <location filename="../client/android/main_window.cc" line="936"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>링크가 참조하는 호스트가 저장된 호스트 중에 없습니다.</translation>
     </message>
@@ -453,6 +463,7 @@ Routers added: %4</source>
         <translation>원격 키보드 및 마우스 제어를 허용하려면 접근성 서비스를 사용하도록 설정하십시오.</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="198"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -6710,7 +6721,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="508"/>
-        <location filename="../client/desktop/settings_tab.cc" line="129"/>
+        <location filename="../client/desktop/settings_tab.cc" line="128"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
@@ -6740,64 +6751,64 @@ Credentials imported: %5</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="191"/>
+        <location filename="../client/desktop/settings_tab.cc" line="189"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="219"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="329"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="404"/>
+        <location filename="../client/desktop/settings_tab.cc" line="398"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="424"/>
+        <location filename="../client/desktop/settings_tab.cc" line="418"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="426"/>
+        <location filename="../client/desktop/settings_tab.cc" line="420"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="434"/>
+        <location filename="../client/desktop/settings_tab.cc" line="428"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="435"/>
+        <location filename="../client/desktop/settings_tab.cc" line="429"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="438"/>
+        <location filename="../client/desktop/settings_tab.cc" line="432"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="447"/>
+        <location filename="../client/desktop/settings_tab.cc" line="441"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>현재 암호가 잘못되었거나 변경할 수 없습니다.</translation>
     </message>
@@ -6880,223 +6891,270 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="145"/>
+        <location filename="../client/android/settings_widget.cc" line="136"/>
+        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <source>Update</source>
+        <translation>업데이트</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="159"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="153"/>
-        <location filename="../host/android/settings_widget.cc" line="144"/>
+        <location filename="../client/android/settings_widget.cc" line="167"/>
+        <location filename="../host/android/settings_widget.cc" line="148"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="210"/>
-        <location filename="../host/android/settings_widget.cc" line="214"/>
+        <location filename="../client/android/settings_widget.cc" line="231"/>
+        <location filename="../host/android/settings_widget.cc" line="235"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="213"/>
-        <location filename="../host/android/settings_widget.cc" line="219"/>
+        <location filename="../client/android/settings_widget.cc" line="234"/>
+        <location filename="../host/android/settings_widget.cc" line="240"/>
         <source>Theme</source>
         <translation>테마</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="226"/>
+        <location filename="../client/android/settings_widget.cc" line="247"/>
         <source>Display name when connected</source>
         <translation>연결 시 표시 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="238"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="259"/>
+        <location filename="../host/android/settings_widget.cc" line="256"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="252"/>
+        <location filename="../client/android/settings_widget.cc" line="273"/>
         <source>Unlock with biometrics</source>
         <translation>생체 인식으로 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="277"/>
+        <location filename="../client/android/settings_widget.cc" line="298"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>이 기능을 사용하려면 시스템 설정에서 지문을 등록하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Biometrics are not available on this device.</source>
         <translation>이 장치에서는 생체 인식을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="290"/>
+        <location filename="../client/android/settings_widget.cc" line="311"/>
         <source>UDP Connections</source>
         <translation>UDP 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="304"/>
+        <location filename="../client/android/settings_widget.cc" line="325"/>
         <source>Allow direct connections</source>
         <translation>직접 연결 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="305"/>
+        <location filename="../client/android/settings_widget.cc" line="326"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP 홀 펀칭 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="306"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow PCP protocol</source>
         <translation>PCP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="307"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="308"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="314"/>
+        <location filename="../client/android/settings_widget.cc" line="335"/>
         <source>Remote Desktop</source>
         <translation>원격 데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="316"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Enable audio</source>
         <translation>오디오 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="321"/>
+        <location filename="../client/android/settings_widget.cc" line="342"/>
         <source>Enable clipboard</source>
         <translation>클립보드 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="347"/>
         <source>Show shape of remote cursor</source>
         <translation>원격 커서 모양 표시</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="332"/>
+        <location filename="../client/android/settings_widget.cc" line="353"/>
         <source>Show position of remote cursor</source>
         <translation>원격 커서 위치 표시</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="338"/>
+        <location filename="../client/android/settings_widget.cc" line="359"/>
         <source>Disable desktop effects</source>
         <translation>바탕 화면 효과 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="344"/>
+        <location filename="../client/android/settings_widget.cc" line="365"/>
         <source>Disable desktop wallpaper</source>
         <translation>바탕 화면 배경 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="350"/>
+        <location filename="../client/android/settings_widget.cc" line="371"/>
         <source>Lock computer at disconnect</source>
         <translation>연결이 끊길 때 컴퓨터 잠금</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="356"/>
+        <location filename="../client/android/settings_widget.cc" line="377"/>
         <source>Block remote input</source>
         <translation>원격 입력 차단</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="388"/>
+        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <source>Updates</source>
+        <translation>업데이트</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <source>Check for updates on startup</source>
+        <translation>시작할 때 업데이트 확인</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="399"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <source>Update channel</source>
+        <translation>업데이트 채널</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="400"/>
+        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <source>Stable</source>
+        <translation>안정 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <source>Beta</source>
+        <translation>베타 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <source>Alpha</source>
+        <translation>알파 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <source>Check for updates</source>
+        <translation>업데이트 확인</translation>
+    </message>
+    <message>
+        <location filename="../client/android/settings_widget.cc" line="434"/>
         <source>Enable biometric unlock</source>
         <translation>생체 인식 잠금 해제 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="153"/>
+        <location filename="../host/android/settings_widget.cc" line="157"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Edit User</source>
         <translation>사용자 편집</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="162"/>
+        <location filename="../host/android/settings_widget.cc" line="166"/>
         <source>Add User</source>
         <translation>사용자 추가</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="237"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Manage users</source>
         <translation>사용자 관리</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="245"/>
+        <location filename="../host/android/settings_widget.cc" line="266"/>
         <source>Change password</source>
         <translation>암호 변경</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="249"/>
+        <location filename="../host/android/settings_widget.cc" line="270"/>
         <source>Disable password protection</source>
         <translation>암호 보호 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="279"/>
         <source>Enable password protection</source>
         <translation>암호 보호 사용</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="273"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="278"/>
+        <location filename="../host/android/settings_widget.cc" line="299"/>
         <source>Enable the use of a router</source>
         <translation>라우터 사용</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
+        <location filename="../host/android/settings_widget.cc" line="304"/>
         <source>Address</source>
         <translation>주소</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="289"/>
+        <location filename="../host/android/settings_widget.cc" line="310"/>
         <source>Public Key</source>
         <translation>공개 키</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="315"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>직접 연결이 불가능한 경우(NAT 우회) 컴퓨터에 연결하려면 라우터가 필요합니다. Aspia는 공용 라우터를 제공하지 않지만 직접 설치할 수 있습니다. 라우터는 &lt;a href=&quot;https://aspia.org&quot;&gt;공식 웹 사이트&lt;/a&gt;에서 다운로드할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="363"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="428"/>
         <source>An error occurred while processing the password.</source>
         <translation>암호를 처리하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="449"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
@@ -11379,67 +11437,154 @@ Credentials imported: %5</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="120"/>
+        <location filename="../common/desktop/update_dialog.cc" line="131"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="137"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>업데이트가 다운로드됩니다. 다운로드가 완료되면 응용 프로그램이 자동으로 닫힙니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="128"/>
+        <location filename="../common/desktop/update_dialog.cc" line="139"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>연결된 모든 세션이 종료됩니다. 업데이트가 완료될 때까지 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="130"/>
+        <location filename="../common/desktop/update_dialog.cc" line="141"/>
         <source>All unsaved data will be lost.</source>
         <translation>저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="131"/>
+        <location filename="../common/desktop/update_dialog.cc" line="142"/>
         <source>Continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="165"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="174"/>
-        <location filename="../common/desktop/update_dialog.cc" line="195"/>
-        <location filename="../common/desktop/update_dialog.cc" line="205"/>
-        <location filename="../common/desktop/update_dialog.cc" line="227"/>
+        <location filename="../common/desktop/update_dialog.cc" line="185"/>
+        <location filename="../common/desktop/update_dialog.cc" line="206"/>
+        <location filename="../common/desktop/update_dialog.cc" line="216"/>
+        <location filename="../common/desktop/update_dialog.cc" line="238"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="193"/>
+        <location filename="../common/desktop/update_dialog.cc" line="204"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="273"/>
+        <location filename="../common/desktop/update_dialog.cc" line="284"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="274"/>
+        <location filename="../common/desktop/update_dialog.cc" line="285"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="284"/>
+        <location filename="../common/desktop/update_dialog.cc" line="295"/>
         <source>Installing the update. Please wait.</source>
         <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="249"/>
+        <location filename="../common/desktop/update_dialog.cc" line="260"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateWidget</name>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="59"/>
+        <location filename="../common/android/update_widget.cc" line="197"/>
+        <location filename="../common/android/update_widget.cc" line="206"/>
+        <location filename="../common/android/update_widget.cc" line="216"/>
+        <source>Update</source>
+        <translation>업데이트</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="69"/>
+        <source>Installed version: %1</source>
+        <translation>설치된 버전: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="96"/>
+        <source>Receiving information...</source>
+        <translation>정보를 받는 중...</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="117"/>
+        <source>No updates available.</source>
+        <translation>사용 가능한 업데이트가 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="123"/>
+        <source>Version %1 is available.</source>
+        <translation>%1 버전을 사용할 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="137"/>
+        <source>Error retrieving update information.</source>
+        <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="161"/>
+        <source>An error occurred while downloading the update: %1</source>
+        <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="178"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="185"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>다운로드한 파일이 손상되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="187"/>
+        <location filename="../common/android/update_widget.cc" line="236"/>
+        <source>An error occurred while installing the update.</source>
+        <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="198"/>
+        <source>Install the update yourself: %1</source>
+        <translation>업데이트를 직접 설치하십시오: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="207"/>
+        <source>To install the update, allow this application to install unknown apps on the next screen.</source>
+        <translation>업데이트를 설치하려면 다음 화면에서 이 응용 프로그램이 알 수 없는 앱을 설치하도록 허용하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="208"/>
+        <source>Allow</source>
+        <translation>허용</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="217"/>
+        <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
+        <translation>업데이트가 다운로드됩니다. 연결된 모든 세션이 종료되고 저장하지 않은 모든 데이터가 손실됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="218"/>
+        <source>Continue</source>
+        <translation>계속</translation>
+    </message>
+    <message>
+        <location filename="../common/android/update_widget.cc" line="253"/>
+        <source>Downloading the update. Please wait.</source>
+        <translation>업데이트를 다운로드하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
 </context>
 <context>
