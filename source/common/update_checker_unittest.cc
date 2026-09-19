@@ -333,3 +333,50 @@ TEST(UpdateCheckerTest, ModifiedManifestFails)
     ASSERT_TRUE(failed.wait(15000));
     EXPECT_TRUE(spy.isEmpty());
 }
+
+//--------------------------------------------------------------------------------------------------
+// The rules name a label that is not there. Nothing can be offered, but that is a mistake in the
+// published file and the user is told the check did not happen.
+TEST(UpdateCheckerTest, RulesWithUnknownLabelFail)
+{
+    QByteArray broken_rules = QByteArray(rules()).replace("@latest", "@lastest");
+    ASSERT_NE(broken_rules, rules());
+
+    FileServer server(withSignatures({ { "/latest.json", broken_rules } }));
+
+    std::unique_ptr<UpdateChecker> checker = checkerFor(server);
+    QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
+    QSignalSpy failed(checker.get(), &UpdateChecker::sig_checkFailed);
+
+    checker->start();
+
+    ASSERT_TRUE(failed.wait(15000));
+    EXPECT_TRUE(spy.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The rules and the manifest disagree about which release this is. Both are signed, so it is a
+// broken publication rather than something to pass off as an absence of updates.
+TEST(UpdateCheckerTest, ManifestOfAnotherVersionFails)
+{
+    QVersionNumber other(nextVersion().majorVersion(), nextVersion().minorVersion(),
+                         nextVersion().microVersion() + 1);
+
+    QByteArray other_manifest = QByteArray(manifest()).replace(
+        QString("\"version\": \"%1\"").arg(nextVersion().toString()).toUtf8(),
+        QString("\"version\": \"%1\"").arg(other.toString()).toUtf8());
+    ASSERT_NE(other_manifest, manifest());
+
+    FileServer server(withSignatures(
+        { { "/latest.json", rules() },
+          { QString("/%1.json").arg(nextVersion().toString()), other_manifest } }));
+
+    std::unique_ptr<UpdateChecker> checker = checkerFor(server);
+    QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
+    QSignalSpy failed(checker.get(), &UpdateChecker::sig_checkFailed);
+
+    checker->start();
+
+    ASSERT_TRUE(failed.wait(15000));
+    EXPECT_TRUE(spy.isEmpty());
+}

@@ -21,6 +21,7 @@
 #include <QStandardPaths>
 #include <QVersionNumber>
 
+#include <optional>
 #include <utility>
 
 #include "base/build_config.h"
@@ -180,15 +181,21 @@ void UpdateChecker::check()
         return;
     }
 
-    QVersionNumber target_version = UpdateInfo::targetVersion(rules, kCurrentVersion);
-    if (target_version.isNull() || target_version <= kCurrentVersion)
+    std::optional<QVersionNumber> target_version = UpdateInfo::targetVersion(rules, kCurrentVersion);
+    if (!target_version)
+    {
+        emit sig_checkFailed();
+        return;
+    }
+
+    if (target_version->isNull() || *target_version <= kCurrentVersion)
     {
         LOG(INFO) << "No updates for version" << kCurrentVersion.toString();
         emit sig_checkFinished(UpdateInfo());
         return;
     }
 
-    QByteArray manifest = downloadSigned(server_ + "/" + target_version.toString() + ".json");
+    QByteArray manifest = downloadSigned(server_ + "/" + target_version->toString() + ".json");
     if (interrupted_.load(std::memory_order_relaxed))
         return;
 
@@ -198,16 +205,21 @@ void UpdateChecker::check()
         return;
     }
 
-    UpdateInfo update_info = UpdateInfo::fromManifest(manifest, package_, os, arch, format);
-
-    if (update_info.isValid() && update_info.version() != target_version)
+    std::optional<UpdateInfo> update_info = UpdateInfo::fromManifest(manifest, package_, os, arch, format);
+    if (update_info && update_info->isValid() && update_info->version() != *target_version)
     {
-        LOG(ERROR) << "Manifest of version" << target_version.toString()
-                   << "carries version" << update_info.version().toString();
-        update_info = UpdateInfo();
+        LOG(ERROR) << "Manifest of version" << target_version->toString()
+                   << "carries version" << update_info->version().toString();
+        update_info.reset();
     }
 
-    emit sig_checkFinished(update_info);
+    if (!update_info)
+    {
+        emit sig_checkFailed();
+        return;
+    }
+
+    emit sig_checkFinished(*update_info);
 }
 
 //--------------------------------------------------------------------------------------------------

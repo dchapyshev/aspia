@@ -24,6 +24,8 @@
 #include <QString>
 #include <QVersionNumber>
 
+#include <optional>
+
 class UpdateInfo
 {
 public:
@@ -32,14 +34,18 @@ public:
     UpdateInfo& operator=(const UpdateInfo& other) = default;
     ~UpdateInfo() = default;
 
-    // The version latest.json offers to |current|, or a null version when it names none.
-    static QVersionNumber targetVersion(const QByteArray& buffer, const QVersionNumber& current);
+    // The version latest.json offers to |current|. A null version means the rules name nothing
+    // for it, and no value at all that they could not be read.
+    static std::optional<QVersionNumber> targetVersion(const QByteArray& buffer,
+                                                       const QVersionNumber& current);
 
     // The file of |package| built for this OS and architecture, taken from the manifest of one
     // version. |format| is the package format to prefer; with an empty one, or when the manifest
-    // has no file of that format, the first file listed is taken.
-    static UpdateInfo fromManifest(const QByteArray& buffer, const QString& package,
-                                   const QString& os, const QString& arch, const QString& format);
+    // has no file of that format, the first file listed is taken. An invalid answer means the
+    // release has no build for this platform, and no value at all that the manifest is broken.
+    static std::optional<UpdateInfo> fromManifest(const QByteArray& buffer, const QString& package,
+                                                  const QString& os, const QString& arch,
+                                                  const QString& format);
 
     bool isValid() const { return valid_; }
     const QVersionNumber& version() const { return version_; }

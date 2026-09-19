@@ -73,11 +73,12 @@ QJsonObject rootObject(const QByteArray& buffer)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QVersionNumber UpdateInfo::targetVersion(const QByteArray& buffer, const QVersionNumber& current)
+std::optional<QVersionNumber> UpdateInfo::targetVersion(
+    const QByteArray& buffer, const QVersionNumber& current)
 {
     QJsonObject root = rootObject(buffer);
     if (root.isEmpty())
-        return QVersionNumber();
+        return std::nullopt;
 
     const QJsonArray rules = root.value("updates").toArray();
     for (const QJsonValue& item : rules)
@@ -100,13 +101,16 @@ QVersionNumber UpdateInfo::targetVersion(const QByteArray& buffer, const QVersio
             if (target.isEmpty())
             {
                 LOG(ERROR) << "Unknown label:" << label;
-                return QVersionNumber();
+                return std::nullopt;
             }
         }
 
         QVersionNumber version = QVersionNumber::fromString(target);
         if (version.isNull())
+        {
             LOG(ERROR) << "Invalid target version:" << target;
+            return std::nullopt;
+        }
 
         return version;
     }
@@ -117,12 +121,13 @@ QVersionNumber UpdateInfo::targetVersion(const QByteArray& buffer, const QVersio
 
 //--------------------------------------------------------------------------------------------------
 // static
-UpdateInfo UpdateInfo::fromManifest(const QByteArray& buffer, const QString& package,
-                                    const QString& os, const QString& arch, const QString& format)
+std::optional<UpdateInfo> UpdateInfo::fromManifest(const QByteArray& buffer,
+                                                   const QString& package, const QString& os,
+                                                   const QString& arch, const QString& format)
 {
     QJsonObject root = rootObject(buffer);
     if (root.isEmpty())
-        return UpdateInfo();
+        return std::nullopt;
 
     const QJsonArray files = root.value("packages").toObject()
                                  .value(package).toObject()
@@ -176,6 +181,9 @@ UpdateInfo UpdateInfo::fromManifest(const QByteArray& buffer, const QString& pac
     {
         update_info.valid_ = true;
     }
+
+    if (!update_info.valid_)
+        return std::nullopt;
 
     return update_info;
 }

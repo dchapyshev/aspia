@@ -98,12 +98,20 @@ TEST(UpdateInfoTest, LabelIsResolved)
 // has it as a source until the next release is out.
 TEST(UpdateInfoTest, VersionWithoutRuleIsNotOffered)
 {
-    EXPECT_TRUE(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(2, 7, 0)).isNull());
-    EXPECT_TRUE(UpdateInfo::targetVersion(rulesJson(), QVersionNumber(3, 0, 6)).isNull());
+    std::optional<QVersionNumber> unsupported =
+        UpdateInfo::targetVersion(rulesJson(), QVersionNumber(2, 7, 0));
+    ASSERT_TRUE(unsupported.has_value());
+    EXPECT_TRUE(unsupported->isNull());
+
+    std::optional<QVersionNumber> newest =
+        UpdateInfo::targetVersion(rulesJson(), QVersionNumber(3, 0, 6));
+    ASSERT_TRUE(newest.has_value());
+    EXPECT_TRUE(newest->isNull());
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, UnknownLabelIsNotOffered)
+// A label the rules do not carry is a mistake in them, not an absence of updates.
+TEST(UpdateInfoTest, UnknownLabelIsRejected)
 {
     QByteArray rules = R"({
         "format": 1,
@@ -111,7 +119,7 @@ TEST(UpdateInfoTest, UnknownLabelIsNotOffered)
         "updates": [ { "source": "3.0.0", "target": "@stable" } ]
     })";
 
-    EXPECT_TRUE(UpdateInfo::targetVersion(rules, QVersionNumber(3, 0, 0)).isNull());
+    EXPECT_FALSE(UpdateInfo::targetVersion(rules, QVersionNumber(3, 0, 0)).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -127,7 +135,7 @@ TEST(UpdateInfoTest, SourceIsComparedAsVersion)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, BrokenRulesAreNotOffered)
+TEST(UpdateInfoTest, BrokenRulesAreRejected)
 {
     const char* kAnswers[] =
     {
@@ -137,40 +145,57 @@ TEST(UpdateInfoTest, BrokenRulesAreNotOffered)
         "<html><body>404 Not Found</body></html>",
         R"({ "format": 2, "updates": [ { "source": "3.0.0", "target": "3.0.6" } ] })",
         R"({ "updates": [ { "source": "3.0.0", "target": "3.0.6" } ] })",
-        R"({ "format": 1 })",
         R"({ "format": 1, "updates": [ { "source": "3.0.0", "target": "" } ] })"
     };
 
     for (const char* answer : kAnswers)
     {
-        EXPECT_TRUE(UpdateInfo::targetVersion(QByteArray(answer), QVersionNumber(3, 0, 0)).isNull())
+        EXPECT_FALSE(
+            UpdateInfo::targetVersion(QByteArray(answer), QVersionNumber(3, 0, 0)).has_value())
             << answer;
     }
+
+    // Rules without a single line are readable, and what they say is that nothing is offered.
+    std::optional<QVersionNumber> empty =
+        UpdateInfo::targetVersion(QByteArray(R"({ "format": 1 })"), QVersionNumber(3, 0, 0));
+
+    ASSERT_TRUE(empty.has_value());
+    EXPECT_TRUE(empty->isNull());
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(UpdateInfoTest, ManifestIsParsed)
 {
-    UpdateInfo update_info =
+    std::optional<UpdateInfo> update_info =
         UpdateInfo::fromManifest(manifestJson(), "host", "windows", "x86_64", "msi");
 
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.version(), QVersionNumber(3, 0, 6));
-    EXPECT_EQ(update_info.description(), QString("A new version of the program."));
-    EXPECT_EQ(update_info.url(), QString(kUrl));
-    EXPECT_EQ(update_info.sha256(), QString(kSha256));
+    ASSERT_TRUE(update_info.has_value());
+    ASSERT_TRUE(update_info->isValid());
+    EXPECT_EQ(update_info->version(), QVersionNumber(3, 0, 6));
+    EXPECT_EQ(update_info->description(), QString("A new version of the program."));
+    EXPECT_EQ(update_info->url(), QString(kUrl));
+    EXPECT_EQ(update_info->sha256(), QString(kSha256));
 }
 
 //--------------------------------------------------------------------------------------------------
 // A release built for other platforms carries no files for this one, and that is not an error.
 TEST(UpdateInfoTest, PlatformWithoutFilesIsNotOffered)
 {
-    EXPECT_FALSE(
-        UpdateInfo::fromManifest(manifestJson(), "host", "windows", "x86", "msi").isValid());
-    EXPECT_FALSE(
-        UpdateInfo::fromManifest(manifestJson(), "host", "macosx", "arm64", QString()).isValid());
-    EXPECT_FALSE(
-        UpdateInfo::fromManifest(manifestJson(), "client", "windows", "x86_64", "msi").isValid());
+    const char* kPlatforms[][3] =
+    {
+        { "host", "windows", "x86" },
+        { "host", "macosx", "arm64" },
+        { "client", "windows", "x86_64" }
+    };
+
+    for (const char* const* platform : kPlatforms)
+    {
+        std::optional<UpdateInfo> update_info = UpdateInfo::fromManifest(
+            manifestJson(), platform[0], platform[1], platform[2], QString());
+
+        ASSERT_TRUE(update_info.has_value()) << platform[1];
+        EXPECT_FALSE(update_info->isValid()) << platform[1];
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -178,28 +203,31 @@ TEST(UpdateInfoTest, PlatformWithoutFilesIsNotOffered)
 // one the manifest does not carry, the first file listed is.
 TEST(UpdateInfoTest, PreferredFormatIsTaken)
 {
-    UpdateInfo rpm = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "rpm");
-    ASSERT_TRUE(rpm.isValid());
-    EXPECT_EQ(rpm.url(), QString("https://aspia.org/d/host.rpm"));
+    std::optional<UpdateInfo> rpm =
+        UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "rpm");
+    ASSERT_TRUE(rpm.has_value());
+    EXPECT_EQ(rpm->url(), QString("https://aspia.org/d/host.rpm"));
 
-    UpdateInfo any = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", QString());
-    ASSERT_TRUE(any.isValid());
-    EXPECT_EQ(any.url(), QString("https://aspia.org/d/host.deb"));
+    std::optional<UpdateInfo> any =
+        UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", QString());
+    ASSERT_TRUE(any.has_value());
+    EXPECT_EQ(any->url(), QString("https://aspia.org/d/host.deb"));
 
-    UpdateInfo missing = UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "msi");
-    ASSERT_TRUE(missing.isValid());
-    EXPECT_EQ(missing.url(), QString("https://aspia.org/d/host.deb"));
+    std::optional<UpdateInfo> missing =
+        UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "msi");
+    ASSERT_TRUE(missing.has_value());
+    EXPECT_EQ(missing->url(), QString("https://aspia.org/d/host.deb"));
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(UpdateInfoTest, ManifestWithoutDescriptionIsValid)
 {
-    UpdateInfo update_info =
+    std::optional<UpdateInfo> update_info =
         UpdateInfo::fromManifest(manifestJson("3.0.6", QString(), kUrl, kSha256),
                                  "host", "windows", "x86_64", "msi");
 
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_TRUE(update_info.description().isEmpty());
+    ASSERT_TRUE(update_info.has_value());
+    EXPECT_TRUE(update_info->description().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -208,7 +236,7 @@ TEST(UpdateInfoTest, TooLongDescriptionIsRejected)
     QString description = QString("a").repeated(4097);
 
     EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", description, kUrl, kSha256),
-                                          "host", "windows", "x86_64", "msi").isValid());
+                                          "host", "windows", "x86_64", "msi").has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,13 +247,14 @@ TEST(UpdateInfoTest, BrokenUrlIsRejected)
     for (const char* url : kUrls)
     {
         EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", url, kSha256),
-                                              "host", "windows", "x86_64", "msi").isValid()) << url;
+                                              "host", "windows", "x86_64", "msi").has_value())
+            << url;
     }
 
     QString long_url = QString("https://aspia.org/") + QString("a").repeated(256);
 
     EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", long_url, kSha256),
-                                          "host", "windows", "x86_64", "msi").isValid());
+                                          "host", "windows", "x86_64", "msi").has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,7 +272,7 @@ TEST(UpdateInfoTest, BrokenSha256IsRejected)
     for (const char* sha256 : kHashes)
     {
         EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", kUrl, sha256),
-                                              "host", "windows", "x86_64", "msi").isValid())
+                                              "host", "windows", "x86_64", "msi").has_value())
             << sha256;
     }
 }
@@ -252,29 +281,36 @@ TEST(UpdateInfoTest, BrokenSha256IsRejected)
 // The hash is written in either case, and the parsed record keeps one of them.
 TEST(UpdateInfoTest, Sha256IsLowerCased)
 {
-    UpdateInfo update_info =
+    std::optional<UpdateInfo> update_info =
         UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", kUrl, QString(kSha256).toUpper()),
                                  "host", "windows", "x86_64", "msi");
 
-    ASSERT_TRUE(update_info.isValid());
-    EXPECT_EQ(update_info.sha256(), QString(kSha256));
+    ASSERT_TRUE(update_info.has_value());
+    EXPECT_EQ(update_info->sha256(), QString(kSha256));
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, BrokenManifestIsNotOffered)
+TEST(UpdateInfoTest, BrokenManifestIsRejected)
 {
     const char* kAnswers[] =
     {
         "",
         "not a json at all",
         "<html><body>404 Not Found</body></html>",
-        R"({ "format": 2, "version": "3.0.6", "packages": {} })",
-        R"({ "format": 1, "packages": {} })"
+        R"({ "format": 2, "version": "3.0.6", "packages": {} })"
     };
 
     for (const char* answer : kAnswers)
     {
         EXPECT_FALSE(UpdateInfo::fromManifest(QByteArray(answer), "host", "windows", "x86_64",
-                                              "msi").isValid()) << answer;
+                                              "msi").has_value()) << answer;
     }
+
+    // A manifest without a single package is readable, and what it says is that the release was
+    // built for nobody.
+    std::optional<UpdateInfo> empty = UpdateInfo::fromManifest(
+        QByteArray(R"({ "format": 1, "packages": {} })"), "host", "windows", "x86_64", "msi");
+
+    ASSERT_TRUE(empty.has_value());
+    EXPECT_FALSE(empty->isValid());
 }
