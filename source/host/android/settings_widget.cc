@@ -39,8 +39,10 @@
 #include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
+#include "common/android/update_widget.h"
 #include "host/database.h"
 #include "host/settings_util.h"
+#include "host/system_settings.h"
 #include "host/user_settings.h"
 #include "host/android/password_dialog.h"
 #include "host/android/user_editor_widget.h"
@@ -60,6 +62,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       settings_page_(new ScrollArea()),
       about_page_(new AboutWidget()),
+      update_page_(new UpdateWidget("host")),
       users_page_(new UsersWidget()),
       editor_page_(new UserEditorWidget()),
       about_button_(new IconButton(":/img/material/info.svg", this)),
@@ -92,6 +95,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     stack_->addWidget(about_page_);
     stack_->addWidget(users_page_);
     stack_->addWidget(editor_page_);
+    stack_->addWidget(update_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -108,7 +112,7 @@ QList<QWidget*> SettingsWidget::appBarActions() const
         return { save_button_ };
     if (isUsersPage())
         return { add_user_button_ };
-    if (isAboutPage())
+    if (isAboutPage() || isUpdatePage())
         return {};
     return { import_button_, about_button_ };
 }
@@ -123,7 +127,7 @@ void SettingsWidget::goBack()
         return;
     }
 
-    if (!isAboutPage() && !isUsersPage())
+    if (!isAboutPage() && !isUsersPage() && !isUpdatePage())
         return;
 
     stack_->setCurrentWidget(settings_page_);
@@ -164,6 +168,16 @@ void SettingsWidget::showUserEditor(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsWidget::showUpdate()
+{
+    update_page_->check(SystemSettings().updateChannel());
+
+    stack_->setCurrentWidget(update_page_);
+    emit sig_titleChanged(tr("Update"), true);
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SettingsWidget::isAboutPage() const
 {
     return stack_->currentWidget() == about_page_;
@@ -182,6 +196,12 @@ bool SettingsWidget::isEditorPage() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isUpdatePage() const
+{
+    return stack_->currentWidget() == update_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::buildSettings()
 {
     QWidget* content = new QWidget(settings_page_);
@@ -193,6 +213,7 @@ void SettingsWidget::buildSettings()
     buildInterfaceSection(layout);
     buildSecuritySection(layout);
     buildRouterSection(layout);
+    buildUpdateSection(layout);
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.
@@ -349,6 +370,30 @@ void SettingsWidget::buildRouterSection(QVBoxLayout* layout)
             public_key->setText(QString::fromUtf8(db.routerPublicKey().toHex()));
         }
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Updates"));
+
+    ComboBox* channel = new ComboBox();
+    channel->setLabel(tr("Update channel"));
+    channel->addItem(tr("Stable"), kStableUpdateChannel);
+    channel->addItem(tr("Beta"), kBetaUpdateChannel);
+    channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
+    channel->setCurrentIndex(qMax(0, channel->findData(SystemSettings().updateChannel())));
+    connect(channel, &QComboBox::currentIndexChanged, this, [channel](int /* index */)
+    {
+        SystemSettings settings;
+        settings.setUpdateChannel(channel->currentData().toString());
+        settings.sync();
+    });
+    layout->addWidget(channel);
+
+    Button* check = new Button(tr("Check for Updates"), Button::Role::FILLED);
+    connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);
+    layout->addWidget(check);
 }
 
 //--------------------------------------------------------------------------------------------------

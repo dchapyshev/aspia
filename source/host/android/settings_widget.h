@@ -23,6 +23,7 @@
 #include <QWidget>
 
 class AboutWidget;
+class UpdateWidget;
 class IconButton;
 class ScrollArea;
 class UserEditorWidget;
@@ -64,9 +65,11 @@ private:
     void showAbout();
     void showUsers();
     void showUserEditor(qint64 entry_id);
+    void showUpdate();
     bool isAboutPage() const;
     bool isUsersPage() const;
     bool isEditorPage() const;
+    bool isUpdatePage() const;
 
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
@@ -74,6 +77,7 @@ private:
     void buildInterfaceSection(QVBoxLayout* layout);
     void buildSecuritySection(QVBoxLayout* layout);
     void buildRouterSection(QVBoxLayout* layout);
+    void buildUpdateSection(QVBoxLayout* layout);
 
     void onEnableProtection();
     void onChangePassword();
@@ -83,6 +87,7 @@ private:
     QStackedWidget* stack_;
     ScrollArea* settings_page_;
     AboutWidget* about_page_;
+    UpdateWidget* update_page_;
     UsersWidget* users_page_;
     UserEditorWidget* editor_page_;
     IconButton* about_button_;

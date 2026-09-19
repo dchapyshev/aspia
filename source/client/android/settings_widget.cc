@@ -24,6 +24,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
+#include "base/build_config.h"
 #include "base/gui_application.h"
 #include "base/net/udp_channel.h"
 #include "client/database.h"
@@ -39,6 +40,7 @@
 #include "common/android/line_edit.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
+#include "common/android/update_widget.h"
 
 namespace {
 
@@ -55,6 +57,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       settings_page_(new ScrollArea()),
       credentials_page_(new CredentialsWidget()),
       about_page_(new AboutWidget()),
+      update_page_(new UpdateWidget("client")),
       button_credentials_(new IconButton(":/img/material/key.svg", this)),
       button_about_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(settings_.desktopConfig()),
@@ -77,6 +80,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     stack_->addWidget(settings_page_);
     stack_->addWidget(credentials_page_);
     stack_->addWidget(about_page_);
+    stack_->addWidget(update_page_);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -91,7 +95,7 @@ QList<QWidget*> SettingsWidget::appBarActions() const
 {
     if (isCredentialsPage())
         return credentials_page_->appBarActions();
-    if (isAboutPage())
+    if (isAboutPage() || isUpdatePage())
         return {};
     return { button_credentials_, button_about_ };
 }
@@ -106,7 +110,7 @@ void SettingsWidget::goBack()
         return;
     }
 
-    if (!isCredentialsPage() && !isAboutPage())
+    if (!isCredentialsPage() && !isAboutPage() && !isUpdatePage())
         return;
 
     stack_->setCurrentWidget(settings_page_);
@@ -121,6 +125,16 @@ void SettingsWidget::resetToSettings()
         credentials_page_->goBack();
 
     stack_->setCurrentWidget(settings_page_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::showUpdate()
+{
+    update_page_->check(Database::instance().updateChannel());
+
+    stack_->setCurrentWidget(update_page_);
+    emit sig_titleChanged(tr("Update"), true);
+    emit sig_appBarActionsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,6 +181,12 @@ bool SettingsWidget::isAboutPage() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SettingsWidget::isUpdatePage() const
+{
+    return stack_->currentWidget() == update_page_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsWidget::buildSettings()
 {
     QWidget* content = new QWidget(settings_page_);
@@ -179,6 +199,7 @@ void SettingsWidget::buildSettings()
     buildSecuritySection(layout);
     buildUdpSection(layout);
     buildDesktopSection(layout);
+    buildUpdateSection(layout);
     layout->addStretch();
 
     // setWidget() deletes the previously set content widget.
@@ -359,6 +380,36 @@ void SettingsWidget::buildDesktopSection(QVBoxLayout* layout)
         desktop_config_.set_block_input(checked);
         settings_.setDesktopConfig(desktop_config_);
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
+{
+    addSectionHeader(layout, tr("Updates"));
+
+    Database& db = Database::instance();
+
+    addBoolSetting(layout, tr("Check for updates on startup"), db.isCheckUpdatesEnabled(),
+                   [](bool checked)
+    {
+        Database::instance().setCheckUpdatesEnabled(checked);
+    });
+
+    ComboBox* channel = new ComboBox();
+    channel->setLabel(tr("Update channel"));
+    channel->addItem(tr("Stable"), kStableUpdateChannel);
+    channel->addItem(tr("Beta"), kBetaUpdateChannel);
+    channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
+    channel->setCurrentIndex(qMax(0, channel->findData(db.updateChannel())));
+    connect(channel, &QComboBox::currentIndexChanged, this, [channel](int /* index */)
+    {
+        Database::instance().setUpdateChannel(channel->currentData().toString());
+    });
+    layout->addWidget(channel);
+
+    Button* check = new Button(tr("Check for Updates"), Button::Role::FILLED);
+    connect(check, &Button::clicked, this, &SettingsWidget::showUpdate);
+    layout->addWidget(check);
 }
 
 //--------------------------------------------------------------------------------------------------

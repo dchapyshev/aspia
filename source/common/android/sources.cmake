@@ -66,4 +66,6 @@ collect_sources(SOURCE_COMMON_ANDROID
     touch_scroller.cc
     touch_scroller.h
     tree_widget.cc
-    tree_widget.h)
+    tree_widget.h
+    update_widget.cc
+    update_widget.h)

@@ -46,6 +46,7 @@
 #include "client/android/routers_widget.h"
 #include "client/android/settings_widget.h"
 #include "client/android/two_factor_dialog.h"
+#include "client/workers/update_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
 #include "common/android/message_dialog.h"
@@ -189,6 +190,22 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
 
     connect(nav_bar_, &BottomNavigationBar::sig_currentChanged,
             this, &AndroidMainWindow::onSectionChanged);
+
+    connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
+            this, [this](const UpdateInfo& update_info)
+    {
+        if (!MessageDialog::confirm(this, tr("Update"),
+                tr("Version %1 is available.").arg(update_info.version().toString()), tr("Open")))
+        {
+            return;
+        }
+
+        nav_bar_->setCurrentIndex(SECTION_SETTINGS);
+
+        SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
+        if (settings)
+            settings->showUpdate();
+    }, Qt::QueuedConnection);
 
     onSectionChanged(nav_bar_->currentIndex());
 

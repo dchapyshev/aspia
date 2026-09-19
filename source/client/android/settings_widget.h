@@ -30,6 +30,7 @@
 class QVBoxLayout;
 class QStackedWidget;
 class AboutWidget;
+class UpdateWidget;
 class CredentialsWidget;
 class IconButton;
 class ScrollArea;
@@ -55,6 +56,9 @@ public:
     // Returns to the settings page without animation, used when the tab is left.
     void resetToSettings();
 
+    // Opens the update page and starts a check on it.
+    void showUpdate();
+
 signals:
     // Requests the host bar to show |title| with a back button (a sub-page) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);
@@ -71,6 +75,7 @@ private:
     void showAbout();
     bool isCredentialsPage() const;
     bool isAboutPage() const;
+    bool isUpdatePage() const;
 
     void buildSettings();
     void addSectionHeader(QVBoxLayout* layout, const QString& text);
@@ -80,6 +85,7 @@ private:
     void buildSecuritySection(QVBoxLayout* layout);
     void buildUdpSection(QVBoxLayout* layout);
     void buildDesktopSection(QVBoxLayout* layout);
+    void buildUpdateSection(QVBoxLayout* layout);
 
     // Enables or disables biometric unlock, returning whether the requested state was reached so the
     // caller can revert the switch on cancellation or failure.
@@ -89,6 +95,7 @@ private:
     ScrollArea* settings_page_;
     CredentialsWidget* credentials_page_;
     AboutWidget* about_page_;
+    UpdateWidget* update_page_;
     IconButton* button_credentials_;
     IconButton* button_about_;
 
