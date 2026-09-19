@@ -955,22 +955,22 @@ Přidané routery: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="185"/>
+        <location filename="../client/main.cc" line="216"/>
         <source>Set Master Password</source>
         <translation>Nastavit hlavní heslo</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="187"/>
+        <location filename="../client/main.cc" line="218"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Nastavte hlavní heslo vyžadované k odemknutí aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="195"/>
+        <location filename="../client/main.cc" line="226"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Zadané heslo nesplňuje požadavky na zabezpečení!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="197"/>
+        <location filename="../client/main.cc" line="228"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Heslo musí obsahovat malá a velká písmena, číslice a nemělo by být kratší než %n znak.</numerusform>
@@ -979,37 +979,37 @@ Přidané routery: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="201"/>
+        <location filename="../client/main.cc" line="232"/>
         <source>Do you want to enter a different password?</source>
         <translation>Chcete zadat jiné heslo?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="211"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Unable to set master password.</source>
         <translation>Nelze nastavit hlavní heslo.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="159"/>
+        <location filename="../client/main.cc" line="190"/>
         <source>Unlock</source>
         <translation>Odemknout</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="120"/>
+        <location filename="../client/main.cc" line="151"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Odkaz aspia:// pro připojení k hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="161"/>
+        <location filename="../client/main.cc" line="192"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Zadejte hlavní heslo pro odemknutí aplikace.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="177"/>
+        <location filename="../client/main.cc" line="208"/>
         <source>Invalid master password.</source>
         <translation>Neplatné hlavní heslo.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="116"/>
+        <location filename="../client/main.cc" line="147"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1310,164 +1310,164 @@ Přidané routery: %4</translation>
         <translation>Kontrolovat aktualizace:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="114"/>
+        <location filename="../host/ui/config_dialog.cc" line="115"/>
         <source>Once a day</source>
         <translation>Jednou denně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="115"/>
+        <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a week</source>
         <translation>Jednou týdně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="116"/>
+        <location filename="../host/ui/config_dialog.cc" line="117"/>
         <source>Once a month</source>
         <translation>Jednou měsíčně</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="152"/>
+        <location filename="../host/ui/config_dialog.cc" line="155"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="193"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>On reboot</source>
         <translation>Při restartu</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="194"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 5 minutes</source>
         <translation>Každých 5 minut</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="195"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 30 minutes</source>
         <translation>Každých 30 minut</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="196"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 1 hour</source>
         <translation>Každou hodinu</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="197"/>
+        <location filename="../host/ui/config_dialog.cc" line="200"/>
         <source>Every 6 hours</source>
         <translation>Každých 6 hodin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="198"/>
+        <location filename="../host/ui/config_dialog.cc" line="201"/>
         <source>Every 12 hours</source>
         <translation>Každých 12 hodin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="199"/>
+        <location filename="../host/ui/config_dialog.cc" line="202"/>
         <source>Every 24 hours</source>
         <translation>Každých 24 hodin</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Letters and digits</source>
         <translation>Písmena a číslice</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="213"/>
         <source>Letters</source>
         <translation>Písmena</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="212"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>Digits</source>
         <translation>Číslice</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="229"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>Never</source>
         <translation>Nikdy</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="230"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>15 seconds</source>
         <translation>15 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="231"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>30 seconds</source>
         <translation>30 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="232"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>45 seconds</source>
         <translation>45 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="233"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>60 seconds</source>
         <translation>60 sekund</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="244"/>
         <source>Accept connection</source>
         <translation>Přijmout připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="245"/>
         <source>Reject connection</source>
         <translation>Odmítnout připojení</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="441"/>
+        <location filename="../host/ui/config_dialog.cc" line="444"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Opravdu chcete odstranit uživatele &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="468"/>
-        <location filename="../host/ui/config_dialog.cc" line="501"/>
+        <location filename="../host/ui/config_dialog.cc" line="471"/>
+        <location filename="../host/ui/config_dialog.cc" line="504"/>
         <source>An error occurred while processing the password.</source>
         <translation>Při zpracování hesla došlo k chybě.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="485"/>
+        <location filename="../host/ui/config_dialog.cc" line="488"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="515"/>
+        <location filename="../host/ui/config_dialog.cc" line="518"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="515"/>
-        <location filename="../host/ui/config_dialog.cc" line="532"/>
+        <location filename="../host/ui/config_dialog.cc" line="518"/>
+        <location filename="../host/ui/config_dialog.cc" line="535"/>
         <source>JSON-files (*.json)</source>
         <translation>Soubory JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="532"/>
+        <location filename="../host/ui/config_dialog.cc" line="535"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="557"/>
+        <location filename="../host/ui/config_dialog.cc" line="560"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Konfiguraci nelze zapsat. Ujistěte se, že máte dostatečná práva k zápisu.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="570"/>
+        <location filename="../host/ui/config_dialog.cc" line="573"/>
         <source>Incorrect router address entered.</source>
         <translation>Byla zadána nesprávná adresa routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="580"/>
+        <location filename="../host/ui/config_dialog.cc" line="583"/>
         <source>Incorrect router public key entered.</source>
         <translation>Byl zadán nesprávný veřejný klíč routeru.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="737"/>
+        <location filename="../host/ui/config_dialog.cc" line="741"/>
         <source>Install</source>
         <translation>Nainstalovat</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="742"/>
+        <location filename="../host/ui/config_dialog.cc" line="746"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
@@ -2364,7 +2364,7 @@ Heslo: %2</translation>
         <translation>Probíhá stahování aktualizace...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/download_dialog.cc" line="65"/>
+        <location filename="../common/desktop/download_dialog.cc" line="64"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Při stahování aktualizace došlo k chybě: %1</translation>
     </message>
@@ -3133,17 +3133,17 @@ Heslo: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="484"/>
+        <location filename="../base/gui_application.cc" line="485"/>
         <source>Dark</source>
         <translation>Tmavý</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="486"/>
+        <location filename="../base/gui_application.cc" line="487"/>
         <source>Light</source>
         <translation>Světlý</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="487"/>
+        <location filename="../base/gui_application.cc" line="488"/>
         <source>Auto</source>
         <translation>Automaticky</translation>
     </message>
@@ -3151,8 +3151,8 @@ Heslo: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="614"/>
-        <location filename="../host/main.cc" line="649"/>
+        <location filename="../host/main.cc" line="601"/>
+        <location filename="../host/main.cc" line="636"/>
         <source>Settings storage is unavailable.</source>
         <translation>Úložiště nastavení není k dispozici.</translation>
     </message>
@@ -3233,32 +3233,32 @@ Heslo: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="540"/>
+        <location filename="../host/main.cc" line="538"/>
         <source>Launch the application hidden.</source>
         <translation>Spustí aplikaci skrytě.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="542"/>
+        <location filename="../host/main.cc" line="540"/>
         <source>Export parameters to file.</source>
         <translation>Exportuje parametry do souboru.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="544"/>
+        <location filename="../host/main.cc" line="542"/>
         <source>Import parameters from file.</source>
         <translation>Importuje parametry ze souboru.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="546"/>
+        <location filename="../host/main.cc" line="544"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Nezobrazovat žádné zprávy během importu a exportu.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="550"/>
+        <location filename="../host/main.cc" line="546"/>
         <source>Calling the settings dialog.</source>
         <translation>Otevře dialog nastavení.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="552"/>
+        <location filename="../host/main.cc" line="548"/>
         <source>Calling the security log dialog.</source>
         <translation>Otevře dialog protokolu zabezpečení.</translation>
     </message>
@@ -4120,7 +4120,7 @@ Importované přihlašovací údaje: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="356"/>
+        <location filename="../client/desktop/main_window.cc" line="360"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4185,42 +4185,42 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Hledat...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="172"/>
+        <location filename="../client/desktop/main_window.cc" line="176"/>
         <source>Management</source>
         <translation>Správa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="201"/>
+        <location filename="../client/desktop/main_window.cc" line="205"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Neplatný odkaz &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="225"/>
+        <location filename="../client/desktop/main_window.cc" line="229"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Router, na který odkaz odkazuje, není mezi uloženými routery.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="264"/>
+        <location filename="../client/desktop/main_window.cc" line="268"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Hostitel, na kterého odkaz odkazuje, není mezi uloženými hostiteli.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="454"/>
+        <location filename="../client/desktop/main_window.cc" line="458"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Ve vlastnostech hostitele je zadáno připojení podle ID, ale router není nakonfigurován. Zkontrolujte parametry routeru ve vlastnostech hostitele.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="270"/>
+        <location filename="../client/desktop/main_window.cc" line="274"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Router přidružený k tomuto hostiteli byl odstraněn. Upravte hostitele a vyberte jiný router, nebo přepněte na přímé připojení.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="316"/>
+        <location filename="../client/desktop/main_window.cc" line="320"/>
         <source>Credentials</source>
         <translation>Přihlašovací údaje</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="342"/>
+        <location filename="../client/desktop/main_window.cc" line="346"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -11422,53 +11422,74 @@ Importované přihlašovací údaje: %5</translation>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="56"/>
+        <location filename="../common/desktop/update_dialog.cc" line="62"/>
         <source>Receiving information...</source>
         <translation>Přijímání informací...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="108"/>
+        <location filename="../common/desktop/update_dialog.cc" line="107"/>
         <source>Cancel checking for updates. Please wait.</source>
         <translation>Probíhá rušení kontroly aktualizací. Čekejte prosím.</translation>
     </message>
     <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
+        <source>Install the update yourself: %1</source>
+        <translation>Nainstalujte aktualizaci ručně: %1</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="128"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Bude stažena aktualizace. Po dokončení stahování se aplikace automaticky zavře.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="124"/>
+        <location filename="../common/desktop/update_dialog.cc" line="130"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Všechny připojené relace budou ukončeny. Dokud nebude aktualizace dokončena, nebude možné navázat připojení.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="126"/>
+        <location filename="../common/desktop/update_dialog.cc" line="132"/>
         <source>All unsaved data will be lost.</source>
         <translation>Všechna neuložená data budou ztracena.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="127"/>
+        <location filename="../common/desktop/update_dialog.cc" line="133"/>
         <source>Continue?</source>
         <translation>Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="139"/>
+        <location filename="../common/desktop/update_dialog.cc" line="167"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>Při instalaci aktualizace došlo k chybě: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="196"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="197"/>
+        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <source>An error occurred while installing the update.</source>
+        <translation>Při instalaci aktualizace došlo k chybě.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="195"/>
+        <source>The downloaded file is damaged.</source>
+        <translation>Stažený soubor je poškozen.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="272"/>
         <source>Unknown</source>
         <translation>Neznámý</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="197"/>
+        <location filename="../common/desktop/update_dialog.cc" line="273"/>
         <source>Error retrieving update information.</source>
         <translation>Chyba při načítání informací o aktualizaci.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="207"/>
-        <location filename="../common/desktop/update_dialog.cc" line="230"/>
+        <location filename="../common/desktop/update_dialog.cc" line="283"/>
+        <source>Installing the update. Please wait.</source>
+        <translation>Probíhá instalace aktualizace. Čekejte prosím.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/update_dialog.cc" line="248"/>
         <source>No updates available.</source>
         <translation>Nejsou k dispozici žádné aktualizace.</translation>
     </message>
