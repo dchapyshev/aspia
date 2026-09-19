@@ -48,9 +48,9 @@ UpdateWorker::~UpdateWorker()
 void UpdateWorker::onCheckUpdates()
 {
 #if !defined(Q_OS_ANDROID)
-    if (update_checker_)
+    if (update_checker_ || update_downloader_ || update_installer_)
     {
-        LOG(INFO) << "Update check already in progress";
+        LOG(INFO) << "Update already in progress";
         return;
     }
 
