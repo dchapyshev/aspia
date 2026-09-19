@@ -953,59 +953,59 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="147"/>
+        <location filename="../client/main.cc" line="149"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="151"/>
+        <location filename="../client/main.cc" line="153"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>호스트에 연결하기 위한 aspia:// 링크입니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="190"/>
+        <location filename="../client/main.cc" line="192"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="192"/>
+        <location filename="../client/main.cc" line="194"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>응용 프로그램의 잠금을 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="208"/>
+        <location filename="../client/main.cc" line="210"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="216"/>
+        <location filename="../client/main.cc" line="218"/>
         <source>Set Master Password</source>
         <translation>마스터 암호 설정</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="218"/>
+        <location filename="../client/main.cc" line="220"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>응용 프로그램의 잠금을 해제하는 데 필요한 마스터 암호를 설정하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="226"/>
+        <location filename="../client/main.cc" line="228"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="228"/>
+        <location filename="../client/main.cc" line="230"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="232"/>
+        <location filename="../client/main.cc" line="234"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="242"/>
+        <location filename="../client/main.cc" line="244"/>
         <source>Unable to set master password.</source>
         <translation>마스터 암호를 설정할 수 없습니다.</translation>
     </message>
@@ -1110,7 +1110,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="168"/>
+        <location filename="../host/ui/config_dialog.ui" line="154"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -1135,11 +1135,6 @@ Routers added: %4</source>
         <translation>기본 비디오 캡처 방식:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="86"/>
-        <source>Update Server</source>
-        <translation>업데이트 서버</translation>
-    </message>
-    <message>
         <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
         <translation>업데이트 자동 확인 및 설치</translation>
@@ -1150,158 +1145,158 @@ Routers added: %4</source>
         <translation>업데이트 확인 주기:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="113"/>
-        <source>Use custom update server</source>
-        <translation>사용자 지정 업데이트 서버 사용</translation>
+        <location filename="../host/ui/config_dialog.ui" line="86"/>
+        <source>Updates</source>
+        <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="122"/>
-        <source>Server:</source>
-        <translation>서버:</translation>
+        <location filename="../host/ui/config_dialog.ui" line="115"/>
+        <source>Update channel:</source>
+        <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="156"/>
+        <location filename="../host/ui/config_dialog.ui" line="142"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="187"/>
+        <location filename="../host/ui/config_dialog.ui" line="173"/>
         <source>Import settings</source>
         <translation>설정 가져오기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="194"/>
+        <location filename="../host/ui/config_dialog.ui" line="180"/>
         <source>Export settings</source>
         <translation>설정 내보내기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="218"/>
+        <location filename="../host/ui/config_dialog.ui" line="204"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="224"/>
+        <location filename="../host/ui/config_dialog.ui" line="210"/>
         <source>Password Protection of Settings</source>
         <translation>설정 암호 보호</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="243"/>
+        <location filename="../host/ui/config_dialog.ui" line="229"/>
         <source>Change password</source>
         <translation>암호 변경</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="260"/>
+        <location filename="../host/ui/config_dialog.ui" line="246"/>
         <source>One-time Password</source>
         <translation>일회용 암호</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="266"/>
+        <location filename="../host/ui/config_dialog.ui" line="252"/>
         <source>Enable one-time password</source>
         <translation>일회용 암호 사용</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="261"/>
         <source>Change password:</source>
         <translation>암호 변경 주기:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="285"/>
+        <location filename="../host/ui/config_dialog.ui" line="271"/>
         <source>Characters:</source>
         <translation>문자:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="295"/>
+        <location filename="../host/ui/config_dialog.ui" line="281"/>
         <source>Characters count:</source>
         <translation>문자 수:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="317"/>
+        <location filename="../host/ui/config_dialog.ui" line="303"/>
         <source>Connection Confirmation</source>
         <translation>연결 확인</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="323"/>
+        <location filename="../host/ui/config_dialog.ui" line="309"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>컴퓨터에 연결할 때 확인 요구</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="318"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>연결 자동 확인 방법:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="342"/>
+        <location filename="../host/ui/config_dialog.ui" line="328"/>
         <source>If there is no active user:</source>
         <translation>활성 사용자가 없는 경우:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="357"/>
+        <location filename="../host/ui/config_dialog.ui" line="343"/>
         <source>Other</source>
         <translation>기타</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="363"/>
+        <location filename="../host/ui/config_dialog.ui" line="349"/>
         <source>Disable Aspia shutdown</source>
         <translation>Aspia 종료 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="387"/>
+        <location filename="../host/ui/config_dialog.ui" line="373"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="393"/>
+        <location filename="../host/ui/config_dialog.ui" line="379"/>
         <source>Enable the use of a router</source>
         <translation>라우터 사용</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="405"/>
+        <location filename="../host/ui/config_dialog.ui" line="391"/>
         <source>Address:</source>
         <translation>주소:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="424"/>
+        <location filename="../host/ui/config_dialog.ui" line="410"/>
         <source>Public Key:</source>
         <translation>공개 키:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="438"/>
+        <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>직접 연결이 불가능한 경우(NAT 우회) 컴퓨터에 연결하려면 라우터가 필요합니다. Aspia는 공용 라우터를 제공하지 않지만 직접 설치할 수 있습니다. 라우터는 &lt;a href=&quot;https://aspia.org&quot;&gt;공식 웹 사이트&lt;/a&gt;에서 다운로드할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="455"/>
-        <location filename="../host/ui/config_dialog.ui" line="566"/>
+        <location filename="../host/ui/config_dialog.ui" line="441"/>
+        <location filename="../host/ui/config_dialog.ui" line="552"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="469"/>
+        <location filename="../host/ui/config_dialog.ui" line="455"/>
         <source>Add new user</source>
         <translation>새 사용자 추가</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="495"/>
+        <location filename="../host/ui/config_dialog.ui" line="481"/>
         <source>Edit user</source>
         <translation>사용자 편집</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="521"/>
+        <location filename="../host/ui/config_dialog.ui" line="507"/>
         <source>Delete user</source>
         <translation>사용자 삭제</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="589"/>
+        <location filename="../host/ui/config_dialog.ui" line="575"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="598"/>
+        <location filename="../host/ui/config_dialog.ui" line="584"/>
         <source>Modify</source>
         <translation>수정</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="607"/>
+        <location filename="../host/ui/config_dialog.ui" line="593"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
@@ -1321,149 +1316,164 @@ Routers added: %4</source>
         <translation>한 달에 한 번</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="155"/>
+        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <source>Stable</source>
+        <translation>안정 버전</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <source>Beta</source>
+        <translation>베타 버전</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <source>Alpha</source>
+        <translation>알파 버전</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="196"/>
+        <location filename="../host/ui/config_dialog.cc" line="189"/>
         <source>On reboot</source>
         <translation>다시 시작할 때</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="197"/>
+        <location filename="../host/ui/config_dialog.cc" line="190"/>
         <source>Every 5 minutes</source>
         <translation>5분마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="198"/>
+        <location filename="../host/ui/config_dialog.cc" line="191"/>
         <source>Every 30 minutes</source>
         <translation>30분마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="199"/>
+        <location filename="../host/ui/config_dialog.cc" line="192"/>
         <source>Every 1 hour</source>
         <translation>1시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="200"/>
+        <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>Every 6 hours</source>
         <translation>6시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Every 12 hours</source>
         <translation>12시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="202"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>Every 24 hours</source>
         <translation>24시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="203"/>
         <source>Letters and digits</source>
         <translation>영문자와 숫자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="213"/>
+        <location filename="../host/ui/config_dialog.cc" line="206"/>
         <source>Letters</source>
         <translation>영문자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="215"/>
+        <location filename="../host/ui/config_dialog.cc" line="208"/>
         <source>Digits</source>
         <translation>숫자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="232"/>
+        <location filename="../host/ui/config_dialog.cc" line="225"/>
         <source>Never</source>
         <translation>안 함</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="233"/>
+        <location filename="../host/ui/config_dialog.cc" line="226"/>
         <source>15 seconds</source>
         <translation>15초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="234"/>
+        <location filename="../host/ui/config_dialog.cc" line="227"/>
         <source>30 seconds</source>
         <translation>30초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="235"/>
+        <location filename="../host/ui/config_dialog.cc" line="228"/>
         <source>45 seconds</source>
         <translation>45초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="229"/>
         <source>60 seconds</source>
         <translation>60초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Accept connection</source>
         <translation>연결 수락</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>Reject connection</source>
         <translation>연결 거부</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="444"/>
+        <location filename="../host/ui/config_dialog.cc" line="437"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="471"/>
-        <location filename="../host/ui/config_dialog.cc" line="504"/>
+        <location filename="../host/ui/config_dialog.cc" line="464"/>
+        <location filename="../host/ui/config_dialog.cc" line="497"/>
         <source>An error occurred while processing the password.</source>
         <translation>암호를 처리하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="488"/>
+        <location filename="../host/ui/config_dialog.cc" line="481"/>
         <source>Settings storage is unavailable.</source>
         <translation>설정 저장소를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="518"/>
+        <location filename="../host/ui/config_dialog.cc" line="511"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="518"/>
-        <location filename="../host/ui/config_dialog.cc" line="535"/>
+        <location filename="../host/ui/config_dialog.cc" line="511"/>
+        <location filename="../host/ui/config_dialog.cc" line="528"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="535"/>
+        <location filename="../host/ui/config_dialog.cc" line="528"/>
         <source>Export</source>
         <translation>내보내기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.cc" line="553"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>구성을 저장할 수 없습니다. 쓰기 권한이 충분한지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="573"/>
+        <location filename="../host/ui/config_dialog.cc" line="566"/>
         <source>Incorrect router address entered.</source>
         <translation>잘못된 라우터 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <location filename="../host/ui/config_dialog.cc" line="576"/>
         <source>Incorrect router public key entered.</source>
         <translation>잘못된 라우터 공개 키를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="741"/>
+        <location filename="../host/ui/config_dialog.cc" line="732"/>
         <source>Install</source>
         <translation>설치</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="746"/>
+        <location filename="../host/ui/config_dialog.cc" line="737"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
@@ -6710,17 +6720,12 @@ Credentials imported: %5</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="521"/>
-        <source>Use custom update server</source>
-        <translation>사용자 지정 업데이트 서버 사용</translation>
+        <location filename="../client/desktop/settings_tab.ui" line="523"/>
+        <source>Update channel:</source>
+        <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="530"/>
-        <source>Server:</source>
-        <translation>서버:</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/settings_tab.ui" line="557"/>
+        <location filename="../client/desktop/settings_tab.ui" line="550"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
@@ -6740,44 +6745,59 @@ Credentials imported: %5</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="342"/>
+        <location filename="../client/desktop/settings_tab.cc" line="217"/>
+        <source>Stable</source>
+        <translation>안정 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="218"/>
+        <source>Beta</source>
+        <translation>베타 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="219"/>
+        <source>Alpha</source>
+        <translation>알파 버전</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="335"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="411"/>
+        <location filename="../client/desktop/settings_tab.cc" line="404"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="431"/>
+        <location filename="../client/desktop/settings_tab.cc" line="424"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="433"/>
+        <location filename="../client/desktop/settings_tab.cc" line="426"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="434"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="442"/>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="445"/>
+        <location filename="../client/desktop/settings_tab.cc" line="438"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="454"/>
+        <location filename="../client/desktop/settings_tab.cc" line="447"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>현재 암호가 잘못되었거나 변경할 수 없습니다.</translation>
     </message>
@@ -11359,64 +11379,65 @@ Credentials imported: %5</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="122"/>
+        <location filename="../common/desktop/update_dialog.cc" line="120"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="128"/>
+        <location filename="../common/desktop/update_dialog.cc" line="126"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>업데이트가 다운로드됩니다. 다운로드가 완료되면 응용 프로그램이 자동으로 닫힙니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="130"/>
+        <location filename="../common/desktop/update_dialog.cc" line="128"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>연결된 모든 세션이 종료됩니다. 업데이트가 완료될 때까지 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="132"/>
+        <location filename="../common/desktop/update_dialog.cc" line="130"/>
         <source>All unsaved data will be lost.</source>
         <translation>저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="133"/>
+        <location filename="../common/desktop/update_dialog.cc" line="131"/>
         <source>Continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="167"/>
+        <location filename="../common/desktop/update_dialog.cc" line="165"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="176"/>
-        <location filename="../common/desktop/update_dialog.cc" line="197"/>
-        <location filename="../common/desktop/update_dialog.cc" line="207"/>
+        <location filename="../common/desktop/update_dialog.cc" line="174"/>
+        <location filename="../common/desktop/update_dialog.cc" line="195"/>
+        <location filename="../common/desktop/update_dialog.cc" line="205"/>
+        <location filename="../common/desktop/update_dialog.cc" line="227"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="195"/>
+        <location filename="../common/desktop/update_dialog.cc" line="193"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="272"/>
+        <location filename="../common/desktop/update_dialog.cc" line="273"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="273"/>
+        <location filename="../common/desktop/update_dialog.cc" line="274"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="283"/>
+        <location filename="../common/desktop/update_dialog.cc" line="284"/>
         <source>Installing the update. Please wait.</source>
         <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="248"/>
+        <location filename="../common/desktop/update_dialog.cc" line="249"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
