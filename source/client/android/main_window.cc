@@ -194,17 +194,15 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& update_info)
     {
-        if (!MessageDialog::confirm(this, tr("Update"),
-                tr("Version %1 is available.").arg(update_info.version().toString()), tr("Open")))
+        // The gate of the master password is still on the screen at this point, and a question
+        // asked over it comes before the application is even unlocked.
+        if (!unlocked_)
         {
+            pending_update_ = update_info;
             return;
         }
 
-        nav_bar_->setCurrentIndex(SECTION_SETTINGS);
-
-        SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
-        if (settings)
-            settings->showUpdate();
+        showUpdatePrompt(update_info);
     }, Qt::QueuedConnection);
 
     onSectionChanged(nav_bar_->currentIndex());
@@ -663,8 +661,37 @@ void AndroidMainWindow::onUnlocked()
     // Open the link that started the application or arrived while the gate was on the screen.
     QString url = pending_url_.isEmpty() ? startUrlFromIntent() : pending_url_;
     pending_url_.clear();
+
     if (!url.isEmpty())
+    {
+        // A link means the user came to connect, so the update waits for the next start.
         connectToUrl(url);
+        return;
+    }
+
+    if (pending_update_.isValid())
+    {
+        UpdateInfo update_info = pending_update_;
+        pending_update_ = UpdateInfo();
+
+        showUpdatePrompt(update_info);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void AndroidMainWindow::showUpdatePrompt(const UpdateInfo& update_info)
+{
+    if (!MessageDialog::confirm(this, tr("Update"),
+            tr("Version %1 is available.").arg(update_info.version().toString()), tr("Open")))
+    {
+        return;
+    }
+
+    nav_bar_->setCurrentIndex(SECTION_SETTINGS);
+
+    SettingsWidget* settings = qobject_cast<SettingsWidget*>(stack_content_->widget(SECTION_SETTINGS));
+    if (settings)
+        settings->showUpdate();
 }
 
 //--------------------------------------------------------------------------------------------------

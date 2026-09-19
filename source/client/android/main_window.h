@@ -24,6 +24,7 @@
 #include <QWidget>
 
 #include "base/time_types.h"
+#include "common/update_info.h"
 
 namespace proto::peer {
 enum SessionType : int;
@@ -89,6 +90,10 @@ private:
     void runMasterPasswordGate();
     void onUnlocked();
 
+    // Asks whether to install |update_info| and opens the update page on agreement. The check runs
+    // while the gate is still on the screen, so the question can only be asked after it.
+    void showUpdatePrompt(const UpdateInfo& update_info);
+
     // Prompts to unlock (password or fingerprint) again after the background timeout; quits if the
     // user cancels.
     void relock();
@@ -140,9 +145,10 @@ private:
     TimePoint background_since_;
     bool relocking_ = false;
 
-    // A link that arrived before the master password gate was passed, and whether the gate has
-    // been passed already.
+    // A link and an offered update that arrived before the master password gate was passed, and
+    // whether the gate has been passed already.
     QString pending_url_;
+    UpdateInfo pending_update_;
     bool unlocked_ = false;
 
     Q_DISABLE_COPY_MOVE(AndroidMainWindow)
