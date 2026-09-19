@@ -23,6 +23,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/process_util.h"
 #include "base/version_constants.h"
 #include "base/update/update_checker.h"
 #include "base/update/update_installer.h"
@@ -152,7 +153,7 @@ void UpdateDialog::onUpdateNow()
 
     // Downloading the package and checking it against the manifest is what the privileges are for,
     // so an unprivileged process hands over the whole thing instead of doing part of it.
-    if (ElevateUtil::isPrivileged())
+    if (ProcessUtil::isPrivileged())
         startInstall();
     else
         startPrivilegedInstance();

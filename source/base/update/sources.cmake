@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_BASE_UPDATE
+    console_updater.cc
+    console_updater.h
     update_checker.cc
     update_checker.h
     update_info.cc

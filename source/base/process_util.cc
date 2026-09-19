@@ -38,6 +38,10 @@
 #include <limits.h>
 #endif // defined(Q_OS_LINUX)
 
+#if !defined(Q_OS_WINDOWS)
+#include <unistd.h>
+#endif // !defined(Q_OS_WINDOWS)
+
 #if defined(Q_OS_MACOS)
 #include <libproc.h>
 #include <sys/sysctl.h>
@@ -176,6 +180,18 @@ QString ProcessUtil::filePath(quint32 pid)
     Q_UNUSED(pid)
     return QString();
 #endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool ProcessUtil::isPrivileged()
+{
+#if defined(Q_OS_WINDOWS)
+    return isProcessElevated();
+#else
+    // Root, or a process that was given the rights of another user.
+    return getuid() == 0 || getuid() != geteuid();
+#endif // defined(Q_OS_WINDOWS)
 }
 
 #if defined(Q_OS_WINDOWS)

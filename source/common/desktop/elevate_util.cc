@@ -22,14 +22,13 @@
 #include <QStringList>
 
 #include "base/logging.h"
+#include "base/process_util.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <QDir>
 #include <QWinEventNotifier>
 #include <qt_windows.h>
 #include <shellapi.h>
-
-#include "base/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
@@ -108,7 +107,7 @@ public:
     bool runElevated(const QStringList& arguments, quintptr parent_window,
                      std::function<void(int)> on_finished) final
     {
-        if (isPrivileged())
+        if (ProcessUtil::isPrivileged())
             return false;
 
         LOG(INFO) << "Process not elevated";
@@ -219,7 +218,7 @@ public:
                      std::function<void(int)> on_finished) final
     {
         // Already root, or running setuid: do the work in-process.
-        if (isPrivileged())
+        if (ProcessUtil::isPrivileged())
             return false;
 
         LOG(INFO) << "Start dialog as super user";
@@ -315,7 +314,7 @@ public:
                      std::function<void(int)> on_finished) final
     {
         // Already root, or running setuid: do the work in-process.
-        if (isPrivileged())
+        if (ProcessUtil::isPrivileged())
             return false;
 
         LOG(INFO) << "Start dialog as super user";
@@ -419,19 +418,6 @@ ScopedQPointer<ElevateUtil> ElevateUtil::create(QObject* parent)
 #else
     Q_UNUSED(parent);
     return ScopedQPointer<ElevateUtil>();
-#endif // defined(Q_OS_*)
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool ElevateUtil::isPrivileged()
-{
-#if defined(Q_OS_WINDOWS)
-    return ProcessUtil::isProcessElevated();
-#elif (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
-    return getuid() == 0 || getuid() != geteuid();
-#else
-    return false;
 #endif // defined(Q_OS_*)
 }
 

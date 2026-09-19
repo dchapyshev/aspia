@@ -23,8 +23,10 @@
 #include <QStandardPaths>
 
 #include "version.h"
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/service_controller.h"
+#include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
@@ -33,6 +35,7 @@
 #include "base/files/file_util.h"
 #include "base/peer/router_user.h"
 #include "base/threading/asio_event_dispatcher.h"
+#include "base/update/console_updater.h"
 #include "proto/router_constants.h"
 #include "router/database.h"
 #include "router/migration_utils.h"
@@ -457,6 +460,10 @@ int main(int argc, char* argv[])
     QCommandLineOption create_config_option("create-config", "Creates a configuration.");
     QCommandLineOption reset_otp_option("reset-otp",
         "Resets two-factor authentication for the specified user.", "user");
+    QCommandLineOption check_update_option("check-update", "Checks for updates.");
+    QCommandLineOption install_update_option("install-update", "Installs the available update.");
+    QCommandLineOption channel_option("update-channel",
+        "Channel the update is taken from: stable, beta or alpha.", "channel", kStableUpdateChannel);
 
     QCommandLineParser parser;
     parser.addOption(install_option);
@@ -466,6 +473,9 @@ int main(int argc, char* argv[])
     parser.addOption(keygen_option);
     parser.addOption(create_config_option);
     parser.addOption(reset_otp_option);
+    parser.addOption(check_update_option);
+    parser.addOption(install_update_option);
+    parser.addOption(channel_option);
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -490,6 +500,10 @@ int main(int argc, char* argv[])
         return startService(out);
     else if (parser.isSet(stop_option))
         return stopService(out);
+    else if (parser.isSet(check_update_option))
+        return ConsoleUpdater(kRouterUpdatePackage, out).check(parser.value(channel_option));
+    else if (parser.isSet(install_update_option))
+        return ConsoleUpdater(kRouterUpdatePackage, out).install(parser.value(channel_option));
 
     // The workers read the configuration and touch the database as soon as they start, so any
     // pending migration must complete before them.

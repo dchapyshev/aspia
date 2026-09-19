@@ -36,6 +36,10 @@ public:
     // failure.
     static QString filePath(quint32 pid);
 
+    // True when the process may change what is installed on the machine: an elevated process on
+    // Windows, and root where the package managers ask for it.
+    static bool isPrivileged();
+
 #if defined(Q_OS_WINDOWS)
     static bool isLaunchedByService();
     static bool isProcessElevated();

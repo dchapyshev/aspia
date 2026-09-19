@@ -47,9 +47,6 @@ public:
     // Creates the implementation for the current platform, or nullptr if elevation is not supported.
     static ScopedQPointer<ElevateUtil> create(QObject* parent = nullptr);
 
-    // True when this process already has the privileges elevation would ask for.
-    static bool isPrivileged();
-
     // Re-launches the application elevated with |arguments| (e.g. { "--config" }), parented to the
     // |parent_window| native handle, and returns true. Returns false when the process is already
     // privileged or the relaunch could not be started, and then |on_finished| is never called.
