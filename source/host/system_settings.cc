@@ -75,7 +75,7 @@ void SystemSettings::sync()
 QString SystemSettings::updateServer() const
 {
     QString value = settings_.value(kUpdateServer).toString();
-    if (value.isEmpty())
+    if (value.isEmpty() || value == kLegacyUpdateServerOrg || value == kLegacyUpdateServerNet)
         value = kDefaultUpdateServer;
 
     return value;

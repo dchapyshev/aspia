@@ -1669,10 +1669,10 @@ bool Database::setCheckUpdatesEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 QString Database::updateServer() const
 {
-    QString value = readSetting(kSettingUpdateServer);
-    if (value.isEmpty())
+    QString value = readSetting(kSettingUpdateServer).toLower();
+    if (value.isEmpty() || value == kLegacyUpdateServerOrg || value == kLegacyUpdateServerNet)
         value = kDefaultUpdateServer;
-    return value.toLower();
+    return value;
 }
 
 //--------------------------------------------------------------------------------------------------

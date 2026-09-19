@@ -26,6 +26,8 @@
 
 inline constexpr QLatin1StringView kDefaultLocale("en");
 inline constexpr QLatin1StringView kDefaultUpdateServer("https://aspia.org/updates");
+inline constexpr QLatin1StringView kLegacyUpdateServerOrg("https://update.aspia.org");
+inline constexpr QLatin1StringView kLegacyUpdateServerNet("https://update.aspia.net");
 
 inline constexpr quint16 kDefaultHostTcpPort             = 8050;
 inline constexpr quint16 kDefaultRouterLegacyHostTcpPort = 8060;
