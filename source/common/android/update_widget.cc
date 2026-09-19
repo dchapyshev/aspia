@@ -89,9 +89,21 @@ void UpdateWidget::check(const QString& channel)
     channel_ = channel;
     update_info_ = UpdateInfo();
 
-    downloader_.reset();
+    // A deferred deletion leaves the object alive and connected for a while longer, so a thread
+    // that is still running would deliver what it finds into the check that replaced it.
+    if (checker_)
+    {
+        checker_->disconnect(this);
+        checker_.reset();
+    }
+
+    if (downloader_)
+    {
+        downloader_->disconnect(this);
+        downloader_.reset();
+    }
+
     installer_.reset();
-    checker_.reset();
 
     label_status_->setText(tr("Receiving information..."));
     setDescription(QString());
