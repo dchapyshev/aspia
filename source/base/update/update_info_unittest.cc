@@ -24,6 +24,8 @@
 
 namespace {
 
+const char kPath[] = "https://aspia.org/download";
+const char kFile[] = "aspia-host-3.0.6-x86_64.msi";
 const char kUrl[] = "https://aspia.org/download/aspia-host-3.0.6-x86_64.msi";
 const char kSha256[] = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
@@ -43,28 +45,30 @@ QByteArray rulesJson()
 }
 
 //--------------------------------------------------------------------------------------------------
-// <version>.json: the files of one release.
-QByteArray manifestJson(const QString& version, const QString& description, const QString& url,
+// <version>.json: the files of one release. The directory they lie in is named once, so an entry
+// carries the file name alone.
+QByteArray manifestJson(const QString& version, const QString& description, const QString& file,
                         const QString& sha256)
 {
     QString json = QString(R"({
         "format": 1,
         "version": "%1",
         "description": "%2",
+        "path": "https://aspia.org/download",
         "packages": {
             "host": {
                 "windows": {
-                    "x86_64": [ { "format": "msi", "url": "%3", "sha256": "%4" } ]
+                    "x86_64": [ { "format": "msi", "file": "%3", "sha256": "%4" } ]
                 },
                 "linux": {
                     "x86_64": [
-                        { "format": "deb", "url": "https://aspia.org/d/host.deb", "sha256": "%4" },
-                        { "format": "rpm", "url": "https://aspia.org/d/host.rpm", "sha256": "%4" }
+                        { "format": "deb", "file": "host.deb", "sha256": "%4" },
+                        { "format": "rpm", "file": "host.rpm", "sha256": "%4" }
                     ]
                 }
             }
         }
-    })").arg(version, description, url, sha256);
+    })").arg(version, description, file, sha256);
 
     return json.toUtf8();
 }
@@ -72,7 +76,7 @@ QByteArray manifestJson(const QString& version, const QString& description, cons
 //--------------------------------------------------------------------------------------------------
 QByteArray manifestJson()
 {
-    return manifestJson("3.0.6", "A new version of the program.", kUrl, kSha256);
+    return manifestJson("3.0.6", "A new version of the program.", kFile, kSha256);
 }
 
 } // namespace
@@ -206,24 +210,24 @@ TEST(UpdateInfoTest, PreferredFormatIsTaken)
     std::optional<UpdateInfo> rpm =
         UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "rpm");
     ASSERT_TRUE(rpm.has_value());
-    EXPECT_EQ(rpm->url(), QString("https://aspia.org/d/host.rpm"));
+    EXPECT_EQ(rpm->url(), QString(kPath) + "/host.rpm");
 
     std::optional<UpdateInfo> any =
         UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", QString());
     ASSERT_TRUE(any.has_value());
-    EXPECT_EQ(any->url(), QString("https://aspia.org/d/host.deb"));
+    EXPECT_EQ(any->url(), QString(kPath) + "/host.deb");
 
     std::optional<UpdateInfo> missing =
         UpdateInfo::fromManifest(manifestJson(), "host", "linux", "x86_64", "msi");
     ASSERT_TRUE(missing.has_value());
-    EXPECT_EQ(missing->url(), QString("https://aspia.org/d/host.deb"));
+    EXPECT_EQ(missing->url(), QString(kPath) + "/host.deb");
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST(UpdateInfoTest, ManifestWithoutDescriptionIsValid)
 {
     std::optional<UpdateInfo> update_info =
-        UpdateInfo::fromManifest(manifestJson("3.0.6", QString(), kUrl, kSha256),
+        UpdateInfo::fromManifest(manifestJson("3.0.6", QString(), kFile, kSha256),
                                  "host", "windows", "x86_64", "msi");
 
     ASSERT_TRUE(update_info.has_value());
@@ -235,26 +239,35 @@ TEST(UpdateInfoTest, TooLongDescriptionIsRejected)
 {
     QString description = QString("a").repeated(4097);
 
-    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", description, kUrl, kSha256),
+    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", description, kFile, kSha256),
                                           "host", "windows", "x86_64", "msi").has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST(UpdateInfoTest, BrokenUrlIsRejected)
+TEST(UpdateInfoTest, BrokenFileNameIsRejected)
 {
-    const char* kUrls[] = { "", "http://a." };
-
-    for (const char* url : kUrls)
-    {
-        EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", url, kSha256),
-                                              "host", "windows", "x86_64", "msi").has_value())
-            << url;
-    }
-
-    QString long_url = QString("https://aspia.org/") + QString("a").repeated(256);
-
-    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", long_url, kSha256),
+    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", QString(), kSha256),
                                           "host", "windows", "x86_64", "msi").has_value());
+
+    QString long_name = QString("a").repeated(256);
+
+    EXPECT_FALSE(UpdateInfo::fromManifest(manifestJson("3.0.6", "Release", long_name, kSha256),
+                                          "host", "windows", "x86_64", "msi").has_value());
+}
+
+//--------------------------------------------------------------------------------------------------
+// Without the directory of the release there is nowhere to take the file from.
+TEST(UpdateInfoTest, ManifestWithoutPathIsRejected)
+{
+    QByteArray json = QString(R"({
+        "format": 1,
+        "version": "3.0.6",
+        "packages": {
+            "host": { "windows": { "x86_64": [ { "format": "msi", "file": "%1", "sha256": "%2" } ] } }
+        }
+    })").arg(QString(kFile), QString(kSha256)).toUtf8();
+
+    EXPECT_FALSE(UpdateInfo::fromManifest(json, "host", "windows", "x86_64", "msi").has_value());
 }
 
 //--------------------------------------------------------------------------------------------------

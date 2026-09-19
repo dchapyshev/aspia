@@ -150,12 +150,22 @@ std::optional<UpdateInfo> UpdateInfo::fromManifest(const QByteArray& buffer,
         }
     }
 
+    // The files of a release lie in one directory, so the manifest names it once and an entry
+    // names nothing but the file.
+    QString path = root.value("path").toString();
+    while (path.endsWith('/'))
+        path.chop(1);
+
+    QString file_name = file.value("file").toString();
+
     UpdateInfo update_info;
     update_info.version_ = QVersionNumber::fromString(root.value("version").toString());
     update_info.description_ = root.value("description").toString();
-    update_info.url_ = file.value("url").toString();
     update_info.sha256_ = file.value("sha256").toString().toLower();
     update_info.format_ = file.value("format").toString();
+
+    if (!path.isEmpty() && !file_name.isEmpty())
+        update_info.url_ = path + "/" + file_name;
 
     if (update_info.version_.isNull())
     {
@@ -164,6 +174,14 @@ std::optional<UpdateInfo> UpdateInfo::fromManifest(const QByteArray& buffer,
     else if (update_info.description_.size() > kMaxDescriptionLength)
     {
         LOG(ERROR) << "Too many characters in description";
+    }
+    else if (path.isEmpty())
+    {
+        LOG(ERROR) << "Manifest without a path";
+    }
+    else if (file_name.isEmpty())
+    {
+        LOG(ERROR) << "Entry without a file name";
     }
     else if (update_info.url_.size() < kMinUrlLength || update_info.url_.size() > kMaxUrlLength)
     {

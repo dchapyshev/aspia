@@ -108,19 +108,20 @@ QByteArray rules()
 // Every platform the release is built for, so the answer does not depend on where the test runs.
 QByteArray manifest()
 {
-    QString files = R"([ { "format": "%1", "url": "https://files.aspia.net/beta/%2/%3",
+    QString files = R"([ { "format": "%1", "file": "%2",
         "sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08" } ])";
 
     QString version = nextVersion().toString();
-    QString msi = files.arg("msi", version, "aspia-host.msi");
-    QString deb = files.arg("deb", version, "aspia-host.deb");
-    QString pkg = files.arg("pkg", version, "aspia-host.pkg");
-    QString apk = files.arg("apk", version, "aspia-host.apk");
+    QString msi = files.arg("msi", "aspia-host.msi");
+    QString deb = files.arg("deb", "aspia-host.deb");
+    QString pkg = files.arg("pkg", "aspia-host.pkg");
+    QString apk = files.arg("apk", "aspia-host.apk");
 
     return QString(R"({
         "format": 1,
         "version": "%1",
         "description": "A new version of the program.",
+        "path": "https://files.aspia.net/beta/%1",
         "packages": {
             "host": {
                 "windows": { "x86_64": %2, "x86": %2, "arm64": %2 },
