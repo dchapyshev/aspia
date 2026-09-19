@@ -52,6 +52,14 @@ private slots:
 private:
     void onUpdateClicked();
     void startDownload();
+    void cancelDownload();
+
+    // Puts the screen back to offering what the check found.
+    void showAvailable();
+
+    // Returns the button to the one that starts an update.
+    void showUpdateButton();
+
     void setDescription(const QString& text);
 
     const QString package_;

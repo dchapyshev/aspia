@@ -90,6 +90,11 @@ UpdateWidget::~UpdateWidget()
 //--------------------------------------------------------------------------------------------------
 void UpdateWidget::check(const QString& channel)
 {
+    // The screen is left and entered again while the update it started is downloading, and a check
+    // over it would take away the package the installation is waiting for.
+    if (downloader_)
+        return;
+
     channel_ = channel;
     update_info_ = UpdateInfo();
 
@@ -99,12 +104,6 @@ void UpdateWidget::check(const QString& channel)
     {
         checker_->disconnect(this);
         checker_.reset();
-    }
-
-    if (downloader_)
-    {
-        downloader_->disconnect(this);
-        downloader_.reset();
     }
 
     installer_.reset();
@@ -136,10 +135,8 @@ void UpdateWidget::onCheckFinished(const UpdateInfo& update_info)
     {
         LOG(INFO) << "New version available:" << update_info_.version().toString();
 
-        label_status_->setText(tr("Version %1 is available.").arg(update_info_.version().toString()));
-
+        showAvailable();
         setDescription(update_info_.description());
-        button_update_->setEnabled(true);
     }
 
     checker_->disconnect(this);
@@ -172,7 +169,7 @@ void UpdateWidget::onDownloadError(const QString& error)
     installer_.reset();
 
     progress_->setVisible(false);
-    button_update_->setEnabled(true);
+    showUpdateButton();
 
     label_status_->setText(tr("An error occurred while downloading the update: %1").arg(error));
 }
@@ -188,13 +185,13 @@ void UpdateWidget::onDownloadCompleted()
     UpdateInstaller::Result result = installer_->install();
     installer_.reset();
 
-    button_update_->setEnabled(true);
-
     if (result == UpdateInstaller::Result::STARTED)
     {
-        label_status_->setText(tr("Version %1 is available.").arg(update_info_.version().toString()));
+        showAvailable();
         return;
     }
+
+    showUpdateButton();
 
     if (result == UpdateInstaller::Result::DAMAGED)
         label_status_->setText(tr("The downloaded file is damaged."));
@@ -205,6 +202,15 @@ void UpdateWidget::onDownloadCompleted()
 //--------------------------------------------------------------------------------------------------
 void UpdateWidget::onUpdateClicked()
 {
+    // A download goes on while the user is away in another application, so the button is what
+    // stops one that is under way.
+    if (downloader_)
+    {
+        LOG(INFO) << "[ACTION] Cancel update";
+        cancelDownload();
+        return;
+    }
+
     LOG(INFO) << "[ACTION] Update now";
 
     if (!UpdateInstaller::isSupported(update_info_.format()))
@@ -261,13 +267,43 @@ void UpdateWidget::startDownload()
     connect(downloader_, &HttpFileDownloader::sig_downloadCompleted,
             this, &UpdateWidget::onDownloadCompleted);
 
-    button_update_->setEnabled(false);
+    button_update_->setText(tr("Cancel"));
     progress_->setValue(0);
     progress_->setVisible(true);
 
     label_status_->setText(tr("Downloading the update. Please wait."));
 
     downloader_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWidget::cancelDownload()
+{
+    if (!downloader_)
+        return;
+
+    LOG(INFO) << "Downloading of the update canceled";
+
+    downloader_->disconnect(this);
+    downloader_.reset();
+    installer_.reset();
+
+    progress_->setVisible(false);
+    showAvailable();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWidget::showAvailable()
+{
+    label_status_->setText(tr("Version %1 is available.").arg(update_info_.version().toString()));
+    showUpdateButton();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateWidget::showUpdateButton()
+{
+    button_update_->setText(tr("Update"));
+    button_update_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
