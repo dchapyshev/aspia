@@ -11359,11 +11359,6 @@ Credentials imported: %5</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>업데이트 확인을 취소하는 중입니다. 잠시 기다려 주십시오.</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>

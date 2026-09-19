@@ -11393,11 +11393,6 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Informationen werden empfangen...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>Updateprüfung wird abgebrochen. Bitte warten.</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>Installieren Sie das Update selbst: %1</translation>

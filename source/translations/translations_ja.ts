@@ -11359,11 +11359,6 @@ Credentials imported: %5</source>
         <translation>情報を受信しています...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>更新の確認をキャンセルしています。お待ちください。</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>更新を手動でインストールしてください: %1</translation>

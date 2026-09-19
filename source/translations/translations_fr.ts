@@ -11393,11 +11393,6 @@ Identifiants importés: %5</translation>
         <translation>Réception des informations...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>Annulation de la vérification des mises à jour. Veuillez patienter.</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>Installez la mise à jour vous-même: %1</translation>

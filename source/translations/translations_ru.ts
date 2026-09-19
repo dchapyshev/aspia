@@ -11431,11 +11431,6 @@ Credentials imported: %5</source>
         <translation>Получение информации...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>Отмена проверки обновлений. Пожалуйста, подождите.</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>Установите обновление самостоятельно: %1</translation>

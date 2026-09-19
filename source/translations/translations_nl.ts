@@ -11393,11 +11393,6 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Informatie ontvangen...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="107"/>
-        <source>Cancel checking for updates. Please wait.</source>
-        <translation>Controle op updates wordt geannuleerd. Even geduld.</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="122"/>
         <source>Install the update yourself: %1</source>
         <translation>Installeer de update zelf: %1</translation>
