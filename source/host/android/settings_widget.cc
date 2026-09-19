@@ -62,7 +62,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       stack_(new QStackedWidget(this)),
       settings_page_(new ScrollArea()),
       about_page_(new AboutWidget()),
-      update_page_(new UpdateWidget("host")),
+      update_page_(new UpdateWidget(kHostUpdatePackage)),
       users_page_(new UsersWidget()),
       editor_page_(new UserEditorWidget()),
       about_button_(new IconButton(":/img/material/info.svg", this)),

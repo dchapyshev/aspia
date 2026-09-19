@@ -18,6 +18,7 @@
 
 #include "client/workers/update_worker.h"
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/update/update_checker.h"
 #include "client/database.h"
@@ -46,7 +47,7 @@ void UpdateWorker::onPrepare()
         return;
     }
 
-    update_checker_ = new UpdateChecker(db.updateChannel(), "client", this);
+    update_checker_ = new UpdateChecker(db.updateChannel(), kClientUpdatePackage, this);
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);

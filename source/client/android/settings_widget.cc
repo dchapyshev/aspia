@@ -57,7 +57,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
       settings_page_(new ScrollArea()),
       credentials_page_(new CredentialsWidget()),
       about_page_(new AboutWidget()),
-      update_page_(new UpdateWidget("client")),
+      update_page_(new UpdateWidget(kClientUpdatePackage)),
       button_credentials_(new IconButton(":/img/material/key.svg", this)),
       button_about_(new IconButton(":/img/material/info.svg", this)),
       desktop_config_(settings_.desktopConfig()),

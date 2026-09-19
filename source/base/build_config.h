@@ -32,6 +32,12 @@ inline constexpr QLatin1StringView kStableUpdateChannel("stable");
 inline constexpr QLatin1StringView kBetaUpdateChannel("beta");
 inline constexpr QLatin1StringView kAlphaUpdateChannel("alpha");
 
+// The names the applications go by in the manifest of a release.
+inline constexpr QLatin1StringView kClientUpdatePackage("client");
+inline constexpr QLatin1StringView kHostUpdatePackage("host");
+inline constexpr QLatin1StringView kRelayUpdatePackage("relay");
+inline constexpr QLatin1StringView kRouterUpdatePackage("router");
+
 inline constexpr quint16 kDefaultHostTcpPort             = 8050;
 inline constexpr quint16 kDefaultRouterLegacyHostTcpPort = 8060;
 inline constexpr quint16 kDefaultRouterHostTcpPort       = 8061;

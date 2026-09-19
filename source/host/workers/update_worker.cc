@@ -18,6 +18,7 @@
 
 #include "host/workers/update_worker.h"
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/http_file_downloader.h"
 #include "base/update/update_checker.h"
@@ -54,7 +55,7 @@ void UpdateWorker::onCheckUpdates()
         return;
     }
 
-    update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), "host", this);
+    update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), kHostUpdatePackage, this);
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
             this, &UpdateWorker::onUpdateCheckFinished);
