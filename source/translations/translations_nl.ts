@@ -965,17 +965,17 @@ Toegevoegde routers: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="218"/>
+        <location filename="../client/main.cc" line="228"/>
         <source>Set Master Password</source>
         <translation>Hoofdwachtwoord instellen</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="220"/>
+        <location filename="../client/main.cc" line="230"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Stel een hoofdwachtwoord in dat vereist is om de applicatie te ontgrendelen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="228"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord mag niet korter zijn dan %n teken.</numerusform>
@@ -983,12 +983,12 @@ Toegevoegde routers: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="236"/>
+        <location filename="../client/main.cc" line="246"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Het ingevoerde wachtwoord voldoet niet aan de beveiligingseisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="248"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Het wachtwoord moet kleine letters, hoofdletters en cijfers bevatten en mag niet korter zijn dan %n teken.</numerusform>
@@ -996,37 +996,37 @@ Toegevoegde routers: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="242"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Do you want to enter a different password?</source>
         <translation>Wilt u een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="252"/>
+        <location filename="../client/main.cc" line="262"/>
         <source>Unable to set master password.</source>
         <translation>Kan hoofdwachtwoord niet instellen.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="192"/>
+        <location filename="../client/main.cc" line="202"/>
         <source>Unlock</source>
         <translation>Ontgrendelen</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="153"/>
+        <location filename="../client/main.cc" line="163"/>
         <source>An aspia:// link to connect to a host.</source>
         <translation>Een aspia://-link om verbinding te maken met een host.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="194"/>
+        <location filename="../client/main.cc" line="204"/>
         <source>Enter the master password to unlock the application.</source>
         <translation>Voer het hoofdwachtwoord in om de applicatie te ontgrendelen.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="210"/>
+        <location filename="../client/main.cc" line="220"/>
         <source>Invalid master password.</source>
         <translation>Ongeldig hoofdwachtwoord.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="149"/>
+        <location filename="../client/main.cc" line="159"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -1146,174 +1146,174 @@ Toegevoegde routers: %4</translation>
         <translation>Wachtwoord wijzigen</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="115"/>
+        <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a day</source>
         <translation>Eén keer per dag</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="116"/>
+        <location filename="../host/ui/config_dialog.cc" line="117"/>
         <source>Once a week</source>
         <translation>Eén keer per week</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="117"/>
+        <location filename="../host/ui/config_dialog.cc" line="118"/>
         <source>Once a month</source>
         <translation>Eén keer per maand</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="119"/>
+        <location filename="../host/ui/config_dialog.cc" line="120"/>
         <source>Stable</source>
         <translation>Stabiel</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="120"/>
+        <location filename="../host/ui/config_dialog.cc" line="121"/>
         <source>Beta</source>
         <translation>Bèta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <location filename="../host/ui/config_dialog.cc" line="122"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="148"/>
+        <location filename="../host/ui/config_dialog.cc" line="147"/>
         <source>Default</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="189"/>
+        <location filename="../host/ui/config_dialog.cc" line="188"/>
         <source>On reboot</source>
         <translation>Bij opnieuw opstarten</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="190"/>
+        <location filename="../host/ui/config_dialog.cc" line="189"/>
         <source>Every 5 minutes</source>
         <translation>Elke 5 minuten</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="191"/>
+        <location filename="../host/ui/config_dialog.cc" line="190"/>
         <source>Every 30 minutes</source>
         <translation>Elke 30 minuten</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="192"/>
+        <location filename="../host/ui/config_dialog.cc" line="191"/>
         <source>Every 1 hour</source>
         <translation>Elk uur</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="193"/>
+        <location filename="../host/ui/config_dialog.cc" line="192"/>
         <source>Every 6 hours</source>
         <translation>Elke 6 uur</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="194"/>
+        <location filename="../host/ui/config_dialog.cc" line="193"/>
         <source>Every 12 hours</source>
         <translation>Elke 12 uur</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="202"/>
+        <location filename="../host/ui/config_dialog.cc" line="201"/>
         <source>Letters and digits</source>
         <translation>Letters en cijfers</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="205"/>
+        <location filename="../host/ui/config_dialog.cc" line="204"/>
         <source>Letters</source>
         <translation>Letters</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="206"/>
         <source>Digits</source>
         <translation>Cijfers</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="224"/>
+        <location filename="../host/ui/config_dialog.cc" line="223"/>
         <source>Never</source>
         <translation>Nooit</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="224"/>
         <source>15 seconds</source>
         <translation>15 seconden</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="226"/>
+        <location filename="../host/ui/config_dialog.cc" line="225"/>
         <source>30 seconds</source>
         <translation>30 seconden</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="227"/>
+        <location filename="../host/ui/config_dialog.cc" line="226"/>
         <source>45 seconds</source>
         <translation>45 seconden</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="227"/>
         <source>60 seconds</source>
         <translation>60 seconden</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>Accept connection</source>
         <translation>Verbinding accepteren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>Reject connection</source>
         <translation>Verbinding weigeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="436"/>
+        <location filename="../host/ui/config_dialog.cc" line="435"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u gebruiker &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="463"/>
-        <location filename="../host/ui/config_dialog.cc" line="496"/>
+        <location filename="../host/ui/config_dialog.cc" line="462"/>
+        <location filename="../host/ui/config_dialog.cc" line="495"/>
         <source>An error occurred while processing the password.</source>
         <translation>Er is een fout opgetreden bij het verwerken van het wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="480"/>
+        <location filename="../host/ui/config_dialog.cc" line="479"/>
         <source>Settings storage is unavailable.</source>
         <translation>Opslag van instellingen is niet beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="510"/>
+        <location filename="../host/ui/config_dialog.cc" line="509"/>
         <source>Import</source>
         <translation>Importeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="510"/>
-        <location filename="../host/ui/config_dialog.cc" line="527"/>
+        <location filename="../host/ui/config_dialog.cc" line="509"/>
+        <location filename="../host/ui/config_dialog.cc" line="526"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-bestanden (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="527"/>
+        <location filename="../host/ui/config_dialog.cc" line="526"/>
         <source>Export</source>
         <translation>Exporteren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="552"/>
+        <location filename="../host/ui/config_dialog.cc" line="551"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>De configuratie kan niet worden weggeschreven. Controleer of u voldoende schrijfrechten hebt.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="565"/>
+        <location filename="../host/ui/config_dialog.cc" line="564"/>
         <source>Incorrect router address entered.</source>
         <translation>Onjuist routeradres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="575"/>
+        <location filename="../host/ui/config_dialog.cc" line="574"/>
         <source>Incorrect router public key entered.</source>
         <translation>Onjuiste public key van de router ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="731"/>
+        <location filename="../host/ui/config_dialog.cc" line="730"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="736"/>
+        <location filename="../host/ui/config_dialog.cc" line="735"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
@@ -3147,17 +3147,17 @@ Wachtwoord: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="485"/>
+        <location filename="../base/gui_application.cc" line="506"/>
         <source>Dark</source>
         <translation>Donker</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="487"/>
+        <location filename="../base/gui_application.cc" line="508"/>
         <source>Light</source>
         <translation>Licht</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="488"/>
+        <location filename="../base/gui_application.cc" line="509"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
@@ -3165,8 +3165,8 @@ Wachtwoord: %2</translation>
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/main.cc" line="601"/>
-        <location filename="../host/main.cc" line="636"/>
+        <location filename="../host/main.cc" line="607"/>
+        <location filename="../host/main.cc" line="642"/>
         <source>Settings storage is unavailable.</source>
         <translation>Opslag van instellingen is niet beschikbaar.</translation>
     </message>
@@ -3247,32 +3247,32 @@ Wachtwoord: %2</translation>
 <context>
     <name>HostMain</name>
     <message>
-        <location filename="../host/main.cc" line="538"/>
+        <location filename="../host/main.cc" line="544"/>
         <source>Launch the application hidden.</source>
         <translation>De applicatie verborgen starten.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="540"/>
+        <location filename="../host/main.cc" line="546"/>
         <source>Export parameters to file.</source>
         <translation>Parameters naar bestand exporteren.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="542"/>
+        <location filename="../host/main.cc" line="548"/>
         <source>Import parameters from file.</source>
         <translation>Parameters uit bestand importeren.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="544"/>
+        <location filename="../host/main.cc" line="550"/>
         <source>Do not display any messages during import and export.</source>
         <translation>Geen berichten weergeven tijdens importeren en exporteren.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="546"/>
+        <location filename="../host/main.cc" line="552"/>
         <source>Calling the settings dialog.</source>
         <translation>Het instellingenvenster openen.</translation>
     </message>
     <message>
-        <location filename="../host/main.cc" line="548"/>
+        <location filename="../host/main.cc" line="554"/>
         <source>Calling the security log dialog.</source>
         <translation>Het dialoogvenster van het beveiligingslogboek openen.</translation>
     </message>
@@ -4119,7 +4119,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="360"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4184,47 +4184,47 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Instellingen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="97"/>
+        <location filename="../client/desktop/main_window.cc" line="100"/>
         <source>Search...</source>
         <translation>Zoeken...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="176"/>
+        <location filename="../client/desktop/main_window.cc" line="179"/>
         <source>Management</source>
         <translation>Beheer</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="205"/>
+        <location filename="../client/desktop/main_window.cc" line="208"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Ongeldige link &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="229"/>
+        <location filename="../client/desktop/main_window.cc" line="232"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>De router waarnaar de link verwijst, staat niet bij de opgeslagen routers.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="268"/>
+        <location filename="../client/desktop/main_window.cc" line="271"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>De host waarnaar de link verwijst, staat niet bij de opgeslagen hosts.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="458"/>
+        <location filename="../client/desktop/main_window.cc" line="461"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Verbinding via ID is opgegeven in de eigenschappen van de host, maar de router is niet geconfigureerd. Controleer de routerinstellingen in de eigenschappen van de host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="274"/>
+        <location filename="../client/desktop/main_window.cc" line="277"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>De router die aan deze host is gekoppeld, is verwijderd. Bewerk de host om een andere router te selecteren of schakel over op een directe verbinding.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="320"/>
+        <location filename="../client/desktop/main_window.cc" line="323"/>
         <source>Credentials</source>
         <translation>Aanmeldgegevens</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="346"/>
+        <location filename="../client/desktop/main_window.cc" line="349"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
@@ -5122,7 +5122,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
 <context>
     <name>QGuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="73"/>
+        <location filename="../base/gui_application.cc" line="75"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
     </message>
@@ -5922,13 +5922,13 @@ Aanmeldgegevens geïmporteerd: %5</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="227"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="230"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>De router wacht op een tweefactorcode.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="228"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="231"/>
         <source>Enter Code</source>
         <translation>Code invoeren</translation>
     </message>
@@ -5943,7 +5943,7 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Gebeurtenis</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_status_widget.cc" line="197"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="200"/>
         <source>%n event(s)</source>
         <translation>
             <numerusform>%n gebeurtenis</numerusform>
@@ -5951,17 +5951,17 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="215"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="218"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>Tweefactorauthenticatie is geblokkeerd na te veel mislukte pogingen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="232"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="235"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>Voor deze router moet tweefactorauthenticatie worden ingesteld.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="233"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="236"/>
         <source>Set Up</source>
         <translation>Instellen</translation>
     </message>
@@ -5994,7 +5994,12 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Items per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="186"/>
+        <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
+        <translation>Als u een host goedkeurt, krijgt deze permanente toegang tot de router. Weet u zeker dat u host &quot;%1&quot; wilt goedkeuren?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="237"/>
         <source>Failed to approve the host.</source>
         <translation>Kan de host niet goedkeuren.</translation>
     </message>
@@ -11501,60 +11506,60 @@ Aanmeldgegevens geïmporteerd: %5</translation>
         <translation>Informatie ontvangen...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="132"/>
+        <location filename="../common/desktop/update_dialog.cc" line="137"/>
         <source>Install the update yourself: %1</source>
         <translation>Installeer de update zelf: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="138"/>
+        <location filename="../common/desktop/update_dialog.cc" line="143"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Er wordt een update gedownload. Nadat de download is voltooid, wordt de applicatie automatisch gesloten.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="140"/>
+        <location filename="../common/desktop/update_dialog.cc" line="145"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Alle verbonden sessies worden beëindigd. U kunt geen verbinding maken totdat de update is voltooid.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="142"/>
+        <location filename="../common/desktop/update_dialog.cc" line="147"/>
         <source>All unsaved data will be lost.</source>
         <translation>Alle niet-opgeslagen gegevens gaan verloren.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="143"/>
+        <location filename="../common/desktop/update_dialog.cc" line="148"/>
         <source>Continue?</source>
         <translation>Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="186"/>
-        <location filename="../common/desktop/update_dialog.cc" line="207"/>
-        <location filename="../common/desktop/update_dialog.cc" line="217"/>
-        <location filename="../common/desktop/update_dialog.cc" line="239"/>
+        <location filename="../common/desktop/update_dialog.cc" line="176"/>
+        <location filename="../common/desktop/update_dialog.cc" line="201"/>
+        <location filename="../common/desktop/update_dialog.cc" line="210"/>
+        <location filename="../common/desktop/update_dialog.cc" line="232"/>
         <source>An error occurred while installing the update.</source>
         <translation>Er is een fout opgetreden bij het installeren van de update.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="205"/>
+        <location filename="../common/desktop/update_dialog.cc" line="199"/>
         <source>The downloaded file is damaged.</source>
         <translation>Het gedownloade bestand is beschadigd.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="285"/>
+        <location filename="../common/desktop/update_dialog.cc" line="278"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="286"/>
+        <location filename="../common/desktop/update_dialog.cc" line="279"/>
         <source>Error retrieving update information.</source>
         <translation>Fout bij het ophalen van update-informatie.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="296"/>
+        <location filename="../common/desktop/update_dialog.cc" line="289"/>
         <source>Installing the update. Please wait.</source>
         <translation>De update wordt geïnstalleerd. Even geduld.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="261"/>
+        <location filename="../common/desktop/update_dialog.cc" line="254"/>
         <source>No updates available.</source>
         <translation>Geen updates beschikbaar.</translation>
     </message>
