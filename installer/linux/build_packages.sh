@@ -21,6 +21,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+VENDOR="Dmitry Chapyshev"
 MAINTAINER="Dmitry Chapyshev <dmitry@aspia.ru>"
 HOMEPAGE="https://aspia.org/"
 LICENSE="GPLv3"
@@ -57,7 +58,14 @@ OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 for format in "${FORMATS[@]}"; do
     case "$format" in
-        deb) command -v dpkg-deb >/dev/null || die "dpkg-deb not found" ;;
+        deb)
+            command -v dpkg-deb >/dev/null || die "dpkg-deb not found"
+
+            # The dependencies are read out of the binary, and a package without them is built
+            # without a word of complaint.
+            command -v readelf >/dev/null || die "readelf not found"
+            command -v objdump >/dev/null || die "objdump not found"
+            ;;
         rpm) command -v rpmbuild >/dev/null || die "rpmbuild not found" ;;
         *) die "unknown format: $format" ;;
     esac
@@ -160,6 +168,7 @@ deb_depends()
 
     # The oldest glibc that still has every versioned symbol the binary refers to.
     glibc="$(objdump -T "$binary" | sed -n 's/.*GLIBC_\([0-9][0-9.]*\).*/\1/p' | sort -V -u | tail -1)"
+    [ -n "$glibc" ] || die "no versioned glibc symbol in $binary"
 
     for soname in $(readelf -d "$binary" | sed -n 's/.*NEEDED.*\[\(.*\)\].*/\1/p'); do
         case "$soname" in
@@ -175,6 +184,8 @@ deb_depends()
         case ", $depends," in *", $package,"*) continue ;; esac
         depends="${depends:+$depends, }$package"
     done
+
+    [ -n "$depends" ] || die "no dependencies read out of $binary"
 
     echo "$depends"
 }
@@ -253,6 +264,7 @@ build_rpm()
         echo "Summary:   $(summary_of "$component")"
         echo "License:   $LICENSE"
         echo "URL:       $HOMEPAGE"
+        echo "Vendor:    $VENDOR"
         echo "Packager:  $MAINTAINER"
         echo "BuildArch: $MACHINE"
         echo

@@ -292,7 +292,8 @@ void UpdateInstaller::removeLeftovers()
 
     QDateTime now = QDateTime::currentDateTime();
 
-    for (const QFileInfo& entry : directory.entryInfoList({ QString(kPackagePrefix) + "*" }, QDir::Dirs))
+    for (const QFileInfo& entry : directory.entryInfoList({ QString(kPackagePrefix) + "*" },
+                                                          QDir::Dirs | QDir::NoSymLinks))
     {
         QDateTime last_change = entry.lastModified();
 
