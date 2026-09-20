@@ -88,8 +88,15 @@ jobs:
           # Run tests
           ctest --preset ci-${{ matrix.build_type }}
 
-          # Create deb packages
-          cpack --config ${{ github.workspace }}/builds/ci/CPackConfig.cmake -C ${{ matrix.build_type }}
+          # Create deb and rpm packages
+          case "${{ matrix.build_type }}" in
+            release) config=Release ;;
+            debug) config=Debug ;;
+          esac
+
+          installer/linux/build_packages.sh \
+              --build-dir ${{ github.workspace }}/builds/ci/$config \
+              --output-dir ${{ github.workspace }}
 
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f vcpkg4aspia/vcpkg ]; then
