@@ -51,6 +51,12 @@ constexpr int kTabBarShadeDark = 40;
 // and not the rect.
 constexpr int kTabMarginPx = 2;
 
+#if defined(Q_OS_MACOS)
+// Four pixels of air on each side of the icon and of the close button, as the macOS style lays the
+// label out.
+constexpr int kMacLabelPaddingPx = 8;
+#endif // defined(Q_OS_MACOS)
+
 //--------------------------------------------------------------------------------------------------
 bool isWindows11Style(const QStyle* style)
 {
@@ -95,6 +101,29 @@ void TabBar::setDropTarget(int index)
 
     update();
 }
+
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+QSize TabBar::tabSizeHint(int index) const
+{
+    QSize size = QTabBar::tabSizeHint(index);
+
+    // The macOS style keeps the label centered: it takes the icon and the close button off both
+    // sides of the tab, but asks for their width only once. Without the other half everything is
+    // elided.
+    if (!tabIcon(index).isNull())
+    {
+        QWidget* button = tabButton(index, QTabBar::RightSide);
+        int extra = iconSize().width() + (button ? button->width() : 0) + kMacLabelPaddingPx -
+            style()->pixelMetric(QStyle::PM_TabBarTabHSpace, nullptr, this);
+
+        if (extra > 0)
+            size.rwidth() += extra;
+    }
+
+    return size;
+}
+#endif // defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 void TabBar::mousePressEvent(QMouseEvent* event)
@@ -220,9 +249,10 @@ void TabBar::tabInserted(int index)
         }
     });
 
-    QTabBar::ButtonPosition side = static_cast<QTabBar::ButtonPosition>(
-        style()->styleHint(QStyle::SH_TabBar_CloseButtonPosition, nullptr, this));
-    setTabButton(index, side, close_button);
+    // The button belongs to the right on every platform. macOS asks for it on the left, so the one
+    // Qt has already put there is dropped.
+    setTabButton(index, QTabBar::LeftSide, nullptr);
+    setTabButton(index, QTabBar::RightSide, close_button);
 }
 
 //--------------------------------------------------------------------------------------------------
