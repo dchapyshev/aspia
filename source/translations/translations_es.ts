@@ -11526,11 +11526,6 @@ Credenciales importadas: %5</translation>
         <translation>¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="177"/>
-        <source>An error occurred while installing the update: %1</source>
-        <translation>Se produjo un error al instalar la actualización: %1</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="186"/>
         <location filename="../common/desktop/update_dialog.cc" line="207"/>
         <location filename="../common/desktop/update_dialog.cc" line="217"/>

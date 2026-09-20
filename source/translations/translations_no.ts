@@ -11526,11 +11526,6 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Fortsette?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="177"/>
-        <source>An error occurred while installing the update: %1</source>
-        <translation>Det oppstod en feil under installasjon av oppdateringen: %1</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="186"/>
         <location filename="../common/desktop/update_dialog.cc" line="207"/>
         <location filename="../common/desktop/update_dialog.cc" line="217"/>

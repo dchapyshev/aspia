@@ -11526,11 +11526,6 @@ Credentials imported: %5</source>
         <translation>Συνέχεια;</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="177"/>
-        <source>An error occurred while installing the update: %1</source>
-        <translation>Παρουσιάστηκε σφάλμα κατά την εγκατάσταση της ενημέρωσης: %1</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="186"/>
         <location filename="../common/desktop/update_dialog.cc" line="207"/>
         <location filename="../common/desktop/update_dialog.cc" line="217"/>

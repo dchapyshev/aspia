@@ -11487,11 +11487,6 @@ Credentials imported: %5</source>
         <translation>要繼續嗎？</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="177"/>
-        <source>An error occurred while installing the update: %1</source>
-        <translation>安裝更新時發生錯誤：%1</translation>
-    </message>
-    <message>
         <location filename="../common/desktop/update_dialog.cc" line="186"/>
         <location filename="../common/desktop/update_dialog.cc" line="207"/>
         <location filename="../common/desktop/update_dialog.cc" line="217"/>
