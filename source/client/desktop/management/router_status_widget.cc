@@ -20,6 +20,7 @@
 
 #include <QDataStream>
 #include <QEvent>
+#include <QHeaderView>
 #include <QIcon>
 #include <QLabel>
 #include <QPushButton>
@@ -52,6 +53,8 @@ RouterStatusWidget::RouterStatusWidget(QWidget* parent)
 
     ui->label_two_factor_icon->setPixmap(GuiApplication::svgPixmap(":/img/lock.svg", QSize(24, 24)));
     ui->frame_two_factor->setVisible(false);
+
+    ui->tree_events->header()->resizeSection(COLUMN_TIME, 200);
 
     connect(ui->button_two_factor, &QPushButton::clicked,
             this, &RouterStatusWidget::onTwoFactorClicked);
