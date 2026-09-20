@@ -446,7 +446,8 @@ if (LINUX)
         "/usr/share/icons/hicolor/32x32" "/usr/share/icons/hicolor/32x32/apps"
         "/usr/share/icons/hicolor/48x48" "/usr/share/icons/hicolor/48x48/apps"
         "/usr/share/icons/hicolor/64x64" "/usr/share/icons/hicolor/64x64/apps"
-        "/usr/share/icons/hicolor/128x128" "/usr/share/icons/hicolor/128x128/apps")
+        "/usr/share/icons/hicolor/128x128" "/usr/share/icons/hicolor/128x128/apps"
+        "/usr/share/icons/hicolor/scalable" "/usr/share/icons/hicolor/scalable/apps")
 
     set(CPACK_COMPONENTS_ALL host client router relay)
 endif()
