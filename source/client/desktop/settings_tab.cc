@@ -472,9 +472,8 @@ void SettingsTab::onUpdateChannelChanged()
 void SettingsTab::onCheckForUpdatesClicked()
 {
     LOG(INFO) << "[ACTION] Check for updates";
-    if (UpdateDialog(ui->combobox_update_channel->currentData().toString(), "client",
-                     UpdateDialog::Action::ASK, this).exec() == QDialog::Accepted)
-        GuiApplication::quit();
+    UpdateDialog(ui->combobox_update_channel->currentData().toString(), "client",
+                 UpdateDialog::Action::ASK, this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------

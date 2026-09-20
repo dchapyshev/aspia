@@ -40,7 +40,7 @@ public:
     // What came of starting the installation.
     enum class Result
     {
-        STARTED, // The installer of the system is running. How it ended comes with sig_finished.
+        STARTED, // The package is handed over and the installer of the system runs on its own.
         DAMAGED, // The package is not the one the manifest describes.
         FAILED   // Anything else, the user dismissing the request for rights among it.
     };
@@ -67,18 +67,15 @@ public:
     QString createPackageFile(const UpdateInfo& update_info);
 
     // Checks the downloaded package against what the manifest says about it and starts the
-    // installer of the system for it.
+    // installer of the system for it. The installer is detached and owes this process nothing:
+    // once the package is handed over, this one has to end, because the files it is running are
+    // the ones being replaced.
     Result install();
 
     // Removes the package and the directory it was prepared in, unless the installer of the system
     // has taken them. Calling it more than once is safe. The destructor calls it, so it is only
     // needed where the process ends before the deferred deletion of this object can run.
     void cleanup();
-
-signals:
-    // Emitted once when nothing more is going to happen. |error| is what the installer said when it
-    // failed and is empty when there is nothing to report, as when the user declined.
-    void sig_finished(bool success, const QString& error);
 
 private:
     bool startInstaller();

@@ -156,11 +156,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
-        if (UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK,
-                         this).exec() == QDialog::Accepted)
-        {
-            GuiApplication::quit();
-        }
+        UpdateDialog(Database::instance().updateChannel(), "client", UpdateDialog::Action::ASK, this).exec();
     }, Qt::QueuedConnection);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,

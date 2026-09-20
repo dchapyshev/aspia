@@ -102,17 +102,6 @@ int ConsoleUpdater::install(const QString& channel)
 
     out_ << "Installing the update..." << Qt::endl;
 
-    bool success = false;
-    QEventLoop loop;
-
-    QObject::connect(&installer, &UpdateInstaller::sig_finished, &loop,
-                     [&](bool installer_success, const QString& installer_error)
-    {
-        success = installer_success;
-        error = installer_error;
-        loop.quit();
-    });
-
     UpdateInstaller::Result result = installer.install();
 
     if (result == UpdateInstaller::Result::DAMAGED)
@@ -127,21 +116,7 @@ int ConsoleUpdater::install(const QString& channel)
         return 1;
     }
 
-    loop.exec();
-
-    if (!success)
-    {
-        out_ << "The installation failed. " << error << Qt::endl;
-        return 1;
-    }
-
-#if defined(Q_OS_WINDOWS)
-    // The installer of the system does the installation in a process of its own, and this one is
-    // gone before it has anything to say about how it went.
     out_ << "The installation is started." << Qt::endl;
-#else
-    out_ << "The update is installed." << Qt::endl;
-#endif // defined(Q_OS_WINDOWS)
 
     return 0;
 }

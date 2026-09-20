@@ -87,6 +87,11 @@ void UpdateDialog::done(int result)
         ElevateUtil::reportExitCode(result == Accepted ? kInstalledExitCode : kClosedExitCode);
 
     QDialog::done(result);
+
+    if (result != Accepted)
+        return;
+
+    QCoreApplication::exit(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -164,21 +169,6 @@ void UpdateDialog::startInstall()
 {
     installer_.reset(new UpdateInstaller(UpdateInstaller::Mode::USER, this));
 
-    connect(installer_, &UpdateInstaller::sig_finished, this,
-            [this](bool success, const QString& error)
-    {
-        if (success)
-        {
-            accept();
-            return;
-        }
-
-        if (!error.isEmpty())
-            MsgBox::warning(this, tr("An error occurred while installing the update: %1").arg(error));
-
-        setInstalling(false);
-    });
-
     QString file_path = installer_->createPackageFile(update_info_);
     if (file_path.isEmpty())
     {
@@ -197,15 +187,18 @@ void UpdateDialog::startInstall()
     }
 
     UpdateInstaller::Result result = installer_->install();
-    if (result != UpdateInstaller::Result::STARTED)
+    if (result == UpdateInstaller::Result::STARTED)
     {
-        setInstalling(false);
-
-        if (result == UpdateInstaller::Result::DAMAGED)
-            MsgBox::warning(this, tr("The downloaded file is damaged."));
-        else
-            MsgBox::warning(this, tr("An error occurred while installing the update."));
+        accept();
+        return;
     }
+
+    setInstalling(false);
+
+    if (result == UpdateInstaller::Result::DAMAGED)
+        MsgBox::warning(this, tr("The downloaded file is damaged."));
+    else
+        MsgBox::warning(this, tr("An error occurred while installing the update."));
 }
 
 //--------------------------------------------------------------------------------------------------

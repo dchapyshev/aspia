@@ -25,7 +25,6 @@
 #include <QTranslator>
 
 #include "base/build_config.h"
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
@@ -139,9 +138,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
-        if (UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK,
-                         this).exec() == QDialog::Accepted)
-            GuiApplication::quit();
+        UpdateDialog(SystemSettings().updateChannel(), "host", UpdateDialog::Action::ASK, this).exec();
     });
 
     ui->combo_video_capturer->addItem(

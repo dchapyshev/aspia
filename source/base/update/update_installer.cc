@@ -21,7 +21,6 @@
 #include <QDir>
 #include <QFile>
 #include <QStandardPaths>
-#include <QTimer>
 
 #include "base/logging.h"
 #include "base/time_types.h"
@@ -375,14 +374,6 @@ bool UpdateInstaller::startInstaller()
     file_path_.clear();
     directory_.clear();
 
-    // msiexec replaces the files of the running application, this one among them, so it is not
-    // waited for: the file is free only after this process is gone. The result is reported once the
-    // caller has control back.
-    QTimer::singleShot(MilliSeconds(0), this, [this]()
-    {
-        emit sig_finished(true, QString());
-    });
-
     return true;
 #elif defined(Q_OS_ANDROID)
     if (!canInstall())
@@ -445,11 +436,6 @@ bool UpdateInstaller::startInstaller()
     file_path_.clear();
     directory_.clear();
 
-    QTimer::singleShot(MilliSeconds(0), this, [this]()
-    {
-        emit sig_finished(true, QString());
-    });
-
     return true;
 #elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     QStringList arguments;
@@ -470,42 +456,22 @@ bool UpdateInstaller::startInstaller()
     }
 #endif // defined(Q_OS_MACOS)
 
-    if (mode_ == Mode::SERVICE)
-    {
 #if defined(Q_OS_LINUX)
-        // The package restarts the service, and systemd kills the whole control group of a unit
-        // it stops, so the installer dies with it. A transient unit of its own outlives that and
-        // the install finishes even though it is the updated service that started it.
-        if (!QStandardPaths::findExecutable("systemd-run").isEmpty())
-        {
-            arguments = QStringList() << "systemd-run" << "--collect" << "--quiet"
-                                      << "--unit=aspia-host-update" << arguments;
-        }
+    // The package restarts the service, and systemd kills the whole control group of a unit it
+    // stops, so an installer left in that group dies with it. A transient unit of its own outlives
+    // whoever asked for the installation. The name carries the process id: the host and the client
+    // of one machine can be updated at the same moment, and a name already taken is a refusal.
+    if (!QStandardPaths::findExecutable("systemd-run").isEmpty())
+    {
+        arguments = QStringList() << "systemd-run" << "--collect" << "--quiet"
+                                  << ("--unit=aspia-update-" + QString::number(getpid()))
+                                  << arguments;
+    }
 #endif // defined(Q_OS_LINUX)
 
-        QString program = arguments.takeFirst();
-
-        if (!QProcess::startDetached(program, arguments))
-        {
-            LOG(ERROR) << "Unable to create update process (cmd:" << program << arguments << ")";
-            return false;
-        }
-
-        LOG(INFO) << "Update process started (cmd:" << program << arguments << ")";
-
-        // The process is detached, so there is nobody left to clean up after it.
-        file_path_.clear();
-        directory_.clear();
-
-        QTimer::singleShot(MilliSeconds(0), this, [this]()
-        {
-            emit sig_finished(true, QString());
-        });
-
-        return true;
-    }
-
-    QProcess* process = new QProcess(this);
+    QProcess process;
+    process.setProgram(arguments.takeFirst());
+    process.setArguments(arguments);
 
 #if defined(Q_OS_LINUX)
     if (update_info_.format() == "deb")
@@ -514,49 +480,22 @@ bool UpdateInstaller::startInstaller()
         // and there is nobody to answer it.
         QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
         environment.insert("DEBIAN_FRONTEND", "noninteractive");
-        process->setProcessEnvironment(environment);
+        process.setProcessEnvironment(environment);
     }
 #endif // defined(Q_OS_LINUX)
 
-    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
-            [this, process](int exit_code, QProcess::ExitStatus exit_status)
+    if (!process.startDetached())
     {
-        LOG(INFO) << "Installer finished with exit code:" << exit_code
-                  << "(status:" << exit_status << ")";
+        LOG(ERROR) << "Unable to create update process (cmd:" << process.program()
+                   << process.arguments() << ")";
+        return false;
+    }
 
-        // The package managers of Linux report the failure on the standard error, the installer
-        // of macOS on the standard output, where its last line is the one that matters.
-        QString error = QString::fromLocal8Bit(process->readAllStandardError()).trimmed();
-        if (error.isEmpty())
-        {
-            error = QString::fromLocal8Bit(process->readAllStandardOutput())
-                .trimmed().section('\n', -1);
-        }
+    LOG(INFO) << "Update process started (cmd:" << process.program() << process.arguments() << ")";
 
-        process->deleteLater();
-        cleanup();
-
-        emit sig_finished(exit_code == 0, error);
-    });
-
-    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error)
-    {
-        if (error != QProcess::FailedToStart)
-            return;
-
-        QString error_string = process->errorString();
-        LOG(ERROR) << "Unable to start installer:" << error_string;
-
-        process->deleteLater();
-        cleanup();
-
-        emit sig_finished(false, error_string);
-    });
-
-    QString program = arguments.takeFirst();
-
-    process->start(program, arguments);
-    process->closeWriteChannel();
+    // The process is detached, so there is nobody left to clean up after it.
+    file_path_.clear();
+    directory_.clear();
 
     return true;
 #else
