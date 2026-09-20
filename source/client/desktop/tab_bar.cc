@@ -108,7 +108,7 @@ QSize TabBar::tabSizeHint(int index) const
 {
     QSize size = QTabBar::tabSizeHint(index);
 
-    // The macOS style keeps the label centered: it takes the icon and the close button off both
+    // The macOS style keeps the label centered and takes the icon and the close button off both
     // sides of the tab, but asks for their width only once. Without the other half everything is
     // elided.
     if (!tabIcon(index).isNull())

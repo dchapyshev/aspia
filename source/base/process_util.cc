@@ -202,9 +202,9 @@ bool ProcessUtil::isPrivileged()
 void ProcessUtil::restartAsRoot(char* argv[])
 {
     // Authorization Services runs the process with euid 0 but the real uid of the caller. Whatever it
-    // was elevated for then fails: the checks made before writing ask about the real user and say no,
-    // and the work is dropped without a word. The identity cannot be changed while running - the
-    // system gives no window to such a process - so the process starts over.
+    // was elevated for then fails, because the checks made before writing ask about the real user and
+    // say no, and the work is dropped without a word. The identity cannot be changed while running,
+    // because the system gives no window to such a process, so the process starts over.
     if (geteuid() == 0 && getuid() != 0 && setgid(0) == 0 && setuid(0) == 0)
     {
         execv(argv[0], argv);
