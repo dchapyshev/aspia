@@ -25,6 +25,7 @@ class SecureString;
 class MasterPassword
 {
 public:
+    static const int kMinPasswordLength = 6;
     static const int kSafePasswordLength = 8;
 
     static bool isSafePassword(const SecureString& password);

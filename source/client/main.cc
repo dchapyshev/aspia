@@ -223,6 +223,14 @@ int main(int argc, char* argv[])
         {
             SecureString new_password = d->password();
 
+            if (new_password.size() < MasterPassword::kMinPasswordLength)
+            {
+                MsgBox::warning(d, QApplication::translate(
+                    "Client", "The password can not be shorter than %n characters.",
+                    "", MasterPassword::kMinPasswordLength));
+                return false;
+            }
+
             if (!MasterPassword::isSafePassword(new_password))
             {
                 QString unsafe = QApplication::translate(

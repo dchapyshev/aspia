@@ -423,6 +423,13 @@ void SettingsTab::onChangeMasterPassword()
         SecureString current = d->currentPassword();
         SecureString new_password = d->password();
 
+        if (new_password.size() < MasterPassword::kMinPasswordLength)
+        {
+            MsgBox::warning(d, tr("The password can not be shorter than %n characters.",
+                                  "", MasterPassword::kMinPasswordLength));
+            return false;
+        }
+
         if (!MasterPassword::isSafePassword(new_password))
         {
             QString unsafe = tr("Password you entered does not meet the security requirements!");

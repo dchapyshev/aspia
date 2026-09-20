@@ -137,9 +137,10 @@ void MasterPasswordDialog::onAccept()
     }
 
     // CREATE and CHANGE both set a new password and require a matching confirmation.
-    if (edit_password_->text().isEmpty())
+    if (edit_password_->text().length() < MasterPassword::kMinPasswordLength)
     {
-        showError(tr("Password cannot be empty."));
+        showError(tr("The password can not be shorter than %n characters.",
+                     "", MasterPassword::kMinPasswordLength));
         edit_password_->setFocus();
         return;
     }
