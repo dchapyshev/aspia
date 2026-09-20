@@ -18,8 +18,10 @@
 
 #include "base/update/update_installer.h"
 
+#include <QDateTime>
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QStandardPaths>
 
 #include "base/logging.h"
@@ -52,10 +54,22 @@ namespace {
 
 const qint64 kHashBlockSize = 1024 * 1024;
 
-#if defined(Q_OS_ANDROID)
+// How long a package is left alone before it counts as forgotten. The installer of the system reads
+// the package from a process of its own, and the host and the client of one machine are updated
+// apart, so a directory that is still being written to or read from is not the one to remove.
+const qint64 kLeftoverSeconds = 60 * 60;
+
+#if !defined(Q_OS_WINDOWS)
 // Every package waits in a directory of its own named after this.
 const char kPackagePrefix[] = "aspia_update_";
-#endif // defined(Q_OS_ANDROID)
+#endif // !defined(Q_OS_WINDOWS)
+
+#if (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
+// The directory the packages wait in. A /tmp that lives in memory is no place for tens of
+// megabytes, and what is left there after an installation has to survive a reboot to be found and
+// removed by the update that follows.
+const char kPackageDirectory[] = "/var/tmp";
+#endif // (defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)) || defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 bool hasExpectedHash(const QString& file_path, const QString& expected)
@@ -140,7 +154,9 @@ QString createPrivateDirectory()
 
     return path;
 #elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    QByteArray name = "/var/tmp/aspia_update_XXXXXX";
+    UpdateInstaller::removeLeftovers();
+
+    QByteArray name = QByteArray(kPackageDirectory) + "/" + kPackagePrefix + "XXXXXX";
     if (!mkdtemp(name.data()))
     {
         PLOG(ERROR) << "mkdtemp failed";
@@ -264,15 +280,35 @@ void UpdateInstaller::openInstallPermission()
 // static
 void UpdateInstaller::removeLeftovers()
 {
+#if defined(Q_OS_WINDOWS)
+    // What the installer of the system was given is removed at the next start of the system, so
+    // nothing waits here to be found.
+#else
 #if defined(Q_OS_ANDROID)
     QDir directory(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-
-    for (const QString& name : directory.entryList({ QString(kPackagePrefix) + "*" }, QDir::Dirs))
-    {
-        LOG(INFO) << "Removing the package of a previous update:" << name;
-        QDir(directory.filePath(name)).removeRecursively();
-    }
+#else
+    QDir directory(QString::fromLatin1(kPackageDirectory));
 #endif // defined(Q_OS_ANDROID)
+
+    QDateTime now = QDateTime::currentDateTime();
+
+    for (const QFileInfo& entry : directory.entryInfoList({ QString(kPackagePrefix) + "*" }, QDir::Dirs))
+    {
+        QDateTime last_change = entry.lastModified();
+
+        for (const QFileInfo& file : QDir(entry.filePath()).entryInfoList(QDir::Files))
+        {
+            if (file.lastModified() > last_change)
+                last_change = file.lastModified();
+        }
+
+        if (last_change.secsTo(now) < kLeftoverSeconds)
+            continue;
+
+        LOG(INFO) << "Removing the package of a previous update:" << entry.fileName();
+        QDir(entry.filePath()).removeRecursively();
+    }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
