@@ -26,6 +26,8 @@
 
 namespace {
 
+// Version 1 is Ed25519 over the bytes of the file with the signature in base64.
+const char kFormat[] = "1";
 const qsizetype kKeySize = 32;
 const qsizetype kSignatureSize = 64;
 
@@ -170,4 +172,34 @@ bool Signature::verify(QByteArrayView public_key, QByteArrayView data, QByteArra
                             static_cast<size_t>(signature.size()),
                             reinterpret_cast<const quint8*>(data.constData()),
                             static_cast<size_t>(data.size())) == 1;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray Signature::tagged(QByteArrayView signature)
+{
+    return QByteArray(kFormat) + ':' + signature.toByteArray().toBase64();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QByteArray Signature::untagged(QByteArrayView tagged_signature)
+{
+    QByteArray buffer = tagged_signature.toByteArray().trimmed();
+
+    qsizetype separator = buffer.indexOf(':');
+    if (separator < 0)
+    {
+        LOG(ERROR) << "Signature without a version";
+        return QByteArray();
+    }
+
+    QByteArray format = buffer.first(separator);
+    if (format != kFormat)
+    {
+        LOG(ERROR) << "Signature of version" << format << "and we check version" << kFormat;
+        return QByteArray();
+    }
+
+    return QByteArray::fromBase64(buffer.sliced(separator + 1));
 }

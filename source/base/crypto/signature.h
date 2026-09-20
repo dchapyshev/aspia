@@ -37,6 +37,13 @@ public:
 
     // True when |signature| is the one |public_key| makes for |data|.
     static bool verify(QByteArrayView public_key, QByteArrayView data, QByteArrayView signature);
+
+    // The form a signature is stored in next to the file it signs. It begins with the version of
+    // the scheme, so a signature made by a release that signs otherwise is not read as a broken one.
+    static QByteArray tagged(QByteArrayView signature);
+
+    // The signature taken out of that form. Empty for a version we cannot check.
+    static QByteArray untagged(QByteArrayView tagged_signature);
 };
 
 #endif // BASE_CRYPTO_SIGNATURE_H

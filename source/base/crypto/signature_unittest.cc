@@ -112,6 +112,29 @@ TEST(Signature, AnotherKey)
     EXPECT_FALSE(Signature::verify(QByteArray::fromHex(kPublicKey2), data, signature));
 }
 
+TEST(Signature, Tagged)
+{
+    QByteArray data("{ \"format\": 1 }");
+    QByteArray signature = Signature::create(privateKey(kPrivateKey1), data);
+    QByteArray tagged = Signature::tagged(signature);
+
+    EXPECT_TRUE(tagged.startsWith("1:"));
+    EXPECT_EQ(Signature::untagged(tagged), signature);
+
+    // An editor may leave a line break at the end of the file.
+    EXPECT_EQ(Signature::untagged(QByteArray(tagged + "\n")), signature);
+}
+
+TEST(Signature, UntaggedRejectsAnotherVersion)
+{
+    QByteArray data("{ \"format\": 1 }");
+    QByteArray signature = Signature::create(privateKey(kPrivateKey1), data);
+
+    EXPECT_TRUE(Signature::untagged(QByteArray("2:" + signature.toBase64())).isEmpty());
+    EXPECT_TRUE(Signature::untagged(signature.toBase64()).isEmpty());
+    EXPECT_TRUE(Signature::untagged(QByteArray()).isEmpty());
+}
+
 TEST(Signature, InvalidSizes)
 {
     QByteArray public_key = QByteArray::fromHex(kPublicKey1);

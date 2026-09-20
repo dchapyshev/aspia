@@ -229,7 +229,7 @@ QByteArray UpdateChecker::downloadSigned(const QString& url)
     if (data.isEmpty())
         return QByteArray();
 
-    QByteArray signature = QByteArray::fromBase64(download(url + ".sig").trimmed());
+    QByteArray signature = Signature::untagged(download(url + ".sig"));
     if (signature.isEmpty())
         return QByteArray();
 

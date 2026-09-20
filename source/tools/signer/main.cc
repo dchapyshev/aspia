@@ -133,7 +133,7 @@ bool sign(const SecureByteArray& private_key, const QString& file_path)
 
     QString signature_path = file_path + ".sig";
 
-    if (!writeFile(signature_path, signature.toBase64()))
+    if (!writeFile(signature_path, Signature::tagged(signature)))
     {
         std::cerr << "Unable to write signature file" << std::endl;
         return false;
@@ -160,7 +160,7 @@ bool verify(const QByteArray& public_key, const QString& file_path)
         return false;
     }
 
-    if (!Signature::verify(public_key, data, QByteArray::fromBase64(signature.trimmed())))
+    if (!Signature::verify(public_key, data, Signature::untagged(signature)))
     {
         std::cout << file_path.toStdString() << " NOT SIGNED BY THIS KEY" << std::endl;
         return false;

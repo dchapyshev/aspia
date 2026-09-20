@@ -151,7 +151,7 @@ QHash<QString, QByteArray> withSignatures(const QHash<QString, QByteArray>& file
     for (auto it = files.constBegin(); it != files.constEnd(); ++it)
     {
         result.insert(it.key(), it.value());
-        result.insert(it.key() + ".sig", Signature::create(privateKey(), it.value()).toBase64());
+        result.insert(it.key() + ".sig", Signature::tagged(Signature::create(privateKey(), it.value())));
     }
 
     return result;
