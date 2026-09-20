@@ -121,7 +121,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     SecureString password = ui->edit_password->password();
-    if (!User::isValidPassword(password))
+    if (password.isEmpty())
     {
         LOG(ERROR) << "Invalid password entered";
         showError(tr("Password cannot be empty."));

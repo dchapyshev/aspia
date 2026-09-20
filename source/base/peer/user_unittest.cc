@@ -121,9 +121,15 @@ TEST(user_test, invalid_password_too_long)
     EXPECT_FALSE(User::isValidPassword(password));
 }
 
+TEST(user_test, invalid_password_too_short)
+{
+    SecureString password(QString(User::kMinPasswordLength - 1, 'x'));
+    EXPECT_FALSE(User::isValidPassword(password));
+}
+
 TEST(user_test, valid_password_normal)
 {
-    EXPECT_TRUE(User::isValidPassword(SecureString("secret")));
+    EXPECT_TRUE(User::isValidPassword(SecureString("password")));
     EXPECT_TRUE(User::isValidPassword(SecureString("P@ssw0rd!")));
 }
 
@@ -134,16 +140,16 @@ TEST(user_test, valid_password_normal)
 TEST(user_test, safe_password_meets_all_criteria)
 {
     // >= kSafePasswordLength, has upper, lower, digit.
-    EXPECT_TRUE(User::isSafePassword(SecureString("Abcdefg1")));
-    EXPECT_TRUE(User::isSafePassword(SecureString("Password1")));
-    EXPECT_TRUE(User::isSafePassword(SecureString("12345Abc")));
+    EXPECT_TRUE(User::isSafePassword(SecureString("Abcdefgh12")));
+    EXPECT_TRUE(User::isSafePassword(SecureString("Password1234")));
+    EXPECT_TRUE(User::isSafePassword(SecureString("12345Abcde")));
 }
 
 TEST(user_test, unsafe_password_too_short)
 {
     // Has upper, lower, digit but too short.
     EXPECT_FALSE(User::isSafePassword(SecureString("Ab1")));
-    EXPECT_FALSE(User::isSafePassword(SecureString("Abc123")));
+    EXPECT_FALSE(User::isSafePassword(SecureString("Abc12345")));
 }
 
 TEST(user_test, unsafe_password_no_upper)
@@ -163,7 +169,7 @@ TEST(user_test, unsafe_password_no_lower)
 TEST(user_test, unsafe_password_no_digit)
 {
     // Has upper + lower, no digit.
-    EXPECT_FALSE(User::isSafePassword(SecureString("Abcdefgh")));
+    EXPECT_FALSE(User::isSafePassword(SecureString("Abcdefghij")));
 }
 
 TEST(user_test, safe_password_exact_min_length)

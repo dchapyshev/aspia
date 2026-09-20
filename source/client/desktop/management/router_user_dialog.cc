@@ -539,8 +539,12 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!User::isValidPassword(password))
         {
             LOG(INFO) << "Invalid password";
-            MsgBox::warning(this, tr("Password can not be empty and should not exceed %n characters.",
-                "", User::kMaxPasswordLength));
+
+            QString message = password.size() < User::kMinPasswordLength
+                ? tr("The password can not be shorter than %n characters.", "", User::kMinPasswordLength)
+                : tr("The password can not be longer than %n characters.", "", User::kMaxPasswordLength);
+
+            MsgBox::warning(this, message);
 
             ui->edit_password->selectAll();
             ui->edit_password->setFocus();

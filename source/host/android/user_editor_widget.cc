@@ -206,9 +206,13 @@ void UserEditorWidget::save()
 
         if (!User::isValidPassword(password))
         {
-            MessageDialog::info(this, tr("Error"),
-                tr("Password can not be empty and should not exceed %n characters.",
-                   "", static_cast<int>(User::kMaxPasswordLength)));
+            const QString message = password.size() < User::kMinPasswordLength
+                ? tr("The password can not be shorter than %n characters.",
+                     "", static_cast<int>(User::kMinPasswordLength))
+                : tr("The password can not be longer than %n characters.",
+                     "", static_cast<int>(User::kMaxPasswordLength));
+
+            MessageDialog::info(this, tr("Error"), message);
             password_->setFocus();
             return;
         }

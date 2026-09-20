@@ -505,8 +505,11 @@ void Sidebar::changeRouterPassword(qint64 router_id)
 
         if (!User::isValidPassword(password))
         {
-            MsgBox::warning(dialog, tr("Password can not be empty and should not exceed %n characters.",
-                "", User::kMaxPasswordLength));
+            QString message = password.size() < User::kMinPasswordLength
+                ? tr("The password can not be shorter than %n characters.", "", User::kMinPasswordLength)
+                : tr("The password can not be longer than %n characters.", "", User::kMaxPasswordLength);
+
+            MsgBox::warning(dialog, message);
             return false;
         }
 

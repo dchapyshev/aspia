@@ -39,9 +39,9 @@ public:
     enum Flags { ENABLED = 1 };
 
     static const size_t kMaxUserNameLength = 64;
-    static const size_t kMinPasswordLength = 1;
+    static const size_t kMinPasswordLength = 8;
     static const size_t kMaxPasswordLength = 64;
-    static const size_t kSafePasswordLength = 8;
+    static const size_t kSafePasswordLength = 10;
 
     // The salt is 64 bytes, the verifier at most as wide as the modulus of the widest SRP group
     // (8192 bits). Bounded because the record is stored as the peer sends it and travels back in

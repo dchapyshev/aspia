@@ -171,7 +171,7 @@ void RouterEditor::onSaveClicked()
     }
 
     SecureString password(edit_password_->text());
-    if (!User::isValidPassword(password))
+    if (password.isEmpty())
     {
         showError(tr("Password cannot be empty."));
         edit_password_->setFocus();
