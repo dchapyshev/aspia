@@ -30,6 +30,7 @@
 #include <QOperatingSystemVersion>
 #include <QLockFile>
 #include <QPainter>
+#include <QLineEdit>
 #include <QStyleFactory>
 #include <QStyleHints>
 #include <QSvgRenderer>
@@ -85,8 +86,13 @@ public:
     int pixelMetric(
         PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
     {
-        if (metric == QStyle::PM_SmallIconSize || metric == QStyle::PM_TabBarIconSize)
+        // The size is meant for toolbars and tabs. A line edit measures the button of a trailing
+        // action by the same metric, and there the icon has to fit the text field.
+        if ((metric == QStyle::PM_SmallIconSize || metric == QStyle::PM_TabBarIconSize) &&
+            !qobject_cast<const QLineEdit*>(widget))
+        {
             return small_icon_size_;
+        }
 
         return QProxyStyle::pixelMetric(metric, option, widget);
     }

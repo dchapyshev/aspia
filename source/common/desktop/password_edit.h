@@ -22,7 +22,7 @@
 #include <QLineEdit>
 #include <QPointer>
 
-class QToolButton;
+class QAction;
 class SecureString;
 
 class PasswordEdit final : public QLineEdit
@@ -54,12 +54,8 @@ public slots:
     // reducing the window during which the password remains in the widget's text buffer.
     void clear();
 
-protected:
-    // QWidget implementation.
-    void resizeEvent(QResizeEvent* event) final;
-
 private:
-    QPointer<QToolButton> show_password_button_;
+    QPointer<QAction> show_password_action_;
 
     Q_DISABLE_COPY_MOVE(PasswordEdit)
 };
