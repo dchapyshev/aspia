@@ -46,8 +46,12 @@ QString systemProperty(const char* name)
 //--------------------------------------------------------------------------------------------------
 //static
 QString SysInfo::operatingSystemName()
-{
-    return "Android";
+{.
+    QString version = operatingSystemVersion();
+    if (version.isEmpty())
+        return "Android";
+
+    return "Android " + version;
 }
 
 //--------------------------------------------------------------------------------------------------
