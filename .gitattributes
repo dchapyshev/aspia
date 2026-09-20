@@ -82,14 +82,24 @@
 # handle automatically.
 # You must not rely on them having a particular line ending style!
 
-# Shell scripts, systemd unit files, Debian maintainer scripts, PAM policies, .desktop entries and
-# polkit policies are consumed on Linux and macOS and must keep LF line endings regardless of
-# core.autocrlf (CRLF breaks the shebang line and the PAM @include parser, etc.).
+# Shell scripts, systemd unit files, PAM policies, .desktop entries and polkit policies are consumed
+# on Linux and macOS and must keep LF line endings regardless of core.autocrlf (CRLF breaks the
+# shebang line and the PAM @include parser, etc.).
 *.sh text eol=lf
 *.service text eol=lf
 *.pam text eol=lf
 *.desktop text eol=lf
 *.policy text eol=lf
-**/linux/postinst text eol=lf
-**/linux/prerm text eol=lf
-**/linux/postrm text eol=lf
+
+# Package scripts have no extension, so they are matched by name. A carriage return in one breaks
+# the shell that dpkg, rpm and the macOS installer run it through.
+preinst text eol=lf
+postinst text eol=lf
+prerm text eol=lf
+postrm text eol=lf
+rpm_pre text eol=lf
+rpm_post text eol=lf
+rpm_preun text eol=lf
+rpm_postun text eol=lf
+preinstall text eol=lf
+postinstall text eol=lf
