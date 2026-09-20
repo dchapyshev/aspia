@@ -195,7 +195,7 @@ void fillAdapterMemory(io_service_t service, NSArray<id<MTLDevice>>* metal_devic
 //static
 QString SysInfo::operatingSystemName()
 {
-    return "Mac OS X";
+    return "MacOS";
 }
 
 //--------------------------------------------------------------------------------------------------
