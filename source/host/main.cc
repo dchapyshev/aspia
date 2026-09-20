@@ -170,6 +170,14 @@ int runAgent(int& argc, char* argv[], const char* agent_type)
         application.addWorker(std::make_unique<InputWorker>());
         application.addWorker(std::make_unique<AudioWorker>());
 
+#if defined(Q_OS_MACOS)
+        // In the session of a logged-in user this agent is the instance of the application that
+        // LaunchServices finds, so it is the one that has to answer the click opening the window.
+        // At the login window there is nobody to click.
+        if (!LoginUtils::isActive())
+            return application.exec(CoreApplication::Loop::APPKIT);
+#endif // defined(Q_OS_MACOS)
+
         return application.exec();
     }
 

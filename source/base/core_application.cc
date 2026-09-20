@@ -377,11 +377,32 @@ CoreApplication::~CoreApplication()
 }
 
 //--------------------------------------------------------------------------------------------------
-int CoreApplication::exec()
+int CoreApplication::exec(Loop loop)
 {
     std::unique_ptr<WorkerManager> safe_deleter(worker_manager_);
     worker_manager_->start();
+
+#if defined(Q_OS_MACOS)
+    if (loop == Loop::APPKIT)
+        return execAppKitLoop();
+#else
+    Q_UNUSED(loop)
+#endif // defined(Q_OS_MACOS)
+
     return QCoreApplication::exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void CoreApplication::quit()
+{
+#if defined(Q_OS_MACOS)
+    CoreApplication* application = instance();
+    if (application && application->appkit_loop_)
+        stopAppKitLoop();
+#endif // defined(Q_OS_MACOS)
+
+    QCoreApplication::quit();
 }
 
 //--------------------------------------------------------------------------------------------------

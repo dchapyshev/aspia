@@ -48,7 +48,21 @@ public:
     };
     Q_ENUM(PowerEvent)
 
-    int exec();
+    // The loop the application runs. With the loop of AppKit the process counts as a running instance
+    // of the application bundle on macOS, so a click on the application opens a window instead of
+    // failing. The other systems always run the loop of Qt.
+    enum class Loop
+    {
+        QT,
+        APPKIT
+    };
+    Q_ENUM(Loop)
+
+    int exec(Loop loop = Loop::QT);
+
+    // Hides QCoreApplication::quit(), because the loop of AppKit does not end by itself when the
+    // application is asked to stop.
+    static void quit();
 
     static CoreApplication* instance();
 
@@ -70,6 +84,11 @@ signals:
     void sig_powerEvent(CoreApplication::PowerEvent event);
 
 private:
+#if defined(Q_OS_MACOS)
+    int execAppKitLoop();
+    static void stopAppKitLoop();
+#endif // defined(Q_OS_MACOS)
+
     ScopedQPointer<WorkerManager> worker_manager_;
 
 #if defined(Q_OS_WINDOWS)
@@ -86,6 +105,7 @@ private:
 
 #if defined(Q_OS_MACOS)
     std::unique_ptr<EventMonitor> event_monitor_;
+    bool appkit_loop_ = false;
 #endif // defined(Q_OS_MACOS)
 
     Q_DISABLE_COPY_MOVE(CoreApplication)

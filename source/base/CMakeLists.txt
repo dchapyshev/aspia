@@ -109,6 +109,7 @@ endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE
+        core_application_mac.mm
         core_service.h
         core_service_posix.cc
         event_enumerator_mac.h
