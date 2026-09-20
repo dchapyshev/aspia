@@ -1,0 +1,24 @@
+
+# The files of the version that is running are about to be replaced. A client of that version writes
+# its settings when it goes away, over the ones the version being installed brings, so it does not
+# outlive the replacement. An update the client asked for itself is installed by a unit of its own
+# and is not among the processes ended here. Argument 2 is an upgrade, 1 a first install with
+# nothing to stop.
+#
+# The client is asked to quit first, and the one that has not gone after five seconds is ended, the
+# way the installer on Windows does it.
+if [ "$1" -ge 2 ]; then
+    pkill -x aspia_client >/dev/null 2>&1 || true
+
+    seconds=0
+    while pgrep -x aspia_client >/dev/null 2>&1 && [ "$seconds" -lt 5 ]; do
+        sleep 1
+        seconds=$((seconds + 1))
+    done
+
+    pkill -KILL -x aspia_client >/dev/null 2>&1 || true
+fi
+
+# A scriptlet that ends with a failure takes the transaction with it, and nothing above is a reason
+# to refuse the update.
+exit 0

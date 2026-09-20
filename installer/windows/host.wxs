@@ -27,7 +27,7 @@
          reports success without closing any of them. They are asked to quit and ended when they do
          not, so the upgrade leaves nothing running from the version it replaced. -->
     <util:CloseApplication Id="CloseHostProcesses" Target="aspia_host.exe"
-                           ElevatedEndSessionMessage="yes" Timeout="10" TerminateProcess="0"
+                           ElevatedEndSessionMessage="yes" Timeout="5" TerminateProcess="0"
                            RebootPrompt="no" />
 
     <Icon Id="aspia.ico" SourceFile="resources/aspia.ico" />

@@ -308,13 +308,15 @@ if (LINUX)
         # The host runs without prior configuration, so the maintainer scripts enable and start the
         # systemd service directly (and restart it on upgrade) rather than via --install.
         set(CPACK_DEBIAN_HOST_PACKAGE_CONTROL_EXTRA
-            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/host/linux/prerm")
+            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/preinst;${CMAKE_CURRENT_SOURCE_DIR}/host/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/host/linux/prerm")
 
         set(CPACK_DEBIAN_HOST_FILE_NAME
             "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 
         # RPM equivalents of the maintainer scripts (RPM scriptlet argument semantics differ from
         # Debian: %post runs on install and upgrade, %preun receives 0 only on final removal).
+        set(CPACK_RPM_HOST_PRE_INSTALL_SCRIPT_FILE
+            "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/rpm_pre")
         set(CPACK_RPM_HOST_POST_INSTALL_SCRIPT_FILE
             "${CMAKE_CURRENT_SOURCE_DIR}/host/linux/rpm_post")
         set(CPACK_RPM_HOST_PRE_UNINSTALL_SCRIPT_FILE
@@ -351,8 +353,15 @@ if (LINUX)
     install(FILES client/linux/org.aspia.client.policy
         DESTINATION share/polkit-1/actions COMPONENT client)
 
+    # The client of the version being replaced is ended before its files are overwritten.
+    set(CPACK_DEBIAN_CLIENT_PACKAGE_CONTROL_EXTRA
+        "${CMAKE_CURRENT_SOURCE_DIR}/client/linux/preinst")
+
     set(CPACK_DEBIAN_CLIENT_FILE_NAME
         "${CPACK_COMPONENT_CLIENT_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+    set(CPACK_RPM_CLIENT_PRE_INSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/client/linux/rpm_pre")
 
     set(CPACK_RPM_CLIENT_PACKAGE_NAME "${CPACK_COMPONENT_CLIENT_NAME}")
     set(CPACK_RPM_CLIENT_FILE_NAME
@@ -374,11 +383,13 @@ if (LINUX)
     # The service is registered by the application itself (aspia_router --install/--remove), invoked
     # from the package maintainer scripts, so the account and sandboxing are configured in one place.
     set(CPACK_DEBIAN_ROUTER_PACKAGE_CONTROL_EXTRA
-        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/router/linux/prerm")
+        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/preinst;${CMAKE_CURRENT_SOURCE_DIR}/router/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/router/linux/prerm")
 
     set(CPACK_DEBIAN_ROUTER_FILE_NAME
         "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 
+    set(CPACK_RPM_ROUTER_PRE_INSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/rpm_pre")
     set(CPACK_RPM_ROUTER_POST_INSTALL_SCRIPT_FILE
         "${CMAKE_CURRENT_SOURCE_DIR}/router/linux/rpm_post")
     set(CPACK_RPM_ROUTER_PRE_UNINSTALL_SCRIPT_FILE
@@ -403,11 +414,13 @@ if (LINUX)
     # The service is registered by the application itself (aspia_relay --install/--remove), invoked
     # from the package maintainer scripts, so the account and sandboxing are configured in one place.
     set(CPACK_DEBIAN_RELAY_PACKAGE_CONTROL_EXTRA
-        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/prerm")
+        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/preinst;${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/postinst;${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/prerm")
 
     set(CPACK_DEBIAN_RELAY_FILE_NAME
         "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 
+    set(CPACK_RPM_RELAY_PRE_INSTALL_SCRIPT_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/rpm_pre")
     set(CPACK_RPM_RELAY_POST_INSTALL_SCRIPT_FILE
         "${CMAKE_CURRENT_SOURCE_DIR}/relay/linux/rpm_post")
     set(CPACK_RPM_RELAY_PRE_UNINSTALL_SCRIPT_FILE

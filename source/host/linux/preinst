@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+
+# The files of the version that is running are about to be replaced. A process of it that outlives
+# the replacement writes its settings over the ones the version being installed brings, so nothing
+# of it is left running. An update the host asked for itself is installed by a unit of its own and
+# is not among the processes ended here.
+if [ "$1" = "upgrade" ]; then
+    if [ -d /run/systemd/system ]; then
+        systemctl stop aspia-host-service.service >/dev/null 2>&1 || true
+    fi
+
+    # The service takes the agents and the GUI it started with it, but a GUI started by the desktop
+    # session of the user belongs to that session and stays. Every process of the host is asked to
+    # quit, and the one that has not gone after five seconds is ended, the way the installer on
+    # Windows does it.
+    pkill -x aspia_host >/dev/null 2>&1 || true
+
+    seconds=0
+    while pgrep -x aspia_host >/dev/null 2>&1 && [ "$seconds" -lt 5 ]; do
+        sleep 1
+        seconds=$((seconds + 1))
+    done
+
+    pkill -KILL -x aspia_host >/dev/null 2>&1 || true
+fi

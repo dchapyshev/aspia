@@ -1,0 +1,27 @@
+
+# The files of the version that is running are about to be replaced. A process of it that outlives
+# the replacement works from a binary that is no longer on disk, so nothing of it is left running.
+# The service stays stopped afterwards and the administrator starts it. An update the relay was told
+# to install runs in a unit of its own and is not among the processes ended here. Argument 2 is an
+# upgrade, 1 a first install with nothing to stop.
+if [ "$1" -ge 2 ]; then
+    if [ -d /run/systemd/system ]; then
+        systemctl stop aspia-relay.service >/dev/null 2>&1 || true
+    fi
+
+    # The relay is asked to quit first, and what has not gone after five seconds is ended, the way
+    # the installer on Windows does it.
+    pkill -x aspia_relay >/dev/null 2>&1 || true
+
+    seconds=0
+    while pgrep -x aspia_relay >/dev/null 2>&1 && [ "$seconds" -lt 5 ]; do
+        sleep 1
+        seconds=$((seconds + 1))
+    done
+
+    pkill -KILL -x aspia_relay >/dev/null 2>&1 || true
+fi
+
+# A scriptlet that ends with a failure takes the transaction with it, and nothing above is a reason
+# to refuse the update.
+exit 0

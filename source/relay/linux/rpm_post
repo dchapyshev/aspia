@@ -4,9 +4,10 @@
 # install ($1=1) and upgrade ($1=2).
 /usr/bin/aspia_relay --install || true
 
-# The upgrade replaced the binary, but a running service still executes the old one. try-restart
-# refreshes it and does nothing when the service is not running - a clean install without a
-# configuration, or a service the administrator stopped, is left alone.
-if [ -d /run/systemd/system ]; then
-    systemctl try-restart aspia-relay.service >/dev/null 2>&1 || true
+# %pre stopped the service before the files were replaced, so an upgrade starts it again. A first
+# installation leaves it stopped: there is no configuration yet and the administrator starts the
+# service once there is one. Argument 2 is an upgrade, 1 a first install. This is what the installer
+# on Windows does.
+if [ "$1" -ge 2 ] && [ -d /run/systemd/system ]; then
+    systemctl start aspia-relay.service >/dev/null 2>&1 || true
 fi

@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Ends the version being replaced before its files are overwritten. Runs as root from the installer.
+#
+# A process of the old version that outlives the replacement writes its settings over the ones the
+# new version brings, and the agent of the user session would keep serving connections from the
+# binary that is no longer on disk.
+#
+
+DAEMON_LABEL="org.aspia.host-service"
+AGENT_LABEL="org.aspia.host-loginwindow"
+
+# launchd holds the daemon of the old version until it is told to let it go.
+launchctl bootout "system/$DAEMON_LABEL" 2>/dev/null || true
+
+# The agent of the logged-in user, if there is one. The login-window instance is launchd's own.
+CONSOLE_UID=$(stat -f%u /dev/console 2>/dev/null)
+if [ -n "$CONSOLE_UID" ] && [ "$CONSOLE_UID" != "0" ]; then
+    launchctl bootout "gui/$CONSOLE_UID/$AGENT_LABEL" 2>/dev/null || true
+fi
+
+# The GUI and the dialogs of the user are started by the host itself, so launchd knows nothing of
+# them. Every process of the host is asked to quit, and the one that has not gone after five seconds
+# is ended, the way the installer on Windows does it.
+pkill -x aspia_host 2>/dev/null || true
+
+seconds=0
+while pgrep -x aspia_host >/dev/null 2>&1 && [ "$seconds" -lt 5 ]; do
+    sleep 1
+    seconds=$((seconds + 1))
+done
+
+pkill -KILL -x aspia_host 2>/dev/null || true
+
+exit 0

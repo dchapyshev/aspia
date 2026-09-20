@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Ends the version being replaced before its files are overwritten. Runs as root from the installer.
+#
+# A client of the old version writes its settings when it goes away, over the ones the version being
+# installed brings, so it does not outlive the replacement. An update the client asked for itself is
+# installed by a process of its own and is not among the ones ended here.
+#
+# The client is asked to quit first, and the one that has not gone after five seconds is ended, the
+# way the installer on Windows does it.
+#
+
+pkill -x aspia_client 2>/dev/null || true
+
+seconds=0
+while pgrep -x aspia_client >/dev/null 2>&1 && [ "$seconds" -lt 5 ]; do
+    sleep 1
+    seconds=$((seconds + 1))
+done
+
+pkill -KILL -x aspia_client 2>/dev/null || true
+
+exit 0

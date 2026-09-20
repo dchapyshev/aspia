@@ -4,8 +4,8 @@
 # aspia_client.app bundle (see the APPLE section of source/client/CMakeLists.txt).
 #
 # The installer drops the bundle into /Applications/aspia_client.app. Unlike the host package there
-# is nothing to register afterwards: the client is a plain application, so the package carries no
-# scripts.
+# is nothing to register afterwards: the client is a plain application. The one script it carries
+# ends the client of the version being replaced, before its files are overwritten.
 #
 # Usage:
 #   installer/macos/build_client_pkg.sh <path-to-aspia_client.app> [--output <file.pkg>]
@@ -19,6 +19,8 @@
 #
 
 set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 BUNDLE_ID="org.aspia.client"
 APP_NAME="aspia_client.app"
@@ -106,6 +108,7 @@ pkgbuild \
     --component-plist "$COMPONENT_PLIST" \
     --identifier "$BUNDLE_ID" \
     --version "$VERSION" \
+    --scripts "$SCRIPT_DIR/client_scripts" \
     --install-location / \
     "$COMPONENT_PKG"
 
