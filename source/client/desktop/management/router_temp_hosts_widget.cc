@@ -183,11 +183,18 @@ void RouterTempHostsWidget::onApproveHost()
         return;
     }
 
+    if (MsgBox::question(this, tr("Approving a host will give it permanent access to the router. "
+        "Are you sure you want to approve host \"%1\"?").arg(host->computer_name)) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Approve temporary host rejected by user";
+        return;
+    }
+
     RouterSession* session = RouterController::session(router_id_);
     if (!session)
         return;
 
-    LOG(INFO) << "[ACTION] Approve temporary host requested by user";
+    LOG(INFO) << "[ACTION] Approve temporary host accepted by user";
     session->approveHost(host->temp_id, { this, &RouterTempHostsWidget::onHostResultReceived });
 }
 
