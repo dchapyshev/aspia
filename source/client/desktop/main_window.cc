@@ -65,6 +65,9 @@
 
 namespace {
 
+// The search field is the last thing on the toolbar and ends up against its edge.
+constexpr int kSearchFieldMarginPx = 5;
+
 //--------------------------------------------------------------------------------------------------
 QString escapeTabTitle(const QString& title)
 {
@@ -98,6 +101,10 @@ MainWindow::MainWindow(QWidget* parent)
     search_field_->setClearButtonEnabled(true);
     search_field_->setMaximumWidth(250);
     search_action_ = ui->toolbar->addWidget(search_field_);
+
+    QWidget* margin = new QWidget(this);
+    margin->setFixedWidth(kSearchFieldMarginPx);
+    ui->toolbar->addWidget(margin);
 
     bool search_field_enabled = settings.isSearchFieldEnabled();
     ui->action_search_field->setChecked(search_field_enabled);
