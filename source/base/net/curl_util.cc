@@ -23,8 +23,13 @@
 #if defined(Q_OS_ANDROID)
 #include <QJniEnvironment>
 #include <QJniObject>
+#elif defined(Q_OS_LINUX)
+#include <QFile>
+#endif
 
 namespace {
+
+#if defined(Q_OS_ANDROID)
 
 //--------------------------------------------------------------------------------------------------
 // Wraps one certificate in the armor curl expects to find around it.
@@ -72,8 +77,32 @@ QByteArray systemCaBundle()
     return result;
 }
 
-} // namespace
+#elif defined(Q_OS_LINUX)
+
+//--------------------------------------------------------------------------------------------------
+QByteArray systemCaBundlePath()
+{
+    static const char* const kPaths[] =
+    {
+        "/etc/ssl/certs/ca-certificates.crt", // Debian, Ubuntu, Arch, Gentoo.
+        "/etc/pki/tls/certs/ca-bundle.crt",   // Red Hat family.
+        "/etc/ssl/ca-bundle.pem",             // openSUSE.
+        "/etc/pki/tls/cacert.pem",
+        "/etc/ssl/cert.pem"
+    };
+
+    for (const char* path : kPaths)
+    {
+        if (QFile::exists(QString::fromLatin1(path)))
+            return QByteArray(path);
+    }
+
+    return QByteArray();
+}
+
 #endif // defined(Q_OS_ANDROID)
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 ScopedCURL::ScopedCURL()
@@ -99,6 +128,16 @@ ScopedCURL::ScopedCURL()
     blob.flags = CURL_BLOB_COPY;
 
     curl_easy_setopt(curl_, CURLOPT_CAINFO_BLOB, &blob);
+#elif defined(Q_OS_LINUX)
+    static const QByteArray bundle_path = systemCaBundlePath();
+
+    if (bundle_path.isEmpty())
+    {
+        LOG(ERROR) << "System has no known certificate authorities";
+        return;
+    }
+
+    curl_easy_setopt(curl_, CURLOPT_CAINFO, bundle_path.constData());
 #endif // defined(Q_OS_ANDROID)
 }
 
