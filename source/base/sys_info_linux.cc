@@ -707,12 +707,55 @@ void readRpmPackages(QList<SysInfo::Application>* applications)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Reads |key| from os-release, the file a distribution describes itself in.
+QString osReleaseValue(const QByteArray& key)
+{
+    QFile file("/etc/os-release");
+
+    // The file belongs to the system and /etc usually holds only a symbolic link to it. A system
+    // without that link keeps the file itself.
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        file.setFileName("/usr/lib/os-release");
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return QString();
+    }
+
+    QByteArray line;
+    while (!(line = file.readLine()).isEmpty())
+    {
+        const QByteArray trimmed = line.trimmed();
+
+        const int eq = trimmed.indexOf('=');
+        if (eq < 0 || trimmed.left(eq) != key)
+            continue;
+
+        QByteArray value = trimmed.mid(eq + 1).trimmed();
+
+        // The file is read by shells as well, so a value containing a space is quoted.
+        if (value.size() > 1 && (value.startsWith('"') || value.startsWith('\'')) &&
+            value.endsWith(value.front()))
+        {
+            value = value.mid(1, value.size() - 2);
+        }
+
+        return QString::fromUtf8(value);
+    }
+
+    return QString();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 //static
 QString SysInfo::operatingSystemName()
-{
+{.
+    const QString distribution = osReleaseValue("PRETTY_NAME");
+    if (!distribution.isEmpty())
+        return distribution;
+
     struct utsname info;
     if (uname(&info) < 0)
         return QString();
