@@ -43,6 +43,8 @@
 #endif // !defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_MACOS)
+#include <QCoreApplication>
+
 #include <libproc.h>
 #include <sys/sysctl.h>
 #include <sys/types.h>
@@ -193,6 +195,27 @@ bool ProcessUtil::isPrivileged()
     return getuid() == 0 || getuid() != geteuid();
 #endif // defined(Q_OS_WINDOWS)
 }
+
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+// static
+void ProcessUtil::restartAsRoot(char* argv[])
+{
+    // Authorization Services runs the process with euid 0 but the real uid of the caller. Whatever it
+    // was elevated for then fails: the checks made before writing ask about the real user and say no,
+    // and the work is dropped without a word. The identity cannot be changed while running - the
+    // system gives no window to such a process - so the process starts over.
+    if (geteuid() == 0 && getuid() != 0 && setgid(0) == 0 && setuid(0) == 0)
+    {
+        execv(argv[0], argv);
+        PLOG(ERROR) << "Unable to start again as root";
+    }
+
+    // Qt aborts on a uid mismatch ("running setuid, this is a security hole"), which is what is left
+    // when the lines above did not go through. The launch is our own, so allow it.
+    QCoreApplication::setSetuidAllowed(true);
+}
+#endif // defined(Q_OS_MACOS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------

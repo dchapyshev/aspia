@@ -40,6 +40,11 @@ public:
     // Windows, and root where the package managers ask for it.
     static bool isPrivileged();
 
+#if defined(Q_OS_MACOS)
+    // Takes the identity of root in full and starts the process over with the same arguments.
+    static void restartAsRoot(char* argv[]);
+#endif // defined(Q_OS_MACOS)
+
 #if defined(Q_OS_WINDOWS)
     static bool isLaunchedByService();
     static bool isProcessElevated();

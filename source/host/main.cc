@@ -67,8 +67,8 @@
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
-#include <unistd.h>
 #include "base/mac/login_utils.h"
+#include "base/process_util.h"
 #include "host/screen_capturer_mac.h"
 #endif // defined(Q_OS_MACOS)
 
@@ -515,20 +515,9 @@ int main(int argc, char* argv[])
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
 #if defined(Q_OS_MACOS)
-    // The settings / security-log dialog is launched elevated through Authorization Services, which
-    // runs the process with euid 0 but the original real uid. Writing the settings then fails: the
-    // file opens, but the check the writer makes before saving asks about the real user and says no,
-    // and the value is dropped without a word. Take the identity of root in full and start over,
-    // because the system gives no window to a process that changed its identity while running.
-    if (geteuid() == 0 && getuid() != 0 && setgid(0) == 0 && setuid(0) == 0)
-    {
-        execv(argv[0], argv);
-        PLOG(ERROR) << "Unable to start again as root";
-    }
-
-    // Qt aborts on a uid mismatch ("running setuid, this is a security hole"), which is what is left
-    // when the lines above did not go through. The launch is our own, so allow it.
-    Application::setSetuidAllowed(true);
+    // The settings and the security log are edited by an instance launched through Authorization
+    // Services, and without the identity of root what it writes goes nowhere.
+    ProcessUtil::restartAsRoot(argv);
 #endif // defined(Q_OS_MACOS)
 
     Application application(argc, argv);

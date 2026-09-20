@@ -23,6 +23,10 @@
 #include "base/sys_info.h"
 #include "client/application.h"
 
+#if defined(Q_OS_MACOS)
+#include "base/process_util.h"
+#endif // defined(Q_OS_MACOS)
+
 #if defined(Q_OS_ANDROID)
 #include <QCoreApplication>
 #include <QJniObject>
@@ -94,6 +98,12 @@ int main(int argc, char* argv[])
     ScopedLogging scoped_logging(logging_settings);
 
     Application::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
+#if defined(Q_OS_MACOS)
+    // The update is installed by an instance launched through Authorization Services, and without the
+    // identity of root the installation is refused.
+    ProcessUtil::restartAsRoot(argv);
+#endif // defined(Q_OS_MACOS)
 
 #if !defined(Q_OS_ANDROID)
     if (argc == 3)
