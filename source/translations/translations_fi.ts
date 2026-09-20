@@ -974,13 +974,21 @@ Lisättyjä reitittimiä: %4</translation>
         <source>Set a master password required to unlock the application.</source>
         <translation>Aseta pääsalasana, joka vaaditaan sovelluksen lukituksen avaamiseen.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/main.cc" line="228"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -988,12 +996,12 @@ Lisättyjä reitittimiä: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="244"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Unable to set master password.</source>
         <translation>Pääsalasanaa ei voi asettaa.</translation>
     </message>
@@ -4635,7 +4643,7 @@ Tuotuja kirjautumistietoja: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Unlock</source>
         <translation>Avaa lukitus</translation>
     </message>
@@ -4694,39 +4702,42 @@ Tuotuja kirjautumistietoja: %5</translation>
         <source>Invalid master password.</source>
         <translation>Virheellinen pääsalasana.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
-        <source>Password cannot be empty.</source>
-        <translation>Salasana ei voi olla tyhjä.</translation>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="149"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The entered passwords do not match.</source>
         <translation>Syötetyt salasanat eivät täsmää.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="159"/>
+        <location filename="../client/android/master_password_dialog.cc" line="160"/>
         <source>Unable to set master password.</source>
         <translation>Pääsalasanaa ei voi asettaa.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Nykyinen salasana on virheellinen tai sitä ei voi vaihtaa.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
         <source>Use password</source>
         <translation>Käytä salasanaa</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="210"/>
-        <location filename="../client/android/master_password_dialog.cc" line="218"/>
+        <location filename="../client/android/master_password_dialog.cc" line="211"/>
+        <location filename="../client/android/master_password_dialog.cc" line="219"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Biometrinen avaus epäonnistui. Syötä pääsalasana.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Biometriset tiedot ovat muuttuneet. Jatka syöttämällä pääsalasana.</translation>
     </message>
@@ -6106,20 +6117,28 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä _, -, . ja @. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="542"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="544"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkki.</numerusform>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkkiä.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkkiä.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -6127,52 +6146,52 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="561"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="580"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="584"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Tuntematon sisäinen virhe käyttäjää luotaessa tai muokattaessa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="648"/>
         <source>The user name you entered already exists.</source>
         <translation>Syöttämäsi käyttäjänimi on jo olemassa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="734"/>
         <source>Double-click to change</source>
         <translation>Muuta kaksoisnapsauttamalla</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="786"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="790"/>
         <source>The token of your current session.</source>
         <translation>Nykyisen istuntosi tunniste.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="819"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
         <source>Administrator</source>
         <translation>Järjestelmänvalvoja</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
         <source>Manager</source>
         <translation>Hallinnoija</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Operator</source>
         <translation>Operaattori</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="845"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="849"/>
         <source>Never</source>
         <translation>Ei koskaan</translation>
     </message>
@@ -6816,13 +6835,21 @@ Tuotuja kirjautumistietoja: %5</translation>
         <source>Enter your current password and choose a new one.</source>
         <translation>Syötä nykyinen salasanasi ja valitse uusi.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="429"/>
+        <location filename="../client/desktop/settings_tab.cc" line="436"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -6830,12 +6857,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="432"/>
+        <location filename="../client/desktop/settings_tab.cc" line="439"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="448"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Nykyinen salasana on virheellinen tai sitä ei voi vaihtaa.</translation>
     </message>
@@ -7200,20 +7227,28 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Vaihda salasana</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="508"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkki.</numerusform>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkkiä.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkkiä.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7221,49 +7256,49 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="537"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Vaihdetaan salasanaa. Odotetaan istunnon uudelleenkirjautumista...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa ryhmän &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="700"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
         <source>Unable to remove group</source>
         <translation>Ryhmää ei voi poistaa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="764"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa reitittimen &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1330"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Tämänniminen ryhmä on jo olemassa valitussa yläryhmässä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1339"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
         <source>Failed to move the group.</source>
         <translation>Ryhmän siirtäminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1388"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Tämänniminen isäntä on jo olemassa valitussa ryhmässä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1406"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1575"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Isännän siirtäminen valittuun ryhmään epäonnistui.</translation>
     </message>
@@ -11675,20 +11710,28 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Syöttämäsi salasanat eivät täsmää.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="218"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../host/ui/user_dialog.cc" line="219"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkki.</numerusform>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkkiä.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/ui/user_dialog.cc" line="221"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkkiä.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="228"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -11696,24 +11739,24 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
+        <location filename="../host/ui/user_dialog.cc" line="240"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="238"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="256"/>
-        <location filename="../host/ui/user_dialog.cc" line="286"/>
-        <location filename="../host/ui/user_dialog.cc" line="296"/>
+        <location filename="../host/ui/user_dialog.cc" line="261"/>
+        <location filename="../host/ui/user_dialog.cc" line="291"/>
+        <location filename="../host/ui/user_dialog.cc" line="301"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Tuntematon sisäinen virhe käyttäjää luotaessa tai muokattaessa.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="334"/>
+        <location filename="../host/ui/user_dialog.cc" line="339"/>
         <source>Double-click to change</source>
         <translation>Muuta kaksoisnapsauttamalla</translation>
     </message>
@@ -11724,11 +11767,11 @@ Tuotuja kirjautumistietoja: %5</translation>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
         <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="209"/>
-        <location filename="../host/android/user_editor_widget.cc" line="219"/>
-        <location filename="../host/android/user_editor_widget.cc" line="242"/>
-        <location filename="../host/android/user_editor_widget.cc" line="253"/>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="215"/>
+        <location filename="../host/android/user_editor_widget.cc" line="223"/>
+        <location filename="../host/android/user_editor_widget.cc" line="246"/>
+        <location filename="../host/android/user_editor_widget.cc" line="257"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
@@ -11742,18 +11785,10 @@ Tuotuja kirjautumistietoja: %5</translation>
         <source>The passwords you entered do not match.</source>
         <translation>Syöttämäsi salasanat eivät täsmää.</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkki.</numerusform>
-            <numerusform>Salasana ei voi olla tyhjä eikä saa olla pidempi kuin %n merkkiä.</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="220"/>
-        <location filename="../host/android/user_editor_widget.cc" line="243"/>
-        <location filename="../host/android/user_editor_widget.cc" line="254"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Tuntematon sisäinen virhe käyttäjää luotaessa tai muokattaessa.</translation>
     </message>
@@ -11807,23 +11842,39 @@ Tuotuja kirjautumistietoja: %5</translation>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>Käyttäjänimi ei voi olla tyhjä ja voi sisältää vain kirjaimia, numeroita sekä merkkejä &quot;_&quot;, &quot;-&quot;, &quot;.&quot; ja &quot;@&quot;. Se ei voi koostua pelkistä numeroista.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla lyhyempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
+            <numerusform>Salasana ei saa olla pidempi kuin %n merkkiä.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="268"/>
+        <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
         <translation>Poista käyttäjä</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>Poistetaanko käyttäjä &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
         <translation>Käyttäjän poistaminen epäonnistui.</translation>
     </message>

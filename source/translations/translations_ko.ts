@@ -998,25 +998,32 @@ Routers added: %4</source>
         <source>Set a master password required to unlock the application.</source>
         <translation>응용 프로그램의 잠금을 해제하는 데 필요한 마스터 암호를 설정하십시오.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/main.cc" line="228"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="244"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Unable to set master password.</source>
         <translation>마스터 암호를 설정할 수 없습니다.</translation>
     </message>
@@ -4615,7 +4622,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
@@ -4674,39 +4681,41 @@ Credentials imported: %5</source>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
-        <source>Password cannot be empty.</source>
-        <translation>암호는 비워 둘 수 없습니다.</translation>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="149"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The entered passwords do not match.</source>
         <translation>입력한 암호가 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="159"/>
+        <location filename="../client/android/master_password_dialog.cc" line="160"/>
         <source>Unable to set master password.</source>
         <translation>마스터 암호를 설정할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>현재 암호가 잘못되었거나 변경할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
         <source>Use password</source>
         <translation>암호 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="210"/>
-        <location filename="../client/android/master_password_dialog.cc" line="218"/>
+        <location filename="../client/android/master_password_dialog.cc" line="211"/>
+        <location filename="../client/android/master_password_dialog.cc" line="219"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>생체 인식 잠금 해제에 실패했습니다. 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>생체 인식 정보가 변경되었습니다. 계속하려면 마스터 암호를 입력하십시오.</translation>
     </message>
@@ -6079,71 +6088,78 @@ Credentials imported: %5</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="542"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="544"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>암호는 비워 둘 수 없으며 %n자를 초과할 수 없습니다.</numerusform>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="561"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="580"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="584"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="648"/>
         <source>The user name you entered already exists.</source>
         <translation>입력한 사용자 이름이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="734"/>
         <source>Double-click to change</source>
         <translation>두 번 클릭하여 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="786"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="790"/>
         <source>The token of your current session.</source>
         <translation>현재 세션의 토큰입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="819"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
         <source>Administrator</source>
         <translation>관리자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
         <source>Manager</source>
         <translation>매니저</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Operator</source>
         <translation>운영자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="845"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="849"/>
         <source>Never</source>
         <translation>없음</translation>
     </message>
@@ -6785,25 +6801,32 @@ Credentials imported: %5</source>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="429"/>
+        <location filename="../client/desktop/settings_tab.cc" line="436"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="432"/>
+        <location filename="../client/desktop/settings_tab.cc" line="439"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="448"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>현재 암호가 잘못되었거나 변경할 수 없습니다.</translation>
     </message>
@@ -7168,68 +7191,75 @@ Credentials imported: %5</source>
         <translation>암호 변경</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="508"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>암호는 비워 둘 수 없으며 %n자를 초과할 수 없습니다.</numerusform>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="537"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>암호를 변경하는 중입니다. 세션이 다시 로그인하기를 기다리는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="700"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
         <source>Unable to remove group</source>
         <translation>그룹을 제거할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="764"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 라우터를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1330"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>선택한 상위 그룹에 같은 이름의 그룹이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1339"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
         <source>Failed to move the group.</source>
         <translation>그룹을 이동하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1388"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>선택한 그룹에 같은 이름의 호스트가 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1406"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1575"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>호스트를 선택한 그룹으로 이동하지 못했습니다.</translation>
     </message>
@@ -11641,43 +11671,50 @@ Credentials imported: %5</source>
         <translation>입력한 암호가 일치하지 않습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="218"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../host/ui/user_dialog.cc" line="219"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>암호는 비워 둘 수 없으며 %n자를 초과할 수 없습니다.</numerusform>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/ui/user_dialog.cc" line="221"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="228"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
+        <location filename="../host/ui/user_dialog.cc" line="240"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="238"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="256"/>
-        <location filename="../host/ui/user_dialog.cc" line="286"/>
-        <location filename="../host/ui/user_dialog.cc" line="296"/>
+        <location filename="../host/ui/user_dialog.cc" line="261"/>
+        <location filename="../host/ui/user_dialog.cc" line="291"/>
+        <location filename="../host/ui/user_dialog.cc" line="301"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="334"/>
+        <location filename="../host/ui/user_dialog.cc" line="339"/>
         <source>Double-click to change</source>
         <translation>두 번 클릭하여 변경</translation>
     </message>
@@ -11733,11 +11770,11 @@ Credentials imported: %5</source>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
         <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="209"/>
-        <location filename="../host/android/user_editor_widget.cc" line="219"/>
-        <location filename="../host/android/user_editor_widget.cc" line="242"/>
-        <location filename="../host/android/user_editor_widget.cc" line="253"/>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="215"/>
+        <location filename="../host/android/user_editor_widget.cc" line="223"/>
+        <location filename="../host/android/user_editor_widget.cc" line="246"/>
+        <location filename="../host/android/user_editor_widget.cc" line="257"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
@@ -11758,35 +11795,42 @@ Credentials imported: %5</source>
     </message>
     <message numerus="yes">
         <location filename="../host/android/user_editor_widget.cc" line="210"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>암호는 비워 둘 수 없으며 %n자를 초과할 수 없습니다.</numerusform>
+            <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="220"/>
-        <location filename="../host/android/user_editor_widget.cc" line="243"/>
-        <location filename="../host/android/user_editor_widget.cc" line="254"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="268"/>
+        <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
         <translation>사용자 삭제</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
         <translation>사용자를 삭제하지 못했습니다.</translation>
     </message>

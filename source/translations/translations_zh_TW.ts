@@ -973,25 +973,32 @@ Routers added: %4</source>
         <source>Set a master password required to unlock the application.</source>
         <translation>設定解除鎖定應用程式所需的主密碼。</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/main.cc" line="228"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="244"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Unable to set master password.</source>
         <translation>無法設定主密碼。</translation>
     </message>
@@ -4615,7 +4622,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Unlock</source>
         <translation>解除鎖定</translation>
     </message>
@@ -4674,39 +4681,41 @@ Credentials imported: %5</source>
         <source>Invalid master password.</source>
         <translation>主密碼無效。</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
-        <source>Password cannot be empty.</source>
-        <translation>密碼不能為空。</translation>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="149"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The entered passwords do not match.</source>
         <translation>輸入的密碼不相符。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="159"/>
+        <location filename="../client/android/master_password_dialog.cc" line="160"/>
         <source>Unable to set master password.</source>
         <translation>無法設定主密碼。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>目前密碼無效或無法變更。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
         <source>Use password</source>
         <translation>使用密碼</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="210"/>
-        <location filename="../client/android/master_password_dialog.cc" line="218"/>
+        <location filename="../client/android/master_password_dialog.cc" line="211"/>
+        <location filename="../client/android/master_password_dialog.cc" line="219"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>生物辨識解鎖失敗。請輸入主密碼。</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>生物辨識資料已變更。請輸入主密碼以繼續。</translation>
     </message>
@@ -6079,71 +6088,78 @@ Credentials imported: %5</source>
         <translation>使用者名稱不能為空，且只能包含字母、數字和 _、-、.、@ 字元。不能只由數字組成。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="542"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="544"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>密碼不能為空，且不能超過 %n 個字元。</numerusform>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>密碼不能超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="561"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="580"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="584"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>建立或修改使用者時發生未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="648"/>
         <source>The user name you entered already exists.</source>
         <translation>輸入的使用者名稱已存在。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="734"/>
         <source>Double-click to change</source>
         <translation>按兩下以變更</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="786"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="790"/>
         <source>The token of your current session.</source>
         <translation>您目前工作階段的權杖。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="819"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
         <source>Administrator</source>
         <translation>系統管理員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
         <source>Manager</source>
         <translation>管理者</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Operator</source>
         <translation>操作員</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="845"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="849"/>
         <source>Never</source>
         <translation>從不</translation>
     </message>
@@ -6785,25 +6801,32 @@ Credentials imported: %5</source>
         <source>Enter your current password and choose a new one.</source>
         <translation>輸入您目前的密碼並選擇新密碼。</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="429"/>
+        <location filename="../client/desktop/settings_tab.cc" line="436"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="432"/>
+        <location filename="../client/desktop/settings_tab.cc" line="439"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="448"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>目前密碼無效或無法變更。</translation>
     </message>
@@ -7168,68 +7191,75 @@ Credentials imported: %5</source>
         <translation>變更密碼</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="508"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>密碼不能為空，且不能超過 %n 個字元。</numerusform>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>密碼不能超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="537"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>正在變更密碼。正在等待工作階段重新登入...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>確定要刪除群組「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="700"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
         <source>Unable to remove group</source>
         <translation>無法移除群組</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="764"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>確定要刪除路由器「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1330"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>所選的父群組中已存在同名群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1339"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
         <source>Failed to move the group.</source>
         <translation>無法移動群組。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1388"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>所選群組中已存在同名主機。</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1406"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1575"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>無法將主機移至所選群組。</translation>
     </message>
@@ -11641,43 +11671,50 @@ Credentials imported: %5</source>
         <translation>輸入的密碼不相符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="218"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../host/ui/user_dialog.cc" line="219"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>密碼不能為空，且不能超過 %n 個字元。</numerusform>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/ui/user_dialog.cc" line="221"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>密碼不能超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="228"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>輸入的密碼不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密碼必須包含大小寫字母和數字，且長度不能少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
+        <location filename="../host/ui/user_dialog.cc" line="240"/>
         <source>Do you want to enter a different password?</source>
         <translation>要輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="238"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="256"/>
-        <location filename="../host/ui/user_dialog.cc" line="286"/>
-        <location filename="../host/ui/user_dialog.cc" line="296"/>
+        <location filename="../host/ui/user_dialog.cc" line="261"/>
+        <location filename="../host/ui/user_dialog.cc" line="291"/>
+        <location filename="../host/ui/user_dialog.cc" line="301"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>建立或修改使用者時發生未知的內部錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="334"/>
+        <location filename="../host/ui/user_dialog.cc" line="339"/>
         <source>Double-click to change</source>
         <translation>按兩下以變更</translation>
     </message>
@@ -11688,11 +11725,11 @@ Credentials imported: %5</source>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
         <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="209"/>
-        <location filename="../host/android/user_editor_widget.cc" line="219"/>
-        <location filename="../host/android/user_editor_widget.cc" line="242"/>
-        <location filename="../host/android/user_editor_widget.cc" line="253"/>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="215"/>
+        <location filename="../host/android/user_editor_widget.cc" line="223"/>
+        <location filename="../host/android/user_editor_widget.cc" line="246"/>
+        <location filename="../host/android/user_editor_widget.cc" line="257"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
@@ -11706,17 +11743,10 @@ Credentials imported: %5</source>
         <source>The passwords you entered do not match.</source>
         <translation>輸入的密碼不相符。</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
-            <numerusform>密碼不能為空，且不能超過 %n 個字元。</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="220"/>
-        <location filename="../host/android/user_editor_widget.cc" line="243"/>
-        <location filename="../host/android/user_editor_widget.cc" line="254"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>建立或修改使用者時發生未知的內部錯誤。</translation>
     </message>
@@ -11770,23 +11800,37 @@ Credentials imported: %5</source>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>使用者名稱不能為空，且只能包含字母、數字和「_」、「-」、「.」、「@」字元。不能只由數字組成。</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>密碼長度不能少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>密碼不能超過 %n 個字元。</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="268"/>
+        <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
         <translation>刪除使用者</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>要刪除使用者「%1」嗎？</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
         <translation>無法刪除使用者。</translation>
     </message>

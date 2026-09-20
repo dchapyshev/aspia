@@ -974,13 +974,21 @@ Routeurs ajoutés: %4</translation>
         <source>Set a master password required to unlock the application.</source>
         <translation>Définissez un mot de passe principal requis pour déverrouiller l&apos;application.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/main.cc" line="228"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des lettres minuscules et majuscules, des chiffres et ne doit pas comporter moins de %n caractère.</numerusform>
@@ -988,12 +996,12 @@ Routeurs ajoutés: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous saisir un autre mot de passe?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="244"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Unable to set master password.</source>
         <translation>Impossible de définir le mot de passe principal.</translation>
     </message>
@@ -4635,7 +4643,7 @@ Identifiants importés: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Unlock</source>
         <translation>Déverrouiller</translation>
     </message>
@@ -4694,39 +4702,42 @@ Identifiants importés: %5</translation>
         <source>Invalid master password.</source>
         <translation>Mot de passe principal non valide.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
-        <source>Password cannot be empty.</source>
-        <translation>Le mot de passe ne peut pas être vide.</translation>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="149"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The entered passwords do not match.</source>
         <translation>Les mots de passe saisis ne correspondent pas.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="159"/>
+        <location filename="../client/android/master_password_dialog.cc" line="160"/>
         <source>Unable to set master password.</source>
         <translation>Impossible de définir le mot de passe principal.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Le mot de passe actuel n&apos;est pas valide ou ne peut pas être modifié.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
         <source>Use password</source>
         <translation>Utiliser le mot de passe</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="210"/>
-        <location filename="../client/android/master_password_dialog.cc" line="218"/>
+        <location filename="../client/android/master_password_dialog.cc" line="211"/>
+        <location filename="../client/android/master_password_dialog.cc" line="219"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Le déverrouillage biométrique a échoué. Saisissez le mot de passe principal.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>La biométrie a changé. Saisissez le mot de passe principal pour continuer.</translation>
     </message>
@@ -6106,20 +6117,28 @@ Identifiants importés: %5</translation>
         <translation>Le nom d&apos;utilisateur ne peut pas être vide et ne peut contenir que des lettres, des chiffres et les caractères _, -, ., @. Il ne peut pas être composé uniquement de chiffres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="542"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="544"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractère.</numerusform>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractères.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractères.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des lettres minuscules et majuscules, des chiffres et ne doit pas comporter moins de %n caractère.</numerusform>
@@ -6127,52 +6146,52 @@ Identifiants importés: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="561"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous saisir un autre mot de passe?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="580"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="584"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erreur interne inconnue lors de la création ou de la modification d&apos;un utilisateur.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="648"/>
         <source>The user name you entered already exists.</source>
         <translation>Le nom d&apos;utilisateur saisi existe déjà.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="734"/>
         <source>Double-click to change</source>
         <translation>Double-cliquez pour modifier</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="786"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="790"/>
         <source>The token of your current session.</source>
         <translation>Le jeton de votre session actuelle.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="819"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
         <source>Administrator</source>
         <translation>Administrateur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
         <source>Manager</source>
         <translation>Gestionnaire</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Operator</source>
         <translation>Opérateur</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="845"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="849"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
@@ -6816,13 +6835,21 @@ Identifiants importés: %5</translation>
         <source>Enter your current password and choose a new one.</source>
         <translation>Saisissez votre mot de passe actuel et choisissez-en un nouveau.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="429"/>
+        <location filename="../client/desktop/settings_tab.cc" line="436"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des lettres minuscules et majuscules, des chiffres et ne doit pas comporter moins de %n caractère.</numerusform>
@@ -6830,12 +6857,12 @@ Identifiants importés: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="432"/>
+        <location filename="../client/desktop/settings_tab.cc" line="439"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous saisir un autre mot de passe?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="448"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Le mot de passe actuel n&apos;est pas valide ou ne peut pas être modifié.</translation>
     </message>
@@ -7200,20 +7227,28 @@ Identifiants importés: %5</translation>
         <translation>Changer le mot de passe</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="508"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractère.</numerusform>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractères.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractères.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des lettres minuscules et majuscules, des chiffres et ne doit pas comporter moins de %n caractère.</numerusform>
@@ -7221,49 +7256,49 @@ Identifiants importés: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous saisir un autre mot de passe?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="537"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Changement du mot de passe. En attente de la reconnexion de la session...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Voulez-vous vraiment supprimer le groupe &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="700"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
         <source>Unable to remove group</source>
         <translation>Impossible de supprimer le groupe</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="764"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Voulez-vous vraiment supprimer le routeur &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1330"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Un groupe portant ce nom existe déjà dans le groupe parent sélectionné.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1339"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
         <source>Failed to move the group.</source>
         <translation>Impossible de déplacer le groupe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1388"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Un hôte portant ce nom existe déjà dans le groupe sélectionné.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1406"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1575"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Impossible de déplacer l&apos;hôte vers le groupe sélectionné.</translation>
     </message>
@@ -11675,20 +11710,28 @@ Identifiants importés: %5</translation>
         <translation>Les mots de passe saisis ne correspondent pas.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="218"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../host/ui/user_dialog.cc" line="219"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractère.</numerusform>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractères.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/ui/user_dialog.cc" line="221"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractères.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="228"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Le mot de passe saisi ne répond pas aux exigences de sécurité!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Le mot de passe doit contenir des lettres minuscules et majuscules, des chiffres et ne doit pas comporter moins de %n caractère.</numerusform>
@@ -11696,24 +11739,24 @@ Identifiants importés: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
+        <location filename="../host/ui/user_dialog.cc" line="240"/>
         <source>Do you want to enter a different password?</source>
         <translation>Voulez-vous saisir un autre mot de passe?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="238"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="256"/>
-        <location filename="../host/ui/user_dialog.cc" line="286"/>
-        <location filename="../host/ui/user_dialog.cc" line="296"/>
+        <location filename="../host/ui/user_dialog.cc" line="261"/>
+        <location filename="../host/ui/user_dialog.cc" line="291"/>
+        <location filename="../host/ui/user_dialog.cc" line="301"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erreur interne inconnue lors de la création ou de la modification d&apos;un utilisateur.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="334"/>
+        <location filename="../host/ui/user_dialog.cc" line="339"/>
         <source>Double-click to change</source>
         <translation>Double-cliquez pour modifier</translation>
     </message>
@@ -11724,11 +11767,11 @@ Identifiants importés: %5</translation>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
         <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="209"/>
-        <location filename="../host/android/user_editor_widget.cc" line="219"/>
-        <location filename="../host/android/user_editor_widget.cc" line="242"/>
-        <location filename="../host/android/user_editor_widget.cc" line="253"/>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="215"/>
+        <location filename="../host/android/user_editor_widget.cc" line="223"/>
+        <location filename="../host/android/user_editor_widget.cc" line="246"/>
+        <location filename="../host/android/user_editor_widget.cc" line="257"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -11742,18 +11785,10 @@ Identifiants importés: %5</translation>
         <source>The passwords you entered do not match.</source>
         <translation>Les mots de passe saisis ne correspondent pas.</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractère.</numerusform>
-            <numerusform>Le mot de passe ne peut pas être vide et ne doit pas dépasser %n caractères.</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="220"/>
-        <location filename="../host/android/user_editor_widget.cc" line="243"/>
-        <location filename="../host/android/user_editor_widget.cc" line="254"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Erreur interne inconnue lors de la création ou de la modification d&apos;un utilisateur.</translation>
     </message>
@@ -11807,23 +11842,39 @@ Identifiants importés: %5</translation>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>Le nom d&apos;utilisateur ne peut pas être vide et ne peut contenir que des lettres, des chiffres et les caractères &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Il ne peut pas être composé uniquement de chiffres.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas comporter moins de %n caractères.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractère.</numerusform>
+            <numerusform>Le mot de passe ne doit pas dépasser %n caractères.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="268"/>
+        <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
         <translation>Supprimer l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>Supprimer l&apos;utilisateur &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
         <translation>Impossible de supprimer l&apos;utilisateur.</translation>
     </message>

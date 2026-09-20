@@ -974,13 +974,21 @@ Rutere lagt til: %4</translation>
         <source>Set a master password required to unlock the application.</source>
         <translation>Angi et hovedpassord som kreves for å låse opp programmet.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/main.cc" line="228"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="238"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -988,12 +996,12 @@ Rutere lagt til: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="234"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="244"/>
+        <location filename="../client/main.cc" line="252"/>
         <source>Unable to set master password.</source>
         <translation>Kan ikke angi hovedpassord.</translation>
     </message>
@@ -4635,7 +4643,7 @@ Påloggingsinformasjon importert: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <location filename="../client/android/master_password_dialog.cc" line="193"/>
         <source>Unlock</source>
         <translation>Lås opp</translation>
     </message>
@@ -4694,39 +4702,42 @@ Påloggingsinformasjon importert: %5</translation>
         <source>Invalid master password.</source>
         <translation>Ugyldig hovedpassord.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/android/master_password_dialog.cc" line="142"/>
-        <source>Password cannot be empty.</source>
-        <translation>Passordet kan ikke være tomt.</translation>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="149"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The entered passwords do not match.</source>
         <translation>Passordene du skrev inn, er ikke like.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="159"/>
+        <location filename="../client/android/master_password_dialog.cc" line="160"/>
         <source>Unable to set master password.</source>
         <translation>Kan ikke angi hovedpassord.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="168"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Ugyldig gjeldende passord, eller det kan ikke endres.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="194"/>
         <source>Use password</source>
         <translation>Bruk passord</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="210"/>
-        <location filename="../client/android/master_password_dialog.cc" line="218"/>
+        <location filename="../client/android/master_password_dialog.cc" line="211"/>
+        <location filename="../client/android/master_password_dialog.cc" line="219"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Biometrisk opplåsing mislyktes. Skriv inn hovedpassordet.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="214"/>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Biometrien er endret. Skriv inn hovedpassordet for å fortsette.</translation>
     </message>
@@ -6106,20 +6117,28 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Brukernavnet kan ikke være tomt og kan bare inneholde bokstaver, tall og tegnene _, -, ., @. Det kan ikke bestå av bare sifre.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="542"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="544"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="556"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -6127,52 +6146,52 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="557"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="561"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="560"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="564"/>
         <source>Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="580"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="584"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Ukjent intern feil ved oppretting eller endring av en bruker.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="644"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="648"/>
         <source>The user name you entered already exists.</source>
         <translation>Brukernavnet du skrev inn, finnes allerede.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="730"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="734"/>
         <source>Double-click to change</source>
         <translation>Dobbeltklikk for å endre</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="786"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="790"/>
         <source>The token of your current session.</source>
         <translation>Tokenet til den gjeldende økten din.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="819"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
         <source>Administrator</source>
         <translation>Administrator</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="823"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
         <source>Manager</source>
         <translation>Forvalter</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="827"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Operator</source>
         <translation>Operatør</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="845"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="849"/>
         <source>Never</source>
         <translation>Aldri</translation>
     </message>
@@ -6816,13 +6835,21 @@ Påloggingsinformasjon importert: %5</translation>
         <source>Enter your current password and choose a new one.</source>
         <translation>Skriv inn gjeldende passord og velg et nytt.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../client/desktop/settings_tab.cc" line="428"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="435"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="429"/>
+        <location filename="../client/desktop/settings_tab.cc" line="436"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -6830,12 +6857,12 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="432"/>
+        <location filename="../client/desktop/settings_tab.cc" line="439"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="441"/>
+        <location filename="../client/desktop/settings_tab.cc" line="448"/>
         <source>Invalid current password or unable to change it.</source>
         <translation>Ugyldig gjeldende passord, eller det kan ikke endres.</translation>
     </message>
@@ -7200,20 +7227,28 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Endre passord</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="508"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="515"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="516"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -7221,49 +7256,49 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="537"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Endrer passordet. Venter på at økten logger på igjen...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Er du sikker på at du vil slette gruppen &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="700"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
         <source>Unable to remove group</source>
         <translation>Kan ikke fjerne gruppe</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="764"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Er du sikker på at du vil slette ruteren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1330"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Det finnes allerede en gruppe med dette navnet i den valgte overordnede gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1339"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
         <source>Failed to move the group.</source>
         <translation>Kunne ikke flytte gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1388"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Det finnes allerede en vert med dette navnet i den valgte gruppen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1406"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1575"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Kunne ikke flytte verten til den valgte gruppen.</translation>
     </message>
@@ -11675,20 +11710,28 @@ Påloggingsinformasjon importert: %5</translation>
         <translation>Passordene du skrev inn, er ikke like.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="218"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
+        <location filename="../host/ui/user_dialog.cc" line="219"/>
+        <source>The password can not be shorter than %n characters.</source>
         <translation>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/ui/user_dialog.cc" line="221"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="228"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Passordet du skrev inn, oppfyller ikke sikkerhetskravene!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Passordet må inneholde små og store bokstaver samt tall, og kan ikke være kortere enn %n tegn.</numerusform>
@@ -11696,24 +11739,24 @@ Påloggingsinformasjon importert: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="235"/>
+        <location filename="../host/ui/user_dialog.cc" line="240"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vil du skrive inn et annet passord?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="238"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Warning</source>
         <translation>Advarsel</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="256"/>
-        <location filename="../host/ui/user_dialog.cc" line="286"/>
-        <location filename="../host/ui/user_dialog.cc" line="296"/>
+        <location filename="../host/ui/user_dialog.cc" line="261"/>
+        <location filename="../host/ui/user_dialog.cc" line="291"/>
+        <location filename="../host/ui/user_dialog.cc" line="301"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Ukjent intern feil ved oppretting eller endring av en bruker.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="334"/>
+        <location filename="../host/ui/user_dialog.cc" line="339"/>
         <source>Double-click to change</source>
         <translation>Dobbeltklikk for å endre</translation>
     </message>
@@ -11724,11 +11767,11 @@ Påloggingsinformasjon importert: %5</translation>
         <location filename="../host/android/user_editor_widget.cc" line="169"/>
         <location filename="../host/android/user_editor_widget.cc" line="182"/>
         <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="209"/>
-        <location filename="../host/android/user_editor_widget.cc" line="219"/>
-        <location filename="../host/android/user_editor_widget.cc" line="242"/>
-        <location filename="../host/android/user_editor_widget.cc" line="253"/>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="215"/>
+        <location filename="../host/android/user_editor_widget.cc" line="223"/>
+        <location filename="../host/android/user_editor_widget.cc" line="246"/>
+        <location filename="../host/android/user_editor_widget.cc" line="257"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Error</source>
         <translation>Feil</translation>
     </message>
@@ -11742,18 +11785,10 @@ Påloggingsinformasjon importert: %5</translation>
         <source>The passwords you entered do not match.</source>
         <translation>Passordene du skrev inn, er ikke like.</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
-        <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
-            <numerusform>Passordet kan ikke være tomt og kan ikke overstige %n tegn.</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="220"/>
-        <location filename="../host/android/user_editor_widget.cc" line="243"/>
-        <location filename="../host/android/user_editor_widget.cc" line="254"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Ukjent intern feil ved oppretting eller endring av en bruker.</translation>
     </message>
@@ -11807,23 +11842,39 @@ Påloggingsinformasjon importert: %5</translation>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>Brukernavnet kan ikke være tomt og kan bare inneholde bokstaver, tall og tegnene &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Det kan ikke bestå av bare sifre.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <source>The password can not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke være kortere enn %n tegn.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <source>The password can not be longer than %n characters.</source>
+        <translation>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
+            <numerusform>Passordet kan ikke overstige %n tegn.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="268"/>
+        <location filename="../host/android/user_editor_widget.cc" line="272"/>
         <source>Delete User</source>
         <translation>Slett bruker</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>Vil du slette brukeren &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="269"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete</source>
         <translation>Slett</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="276"/>
+        <location filename="../host/android/user_editor_widget.cc" line="280"/>
         <source>Failed to delete the user.</source>
         <translation>Kunne ikke slette brukeren.</translation>
     </message>
