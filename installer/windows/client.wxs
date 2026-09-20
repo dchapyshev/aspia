@@ -21,6 +21,13 @@
         <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
 
+    <!-- Every process of the client keeps the image of the version being replaced, and Restart
+         Manager reports success without closing any of them. They are asked to quit and ended
+         when they do not, so the upgrade leaves nothing running from the version it replaced. -->
+    <util:CloseApplication Id="CloseClientProcesses" Target="$(var.Executable)"
+                           ElevatedEndSessionMessage="yes" Timeout="10" TerminateProcess="0"
+                           RebootPrompt="no" />
+
     <Icon Id="aspia.ico" SourceFile="resources/aspia.ico" />
     <Property Id="ARPPRODUCTICON" Value="aspia.ico" />
 
