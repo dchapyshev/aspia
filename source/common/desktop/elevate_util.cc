@@ -45,6 +45,7 @@
 #include <vector>
 #include <QSocketNotifier>
 #include <Security/Authorization.h>
+#include <Security/AuthorizationTags.h>
 #endif // defined(Q_OS_MACOS)
 
 namespace {
@@ -281,6 +282,9 @@ public:
 // What the started process writes into the pipe to say how it ended.
 const char kExitCodeMark[] = "aspia exit code ";
 
+// The tool that is run as root. It puts the application into the session of the console user.
+const char kLaunchctl[] = "/bin/launchctl";
+
 //--------------------------------------------------------------------------------------------------
 int exitCodeFromOutput(const QByteArray& output)
 {
@@ -319,12 +323,24 @@ public:
 
         LOG(INFO) << "Start dialog as super user";
 
+        // The right to run a tool as root is acquired here, together with the path of that tool,
+        // because the execution below only works with a right already held. Left to it, the call
+        // ends with "interaction not allowed" and the dialog silently opens without the rights it
+        // needs.
+        QByteArray tool = kLaunchctl;
+        AuthorizationItem right = { const_cast<AuthorizationString>(kAuthorizationRightExecute),
+                                    static_cast<size_t>(tool.size()), tool.data(), 0 };
+        AuthorizationRights rights = { 1, &right };
+
         AuthorizationRef authorization = nullptr;
         OSStatus status = AuthorizationCreate(
-            nullptr, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &authorization);
+            &rights, kAuthorizationEmptyEnvironment,
+            kAuthorizationFlagDefaults | kAuthorizationFlagInteractionAllowed |
+                kAuthorizationFlagPreAuthorize | kAuthorizationFlagExtendRights, &authorization);
         if (status != errAuthorizationSuccess)
         {
-            LOG(ERROR) << "AuthorizationCreate failed:" << status;
+            if (status != errAuthorizationCanceled)
+                LOG(ERROR) << "AuthorizationCreate failed:" << status;
             return false;
         }
 
@@ -353,7 +369,7 @@ public:
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         // No non-deprecated replacement exists without shipping a signed SMJobBless helper.
         status = AuthorizationExecuteWithPrivileges(
-            authorization, "/bin/launchctl", kAuthorizationFlagDefaults, argument_pointers.data(), &pipe);
+            authorization, kLaunchctl, kAuthorizationFlagDefaults, argument_pointers.data(), &pipe);
 #pragma clang diagnostic pop
 
         if (status != errAuthorizationSuccess)
