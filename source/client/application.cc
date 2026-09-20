@@ -90,13 +90,14 @@ Application::Application(int& argc, char* argv[])
 
     Settings settings;
 
-    if (!hasLocale(settings.locale()))
+    QString locale = resolveLocale(settings.locale());
+    if (locale != settings.locale())
     {
-        LOG(INFO) << "Set default locale";
-        settings.setLocale(kDefaultLocale);
+        LOG(INFO) << "Locale changed to:" << locale;
+        settings.setLocale(locale);
     }
 
-    setLocale(settings.locale());
+    setLocale(locale);
     setTheme(settings.theme());
 
     addWorker(std::make_unique<RouterWorker>());

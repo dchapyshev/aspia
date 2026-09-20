@@ -304,9 +304,7 @@ int runSysInfo(int& argc, char* argv[])
 
     UserSettings user_settings;
 
-    QString locale = user_settings.locale();
-    if (!application.hasLocale(locale))
-        locale = kDefaultLocale;
+    QString locale = application.resolveLocale(user_settings.locale());
 
     application.setTheme(user_settings.theme());
     application.setLocale(locale);

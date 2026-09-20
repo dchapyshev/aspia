@@ -71,7 +71,7 @@ public:
     LocaleList localeList() const;
     QString locale() const { return locale_; }
     void setLocale(const QString& locale);
-    bool hasLocale(const QString& locale);
+    QString resolveLocale(const QString& locale) const;
 
     QStringList availableThemes() const;
     void setTheme(const QString& theme_id);

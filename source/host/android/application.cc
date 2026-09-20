@@ -39,10 +39,11 @@ Application::Application(int& argc, char* argv[])
 
     UserSettings settings;
 
-    if (!hasLocale(settings.locale()))
-        settings.setLocale(kDefaultLocale);
+    QString locale = resolveLocale(settings.locale());
+    if (locale != settings.locale())
+        settings.setLocale(locale);
 
-    setLocale(settings.locale());
+    setLocale(locale);
     setTheme(settings.theme());
 
     addWorker(std::make_unique<ServerWorker>());

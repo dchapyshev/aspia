@@ -148,7 +148,7 @@ HostWindow::HostWindow(QWidget* parent)
 
     connect(ui->menu_access, &QMenu::triggered, this, &HostWindow::onOneTimeSessionsChanged);
 
-    createLanguageMenu(user_settings.locale());
+    createLanguageMenu(GuiApplication::instance()->locale());
     createThemeMenu(user_settings.theme());
 
     onSettingsChanged();

@@ -36,6 +36,7 @@
 #include <QSvgRenderer>
 #include <QTranslator>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -351,9 +352,23 @@ void GuiApplication::setLocale(const QString& locale)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool GuiApplication::hasLocale(const QString& locale)
+QString GuiApplication::resolveLocale(const QString& locale) const
 {
-    return locale_list_.contains(locale);
+    if (locale_list_.contains(locale))
+        return locale;
+
+    qsizetype separator = locale.indexOf('-');
+    if (separator < 0)
+        separator = locale.indexOf('_');
+
+    if (separator > 0)
+    {
+        QString language = locale.left(separator);
+        if (locale_list_.contains(language))
+            return language;
+    }
+
+    return kDefaultLocale;
 }
 
 //--------------------------------------------------------------------------------------------------
