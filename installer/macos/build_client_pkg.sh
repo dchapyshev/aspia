@@ -3,9 +3,12 @@
 # Builds the macOS installer package (.pkg) for the Aspia Client out of an already-built
 # aspia_client.app bundle (see the APPLE section of source/client/CMakeLists.txt).
 #
-# The installer drops the bundle into /Applications/aspia_client.app. Unlike the host package there
-# is nothing to register afterwards: the client is a plain application. The one script it carries
-# ends the client of the version being replaced, before its files are overwritten.
+# The installer drops the bundle into /Applications/Aspia Client.app. The name matters: the system
+# shows the localized name of an application only while the bundle on disk is still called what the
+# bundle says it is called, and a bundle named after the build target is shown as aspia_client.
+# Unlike the host package there is nothing to register afterwards: the client is a plain
+# application. The one script it carries ends the client of the version being replaced, before its
+# files are overwritten.
 #
 # Usage:
 #   installer/macos/build_client_pkg.sh <path-to-aspia_client.app> [--output <file.pkg>]
@@ -23,7 +26,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 BUNDLE_ID="org.aspia.client"
-APP_NAME="aspia_client.app"
+APP_NAME="Aspia Client.app"
 
 #--------------------------------------------------------------------------------------------------
 die() { echo "error: $*" >&2; exit 1; }
@@ -67,7 +70,7 @@ echo "  bundle: $APP_PATH"
 echo "  output: $OUTPUT"
 
 #--------------------------------------------------------------------------------------------------
-# Stage the payload: /Applications/aspia_client.app.
+# Stage the payload: /Applications/Aspia Client.app.
 #--------------------------------------------------------------------------------------------------
 mkdir -p "$STAGING/Applications"
 ditto "$APP_PATH" "$STAGING/Applications/$APP_NAME"
