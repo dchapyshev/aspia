@@ -209,47 +209,69 @@ Hinzugefügte Router: %4</translation>
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="99"/>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Logs</source>
+        <translation>Protokolle</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <source>The logs are saved to &quot;%1&quot;.</source>
+        <translation>Die Protokolle wurden unter &quot;%1&quot; gespeichert.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <source>There are no logs to save.</source>
+        <translation>Es gibt keine Protokolle zum Speichern.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Unable to save the logs.</source>
+        <translation>Die Protokolle können nicht gespeichert werden.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="148"/>
         <source>Version: %1 (%2)</source>
         <translation>Version: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="102"/>
+        <location filename="../common/android/about_widget.cc" line="151"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia ist freie Software, die unter der GNU General Public License 3 veröffentlicht wird.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="103"/>
+        <location filename="../common/android/about_widget.cc" line="152"/>
         <source>You can get a copy of license here:</source>
         <translation>Eine Kopie der Lizenz erhalten Sie hier:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Links</source>
         <translation>Links</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Home page:</source>
         <translation>Homepage:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>GitHub page:</source>
         <translation>GitHub-Seite:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="113"/>
+        <location filename="../common/android/about_widget.cc" line="162"/>
         <source>Developers</source>
         <translation>Entwickler</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="114"/>
+        <location filename="../common/android/about_widget.cc" line="163"/>
         <source>Translators</source>
         <translation>Übersetzer</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="115"/>
+        <location filename="../common/android/about_widget.cc" line="164"/>
         <source>Third-party components</source>
         <translation>Komponenten von Drittanbietern</translation>
     </message>
@@ -701,53 +723,53 @@ Hinzugefügte Router: %4</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="306"/>
+        <location filename="../common/desktop/chat_widget.cc" line="309"/>
         <source>Save chat...</source>
         <translation>Chat speichern...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="307"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Clear chat</source>
         <translation>Chat leeren</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>%1 is typing...</source>
         <translation>%1 schreibt...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Benutzer %1 ist dem Chat beigetreten (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Benutzer %1 hat den Chat verlassen (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is logged in (%2)</source>
         <translation>Benutzer %1 ist angemeldet (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>Benutzer %1 ist nicht angemeldet (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="219"/>
+        <location filename="../common/desktop/chat_widget.cc" line="221"/>
         <source>There are no connected users (%1)</source>
         <translation>Keine verbundenen Benutzer (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="428"/>
+        <location filename="../common/desktop/chat_widget.cc" line="431"/>
         <source>Unable to write file.</source>
         <translation>Datei kann nicht geschrieben werden.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="444"/>
+        <location filename="../common/desktop/chat_widget.cc" line="447"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Die Nachricht ist zu lang. Die maximale Nachrichtenlänge beträgt %n Zeichen.</numerusform>
@@ -755,17 +777,17 @@ Hinzugefügte Router: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>TXT files (*.txt)</source>
         <translation>TXT-Dateien (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="380"/>
+        <location filename="../common/desktop/chat_widget.cc" line="383"/>
         <source>Could not open file for writing.</source>
         <translation>Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
@@ -833,108 +855,108 @@ Hinzugefügte Router: %4</translation>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="105"/>
+        <location filename="../client/android/chat_window.cc" line="135"/>
         <source>User %1 has joined the chat</source>
         <translation>Benutzer %1 ist dem Chat beigetreten</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="108"/>
+        <location filename="../client/android/chat_window.cc" line="138"/>
         <source>User %1 has left the chat</source>
         <translation>Benutzer %1 hat den Chat verlassen</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="111"/>
+        <location filename="../client/android/chat_window.cc" line="141"/>
         <source>User %1 is logged in</source>
         <translation>Benutzer %1 ist angemeldet</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="114"/>
+        <location filename="../client/android/chat_window.cc" line="144"/>
         <source>User %1 is not logged in</source>
         <translation>Benutzer %1 ist nicht angemeldet</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="117"/>
+        <location filename="../client/android/chat_window.cc" line="147"/>
         <source>There are no connected users</source>
         <translation>Keine verbundenen Benutzer</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="145"/>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="175"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="222"/>
+        <location filename="../client/android/chat_window.cc" line="252"/>
         <source>Connecting to host %1...</source>
         <translation>Verbindung mit Host %1 wird hergestellt...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="240"/>
+        <location filename="../client/android/chat_window.cc" line="270"/>
         <source>The connection to the host has been lost.</source>
         <translation>Die Verbindung zum Host wurde unterbrochen.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="454"/>
+        <location filename="../client/android/chat_window.cc" line="484"/>
         <source>The specified router is unavailable.</source>
         <translation>Der angegebene Router ist nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="493"/>
+        <location filename="../client/android/chat_window.cc" line="523"/>
         <source>Error requesting connection via router.</source>
         <translation>Fehler bei der Verbindungsanforderung über den Router.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="282"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Die Host-Version ist neuer als die des Clients. Bitte aktualisieren Sie die Anwendung.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="280"/>
+        <location filename="../client/android/chat_window.cc" line="310"/>
         <source>%1 is typing...</source>
         <translation>%1 schreibt...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="433"/>
+        <location filename="../client/android/chat_window.cc" line="463"/>
         <source>Connecting...</source>
         <translation>Verbindung wird hergestellt...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="460"/>
+        <location filename="../client/android/chat_window.cc" line="490"/>
         <source>Connecting to router...</source>
         <translation>Verbindung mit Router wird hergestellt...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="481"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Requesting connection to the host...</source>
         <translation>Verbindung zum Host wird angefordert...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Save Chat</source>
         <translation>Chat speichern</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Text files (*.txt)</source>
         <translation>Textdateien (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Could not open the file for writing.</source>
         <translation>Die Datei konnte nicht zum Schreiben geöffnet werden.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear Chat</source>
         <translation>Chat leeren</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear the chat history?</source>
         <translation>Chatverlauf löschen?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear</source>
         <translation>Leeren</translation>
     </message>
@@ -1816,6 +1838,16 @@ Kennwort: %2</translation>
         <source>Unable to delete credentials.</source>
         <translation>Anmeldedaten können nicht gelöscht werden.</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="204"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Die Daten konnten nicht gelesen werden. Die Liste ist möglicherweise veraltet.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Einige Datensätze konnten nicht gelesen werden und werden nicht in der Liste angezeigt.</translation>
+    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
@@ -2110,17 +2142,17 @@ Kennwort: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-Bild (*.png);;BMP-Bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
         <source>Could not save image</source>
         <translation>Bild konnte nicht gespeichert werden</translation>
     </message>
@@ -3147,17 +3179,17 @@ Kennwort: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="506"/>
+        <location filename="../base/gui_application.cc" line="541"/>
         <source>Dark</source>
         <translation>Dunkel</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="508"/>
+        <location filename="../base/gui_application.cc" line="543"/>
         <source>Light</source>
         <translation>Hell</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="509"/>
+        <location filename="../base/gui_application.cc" line="544"/>
         <source>Auto</source>
         <translation>Automatisch</translation>
     </message>
@@ -3608,12 +3640,22 @@ Kennwort: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
         <source>Status update...</source>
         <translation>Statusaktualisierung...</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Die Daten konnten nicht gelesen werden. Die Liste ist möglicherweise veraltet.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Einige Datensätze konnten nicht gelesen werden und werden nicht in der Liste angezeigt.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="399"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n Untergruppe</numerusform>
@@ -3621,7 +3663,7 @@ Kennwort: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n untergeordneter Host</numerusform>
@@ -6950,270 +6992,270 @@ Importierte Anmeldedaten: %5</translation>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="136"/>
-        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../host/android/settings_widget.cc" line="178"/>
         <source>Update</source>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="159"/>
+        <location filename="../client/android/settings_widget.cc" line="161"/>
         <source>Credentials</source>
         <translation>Anmeldedaten</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="167"/>
-        <location filename="../host/android/settings_widget.cc" line="148"/>
+        <location filename="../client/android/settings_widget.cc" line="169"/>
+        <location filename="../host/android/settings_widget.cc" line="150"/>
         <source>About</source>
         <translation>Über das Programm</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="231"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Interface</source>
         <translation>Oberfläche</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="234"/>
-        <location filename="../host/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../host/android/settings_widget.cc" line="242"/>
         <source>Theme</source>
         <translation>Design</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="247"/>
+        <location filename="../client/android/settings_widget.cc" line="249"/>
         <source>Display name when connected</source>
         <translation>Anzeigename bei Verbindung</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="259"/>
-        <location filename="../host/android/settings_widget.cc" line="256"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Security</source>
         <translation>Sicherheit</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="263"/>
         <source>Change Master Password</source>
         <translation>Master-Kennwort ändern</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="273"/>
+        <location filename="../client/android/settings_widget.cc" line="275"/>
         <source>Unlock with biometrics</source>
         <translation>Mit Biometrie entsperren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="298"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Richten Sie in den Systemeinstellungen einen Fingerabdruck ein, um diese Funktion zu nutzen.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="300"/>
+        <location filename="../client/android/settings_widget.cc" line="302"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Biometrie ist auf diesem Gerät nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="311"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
         <source>UDP Connections</source>
         <translation>UDP-Verbindungen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="325"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow direct connections</source>
         <translation>Direkte Verbindungen erlauben</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP-Hole-Punching erlauben</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow PCP protocol</source>
         <translation>PCP-Protokoll erlauben</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP-Protokoll erlauben</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="329"/>
+        <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP-Protokoll erlauben</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="335"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Remote Desktop</source>
         <translation>Remotedesktop</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="337"/>
+        <location filename="../client/android/settings_widget.cc" line="339"/>
         <source>Enable audio</source>
         <translation>Audio aktivieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="342"/>
+        <location filename="../client/android/settings_widget.cc" line="344"/>
         <source>Enable clipboard</source>
         <translation>Zwischenablage aktivieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="347"/>
+        <location filename="../client/android/settings_widget.cc" line="349"/>
         <source>Show shape of remote cursor</source>
         <translation>Form des Remote-Cursors anzeigen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="353"/>
+        <location filename="../client/android/settings_widget.cc" line="355"/>
         <source>Show position of remote cursor</source>
         <translation>Position des Remote-Cursors anzeigen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
         <source>Disable desktop effects</source>
         <translation>Desktopeffekte deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="367"/>
         <source>Disable desktop wallpaper</source>
         <translation>Desktophintergrund deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="371"/>
+        <location filename="../client/android/settings_widget.cc" line="373"/>
         <source>Lock computer at disconnect</source>
         <translation>Computer beim Trennen sperren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Block remote input</source>
         <translation>Remote-Eingabe blockieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="388"/>
-        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <location filename="../client/android/settings_widget.cc" line="390"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Updates</source>
         <translation>Updates</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <location filename="../client/android/settings_widget.cc" line="394"/>
         <source>Check for updates on startup</source>
         <translation>Beim Start nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="399"/>
-        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Update channel</source>
         <translation>Updatekanal</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="400"/>
-        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Stable</source>
         <translation>Stabil</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <location filename="../client/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="396"/>
         <source>Check for updates</source>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="434"/>
+        <location filename="../client/android/settings_widget.cc" line="436"/>
         <source>Enable biometric unlock</source>
         <translation>Biometrische Entsperrung aktivieren</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="157"/>
+        <location filename="../host/android/settings_widget.cc" line="159"/>
         <source>Users</source>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Edit User</source>
         <translation>Benutzer bearbeiten</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Add User</source>
         <translation>Benutzer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="260"/>
         <source>Manage users</source>
         <translation>Benutzer verwalten</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="266"/>
+        <location filename="../host/android/settings_widget.cc" line="268"/>
         <source>Change password</source>
         <translation>Kennwort ändern</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="270"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Disable password protection</source>
         <translation>Kennwortschutz deaktivieren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="279"/>
+        <location filename="../host/android/settings_widget.cc" line="281"/>
         <source>Enable password protection</source>
         <translation>Kennwortschutz aktivieren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="296"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="299"/>
+        <location filename="../host/android/settings_widget.cc" line="301"/>
         <source>Enable the use of a router</source>
         <translation>Verwendung eines Routers aktivieren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="304"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="310"/>
+        <location filename="../host/android/settings_widget.cc" line="312"/>
         <source>Public Key</source>
         <translation>Öffentlicher Schlüssel</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="315"/>
+        <location filename="../host/android/settings_widget.cc" line="317"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Ein Router wird benötigt, um eine Verbindung zu einem Computer herzustellen, wenn keine direkte Verbindung möglich ist (NAT-Umgehung). Aspia stellt keinen öffentlichen Router bereit, aber Sie können Ihren eigenen installieren. Sie können den Router auf der &lt;a href=&quot;https://aspia.org&quot;&gt;offiziellen Website&lt;/a&gt; herunterladen.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>An error occurred while processing the password.</source>
         <translation>Bei der Verarbeitung des Kennworts ist ein Fehler aufgetreten.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>Import</source>
         <translation>Importieren</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-Dateien (*.json)</translation>
     </message>
@@ -7227,12 +7269,24 @@ Importierte Anmeldedaten: %5</translation>
         <translation>Lokal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="501"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Die Daten konnten nicht gelesen werden. Die Liste ist möglicherweise veraltet.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Einige Datensätze konnten nicht gelesen werden und werden nicht in der Liste angezeigt.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Change Password</source>
         <translation>Kennwort ändern</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort darf nicht kürzer als %n Zeichen sein.</numerusform>
@@ -7240,7 +7294,7 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort darf nicht länger als %n Zeichen sein.</numerusform>
@@ -7248,12 +7302,12 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Das eingegebene Kennwort erfüllt nicht die Sicherheitsanforderungen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Das Kennwort muss Klein- und Großbuchstaben sowie Ziffern enthalten und darf nicht kürzer als %n Zeichen sein.</numerusform>
@@ -7261,49 +7315,49 @@ Importierte Anmeldedaten: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
         <source>Do you want to enter a different password?</source>
         <translation>Möchten Sie ein anderes Kennwort eingeben?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Kennwort wird geändert. Warten auf die erneute Anmeldung der Sitzung...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Möchten Sie die Gruppe &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
         <source>Unable to remove group</source>
         <translation>Gruppe kann nicht entfernt werden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Möchten Sie den Router &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Eine Gruppe mit diesem Namen existiert bereits in der ausgewählten übergeordneten Gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
         <source>Failed to move the group.</source>
         <translation>Die Gruppe konnte nicht verschoben werden.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Ein Host mit diesem Namen existiert bereits in der ausgewählten Gruppe.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Der Host konnte nicht in die ausgewählte Gruppe verschoben werden.</translation>
     </message>
@@ -12001,6 +12055,24 @@ Importierte Anmeldedaten: %5</translation>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
+    </message>
+</context>
+<context>
+    <name>VideoWorker</name>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <source>Unable to create the directory for the recording.</source>
+        <translation>Das Verzeichnis für die Aufzeichnung kann nicht erstellt werden.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <source>Unable to create the file for the recording.</source>
+        <translation>Die Datei für die Aufzeichnung kann nicht erstellt werden.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <source>An error occurred while writing the recording.</source>
+        <translation>Beim Schreiben der Aufzeichnung ist ein Fehler aufgetreten.</translation>
     </message>
 </context>
 </TS>

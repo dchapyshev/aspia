@@ -209,47 +209,69 @@ Routers added: %4</source>
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="99"/>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Logs</source>
+        <translation>گزارش‌ها</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <source>The logs are saved to &quot;%1&quot;.</source>
+        <translation>گزارش‌ها در &quot;%1&quot; ذخیره شدند.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <source>There are no logs to save.</source>
+        <translation>هیچ گزارشی برای ذخیره وجود ندارد.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Unable to save the logs.</source>
+        <translation>ذخیره گزارش‌ها ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="148"/>
         <source>Version: %1 (%2)</source>
         <translation>نسخه: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="102"/>
+        <location filename="../common/android/about_widget.cc" line="151"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia نرم‌افزاری آزاد است که تحت مجوز GNU General Public License 3 منتشر شده است.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="103"/>
+        <location filename="../common/android/about_widget.cc" line="152"/>
         <source>You can get a copy of license here:</source>
         <translation>می‌توانید نسخه‌ای از مجوز را از اینجا دریافت کنید:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Links</source>
         <translation>پیوندها</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Home page:</source>
         <translation>صفحه اصلی:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>GitHub page:</source>
         <translation>صفحه GitHub:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="113"/>
+        <location filename="../common/android/about_widget.cc" line="162"/>
         <source>Developers</source>
         <translation>توسعه‌دهندگان</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="114"/>
+        <location filename="../common/android/about_widget.cc" line="163"/>
         <source>Translators</source>
         <translation>مترجمان</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="115"/>
+        <location filename="../common/android/about_widget.cc" line="164"/>
         <source>Third-party components</source>
         <translation>اجزای شخص ثالث</translation>
     </message>
@@ -701,70 +723,70 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="306"/>
+        <location filename="../common/desktop/chat_widget.cc" line="309"/>
         <source>Save chat...</source>
         <translation>ذخیره چت...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="307"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Clear chat</source>
         <translation>پاک کردن چت</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>%1 is typing...</source>
         <translation>%1 در حال نوشتن است...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>کاربر %1 به چت پیوست (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>کاربر %1 چت را ترک کرد (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is logged in (%2)</source>
         <translation>کاربر %1 وارد سیستم شد (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>کاربر %1 وارد سیستم نیست (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="219"/>
+        <location filename="../common/desktop/chat_widget.cc" line="221"/>
         <source>There are no connected users (%1)</source>
         <translation>هیچ کاربر متصلی وجود ندارد (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="428"/>
+        <location filename="../common/desktop/chat_widget.cc" line="431"/>
         <source>Unable to write file.</source>
         <translation>نوشتن فایل ممکن نیست.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="444"/>
+        <location filename="../common/desktop/chat_widget.cc" line="447"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>پیام خیلی طولانی است. حداکثر طول پیام %n نویسه است.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>TXT files (*.txt)</source>
         <translation>فایل‌های TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="380"/>
+        <location filename="../common/desktop/chat_widget.cc" line="383"/>
         <source>Could not open file for writing.</source>
         <translation>باز کردن فایل برای نوشتن ممکن نیست.</translation>
     </message>
@@ -832,108 +854,108 @@ Routers added: %4</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="105"/>
+        <location filename="../client/android/chat_window.cc" line="135"/>
         <source>User %1 has joined the chat</source>
         <translation>کاربر %1 به چت پیوست</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="108"/>
+        <location filename="../client/android/chat_window.cc" line="138"/>
         <source>User %1 has left the chat</source>
         <translation>کاربر %1 چت را ترک کرد</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="111"/>
+        <location filename="../client/android/chat_window.cc" line="141"/>
         <source>User %1 is logged in</source>
         <translation>کاربر %1 وارد سیستم شد</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="114"/>
+        <location filename="../client/android/chat_window.cc" line="144"/>
         <source>User %1 is not logged in</source>
         <translation>کاربر %1 وارد سیستم نیست</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="117"/>
+        <location filename="../client/android/chat_window.cc" line="147"/>
         <source>There are no connected users</source>
         <translation>هیچ کاربر متصلی وجود ندارد</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="145"/>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="175"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Chat</source>
         <translation>چت</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="222"/>
+        <location filename="../client/android/chat_window.cc" line="252"/>
         <source>Connecting to host %1...</source>
         <translation>در حال اتصال به میزبان %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="240"/>
+        <location filename="../client/android/chat_window.cc" line="270"/>
         <source>The connection to the host has been lost.</source>
         <translation>اتصال به میزبان قطع شد.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="454"/>
+        <location filename="../client/android/chat_window.cc" line="484"/>
         <source>The specified router is unavailable.</source>
         <translation>روتر مشخص‌شده در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="493"/>
+        <location filename="../client/android/chat_window.cc" line="523"/>
         <source>Error requesting connection via router.</source>
         <translation>خطا در درخواست اتصال از طریق روتر.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="282"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>نسخه میزبان از کلاینت جدیدتر است. لطفاً برنامه را به‌روزرسانی کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="280"/>
+        <location filename="../client/android/chat_window.cc" line="310"/>
         <source>%1 is typing...</source>
         <translation>%1 در حال نوشتن است...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="433"/>
+        <location filename="../client/android/chat_window.cc" line="463"/>
         <source>Connecting...</source>
         <translation>در حال اتصال...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="460"/>
+        <location filename="../client/android/chat_window.cc" line="490"/>
         <source>Connecting to router...</source>
         <translation>در حال اتصال به روتر...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="481"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Requesting connection to the host...</source>
         <translation>در حال درخواست اتصال به میزبان...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Save Chat</source>
         <translation>ذخیره چت</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Text files (*.txt)</source>
         <translation>فایل‌های متنی (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Could not open the file for writing.</source>
         <translation>باز کردن این فایل برای نوشتن ممکن نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear Chat</source>
         <translation>پاک کردن چت</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear the chat history?</source>
         <translation>تاریخچه چت پاک شود؟</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear</source>
         <translation>پاک کردن</translation>
     </message>
@@ -1809,6 +1831,16 @@ Password: %2</source>
         <source>Unable to delete credentials.</source>
         <translation>حذف اطلاعات ورود ممکن نیست.</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="204"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>خواندن داده‌ها ناموفق بود. ممکن است فهرست قدیمی باشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>برخی رکوردها خوانده نشدند و در فهرست نمایش داده نمی‌شوند.</translation>
+    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
@@ -2103,17 +2135,17 @@ Password: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
         <source>Save File</source>
         <translation>ذخیره فایل</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>تصویر PNG (*.png);;تصویر BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
         <source>Could not save image</source>
         <translation>ذخیره تصویر ممکن نیست</translation>
     </message>
@@ -3136,17 +3168,17 @@ Password: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="506"/>
+        <location filename="../base/gui_application.cc" line="541"/>
         <source>Dark</source>
         <translation>تیره</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="508"/>
+        <location filename="../base/gui_application.cc" line="543"/>
         <source>Light</source>
         <translation>روشن</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="509"/>
+        <location filename="../base/gui_application.cc" line="544"/>
         <source>Auto</source>
         <translation>خودکار</translation>
     </message>
@@ -3593,19 +3625,29 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
         <source>Status update...</source>
         <translation>به‌روزرسانی وضعیت...</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>خواندن داده‌ها ناموفق بود. ممکن است فهرست قدیمی باشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>برخی رکوردها خوانده نشدند و در فهرست نمایش داده نمی‌شوند.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="399"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n زیرگروه</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n میزبان زیرمجموعه</numerusform>
@@ -6914,270 +6956,270 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="136"/>
-        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../host/android/settings_widget.cc" line="178"/>
         <source>Update</source>
         <translation>به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="159"/>
+        <location filename="../client/android/settings_widget.cc" line="161"/>
         <source>Credentials</source>
         <translation>اطلاعات ورود</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="167"/>
-        <location filename="../host/android/settings_widget.cc" line="148"/>
+        <location filename="../client/android/settings_widget.cc" line="169"/>
+        <location filename="../host/android/settings_widget.cc" line="150"/>
         <source>About</source>
         <translation>درباره</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="231"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Interface</source>
         <translation>رابط کاربری</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="234"/>
-        <location filename="../host/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../host/android/settings_widget.cc" line="242"/>
         <source>Theme</source>
         <translation>تم</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="247"/>
+        <location filename="../client/android/settings_widget.cc" line="249"/>
         <source>Display name when connected</source>
         <translation>نام نمایشی هنگام اتصال</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="259"/>
-        <location filename="../host/android/settings_widget.cc" line="256"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Security</source>
         <translation>امنیت</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="263"/>
         <source>Change Master Password</source>
         <translation>تغییر گذرواژه اصلی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="273"/>
+        <location filename="../client/android/settings_widget.cc" line="275"/>
         <source>Unlock with biometrics</source>
         <translation>باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="298"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>برای استفاده از این قابلیت، در تنظیمات سیستم اثر انگشت ثبت کنید.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="300"/>
+        <location filename="../client/android/settings_widget.cc" line="302"/>
         <source>Biometrics are not available on this device.</source>
         <translation>بیومتریک در این دستگاه در دسترس نیست.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="311"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
         <source>UDP Connections</source>
         <translation>اتصال‌های UDP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="325"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow direct connections</source>
         <translation>اجازه به اتصال‌های مستقیم</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow UDP Hole Punching</source>
         <translation>اجازه به UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow PCP protocol</source>
         <translation>اجازه به پروتکل PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>اجازه به پروتکل NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="329"/>
+        <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Allow UPnP protocol</source>
         <translation>اجازه به پروتکل UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="335"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Remote Desktop</source>
         <translation>دسکتاپ راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="337"/>
+        <location filename="../client/android/settings_widget.cc" line="339"/>
         <source>Enable audio</source>
         <translation>فعال‌سازی صدا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="342"/>
+        <location filename="../client/android/settings_widget.cc" line="344"/>
         <source>Enable clipboard</source>
         <translation>فعال‌سازی کلیپ‌بورد</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="347"/>
+        <location filename="../client/android/settings_widget.cc" line="349"/>
         <source>Show shape of remote cursor</source>
         <translation>نمایش شکل نشانگر راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="353"/>
+        <location filename="../client/android/settings_widget.cc" line="355"/>
         <source>Show position of remote cursor</source>
         <translation>نمایش موقعیت نشانگر راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
         <source>Disable desktop effects</source>
         <translation>غیرفعال کردن جلوه‌های دسکتاپ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="367"/>
         <source>Disable desktop wallpaper</source>
         <translation>غیرفعال کردن تصویر زمینه دسکتاپ</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="371"/>
+        <location filename="../client/android/settings_widget.cc" line="373"/>
         <source>Lock computer at disconnect</source>
         <translation>قفل کردن رایانه هنگام قطع اتصال</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Block remote input</source>
         <translation>مسدود کردن ورودی راه دور</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="388"/>
-        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <location filename="../client/android/settings_widget.cc" line="390"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Updates</source>
         <translation>به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <location filename="../client/android/settings_widget.cc" line="394"/>
         <source>Check for updates on startup</source>
         <translation>بررسی به‌روزرسانی‌ها هنگام راه‌اندازی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="399"/>
-        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Update channel</source>
         <translation>کانال به‌روزرسانی</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="400"/>
-        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Stable</source>
         <translation>پایدار</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Beta</source>
         <translation>بتا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Alpha</source>
         <translation>آلفا</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <location filename="../client/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="396"/>
         <source>Check for updates</source>
         <translation>بررسی به‌روزرسانی‌ها</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="434"/>
+        <location filename="../client/android/settings_widget.cc" line="436"/>
         <source>Enable biometric unlock</source>
         <translation>فعال‌سازی باز کردن قفل با بیومتریک</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Cancel</source>
         <translation>لغو</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="157"/>
+        <location filename="../host/android/settings_widget.cc" line="159"/>
         <source>Users</source>
         <translation>کاربران</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Edit User</source>
         <translation>ویرایش کاربر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Add User</source>
         <translation>افزودن کاربر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="260"/>
         <source>Manage users</source>
         <translation>مدیریت کاربران</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="266"/>
+        <location filename="../host/android/settings_widget.cc" line="268"/>
         <source>Change password</source>
         <translation>تغییر گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="270"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Disable password protection</source>
         <translation>غیرفعال کردن محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="279"/>
+        <location filename="../host/android/settings_widget.cc" line="281"/>
         <source>Enable password protection</source>
         <translation>فعال‌سازی محافظت با گذرواژه</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="296"/>
         <source>Router</source>
         <translation>روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="299"/>
+        <location filename="../host/android/settings_widget.cc" line="301"/>
         <source>Enable the use of a router</source>
         <translation>فعال‌سازی استفاده از روتر</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="304"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Address</source>
         <translation>آدرس</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="310"/>
+        <location filename="../host/android/settings_widget.cc" line="312"/>
         <source>Public Key</source>
         <translation>کلید عمومی</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="315"/>
+        <location filename="../host/android/settings_widget.cc" line="317"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>در صورت نبود اتصال مستقیم (دور زدن NAT)، برای اتصال به رایانه به روتر نیاز است. Aspia روتر عمومی ارائه نمی‌دهد، اما می‌توانید روتر خود را نصب کنید. می‌توانید روتر را از &lt;a href=&quot;https://aspia.org&quot;&gt;وب‌سایت رسمی&lt;/a&gt; دانلود کنید.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Error</source>
         <translation>خطا</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>An error occurred while processing the password.</source>
         <translation>هنگام پردازش گذرواژه خطایی رخ داد.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>Import</source>
         <translation>وارد کردن</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>JSON files (*.json)</source>
         <translation>فایل‌های JSON (*.json)</translation>
     </message>
@@ -7191,80 +7233,92 @@ Credentials imported: %5</source>
         <translation>محلی</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="501"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>خواندن داده‌ها ناموفق بود. ممکن است فهرست قدیمی باشد.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>برخی رکوردها خوانده نشدند و در فهرست نمایش داده نمی‌شوند.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Change Password</source>
         <translation>تغییر گذرواژه</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>گذرواژه نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>گذرواژه نباید بیش از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>گذرواژه واردشده الزامات امنیتی را برآورده نمی‌کند!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>گذرواژه باید شامل حروف کوچک و بزرگ و اعداد باشد و نباید کوتاه‌تر از %n نویسه باشد.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
         <source>Do you want to enter a different password?</source>
         <translation>آیا می‌خواهید گذرواژه دیگری وارد کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>در حال تغییر گذرواژه. در انتظار ورود مجدد نشست...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید گروه &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
         <source>Unable to remove group</source>
         <translation>حذف گروه ممکن نیست</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>آیا مطمئن هستید که می‌خواهید روتر &quot;%1&quot; را حذف کنید؟</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>گروهی با این نام از قبل در گروه والد انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
         <source>Failed to move the group.</source>
         <translation>جابه‌جایی گروه ناموفق بود.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>میزبانی با این نام از قبل در گروه انتخاب‌شده وجود دارد.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>انتقال میزبان به گروه انتخاب‌شده ناموفق بود.</translation>
     </message>
@@ -11957,6 +12011,24 @@ Credentials imported: %5</source>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
         <translation>غیرفعال</translation>
+    </message>
+</context>
+<context>
+    <name>VideoWorker</name>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <source>Unable to create the directory for the recording.</source>
+        <translation>ایجاد پوشه برای فایل ضبط ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <source>Unable to create the file for the recording.</source>
+        <translation>ایجاد فایل ضبط ممکن نیست.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <source>An error occurred while writing the recording.</source>
+        <translation>هنگام نوشتن فایل ضبط خطایی رخ داد.</translation>
     </message>
 </context>
 </TS>

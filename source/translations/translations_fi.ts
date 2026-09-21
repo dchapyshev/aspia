@@ -209,47 +209,69 @@ Lisättyjä reitittimiä: %4</translation>
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="99"/>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Logs</source>
+        <translation>Lokit</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <source>The logs are saved to &quot;%1&quot;.</source>
+        <translation>Lokit on tallennettu kohteeseen &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <source>There are no logs to save.</source>
+        <translation>Tallennettavia lokeja ei ole.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Unable to save the logs.</source>
+        <translation>Lokeja ei voi tallentaa.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="148"/>
         <source>Version: %1 (%2)</source>
         <translation>Versio: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="102"/>
+        <location filename="../common/android/about_widget.cc" line="151"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia on vapaa ohjelmisto, joka on julkaistu GNU General Public License 3 -lisenssillä.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="103"/>
+        <location filename="../common/android/about_widget.cc" line="152"/>
         <source>You can get a copy of license here:</source>
         <translation>Voit hakea lisenssin kopion täältä:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Links</source>
         <translation>Linkit</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Home page:</source>
         <translation>Kotisivu:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>GitHub page:</source>
         <translation>GitHub-sivu:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="113"/>
+        <location filename="../common/android/about_widget.cc" line="162"/>
         <source>Developers</source>
         <translation>Kehittäjät</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="114"/>
+        <location filename="../common/android/about_widget.cc" line="163"/>
         <source>Translators</source>
         <translation>Kääntäjät</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="115"/>
+        <location filename="../common/android/about_widget.cc" line="164"/>
         <source>Third-party components</source>
         <translation>Kolmannen osapuolen komponentit</translation>
     </message>
@@ -701,53 +723,53 @@ Lisättyjä reitittimiä: %4</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="306"/>
+        <location filename="../common/desktop/chat_widget.cc" line="309"/>
         <source>Save chat...</source>
         <translation>Tallenna keskustelu...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="307"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Clear chat</source>
         <translation>Tyhjennä keskustelu</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>%1 is typing...</source>
         <translation>%1 kirjoittaa...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>Käyttäjä %1 liittyi keskusteluun (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>Käyttäjä %1 poistui keskustelusta (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is logged in (%2)</source>
         <translation>Käyttäjä %1 on kirjautunut sisään (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>Käyttäjä %1 ei ole kirjautunut sisään (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="219"/>
+        <location filename="../common/desktop/chat_widget.cc" line="221"/>
         <source>There are no connected users (%1)</source>
         <translation>Ei yhdistettyjä käyttäjiä (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="428"/>
+        <location filename="../common/desktop/chat_widget.cc" line="431"/>
         <source>Unable to write file.</source>
         <translation>Tiedostoa ei voi kirjoittaa.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="444"/>
+        <location filename="../common/desktop/chat_widget.cc" line="447"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Viesti on liian pitkä. Viestin enimmäispituus on %n merkki.</numerusform>
@@ -755,17 +777,17 @@ Lisättyjä reitittimiä: %4</translation>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>TXT files (*.txt)</source>
         <translation>TXT-tiedostot (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="380"/>
+        <location filename="../common/desktop/chat_widget.cc" line="383"/>
         <source>Could not open file for writing.</source>
         <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
@@ -833,108 +855,108 @@ Lisättyjä reitittimiä: %4</translation>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="105"/>
+        <location filename="../client/android/chat_window.cc" line="135"/>
         <source>User %1 has joined the chat</source>
         <translation>Käyttäjä %1 liittyi keskusteluun</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="108"/>
+        <location filename="../client/android/chat_window.cc" line="138"/>
         <source>User %1 has left the chat</source>
         <translation>Käyttäjä %1 poistui keskustelusta</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="111"/>
+        <location filename="../client/android/chat_window.cc" line="141"/>
         <source>User %1 is logged in</source>
         <translation>Käyttäjä %1 on kirjautunut sisään</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="114"/>
+        <location filename="../client/android/chat_window.cc" line="144"/>
         <source>User %1 is not logged in</source>
         <translation>Käyttäjä %1 ei ole kirjautunut sisään</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="117"/>
+        <location filename="../client/android/chat_window.cc" line="147"/>
         <source>There are no connected users</source>
         <translation>Ei yhdistettyjä käyttäjiä</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="145"/>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="175"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Chat</source>
         <translation>Keskustelu</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="222"/>
+        <location filename="../client/android/chat_window.cc" line="252"/>
         <source>Connecting to host %1...</source>
         <translation>Yhdistetään isäntään %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="240"/>
+        <location filename="../client/android/chat_window.cc" line="270"/>
         <source>The connection to the host has been lost.</source>
         <translation>Yhteys isäntään on katkennut.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="454"/>
+        <location filename="../client/android/chat_window.cc" line="484"/>
         <source>The specified router is unavailable.</source>
         <translation>Määritetty reititin ei ole käytettävissä.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="493"/>
+        <location filename="../client/android/chat_window.cc" line="523"/>
         <source>Error requesting connection via router.</source>
         <translation>Virhe pyydettäessä yhteyttä reitittimen kautta.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="282"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Isännän versio on uudempi kuin asiakkaan. Päivitä sovellus.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="280"/>
+        <location filename="../client/android/chat_window.cc" line="310"/>
         <source>%1 is typing...</source>
         <translation>%1 kirjoittaa...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="433"/>
+        <location filename="../client/android/chat_window.cc" line="463"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="460"/>
+        <location filename="../client/android/chat_window.cc" line="490"/>
         <source>Connecting to router...</source>
         <translation>Yhdistetään reitittimeen...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="481"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Requesting connection to the host...</source>
         <translation>Pyydetään yhteyttä isäntään...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Save Chat</source>
         <translation>Tallenna keskustelu</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Text files (*.txt)</source>
         <translation>Tekstitiedostot (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Could not open the file for writing.</source>
         <translation>Tiedostoa ei voitu avata kirjoittamista varten.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear Chat</source>
         <translation>Tyhjennä keskustelu</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear the chat history?</source>
         <translation>Tyhjennetäänkö keskusteluhistoria?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear</source>
         <translation>Tyhjennä</translation>
     </message>
@@ -1816,6 +1838,16 @@ Salasana: %2</translation>
         <source>Unable to delete credentials.</source>
         <translation>Kirjautumistietoja ei voi poistaa.</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="204"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Tietojen lukeminen epäonnistui. Luettelo voi olla vanhentunut.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Joitakin tietueita ei voitu lukea, eikä niitä näytetä luettelossa.</translation>
+    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
@@ -2110,17 +2142,17 @@ Salasana: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-kuva (*.png);;BMP-kuva (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
         <source>Could not save image</source>
         <translation>Kuvaa ei voitu tallentaa</translation>
     </message>
@@ -3147,17 +3179,17 @@ Salasana: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="506"/>
+        <location filename="../base/gui_application.cc" line="541"/>
         <source>Dark</source>
         <translation>Tumma</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="508"/>
+        <location filename="../base/gui_application.cc" line="543"/>
         <source>Light</source>
         <translation>Vaalea</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="509"/>
+        <location filename="../base/gui_application.cc" line="544"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
@@ -3608,12 +3640,22 @@ Salasana: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
         <source>Status update...</source>
         <translation>Päivitetään tilaa...</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Tietojen lukeminen epäonnistui. Luettelo voi olla vanhentunut.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Joitakin tietueita ei voitu lukea, eikä niitä näytetä luettelossa.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="399"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n aliryhmä</numerusform>
@@ -3621,7 +3663,7 @@ Salasana: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n isäntä</numerusform>
@@ -6950,270 +6992,270 @@ Tuotuja kirjautumistietoja: %5</translation>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="136"/>
-        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../host/android/settings_widget.cc" line="178"/>
         <source>Update</source>
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="159"/>
+        <location filename="../client/android/settings_widget.cc" line="161"/>
         <source>Credentials</source>
         <translation>Kirjautumistiedot</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="167"/>
-        <location filename="../host/android/settings_widget.cc" line="148"/>
+        <location filename="../client/android/settings_widget.cc" line="169"/>
+        <location filename="../host/android/settings_widget.cc" line="150"/>
         <source>About</source>
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="231"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Interface</source>
         <translation>Käyttöliittymä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="234"/>
-        <location filename="../host/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../host/android/settings_widget.cc" line="242"/>
         <source>Theme</source>
         <translation>Teema</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="247"/>
+        <location filename="../client/android/settings_widget.cc" line="249"/>
         <source>Display name when connected</source>
         <translation>Näyttönimi yhdistettynä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="259"/>
-        <location filename="../host/android/settings_widget.cc" line="256"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Security</source>
         <translation>Suojaus</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="263"/>
         <source>Change Master Password</source>
         <translation>Vaihda pääsalasana</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="273"/>
+        <location filename="../client/android/settings_widget.cc" line="275"/>
         <source>Unlock with biometrics</source>
         <translation>Avaa biometriikalla</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="298"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Määritä sormenjälki järjestelmän asetuksissa käyttääksesi tätä.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="300"/>
+        <location filename="../client/android/settings_widget.cc" line="302"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Biometriikka ei ole käytettävissä tällä laitteella.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="311"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
         <source>UDP Connections</source>
         <translation>UDP-yhteydet</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="325"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow direct connections</source>
         <translation>Salli suorat yhteydet</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Salli UDP hole punching</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow PCP protocol</source>
         <translation>Salli PCP-protokolla</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Salli NAT-PMP-protokolla</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="329"/>
+        <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Allow UPnP protocol</source>
         <translation>Salli UPnP-protokolla</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="335"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Remote Desktop</source>
         <translation>Etätyöpöytä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="337"/>
+        <location filename="../client/android/settings_widget.cc" line="339"/>
         <source>Enable audio</source>
         <translation>Ota ääni käyttöön</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="342"/>
+        <location filename="../client/android/settings_widget.cc" line="344"/>
         <source>Enable clipboard</source>
         <translation>Ota leikepöytä käyttöön</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="347"/>
+        <location filename="../client/android/settings_widget.cc" line="349"/>
         <source>Show shape of remote cursor</source>
         <translation>Näytä etäosoittimen muoto</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="353"/>
+        <location filename="../client/android/settings_widget.cc" line="355"/>
         <source>Show position of remote cursor</source>
         <translation>Näytä etäosoittimen sijainti</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
         <source>Disable desktop effects</source>
         <translation>Poista työpöytätehosteet käytöstä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="367"/>
         <source>Disable desktop wallpaper</source>
         <translation>Poista työpöydän taustakuva käytöstä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="371"/>
+        <location filename="../client/android/settings_widget.cc" line="373"/>
         <source>Lock computer at disconnect</source>
         <translation>Lukitse tietokone yhteyden katketessa</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Block remote input</source>
         <translation>Estä etäsyöttö</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="388"/>
-        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <location filename="../client/android/settings_widget.cc" line="390"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Updates</source>
         <translation>Päivitykset</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <location filename="../client/android/settings_widget.cc" line="394"/>
         <source>Check for updates on startup</source>
         <translation>Tarkista päivitykset käynnistyksen yhteydessä</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="399"/>
-        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Update channel</source>
         <translation>Päivityskanava</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="400"/>
-        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Stable</source>
         <translation>Vakaa</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Beta</source>
         <translation>Beeta</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <location filename="../client/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="396"/>
         <source>Check for updates</source>
         <translation>Tarkista päivitykset</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="434"/>
+        <location filename="../client/android/settings_widget.cc" line="436"/>
         <source>Enable biometric unlock</source>
         <translation>Ota biometrinen avaus käyttöön</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Cancel</source>
         <translation>Peruuta</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="157"/>
+        <location filename="../host/android/settings_widget.cc" line="159"/>
         <source>Users</source>
         <translation>Käyttäjät</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Edit User</source>
         <translation>Muokkaa käyttäjää</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Add User</source>
         <translation>Lisää käyttäjä</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="260"/>
         <source>Manage users</source>
         <translation>Hallitse käyttäjiä</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="266"/>
+        <location filename="../host/android/settings_widget.cc" line="268"/>
         <source>Change password</source>
         <translation>Vaihda salasana</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="270"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Disable password protection</source>
         <translation>Poista salasanasuojaus käytöstä</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="279"/>
+        <location filename="../host/android/settings_widget.cc" line="281"/>
         <source>Enable password protection</source>
         <translation>Ota salasanasuojaus käyttöön</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="296"/>
         <source>Router</source>
         <translation>Reititin</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="299"/>
+        <location filename="../host/android/settings_widget.cc" line="301"/>
         <source>Enable the use of a router</source>
         <translation>Käytä reititintä</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="304"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Address</source>
         <translation>Osoite</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="310"/>
+        <location filename="../host/android/settings_widget.cc" line="312"/>
         <source>Public Key</source>
         <translation>Julkinen avain</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="315"/>
+        <location filename="../host/android/settings_widget.cc" line="317"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Reititintä tarvitaan yhteyden muodostamiseen tietokoneeseen, jos suoraa yhteyttä ei ole (NAT:n ohitus). Aspia ei tarjoa julkista reititintä, mutta voit asentaa oman. Voit ladata reitittimen &lt;a href=&quot;https://aspia.org&quot;&gt;viralliselta verkkosivustolta&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>An error occurred while processing the password.</source>
         <translation>Salasanan käsittelyssä tapahtui virhe.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>Import</source>
         <translation>Tuo</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-tiedostot (*.json)</translation>
     </message>
@@ -7227,12 +7269,24 @@ Tuotuja kirjautumistietoja: %5</translation>
         <translation>Paikallinen</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="501"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Tietojen lukeminen epäonnistui. Luettelo voi olla vanhentunut.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Joitakin tietueita ei voitu lukea, eikä niitä näytetä luettelossa.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Change Password</source>
         <translation>Vaihda salasana</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7240,7 +7294,7 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Salasana ei saa olla pidempi kuin %n merkki.</numerusform>
@@ -7248,12 +7302,12 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Syöttämäsi salasana ei täytä turvallisuusvaatimuksia!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Salasanassa on oltava pieniä ja isoja kirjaimia sekä numeroita, eikä se saa olla lyhyempi kuin %n merkki.</numerusform>
@@ -7261,49 +7315,49 @@ Tuotuja kirjautumistietoja: %5</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
         <source>Do you want to enter a different password?</source>
         <translation>Haluatko syöttää toisen salasanan?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Vaihdetaan salasanaa. Odotetaan istunnon uudelleenkirjautumista...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa ryhmän &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
         <source>Unable to remove group</source>
         <translation>Ryhmää ei voi poistaa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Haluatko varmasti poistaa reitittimen &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Tämänniminen ryhmä on jo olemassa valitussa yläryhmässä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
         <source>Failed to move the group.</source>
         <translation>Ryhmän siirtäminen epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Tämänniminen isäntä on jo olemassa valitussa ryhmässä.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Isännän siirtäminen valittuun ryhmään epäonnistui.</translation>
     </message>
@@ -12001,6 +12055,24 @@ Tuotuja kirjautumistietoja: %5</translation>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
         <translation>Poissa käytöstä</translation>
+    </message>
+</context>
+<context>
+    <name>VideoWorker</name>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <source>Unable to create the directory for the recording.</source>
+        <translation>Tallenteen kansiota ei voi luoda.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <source>Unable to create the file for the recording.</source>
+        <translation>Tallenteen tiedostoa ei voi luoda.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <source>An error occurred while writing the recording.</source>
+        <translation>Tallenteen kirjoittamisessa tapahtui virhe.</translation>
     </message>
 </context>
 </TS>

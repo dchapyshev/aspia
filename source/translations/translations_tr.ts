@@ -209,47 +209,69 @@ Eklenen yönlendiriciler: %4</translation>
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../common/android/about_widget.cc" line="99"/>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Logs</source>
+        <translation>Günlükler</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="131"/>
+        <source>The logs are saved to &quot;%1&quot;.</source>
+        <translation>Günlükler &quot;%1&quot; konumuna kaydedildi.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="135"/>
+        <source>There are no logs to save.</source>
+        <translation>Kaydedilecek günlük yok.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="139"/>
+        <source>Unable to save the logs.</source>
+        <translation>Günlükler kaydedilemiyor.</translation>
+    </message>
+    <message>
+        <location filename="../common/android/about_widget.cc" line="148"/>
         <source>Version: %1 (%2)</source>
         <translation>Sürüm: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="102"/>
+        <location filename="../common/android/about_widget.cc" line="151"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation>Aspia, GNU Genel Kamu Lisansı 3 altında yayımlanan özgür bir yazılımdır.</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="103"/>
+        <location filename="../common/android/about_widget.cc" line="152"/>
         <source>You can get a copy of license here:</source>
         <translation>Lisansın bir kopyasını buradan edinebilirsiniz:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Links</source>
         <translation>Bağlantılar</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>Home page:</source>
         <translation>Ana sayfa:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="106"/>
+        <location filename="../common/android/about_widget.cc" line="155"/>
         <source>GitHub page:</source>
         <translation>GitHub sayfası:</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="113"/>
+        <location filename="../common/android/about_widget.cc" line="162"/>
         <source>Developers</source>
         <translation>Geliştiriciler</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="114"/>
+        <location filename="../common/android/about_widget.cc" line="163"/>
         <source>Translators</source>
         <translation>Çevirmenler</translation>
     </message>
     <message>
-        <location filename="../common/android/about_widget.cc" line="115"/>
+        <location filename="../common/android/about_widget.cc" line="164"/>
         <source>Third-party components</source>
         <translation>Üçüncü taraf bileşenler</translation>
     </message>
@@ -701,70 +723,70 @@ Eklenen yönlendiriciler: %4</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="134"/>
-        <location filename="../common/desktop/chat_widget.cc" line="306"/>
+        <location filename="../common/desktop/chat_widget.cc" line="309"/>
         <source>Save chat...</source>
         <translation>Sohbeti kaydet...</translation>
     </message>
     <message>
         <location filename="../common/desktop/chat_widget.cc" line="135"/>
-        <location filename="../common/desktop/chat_widget.cc" line="307"/>
+        <location filename="../common/desktop/chat_widget.cc" line="310"/>
         <source>Clear chat</source>
         <translation>Sohbeti temizle</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="204"/>
+        <location filename="../common/desktop/chat_widget.cc" line="206"/>
         <source>%1 is typing...</source>
         <translation>%1 yazıyor...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="207"/>
+        <location filename="../common/desktop/chat_widget.cc" line="209"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation>%1 kullanıcısı sohbete katıldı (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="210"/>
+        <location filename="../common/desktop/chat_widget.cc" line="212"/>
         <source>User %1 has left the chat (%2)</source>
         <translation>%1 kullanıcısı sohbetten ayrıldı (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="213"/>
+        <location filename="../common/desktop/chat_widget.cc" line="215"/>
         <source>User %1 is logged in (%2)</source>
         <translation>%1 kullanıcısının oturumu açık (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="216"/>
+        <location filename="../common/desktop/chat_widget.cc" line="218"/>
         <source>User %1 is not logged in (%2)</source>
         <translation>%1 kullanıcısının oturumu açık değil (%2)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="219"/>
+        <location filename="../common/desktop/chat_widget.cc" line="221"/>
         <source>There are no connected users (%1)</source>
         <translation>Bağlı kullanıcı yok (%1)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="428"/>
+        <location filename="../common/desktop/chat_widget.cc" line="431"/>
         <source>Unable to write file.</source>
         <translation>Dosya yazılamıyor.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/desktop/chat_widget.cc" line="444"/>
+        <location filename="../common/desktop/chat_widget.cc" line="447"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation>
             <numerusform>Mesaj çok uzun. Maksimum mesaj uzunluğu %n karakterdir.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="367"/>
+        <location filename="../common/desktop/chat_widget.cc" line="370"/>
         <source>TXT files (*.txt)</source>
         <translation>TXT dosyaları (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.cc" line="380"/>
+        <location filename="../common/desktop/chat_widget.cc" line="383"/>
         <source>Could not open file for writing.</source>
         <translation>Dosya yazma için açılamadı.</translation>
     </message>
@@ -832,108 +854,108 @@ Eklenen yönlendiriciler: %4</translation>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="105"/>
+        <location filename="../client/android/chat_window.cc" line="135"/>
         <source>User %1 has joined the chat</source>
         <translation>%1 kullanıcısı sohbete katıldı</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="108"/>
+        <location filename="../client/android/chat_window.cc" line="138"/>
         <source>User %1 has left the chat</source>
         <translation>%1 kullanıcısı sohbetten ayrıldı</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="111"/>
+        <location filename="../client/android/chat_window.cc" line="141"/>
         <source>User %1 is logged in</source>
         <translation>%1 kullanıcısının oturumu açık</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="114"/>
+        <location filename="../client/android/chat_window.cc" line="144"/>
         <source>User %1 is not logged in</source>
         <translation>%1 kullanıcısının oturumu açık değil</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="117"/>
+        <location filename="../client/android/chat_window.cc" line="147"/>
         <source>There are no connected users</source>
         <translation>Bağlı kullanıcı yok</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="145"/>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="175"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Chat</source>
         <translation>Sohbet</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="222"/>
+        <location filename="../client/android/chat_window.cc" line="252"/>
         <source>Connecting to host %1...</source>
         <translation>%1 ana bilgisayarına bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="240"/>
+        <location filename="../client/android/chat_window.cc" line="270"/>
         <source>The connection to the host has been lost.</source>
         <translation>Ana bilgisayarla bağlantı kesildi.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="454"/>
+        <location filename="../client/android/chat_window.cc" line="484"/>
         <source>The specified router is unavailable.</source>
         <translation>Belirtilen yönlendirici kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="493"/>
+        <location filename="../client/android/chat_window.cc" line="523"/>
         <source>Error requesting connection via router.</source>
         <translation>Yönlendirici üzerinden bağlantı isteğinde hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="282"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Ana bilgisayar sürümü istemciden daha yeni. Lütfen uygulamayı güncelleyin.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="280"/>
+        <location filename="../client/android/chat_window.cc" line="310"/>
         <source>%1 is typing...</source>
         <translation>%1 yazıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="433"/>
+        <location filename="../client/android/chat_window.cc" line="463"/>
         <source>Connecting...</source>
         <translation>Bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="460"/>
+        <location filename="../client/android/chat_window.cc" line="490"/>
         <source>Connecting to router...</source>
         <translation>Yönlendiriciye bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="481"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Requesting connection to the host...</source>
         <translation>Ana bilgisayara bağlantı isteniyor...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Save Chat</source>
         <translation>Sohbeti Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="322"/>
+        <location filename="../client/android/chat_window.cc" line="352"/>
         <source>Text files (*.txt)</source>
         <translation>Metin dosyaları (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="329"/>
+        <location filename="../client/android/chat_window.cc" line="359"/>
         <source>Could not open the file for writing.</source>
         <translation>Dosya yazma için açılamadı.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear Chat</source>
         <translation>Sohbeti Temizle</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear the chat history?</source>
         <translation>Sohbet geçmişi temizlensin mi?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="382"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
@@ -1809,6 +1831,16 @@ Parola: %2</translation>
         <source>Unable to delete credentials.</source>
         <translation>Kimlik bilgileri silinemiyor.</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="204"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Bazı kayıtlar okunamadı ve listede gösterilmiyor.</translation>
+    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
@@ -2103,17 +2135,17 @@ Parola: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="948"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="954"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="949"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="955"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG Görüntüsü (*.png);;BMP Görüntüsü (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="980"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="986"/>
         <source>Could not save image</source>
         <translation>Görüntü kaydedilemedi</translation>
     </message>
@@ -3136,17 +3168,17 @@ Parola: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="506"/>
+        <location filename="../base/gui_application.cc" line="541"/>
         <source>Dark</source>
         <translation>Koyu</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="508"/>
+        <location filename="../base/gui_application.cc" line="543"/>
         <source>Light</source>
         <translation>Açık</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="509"/>
+        <location filename="../base/gui_application.cc" line="544"/>
         <source>Auto</source>
         <translation>Otomatik</translation>
     </message>
@@ -3593,19 +3625,29 @@ Parola: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="49"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
         <source>Status update...</source>
         <translation>Durum güncelleniyor...</translation>
     </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Bazı kayıtlar okunamadı ve listede gösterilmiyor.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="399"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n alt grup</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="400"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n alt ana bilgisayar</numerusform>
@@ -6914,270 +6956,270 @@ Credentials imported: %5</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="136"/>
-        <location filename="../host/android/settings_widget.cc" line="176"/>
+        <location filename="../client/android/settings_widget.cc" line="138"/>
+        <location filename="../host/android/settings_widget.cc" line="178"/>
         <source>Update</source>
         <translation>Güncelle</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="159"/>
+        <location filename="../client/android/settings_widget.cc" line="161"/>
         <source>Credentials</source>
         <translation>Kimlik Bilgileri</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="167"/>
-        <location filename="../host/android/settings_widget.cc" line="148"/>
+        <location filename="../client/android/settings_widget.cc" line="169"/>
+        <location filename="../host/android/settings_widget.cc" line="150"/>
         <source>About</source>
         <translation>Hakkında</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="231"/>
-        <location filename="../host/android/settings_widget.cc" line="235"/>
+        <location filename="../client/android/settings_widget.cc" line="233"/>
+        <location filename="../host/android/settings_widget.cc" line="237"/>
         <source>Interface</source>
         <translation>Arabirim</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="234"/>
-        <location filename="../host/android/settings_widget.cc" line="240"/>
+        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../host/android/settings_widget.cc" line="242"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="247"/>
+        <location filename="../client/android/settings_widget.cc" line="249"/>
         <source>Display name when connected</source>
         <translation>Bağlanıldığında görünen ad</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="259"/>
-        <location filename="../host/android/settings_widget.cc" line="256"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="258"/>
         <source>Security</source>
         <translation>Güvenlik</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="263"/>
         <source>Change Master Password</source>
         <translation>Ana Parolayı Değiştir</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="273"/>
+        <location filename="../client/android/settings_widget.cc" line="275"/>
         <source>Unlock with biometrics</source>
         <translation>Biyometri ile kilidi aç</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="298"/>
+        <location filename="../client/android/settings_widget.cc" line="300"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Bunu kullanmak için sistem ayarlarında bir parmak izi ayarlayın.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="300"/>
+        <location filename="../client/android/settings_widget.cc" line="302"/>
         <source>Biometrics are not available on this device.</source>
         <translation>Bu cihazda biyometri kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="311"/>
+        <location filename="../client/android/settings_widget.cc" line="313"/>
         <source>UDP Connections</source>
         <translation>UDP Bağlantıları</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="325"/>
+        <location filename="../client/android/settings_widget.cc" line="327"/>
         <source>Allow direct connections</source>
         <translation>Doğrudan bağlantılara izin ver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="326"/>
+        <location filename="../client/android/settings_widget.cc" line="328"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP Hole Punching&apos;e izin ver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="327"/>
+        <location filename="../client/android/settings_widget.cc" line="329"/>
         <source>Allow PCP protocol</source>
         <translation>PCP protokolüne izin ver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="328"/>
+        <location filename="../client/android/settings_widget.cc" line="330"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP protokolüne izin ver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="329"/>
+        <location filename="../client/android/settings_widget.cc" line="331"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP protokolüne izin ver</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="335"/>
+        <location filename="../client/android/settings_widget.cc" line="337"/>
         <source>Remote Desktop</source>
         <translation>Uzak Masaüstü</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="337"/>
+        <location filename="../client/android/settings_widget.cc" line="339"/>
         <source>Enable audio</source>
         <translation>Sesi etkinleştir</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="342"/>
+        <location filename="../client/android/settings_widget.cc" line="344"/>
         <source>Enable clipboard</source>
         <translation>Panoyu etkinleştir</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="347"/>
+        <location filename="../client/android/settings_widget.cc" line="349"/>
         <source>Show shape of remote cursor</source>
         <translation>Uzak imlecin şeklini göster</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="353"/>
+        <location filename="../client/android/settings_widget.cc" line="355"/>
         <source>Show position of remote cursor</source>
         <translation>Uzak imlecin konumunu göster</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="359"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
         <source>Disable desktop effects</source>
         <translation>Masaüstü efektlerini devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="365"/>
+        <location filename="../client/android/settings_widget.cc" line="367"/>
         <source>Disable desktop wallpaper</source>
         <translation>Masaüstü duvar kağıdını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="371"/>
+        <location filename="../client/android/settings_widget.cc" line="373"/>
         <source>Lock computer at disconnect</source>
         <translation>Bağlantı kesildiğinde bilgisayarı kilitle</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="377"/>
+        <location filename="../client/android/settings_widget.cc" line="379"/>
         <source>Block remote input</source>
         <translation>Uzak girişi engelle</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="388"/>
-        <location filename="../host/android/settings_widget.cc" line="378"/>
+        <location filename="../client/android/settings_widget.cc" line="390"/>
+        <location filename="../host/android/settings_widget.cc" line="380"/>
         <source>Updates</source>
         <translation>Güncellemeler</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="392"/>
+        <location filename="../client/android/settings_widget.cc" line="394"/>
         <source>Check for updates on startup</source>
         <translation>Başlangıçta güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="399"/>
-        <location filename="../host/android/settings_widget.cc" line="381"/>
+        <location filename="../client/android/settings_widget.cc" line="401"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Update channel</source>
         <translation>Güncelleme kanalı</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="400"/>
-        <location filename="../host/android/settings_widget.cc" line="382"/>
+        <location filename="../client/android/settings_widget.cc" line="402"/>
+        <location filename="../host/android/settings_widget.cc" line="384"/>
         <source>Stable</source>
         <translation>Kararlı</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="401"/>
-        <location filename="../host/android/settings_widget.cc" line="383"/>
+        <location filename="../client/android/settings_widget.cc" line="403"/>
+        <location filename="../host/android/settings_widget.cc" line="385"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="402"/>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../client/android/settings_widget.cc" line="404"/>
+        <location filename="../host/android/settings_widget.cc" line="386"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="410"/>
-        <location filename="../host/android/settings_widget.cc" line="394"/>
+        <location filename="../client/android/settings_widget.cc" line="412"/>
+        <location filename="../host/android/settings_widget.cc" line="396"/>
         <source>Check for updates</source>
         <translation>Güncellemeleri denetle</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="434"/>
+        <location filename="../client/android/settings_widget.cc" line="436"/>
         <source>Enable biometric unlock</source>
         <translation>Biyometrik kilit açmayı etkinleştir</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="157"/>
+        <location filename="../host/android/settings_widget.cc" line="159"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Edit User</source>
         <translation>Kullanıcıyı Düzenle</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="166"/>
+        <location filename="../host/android/settings_widget.cc" line="168"/>
         <source>Add User</source>
         <translation>Kullanıcı Ekle</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="258"/>
+        <location filename="../host/android/settings_widget.cc" line="260"/>
         <source>Manage users</source>
         <translation>Kullanıcıları yönet</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="266"/>
+        <location filename="../host/android/settings_widget.cc" line="268"/>
         <source>Change password</source>
         <translation>Parolayı değiştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="270"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Disable password protection</source>
         <translation>Parola korumasını devre dışı bırak</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="279"/>
+        <location filename="../host/android/settings_widget.cc" line="281"/>
         <source>Enable password protection</source>
         <translation>Parola korumasını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="296"/>
         <source>Router</source>
         <translation>Yönlendirici</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="299"/>
+        <location filename="../host/android/settings_widget.cc" line="301"/>
         <source>Enable the use of a router</source>
         <translation>Yönlendirici kullanımını etkinleştir</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="304"/>
+        <location filename="../host/android/settings_widget.cc" line="306"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="310"/>
+        <location filename="../host/android/settings_widget.cc" line="312"/>
         <source>Public Key</source>
         <translation>Ortak Anahtar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="315"/>
+        <location filename="../host/android/settings_widget.cc" line="317"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Doğrudan bağlantı olmadığında (NAT arkasında) bir bilgisayara bağlanmak için yönlendirici gereklidir. Aspia genel bir yönlendirici sağlamaz, ancak kendi yönlendiricinizi kurabilirsiniz. Yönlendiriciyi &lt;a href=&quot;https://aspia.org&quot;&gt;resmi web sitesinden&lt;/a&gt; indirebilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
-        <location filename="../host/android/settings_widget.cc" line="428"/>
+        <location filename="../host/android/settings_widget.cc" line="410"/>
+        <location filename="../host/android/settings_widget.cc" line="430"/>
         <source>An error occurred while processing the password.</source>
         <translation>Parola işlenirken bir hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>Import</source>
         <translation>İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="449"/>
+        <location filename="../host/android/settings_widget.cc" line="451"/>
         <source>JSON files (*.json)</source>
         <translation>JSON dosyaları (*.json)</translation>
     </message>
@@ -7191,80 +7233,92 @@ Credentials imported: %5</source>
         <translation>Yerel</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="501"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="114"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <source>Failed to read data. The list may be out of date.</source>
+        <translation>Veriler okunamadı. Liste güncel olmayabilir.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
+        <source>Some records could not be read and are not shown in the list.</source>
+        <translation>Bazı kayıtlar okunamadı ve listede gösterilmiyor.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
         <source>Change Password</source>
         <translation>Parolayı Değiştir</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="509"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="510"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Parola %n karakteri aşmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="518"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Girdiğiniz parola güvenlik gereksinimlerini karşılamıyor!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="519"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Parola küçük ve büyük harfler ile rakamlar içermeli ve %n karakterden kısa olmamalıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="522"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
         <source>Do you want to enter a different password?</source>
         <translation>Farklı bir parola girmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="540"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Parola değiştiriliyor. Oturumun yeniden açılması bekleniyor...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="690"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; grubunu silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="703"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
         <source>Unable to remove group</source>
         <translation>Grup kaldırılamıyor</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="767"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; yönlendiricisini silmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1333"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Seçilen üst grupta bu ada sahip bir grup zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1342"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1500"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
         <source>Failed to move the group.</source>
         <translation>Grup taşınamadı.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1391"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Seçilen grupta bu ada sahip bir ana bilgisayar zaten var.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1409"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1578"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Ana bilgisayar seçilen gruba taşınamadı.</translation>
     </message>
@@ -11957,6 +12011,24 @@ Credentials imported: %5</source>
         <location filename="../host/android/users_widget.cc" line="117"/>
         <source>Disabled</source>
         <translation>Devre Dışı</translation>
+    </message>
+</context>
+<context>
+    <name>VideoWorker</name>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="46"/>
+        <source>Unable to create the directory for the recording.</source>
+        <translation>Kayıt için dizin oluşturulamıyor.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="48"/>
+        <source>Unable to create the file for the recording.</source>
+        <translation>Kayıt için dosya oluşturulamıyor.</translation>
+    </message>
+    <message>
+        <location filename="../client/workers/video_worker.cc" line="50"/>
+        <source>An error occurred while writing the recording.</source>
+        <translation>Kayıt yazılırken bir hata oluştu.</translation>
     </message>
 </context>
 </TS>
