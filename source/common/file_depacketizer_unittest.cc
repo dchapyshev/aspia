@@ -244,6 +244,65 @@ TEST_F(FileDepacketizerTest, DataPastTheDeclaredSizeIsRejected)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The last packet closes the file, so a peer that declares more than it sends must not get it
+// accepted as a complete file.
+TEST_F(FileDepacketizerTest, LastPacketBeforeTheDeclaredSizeIsRejected)
+{
+    const QByteArray data = content(10);
+
+    std::unique_ptr<FileDepacketizer> depacketizer =
+        FileDepacketizer::create(targetPath(), true);
+    ASSERT_NE(depacketizer, nullptr);
+
+    EXPECT_FALSE(depacketizer->writeNextPacket(
+        dataPacket(Packet::FIRST_PACKET | Packet::LAST_PACKET, 100, data)));
+
+    depacketizer.reset();
+
+    EXPECT_FALSE(QFile::exists(targetPath()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The size and the offset are set by the first packet alone: a second one would write the rest of
+// the transfer over the beginning of the file.
+TEST_F(FileDepacketizerTest, RepeatedFirstPacketIsRejected)
+{
+    const QByteArray data = content(kMaxFilePacketSize);
+
+    std::unique_ptr<FileDepacketizer> depacketizer =
+        FileDepacketizer::create(targetPath(), true);
+    ASSERT_NE(depacketizer, nullptr);
+
+    ASSERT_TRUE(depacketizer->writeNextPacket(
+        dataPacket(Packet::FIRST_PACKET, 2 * kMaxFilePacketSize, data)));
+
+    EXPECT_FALSE(depacketizer->writeNextPacket(
+        dataPacket(Packet::FIRST_PACKET, 2 * kMaxFilePacketSize, data)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The empty packet that stands for a file of zero length is a first packet too, and a transfer in
+// progress is not one.
+TEST_F(FileDepacketizerTest, EmptyFileDuringTransferIsRejected)
+{
+    const QByteArray data = content(kMaxFilePacketSize);
+
+    std::unique_ptr<FileDepacketizer> depacketizer =
+        FileDepacketizer::create(targetPath(), true);
+    ASSERT_NE(depacketizer, nullptr);
+
+    ASSERT_TRUE(depacketizer->writeNextPacket(
+        dataPacket(Packet::FIRST_PACKET, 2 * kMaxFilePacketSize, data)));
+
+    EXPECT_FALSE(depacketizer->writeNextPacket(
+        dataPacket(Packet::FIRST_PACKET | Packet::LAST_PACKET, 0, QByteArray())));
+
+    depacketizer.reset();
+
+    EXPECT_FALSE(QFile::exists(targetPath()));
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST_F(FileDepacketizerTest, EmptyPacketWithoutTheLastFlagIsRejected)
 {
     std::unique_ptr<FileDepacketizer> depacketizer =

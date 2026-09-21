@@ -62,6 +62,12 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 {
     DCHECK(file_->isOpen());
 
+    if ((packet.flags() & proto::file_transfer::Packet::FIRST_PACKET) && file_size_ != 0)
+    {
+        LOG(ERROR) << "Repeated first packet";
+        return false;
+    }
+
     const size_t packet_size = packet.data().size();
     if (!packet_size)
     {
@@ -118,6 +124,12 @@ bool FileDepacketizer::writeNextPacket(const proto::file_transfer::Packet& packe
 
     if (packet.flags() & proto::file_transfer::Packet::LAST_PACKET)
     {
+        if (left_size_ != 0)
+        {
+            LOG(ERROR) << "Incomplete file:" << left_size_ << "bytes are missing";
+            return false;
+        }
+
         file_size_ = 0;
         file_->close();
     }
