@@ -28,10 +28,27 @@
 #include "proto/desktop_audio.h"
 #include "proto/desktop_video.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString sanitizedFileName(const QString& name)
+{
+    static const QString kInvalidCharacters = "/\\:*?\"<>|";
+
+    QString result = name;
+
+    for (const QChar& character : kInvalidCharacters)
+        result.replace(character, '_');
+
+    return result;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)
     : path_(path),
-      name_(name),
+      name_(sanitizedFileName(name)),
       last_video_encoding_(proto::video::ENCODING_UNKNOWN)
 {
     LOG(INFO) << "Ctor (path=" << path << "name=" << name.data() << ")";
@@ -188,7 +205,7 @@ bool WebmFileWriter::init()
     LOG(INFO) << "New video file:" << file_path;
 
 #if defined(Q_OS_WINDOWS)
-    if (fopen_s(&file_, file_path.toLocal8Bit().data(), "wb") != 0)
+    if (_wfopen_s(&file_, reinterpret_cast<const wchar_t*>(file_path.utf16()), L"wb") != 0)
 #else
     file_ = fopen(file_path.toLocal8Bit().data(), "wb");
     if (!file_)
