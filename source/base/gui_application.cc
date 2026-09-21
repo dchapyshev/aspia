@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QStyleFactory>
 #include <QStyleHints>
+#include <QStyleOption>
 #include <QSvgRenderer>
 #include <QTranslator>
 
@@ -97,6 +98,40 @@ public:
 
         return QProxyStyle::pixelMetric(metric, option, widget);
     }
+
+#if defined(Q_OS_MACOS)
+    void drawControl(ControlElement element, const QStyleOption* option, QPainter* painter,
+                     const QWidget* widget) const final
+    {
+        const QStyleOptionMenuItem* menu_item = qstyleoption_cast<const QStyleOptionMenuItem*>(option);
+        int margin = 0;
+
+        // The style puts the text of a menu item at the top of the item and the icon in the middle
+        // of it, and that shows as soon as the icon is taller than the text. Drawing into a rect
+        // narrowed by the same amount at the top and at the bottom leaves the icon where it was and
+        // moves the text to the middle.
+        if (element == QStyle::CE_MenuItem && menu_item &&
+            menu_item->menuItemType != QStyleOptionMenuItem::Separator)
+        {
+            margin = (menu_item->rect.height() - menu_item->fontMetrics.height()) / 2;
+        }
+
+        if (margin <= 0)
+        {
+            QProxyStyle::drawControl(element, option, painter, widget);
+            return;
+        }
+
+        // The narrowed rect is not filled to the edges of the item.
+        if (menu_item->state & QStyle::State_Selected)
+            painter->fillRect(menu_item->rect, menu_item->palette.highlight());
+
+        QStyleOptionMenuItem centered(*menu_item);
+        centered.rect.adjust(0, margin, 0, -margin);
+
+        QProxyStyle::drawControl(element, &centered, painter, widget);
+    }
+#endif // defined(Q_OS_MACOS)
 
 private:
     const int small_icon_size_;
