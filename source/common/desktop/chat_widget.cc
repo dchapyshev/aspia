@@ -90,7 +90,7 @@ QString historyFilePath(const QString& history_id)
         return QString();
 
     if (history_id.isEmpty())
-        return QDir(dir_path).filePath("chat.json");
+        return QDir(dir_path).filePath("host_chat.json");
 
     return QDir(dir_path).filePath(history_id + ".json");
 }
