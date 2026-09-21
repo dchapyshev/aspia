@@ -97,6 +97,8 @@ private:
     QAction* action_clear_chat_;
     QString display_name_;
     QString history_id_;
+    bool history_enabled_ = false;
+
     QVector<HistoryMessage> history_messages_;
     QTimer* status_clear_timer_;
 };

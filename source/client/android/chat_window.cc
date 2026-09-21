@@ -68,13 +68,43 @@ const Seconds kTypingThrottle{ 3 };
 const Seconds kTypingClear{ 5 };
 
 //--------------------------------------------------------------------------------------------------
-// A stable identifier for the chat with a host, derived from its address and credentials.
 QString chatHistoryId(const SessionState& session_state)
 {
-    GenericHash hash(GenericHash::SHA1);
-    hash.addData(session_state.hostAddress().toUtf8());
-    hash.addData(session_state.hostUserName().toUtf8());
-    hash.addData(session_state.hostPassword().toUtf8());
+    const HostConfig& host = session_state.host();
+    const Database& database = Database::instance();
+
+    GenericHash hash(GenericHash::SHA256);
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> entry = database.findLocalHost(host.entryId());
+        if (!entry.has_value())
+        {
+            LOG(WARNING) << "Host entry not found:" << host.entryId();
+            return QString();
+        }
+
+        hash.addData(entry->guid().toUtf8());
+    }
+    else if (host.routerId() > 0)
+    {
+        if (isTempHostId(stringToHostId(host.address())))
+            return QString();
+
+        std::optional<RouterConfig> router = database.findRouter(host.routerId());
+        if (!router.has_value())
+        {
+            LOG(WARNING) << "Router entry not found:" << host.routerId();
+            return QString();
+        }
+
+        hash.addData(router->guid().toUtf8());
+        hash.addData(host.address().toUtf8());
+    }
+    else
+    {
+        return QString();
+    }
 
     return QString::fromLatin1(hash.result().toHex()).first(32);
 }

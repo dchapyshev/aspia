@@ -21,6 +21,8 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
+#include "base/peer/host_id.h"
+#include "client/database.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/chat_widget.h"
 #include "proto/chat.h"
@@ -32,10 +34,41 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString chatHistoryId(const SessionState& session_state)
 {
-    GenericHash hash(GenericHash::SHA1);
-    hash.addData(session_state.hostAddress().toUtf8());
-    hash.addData(session_state.hostUserName().toUtf8());
-    hash.addData(session_state.hostPassword().toUtf8());
+    const HostConfig& host = session_state.host();
+    const Database& database = Database::instance();
+
+    GenericHash hash(GenericHash::SHA256);
+
+    if (host.entryId() > 0)
+    {
+        std::optional<LocalHostConfig> entry = database.findLocalHost(host.entryId());
+        if (!entry.has_value())
+        {
+            LOG(WARNING) << "Host entry not found:" << host.entryId();
+            return QString();
+        }
+
+        hash.addData(entry->guid().toUtf8());
+    }
+    else if (host.routerId() > 0)
+    {
+        if (isTempHostId(stringToHostId(host.address())))
+            return QString();
+
+        std::optional<RouterConfig> router = database.findRouter(host.routerId());
+        if (!router.has_value())
+        {
+            LOG(WARNING) << "Router entry not found:" << host.routerId();
+            return QString();
+        }
+
+        hash.addData(router->guid().toUtf8());
+        hash.addData(host.address().toUtf8());
+    }
+    else
+    {
+        return QString();
+    }
 
     return QString::fromLatin1(hash.result().toHex()).first(32);
 }
@@ -98,7 +131,9 @@ void ChatWindow::onInternalReset()
 //--------------------------------------------------------------------------------------------------
 void ChatWindow::onRegisterWorkers()
 {
-    ui->text_chat_widget->setHistoryId(chatHistoryId(*sessionState()));
+    const QString history_id = chatHistoryId(*sessionState());
+    if (!history_id.isEmpty())
+        ui->text_chat_widget->setHistoryId(history_id);
 
     connect(networkWorker(), &NetworkWorker::sig_channel_0,
             this, &ChatWindow::onChannelMessage, Qt::QueuedConnection);

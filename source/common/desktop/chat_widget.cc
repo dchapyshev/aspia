@@ -138,6 +138,8 @@ ChatWidget::ChatWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
+    removeHistoryFilesOlderThan(30);
+
     ui->setupUi(this);
 
     ui->label_status->setTextFormat(Qt::PlainText);
@@ -245,6 +247,7 @@ void ChatWidget::setDisplayName(const QString& display_name)
 void ChatWidget::setHistoryId(const QString& history_id)
 {
     history_id_ = history_id;
+    history_enabled_ = true;
     loadHistory();
 }
 
@@ -563,8 +566,6 @@ void ChatWidget::loadHistory()
     clearMessages();
     history_messages_.clear();
 
-    removeHistoryFilesOlderThan(30);
-
     QString file_path = historyFilePath(history_id_);
     if (file_path.isEmpty())
     {
@@ -636,6 +637,9 @@ void ChatWidget::loadHistory()
 //--------------------------------------------------------------------------------------------------
 void ChatWidget::saveHistory() const
 {
+    if (!history_enabled_)
+        return;
+
     QString file_path = historyFilePath(history_id_);
     if (file_path.isEmpty())
     {
