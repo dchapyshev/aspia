@@ -47,6 +47,8 @@ collect_sources(SOURCE_COMMON_ANDROID
     label.h
     line_edit.cc
     line_edit.h
+    log_archiver.cc
+    log_archiver.h
     menu.cc
     menu.h
     message_dialog.cc

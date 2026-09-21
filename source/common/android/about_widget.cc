@@ -23,7 +23,11 @@
 #include <QVBoxLayout>
 
 #include "version.h"
+#include "base/logging.h"
 #include "common/android/controls.h"
+#include "common/android/icon_button.h"
+#include "common/android/log_archiver.h"
+#include "common/android/message_dialog.h"
 
 namespace {
 
@@ -84,13 +88,45 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 
 //--------------------------------------------------------------------------------------------------
 AboutWidget::AboutWidget(QWidget* parent)
-    : ScrollArea(parent)
+    : ScrollArea(parent),
+      button_save_logs_(new IconButton(":/img/material/bug_report.svg", this))
 {
+    button_save_logs_->hide();
+    connect(button_save_logs_, &IconButton::clicked, this, &AboutWidget::onSaveLogs);
     buildContent();
 }
 
 //--------------------------------------------------------------------------------------------------
 AboutWidget::~AboutWidget() = default;
+
+//--------------------------------------------------------------------------------------------------
+QList<QWidget*> AboutWidget::appBarActions() const
+{
+    return { button_save_logs_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+void AboutWidget::onSaveLogs()
+{
+    LOG(INFO) << "[ACTION] Save logs requested by user";
+
+    QString location;
+
+    switch (LogArchiver::saveToDownloads(&location))
+    {
+        case LogArchiver::Result::SUCCESS:
+            MessageDialog::info(this, tr("Logs"), tr("The logs are saved to \"%1\".").arg(location));
+            break;
+
+        case LogArchiver::Result::NO_LOGS:
+            MessageDialog::info(this, tr("Logs"), tr("There are no logs to save."));
+            break;
+
+        default:
+            MessageDialog::info(this, tr("Logs"), tr("Unable to save the logs."));
+            break;
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 void AboutWidget::buildContent()

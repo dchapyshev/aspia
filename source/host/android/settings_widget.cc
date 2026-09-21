@@ -112,7 +112,9 @@ QList<QWidget*> SettingsWidget::appBarActions() const
         return { save_button_ };
     if (isUsersPage())
         return { add_user_button_ };
-    if (isAboutPage() || isUpdatePage())
+    if (isAboutPage())
+        return about_page_->appBarActions();
+    if (isUpdatePage())
         return {};
     return { import_button_, about_button_ };
 }

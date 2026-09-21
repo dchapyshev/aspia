@@ -95,7 +95,9 @@ QList<QWidget*> SettingsWidget::appBarActions() const
 {
     if (isCredentialsPage())
         return credentials_page_->appBarActions();
-    if (isAboutPage() || isUpdatePage())
+    if (isAboutPage())
+        return about_page_->appBarActions();
+    if (isUpdatePage())
         return {};
     return { button_credentials_, button_about_ };
 }

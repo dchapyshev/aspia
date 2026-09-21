@@ -16,34 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_ANDROID_ABOUT_WIDGET_H
-#define COMMON_ANDROID_ABOUT_WIDGET_H
+#ifndef COMMON_ANDROID_LOG_ARCHIVER_H
+#define COMMON_ANDROID_LOG_ARCHIVER_H
 
-#include <QList>
+#include <QString>
 
-#include "common/android/scroll_area.h"
-
-class IconButton;
-
-class AboutWidget final : public ScrollArea
+// Packs the log files of the application into one archive the user can pass on.
+class LogArchiver
 {
-    Q_OBJECT
-
 public:
-    explicit AboutWidget(QWidget* parent = nullptr);
-    ~AboutWidget() final;
+    enum class Result
+    {
+        SUCCESS,  // The archive is written; the place it went to is reported.
+        NO_LOGS,  // The application has no log files yet.
+        FAILED    // The archive could not be written.
+    };
 
-    QList<QWidget*> appBarActions() const;
-
-private slots:
-    void onSaveLogs();
+    // Writes the archive to the downloads of the device and names in |location| where it went.
+    static Result saveToDownloads(QString* location);
 
 private:
-    void buildContent();
-
-    IconButton* button_save_logs_;
-
-    Q_DISABLE_COPY_MOVE(AboutWidget)
+    Q_DISABLE_COPY_MOVE(LogArchiver)
 };
 
-#endif // COMMON_ANDROID_ABOUT_WIDGET_H
+#endif // COMMON_ANDROID_LOG_ARCHIVER_H
