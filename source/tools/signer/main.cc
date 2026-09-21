@@ -16,6 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include <QDir>
+#include <QDirIterator>
 #include <QFile>
 
 #include <iostream>
@@ -29,18 +31,30 @@
 namespace {
 
 const qsizetype kKeySize = 32;
+const char kManifestFilter[] = "*.json";
+const char kSignatureSuffix[] = ".sig";
 
 //--------------------------------------------------------------------------------------------------
 void printUsage()
 {
     std::cout << "Signs the files of a release with the key the applications carry." << std::endl
               << std::endl
-              << "  aspia_signer genkey <key-file>    creates a key and prints its public half"
+              << "  aspia_signer genkey <private-key>    creates a key and prints its public half"
               << std::endl
-              << "  aspia_signer sign <key-file> <file>...    writes <file>.sig next to each file"
+              << "  aspia_signer sign <private-key> <file>...    writes <file>.sig next to each"
+              << " file"
               << std::endl
-              << "  aspia_signer verify <key> <file>...    checks each <file>.sig, where <key>"
-              << " is a key file or a public key in hex"
+              << "  aspia_signer signdir <private-key> <directory>...    signs every json file"
+              << " under the directory"
+              << std::endl
+              << "  aspia_signer verify <public-key> <file>...    checks each <file>.sig"
+              << std::endl
+              << "  aspia_signer verifydir <public-key> <directory>...    checks every json file"
+              << " under the directory"
+              << std::endl
+              << std::endl
+              << "A private key is a file. A public key is the key itself in hex or a file holding"
+              << " the private key it belongs to."
               << std::endl;
 }
 
@@ -131,7 +145,7 @@ bool sign(const SecureByteArray& private_key, const QString& file_path)
     if (signature.isEmpty())
         return false;
 
-    QString signature_path = file_path + ".sig";
+    QString signature_path = file_path + kSignatureSuffix;
 
     if (!writeFile(signature_path, Signature::tagged(signature)))
     {
@@ -141,6 +155,37 @@ bool sign(const SecureByteArray& private_key, const QString& file_path)
 
     std::cout << signature_path.toStdString() << std::endl;
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList manifestPaths(const QString& dir_path)
+{
+    QStringList file_paths;
+
+    QDirIterator iterator(dir_path, { kManifestFilter }, QDir::Files, QDirIterator::Subdirectories);
+    while (iterator.hasNext())
+        file_paths.append(iterator.next());
+
+    file_paths.sort();
+    return file_paths;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool signDirectory(const SecureByteArray& private_key, const QString& dir_path)
+{
+    const QStringList file_paths = manifestPaths(dir_path);
+    if (file_paths.isEmpty())
+    {
+        std::cerr << "No files to sign in directory" << std::endl;
+        return false;
+    }
+
+    bool result = true;
+
+    for (const QString& file_path : file_paths)
+        result &= sign(private_key, file_path);
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,7 +199,7 @@ bool verify(const QByteArray& public_key, const QString& file_path)
     }
 
     QByteArray signature;
-    if (!readFile(file_path + ".sig", &signature))
+    if (!readFile(file_path + kSignatureSuffix, &signature))
     {
         std::cerr << "Unable to read signature file" << std::endl;
         return false;
@@ -168,6 +213,24 @@ bool verify(const QByteArray& public_key, const QString& file_path)
 
     std::cout << file_path.toStdString() << " ok" << std::endl;
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool verifyDirectory(const QByteArray& public_key, const QString& dir_path)
+{
+    const QStringList file_paths = manifestPaths(dir_path);
+    if (file_paths.isEmpty())
+    {
+        std::cerr << "No files to check in directory" << std::endl;
+        return false;
+    }
+
+    bool result = true;
+
+    for (const QString& file_path : file_paths)
+        result &= verify(public_key, file_path);
+
+    return result;
 }
 
 } // namespace
@@ -220,6 +283,15 @@ int main(int argc, char* argv[])
         for (const QString& file_path : arguments)
             result &= sign(private_key, file_path);
     }
+    else if (command == "signdir")
+    {
+        SecureByteArray private_key = readKey(key_path);
+        if (private_key.isEmpty())
+            return 1;
+
+        for (const QString& dir_path : arguments)
+            result &= signDirectory(private_key, dir_path);
+    }
     else if (command == "verify")
     {
         QByteArray public_key = readPublicKey(key_path);
@@ -228,6 +300,15 @@ int main(int argc, char* argv[])
 
         for (const QString& file_path : arguments)
             result &= verify(public_key, file_path);
+    }
+    else if (command == "verifydir")
+    {
+        QByteArray public_key = readPublicKey(key_path);
+        if (public_key.isEmpty())
+            return 1;
+
+        for (const QString& dir_path : arguments)
+            result &= verifyDirectory(public_key, dir_path);
     }
     else
     {

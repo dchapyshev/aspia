@@ -191,10 +191,20 @@ An application checks a signature against the public keys built into it. There i
 than one, so a key can be replaced without cutting off the versions that know only the old one.
 
 ```
-aspia_signer genkey <key-file>          creates a key and prints its public half
-aspia_signer sign <key-file> <file>...  writes <file>.sig next to each file
-aspia_signer verify <key> <file>...     checks files; <key> is a key file or a public key in hex
+aspia_signer genkey <private-key>               creates a key and prints its public half
+aspia_signer sign <private-key> <file>...       writes <file>.sig next to each file
+aspia_signer signdir <private-key> <dir>...     signs every json file under the directory
+aspia_signer verify <public-key> <file>...      checks each <file>.sig
+aspia_signer verifydir <public-key> <dir>...    checks every json file under the directory
 ```
+
+A private key is a file. A public key is the key itself in hex or a file holding the private key it
+belongs to, so the same file works for signing and for checking.
+
+A channel, or the whole `updates` directory, is signed and checked in one go with `signdir` and
+`verifydir`. They take the manifests lying under the directory, subdirectories included, and not the
+signatures next to them. A signature does not depend on when it was made, so a file signed again
+keeps the bytes it had.
 
 Signing is the last thing done to a file. A file edited after signing keeps the signature of what
 it used to be, and every application will read it as missing. Before publishing, verify with the
