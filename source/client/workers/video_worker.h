@@ -78,6 +78,7 @@ signals:
     void sig_mouseCursorChanged(std::shared_ptr<MouseCursor> mouse_cursor);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
     void sig_metrics(const VideoWorker::Metrics& metrics);
+    void sig_recordingStopped(const QString& error_text);
 
 protected:
     // Worker implementation.

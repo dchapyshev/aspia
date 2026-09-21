@@ -273,6 +273,12 @@ void DesktopWindow::onRegisterWorkers()
             Qt::QueuedConnection);
     connect(video_worker_, &VideoWorker::sig_h264Disabled, this, &DesktopWindow::onVideoH264Disabled,
             Qt::QueuedConnection);
+    connect(video_worker_, &VideoWorker::sig_recordingStopped, this, [this](const QString& error_text)
+    {
+        toolbar_->startRecording(false);
+        if (!error_text.isEmpty())
+            MsgBox::warning(this, error_text);
+    }, Qt::QueuedConnection);
 
     connect(toolbar_, &DesktopToolBar::sig_switchSession, this, &DesktopWindow::onSwitchSession,
             Qt::UniqueConnection);

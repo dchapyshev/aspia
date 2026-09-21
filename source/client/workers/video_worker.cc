@@ -38,6 +38,20 @@ namespace {
 const int kMaxDirtyRects = 1024;
 
 //--------------------------------------------------------------------------------------------------
+QString recordingErrorText(WebmFileWriter::Error error)
+{
+    switch (error)
+    {
+        case WebmFileWriter::Error::CREATE_DIRECTORY:
+            return VideoWorker::tr("Unable to create the directory for the recording.");
+        case WebmFileWriter::Error::CREATE_FILE:
+            return VideoWorker::tr("Unable to create the file for the recording.");
+        default:
+            return VideoWorker::tr("An error occurred while writing the recording.");
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 int calculateFps(int last_fps, MilliSeconds duration, qint64 count)
 {
     static const double kAlpha = 0.1;
@@ -265,8 +279,19 @@ void VideoWorker::onEncodeTimer()
         return;
 
     proto::video::Packet packet;
-    if (encoder_->encode(decoder_->frame(), &packet))
-        writer_->addVideoPacket(packet);
+    if (!encoder_->encode(decoder_->frame(), &packet))
+        return;
+
+    writer_->addVideoPacket(packet);
+
+    const WebmFileWriter::Error error = writer_->lastError();
+    if (error != WebmFileWriter::Error::NONE)
+    {
+        LOG(ERROR) << "Recording stopped with error:" << error;
+
+        onSetRecording(false, QString(), QString());
+        emit sig_recordingStopped(recordingErrorText(error));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

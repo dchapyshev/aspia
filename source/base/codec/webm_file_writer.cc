@@ -86,6 +86,7 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
                            packet.format().video_rect().height(),
                            video_codec_id))
         {
+            last_error_ = Error::WRITE_FILE;
             return;
         }
 
@@ -93,6 +94,7 @@ void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
                            proto::audio::Packet::CHANNELS_STEREO,
                            mkvmuxer::Tracks::kOpusCodecId))
         {
+            last_error_ = Error::WRITE_FILE;
             return;
         }
 
@@ -170,6 +172,7 @@ bool WebmFileWriter::init()
         else
         {
             LOG(ERROR) << "Unable to create path";
+            last_error_ = Error::CREATE_DIRECTORY;
             return false;
         }
     }
@@ -192,6 +195,7 @@ bool WebmFileWriter::init()
 #endif
     {
         LOG(ERROR) << "Could not open file for writing";
+        last_error_ = Error::CREATE_FILE;
         return false;
     }
 
@@ -201,6 +205,7 @@ bool WebmFileWriter::init()
     if (!segment_->Init(mkv_writer_.get()))
     {
         LOG(ERROR) << "Cannot init segment";
+        last_error_ = Error::WRITE_FILE;
         close();
         return false;
     }
@@ -211,6 +216,7 @@ bool WebmFileWriter::init()
     if (!segment_info)
     {
         LOG(ERROR) << "Segment has no SegmentInfo";
+        last_error_ = Error::WRITE_FILE;
         close();
         return false;
     }
@@ -293,10 +299,17 @@ bool WebmFileWriter::addVideoTrack(int width, int height, std::string_view codec
 bool WebmFileWriter::writeFrame(
     std::string_view frame, NanoSeconds timestamp, quint64 track_num, bool is_key)
 {
+    if (frame.empty())
+    {
+        LOG(WARNING) << "Empty frame for track" << track_num;
+        return false;
+    }
+
     if (!segment_->AddFrame(reinterpret_cast<const quint8*>(frame.data()), frame.size(),
                             track_num, static_cast<quint64>(timestamp.count()), is_key))
     {
         LOG(ERROR) << "AddFrame failed";
+        last_error_ = Error::WRITE_FILE;
         return false;
     }
 

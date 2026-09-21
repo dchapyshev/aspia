@@ -19,6 +19,7 @@
 #ifndef BASE_CODEC_WEBM_FILE_WRITER_H
 #define BASE_CODEC_WEBM_FILE_WRITER_H
 
+#include <QObject>
 #include <QString>
 
 #include <memory>
@@ -43,12 +44,19 @@ class Packet;
 
 class WebmFileWriter
 {
+    Q_GADGET
+
 public:
+    enum class Error { NONE, CREATE_DIRECTORY, CREATE_FILE, WRITE_FILE };
+    Q_ENUM(Error)
+
     WebmFileWriter(const QString& path, const QString& name);
     ~WebmFileWriter();
 
     void addVideoPacket(const proto::video::Packet& packet);
     void addAudioPacket(const proto::audio::Packet& packet);
+
+    Error lastError() const { return last_error_; }
 
 private:
     // Opens the next file and starts a segment on it, in live mode.
@@ -77,6 +85,7 @@ private:
     std::optional<TimePoint> audio_start_time_;
 
     proto::video::Encoding last_video_encoding_;
+    Error last_error_ = Error::NONE;
 
     Q_DISABLE_COPY_MOVE(WebmFileWriter)
 };
