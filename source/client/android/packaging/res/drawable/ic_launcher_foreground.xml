@@ -4,12 +4,13 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- The 48x48 glyph is scaled to 52% of the canvas to fit the adaptive icon safe zone. -->
+    <!-- The 48x48 glyph is scaled to 44% of the canvas, so it stays well inside the area a
+         launcher shows and keeps a margin from the rounded edges of the tile. -->
     <group
-        android:scaleX="1.17"
-        android:scaleY="1.17"
-        android:translateX="25.92"
-        android:translateY="25.92">
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translateX="30"
+        android:translateY="30">
         <path
             android:fillColor="#546E7A"
             android:pathData="M5.3796,0.047h42.6557v34.5734h-42.6557z"/>
