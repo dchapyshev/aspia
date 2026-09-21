@@ -100,15 +100,12 @@ enum LoggingDestination
 
     LOG_TO_ALL    = LOG_TO_FILE | LOG_TO_STDOUT,
 
-#if defined(Q_OS_WINDOWS)
-    // On Windows, use a file next to the exe.
-#if defined(NDEBUG)
+#if defined(Q_OS_ANDROID)
+    LOG_DEFAULT = LOG_TO_STDOUT
+#elif defined(NDEBUG)
     LOG_DEFAULT = LOG_TO_FILE
 #else
     LOG_DEFAULT = LOG_TO_ALL
-#endif
-#elif defined(Q_OS_UNIX)
-    LOG_DEFAULT = LOG_TO_STDOUT
 #endif
 };
 
