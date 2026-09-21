@@ -751,7 +751,7 @@ QString osReleaseValue(const QByteArray& key)
 //--------------------------------------------------------------------------------------------------
 //static
 QString SysInfo::operatingSystemName()
-{.
+{
     const QString distribution = osReleaseValue("PRETTY_NAME");
     if (!distribution.isEmpty())
         return distribution;
