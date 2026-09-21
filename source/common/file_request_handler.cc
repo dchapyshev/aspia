@@ -506,6 +506,13 @@ void FileRequestHandler::doUploadRequest(
         depacketizer_ = FileDepacketizer::create(file_path, request.overwrite());
         if (!depacketizer_)
         {
+            if (!request.overwrite() && QFileInfo::exists(file_path))
+            {
+                LOG(WARNING) << "File already exists:" << file_path;
+                reply->set_error_code(proto::file_transfer::ERROR_CODE_PATH_ALREADY_EXISTS);
+                break;
+            }
+
             LOG(WARNING) << "Unable to create file:" << file_path;
             reply->set_error_code(proto::file_transfer::ERROR_CODE_FILE_CREATE_ERROR);
             break;
