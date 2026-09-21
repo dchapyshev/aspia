@@ -87,7 +87,9 @@ Application::Application(int& argc, char* argv[])
     setOrganizationName("Aspia");
     setApplicationName("Host");
     setApplicationVersion(ASPIA_VERSION_STRING);
+#if !defined(Q_OS_MACOS)
     setWindowIcon(QIcon(":/img/aspia.ico"));
+#endif // !defined(Q_OS_MACOS)
 
     QAbstractEventDispatcher::instance()->installNativeEventFilter(EventFilter::instance());
 

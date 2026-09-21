@@ -70,7 +70,9 @@ Application::Application(int& argc, char* argv[])
     setOrganizationName("Aspia");
     setApplicationName("Client");
     setApplicationVersion(ASPIA_VERSION_STRING);
+#if !defined(Q_OS_MACOS)
     setWindowIcon(QIcon(":/img/aspia.ico"));
+#endif // !defined(Q_OS_MACOS)
 
     connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {
