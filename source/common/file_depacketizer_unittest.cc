@@ -255,15 +255,25 @@ TEST_F(FileDepacketizerTest, EmptyPacketWithoutTheLastFlagIsRejected)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Nothing of the previous file survives a transfer that is shorter than it, whatever |overwrite|
-// says: refusing to replace an existing file is the business of the request handler, which checks
-// it before the depacketizer is ever created.
-TEST_F(FileDepacketizerTest, PreviousContentOfTheFileIsGone)
+// Without |overwrite| an existing file is left alone: it is neither truncated nor replaced, so
+// nothing is lost before the user has decided whether to replace it.
+TEST_F(FileDepacketizerTest, ExistingFileIsNotTouchedWithoutOverwrite)
+{
+    const QByteArray previous("0123456789");
+    const QString path = makeFile("target.bin", previous);
+
+    EXPECT_EQ(FileDepacketizer::create(path, false), nullptr);
+    EXPECT_EQ(readFile(path), previous);
+}
+
+//--------------------------------------------------------------------------------------------------
+// With |overwrite| nothing of the previous file survives a transfer that is shorter than it.
+TEST_F(FileDepacketizerTest, PreviousContentOfTheFileIsGoneWithOverwrite)
 {
     const QString path = makeFile("target.bin", QByteArray("0123456789"));
     const QByteArray data("ab");
 
-    std::unique_ptr<FileDepacketizer> depacketizer = FileDepacketizer::create(path, false);
+    std::unique_ptr<FileDepacketizer> depacketizer = FileDepacketizer::create(path, true);
     ASSERT_NE(depacketizer, nullptr);
 
     EXPECT_TRUE(depacketizer->writeNextPacket(

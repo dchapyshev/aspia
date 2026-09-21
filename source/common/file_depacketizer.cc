@@ -48,10 +48,7 @@ FileDepacketizer::~FileDepacketizer()
 // static
 std::unique_ptr<FileDepacketizer> FileDepacketizer::create(const QString& file_path, bool overwrite)
 {
-    QFile::OpenMode mode = QFile::WriteOnly;
-
-    if (overwrite)
-        mode |= QFile::Truncate;
+    QFile::OpenMode mode = QFile::WriteOnly | (overwrite ? QFile::Truncate : QFile::NewOnly);
 
     std::unique_ptr<QFile> file = std::make_unique<QFile>(file_path);
     if (!file->open(mode))
