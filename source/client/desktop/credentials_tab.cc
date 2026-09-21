@@ -59,7 +59,7 @@ CredentialsTab::CredentialsTab(QWidget* parent)
 
     addActions(ActionRole::EDIT, { ui->action_add, ui->action_edit, ui->action_delete });
 
-    reload(-1);
+    onSelectionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -196,8 +196,14 @@ void CredentialsTab::onContextMenu(const QPoint& pos)
 void CredentialsTab::reload(qint64 credential_id)
 {
     QList<CredentialConfig> credentials;
-    if (!Database::instance().credentialList(&credentials))
+    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+
+    if (result == Database::ReadResult::FAILED)
+    {
         LOG(ERROR) << "Unable to read credentials";
+        MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
+        return;
+    }
 
     model_->setCredentials(credentials);
 
@@ -209,6 +215,12 @@ void CredentialsTab::reload(qint64 credential_id)
     }
 
     onSelectionChanged();
+
+    if (result == Database::ReadResult::INCOMPLETE)
+    {
+        LOG(ERROR) << "Unable to read some of the credentials";
+        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

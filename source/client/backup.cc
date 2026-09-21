@@ -169,8 +169,8 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     QList<RouterConfig> routers;
     QList<LocalGroupConfig> groups;
     QList<CredentialConfig> credentials;
-    if (!db.routerList(&routers) || !db.allLocalGroups(&groups) ||
-        !db.credentialList(&credentials))
+    if (db.routerList(&routers) != Database::ReadResult::OK || !db.allLocalGroups(&groups) ||
+        db.credentialList(&credentials) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the address book";
         return Backup::Result::INTERNAL_ERROR;
@@ -203,7 +203,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     }
 
     QList<LocalHostConfig> hosts;
-    if (!db.allLocalHosts(&hosts))
+    if (db.allLocalHosts(&hosts) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the address book";
         return Backup::Result::INTERNAL_ERROR;
@@ -220,7 +220,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     }
 
     QList<RouterHostConfig> router_hosts;
-    if (!db.allRouterHosts(&router_hosts))
+    if (db.allRouterHosts(&router_hosts) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the address book";
         return Backup::Result::INTERNAL_ERROR;

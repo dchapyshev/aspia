@@ -20,6 +20,7 @@
 #define CLIENT_DATABASE_H
 
 #include <QList>
+#include <QObject>
 #include <QString>
 
 #include <optional>
@@ -30,6 +31,8 @@
 
 class Database
 {
+    Q_GADGET
+
 public:
     // A default-constructed Database is not connected; open() (or instance(), which opens the
     // per-thread connection itself) must be called first.
@@ -46,9 +49,12 @@ public:
 
     bool isValid() const;
 
+    enum class ReadResult { OK, INCOMPLETE, FAILED };
+    Q_ENUM(ReadResult)
+
     // Local Hosts.
-    bool localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
-    bool allLocalHosts(QList<LocalHostConfig>* hosts) const;
+    ReadResult localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
+    ReadResult allLocalHosts(QList<LocalHostConfig>* hosts) const;
     bool addLocalHost(LocalHostConfig& host);
     bool modifyLocalHost(LocalHostConfig& host);
     bool removeLocalHost(qint64 entry_id);
@@ -58,7 +64,7 @@ public:
     std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
 
     // Local Search.
-    bool searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
+    ReadResult searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
 
     // Local Groups.
     bool localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const;
@@ -70,14 +76,14 @@ public:
     std::optional<LocalGroupConfig> findLocalGroup(qint64 group_id) const;
 
     // Routers.
-    bool routerList(QList<RouterConfig>* routers) const;
+    ReadResult routerList(QList<RouterConfig>* routers) const;
     bool addRouter(RouterConfig& router);
     bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
     std::optional<RouterConfig> findRouter(qint64 router_id) const;
 
     // Router Hosts.
-    bool allRouterHosts(QList<RouterHostConfig>* hosts) const;
+    ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
     bool addRouterHost(const RouterHostConfig& host);
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(qint64 router_id, HostId host_id);
@@ -88,7 +94,7 @@ public:
     bool updateRouterHostCheckTime(qint64 router_id, HostId host_id);
 
     // Credentials.
-    bool credentialList(QList<CredentialConfig>* credentials) const;
+    ReadResult credentialList(QList<CredentialConfig>* credentials) const;
     bool addCredential(CredentialConfig& credential);
     bool modifyCredential(const CredentialConfig& credential);
     bool removeCredential(qint64 credential_id);

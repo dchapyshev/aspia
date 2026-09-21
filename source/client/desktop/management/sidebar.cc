@@ -81,7 +81,7 @@ Sidebar::Sidebar(QWidget* parent)
     connect(&controller, &RouterController::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
     connect(&controller, &RouterController::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
 
-    loadRouters();
+    const Database::ReadResult routers_result = loadRouters();
 
     LocalGroupConfig local_root_data;
     local_root_data.setId(0);
@@ -106,8 +106,14 @@ Sidebar::Sidebar(QWidget* parent)
     connect(tree_widget_, &QTreeWidget::itemCollapsed, this, &Sidebar::onItemCollapsed);
 
     // Load groups from database under Local root.
-    loadGroups(0, local_root_);
+    const bool groups_read = loadGroups(0, local_root_);
+
     tree_widget_->setCurrentItem(local_root_);
+
+    if (!groups_read || routers_result == Database::ReadResult::FAILED)
+        MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
+    else if (routers_result == Database::ReadResult::INCOMPLETE)
+        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,12 +138,17 @@ bool Sidebar::dragging() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
+bool Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
     QList<LocalGroupConfig> groups;
-    Database::instance().localGroupList(parent_id, &groups);
+    if (!Database::instance().localGroupList(parent_id, &groups))
+    {
+        LOG(ERROR) << "Unable to read the list of groups";
+        return false;
+    }
 
     Settings settings;
+    bool result = true;
 
     for (const LocalGroupConfig& group : std::as_const(groups))
     {
@@ -145,8 +156,11 @@ void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
         item->setExpanded(settings.isLocalGroupExpanded(group.id()));
 
         // Load child groups recursively.
-        loadGroups(group.id(), item);
+        if (!loadGroups(group.id(), item))
+            result = false;
     }
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,7 +171,9 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
         delete local_root_->child(0);
 
     // Reload from database.
-    loadGroups(0, local_root_);
+    if (!loadGroups(0, local_root_))
+        MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
+
     local_root_->setExpanded(Settings().isLocalGroupExpanded(0));
 
     // Find and select the requested group.
@@ -180,10 +196,15 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::loadRouters()
+Database::ReadResult Sidebar::loadRouters()
 {
     QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
+    const Database::ReadResult result = Database::instance().routerList(&routers);
+
+    if (result == Database::ReadResult::FAILED)
+        LOG(ERROR) << "Unable to read the list of routers";
+    else if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the routers";
 
     for (const RouterConfig& router_config : std::as_const(routers))
     {
@@ -192,15 +213,17 @@ void Sidebar::loadRouters()
     }
 
     RouterController::instance().reload();
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
     QList<RouterConfig> routers;
-    if (!Database::instance().routerList(&routers))
+    if (Database::instance().routerList(&routers) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the router list";
+        MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
         return;
     }
 

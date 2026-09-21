@@ -66,6 +66,37 @@ protected:
         return query.exec();
     }
 
+    // Spoils the sealed text of a record the way a damaged database or one of another installation
+    // has it: the row is in place, its data does not open.
+    bool corruptRecordData(const QString& table, qint64 id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        const std::string sql =
+            QString("UPDATE %1 SET data=X'00' WHERE id=?").arg(table).toStdString();
+
+        SqlQuery query(raw, sql);
+        query.addInt64(id);
+
+        return query.exec();
+    }
+
+    // The same for a record of a router host: it is named by the pair it belongs to, not by an id.
+    bool corruptRouterHostData(qint64 router_id, HostId host_id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE router_hosts SET data=X'00' WHERE router_id=? AND host_id=?");
+        query.addInt64(router_id);
+        query.addUInt64(host_id);
+
+        return query.exec();
+    }
+
     qint64 addGroup(const QString& name, qint64 parent_id)
     {
         LocalGroupConfig group;
@@ -139,14 +170,14 @@ protected:
     QList<LocalHostConfig> localHostList(qint64 group_id)
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_TRUE(db_.localHostList(group_id, &hosts));
+        EXPECT_EQ(db_.localHostList(group_id, &hosts), Database::ReadResult::OK);
         return hosts;
     }
 
     QList<LocalHostConfig> allLocalHosts()
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_TRUE(db_.allLocalHosts(&hosts));
+        EXPECT_EQ(db_.allLocalHosts(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
@@ -167,14 +198,14 @@ protected:
     QList<RouterConfig> routerList()
     {
         QList<RouterConfig> routers;
-        EXPECT_TRUE(db_.routerList(&routers));
+        EXPECT_EQ(db_.routerList(&routers), Database::ReadResult::OK);
         return routers;
     }
 
     QList<RouterHostConfig> allRouterHosts()
     {
         QList<RouterHostConfig> hosts;
-        EXPECT_TRUE(db_.allRouterHosts(&hosts));
+        EXPECT_EQ(db_.allRouterHosts(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
@@ -198,7 +229,7 @@ protected:
     QList<CredentialConfig> credentialList()
     {
         QList<CredentialConfig> credentials;
-        EXPECT_TRUE(db_.credentialList(&credentials));
+        EXPECT_EQ(db_.credentialList(&credentials), Database::ReadResult::OK);
         return credentials;
     }
 
@@ -561,6 +592,106 @@ TEST_F(DatabaseTest, TamperedDataDoesNotOpen)
     LocalHostConfig target;
     EXPECT_FALSE(target.setEncryptedData(tampered));
     EXPECT_TRUE(target.address().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record that does not open is not the same as a list that could not be read: the records that
+// do open come back, and the caller is told the list is not everything the database holds.
+TEST_F(DatabaseTest, HostThatDoesNotOpenLeavesTheListIncomplete)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 broken_id = addHost("broken", group);
+    addHost("readable", group);
+
+    ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
+
+    QList<LocalHostConfig> hosts;
+    EXPECT_EQ(db_.localHostList(group, &hosts), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().name(), QString("readable"));
+
+    QList<LocalHostConfig> all_hosts;
+    EXPECT_EQ(db_.allLocalHosts(&all_hosts), Database::ReadResult::INCOMPLETE);
+    EXPECT_EQ(all_hosts.size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The search reads the whole table and filters what it read, so a record that does not open makes
+// the result incomplete even when it would not have matched.
+TEST_F(DatabaseTest, SearchThatSkippedARecordIsIncomplete)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 broken_id = addHost("office-1", group);
+    addHost("office-2", group);
+
+    ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
+
+    QList<LocalHostConfig> hosts;
+    EXPECT_EQ(db_.searchLocalHosts("office", &hosts), Database::ReadResult::INCOMPLETE);
+
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().name(), QString("office-2"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, RouterThatDoesNotOpenLeavesTheListIncomplete)
+{
+    const qint64 broken_id = addRouter("broken");
+    addRouter("readable");
+
+    ASSERT_TRUE(corruptRecordData("routers", broken_id));
+
+    QList<RouterConfig> routers;
+    EXPECT_EQ(db_.routerList(&routers), Database::ReadResult::INCOMPLETE);
+
+    ASSERT_EQ(routers.size(), 1);
+    EXPECT_EQ(routers.front().displayName(), QString("readable"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, RouterHostThatDoesNotOpenLeavesTheListIncomplete)
+{
+    const qint64 router_id = addRouter("router");
+    addRouterHost(router_id, 1, "user-1", "secret");
+    addRouterHost(router_id, 2, "user-2", "secret");
+
+    ASSERT_TRUE(corruptRouterHostData(router_id, 1));
+
+    QList<RouterHostConfig> hosts;
+    EXPECT_EQ(db_.allRouterHosts(&hosts), Database::ReadResult::INCOMPLETE);
+
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts.front().username(), QString("user-2"));
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseTest, CredentialThatDoesNotOpenLeavesTheListIncomplete)
+{
+    const qint64 broken_id = addCredential("office", "user", "secret");
+    addCredential("home", "user", "secret");
+
+    ASSERT_TRUE(corruptRecordData("credentials", broken_id));
+
+    QList<CredentialConfig> credentials;
+    EXPECT_EQ(db_.credentialList(&credentials), Database::ReadResult::INCOMPLETE);
+
+    ASSERT_EQ(credentials.size(), 1);
+    EXPECT_EQ(credentials.front().displayName(), QString("home"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A list that was not read at all must not pass for a book without records.
+TEST_F(DatabaseTest, ListOfAClosedDatabaseFails)
+{
+    Database closed;
+
+    QList<LocalHostConfig> hosts;
+    EXPECT_EQ(closed.allLocalHosts(&hosts), Database::ReadResult::FAILED);
+    EXPECT_TRUE(hosts.isEmpty());
+
+    QList<CredentialConfig> credentials;
+    EXPECT_EQ(closed.credentialList(&credentials), Database::ReadResult::FAILED);
+    EXPECT_TRUE(credentials.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

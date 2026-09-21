@@ -24,6 +24,7 @@
 #include <QTreeWidget>
 #include <QWidget>
 
+#include "client/database.h"
 #include "client/router_types.h"
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/desktop/management/sidebar_items.h"
@@ -42,9 +43,9 @@ public:
     void setRouterHostMimeType(const QString& mime_type);
     bool dragging() const;
 
-    void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
+    bool loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
     void reloadGroups(qint64 selected_group_id = 0);
-    void loadRouters();
+    Database::ReadResult loadRouters();
     void reloadRouters();
     void setRouterStatus(qint64 router_id, SidebarRouter::Status status);
     void setRouterWorkspaces(qint64 router_id, const QList<RouterWorkspace>& workspaces);

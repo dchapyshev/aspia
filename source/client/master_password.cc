@@ -72,8 +72,10 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     QList<RouterConfig> routers;
     QList<RouterHostConfig> router_hosts;
     QList<CredentialConfig> credentials;
-    if (!db.allLocalHosts(&local_hosts) || !db.routerList(&routers) ||
-        !db.allRouterHosts(&router_hosts) || !db.credentialList(&credentials))
+    if (db.allLocalHosts(&local_hosts) != Database::ReadResult::OK ||
+        db.routerList(&routers) != Database::ReadResult::OK ||
+        db.allRouterHosts(&router_hosts) != Database::ReadResult::OK ||
+        db.credentialList(&credentials) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the address book completely";
         return false;

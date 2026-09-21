@@ -124,7 +124,7 @@ bool ClientWindow::connectToHost(HostConfig host, const QString& display_name)
         auth_dialog.setPassword(host.password());
 
         QList<CredentialConfig> credentials;
-        if (!Database::instance().credentialList(&credentials))
+        if (Database::instance().credentialList(&credentials) != Database::ReadResult::OK)
             LOG(ERROR) << "Unable to read credentials";
 
         auth_dialog.setSavedCredentials(credentials);

@@ -286,7 +286,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const
+Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -294,7 +294,7 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
@@ -302,7 +302,7 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
                         "FROM local_hosts WHERE group_id IS NULLIF(?, 0)");
     query.addInt64(group_id);
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -312,7 +312,7 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -320,18 +320,18 @@ bool Database::localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) con
         std::optional<LocalHostConfig> host = readHost(query);
         if (!host.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
         hosts->append(*host);
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
+Database::ReadResult Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -339,14 +339,14 @@ bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts");
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -356,7 +356,7 @@ bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -364,14 +364,14 @@ bool Database::allLocalHosts(QList<LocalHostConfig>* hosts) const
         std::optional<LocalHostConfig> host = readHost(query);
         if (!host.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
         hosts->append(*host);
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -570,7 +570,8 @@ std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(q
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig>* hosts) const
+Database::ReadResult Database::searchLocalHosts(
+    const QString& query_text, QList<LocalHostConfig>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -578,14 +579,14 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts");
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -593,7 +594,7 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
         if (step == SqlQuery::StepResult::FAILED)
         {
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -601,7 +602,7 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
         std::optional<LocalHostConfig> host = readHost(query);
         if (!host.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
@@ -612,7 +613,7 @@ bool Database::searchLocalHosts(const QString& query_text, QList<LocalHostConfig
         }
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -829,7 +830,7 @@ std::optional<LocalGroupConfig> Database::findLocalGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::routerList(QList<RouterConfig>* routers) const
+Database::ReadResult Database::routerList(QList<RouterConfig>* routers) const
 {
     CHECK(routers);
     routers->clear();
@@ -837,12 +838,12 @@ bool Database::routerList(QList<RouterConfig>* routers) const
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers");
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -852,7 +853,7 @@ bool Database::routerList(QList<RouterConfig>* routers) const
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -860,14 +861,14 @@ bool Database::routerList(QList<RouterConfig>* routers) const
         std::optional<RouterConfig> router = readRouter(query);
         if (!router.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
         routers->append(*router);
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -997,7 +998,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
+Database::ReadResult Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -1005,12 +1006,12 @@ bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts");
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -1020,7 +1021,7 @@ bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -1028,14 +1029,14 @@ bool Database::allRouterHosts(QList<RouterHostConfig>* hosts) const
         std::optional<RouterHostConfig> host = readRouterHost(query);
         if (!host.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
         hosts->append(*host);
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1243,7 +1244,7 @@ bool Database::updateRouterHostCheckTime(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::credentialList(QList<CredentialConfig>* credentials) const
+Database::ReadResult Database::credentialList(QList<CredentialConfig>* credentials) const
 {
     CHECK(credentials);
     credentials->clear();
@@ -1251,12 +1252,12 @@ bool Database::credentialList(QList<CredentialConfig>* credentials) const
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReadResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials");
 
-    bool complete = true;
+    ReadResult result = ReadResult::OK;
 
     for (;;)
     {
@@ -1266,7 +1267,7 @@ bool Database::credentialList(QList<CredentialConfig>* credentials) const
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
             LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return false;
+            return ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
@@ -1274,14 +1275,14 @@ bool Database::credentialList(QList<CredentialConfig>* credentials) const
         std::optional<CredentialConfig> credential = readCredential(query);
         if (!credential.has_value())
         {
-            complete = false;
+            result = ReadResult::INCOMPLETE;
             continue;
         }
 
         credentials->append(*credential);
     }
 
-    return complete;
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

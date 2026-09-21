@@ -37,6 +37,7 @@
 #include "client/desktop/management/drag_and_drop.h"
 #include "client/online_checker/online_checker.h"
 #include "client/router_controller.h"
+#include "common/desktop/msg_box.h"
 #include "ui_local_group_widget.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -137,16 +138,30 @@ const LocalHostConfig* LocalGroupWidget::currentHost() const
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::showGroup(qint64 group_id)
 {
-    current_group_id_ = group_id;
-
     QList<LocalHostConfig> hosts;
-    Database::instance().localHostList(group_id, &hosts);
-    model_->setHosts(hosts);
+    const Database::ReadResult result = Database::instance().localHostList(group_id, &hosts);
 
-    updateStatusLabels();
+    if (result != Database::ReadResult::FAILED || group_id != current_group_id_)
+    {
+        current_group_id_ = group_id;
+        model_->setHosts(hosts);
 
-    if (online_check_enabled_)
-        startOnlineChecker();
+        updateStatusLabels();
+
+        if (online_check_enabled_)
+            startOnlineChecker();
+    }
+
+    if (result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of hosts";
+        MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
+    }
+    else if (result == Database::ReadResult::INCOMPLETE)
+    {
+        LOG(ERROR) << "Unable to read some of the hosts";
+        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

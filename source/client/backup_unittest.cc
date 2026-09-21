@@ -158,7 +158,7 @@ protected:
     static QList<LocalHostConfig> allLocalHosts(Database& db)
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_TRUE(db.allLocalHosts(&hosts));
+        EXPECT_EQ(db.allLocalHosts(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
@@ -172,21 +172,21 @@ protected:
     static QList<RouterConfig> routerList(Database& db)
     {
         QList<RouterConfig> routers;
-        EXPECT_TRUE(db.routerList(&routers));
+        EXPECT_EQ(db.routerList(&routers), Database::ReadResult::OK);
         return routers;
     }
 
     static QList<RouterHostConfig> allRouterHosts(Database& db)
     {
         QList<RouterHostConfig> hosts;
-        EXPECT_TRUE(db.allRouterHosts(&hosts));
+        EXPECT_EQ(db.allRouterHosts(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
     static QList<CredentialConfig> credentialList(Database& db)
     {
         QList<CredentialConfig> credentials;
-        EXPECT_TRUE(db.credentialList(&credentials));
+        EXPECT_EQ(db.credentialList(&credentials), Database::ReadResult::OK);
         return credentials;
     }
 
@@ -371,7 +371,7 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
     EXPECT_EQ(new_parent->parentId(), 0);
     EXPECT_EQ(new_child->parentId(), new_parent->id());
     QList<LocalHostConfig> child_hosts;
-    EXPECT_TRUE(target_.localHostList(new_child->id(), &child_hosts));
+    EXPECT_EQ(target_.localHostList(new_child->id(), &child_hosts), Database::ReadResult::OK);
     EXPECT_EQ(child_hosts.size(), 1);
 }
 

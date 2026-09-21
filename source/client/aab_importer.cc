@@ -117,7 +117,7 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     Database& db = Database::instance();
 
     QList<RouterConfig> routers;
-    if (!db.routerList(&routers))
+    if (db.routerList(&routers) != Database::ReadResult::OK)
         return 0;
 
     for (const RouterConfig& router : std::as_const(routers))

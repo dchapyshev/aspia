@@ -126,7 +126,7 @@ TwoFactorPrompt* RouterController::twoFactorPrompt(qint64 router_id)
 void RouterController::reload()
 {
     QList<RouterConfig> configs;
-    if (!Database::instance().routerList(&configs))
+    if (Database::instance().routerList(&configs) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Failed to read the router list - keeping the current state";
         return;
