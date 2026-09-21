@@ -37,11 +37,6 @@ public:
     // the highlight pulses while the target is set. Pass -1 to clear.
     void setDropTarget(int index);
 
-#if defined(Q_OS_MACOS)
-    // QTabBar implementation.
-    QSize tabSizeHint(int index) const final;
-#endif // defined(Q_OS_MACOS)
-
 signals:
     // Emitted when the user drags a tab vertically out of the bar bounds. The receiver is expected
     // to remove the tab from the QTabWidget and place it into a detached window at global_pos.

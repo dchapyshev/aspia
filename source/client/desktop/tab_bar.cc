@@ -27,6 +27,8 @@
 #include <QProxyStyle>
 #include <QRegion>
 #include <QStyle>
+#include <QStyleHints>
+#include <QStyleOption>
 #include <QTimer>
 #include <QToolButton>
 
@@ -52,9 +54,8 @@ constexpr int kTabBarShadeDark = 40;
 constexpr int kTabMarginPx = 2;
 
 #if defined(Q_OS_MACOS)
-// Four pixels of air on each side of the icon and of the close button, as the macOS style lays the
-// label out.
-constexpr int kMacLabelPaddingPx = 8;
+// Air between the icon, the text and the buttons of a tab.
+constexpr int kTabElementSpacingPx = 4;
 #endif // defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
@@ -66,6 +67,150 @@ bool isWindows11Style(const QStyle* style)
     return base_style && base_style->objectName().compare("windows11", Qt::CaseInsensitive) == 0;
 }
 
+#if defined(Q_OS_MACOS)
+//--------------------------------------------------------------------------------------------------
+bool isHorizontalTab(QTabBar::Shape shape)
+{
+    return shape == QTabBar::RoundedNorth || shape == QTabBar::RoundedSouth ||
+           shape == QTabBar::TriangularNorth || shape == QTabBar::TriangularSouth;
+}
+
+// Lays a tab out the way the styles of the other platforms do. The macOS style keeps the text of a
+// tab in the middle of it and puts the icon aside, so a gap opens between them, and it asks for a
+// tab wider than the label it draws.
+class TabStyle final : public QProxyStyle
+{
+public:
+    explicit TabStyle(QObject* parent)
+    {
+        setParent(parent);
+    }
+
+    int pixelMetric(
+        PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
+    {
+        // The style below is the system one, and the icons of the window are of the size the
+        // application style gives.
+        if (metric == QStyle::PM_TabBarIconSize || metric == QStyle::PM_SmallIconSize)
+            return QApplication::style()->pixelMetric(metric, option, widget);
+
+        return QProxyStyle::pixelMetric(metric, option, widget);
+    }
+
+    QSize sizeFromContents(ContentsType type, const QStyleOption* option, const QSize& size,
+                           const QWidget* widget) const final
+    {
+        QSize result = QProxyStyle::sizeFromContents(type, option, size, widget);
+        const QStyleOptionTab* tab = qstyleoption_cast<const QStyleOptionTab*>(option);
+
+        // The tab bar asks for a size that already holds the horizontal padding of a tab and the
+        // style adds it a second time.
+        if (type == QStyle::CT_TabBarTab && tab && isHorizontalTab(tab->shape))
+            result.rwidth() -= pixelMetric(QStyle::PM_TabBarTabHSpace, option, widget);
+
+        return result;
+    }
+
+    QRect subElementRect(SubElement element, const QStyleOption* option,
+                         const QWidget* widget) const final
+    {
+        const QStyleOptionTab* tab = qstyleoption_cast<const QStyleOptionTab*>(option);
+
+        if (element == QStyle::SE_TabBarTabText && tab && isHorizontalTab(tab->shape))
+        {
+            QRect icon_rect;
+            QRect text_rect;
+
+            labelRects(tab, widget, &icon_rect, &text_rect);
+            return text_rect;
+        }
+
+        return QProxyStyle::subElementRect(element, option, widget);
+    }
+
+    void drawControl(ControlElement element, const QStyleOption* option, QPainter* painter,
+                     const QWidget* widget) const final
+    {
+        const QStyleOptionTab* tab = qstyleoption_cast<const QStyleOptionTab*>(option);
+
+        if (element != QStyle::CE_TabBarTabLabel || !tab || !isHorizontalTab(tab->shape))
+        {
+            QProxyStyle::drawControl(element, option, painter, widget);
+            return;
+        }
+
+        QRect icon_rect;
+        QRect text_rect;
+
+        labelRects(tab, widget, &icon_rect, &text_rect);
+
+        if (!tab->icon.isNull())
+        {
+            QIcon::Mode mode = (tab->state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled;
+            QIcon::State state = (tab->state & QStyle::State_Selected) ? QIcon::On : QIcon::Off;
+
+            painter->drawPixmap(icon_rect.topLeft(), tab->icon.pixmap(
+                icon_rect.size(), painter->device()->devicePixelRatio(), mode, state));
+        }
+
+        int alignment = Qt::AlignCenter | Qt::TextShowMnemonic;
+        if (!styleHint(QStyle::SH_UnderlineShortcut, tab, widget))
+            alignment |= Qt::TextHideMnemonic;
+
+        QPalette::ColorRole role = widget ? widget->foregroundRole() : QPalette::WindowText;
+        QPalette palette = tab->palette;
+
+        // A tab of a document gets the light palette even in the dark theme, so the style colors
+        // its label itself.
+        if (tab->documentMode && QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+        {
+            bool active = (tab->state & QStyle::State_Selected) &&
+                (tab->state & QStyle::State_Active);
+
+            palette.setColor(role, active ? Qt::white : Qt::gray);
+        }
+
+        drawItemText(painter, text_rect, alignment, palette,
+                     tab->state & QStyle::State_Enabled, tab->text, role);
+    }
+
+private:
+    // The icon at the left of the label and the text right next to it.
+    void labelRects(const QStyleOptionTab* tab, const QWidget* widget, QRect* icon_rect,
+                    QRect* text_rect) const
+    {
+        int padding = pixelMetric(QStyle::PM_TabBarTabHSpace, tab, widget) / 2;
+        QRect rect = tab->rect.adjusted(padding, 0, -padding, 0);
+
+        if (!tab->leftButtonSize.isEmpty())
+            rect.setLeft(rect.left() + kTabElementSpacingPx + tab->leftButtonSize.width());
+
+        if (!tab->rightButtonSize.isEmpty())
+            rect.setRight(rect.right() - kTabElementSpacingPx - tab->rightButtonSize.width());
+
+        *icon_rect = QRect();
+
+        if (!tab->icon.isNull())
+        {
+            QSize icon_size = tab->iconSize;
+            if (!icon_size.isValid())
+            {
+                int extent = pixelMetric(QStyle::PM_TabBarIconSize, tab, widget);
+                icon_size = QSize(extent, extent);
+            }
+
+            *icon_rect = QRect(rect.left(), rect.center().y() - icon_size.height() / 2,
+                               icon_size.width(), icon_size.height());
+            rect.setLeft(rect.left() + icon_size.width() + kTabElementSpacingPx);
+        }
+
+        *text_rect = rect;
+    }
+
+    Q_DISABLE_COPY_MOVE(TabStyle)
+};
+#endif // defined(Q_OS_MACOS)
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -75,6 +220,10 @@ TabBar::TabBar(QWidget* parent)
 {
     pulse_timer_->setInterval(kPulseTick);
     connect(pulse_timer_, &QTimer::timeout, this, &TabBar::onPulseTick);
+
+#if defined(Q_OS_MACOS)
+    setStyle(new TabStyle(this));
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,29 +250,6 @@ void TabBar::setDropTarget(int index)
 
     update();
 }
-
-#if defined(Q_OS_MACOS)
-//--------------------------------------------------------------------------------------------------
-QSize TabBar::tabSizeHint(int index) const
-{
-    QSize size = QTabBar::tabSizeHint(index);
-
-    // The macOS style keeps the label centered and takes the icon and the close button off both
-    // sides of the tab, but asks for their width only once. Without the other half everything is
-    // elided.
-    if (!tabIcon(index).isNull())
-    {
-        QWidget* button = tabButton(index, QTabBar::RightSide);
-        int extra = iconSize().width() + (button ? button->width() : 0) + kMacLabelPaddingPx -
-            style()->pixelMetric(QStyle::PM_TabBarTabHSpace, nullptr, this);
-
-        if (extra > 0)
-            size.rwidth() += extra;
-    }
-
-    return size;
-}
-#endif // defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 void TabBar::mousePressEvent(QMouseEvent* event)
