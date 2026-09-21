@@ -18,8 +18,10 @@
 
 #include "common/android/about_widget.h"
 
+#include <QDesktopServices>
 #include <QLabel>
 #include <QSysInfo>
+#include <QUrl>
 #include <QVBoxLayout>
 
 #include "version.h"
@@ -31,6 +33,7 @@
 
 namespace {
 
+const char kDonateLink[] = "https://aspia.org/donate";
 const char kGplLink[] = "https://www.gnu.org/licenses/gpl.html";
 const char kHomeLink[] = "https://aspia.org";
 const char kGitHubLink[] = "https://github.com/dchapyshev/aspia";
@@ -89,9 +92,12 @@ QString createList(const QString& title, const char* array[], size_t array_size)
 //--------------------------------------------------------------------------------------------------
 AboutWidget::AboutWidget(QWidget* parent)
     : ScrollArea(parent),
+      button_donate_(new IconButton(":/img/material/favorite.svg", this)),
       button_save_logs_(new IconButton(":/img/material/bug_report.svg", this))
 {
+    button_donate_->hide();
     button_save_logs_->hide();
+    connect(button_donate_, &IconButton::clicked, this, &AboutWidget::onDonate);
     connect(button_save_logs_, &IconButton::clicked, this, &AboutWidget::onSaveLogs);
     buildContent();
 }
@@ -102,7 +108,14 @@ AboutWidget::~AboutWidget() = default;
 //--------------------------------------------------------------------------------------------------
 QList<QWidget*> AboutWidget::appBarActions() const
 {
-    return { button_save_logs_ };
+    return { button_donate_, button_save_logs_ };
+}
+
+//--------------------------------------------------------------------------------------------------
+void AboutWidget::onDonate()
+{
+    LOG(INFO) << "[ACTION] Donate button clicked";
+    QDesktopServices::openUrl(QUrl(kDonateLink));
 }
 
 //--------------------------------------------------------------------------------------------------

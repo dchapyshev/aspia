@@ -36,12 +36,14 @@ public:
     QList<QWidget*> appBarActions() const;
 
 private slots:
+    void onDonate();
     void onSaveLogs();
 
 private:
     void buildContent();
 
-    IconButton* button_save_logs_;
+    IconButton* button_donate_ = nullptr;
+    IconButton* button_save_logs_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(AboutWidget)
 };
