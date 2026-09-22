@@ -127,7 +127,7 @@ QString RouterConfig::displayLabel() const
     if (!address_.isEmpty())
         return address_;
 
-    return tr("<unread router>");
+    return tr("<unreadable router>");
 }
 
 //--------------------------------------------------------------------------------------------------

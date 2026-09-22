@@ -4,33 +4,38 @@
 <context>
     <name>AabImporter</name>
     <message>
-        <location filename="../client/aab_importer.cc" line="131"/>
+        <location filename="../client/aab_importer.cc" line="143"/>
         <source>%1 (Imported)</source>
         <translation>%1 (Εισηγμένο)</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="300"/>
+        <location filename="../client/aab_importer.cc" line="313"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation>Δεν είναι δυνατό το άνοιγμα του αρχείου &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="309"/>
+        <location filename="../client/aab_importer.cc" line="322"/>
         <source>Selected file is empty.</source>
         <translation>Το επιλεγμένο αρχείο είναι κενό.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="316"/>
-        <location filename="../client/aab_importer.cc" line="364"/>
+        <location filename="../client/aab_importer.cc" line="329"/>
+        <location filename="../client/aab_importer.cc" line="377"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>Το αρχείο του βιβλίου διευθύνσεων είναι κατεστραμμένο ή έχει άγνωστη μορφή.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="356"/>
+        <location filename="../client/aab_importer.cc" line="369"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>Το αρχείο του βιβλίου διευθύνσεων είναι κρυπτογραφημένο με μη υποστηριζόμενο τύπο κρυπτογράφησης.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="391"/>
+        <location filename="../client/aab_importer.cc" line="388"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων από την τοπική βάση δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="407"/>
         <source>Import completed successfully.
 Groups added: %1
 Hosts added: %2
@@ -43,22 +48,22 @@ Routers added: %4</source>
 Δρομολογητές που προστέθηκαν: %4</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="348"/>
+        <location filename="../client/aab_importer.cc" line="361"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>Δεν είναι δυνατή η αποκρυπτογράφηση του βιβλίου διευθύνσεων με τον καθορισμένο κωδικό πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="331"/>
+        <location filename="../client/aab_importer.cc" line="344"/>
         <source>Unlock</source>
         <translation>Ξεκλείδωμα</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="333"/>
+        <location filename="../client/aab_importer.cc" line="346"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation>Το βιβλίο διευθύνσεων είναι κρυπτογραφημένο. Για να το ανοίξετε, πρέπει να εισαγάγετε κωδικό πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="386"/>
+        <location filename="../client/aab_importer.cc" line="402"/>
         <source>Nothing was imported.</source>
         <translation>Δεν έγινε εισαγωγή κανενός στοιχείου.</translation>
     </message>
@@ -417,55 +422,71 @@ Routers added: %4</source>
         <translation>Ρυθμίσεις</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="684"/>
+        <location filename="../client/android/main_window.cc" line="433"/>
+        <location filename="../client/android/main_window.cc" line="1011"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του κεντρικού υπολογιστή. Επεξεργαστείτε τον κεντρικό υπολογιστή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="695"/>
         <source>Update</source>
         <translation>Ενημέρωση</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="685"/>
+        <location filename="../client/android/main_window.cc" line="696"/>
         <source>Version %1 is available.</source>
         <translation>Η έκδοση %1 είναι διαθέσιμη.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="544"/>
+        <location filename="../client/android/main_window.cc" line="743"/>
+        <location filename="../client/android/main_window.cc" line="969"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="744"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="555"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Έλεγχος ταυτότητας δύο παραγόντων - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="885"/>
-        <location filename="../client/android/main_window.cc" line="892"/>
-        <location filename="../client/android/main_window.cc" line="902"/>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <location filename="../client/android/main_window.cc" line="962"/>
-        <source>Connection by link</source>
-        <translation>Σύνδεση μέσω συνδέσμου</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="885"/>
+        <location filename="../client/android/main_window.cc" line="921"/>
         <source>Invalid link.</source>
         <translation>Μη έγκυρος σύνδεσμος.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="893"/>
+        <location filename="../client/android/main_window.cc" line="929"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Μια άλλη περίοδος λειτουργίας είναι ενεργή. Κλείστε την και ανοίξτε ξανά τον σύνδεσμο.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="903"/>
+        <location filename="../client/android/main_window.cc" line="939"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>Ο τύπος περιόδου λειτουργίας από τον σύνδεσμο δεν υποστηρίζεται σε αυτήν τη συσκευή.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="924"/>
+        <location filename="../client/android/main_window.cc" line="960"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ο δρομολογητής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων δρομολογητών.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="963"/>
+        <location filename="../client/android/main_window.cc" line="1012"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Ο κεντρικός υπολογιστής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων κεντρικών υπολογιστών.</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="432"/>
+        <location filename="../client/android/main_window.cc" line="741"/>
+        <location filename="../client/android/main_window.cc" line="921"/>
+        <location filename="../client/android/main_window.cc" line="928"/>
+        <location filename="../client/android/main_window.cc" line="938"/>
+        <location filename="../client/android/main_window.cc" line="959"/>
+        <location filename="../client/android/main_window.cc" line="968"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="463"/>
@@ -485,7 +506,7 @@ Routers added: %4</source>
         <translation>Ενεργοποιήστε την υπηρεσία προσβασιμότητας για να επιτρέψετε τον απομακρυσμένο έλεγχο πληκτρολογίου και ποντικιού.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="685"/>
+        <location filename="../client/android/main_window.cc" line="696"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -555,13 +576,13 @@ Routers added: %4</source>
         <translation>Αποθήκευση στοιχείων σύνδεσης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="201"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="217"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="208"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="224"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="210"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="217"/>
         <source>User name cannot be empty.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό.</translation>
     </message>
@@ -569,59 +590,59 @@ Routers added: %4</source>
 <context>
     <name>AuthorizationWindow</name>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="55"/>
+        <location filename="../client/android/authorization_window.cc" line="72"/>
         <source>Enter user name and password</source>
         <translation>Εισαγωγή ονόματος χρήστη και κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <location filename="../client/android/authorization_window.cc" line="73"/>
         <source>One-time password connection</source>
         <translation>Σύνδεση με κωδικό μίας χρήσης</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="57"/>
+        <location filename="../client/android/authorization_window.cc" line="74"/>
         <source>Use saved credentials</source>
         <translation>Χρήση αποθηκευμένων διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="67"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Authorization</source>
         <translation>Εξουσιοδότηση</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="75"/>
+        <location filename="../client/android/authorization_window.cc" line="92"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="120"/>
+        <location filename="../client/android/authorization_window.cc" line="137"/>
         <source>Save sign-in data</source>
         <translation>Αποθήκευση στοιχείων σύνδεσης</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="218"/>
+        <location filename="../client/android/authorization_window.cc" line="235"/>
         <source>User name cannot be empty.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="78"/>
-        <location filename="../client/android/authorization_window.cc" line="81"/>
+        <location filename="../client/android/authorization_window.cc" line="95"/>
+        <location filename="../client/android/authorization_window.cc" line="98"/>
         <source>Password</source>
         <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <location filename="../client/android/authorization_window.cc" line="101"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="88"/>
+        <location filename="../client/android/authorization_window.cc" line="105"/>
         <source>Connect</source>
         <translation>Σύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="209"/>
-        <location filename="../client/android/authorization_window.cc" line="225"/>
+        <location filename="../client/android/authorization_window.cc" line="226"/>
+        <location filename="../client/android/authorization_window.cc" line="242"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
@@ -855,108 +876,113 @@ Routers added: %4</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="135"/>
+        <location filename="../client/android/chat_window.cc" line="137"/>
         <source>User %1 has joined the chat</source>
         <translation>Ο χρήστης %1 συμμετέχει στη συνομιλία</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="138"/>
+        <location filename="../client/android/chat_window.cc" line="140"/>
         <source>User %1 has left the chat</source>
         <translation>Ο χρήστης %1 αποχώρησε από τη συνομιλία</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="141"/>
+        <location filename="../client/android/chat_window.cc" line="143"/>
         <source>User %1 is logged in</source>
         <translation>Ο χρήστης %1 είναι συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="144"/>
+        <location filename="../client/android/chat_window.cc" line="146"/>
         <source>User %1 is not logged in</source>
         <translation>Ο χρήστης %1 δεν είναι συνδεδεμένος</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="147"/>
+        <location filename="../client/android/chat_window.cc" line="149"/>
         <source>There are no connected users</source>
         <translation>Δεν υπάρχουν συνδεδεμένοι χρήστες</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="175"/>
-        <location filename="../client/android/chat_window.cc" line="359"/>
+        <location filename="../client/android/chat_window.cc" line="177"/>
+        <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Chat</source>
         <translation>Συνομιλία</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="254"/>
         <source>Connecting to host %1...</source>
         <translation>Σύνδεση με τον κεντρικό υπολογιστή %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="270"/>
+        <location filename="../client/android/chat_window.cc" line="272"/>
         <source>The connection to the host has been lost.</source>
         <translation>Η σύνδεση με τον κεντρικό υπολογιστή χάθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="484"/>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="489"/>
         <source>The specified router is unavailable.</source>
         <translation>Ο καθορισμένος δρομολογητής δεν είναι διαθέσιμος.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="523"/>
+        <location filename="../client/android/chat_window.cc" line="528"/>
         <source>Error requesting connection via router.</source>
         <translation>Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="282"/>
+        <location filename="../client/android/chat_window.cc" line="284"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Η έκδοση του κεντρικού υπολογιστή είναι νεότερη από αυτήν του προγράμματος-πελάτη. Ενημερώστε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="310"/>
+        <location filename="../client/android/chat_window.cc" line="312"/>
         <source>%1 is typing...</source>
         <translation>%1 πληκτρολογεί...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="463"/>
+        <location filename="../client/android/chat_window.cc" line="465"/>
         <source>Connecting...</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="490"/>
+        <location filename="../client/android/chat_window.cc" line="495"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="511"/>
+        <location filename="../client/android/chat_window.cc" line="516"/>
         <source>Requesting connection to the host...</source>
         <translation>Αίτηση σύνδεσης με τον κεντρικό υπολογιστή...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Save Chat</source>
         <translation>Αποθήκευση συνομιλίας</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Text files (*.txt)</source>
         <translation>Αρχεία κειμένου (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="359"/>
+        <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Could not open the file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear Chat</source>
         <translation>Απαλοιφή συνομιλίας</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear the chat history?</source>
         <translation>Να διαγραφεί το ιστορικό της συνομιλίας;</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear</source>
         <translation>Απαλοιφή</translation>
     </message>
@@ -987,17 +1013,17 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="228"/>
+        <location filename="../client/main.cc" line="237"/>
         <source>Set Master Password</source>
         <translation>Ορισμός κύριου κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="239"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Ορίστε έναν κύριο κωδικό πρόσβασης που απαιτείται για το ξεκλείδωμα της εφαρμογής.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="247"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -1005,12 +1031,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="246"/>
+        <location filename="../client/main.cc" line="255"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="248"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -1018,12 +1044,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="252"/>
+        <location filename="../client/main.cc" line="261"/>
         <source>Do you want to enter a different password?</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="262"/>
+        <location filename="../client/main.cc" line="271"/>
         <source>Unable to set master password.</source>
         <translation>Δεν είναι δυνατός ο ορισμός του κύριου κωδικού πρόσβασης.</translation>
     </message>
@@ -1043,7 +1069,12 @@ Routers added: %4</source>
         <translation>Εισαγάγετε τον κύριο κωδικό πρόσβασης για να ξεκλειδώσετε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="220"/>
+        <location filename="../client/main.cc" line="224"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Δεν είναι δυνατό το ξεκλείδωμα της βάσης δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="229"/>
         <source>Invalid master password.</source>
         <translation>Μη έγκυρος κύριος κωδικός πρόσβασης.</translation>
     </message>
@@ -1094,12 +1125,12 @@ Routers added: %4</source>
         <translation>Η περίοδος λειτουργίας ξεκίνησε.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="504"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>The specified router is unavailable.</source>
         <translation>Ο καθορισμένος δρομολογητής δεν είναι διαθέσιμος.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="506"/>
+        <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The specified router is offline.</source>
         <translation>Ο καθορισμένος δρομολογητής είναι εκτός σύνδεσης.</translation>
     </message>
@@ -1134,17 +1165,22 @@ Routers added: %4</source>
         <translation>Προσπάθεια σύνδεσης σε λειτουργία συμβατότητας...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="513"/>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/client_window.cc" line="526"/>
         <source>Requesting connection to the host...</source>
         <translation>Αίτηση σύνδεσης με τον κεντρικό υπολογιστή...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="534"/>
         <source>Connection offer received.</source>
         <translation>Ελήφθη προσφορά σύνδεσης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="538"/>
+        <location filename="../client/desktop/client_window.cc" line="551"/>
         <source>Error requesting connection via router.</source>
         <translation>Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
     </message>
@@ -1643,22 +1679,22 @@ Password: %2</source>
         <translation>Κωδικός πρόσβασης:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="44"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
         <source>Edit Credentials</source>
         <translation>Επεξεργασία διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="61"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
         <source>Add Credentials</source>
         <translation>Προσθήκη διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="86"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="69"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credential_dialog.cc" line="94"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="77"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -1666,61 +1702,76 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="104"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="87"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="96"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="114"/>
         <source>Unable to add credentials</source>
         <translation>Δεν είναι δυνατή η προσθήκη των διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="142"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="125"/>
         <source>Unable to modify credentials</source>
         <translation>Δεν είναι δυνατή η τροποποίηση των διαπιστευτηρίων</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credential_dialog.cc" line="145"/>
+        <source>Failed to read the credentials.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credential_dialog.cc" line="157"/>
+        <source>The credentials could not be read. You can enter them again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων. Μπορείτε να τα εισαγάγετε ξανά.</translation>
     </message>
 </context>
 <context>
     <name>CredentialEditor</name>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="52"/>
+        <location filename="../client/android/credential_editor.cc" line="50"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="53"/>
+        <location filename="../client/android/credential_editor.cc" line="51"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="54"/>
+        <location filename="../client/android/credential_editor.cc" line="52"/>
         <source>Password</source>
         <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="63"/>
+        <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="66"/>
-        <location filename="../client/android/credential_editor.cc" line="193"/>
+        <location filename="../client/android/credential_editor.cc" line="64"/>
+        <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete</source>
         <translation>Διαγραφή</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="139"/>
+        <location filename="../client/android/credential_editor.cc" line="133"/>
+        <source>The credentials could not be read. You can enter them again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων. Μπορείτε να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_editor.cc" line="145"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_editor.cc" line="146"/>
+        <location filename="../client/android/credential_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -1728,32 +1779,32 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="155"/>
+        <location filename="../client/android/credential_editor.cc" line="161"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="164"/>
+        <location filename="../client/android/credential_editor.cc" line="170"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="182"/>
+        <location filename="../client/android/credential_editor.cc" line="188"/>
         <source>Failed to save the credentials.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση των διαπιστευτηρίων.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="192"/>
+        <location filename="../client/android/credential_editor.cc" line="198"/>
         <source>Delete Credentials</source>
         <translation>Διαγραφή διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="193"/>
+        <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
         <translation>Να διαγραφούν τα διαπιστευτήρια &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="200"/>
+        <location filename="../client/android/credential_editor.cc" line="206"/>
         <source>Failed to delete the credentials.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή των διαπιστευτηρίων.</translation>
     </message>
@@ -1843,26 +1894,21 @@ Password: %2</source>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
     </message>
-    <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Ορισμένες εγγραφές δεν ήταν δυνατό να διαβαστούν και δεν εμφανίζονται στη λίστα.</translation>
-    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="135"/>
+        <location filename="../client/android/credentials_widget.cc" line="140"/>
         <source>Add Credentials</source>
         <translation>Προσθήκη διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="146"/>
+        <location filename="../client/android/credentials_widget.cc" line="151"/>
         <source>Edit Credentials</source>
         <translation>Επεξεργασία διαπιστευτηρίων</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="162"/>
+        <location filename="../client/android/credentials_widget.cc" line="167"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
@@ -2162,12 +2208,12 @@ Password: %2</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="534"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>Ο καθορισμένος δρομολογητής δεν είναι διαθέσιμος.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="561"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>Αίτηση σύνδεσης με τον κεντρικό υπολογιστή...</translation>
     </message>
@@ -2182,32 +2228,32 @@ Password: %2</source>
         <translation>Περίοδος λειτουργίας %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="540"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="768"/>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
         <source>Connecting to host %1...</source>
         <translation>Σύνδεση με τον κεντρικό υπολογιστή %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="777"/>
         <source>Connection established.</source>
         <translation>Η σύνδεση δημιουργήθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="787"/>
+        <location filename="../client/android/desktop_window.cc" line="790"/>
         <source>The connection to the host has been lost.</source>
         <translation>Η σύνδεση με τον κεντρικό υπολογιστή χάθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="800"/>
+        <location filename="../client/android/desktop_window.cc" line="803"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>Η έκδοση του κεντρικού υπολογιστή είναι νεότερη από αυτήν του προγράμματος-πελάτη. Ενημερώστε την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="804"/>
+        <location filename="../client/android/desktop_window.cc" line="807"/>
         <source>Legacy hosts are not supported.</source>
         <translation>Οι κεντρικοί υπολογιστές παλαιού τύπου δεν υποστηρίζονται.</translation>
     </message>
@@ -2242,68 +2288,73 @@ Password: %2</source>
         <translation>Αποσύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="658"/>
-        <location filename="../client/android/desktop_window.cc" line="712"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="715"/>
         <source>Back</source>
         <translation>Πίσω</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="659"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>Τερματισμός λειτουργίας</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="660"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>Επανεκκίνηση</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="665"/>
         <source>Safe Mode</source>
         <translation>Ασφαλής λειτουργία</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="666"/>
         <source>Logoff</source>
         <translation>Αποσύνδεση χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="667"/>
         <source>Lock</source>
         <translation>Κλείδωμα</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="680"/>
+        <location filename="../client/android/desktop_window.cc" line="683"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να τερματίσετε τη λειτουργία του απομακρυσμένου υπολογιστή;</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="684"/>
+        <location filename="../client/android/desktop_window.cc" line="687"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να επανεκκινήσετε τον απομακρυσμένο υπολογιστή;</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="688"/>
+        <location filename="../client/android/desktop_window.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να επανεκκινήσετε τον απομακρυσμένο υπολογιστή σε ασφαλή λειτουργία;</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="692"/>
+        <location filename="../client/android/desktop_window.cc" line="695"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να τερματίσετε την περίοδο λειτουργίας χρήστη στον απομακρυσμένο υπολογιστή;</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="696"/>
+        <location filename="../client/android/desktop_window.cc" line="699"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να κλειδώσετε την περίοδο λειτουργίας χρήστη στον απομακρυσμένο υπολογιστή;</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Confirmation</source>
         <translation>Επιβεβαίωση</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Yes</source>
         <translation>Ναι</translation>
     </message>
@@ -2994,8 +3045,8 @@ Password: %2</source>
         <location filename="../client/android/file_transfer_window.cc" line="62"/>
         <location filename="../client/android/file_transfer_window.cc" line="187"/>
         <location filename="../client/android/file_transfer_window.cc" line="269"/>
-        <location filename="../client/android/file_transfer_window.cc" line="459"/>
-        <location filename="../client/android/file_transfer_window.cc" line="470"/>
+        <location filename="../client/android/file_transfer_window.cc" line="462"/>
+        <location filename="../client/android/file_transfer_window.cc" line="473"/>
         <source>File Transfer</source>
         <translation>Μεταφορά αρχείων</translation>
     </message>
@@ -3026,12 +3077,12 @@ Password: %2</source>
         <translation>Η σύνδεση με τον κεντρικό υπολογιστή χάθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="328"/>
+        <location filename="../client/android/file_transfer_window.cc" line="331"/>
         <source>The specified router is unavailable.</source>
         <translation>Ο καθορισμένος δρομολογητής δεν είναι διαθέσιμος.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="367"/>
+        <location filename="../client/android/file_transfer_window.cc" line="370"/>
         <source>Error requesting connection via router.</source>
         <translation>Σφάλμα κατά την αίτηση σύνδεσης μέσω δρομολογητή.</translation>
     </message>
@@ -3051,22 +3102,27 @@ Password: %2</source>
         <translation>Σύνδεση...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="334"/>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="337"/>
         <source>Connecting to router...</source>
         <translation>Σύνδεση με τον δρομολογητή...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="355"/>
+        <location filename="../client/android/file_transfer_window.cc" line="358"/>
         <source>Requesting connection to the host...</source>
         <translation>Αίτηση σύνδεσης με τον κεντρικό υπολογιστή...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="460"/>
+        <location filename="../client/android/file_transfer_window.cc" line="463"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>Ανοίξτε πρώτα έναν φάκελο προορισμού στην άλλη πλευρά.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="513"/>
+        <location filename="../client/android/file_transfer_window.cc" line="516"/>
         <source>Deleting</source>
         <translation>Διαγραφή</translation>
     </message>
@@ -3526,22 +3582,27 @@ Password: %2</source>
         <translation>Επεξεργασία ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="69"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
         <source>Add Group</source>
         <translation>Προσθήκη ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="87"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
+        <source>Failed to read the group.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της ομάδας.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
         <source>Local</source>
         <translation>Τοπικά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="115"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="82"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="90"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -3549,7 +3610,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="134"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
@@ -3557,17 +3618,23 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="114"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="185"/>
+        <source>Failed to read the list of groups.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της λίστας ομάδων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Υπάρχει ήδη ομάδα με αυτό το όνομα στην επιλεγμένη γονική ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="168"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="141"/>
         <source>Unable to add group</source>
         <translation>Δεν είναι δυνατή η προσθήκη της ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
         <source>Unable to modify group</source>
         <translation>Δεν είναι δυνατή η τροποποίηση της ομάδας</translation>
     </message>
@@ -3575,33 +3642,33 @@ Password: %2</source>
 <context>
     <name>LocalGroupEditor</name>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="50"/>
+        <location filename="../client/android/local_group_editor.cc" line="48"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="51"/>
+        <location filename="../client/android/local_group_editor.cc" line="49"/>
         <source>Comment</source>
         <translation>Σχόλιο</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="59"/>
+        <location filename="../client/android/local_group_editor.cc" line="57"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="62"/>
-        <location filename="../client/android/local_group_editor.cc" line="177"/>
+        <location filename="../client/android/local_group_editor.cc" line="60"/>
+        <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete</source>
         <translation>Διαγραφή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="134"/>
+        <location filename="../client/android/local_group_editor.cc" line="132"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="141"/>
+        <location filename="../client/android/local_group_editor.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -3609,7 +3676,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="150"/>
+        <location filename="../client/android/local_group_editor.cc" line="148"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
@@ -3617,22 +3684,22 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="166"/>
+        <location filename="../client/android/local_group_editor.cc" line="164"/>
         <source>Failed to save the group.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση της ομάδας.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="176"/>
+        <location filename="../client/android/local_group_editor.cc" line="174"/>
         <source>Delete Group</source>
         <translation>Διαγραφή ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="177"/>
+        <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete the group &quot;%1&quot;?</source>
         <translation>Να διαγραφεί η ομάδα &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="184"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Failed to delete the group.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή της ομάδας.</translation>
     </message>
@@ -3640,22 +3707,17 @@ Password: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="48"/>
         <source>Status update...</source>
         <translation>Ενημέρωση κατάστασης...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="156"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
     </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Ορισμένες εγγραφές δεν ήταν δυνατό να διαβαστούν και δεν εμφανίζονται στη λίστα.</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="413"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n θυγατρική ομάδα</numerusform>
@@ -3663,7 +3725,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n θυγατρικός κεντρικός υπολογιστής</numerusform>
@@ -3700,7 +3762,7 @@ Password: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
         <source>Address:</source>
         <translation>Διεύθυνση:</translation>
     </message>
@@ -3730,37 +3792,37 @@ Password: %2</source>
         <translation>Σχόλιο:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="60"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
         <source>Without Router</source>
         <translation>Χωρίς δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="84"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Edit Host</source>
         <translation>Επεξεργασία κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="112"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Add Host</source>
         <translation>Προσθήκη κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="122"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;διαγραμμένος δρομολογητής&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
         <source>Local</source>
         <translation>Τοπικά</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="221"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -3768,27 +3830,27 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>An invalid host address was entered.</source>
         <translation>Εισαγάγατε μη έγκυρη διεύθυνση κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
         <source>An invalid host ID was entered.</source>
         <translation>Εισαγάγατε μη έγκυρο ID κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="268"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
@@ -3796,32 +3858,62 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="292"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων από την τοπική βάση δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Υπάρχει ήδη κεντρικός υπολογιστής με αυτό το όνομα στην επιλεγμένη ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
         <source>Unable to add host</source>
         <translation>Δεν είναι δυνατή η προσθήκη του κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="326"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
         <source>Unable to modify host</source>
         <translation>Δεν είναι δυνατή η τροποποίηση του κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="341"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <source>Failed to read the list of routers.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της λίστας δρομολογητών.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <source>Failed to read the list of credentials.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της λίστας διαπιστευτηρίων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <source>Failed to read the list of groups.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της λίστας ομάδων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <source>Failed to retrieve host information from the local database.</source>
+        <translation>Δεν ήταν δυνατή η ανάκτηση των πληροφοριών του κεντρικού υπολογιστή από την τοπική βάση δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <source>The data of the host could not be read. You can enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του κεντρικού υπολογιστή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
         <source>Host name or IP address</source>
         <translation>Όνομα κεντρικού υπολογιστή ή διεύθυνση IP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="346"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Host ID</source>
         <translation>ID κεντρικού υπολογιστή</translation>
     </message>
@@ -3829,74 +3921,86 @@ Password: %2</source>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="56"/>
+        <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>
         <translation>Χρήση υπαρχόντων</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="62"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>Router</source>
         <translation>Δρομολογητής</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
-        <location filename="../client/android/local_host_editor.cc" line="205"/>
+        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="248"/>
         <source>Address</source>
         <translation>Διεύθυνση</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="66"/>
+        <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="67"/>
+        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Password</source>
         <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="69"/>
+        <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="70"/>
+        <location filename="../client/android/local_host_editor.cc" line="69"/>
         <source>Comment</source>
         <translation>Σχόλιο</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="78"/>
+        <location filename="../client/android/local_host_editor.cc" line="77"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="81"/>
-        <location filename="../client/android/local_host_editor.cc" line="316"/>
+        <location filename="../client/android/local_host_editor.cc" line="80"/>
+        <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete</source>
         <translation>Διαγραφή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="172"/>
+        <location filename="../client/android/local_host_editor.cc" line="174"/>
+        <source>The data of the host could not be read. You can enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του κεντρικού υπολογιστή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="184"/>
         <source>Without Router</source>
         <translation>Χωρίς δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="205"/>
+        <location filename="../client/android/local_host_editor.cc" line="191"/>
+        <location filename="../client/android/local_host_editor.cc" line="216"/>
+        <location filename="../client/android/local_host_editor.cc" line="271"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων από την τοπική βάση δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="248"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="229"/>
+        <location filename="../client/android/local_host_editor.cc" line="278"/>
         <source>Name cannot be empty.</source>
         <translation>Το όνομα δεν μπορεί να είναι κενό.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="236"/>
+        <location filename="../client/android/local_host_editor.cc" line="285"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -3904,7 +4008,7 @@ Password: %2</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="245"/>
+        <location filename="../client/android/local_host_editor.cc" line="294"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο σχόλιο. Το μέγιστο μήκος του σχολίου είναι %n χαρακτήρας.</numerusform>
@@ -3912,42 +4016,42 @@ Password: %2</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="258"/>
+        <location filename="../client/android/local_host_editor.cc" line="307"/>
         <source>An invalid host address was entered.</source>
         <translation>Εισαγάγατε μη έγκυρη διεύθυνση κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="266"/>
+        <location filename="../client/android/local_host_editor.cc" line="315"/>
         <source>An invalid host ID was entered.</source>
         <translation>Εισαγάγατε μη έγκυρο ID κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="277"/>
+        <location filename="../client/android/local_host_editor.cc" line="326"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="286"/>
+        <location filename="../client/android/local_host_editor.cc" line="335"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="305"/>
+        <location filename="../client/android/local_host_editor.cc" line="354"/>
         <source>Failed to save the host.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση του κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="315"/>
+        <location filename="../client/android/local_host_editor.cc" line="364"/>
         <source>Delete Host</source>
         <translation>Διαγραφή κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="316"/>
+        <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>Να διαγραφεί ο κεντρικός υπολογιστής &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="323"/>
+        <location filename="../client/android/local_host_editor.cc" line="372"/>
         <source>Failed to delete the host.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή του κεντρικού υπολογιστή.</translation>
     </message>
@@ -3955,77 +4059,82 @@ Password: %2</source>
 <context>
     <name>LocalHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="239"/>
         <source>Address / ID</source>
         <translation>Διεύθυνση / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="242"/>
         <source>Comment</source>
         <translation>Σχόλιο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="245"/>
         <source>Created</source>
         <translation>Δημιουργήθηκε</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="248"/>
         <source>Modified</source>
         <translation>Τροποποιήθηκε</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="251"/>
         <source>Last Connect</source>
         <translation>Τελευταία σύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="254"/>
         <source>Status</source>
         <translation>Κατάσταση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="337"/>
         <source>Online</source>
         <translation>Σε σύνδεση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="340"/>
         <source>Offline</source>
         <translation>Εκτός σύνδεσης</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="343"/>
+        <source>Skipped</source>
+        <translation>Παραλείφθηκε</translation>
     </message>
 </context>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="279"/>
-        <location filename="../client/android/local_widget.cc" line="418"/>
+        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="438"/>
         <source>Add Group</source>
         <translation>Προσθήκη ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="280"/>
-        <location filename="../client/android/local_widget.cc" line="428"/>
+        <location filename="../client/android/local_widget.cc" line="295"/>
+        <location filename="../client/android/local_widget.cc" line="448"/>
         <source>Add Host</source>
         <translation>Προσθήκη κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="339"/>
+        <location filename="../client/android/local_widget.cc" line="354"/>
         <source>Invalid password.</source>
         <translation>Μη έγκυρος κωδικός πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="358"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>Το αρχείο δημιουργήθηκε από νεότερη έκδοση και δεν μπορεί να εισαχθεί.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="362"/>
+        <location filename="../client/android/local_widget.cc" line="377"/>
         <source>Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
@@ -4038,90 +4147,95 @@ Credentials imported: %5</source>
 Διαπιστευτήρια που εισήχθησαν: %5</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <location filename="../client/android/local_widget.cc" line="376"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="391"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Αντίγραφο ασφαλείας Aspia (*.aspia-backup)</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="393"/>
+        <location filename="../client/android/local_widget.cc" line="408"/>
         <source>Unable to write the file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="281"/>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <location filename="../client/android/local_widget.cc" line="308"/>
-        <location filename="../client/android/local_widget.cc" line="357"/>
-        <location filename="../client/android/local_widget.cc" line="361"/>
+        <location filename="../client/android/local_widget.cc" line="296"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="323"/>
+        <location filename="../client/android/local_widget.cc" line="372"/>
+        <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Restore from Backup</source>
         <translation>Επαναφορά από αντίγραφο ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="282"/>
-        <location filename="../client/android/local_widget.cc" line="375"/>
-        <location filename="../client/android/local_widget.cc" line="403"/>
-        <location filename="../client/android/local_widget.cc" line="407"/>
+        <location filename="../client/android/local_widget.cc" line="297"/>
+        <location filename="../client/android/local_widget.cc" line="390"/>
+        <location filename="../client/android/local_widget.cc" line="423"/>
+        <location filename="../client/android/local_widget.cc" line="427"/>
         <source>Create Backup</source>
         <translation>Δημιουργία αντιγράφου ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="309"/>
+        <location filename="../client/android/local_widget.cc" line="324"/>
         <source>Everything stored now is deleted and replaced with what the backup holds.</source>
         <translation>Ό,τι είναι αποθηκευμένο τώρα θα διαγραφεί και θα αντικατασταθεί με το περιεχόμενο του αντιγράφου ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="310"/>
+        <location filename="../client/android/local_widget.cc" line="325"/>
         <source>Restore</source>
         <translation>Επαναφορά</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="347"/>
+        <location filename="../client/android/local_widget.cc" line="362"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Το αντίγραφο ασφαλείας δεν περιέχει δεδομένα, επομένως δεν έγινε καμία αλλαγή.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="351"/>
+        <location filename="../client/android/local_widget.cc" line="366"/>
         <source>Failed to restore from the backup.</source>
         <translation>Δεν ήταν δυνατή η επαναφορά από το αντίγραφο ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="389"/>
+        <location filename="../client/android/local_widget.cc" line="404"/>
         <source>There is nothing to save.</source>
         <translation>Δεν υπάρχει τίποτα για αποθήκευση.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="397"/>
+        <location filename="../client/android/local_widget.cc" line="412"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Ορισμένες εγγραφές της βάσης δεδομένων δεν ήταν δυνατό να διαβαστούν. Επεξεργαστείτε τις για να εισαγάγετε τα δεδομένα τους ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="417"/>
         <source>Failed to create the backup.</source>
         <translation>Δεν ήταν δυνατή η δημιουργία του αντιγράφου ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="408"/>
+        <location filename="../client/android/local_widget.cc" line="428"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>Το αρχείο γράφτηκε στο %1. Για να το ανοίξετε αλλού, απαιτείται ο κύριος κωδικός πρόσβασης αυτής της εγκατάστασης.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="494"/>
+        <location filename="../client/android/local_widget.cc" line="536"/>
         <source>Edit Group</source>
         <translation>Επεξεργασία ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="505"/>
+        <location filename="../client/android/local_widget.cc" line="547"/>
         <source>Edit Host</source>
         <translation>Επεξεργασία κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="600"/>
+        <location filename="../client/android/local_widget.cc" line="657"/>
         <source>Desktop</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="602"/>
+        <location filename="../client/android/local_widget.cc" line="659"/>
         <source>File Transfer</source>
         <translation>Μεταφορά αρχείων</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="604"/>
+        <location filename="../client/android/local_widget.cc" line="661"/>
         <source>Chat</source>
         <translation>Συνομιλία</translation>
     </message>
@@ -4166,7 +4280,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="363"/>
+        <location filename="../client/desktop/main_window.cc" line="377"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4226,47 +4340,58 @@ Credentials imported: %5</source>
         <translation>Πάντα σε πρώτο πλάνο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="100"/>
+        <location filename="../client/desktop/main_window.cc" line="98"/>
         <source>Search...</source>
         <translation>Αναζήτηση...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="179"/>
+        <location filename="../client/desktop/main_window.cc" line="177"/>
         <source>Management</source>
         <translation>Διαχείριση</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="208"/>
+        <location filename="../client/desktop/main_window.cc" line="206"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Μη έγκυρος σύνδεσμος &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="229"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>Ο δρομολογητής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων δρομολογητών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="271"/>
+        <location filename="../client/desktop/main_window.cc" line="237"/>
+        <location filename="../client/desktop/main_window.cc" line="290"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του κεντρικού υπολογιστή. Επεξεργαστείτε τον κεντρικό υπολογιστή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>Ο κεντρικός υπολογιστής στον οποίο αναφέρεται ο σύνδεσμος δεν βρίσκεται μεταξύ των αποθηκευμένων κεντρικών υπολογιστών.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="461"/>
+        <location filename="../client/desktop/main_window.cc" line="475"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>Στις ιδιότητες του κεντρικού υπολογιστή έχει καθοριστεί σύνδεση μέσω ID, αλλά ο δρομολογητής δεν έχει ρυθμιστεί. Ελέγξτε τις παραμέτρους του δρομολογητή στις ιδιότητες του κεντρικού υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <location filename="../client/desktop/main_window.cc" line="291"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="323"/>
+        <location filename="../client/desktop/main_window.cc" line="337"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>Settings</source>
         <translation>Ρυθμίσεις</translation>
     </message>
@@ -4461,149 +4586,151 @@ Credentials imported: %5</source>
         <translation>Αυτόματη ανανέωση κατάστασης</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1011"/>
+        <location filename="../client/desktop/management_tab.cc" line="998"/>
         <source>(copy)</source>
         <translation>(αντίγραφο)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="718"/>
-        <location filename="../client/desktop/management_tab.cc" line="747"/>
-        <location filename="../client/desktop/management_tab.cc" line="797"/>
-        <location filename="../client/desktop/management_tab.cc" line="976"/>
-        <location filename="../client/desktop/management_tab.cc" line="1007"/>
-        <location filename="../client/desktop/management_tab.cc" line="1051"/>
+        <location filename="../client/desktop/management_tab.cc" line="966"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="2121"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Δεν ήταν δυνατή η ανάκτηση των πληροφοριών του κεντρικού υπολογιστή από την τοπική βάση δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1016"/>
+        <location filename="../client/desktop/management_tab.cc" line="1003"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Δεν ήταν δυνατή η προσθήκη του κεντρικού υπολογιστή στην τοπική βάση δεδομένων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1055"/>
+        <location filename="../client/desktop/management_tab.cc" line="1043"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον κεντρικό υπολογιστή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1065"/>
+        <location filename="../client/desktop/management_tab.cc" line="1053"/>
         <source>Unable to remove host</source>
         <translation>Δεν είναι δυνατή η κατάργηση του κεντρικού υπολογιστή</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1122"/>
-        <location filename="../client/desktop/management_tab.cc" line="1165"/>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
+        <location filename="../client/desktop/management_tab.cc" line="1153"/>
+        <location filename="../client/desktop/management_tab.cc" line="1178"/>
         <source>Copy Row</source>
         <translation>Αντιγραφή γραμμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1123"/>
-        <location filename="../client/desktop/management_tab.cc" line="1166"/>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1111"/>
+        <location filename="../client/desktop/management_tab.cc" line="1154"/>
+        <location filename="../client/desktop/management_tab.cc" line="1179"/>
         <source>Copy Value</source>
         <translation>Αντιγραφή τιμής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1290"/>
+        <location filename="../client/desktop/management_tab.cc" line="1278"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον χώρο εργασίας &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1310"/>
+        <location filename="../client/desktop/management_tab.cc" line="1298"/>
         <source>Failed to delete the workspace.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή του χώρου εργασίας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1405"/>
+        <location filename="../client/desktop/management_tab.cc" line="1393"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε την ομάδα &quot;%1&quot;; Οι κεντρικοί υπολογιστές που έχουν αντιστοιχιστεί σε αυτήν την ομάδα ή στις υποομάδες της θα μετακινηθούν στη ρίζα του χώρου εργασίας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1424"/>
+        <location filename="../client/desktop/management_tab.cc" line="1412"/>
         <source>Failed to delete the group.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή της ομάδας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1463"/>
+        <location filename="../client/desktop/management_tab.cc" line="1451"/>
         <source>Import Old Address Book</source>
         <translation>Εισαγωγή παλιού βιβλίου διευθύνσεων</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1464"/>
+        <location filename="../client/desktop/management_tab.cc" line="1452"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Βιβλίο διευθύνσεων (*.aab);;Όλα τα αρχεία (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1475"/>
+        <location filename="../client/desktop/management_tab.cc" line="1533"/>
         <source>The database is not available.</source>
         <translation>Η βάση δεδομένων δεν είναι διαθέσιμη.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1493"/>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
         <source>Create Backup</source>
         <translation>Δημιουργία αντιγράφου ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1510"/>
+        <location filename="../client/desktop/management_tab.cc" line="1498"/>
         <source>There is nothing to save.</source>
         <translation>Δεν υπάρχει τίποτα για αποθήκευση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Ορισμένες εγγραφές της βάσης δεδομένων δεν ήταν δυνατό να διαβαστούν. Επεξεργαστείτε τις για να εισαγάγετε τα δεδομένα τους ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1511"/>
         <source>Failed to create the backup.</source>
         <translation>Δεν ήταν δυνατή η δημιουργία του αντιγράφου ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1546"/>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1565"/>
         <source>Restore from Backup</source>
         <translation>Επαναφορά από αντίγραφο ασφαλείας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Ό,τι είναι αποθηκευμένο τώρα θα διαγραφεί και θα αντικατασταθεί με το περιεχόμενο του αντιγράφου ασφαλείας. Συνέχεια;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Το αντίγραφο ασφαλείας δημιουργήθηκε σε άλλη εγκατάσταση. Εισαγάγετε τον κύριο κωδικό πρόσβασης που χρησιμοποιείται εκεί.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <location filename="../client/desktop/management_tab.cc" line="1592"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Το αντίγραφο ασφαλείας δεν περιέχει δεδομένα, επομένως δεν έγινε καμία αλλαγή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <location filename="../client/desktop/management_tab.cc" line="1600"/>
         <source>The file is not a valid backup.</source>
         <translation>Το αρχείο δεν είναι έγκυρο αντίγραφο ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Failed to restore from the backup.</source>
         <translation>Δεν ήταν δυνατή η επαναφορά από το αντίγραφο ασφαλείας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1494"/>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1482"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Αντίγραφο ασφαλείας Aspia (*.aspia-backup);;Όλα τα αρχεία (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1514"/>
+        <location filename="../client/desktop/management_tab.cc" line="1502"/>
         <source>Unable to write the file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1603"/>
+        <location filename="../client/desktop/management_tab.cc" line="1596"/>
         <source>Unable to read the file.</source>
         <translation>Δεν είναι δυνατή η ανάγνωση του αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1523"/>
+        <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4618,17 +4745,17 @@ Credentials exported: %5</source>
 Διαπιστευτήρια που εξήχθησαν: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Δεν είναι δυνατή η αποκρυπτογράφηση του αρχείου με τον καθορισμένο κωδικό πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1595"/>
+        <location filename="../client/desktop/management_tab.cc" line="1588"/>
         <source>Unsupported file format version.</source>
         <translation>Μη υποστηριζόμενη έκδοση μορφής αρχείου.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1616"/>
+        <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4643,30 +4770,39 @@ Credentials imported: %5</source>
 Διαπιστευτήρια που εισήχθησαν: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2050"/>
-        <location filename="../client/desktop/management_tab.cc" line="2081"/>
+        <location filename="../client/desktop/management_tab.cc" line="2044"/>
+        <location filename="../client/desktop/management_tab.cc" line="2075"/>
         <source>Copy Link</source>
         <translation>Αντιγραφή συνδέσμου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2069"/>
-        <location filename="../client/desktop/management_tab.cc" line="2100"/>
-        <location filename="../client/desktop/management_tab.cc" line="2107"/>
+        <location filename="../client/desktop/management_tab.cc" line="2063"/>
+        <location filename="../client/desktop/management_tab.cc" line="2097"/>
         <source>Unable to create a link for this host.</source>
         <translation>Δεν είναι δυνατή η δημιουργία συνδέσμου για αυτόν τον κεντρικό υπολογιστή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2132"/>
+        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του κεντρικού υπολογιστή. Επεξεργαστείτε τον κεντρικό υπολογιστή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2137"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Επεξεργαστείτε τον δρομολογητή για να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2138"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>Ο δρομολογητής που είναι συσχετισμένος με αυτόν τον κεντρικό υπολογιστή έχει διαγραφεί. Επεξεργαστείτε τον κεντρικό υπολογιστή για να επιλέξετε άλλον δρομολογητή ή μεταβείτε σε απευθείας σύνδεση.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2139"/>
+        <location filename="../client/desktop/management_tab.cc" line="2145"/>
         <source>The host has an invalid host ID.</source>
         <translation>Ο κεντρικός υπολογιστής έχει μη έγκυρο ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2148"/>
+        <location filename="../client/desktop/management_tab.cc" line="2154"/>
         <source>The host has an incorrect address.</source>
         <translation>Ο κεντρικός υπολογιστής έχει εσφαλμένη διεύθυνση.</translation>
     </message>
@@ -4685,7 +4821,7 @@ Credentials imported: %5</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Unlock</source>
         <translation>Ξεκλείδωμα</translation>
     </message>
@@ -4740,12 +4876,17 @@ Credentials imported: %5</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="129"/>
+        <location filename="../client/android/master_password_dialog.cc" line="133"/>
         <source>Invalid master password.</source>
         <translation>Μη έγκυρος κύριος κωδικός πρόσβασης.</translation>
     </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="139"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Δεν είναι δυνατό το ξεκλείδωμα της βάσης δεδομένων.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/android/master_password_dialog.cc" line="142"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -4753,33 +4894,43 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="150"/>
+        <location filename="../client/android/master_password_dialog.cc" line="158"/>
         <source>The entered passwords do not match.</source>
         <translation>Οι κωδικοί πρόσβασης που εισαγάγατε δεν ταιριάζουν.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="160"/>
+        <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Unable to set master password.</source>
         <translation>Δεν είναι δυνατός ο ορισμός του κύριου κωδικού πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="169"/>
-        <source>Invalid current password or unable to change it.</source>
-        <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης ή δεν είναι δυνατή η αλλαγή του.</translation>
+        <location filename="../client/android/master_password_dialog.cc" line="181"/>
+        <source>Invalid current password.</source>
+        <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="194"/>
+        <location filename="../client/android/master_password_dialog.cc" line="187"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Ορισμένες εγγραφές της βάσης δεδομένων δεν ήταν δυνατό να διαβαστούν. Επεξεργαστείτε τις για να εισαγάγετε τα δεδομένα τους ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <source>Unable to change the password.</source>
+        <translation>Δεν είναι δυνατή η αλλαγή του κωδικού πρόσβασης.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Use password</source>
         <translation>Χρήση κωδικού πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="211"/>
-        <location filename="../client/android/master_password_dialog.cc" line="219"/>
+        <location filename="../client/android/master_password_dialog.cc" line="232"/>
+        <location filename="../client/android/master_password_dialog.cc" line="240"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Το βιομετρικό ξεκλείδωμα απέτυχε. Εισαγάγετε τον κύριο κωδικό πρόσβασης.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="215"/>
+        <location filename="../client/android/master_password_dialog.cc" line="236"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>Τα βιομετρικά στοιχεία άλλαξαν. Εισαγάγετε τον κύριο κωδικό πρόσβασης για να συνεχίσετε.</translation>
     </message>
@@ -4787,107 +4938,108 @@ Credentials imported: %5</source>
 <context>
     <name>MsgBox</name>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="49"/>
+        <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="50"/>
+        <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="51"/>
+        <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Yes</source>
         <translation>Ναι</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="52"/>
+        <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>No</source>
         <translation>Όχι</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="53"/>
+        <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Apply</source>
         <translation>Εφαρμογή</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="54"/>
+        <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Close</source>
         <translation>Κλείσιμο</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="55"/>
+        <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="56"/>
+        <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Discard</source>
         <translation>Απόρριψη</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="57"/>
+        <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Reset</source>
         <translation>Επαναφορά</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="58"/>
+        <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Help</source>
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="59"/>
+        <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Abort</source>
         <translation>Ματαίωση</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="60"/>
+        <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Retry</source>
         <translation>Επανάληψη</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="61"/>
+        <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Ignore</source>
         <translation>Παράβλεψη</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="62"/>
+        <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Restore Defaults</source>
         <translation>Επαναφορά προεπιλογών</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="63"/>
+        <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Save All</source>
         <translation>Αποθήκευση όλων</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="64"/>
+        <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>Open</source>
         <translation>Άνοιγμα</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="65"/>
+        <location filename="../common/desktop/msg_box.cc" line="67"/>
         <source>Yes to All</source>
         <translation>Ναι σε όλα</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="66"/>
+        <location filename="../common/desktop/msg_box.cc" line="68"/>
         <source>No to All</source>
         <translation>Όχι σε όλα</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="83"/>
+        <location filename="../common/desktop/msg_box.cc" line="85"/>
         <source>Warning</source>
         <translation>Προειδοποίηση</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="91"/>
+        <location filename="../common/desktop/msg_box.cc" line="93"/>
         <source>Information</source>
         <translation>Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="99"/>
+        <location filename="../common/desktop/msg_box.cc" line="101"/>
+        <location filename="../common/desktop/msg_box.cc" line="111"/>
         <source>Confirmation</source>
         <translation>Επιβεβαίωση</translation>
     </message>
@@ -5223,34 +5375,34 @@ Credentials imported: %5</source>
 <context>
     <name>RemoteWidget</name>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="690"/>
+        <location filename="../client/android/remote_widget.cc" line="693"/>
         <source>Unapproved Hosts</source>
         <translation>Μη εγκεκριμένοι κεντρικοί υπολογιστές</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="826"/>
-        <location filename="../client/android/remote_widget.cc" line="847"/>
+        <location filename="../client/android/remote_widget.cc" line="829"/>
+        <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>Show more</source>
         <translation>Εμφάνιση περισσότερων</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="826"/>
-        <location filename="../client/android/remote_widget.cc" line="847"/>
+        <location filename="../client/android/remote_widget.cc" line="829"/>
+        <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>%1 of %2</source>
         <translation>%1 από %2</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="910"/>
+        <location filename="../client/android/remote_widget.cc" line="913"/>
         <source>Desktop</source>
         <translation>Επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="912"/>
+        <location filename="../client/android/remote_widget.cc" line="915"/>
         <source>File Transfer</source>
         <translation>Μεταφορά αρχείων</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="914"/>
+        <location filename="../client/android/remote_widget.cc" line="917"/>
         <source>Chat</source>
         <translation>Συνομιλία</translation>
     </message>
@@ -5258,18 +5410,18 @@ Credentials imported: %5</source>
 <context>
     <name>RouterCard</name>
     <message>
-        <location filename="../client/android/router_card.cc" line="176"/>
-        <location filename="../client/android/router_card.cc" line="226"/>
+        <location filename="../client/android/router_card.cc" line="179"/>
+        <location filename="../client/android/router_card.cc" line="229"/>
         <source>Enter Code</source>
         <translation>Εισαγωγή κωδικού</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="224"/>
+        <location filename="../client/android/router_card.cc" line="227"/>
         <source>Blocked</source>
         <translation>Αποκλεισμένο</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="226"/>
+        <location filename="../client/android/router_card.cc" line="229"/>
         <source>Set Up</source>
         <translation>Ρύθμιση</translation>
     </message>
@@ -5341,46 +5493,54 @@ Credentials imported: %5</source>
     </message>
 </context>
 <context>
+    <name>RouterConfig</name>
+    <message>
+        <location filename="../client/config.cc" line="130"/>
+        <source>&lt;unreadable router&gt;</source>
+        <translation>&lt;μη αναγνώσιμος δρομολογητής&gt;</translation>
+    </message>
+</context>
+<context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="195"/>
-        <location filename="../client/router_controller.cc" line="214"/>
-        <location filename="../client/router_controller.cc" line="390"/>
+        <location filename="../client/router_controller.cc" line="210"/>
+        <location filename="../client/router_controller.cc" line="236"/>
+        <location filename="../client/router_controller.cc" line="436"/>
         <source>Connecting to router %1...</source>
         <translation>Σύνδεση με τον δρομολογητή %1...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="237"/>
+        <location filename="../client/router_controller.cc" line="259"/>
         <source>Event history cleared.</source>
         <translation>Το ιστορικό συμβάντων απαλείφθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="282"/>
+        <location filename="../client/router_controller.cc" line="304"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>Πάρα πολλές αποτυχημένες προσπάθειες. Ο δρομολογητής %1 θα δέχεται ξανά κωδικούς σε περίπου %2 λεπ.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="290"/>
+        <location filename="../client/router_controller.cc" line="312"/>
         <source>The code was not accepted by router %1.</source>
         <translation>Ο κωδικός δεν έγινε δεκτός από τον δρομολογητή %1.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="293"/>
+        <location filename="../client/router_controller.cc" line="315"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>Ο δρομολογητής %1 αναμένει κωδικό δύο παραγόντων.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="318"/>
+        <location filename="../client/router_controller.cc" line="344"/>
         <source>Connection to router %1 established.</source>
         <translation>Η σύνδεση με τον δρομολογητή %1 πραγματοποιήθηκε.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="363"/>
+        <location filename="../client/router_controller.cc" line="389"/>
         <source>Network error: %1</source>
         <translation>Σφάλμα δικτύου: %1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="377"/>
+        <location filename="../client/router_controller.cc" line="403"/>
         <source>Disconnected from router %1.</source>
         <translation>Έγινε αποσύνδεση από τον δρομολογητή %1.</translation>
     </message>
@@ -5428,22 +5588,22 @@ Credentials imported: %5</source>
         <translation>Κωδικός πρόσβασης:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="45"/>
+        <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Administrator</source>
         <translation>Διαχειριστής</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="46"/>
+        <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Manager</source>
         <translation>Διαχειριστής λειτουργίας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="47"/>
+        <location filename="../client/desktop/router_dialog.cc" line="48"/>
         <source>Operator</source>
         <translation>Χειριστής</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="94"/>
+        <location filename="../client/desktop/router_dialog.cc" line="76"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -5451,63 +5611,78 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="106"/>
+        <location filename="../client/desktop/router_dialog.cc" line="88"/>
         <source>An invalid router address was entered.</source>
         <translation>Εισαγάγατε μη έγκυρη διεύθυνση δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="116"/>
+        <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες _, -, .</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="127"/>
+        <location filename="../client/desktop/router_dialog.cc" line="109"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="149"/>
-        <location filename="../client/desktop/router_dialog.cc" line="164"/>
-        <location filename="../client/desktop/router_dialog.cc" line="173"/>
+        <location filename="../client/desktop/router_dialog.cc" line="131"/>
+        <location filename="../client/desktop/router_dialog.cc" line="148"/>
+        <location filename="../client/desktop/router_dialog.cc" line="157"/>
         <source>Failed to save the router.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση του δρομολογητή.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <source>Failed to read the router.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση του δρομολογητή.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <source>The data of the router could not be read. You can enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
     </message>
 </context>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="54"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="57"/>
+        <location filename="../client/android/router_editor.cc" line="55"/>
         <source>Address</source>
         <translation>Διεύθυνση</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="58"/>
+        <location filename="../client/android/router_editor.cc" line="56"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="59"/>
+        <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Password</source>
         <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="68"/>
+        <location filename="../client/android/router_editor.cc" line="66"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="71"/>
-        <location filename="../client/android/router_editor.cc" line="224"/>
+        <location filename="../client/android/router_editor.cc" line="69"/>
+        <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete</source>
         <translation>Διαγραφή</translation>
     </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="141"/>
+        <source>The data of the router could not be read. You can enter it again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων του δρομολογητή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/android/router_editor.cc" line="146"/>
+        <location filename="../client/android/router_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Πολύ μεγάλο όνομα. Το μέγιστο μήκος του ονόματος είναι %n χαρακτήρας.</numerusform>
@@ -5515,38 +5690,38 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="157"/>
+        <location filename="../client/android/router_editor.cc" line="163"/>
         <source>An invalid router address was entered.</source>
         <translation>Εισαγάγατε μη έγκυρη διεύθυνση δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="166"/>
+        <location filename="../client/android/router_editor.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Το όνομα χρήστη δεν μπορεί να είναι κενό και μπορεί να περιέχει μόνο χαρακτήρες του αλφαβήτου, αριθμούς και τους χαρακτήρες &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="176"/>
+        <location filename="../client/android/router_editor.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation>Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="203"/>
-        <location filename="../client/android/router_editor.cc" line="213"/>
+        <location filename="../client/android/router_editor.cc" line="211"/>
+        <location filename="../client/android/router_editor.cc" line="221"/>
         <source>Failed to save the router.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση του δρομολογητή.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="223"/>
+        <location filename="../client/android/router_editor.cc" line="231"/>
         <source>Delete Router</source>
         <translation>Διαγραφή δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="224"/>
+        <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete the router &quot;%1&quot;?</source>
         <translation>Να διαγραφεί ο δρομολογητής &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="231"/>
+        <location filename="../client/android/router_editor.cc" line="239"/>
         <source>Failed to delete the router.</source>
         <translation>Δεν ήταν δυνατή η διαγραφή του δρομολογητή.</translation>
     </message>
@@ -5756,61 +5931,89 @@ Credentials imported: %5</source>
         <translation>Σχόλιο:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="166"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
         <source>Failed to get list of groups.</source>
         <translation>Δεν ήταν δυνατή η λήψη της λίστας ομάδων.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="207"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="253"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="220"/>
         <source>Failed to save the credentials.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση των διαπιστευτηρίων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="243"/>
+        <source>Failed to read the list of credentials.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση της λίστας διαπιστευτηρίων.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="289"/>
+        <source>Failed to read the credentials of the host.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων του κεντρικού υπολογιστή.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <source>The credentials of the host could not be read. You can enter them again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων του κεντρικού υπολογιστή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostEditor</name>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="56"/>
+        <location filename="../client/android/router_host_editor.cc" line="55"/>
         <source>User Name</source>
         <translation>Όνομα χρήστη</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="58"/>
+        <location filename="../client/android/router_host_editor.cc" line="57"/>
         <source>Password</source>
         <translation>Κωδικός πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="50"/>
+        <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
         <translation>Το όνομα χρήστη και ο κωδικός πρόσβασης αποθηκεύονται μόνο σε αυτήν τη συσκευή και δεν αποστέλλονται στον δρομολογητή. Αφήστε και τα δύο κενά για να διαγραφούν.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="47"/>
+        <location filename="../client/android/router_host_editor.cc" line="46"/>
         <source>Use existing</source>
         <translation>Χρήση υπαρχόντων</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="61"/>
+        <location filename="../client/android/router_host_editor.cc" line="60"/>
         <source>Credentials</source>
         <translation>Διαπιστευτήρια</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="69"/>
+        <location filename="../client/android/router_host_editor.cc" line="68"/>
         <source>Save</source>
         <translation>Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="186"/>
-        <location filename="../client/android/router_host_editor.cc" line="210"/>
+        <location filename="../client/android/router_host_editor.cc" line="135"/>
+        <location filename="../client/android/router_host_editor.cc" line="157"/>
+        <location filename="../client/android/router_host_editor.cc" line="204"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων από την τοπική βάση δεδομένων.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="141"/>
+        <source>The credentials of the host could not be read. You can enter them again.</source>
+        <translation>Δεν ήταν δυνατή η ανάγνωση των διαπιστευτηρίων του κεντρικού υπολογιστή. Μπορείτε να τα εισαγάγετε ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="226"/>
+        <location filename="../client/android/router_host_editor.cc" line="240"/>
+        <location filename="../client/android/router_host_editor.cc" line="264"/>
         <source>Failed to save the credentials.</source>
         <translation>Δεν ήταν δυνατή η αποθήκευση των διαπιστευτηρίων.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="176"/>
+        <location filename="../client/android/router_host_editor.cc" line="215"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Εισαγάγετε και το όνομα χρήστη και τον κωδικό πρόσβασης ή αφήστε και τα δύο κενά.</translation>
     </message>
@@ -5853,17 +6056,12 @@ Credentials imported: %5</source>
         <translation>Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε όλους τους κεντρικούς υπολογιστές;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
-        <source>Confirmation</source>
-        <translation>Επιβεβαίωση</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="393"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>Η διαγραφή ενός κεντρικού υπολογιστή θα έχει ως αποτέλεσμα τη διαγραφή όλων των ρυθμίσεών του για τη σύνδεση με τον δρομολογητή, ενώ η εφαρμογή θα απεγκατασταθεί από τον κεντρικό υπολογιστή. Αυτή η ενέργεια είναι μη αναστρέψιμη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="665"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="661"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n κεντρικός υπολογιστής</numerusform>
@@ -5871,22 +6069,22 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="707"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
         <source>Save File</source>
         <translation>Αποθήκευση αρχείου</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="707"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
         <source>JSON files (*.json)</source>
         <translation>Αρχεία JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="714"/>
         <source>Could not open file for writing.</source>
         <translation>Δεν ήταν δυνατό το άνοιγμα του αρχείου για εγγραφή.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="765"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
         <source>Unable to write file.</source>
         <translation>Δεν είναι δυνατή η εγγραφή του αρχείου.</translation>
     </message>
@@ -6424,12 +6622,12 @@ Credentials imported: %5</source>
         <translation>Δεν έχουν προστεθεί δρομολογητές</translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="203"/>
+        <location filename="../client/android/routers_widget.cc" line="206"/>
         <source>Add Router</source>
         <translation>Προσθήκη δρομολογητή</translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="240"/>
+        <location filename="../client/android/routers_widget.cc" line="243"/>
         <source>Edit Router</source>
         <translation>Επεξεργασία δρομολογητή</translation>
     </message>
@@ -6450,22 +6648,22 @@ Credentials imported: %5</source>
 <context>
     <name>SearchResultModel</name>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Name</source>
         <translation>Όνομα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Address / ID</source>
         <translation>Διεύθυνση / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Group</source>
         <translation>Ομάδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="192"/>
         <source>Comment</source>
         <translation>Σχόλιο</translation>
     </message>
@@ -6473,27 +6671,27 @@ Credentials imported: %5</source>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous</source>
         <translation>Προηγούμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="297"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous page</source>
         <translation>Προηγούμενη σελίδα</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
         <source>Next</source>
         <translation>Επόμενο</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next page</source>
         <translation>Επόμενη σελίδα</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="801"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="805"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n αποτέλεσμα</numerusform>
@@ -6909,9 +7107,19 @@ Credentials imported: %5</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
-        <source>Invalid current password or unable to change it.</source>
-        <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης ή δεν είναι δυνατή η αλλαγή του.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <source>Invalid current password.</source>
+        <translation>Μη έγκυρος τρέχων κωδικός πρόσβασης.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="456"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Ορισμένες εγγραφές της βάσης δεδομένων δεν ήταν δυνατό να διαβαστούν. Επεξεργαστείτε τις για να εισαγάγετε τα δεδομένα τους ξανά.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="461"/>
+        <source>Unable to change the password.</source>
+        <translation>Δεν είναι δυνατή η αλλαγή του κωδικού πρόσβασης.</translation>
     </message>
 </context>
 <context>
@@ -7263,30 +7471,25 @@ Credentials imported: %5</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="117"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
         <location filename="../client/desktop/management/sidebar.cc" line="89"/>
         <source>Local</source>
         <translation>Τοπικά</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="114"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="173"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="225"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Δεν ήταν δυνατή η ανάγνωση των δεδομένων. Η λίστα ενδέχεται να μην είναι ενημερωμένη.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Ορισμένες εγγραφές δεν ήταν δυνατό να διαβαστούν και δεν εμφανίζονται στη λίστα.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Change Password</source>
         <translation>Αλλαγή κωδικού πρόσβασης</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="534"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -7294,7 +7497,7 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="535"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης δεν πρέπει να υπερβαίνει τον %n χαρακτήρα.</numerusform>
@@ -7302,12 +7505,12 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="543"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>Ο κωδικός πρόσβασης που εισαγάγατε δεν πληροί τις απαιτήσεις ασφαλείας!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="544"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>Ο κωδικός πρόσβασης πρέπει να περιέχει πεζούς και κεφαλαίους χαρακτήρες, αριθμούς και να μην είναι μικρότερος από %n χαρακτήρα.</numerusform>
@@ -7315,49 +7518,51 @@ Credentials imported: %5</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="547"/>
         <source>Do you want to enter a different password?</source>
         <translation>Θέλετε να εισαγάγετε διαφορετικό κωδικό πρόσβασης;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="565"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Αλλαγή κωδικού πρόσβασης. Αναμονή να συνδεθεί ξανά η περίοδος λειτουργίας...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="715"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε την ομάδα &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="728"/>
         <source>Unable to remove group</source>
         <translation>Δεν είναι δυνατή η κατάργηση της ομάδας</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="793"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Είστε βέβαιοι ότι θέλετε να διαγράψετε τον δρομολογητή &quot;%1&quot;;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1367"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Υπάρχει ήδη ομάδα με αυτό το όνομα στην επιλεγμένη γονική ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1357"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1376"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1532"/>
         <source>Failed to move the group.</source>
         <translation>Δεν ήταν δυνατή η μετακίνηση της ομάδας.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Υπάρχει ήδη κεντρικός υπολογιστής με αυτό το όνομα στην επιλεγμένη ομάδα.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1423"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1441"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Δεν ήταν δυνατή η μετακίνηση του κεντρικού υπολογιστή στην επιλεγμένη ομάδα.</translation>
     </message>
@@ -7365,7 +7570,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="169"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="170"/>
         <source>Clients</source>
         <translation>Πελάτες</translation>
     </message>
@@ -7373,7 +7578,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="151"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="152"/>
         <source>Approved Hosts</source>
         <translation>Εγκεκριμένοι κεντρικοί υπολογιστές</translation>
     </message>
@@ -7381,7 +7586,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="178"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="179"/>
         <source>Relays</source>
         <translation>Αναμεταδότες</translation>
     </message>
@@ -7389,7 +7594,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="187"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="188"/>
         <source>Unapproved Hosts</source>
         <translation>Μη εγκεκριμένοι κεντρικοί υπολογιστές</translation>
     </message>
@@ -7397,7 +7602,7 @@ Credentials imported: %5</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="160"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="161"/>
         <source>Users</source>
         <translation>Χρήστες</translation>
     </message>

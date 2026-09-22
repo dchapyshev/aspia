@@ -4,33 +4,38 @@
 <context>
     <name>AabImporter</name>
     <message>
-        <location filename="../client/aab_importer.cc" line="131"/>
+        <location filename="../client/aab_importer.cc" line="143"/>
         <source>%1 (Imported)</source>
         <translation>%1 (importált)</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="300"/>
+        <location filename="../client/aab_importer.cc" line="313"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation>Nem lehet megnyitni a(z) &quot;%1&quot; fájlt: %2</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="309"/>
+        <location filename="../client/aab_importer.cc" line="322"/>
         <source>Selected file is empty.</source>
         <translation>A kiválasztott fájl üres.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="316"/>
-        <location filename="../client/aab_importer.cc" line="364"/>
+        <location filename="../client/aab_importer.cc" line="329"/>
+        <location filename="../client/aab_importer.cc" line="377"/>
         <source>The address book file is corrupted or has an unknown format.</source>
         <translation>A címjegyzékfájl sérült vagy ismeretlen formátumú.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="356"/>
+        <location filename="../client/aab_importer.cc" line="369"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
         <translation>A címjegyzékfájl nem támogatott titkosítási típussal van titkosítva.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="391"/>
+        <location filename="../client/aab_importer.cc" line="388"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Nem sikerült olvasni az adatokat a helyi adatbázisból.</translation>
+    </message>
+    <message>
+        <location filename="../client/aab_importer.cc" line="407"/>
         <source>Import completed successfully.
 Groups added: %1
 Hosts added: %2
@@ -43,22 +48,22 @@ Kihagyott gazdagépek: %3
 Hozzáadott útválasztók: %4</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="348"/>
+        <location filename="../client/aab_importer.cc" line="361"/>
         <source>Unable to decrypt the address book with the specified password.</source>
         <translation>A címjegyzék nem fejthető vissza a megadott jelszóval.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="331"/>
+        <location filename="../client/aab_importer.cc" line="344"/>
         <source>Unlock</source>
         <translation>Feloldás</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="333"/>
+        <location filename="../client/aab_importer.cc" line="346"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
         <translation>A címjegyzék titkosított. A megnyitáshoz meg kell adnia a jelszót.</translation>
     </message>
     <message>
-        <location filename="../client/aab_importer.cc" line="386"/>
+        <location filename="../client/aab_importer.cc" line="402"/>
         <source>Nothing was imported.</source>
         <translation>Semmi sem lett importálva.</translation>
     </message>
@@ -417,55 +422,71 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="684"/>
+        <location filename="../client/android/main_window.cc" line="433"/>
+        <location filename="../client/android/main_window.cc" line="1011"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>A gazdagép adatait nem sikerült olvasni. Szerkessze a gazdagépet az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="695"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="685"/>
+        <location filename="../client/android/main_window.cc" line="696"/>
         <source>Version %1 is available.</source>
         <translation>A(z) %1 verzió elérhető.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="544"/>
+        <location filename="../client/android/main_window.cc" line="743"/>
+        <location filename="../client/android/main_window.cc" line="969"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="744"/>
+        <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
+        <translation>A gazdagéphez tartozó útválasztó törölve lett. Szerkessze a gazdagépet másik útválasztó kiválasztásához, vagy váltson közvetlen kapcsolatra.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="555"/>
         <source>Two-Factor Authentication - %1</source>
         <translation>Kétfaktoros hitelesítés - %1</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="885"/>
-        <location filename="../client/android/main_window.cc" line="892"/>
-        <location filename="../client/android/main_window.cc" line="902"/>
-        <location filename="../client/android/main_window.cc" line="923"/>
-        <location filename="../client/android/main_window.cc" line="962"/>
-        <source>Connection by link</source>
-        <translation>Csatlakozás hivatkozással</translation>
-    </message>
-    <message>
-        <location filename="../client/android/main_window.cc" line="885"/>
+        <location filename="../client/android/main_window.cc" line="921"/>
         <source>Invalid link.</source>
         <translation>Érvénytelen hivatkozás.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="893"/>
+        <location filename="../client/android/main_window.cc" line="929"/>
         <source>Another session is active. Close it and open the link again.</source>
         <translation>Egy másik munkamenet aktív. Zárja be, majd nyissa meg újra a hivatkozást.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="903"/>
+        <location filename="../client/android/main_window.cc" line="939"/>
         <source>The session type from the link is not supported on this device.</source>
         <translation>A hivatkozásban szereplő munkamenet-típus nem támogatott ezen az eszközön.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="924"/>
+        <location filename="../client/android/main_window.cc" line="960"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>A hivatkozásban szereplő útválasztó nincs a mentett útválasztók között.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="963"/>
+        <location filename="../client/android/main_window.cc" line="1012"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>A hivatkozásban szereplő gazdagép nincs a mentett gazdagépek között.</translation>
     </message>
     <message>
+        <location filename="../client/android/main_window.cc" line="432"/>
+        <location filename="../client/android/main_window.cc" line="741"/>
+        <location filename="../client/android/main_window.cc" line="921"/>
+        <location filename="../client/android/main_window.cc" line="928"/>
+        <location filename="../client/android/main_window.cc" line="938"/>
+        <location filename="../client/android/main_window.cc" line="959"/>
+        <location filename="../client/android/main_window.cc" line="968"/>
+        <location filename="../client/android/main_window.cc" line="1009"/>
         <location filename="../host/android/main_window.cc" line="81"/>
         <location filename="../host/android/main_window.cc" line="97"/>
         <location filename="../host/android/main_window.cc" line="463"/>
@@ -485,7 +506,7 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Engedélyezze a kisegítő lehetőségek szolgáltatást a távoli billentyűzet- és egérvezérléshez.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="685"/>
+        <location filename="../client/android/main_window.cc" line="696"/>
         <location filename="../host/android/main_window.cc" line="339"/>
         <location filename="../host/android/main_window.cc" line="374"/>
         <location filename="../host/android/main_window.cc" line="407"/>
@@ -555,13 +576,13 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Bejelentkezési adatok mentése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="201"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="217"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="208"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="224"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="210"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="217"/>
         <source>User name cannot be empty.</source>
         <translation>A felhasználónév nem lehet üres.</translation>
     </message>
@@ -569,59 +590,59 @@ Hozzáadott útválasztók: %4</translation>
 <context>
     <name>AuthorizationWindow</name>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="55"/>
+        <location filename="../client/android/authorization_window.cc" line="72"/>
         <source>Enter user name and password</source>
         <translation>Felhasználónév és jelszó megadása</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="56"/>
+        <location filename="../client/android/authorization_window.cc" line="73"/>
         <source>One-time password connection</source>
         <translation>Csatlakozás egyszer használatos jelszóval</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="57"/>
+        <location filename="../client/android/authorization_window.cc" line="74"/>
         <source>Use saved credentials</source>
         <translation>Mentett hitelesítő adatok használata</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="67"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Authorization</source>
         <translation>Hitelesítés</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="75"/>
+        <location filename="../client/android/authorization_window.cc" line="92"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="120"/>
+        <location filename="../client/android/authorization_window.cc" line="137"/>
         <source>Save sign-in data</source>
         <translation>Bejelentkezési adatok mentése</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="218"/>
+        <location filename="../client/android/authorization_window.cc" line="235"/>
         <source>User name cannot be empty.</source>
         <translation>A felhasználónév nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="78"/>
-        <location filename="../client/android/authorization_window.cc" line="81"/>
+        <location filename="../client/android/authorization_window.cc" line="95"/>
+        <location filename="../client/android/authorization_window.cc" line="98"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="84"/>
+        <location filename="../client/android/authorization_window.cc" line="101"/>
         <source>Credentials</source>
         <translation>Hitelesítő adatok</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="88"/>
+        <location filename="../client/android/authorization_window.cc" line="105"/>
         <source>Connect</source>
         <translation>Csatlakozás</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="209"/>
-        <location filename="../client/android/authorization_window.cc" line="225"/>
+        <location filename="../client/android/authorization_window.cc" line="226"/>
+        <location filename="../client/android/authorization_window.cc" line="242"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
@@ -854,108 +875,113 @@ Hozzáadott útválasztók: %4</translation>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="135"/>
+        <location filename="../client/android/chat_window.cc" line="137"/>
         <source>User %1 has joined the chat</source>
         <translation>%1 felhasználó csatlakozott a csevegéshez</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="138"/>
+        <location filename="../client/android/chat_window.cc" line="140"/>
         <source>User %1 has left the chat</source>
         <translation>%1 felhasználó elhagyta a csevegést</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="141"/>
+        <location filename="../client/android/chat_window.cc" line="143"/>
         <source>User %1 is logged in</source>
         <translation>%1 felhasználó bejelentkezett</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="144"/>
+        <location filename="../client/android/chat_window.cc" line="146"/>
         <source>User %1 is not logged in</source>
         <translation>%1 felhasználó nincs bejelentkezve</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="147"/>
+        <location filename="../client/android/chat_window.cc" line="149"/>
         <source>There are no connected users</source>
         <translation>Nincsenek csatlakozott felhasználók</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="175"/>
-        <location filename="../client/android/chat_window.cc" line="359"/>
+        <location filename="../client/android/chat_window.cc" line="177"/>
+        <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Chat</source>
         <translation>Csevegés</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="252"/>
+        <location filename="../client/android/chat_window.cc" line="254"/>
         <source>Connecting to host %1...</source>
         <translation>Csatlakozás a(z) %1 gazdagéphez...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="270"/>
+        <location filename="../client/android/chat_window.cc" line="272"/>
         <source>The connection to the host has been lost.</source>
         <translation>A kapcsolat a gazdagéppel megszakadt.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="484"/>
+        <location filename="../client/android/chat_window.cc" line="488"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/chat_window.cc" line="489"/>
         <source>The specified router is unavailable.</source>
         <translation>A megadott útválasztó nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="523"/>
+        <location filename="../client/android/chat_window.cc" line="528"/>
         <source>Error requesting connection via router.</source>
         <translation>Hiba az útválasztón keresztüli kapcsolat kérésekor.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="282"/>
+        <location filename="../client/android/chat_window.cc" line="284"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>A gazdagép verziója újabb, mint a kliensé. Kérjük, frissítse az alkalmazást.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="310"/>
+        <location filename="../client/android/chat_window.cc" line="312"/>
         <source>%1 is typing...</source>
         <translation>%1 éppen ír...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="463"/>
+        <location filename="../client/android/chat_window.cc" line="465"/>
         <source>Connecting...</source>
         <translation>Csatlakozás...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="490"/>
+        <location filename="../client/android/chat_window.cc" line="495"/>
         <source>Connecting to router...</source>
         <translation>Csatlakozás az útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="511"/>
+        <location filename="../client/android/chat_window.cc" line="516"/>
         <source>Requesting connection to the host...</source>
         <translation>Kapcsolat kérése a gazdagéphez...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Save Chat</source>
         <translation>Csevegés mentése</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="352"/>
+        <location filename="../client/android/chat_window.cc" line="354"/>
         <source>Text files (*.txt)</source>
         <translation>Szövegfájlok (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="359"/>
+        <location filename="../client/android/chat_window.cc" line="361"/>
         <source>Could not open the file for writing.</source>
         <translation>Nem sikerült megnyitni a fájlt írásra.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear Chat</source>
         <translation>Csevegés törlése</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear the chat history?</source>
         <translation>Törli a csevegési előzményeket?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="382"/>
+        <location filename="../client/android/chat_window.cc" line="384"/>
         <source>Clear</source>
         <translation>Törlés</translation>
     </message>
@@ -986,41 +1012,41 @@ Hozzáadott útválasztók: %4</translation>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="228"/>
+        <location filename="../client/main.cc" line="237"/>
         <source>Set Master Password</source>
         <translation>Mesterjelszó beállítása</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="230"/>
+        <location filename="../client/main.cc" line="239"/>
         <source>Set a master password required to unlock the application.</source>
         <translation>Állítson be egy mesterjelszót, amely az alkalmazás feloldásához szükséges.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="238"/>
+        <location filename="../client/main.cc" line="247"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszó nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="246"/>
+        <location filename="../client/main.cc" line="255"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A megadott jelszó nem felel meg a biztonsági követelményeknek!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/main.cc" line="248"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszónak tartalmaznia kell kisbetűket és nagybetűket, számokat, és nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="252"/>
+        <location filename="../client/main.cc" line="261"/>
         <source>Do you want to enter a different password?</source>
         <translation>Szeretne másik jelszót megadni?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="262"/>
+        <location filename="../client/main.cc" line="271"/>
         <source>Unable to set master password.</source>
         <translation>Nem lehet beállítani a mesterjelszót.</translation>
     </message>
@@ -1040,7 +1066,12 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Adja meg a mesterjelszót az alkalmazás feloldásához.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="220"/>
+        <location filename="../client/main.cc" line="224"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Nem lehet feloldani az adatbázist.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="229"/>
         <source>Invalid master password.</source>
         <translation>Érvénytelen mesterjelszó.</translation>
     </message>
@@ -1091,12 +1122,12 @@ Hozzáadott útválasztók: %4</translation>
         <translation>A munkamenet elindult.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="504"/>
+        <location filename="../client/desktop/client_window.cc" line="515"/>
         <source>The specified router is unavailable.</source>
         <translation>A megadott útválasztó nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="506"/>
+        <location filename="../client/desktop/client_window.cc" line="519"/>
         <source>The specified router is offline.</source>
         <translation>A megadott útválasztó offline.</translation>
     </message>
@@ -1131,17 +1162,22 @@ Hozzáadott útválasztók: %4</translation>
         <translation>Csatlakozási kísérlet kompatibilitási módban...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="513"/>
+        <location filename="../client/desktop/client_window.cc" line="517"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/client_window.cc" line="526"/>
         <source>Requesting connection to the host...</source>
         <translation>Kapcsolat kérése a gazdagéphez...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="521"/>
+        <location filename="../client/desktop/client_window.cc" line="534"/>
         <source>Connection offer received.</source>
         <translation>Kapcsolati ajánlat érkezett.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="538"/>
+        <location filename="../client/desktop/client_window.cc" line="551"/>
         <source>Error requesting connection via router.</source>
         <translation>Hiba az útválasztón keresztüli kapcsolat kérésekor.</translation>
     </message>
@@ -1638,115 +1674,130 @@ Jelszó: %2</translation>
         <translation>Jelszó:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="44"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
         <source>Edit Credentials</source>
         <translation>Hitelesítő adatok szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="61"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="43"/>
         <source>Add Credentials</source>
         <translation>Hitelesítő adatok hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="86"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="69"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credential_dialog.cc" line="94"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="77"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="104"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="87"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="113"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="96"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="131"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="114"/>
         <source>Unable to add credentials</source>
         <translation>Nem lehet hozzáadni a hitelesítő adatokat</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credential_dialog.cc" line="142"/>
+        <location filename="../client/desktop/credential_dialog.cc" line="125"/>
         <source>Unable to modify credentials</source>
         <translation>Nem lehet módosítani a hitelesítő adatokat</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credential_dialog.cc" line="145"/>
+        <source>Failed to read the credentials.</source>
+        <translation>Nem sikerült olvasni a hitelesítő adatokat.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/credential_dialog.cc" line="157"/>
+        <source>The credentials could not be read. You can enter them again.</source>
+        <translation>A hitelesítő adatokat nem sikerült olvasni. Ezeket újra megadhatja.</translation>
     </message>
 </context>
 <context>
     <name>CredentialEditor</name>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="52"/>
+        <location filename="../client/android/credential_editor.cc" line="50"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="53"/>
+        <location filename="../client/android/credential_editor.cc" line="51"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="54"/>
+        <location filename="../client/android/credential_editor.cc" line="52"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="63"/>
+        <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="66"/>
-        <location filename="../client/android/credential_editor.cc" line="193"/>
+        <location filename="../client/android/credential_editor.cc" line="64"/>
+        <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="139"/>
+        <location filename="../client/android/credential_editor.cc" line="133"/>
+        <source>The credentials could not be read. You can enter them again.</source>
+        <translation>A hitelesítő adatokat nem sikerült olvasni. Ezeket újra megadhatja.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/credential_editor.cc" line="145"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_editor.cc" line="146"/>
+        <location filename="../client/android/credential_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="155"/>
+        <location filename="../client/android/credential_editor.cc" line="161"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="164"/>
+        <location filename="../client/android/credential_editor.cc" line="170"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="182"/>
+        <location filename="../client/android/credential_editor.cc" line="188"/>
         <source>Failed to save the credentials.</source>
         <translation>Nem sikerült menteni a hitelesítő adatokat.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="192"/>
+        <location filename="../client/android/credential_editor.cc" line="198"/>
         <source>Delete Credentials</source>
         <translation>Hitelesítő adatok törlése</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="193"/>
+        <location filename="../client/android/credential_editor.cc" line="199"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
         <translation>Törli a(z) &quot;%1&quot; hitelesítő adatokat?</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="200"/>
+        <location filename="../client/android/credential_editor.cc" line="206"/>
         <source>Failed to delete the credentials.</source>
         <translation>Nem sikerült törölni a hitelesítő adatokat.</translation>
     </message>
@@ -1836,26 +1887,21 @@ Jelszó: %2</translation>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nem sikerült olvasni az adatokat. Lehet, hogy a lista elavult.</translation>
     </message>
-    <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="222"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Néhány rekordot nem sikerült olvasni, ezért nem jelennek meg a listában.</translation>
-    </message>
 </context>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="135"/>
+        <location filename="../client/android/credentials_widget.cc" line="140"/>
         <source>Add Credentials</source>
         <translation>Hitelesítő adatok hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="146"/>
+        <location filename="../client/android/credentials_widget.cc" line="151"/>
         <source>Edit Credentials</source>
         <translation>Hitelesítő adatok szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="162"/>
+        <location filename="../client/android/credentials_widget.cc" line="167"/>
         <source>Credentials</source>
         <translation>Hitelesítő adatok</translation>
     </message>
@@ -2155,12 +2201,12 @@ Jelszó: %2</translation>
         <translation>Csatlakozás...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="534"/>
+        <location filename="../client/android/desktop_window.cc" line="537"/>
         <source>The specified router is unavailable.</source>
         <translation>A megadott útválasztó nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="561"/>
+        <location filename="../client/android/desktop_window.cc" line="564"/>
         <source>Requesting connection to the host...</source>
         <translation>Kapcsolat kérése a gazdagéphez...</translation>
     </message>
@@ -2175,32 +2221,32 @@ Jelszó: %2</translation>
         <translation>Munkamenet %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="540"/>
+        <location filename="../client/android/desktop_window.cc" line="543"/>
         <source>Connecting to router...</source>
         <translation>Csatlakozás az útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="768"/>
+        <location filename="../client/android/desktop_window.cc" line="771"/>
         <source>Connecting to host %1...</source>
         <translation>Csatlakozás a(z) %1 gazdagéphez...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="777"/>
         <source>Connection established.</source>
         <translation>A kapcsolat létrejött.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="787"/>
+        <location filename="../client/android/desktop_window.cc" line="790"/>
         <source>The connection to the host has been lost.</source>
         <translation>A kapcsolat a gazdagéppel megszakadt.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="800"/>
+        <location filename="../client/android/desktop_window.cc" line="803"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>A gazdagép verziója újabb, mint a kliensé. Kérjük, frissítse az alkalmazást.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="804"/>
+        <location filename="../client/android/desktop_window.cc" line="807"/>
         <source>Legacy hosts are not supported.</source>
         <translation>A régi (legacy) gazdagépek nem támogatottak.</translation>
     </message>
@@ -2235,68 +2281,73 @@ Jelszó: %2</translation>
         <translation>Leválasztás</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="658"/>
-        <location filename="../client/android/desktop_window.cc" line="712"/>
+        <location filename="../client/android/desktop_window.cc" line="536"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/desktop_window.cc" line="661"/>
+        <location filename="../client/android/desktop_window.cc" line="715"/>
         <source>Back</source>
         <translation>Vissza</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="659"/>
+        <location filename="../client/android/desktop_window.cc" line="662"/>
         <source>Shutdown</source>
         <translation>Leállítás</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="660"/>
+        <location filename="../client/android/desktop_window.cc" line="663"/>
         <source>Reboot</source>
         <translation>Újraindítás</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="665"/>
         <source>Safe Mode</source>
         <translation>Csökkentett mód</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="666"/>
         <source>Logoff</source>
         <translation>Kijelentkezés</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="667"/>
         <source>Lock</source>
         <translation>Zárolás</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="680"/>
+        <location filename="../client/android/desktop_window.cc" line="683"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Biztosan leállítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="684"/>
+        <location filename="../client/android/desktop_window.cc" line="687"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Biztosan újraindítja a távoli számítógépet?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="688"/>
+        <location filename="../client/android/desktop_window.cc" line="691"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Biztosan újraindítja a távoli számítógépet csökkentett módban?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="692"/>
+        <location filename="../client/android/desktop_window.cc" line="695"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Biztosan befejezi a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="696"/>
+        <location filename="../client/android/desktop_window.cc" line="699"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Biztosan zárolja a felhasználói munkamenetet a távoli számítógépen?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Confirmation</source>
         <translation>Megerősítés</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="754"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
@@ -2987,8 +3038,8 @@ Jelszó: %2</translation>
         <location filename="../client/android/file_transfer_window.cc" line="62"/>
         <location filename="../client/android/file_transfer_window.cc" line="187"/>
         <location filename="../client/android/file_transfer_window.cc" line="269"/>
-        <location filename="../client/android/file_transfer_window.cc" line="459"/>
-        <location filename="../client/android/file_transfer_window.cc" line="470"/>
+        <location filename="../client/android/file_transfer_window.cc" line="462"/>
+        <location filename="../client/android/file_transfer_window.cc" line="473"/>
         <source>File Transfer</source>
         <translation>Fájlátvitel</translation>
     </message>
@@ -3019,12 +3070,12 @@ Jelszó: %2</translation>
         <translation>A kapcsolat a gazdagéppel megszakadt.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="328"/>
+        <location filename="../client/android/file_transfer_window.cc" line="331"/>
         <source>The specified router is unavailable.</source>
         <translation>A megadott útválasztó nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="367"/>
+        <location filename="../client/android/file_transfer_window.cc" line="370"/>
         <source>Error requesting connection via router.</source>
         <translation>Hiba az útválasztón keresztüli kapcsolat kérésekor.</translation>
     </message>
@@ -3044,22 +3095,27 @@ Jelszó: %2</translation>
         <translation>Csatlakozás...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="334"/>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/file_transfer_window.cc" line="337"/>
         <source>Connecting to router...</source>
         <translation>Csatlakozás az útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="355"/>
+        <location filename="../client/android/file_transfer_window.cc" line="358"/>
         <source>Requesting connection to the host...</source>
         <translation>Kapcsolat kérése a gazdagéphez...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="460"/>
+        <location filename="../client/android/file_transfer_window.cc" line="463"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>Először nyisson meg egy célmappát a másik oldalon.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="513"/>
+        <location filename="../client/android/file_transfer_window.cc" line="516"/>
         <source>Deleting</source>
         <translation>Törlés</translation>
     </message>
@@ -3515,46 +3571,57 @@ Jelszó: %2</translation>
         <translation>Csoport szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="69"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
         <source>Add Group</source>
         <translation>Csoport hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="87"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
+        <source>Failed to read the group.</source>
+        <translation>Nem sikerült olvasni a csoportot.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
         <source>Local</source>
         <translation>Helyi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="115"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="82"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="90"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="134"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú megjegyzés. A megjegyzés maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="114"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="185"/>
+        <source>Failed to read the list of groups.</source>
+        <translation>Nem sikerült olvasni a csoportok listáját.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>A kiválasztott szülőcsoportban már létezik ilyen nevű csoport.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="168"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="141"/>
         <source>Unable to add group</source>
         <translation>Nem lehet hozzáadni a csoportot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
         <source>Unable to modify group</source>
         <translation>Nem lehet módosítani a csoportot</translation>
     </message>
@@ -3562,62 +3629,62 @@ Jelszó: %2</translation>
 <context>
     <name>LocalGroupEditor</name>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="50"/>
+        <location filename="../client/android/local_group_editor.cc" line="48"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="51"/>
+        <location filename="../client/android/local_group_editor.cc" line="49"/>
         <source>Comment</source>
         <translation>Megjegyzés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="59"/>
+        <location filename="../client/android/local_group_editor.cc" line="57"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="62"/>
-        <location filename="../client/android/local_group_editor.cc" line="177"/>
+        <location filename="../client/android/local_group_editor.cc" line="60"/>
+        <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="134"/>
+        <location filename="../client/android/local_group_editor.cc" line="132"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="141"/>
+        <location filename="../client/android/local_group_editor.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="150"/>
+        <location filename="../client/android/local_group_editor.cc" line="148"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú megjegyzés. A megjegyzés maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="166"/>
+        <location filename="../client/android/local_group_editor.cc" line="164"/>
         <source>Failed to save the group.</source>
         <translation>Nem sikerült menteni a csoportot.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="176"/>
+        <location filename="../client/android/local_group_editor.cc" line="174"/>
         <source>Delete Group</source>
         <translation>Csoport törlése</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="177"/>
+        <location filename="../client/android/local_group_editor.cc" line="175"/>
         <source>Delete the group &quot;%1&quot;?</source>
         <translation>Törli a(z) &quot;%1&quot; csoportot?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="184"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Failed to delete the group.</source>
         <translation>Nem sikerült törölni a csoportot.</translation>
     </message>
@@ -3625,29 +3692,24 @@ Jelszó: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="50"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="48"/>
         <source>Status update...</source>
         <translation>Állapotfrissítés...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="158"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="156"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nem sikerült olvasni az adatokat. Lehet, hogy a lista elavult.</translation>
     </message>
-    <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Néhány rekordot nem sikerült olvasni, ezért nem jelennek meg a listában.</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="413"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n alcsoport</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_widget.cc" line="415"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="414"/>
         <source>%n child host(s)</source>
         <translation>
             <numerusform>%n gazdagép</numerusform>
@@ -3683,7 +3745,7 @@ Jelszó: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/local_host_dialog.ui" line="59"/>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="340"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="401"/>
         <source>Address:</source>
         <translation>Cím:</translation>
     </message>
@@ -3713,96 +3775,126 @@ Jelszó: %2</translation>
         <translation>Megjegyzés:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="60"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="264"/>
         <source>Without Router</source>
         <translation>Útválasztó nélkül</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="84"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Edit Host</source>
         <translation>Gazdagép szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="112"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
         <source>Add Host</source>
         <translation>Gazdagép hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="122"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="372"/>
         <source>&lt;deleted router&gt;</source>
         <translation>&lt;törölt útválasztó&gt;</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="145"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="331"/>
         <source>Local</source>
         <translation>Helyi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="213"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="131"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="221"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="139"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="154"/>
         <source>An invalid host address was entered.</source>
         <translation>Érvénytelen gazdagépcím lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="164"/>
         <source>An invalid host ID was entered.</source>
         <translation>Érvénytelen gazdagép ID lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="259"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="268"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="186"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Adja meg a felhasználónevet és a jelszót is, vagy hagyja üresen mindkettőt.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="194"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú megjegyzés. A megjegyzés maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="292"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="207"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Nem sikerült olvasni az adatokat a helyi adatbázisból.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="216"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>A kiválasztott csoportban már létezik ilyen nevű gazdagép.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="240"/>
         <source>Unable to add host</source>
         <translation>Nem lehet hozzáadni a gazdagépet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="326"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="250"/>
         <source>Unable to modify host</source>
         <translation>Nem lehet módosítani a gazdagépet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="341"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="272"/>
+        <source>Failed to read the list of routers.</source>
+        <translation>Nem sikerült olvasni az útválasztók listáját.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="293"/>
+        <source>Failed to read the list of credentials.</source>
+        <translation>Nem sikerült olvasni a hitelesítő adatok listáját.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="315"/>
+        <source>Failed to read the list of groups.</source>
+        <translation>Nem sikerült olvasni a csoportok listáját.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="344"/>
+        <source>Failed to retrieve host information from the local database.</source>
+        <translation>Nem sikerült lekérni a gazdagép adatait a helyi adatbázisból.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="392"/>
+        <source>The data of the host could not be read. You can enter it again.</source>
+        <translation>A gazdagép adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="402"/>
         <source>Host name or IP address</source>
         <translation>Gazdagépnév vagy IP-cím</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="345"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="406"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="346"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="407"/>
         <source>Host ID</source>
         <translation>Gazdagép ID</translation>
     </message>
@@ -3810,123 +3902,135 @@ Jelszó: %2</translation>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="56"/>
+        <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>
         <translation>Meglévő használata</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="62"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>Router</source>
         <translation>Útválasztó</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
-        <location filename="../client/android/local_host_editor.cc" line="205"/>
+        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="248"/>
         <source>Address</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="66"/>
+        <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="67"/>
+        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="69"/>
+        <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Credentials</source>
         <translation>Hitelesítő adatok</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="70"/>
+        <location filename="../client/android/local_host_editor.cc" line="69"/>
         <source>Comment</source>
         <translation>Megjegyzés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="78"/>
+        <location filename="../client/android/local_host_editor.cc" line="77"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="81"/>
-        <location filename="../client/android/local_host_editor.cc" line="316"/>
+        <location filename="../client/android/local_host_editor.cc" line="80"/>
+        <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="172"/>
+        <location filename="../client/android/local_host_editor.cc" line="174"/>
+        <source>The data of the host could not be read. You can enter it again.</source>
+        <translation>A gazdagép adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="184"/>
         <source>Without Router</source>
         <translation>Útválasztó nélkül</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="205"/>
+        <location filename="../client/android/local_host_editor.cc" line="191"/>
+        <location filename="../client/android/local_host_editor.cc" line="216"/>
+        <location filename="../client/android/local_host_editor.cc" line="271"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Nem sikerült olvasni az adatokat a helyi adatbázisból.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_host_editor.cc" line="248"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="229"/>
+        <location filename="../client/android/local_host_editor.cc" line="278"/>
         <source>Name cannot be empty.</source>
         <translation>A név nem lehet üres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="236"/>
+        <location filename="../client/android/local_host_editor.cc" line="285"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="245"/>
+        <location filename="../client/android/local_host_editor.cc" line="294"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú megjegyzés. A megjegyzés maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="258"/>
+        <location filename="../client/android/local_host_editor.cc" line="307"/>
         <source>An invalid host address was entered.</source>
         <translation>Érvénytelen gazdagépcím lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="266"/>
+        <location filename="../client/android/local_host_editor.cc" line="315"/>
         <source>An invalid host ID was entered.</source>
         <translation>Érvénytelen gazdagép ID lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="277"/>
+        <location filename="../client/android/local_host_editor.cc" line="326"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="286"/>
+        <location filename="../client/android/local_host_editor.cc" line="335"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Adja meg a felhasználónevet és a jelszót is, vagy hagyja üresen mindkettőt.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="305"/>
+        <location filename="../client/android/local_host_editor.cc" line="354"/>
         <source>Failed to save the host.</source>
         <translation>Nem sikerült menteni a gazdagépet.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="315"/>
+        <location filename="../client/android/local_host_editor.cc" line="364"/>
         <source>Delete Host</source>
         <translation>Gazdagép törlése</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="316"/>
+        <location filename="../client/android/local_host_editor.cc" line="365"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>Törli a(z) &quot;%1&quot; gazdagépet?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="323"/>
+        <location filename="../client/android/local_host_editor.cc" line="372"/>
         <source>Failed to delete the host.</source>
         <translation>Nem sikerült törölni a gazdagépet.</translation>
     </message>
@@ -3934,77 +4038,82 @@ Jelszó: %2</translation>
 <context>
     <name>LocalHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="218"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="221"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="239"/>
         <source>Address / ID</source>
         <translation>Cím / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="224"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="242"/>
         <source>Comment</source>
         <translation>Megjegyzés</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="227"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="245"/>
         <source>Created</source>
         <translation>Létrehozva</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="230"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="248"/>
         <source>Modified</source>
         <translation>Módosítva</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="233"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="251"/>
         <source>Last Connect</source>
         <translation>Utolsó csatlakozás</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="254"/>
         <source>Status</source>
         <translation>Állapot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="337"/>
         <source>Online</source>
         <translation>Online</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="316"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="340"/>
         <source>Offline</source>
         <translation>Offline</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="343"/>
+        <source>Skipped</source>
+        <translation>Kihagyva</translation>
     </message>
 </context>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="279"/>
-        <location filename="../client/android/local_widget.cc" line="418"/>
+        <location filename="../client/android/local_widget.cc" line="294"/>
+        <location filename="../client/android/local_widget.cc" line="438"/>
         <source>Add Group</source>
         <translation>Csoport hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="280"/>
-        <location filename="../client/android/local_widget.cc" line="428"/>
+        <location filename="../client/android/local_widget.cc" line="295"/>
+        <location filename="../client/android/local_widget.cc" line="448"/>
         <source>Add Host</source>
         <translation>Gazdagép hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="339"/>
+        <location filename="../client/android/local_widget.cc" line="354"/>
         <source>Invalid password.</source>
         <translation>Érvénytelen jelszó.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="358"/>
         <source>The file was created by a newer version and cannot be imported.</source>
         <translation>A fájlt egy újabb verzió hozta létre, ezért nem importálható.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="362"/>
+        <location filename="../client/android/local_widget.cc" line="377"/>
         <source>Routers imported: %1
 Groups imported: %2
 Hosts imported: %3
@@ -4017,90 +4126,95 @@ Importált mentett jelszavak: %4
 Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <location filename="../client/android/local_widget.cc" line="376"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="391"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Aspia biztonsági mentés (*.aspia-backup)</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="393"/>
+        <location filename="../client/android/local_widget.cc" line="408"/>
         <source>Unable to write the file.</source>
         <translation>Nem lehet írni a fájlt.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="281"/>
-        <location filename="../client/android/local_widget.cc" line="304"/>
-        <location filename="../client/android/local_widget.cc" line="308"/>
-        <location filename="../client/android/local_widget.cc" line="357"/>
-        <location filename="../client/android/local_widget.cc" line="361"/>
+        <location filename="../client/android/local_widget.cc" line="296"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="323"/>
+        <location filename="../client/android/local_widget.cc" line="372"/>
+        <location filename="../client/android/local_widget.cc" line="376"/>
         <source>Restore from Backup</source>
         <translation>Visszaállítás biztonsági mentésből</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="282"/>
-        <location filename="../client/android/local_widget.cc" line="375"/>
-        <location filename="../client/android/local_widget.cc" line="403"/>
-        <location filename="../client/android/local_widget.cc" line="407"/>
+        <location filename="../client/android/local_widget.cc" line="297"/>
+        <location filename="../client/android/local_widget.cc" line="390"/>
+        <location filename="../client/android/local_widget.cc" line="423"/>
+        <location filename="../client/android/local_widget.cc" line="427"/>
         <source>Create Backup</source>
         <translation>Biztonsági mentés készítése</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="309"/>
+        <location filename="../client/android/local_widget.cc" line="324"/>
         <source>Everything stored now is deleted and replaced with what the backup holds.</source>
         <translation>Minden jelenleg tárolt adat törlődik, és a biztonsági mentés tartalmára cserélődik.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="310"/>
+        <location filename="../client/android/local_widget.cc" line="325"/>
         <source>Restore</source>
         <translation>Visszaállítás</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="347"/>
+        <location filename="../client/android/local_widget.cc" line="362"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>A biztonsági mentés nem tartalmaz adatokat, ezért semmi sem változott.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="351"/>
+        <location filename="../client/android/local_widget.cc" line="366"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nem sikerült visszaállítani a biztonsági mentésből.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="389"/>
+        <location filename="../client/android/local_widget.cc" line="404"/>
         <source>There is nothing to save.</source>
         <translation>Nincs mit menteni.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="397"/>
+        <location filename="../client/android/local_widget.cc" line="412"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Néhány rekordot az adatbázisban nem sikerült olvasni. Szerkessze őket az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="417"/>
         <source>Failed to create the backup.</source>
         <translation>Nem sikerült létrehozni a biztonsági mentést.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="408"/>
+        <location filename="../client/android/local_widget.cc" line="428"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>A fájl ide lett írva: %1. Máshol történő megnyitásához ennek a telepítésnek a mesterjelszava szükséges.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="494"/>
+        <location filename="../client/android/local_widget.cc" line="536"/>
         <source>Edit Group</source>
         <translation>Csoport szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="505"/>
+        <location filename="../client/android/local_widget.cc" line="547"/>
         <source>Edit Host</source>
         <translation>Gazdagép szerkesztése</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="600"/>
+        <location filename="../client/android/local_widget.cc" line="657"/>
         <source>Desktop</source>
         <translation>Asztal</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="602"/>
+        <location filename="../client/android/local_widget.cc" line="659"/>
         <source>File Transfer</source>
         <translation>Fájlátvitel</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="604"/>
+        <location filename="../client/android/local_widget.cc" line="661"/>
         <source>Chat</source>
         <translation>Csevegés</translation>
     </message>
@@ -4145,7 +4259,7 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="363"/>
+        <location filename="../client/desktop/main_window.cc" line="377"/>
         <source>Aspia Client</source>
         <translation>Aspia kliens</translation>
     </message>
@@ -4205,47 +4319,58 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Mindig felül</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="100"/>
+        <location filename="../client/desktop/main_window.cc" line="98"/>
         <source>Search...</source>
         <translation>Keresés...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="179"/>
+        <location filename="../client/desktop/main_window.cc" line="177"/>
         <source>Management</source>
         <translation>Kezelés</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="208"/>
+        <location filename="../client/desktop/main_window.cc" line="206"/>
         <source>Invalid link &quot;%1&quot;.</source>
         <translation>Érvénytelen hivatkozás: &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="232"/>
+        <location filename="../client/desktop/main_window.cc" line="229"/>
         <source>The router referenced by the link is not among the saved routers.</source>
         <translation>A hivatkozásban szereplő útválasztó nincs a mentett útválasztók között.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="271"/>
+        <location filename="../client/desktop/main_window.cc" line="237"/>
+        <location filename="../client/desktop/main_window.cc" line="290"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="278"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>A gazdagép adatait nem sikerült olvasni. Szerkessze a gazdagépet az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/main_window.cc" line="279"/>
         <source>The host referenced by the link is not among the saved hosts.</source>
         <translation>A hivatkozásban szereplő gazdagép nincs a mentett gazdagépek között.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="461"/>
+        <location filename="../client/desktop/main_window.cc" line="475"/>
         <source>Connection by ID is specified in the properties of the host, but the router is not configured. Check the parameters of the router in the properties of the host.</source>
         <translation>A gazdagép tulajdonságaiban ID szerinti kapcsolat van megadva, de az útválasztó nincs konfigurálva. Ellenőrizze az útválasztó paramétereit a gazdagép tulajdonságaiban.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="277"/>
+        <location filename="../client/desktop/main_window.cc" line="291"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>A gazdagéphez tartozó útválasztó törölve lett. Szerkessze a gazdagépet másik útválasztó kiválasztásához, vagy váltson közvetlen kapcsolatra.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="323"/>
+        <location filename="../client/desktop/main_window.cc" line="337"/>
         <source>Credentials</source>
         <translation>Hitelesítő adatok</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="349"/>
+        <location filename="../client/desktop/main_window.cc" line="363"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
@@ -4440,149 +4565,151 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Állapot automatikus frissítése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1011"/>
+        <location filename="../client/desktop/management_tab.cc" line="998"/>
         <source>(copy)</source>
         <translation>(másolat)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="718"/>
-        <location filename="../client/desktop/management_tab.cc" line="747"/>
-        <location filename="../client/desktop/management_tab.cc" line="797"/>
-        <location filename="../client/desktop/management_tab.cc" line="976"/>
-        <location filename="../client/desktop/management_tab.cc" line="1007"/>
-        <location filename="../client/desktop/management_tab.cc" line="1051"/>
+        <location filename="../client/desktop/management_tab.cc" line="966"/>
+        <location filename="../client/desktop/management_tab.cc" line="1039"/>
+        <location filename="../client/desktop/management_tab.cc" line="2121"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Nem sikerült lekérni a gazdagép adatait a helyi adatbázisból.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1016"/>
+        <location filename="../client/desktop/management_tab.cc" line="1003"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Nem sikerült hozzáadni a gazdagépet a helyi adatbázishoz.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1055"/>
+        <location filename="../client/desktop/management_tab.cc" line="1043"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Biztosan törli a(z) &quot;%1&quot; gazdagépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1065"/>
+        <location filename="../client/desktop/management_tab.cc" line="1053"/>
         <source>Unable to remove host</source>
         <translation>Nem lehet eltávolítani a gazdagépet</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1122"/>
-        <location filename="../client/desktop/management_tab.cc" line="1165"/>
-        <location filename="../client/desktop/management_tab.cc" line="1190"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
+        <location filename="../client/desktop/management_tab.cc" line="1153"/>
+        <location filename="../client/desktop/management_tab.cc" line="1178"/>
         <source>Copy Row</source>
         <translation>Sor másolása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1123"/>
-        <location filename="../client/desktop/management_tab.cc" line="1166"/>
-        <location filename="../client/desktop/management_tab.cc" line="1191"/>
+        <location filename="../client/desktop/management_tab.cc" line="1111"/>
+        <location filename="../client/desktop/management_tab.cc" line="1154"/>
+        <location filename="../client/desktop/management_tab.cc" line="1179"/>
         <source>Copy Value</source>
         <translation>Érték másolása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1290"/>
+        <location filename="../client/desktop/management_tab.cc" line="1278"/>
         <source>Are you sure you want to delete workspace &quot;%1&quot;?</source>
         <translation>Biztosan törli a(z) &quot;%1&quot; munkaterületet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1310"/>
+        <location filename="../client/desktop/management_tab.cc" line="1298"/>
         <source>Failed to delete the workspace.</source>
         <translation>Nem sikerült törölni a munkaterületet.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1405"/>
+        <location filename="../client/desktop/management_tab.cc" line="1393"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the workspace root.</source>
         <translation>Biztosan törli a(z) &quot;%1&quot; csoportot? A csoporthoz vagy alcsoportjaihoz rendelt gazdagépek a munkaterület gyökerébe kerülnek.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1424"/>
+        <location filename="../client/desktop/management_tab.cc" line="1412"/>
         <source>Failed to delete the group.</source>
         <translation>Nem sikerült törölni a csoportot.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1463"/>
+        <location filename="../client/desktop/management_tab.cc" line="1451"/>
         <source>Import Old Address Book</source>
         <translation>Régi címjegyzék importálása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1464"/>
+        <location filename="../client/desktop/management_tab.cc" line="1452"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation>Címjegyzék (*.aab);;Minden fájl (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1487"/>
-        <location filename="../client/desktop/management_tab.cc" line="1540"/>
+        <location filename="../client/desktop/management_tab.cc" line="1475"/>
+        <location filename="../client/desktop/management_tab.cc" line="1533"/>
         <source>The database is not available.</source>
         <translation>Az adatbázis nem érhető el.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1493"/>
+        <location filename="../client/desktop/management_tab.cc" line="1481"/>
         <source>Create Backup</source>
         <translation>Biztonsági mentés készítése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1510"/>
+        <location filename="../client/desktop/management_tab.cc" line="1498"/>
         <source>There is nothing to save.</source>
         <translation>Nincs mit menteni.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1518"/>
+        <location filename="../client/desktop/management_tab.cc" line="1506"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Néhány rekordot az adatbázisban nem sikerült olvasni. Szerkessze őket az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1511"/>
         <source>Failed to create the backup.</source>
         <translation>Nem sikerült létrehozni a biztonsági mentést.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1546"/>
-        <location filename="../client/desktop/management_tab.cc" line="1572"/>
+        <location filename="../client/desktop/management_tab.cc" line="1539"/>
+        <location filename="../client/desktop/management_tab.cc" line="1565"/>
         <source>Restore from Backup</source>
         <translation>Visszaállítás biztonsági mentésből</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1555"/>
+        <location filename="../client/desktop/management_tab.cc" line="1548"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Minden jelenleg tárolt adat törlődik, és a biztonsági mentés tartalmára cserélődik. Folytatja?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1574"/>
+        <location filename="../client/desktop/management_tab.cc" line="1567"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>A biztonsági mentés egy másik telepítésen készült. Adja meg az ott használt mesterjelszót.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1599"/>
+        <location filename="../client/desktop/management_tab.cc" line="1592"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>A biztonsági mentés nem tartalmaz adatokat, ezért semmi sem változott.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1607"/>
+        <location filename="../client/desktop/management_tab.cc" line="1600"/>
         <source>The file is not a valid backup.</source>
         <translation>A fájl nem érvényes biztonsági mentés.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1604"/>
         <source>Failed to restore from the backup.</source>
         <translation>Nem sikerült visszaállítani a biztonsági mentésből.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1494"/>
-        <location filename="../client/desktop/management_tab.cc" line="1547"/>
+        <location filename="../client/desktop/management_tab.cc" line="1482"/>
+        <location filename="../client/desktop/management_tab.cc" line="1540"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia biztonsági mentés (*.aspia-backup);;Minden fájl (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1514"/>
+        <location filename="../client/desktop/management_tab.cc" line="1502"/>
         <source>Unable to write the file.</source>
         <translation>Nem lehet írni a fájlt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1603"/>
+        <location filename="../client/desktop/management_tab.cc" line="1596"/>
         <source>Unable to read the file.</source>
         <translation>Nem lehet olvasni a fájlt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1523"/>
+        <location filename="../client/desktop/management_tab.cc" line="1516"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -4597,17 +4724,17 @@ Exportált mentett jelszavak: %4
 Exportált hitelesítő adatok: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1591"/>
+        <location filename="../client/desktop/management_tab.cc" line="1584"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>A fájl nem fejthető vissza a megadott jelszóval.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1595"/>
+        <location filename="../client/desktop/management_tab.cc" line="1588"/>
         <source>Unsupported file format version.</source>
         <translation>Nem támogatott fájlformátum-verzió.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1616"/>
+        <location filename="../client/desktop/management_tab.cc" line="1609"/>
         <source>Import completed successfully.
 Routers imported: %1
 Groups imported: %2
@@ -4622,30 +4749,39 @@ Importált mentett jelszavak: %4
 Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2050"/>
-        <location filename="../client/desktop/management_tab.cc" line="2081"/>
+        <location filename="../client/desktop/management_tab.cc" line="2044"/>
+        <location filename="../client/desktop/management_tab.cc" line="2075"/>
         <source>Copy Link</source>
         <translation>Hivatkozás másolása</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2069"/>
-        <location filename="../client/desktop/management_tab.cc" line="2100"/>
-        <location filename="../client/desktop/management_tab.cc" line="2107"/>
+        <location filename="../client/desktop/management_tab.cc" line="2063"/>
+        <location filename="../client/desktop/management_tab.cc" line="2097"/>
         <source>Unable to create a link for this host.</source>
         <translation>Nem lehet hivatkozást létrehozni ehhez a gazdagéphez.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2132"/>
+        <location filename="../client/desktop/management_tab.cc" line="2116"/>
+        <source>The data of the host could not be read. Edit the host to enter it again.</source>
+        <translation>A gazdagép adatait nem sikerült olvasni. Szerkessze a gazdagépet az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2137"/>
+        <source>The data of the router could not be read. Edit the router to enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Szerkessze az útválasztót az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="2138"/>
         <source>The router associated with this host has been deleted. Edit the host to select another router or switch to direct connection.</source>
         <translation>A gazdagéphez tartozó útválasztó törölve lett. Szerkessze a gazdagépet másik útválasztó kiválasztásához, vagy váltson közvetlen kapcsolatra.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2139"/>
+        <location filename="../client/desktop/management_tab.cc" line="2145"/>
         <source>The host has an invalid host ID.</source>
         <translation>A gazdagép ID-ja érvénytelen.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2148"/>
+        <location filename="../client/desktop/management_tab.cc" line="2154"/>
         <source>The host has an incorrect address.</source>
         <translation>A gazdagép címe hibás.</translation>
     </message>
@@ -4664,7 +4800,7 @@ Importált hitelesítő adatok: %5</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="56"/>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="214"/>
         <source>Unlock</source>
         <translation>Feloldás</translation>
     </message>
@@ -4719,45 +4855,60 @@ Importált hitelesítő adatok: %5</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="129"/>
+        <location filename="../client/android/master_password_dialog.cc" line="133"/>
         <source>Invalid master password.</source>
         <translation>Érvénytelen mesterjelszó.</translation>
     </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="139"/>
+        <source>Unable to unlock the database.</source>
+        <translation>Nem lehet feloldani az adatbázist.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/android/master_password_dialog.cc" line="142"/>
+        <location filename="../client/android/master_password_dialog.cc" line="150"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszó nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="150"/>
+        <location filename="../client/android/master_password_dialog.cc" line="158"/>
         <source>The entered passwords do not match.</source>
         <translation>A megadott jelszavak nem egyeznek.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="160"/>
+        <location filename="../client/android/master_password_dialog.cc" line="168"/>
         <source>Unable to set master password.</source>
         <translation>Nem lehet beállítani a mesterjelszót.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="169"/>
-        <source>Invalid current password or unable to change it.</source>
-        <translation>Érvénytelen a jelenlegi jelszó, vagy nem módosítható.</translation>
+        <location filename="../client/android/master_password_dialog.cc" line="181"/>
+        <source>Invalid current password.</source>
+        <translation>Érvénytelen a jelenlegi jelszó.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="194"/>
+        <location filename="../client/android/master_password_dialog.cc" line="187"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Néhány rekordot az adatbázisban nem sikerült olvasni. Szerkessze őket az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="192"/>
+        <source>Unable to change the password.</source>
+        <translation>Nem lehet módosítani a jelszót.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/master_password_dialog.cc" line="215"/>
         <source>Use password</source>
         <translation>Jelszó használata</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="211"/>
-        <location filename="../client/android/master_password_dialog.cc" line="219"/>
+        <location filename="../client/android/master_password_dialog.cc" line="232"/>
+        <location filename="../client/android/master_password_dialog.cc" line="240"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>A biometrikus feloldás sikertelen. Adja meg a mesterjelszót.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="215"/>
+        <location filename="../client/android/master_password_dialog.cc" line="236"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>A biometrikus adatok megváltoztak. A folytatáshoz adja meg a mesterjelszót.</translation>
     </message>
@@ -4765,107 +4916,108 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>MsgBox</name>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="49"/>
+        <location filename="../common/desktop/msg_box.cc" line="51"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="50"/>
+        <location filename="../common/desktop/msg_box.cc" line="52"/>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="51"/>
+        <location filename="../common/desktop/msg_box.cc" line="53"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="52"/>
+        <location filename="../common/desktop/msg_box.cc" line="54"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="53"/>
+        <location filename="../common/desktop/msg_box.cc" line="55"/>
         <source>Apply</source>
         <translation>Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="54"/>
+        <location filename="../common/desktop/msg_box.cc" line="56"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="55"/>
+        <location filename="../common/desktop/msg_box.cc" line="57"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="56"/>
+        <location filename="../common/desktop/msg_box.cc" line="58"/>
         <source>Discard</source>
         <translation>Elvetés</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="57"/>
+        <location filename="../common/desktop/msg_box.cc" line="59"/>
         <source>Reset</source>
         <translation>Alaphelyzet</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="58"/>
+        <location filename="../common/desktop/msg_box.cc" line="60"/>
         <source>Help</source>
         <translation>Súgó</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="59"/>
+        <location filename="../common/desktop/msg_box.cc" line="61"/>
         <source>Abort</source>
         <translation>Megszakítás</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="60"/>
+        <location filename="../common/desktop/msg_box.cc" line="62"/>
         <source>Retry</source>
         <translation>Újra</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="61"/>
+        <location filename="../common/desktop/msg_box.cc" line="63"/>
         <source>Ignore</source>
         <translation>Mellőzés</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="62"/>
+        <location filename="../common/desktop/msg_box.cc" line="64"/>
         <source>Restore Defaults</source>
         <translation>Alapértelmezések visszaállítása</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="63"/>
+        <location filename="../common/desktop/msg_box.cc" line="65"/>
         <source>Save All</source>
         <translation>Összes mentése</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="64"/>
+        <location filename="../common/desktop/msg_box.cc" line="66"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="65"/>
+        <location filename="../common/desktop/msg_box.cc" line="67"/>
         <source>Yes to All</source>
         <translation>Igen mindre</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="66"/>
+        <location filename="../common/desktop/msg_box.cc" line="68"/>
         <source>No to All</source>
         <translation>Nem mindre</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="83"/>
+        <location filename="../common/desktop/msg_box.cc" line="85"/>
         <source>Warning</source>
         <translation>Figyelmeztetés</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="91"/>
+        <location filename="../common/desktop/msg_box.cc" line="93"/>
         <source>Information</source>
         <translation>Információ</translation>
     </message>
     <message>
-        <location filename="../common/desktop/msg_box.cc" line="99"/>
+        <location filename="../common/desktop/msg_box.cc" line="101"/>
+        <location filename="../common/desktop/msg_box.cc" line="111"/>
         <source>Confirmation</source>
         <translation>Megerősítés</translation>
     </message>
@@ -5201,34 +5353,34 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>RemoteWidget</name>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="690"/>
+        <location filename="../client/android/remote_widget.cc" line="693"/>
         <source>Unapproved Hosts</source>
         <translation>Jóvá nem hagyott gazdagépek</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="826"/>
-        <location filename="../client/android/remote_widget.cc" line="847"/>
+        <location filename="../client/android/remote_widget.cc" line="829"/>
+        <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>Show more</source>
         <translation>Több megjelenítése</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="826"/>
-        <location filename="../client/android/remote_widget.cc" line="847"/>
+        <location filename="../client/android/remote_widget.cc" line="829"/>
+        <location filename="../client/android/remote_widget.cc" line="850"/>
         <source>%1 of %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="910"/>
+        <location filename="../client/android/remote_widget.cc" line="913"/>
         <source>Desktop</source>
         <translation>Asztal</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="912"/>
+        <location filename="../client/android/remote_widget.cc" line="915"/>
         <source>File Transfer</source>
         <translation>Fájlátvitel</translation>
     </message>
     <message>
-        <location filename="../client/android/remote_widget.cc" line="914"/>
+        <location filename="../client/android/remote_widget.cc" line="917"/>
         <source>Chat</source>
         <translation>Csevegés</translation>
     </message>
@@ -5236,18 +5388,18 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>RouterCard</name>
     <message>
-        <location filename="../client/android/router_card.cc" line="176"/>
-        <location filename="../client/android/router_card.cc" line="226"/>
+        <location filename="../client/android/router_card.cc" line="179"/>
+        <location filename="../client/android/router_card.cc" line="229"/>
         <source>Enter Code</source>
         <translation>Kód megadása</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="224"/>
+        <location filename="../client/android/router_card.cc" line="227"/>
         <source>Blocked</source>
         <translation>Blokkolva</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="226"/>
+        <location filename="../client/android/router_card.cc" line="229"/>
         <source>Set Up</source>
         <translation>Beállítás</translation>
     </message>
@@ -5318,46 +5470,54 @@ Importált hitelesítő adatok: %5</translation>
     </message>
 </context>
 <context>
+    <name>RouterConfig</name>
+    <message>
+        <location filename="../client/config.cc" line="130"/>
+        <source>&lt;unreadable router&gt;</source>
+        <translation>&lt;olvashatatlan útválasztó&gt;</translation>
+    </message>
+</context>
+<context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router_controller.cc" line="195"/>
-        <location filename="../client/router_controller.cc" line="214"/>
-        <location filename="../client/router_controller.cc" line="390"/>
+        <location filename="../client/router_controller.cc" line="210"/>
+        <location filename="../client/router_controller.cc" line="236"/>
+        <location filename="../client/router_controller.cc" line="436"/>
         <source>Connecting to router %1...</source>
         <translation>Csatlakozás a(z) %1 útválasztóhoz...</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="237"/>
+        <location filename="../client/router_controller.cc" line="259"/>
         <source>Event history cleared.</source>
         <translation>Az eseményelőzmények törölve.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="282"/>
+        <location filename="../client/router_controller.cc" line="304"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>Túl sok sikertelen kísérlet. A(z) %1 útválasztó kb. %2 perc múlva fogad újra kódokat.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="290"/>
+        <location filename="../client/router_controller.cc" line="312"/>
         <source>The code was not accepted by router %1.</source>
         <translation>A(z) %1 útválasztó nem fogadta el a kódot.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="293"/>
+        <location filename="../client/router_controller.cc" line="315"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>A(z) %1 útválasztó kétfaktoros kódra vár.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="318"/>
+        <location filename="../client/router_controller.cc" line="344"/>
         <source>Connection to router %1 established.</source>
         <translation>A kapcsolat létrejött a(z) %1 útválasztóval.</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="363"/>
+        <location filename="../client/router_controller.cc" line="389"/>
         <source>Network error: %1</source>
         <translation>Hálózati hiba: %1</translation>
     </message>
     <message>
-        <location filename="../client/router_controller.cc" line="377"/>
+        <location filename="../client/router_controller.cc" line="403"/>
         <source>Disconnected from router %1.</source>
         <translation>Leválasztva a(z) %1 útválasztóról.</translation>
     </message>
@@ -5405,123 +5565,138 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Jelszó:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="45"/>
+        <location filename="../client/desktop/router_dialog.cc" line="46"/>
         <source>Administrator</source>
         <translation>Rendszergazda</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="46"/>
+        <location filename="../client/desktop/router_dialog.cc" line="47"/>
         <source>Manager</source>
         <translation>Kezelő</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="47"/>
+        <location filename="../client/desktop/router_dialog.cc" line="48"/>
         <source>Operator</source>
         <translation>Operátor</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/router_dialog.cc" line="94"/>
+        <location filename="../client/desktop/router_dialog.cc" line="76"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="106"/>
+        <location filename="../client/desktop/router_dialog.cc" line="88"/>
         <source>An invalid router address was entered.</source>
         <translation>Érvénytelen útválasztócím lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="116"/>
+        <location filename="../client/desktop/router_dialog.cc" line="98"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint _, -, . karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="127"/>
+        <location filename="../client/desktop/router_dialog.cc" line="109"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/router_dialog.cc" line="149"/>
-        <location filename="../client/desktop/router_dialog.cc" line="164"/>
-        <location filename="../client/desktop/router_dialog.cc" line="173"/>
+        <location filename="../client/desktop/router_dialog.cc" line="131"/>
+        <location filename="../client/desktop/router_dialog.cc" line="148"/>
+        <location filename="../client/desktop/router_dialog.cc" line="157"/>
         <source>Failed to save the router.</source>
         <translation>Nem sikerült menteni az útválasztót.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/router_dialog.cc" line="177"/>
+        <source>Failed to read the router.</source>
+        <translation>Nem sikerült olvasni az útválasztót.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/router_dialog.cc" line="195"/>
+        <source>The data of the router could not be read. You can enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
     </message>
 </context>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="54"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="57"/>
+        <location filename="../client/android/router_editor.cc" line="55"/>
         <source>Address</source>
         <translation>Cím</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="58"/>
+        <location filename="../client/android/router_editor.cc" line="56"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="59"/>
+        <location filename="../client/android/router_editor.cc" line="57"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="68"/>
+        <location filename="../client/android/router_editor.cc" line="66"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="71"/>
-        <location filename="../client/android/router_editor.cc" line="224"/>
+        <location filename="../client/android/router_editor.cc" line="69"/>
+        <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="141"/>
+        <source>The data of the router could not be read. You can enter it again.</source>
+        <translation>Az útválasztó adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../client/android/router_editor.cc" line="146"/>
+        <location filename="../client/android/router_editor.cc" line="152"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Túl hosszú név. A név maximális hossza %n karakter.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="157"/>
+        <location filename="../client/android/router_editor.cc" line="163"/>
         <source>An invalid router address was entered.</source>
         <translation>Érvénytelen útválasztócím lett megadva.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="166"/>
+        <location filename="../client/android/router_editor.cc" line="172"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>A felhasználónév nem lehet üres, és csak betűket, számokat, valamint &quot;_&quot;, &quot;-&quot;, &quot;.&quot; karaktereket tartalmazhat.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="176"/>
+        <location filename="../client/android/router_editor.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation>A jelszó nem lehet üres.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="203"/>
-        <location filename="../client/android/router_editor.cc" line="213"/>
+        <location filename="../client/android/router_editor.cc" line="211"/>
+        <location filename="../client/android/router_editor.cc" line="221"/>
         <source>Failed to save the router.</source>
         <translation>Nem sikerült menteni az útválasztót.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="223"/>
+        <location filename="../client/android/router_editor.cc" line="231"/>
         <source>Delete Router</source>
         <translation>Útválasztó törlése</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="224"/>
+        <location filename="../client/android/router_editor.cc" line="232"/>
         <source>Delete the router &quot;%1&quot;?</source>
         <translation>Törli a(z) &quot;%1&quot; útválasztót?</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="231"/>
+        <location filename="../client/android/router_editor.cc" line="239"/>
         <source>Failed to delete the router.</source>
         <translation>Nem sikerült törölni az útválasztót.</translation>
     </message>
@@ -5730,61 +5905,89 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Megjegyzés:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="166"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="133"/>
         <source>Failed to get list of groups.</source>
         <translation>Nem sikerült lekérni a csoportok listáját.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="240"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="207"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Adja meg a felhasználónevet és a jelszót is, vagy hagyja üresen mindkettőt.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="253"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="220"/>
         <source>Failed to save the credentials.</source>
         <translation>Nem sikerült menteni a hitelesítő adatokat.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="243"/>
+        <source>Failed to read the list of credentials.</source>
+        <translation>Nem sikerült olvasni a hitelesítő adatok listáját.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="289"/>
+        <source>Failed to read the credentials of the host.</source>
+        <translation>Nem sikerült olvasni a gazdagép hitelesítő adatait.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="294"/>
+        <source>The credentials of the host could not be read. You can enter them again.</source>
+        <translation>A gazdagép hitelesítő adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
     </message>
 </context>
 <context>
     <name>RouterHostEditor</name>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="56"/>
+        <location filename="../client/android/router_host_editor.cc" line="55"/>
         <source>User Name</source>
         <translation>Felhasználónév</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="58"/>
+        <location filename="../client/android/router_host_editor.cc" line="57"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="50"/>
+        <location filename="../client/android/router_host_editor.cc" line="49"/>
         <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
         <translation>A felhasználónév és a jelszó csak ezen az eszközön van tárolva, és nem kerül elküldésre az útválasztónak. Az elfelejtésükhöz hagyja üresen mindkettőt.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="47"/>
+        <location filename="../client/android/router_host_editor.cc" line="46"/>
         <source>Use existing</source>
         <translation>Meglévő használata</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="61"/>
+        <location filename="../client/android/router_host_editor.cc" line="60"/>
         <source>Credentials</source>
         <translation>Hitelesítő adatok</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="69"/>
+        <location filename="../client/android/router_host_editor.cc" line="68"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="186"/>
-        <location filename="../client/android/router_host_editor.cc" line="210"/>
+        <location filename="../client/android/router_host_editor.cc" line="135"/>
+        <location filename="../client/android/router_host_editor.cc" line="157"/>
+        <location filename="../client/android/router_host_editor.cc" line="204"/>
+        <source>Failed to read data from the local database.</source>
+        <translation>Nem sikerült olvasni az adatokat a helyi adatbázisból.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="141"/>
+        <source>The credentials of the host could not be read. You can enter them again.</source>
+        <translation>A gazdagép hitelesítő adatait nem sikerült olvasni. Ezeket újra megadhatja.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_host_editor.cc" line="226"/>
+        <location filename="../client/android/router_host_editor.cc" line="240"/>
+        <location filename="../client/android/router_host_editor.cc" line="264"/>
         <source>Failed to save the credentials.</source>
         <translation>Nem sikerült menteni a hitelesítő adatokat.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="176"/>
+        <location filename="../client/android/router_host_editor.cc" line="215"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Adja meg a felhasználónevet és a jelszót is, vagy hagyja üresen mindkettőt.</translation>
     </message>
@@ -5827,39 +6030,34 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Biztosan leválasztja az összes gazdagépet?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="394"/>
-        <source>Confirmation</source>
-        <translation>Megerősítés</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="395"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="393"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>A gazdagép törlésével az útválasztóhoz való csatlakozás összes beállítása törlődik, és az alkalmazás el lesz távolítva a gazdagépről. Ez a művelet visszafordíthatatlan. Biztosan folytatja?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="665"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="661"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n gazdagép</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="707"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
         <source>Save File</source>
         <translation>Fájl mentése</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="707"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="703"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-fájlok (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="718"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="714"/>
         <source>Could not open file for writing.</source>
         <translation>Nem sikerült megnyitni a fájlt írásra.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="765"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="761"/>
         <source>Unable to write file.</source>
         <translation>Nem lehet írni a fájlt.</translation>
     </message>
@@ -6391,12 +6589,12 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Nincs hozzáadott útválasztó</translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="203"/>
+        <location filename="../client/android/routers_widget.cc" line="206"/>
         <source>Add Router</source>
         <translation>Útválasztó hozzáadása</translation>
     </message>
     <message>
-        <location filename="../client/android/routers_widget.cc" line="240"/>
+        <location filename="../client/android/routers_widget.cc" line="243"/>
         <source>Edit Router</source>
         <translation>Útválasztó szerkesztése</translation>
     </message>
@@ -6417,22 +6615,22 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SearchResultModel</name>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="180"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="183"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
         <source>Address / ID</source>
         <translation>Cím / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="186"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
         <source>Group</source>
         <translation>Csoport</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_result_model.cc" line="189"/>
+        <location filename="../client/desktop/management/search_result_model.cc" line="192"/>
         <source>Comment</source>
         <translation>Megjegyzés</translation>
     </message>
@@ -6440,27 +6638,27 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="296"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
         <source>Previous</source>
         <translation>Előző</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="297"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="295"/>
         <source>Previous page</source>
         <translation>Előző oldal</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="303"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
         <source>Next</source>
         <translation>Következő</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="304"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
         <source>Next page</source>
         <translation>Következő oldal</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="801"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="805"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n találat</numerusform>
@@ -6873,9 +7071,19 @@ Importált hitelesítő adatok: %5</translation>
         <translation>Szeretne másik jelszót megadni?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="448"/>
-        <source>Invalid current password or unable to change it.</source>
-        <translation>Érvénytelen a jelenlegi jelszó, vagy nem módosítható.</translation>
+        <location filename="../client/desktop/settings_tab.cc" line="452"/>
+        <source>Invalid current password.</source>
+        <translation>Érvénytelen a jelenlegi jelszó.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="456"/>
+        <source>Some records of the database could not be read. Edit them to enter their data again.</source>
+        <translation>Néhány rekordot az adatbázisban nem sikerült olvasni. Szerkessze őket az adatok újbóli megadásához.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="461"/>
+        <source>Unable to change the password.</source>
+        <translation>Nem lehet módosítani a jelszót.</translation>
     </message>
 </context>
 <context>
@@ -7227,98 +7435,95 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="117"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
         <location filename="../client/desktop/management/sidebar.cc" line="89"/>
         <source>Local</source>
         <translation>Helyi</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/sidebar.cc" line="114"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="175"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="226"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="173"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="225"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Nem sikerült olvasni az adatokat. Lehet, hogy a lista elavult.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="116"/>
-        <source>Some records could not be read and are not shown in the list.</source>
-        <translation>Néhány rekordot nem sikerült olvasni, ezért nem jelennek meg a listában.</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="526"/>
         <source>Change Password</source>
         <translation>Jelszó módosítása</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="532"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="534"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszó nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="533"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="535"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>A jelszó nem haladhatja meg a %n karaktert.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="541"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="543"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>A megadott jelszó nem felel meg a biztonsági követelményeknek!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="542"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="544"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>A jelszónak tartalmaznia kell kisbetűket és nagybetűket, számokat, és nem lehet rövidebb %n karakternél.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="545"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="547"/>
         <source>Do you want to enter a different password?</source>
         <translation>Szeretne másik jelszót megadni?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="565"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Jelszó módosítása. Várakozás a munkamenet újbóli bejelentkezésére...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="713"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="715"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Biztosan törli a(z) &quot;%1&quot; csoportot?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="726"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="728"/>
         <source>Unable to remove group</source>
         <translation>Nem lehet eltávolítani a csoportot</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="790"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="793"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Biztosan törli a(z) &quot;%1&quot; útválasztót?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1356"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1367"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>A kiválasztott szülőcsoportban már létezik ilyen nevű csoport.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1365"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1523"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1357"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1376"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1532"/>
         <source>Failed to move the group.</source>
         <translation>Nem sikerült áthelyezni a csoportot.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1414"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>A kiválasztott csoportban már létezik ilyen nevű gazdagép.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1432"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1601"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1423"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1441"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1610"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Nem sikerült áthelyezni a gazdagépet a kiválasztott csoportba.</translation>
     </message>
@@ -7326,7 +7531,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="169"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="170"/>
         <source>Clients</source>
         <translation>Kliensek</translation>
     </message>
@@ -7334,7 +7539,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="151"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="152"/>
         <source>Approved Hosts</source>
         <translation>Jóváhagyott gazdagépek</translation>
     </message>
@@ -7342,7 +7547,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="178"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="179"/>
         <source>Relays</source>
         <translation>Közvetítők</translation>
     </message>
@@ -7350,7 +7555,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="187"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="188"/>
         <source>Unapproved Hosts</source>
         <translation>Jóvá nem hagyott gazdagépek</translation>
     </message>
@@ -7358,7 +7563,7 @@ Importált hitelesítő adatok: %5</translation>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="160"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="161"/>
         <source>Users</source>
         <translation>Felhasználók</translation>
     </message>
