@@ -390,16 +390,12 @@ void RouterHostsWidget::onRemoveHost()
         return;
     }
 
-    MsgBox message_box(this);
-    message_box.setWindowTitle(tr("Confirmation"));
-    message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
-                           "to the router being deleted, and the application will be uninstalled "
-                           "on the host. This operation is irreversible. Are you sure you want to "
-                           "do this?"));
-    message_box.setIcon(MsgBox::Question);
-    message_box.setStandardButtons(MsgBox::Yes | MsgBox::No);
+    QString message = tr("Deleting a host will result in all its configuration for connecting "
+                         "to the router being deleted, and the application will be uninstalled "
+                         "on the host. This operation is irreversible. Are you sure you want to "
+                         "do this?");
 
-    if (message_box.exec() == MsgBox::No)
+    if (MsgBox::importantQuestion(this, message) == MsgBox::No)
     {
         LOG(INFO) << "[ACTION] Remove host rejected by user";
         return;

@@ -19,6 +19,8 @@
 #include "common/desktop/msg_box.h"
 
 #include <QAbstractButton>
+#include <QPointer>
+#include <QTimer>
 
 //--------------------------------------------------------------------------------------------------
 MsgBox::MsgBox(QWidget* parent)
@@ -98,5 +100,62 @@ int MsgBox::question(QWidget* parent, const QString& text, StandardButtons butto
 {
     MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
     message_box.setTextFormat(Qt::PlainText);
+    return message_box.exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int MsgBox::importantQuestion(QWidget* parent, const QString& text, Seconds delay,
+                              StandardButtons buttons)
+{
+    MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
+    message_box.setTextFormat(Qt::PlainText);
+
+    // The safe button is made default, the countdown is set on the accepting one.
+    if (message_box.button(No))
+        message_box.setDefaultButton(No);
+    else
+        message_box.setDefaultButton(Cancel);
+
+    QPointer<QAbstractButton> button = message_box.button(Yes);
+    if (!button)
+        button = message_box.button(Ok);
+
+    if (button && delay > Seconds::zero())
+    {
+        QPointer<QTimer> timer = new QTimer(button);
+        QString caption;
+        Seconds left = delay;
+
+        connect(timer, &QTimer::timeout, button, [timer, button, caption, left]() mutable
+        {
+            if (!timer || !button)
+                return;
+
+            if (caption.isEmpty())
+            {
+                // The text of the buttons is set in exec(), so it is known only after it.
+                caption = button->text();
+                timer->setInterval(Seconds(1));
+            }
+            else
+            {
+                left -= Seconds(1);
+                if (left <= Seconds::zero())
+                {
+                    timer->stop();
+                    button->setText(caption);
+                    button->setEnabled(true);
+                    return;
+                }
+            }
+
+            button->setText(QString("%1 (%2)").arg(caption).arg(left.count()));
+        });
+
+        button->setEnabled(false);
+        timer->start(MilliSeconds::zero());
+    }
+
     return message_box.exec();
 }

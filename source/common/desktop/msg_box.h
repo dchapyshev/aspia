@@ -21,6 +21,8 @@
 
 #include <QMessageBox>
 
+#include "base/time_types.h"
+
 class MsgBox : public QMessageBox
 {
     Q_OBJECT
@@ -36,6 +38,9 @@ public:
     static int warning(QWidget* parent, const QString& text, StandardButtons buttons = Ok);
     static int information(QWidget* parent, const QString& text, StandardButtons buttons = Ok);
     static int question(QWidget* parent, const QString& text, StandardButtons buttons = Yes | No);
+    static int importantQuestion(QWidget* parent, const QString& text,
+                                 Seconds delay = Seconds(5),
+                                 StandardButtons buttons = Yes | No);
 
     Q_DISABLE_COPY_MOVE(MsgBox)
 };
