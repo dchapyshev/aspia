@@ -395,7 +395,7 @@ void RouterHostsWidget::onRemoveHost()
                          "on the host. This operation is irreversible. Are you sure you want to "
                          "do this?");
 
-    if (MsgBox::importantQuestion(this, message) == MsgBox::No)
+    if (MsgBox::importantQuestion(this, message, Seconds(10)) == MsgBox::No)
     {
         LOG(INFO) << "[ACTION] Remove host rejected by user";
         return;
