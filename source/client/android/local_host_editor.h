@@ -56,8 +56,8 @@ private slots:
     void onDeleteClicked();
 
 private:
-    void loadRouters(qint64 selected_router_id);
-    void loadCredentials(qint64 selected_credential_id);
+    bool loadRouters(qint64 selected_router_id);
+    bool loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
     ComboBox* combo_router_ = nullptr;
@@ -72,6 +72,7 @@ private:
     Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
     qint64 group_id_ = 0;
+    bool lists_loaded_ = true;
 
     Q_DISABLE_COPY_MOVE(LocalHostEditor)
 };

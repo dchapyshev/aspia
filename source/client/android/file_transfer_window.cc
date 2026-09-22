@@ -233,19 +233,19 @@ void FileTransferWindow::forgetHostCredentials()
 
     if (host_.entryId() > 0)
     {
-        std::optional<LocalHostConfig> local_host =
-            Database::instance().findLocalHost(host_.entryId());
-        if (!local_host.has_value())
+        LocalHostConfig local_host;
+        const Database::FindResult found = Database::instance().findLocalHost(host_.entryId(), &local_host);
+        if (found != Database::FindResult::FOUND)
         {
-            LOG(ERROR) << "Local host" << host_.entryId() << "not found";
+            LOG(ERROR) << "Unable to read local host" << host_.entryId() << ":" << found;
             return;
         }
 
-        local_host->setCredentialId(0);
-        local_host->setUsername(QString());
-        local_host->setPassword(SecureString());
+        local_host.setCredentialId(0);
+        local_host.setUsername(QString());
+        local_host.setPassword(SecureString());
 
-        if (!Database::instance().modifyLocalHost(*local_host))
+        if (!Database::instance().modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to remove credentials of local host" << host_.entryId();
         return;
     }
@@ -323,9 +323,12 @@ void FileTransferWindow::fetchConnectionOffer()
     }
 
     RouterController& controller = RouterController::instance();
-    if (RouterController::status(session_state_->routerId()) == RouterStatus::OFFLINE)
+    const RouterStatus router_status = RouterController::status(session_state_->routerId());
+    if (router_status == RouterStatus::OFFLINE || router_status == RouterStatus::UNREADABLE)
     {
-        setStatusText(tr("The specified router is unavailable."));
+        setStatusText(router_status == RouterStatus::UNREADABLE ?
+            tr("The data of the router could not be read. Edit the router to enter it again.") :
+            tr("The specified router is unavailable."));
         return;
     }
 

@@ -79,7 +79,10 @@ QString statusIconPath(RouterStatus status)
             return ":/img/router-online.svg";
 
         case RouterStatus::TWO_FACTOR:
-            return ":/img/lock.svg";
+            return ":/img/router-lock.svg";
+
+        case RouterStatus::UNREADABLE:
+            return ":/img/router-warning.svg";
 
         case RouterStatus::OFFLINE:
         default:

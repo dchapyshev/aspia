@@ -20,8 +20,6 @@
 
 #include <QVBoxLayout>
 
-#include <optional>
-
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/peer/user.h"
@@ -111,8 +109,9 @@ void CredentialEditor::prepareForAdd()
 //--------------------------------------------------------------------------------------------------
 bool CredentialEditor::prepareForEdit(qint64 credential_id)
 {
-    std::optional<CredentialConfig> credential = Database::instance().findCredential(credential_id);
-    if (!credential.has_value())
+    CredentialConfig credential;
+    const Database::FindResult found = Database::instance().findCredential(credential_id, &credential);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Credentials not found:" << credential_id;
         return false;
@@ -120,13 +119,20 @@ bool CredentialEditor::prepareForEdit(qint64 credential_id)
 
     credential_id_ = credential_id;
 
-    edit_name_->setText(credential->displayName());
-    edit_username_->setText(credential->username());
-    edit_password_->setText(credential->password().toString());
+    edit_name_->setText(credential.displayName());
+    edit_username_->setText(credential.username());
+    edit_password_->setText(credential.password().toString());
     label_error_->setVisible(false);
     button_delete_->show();
 
     edit_name_->setFocus();
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of credentials" << credential_id << "could not be read";
+        showError(tr("The credentials could not be read. You can enter them again."));
+    }
+
     return true;
 }
 

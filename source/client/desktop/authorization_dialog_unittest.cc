@@ -323,6 +323,50 @@ TEST_F(AuthorizationDialogTest, ChoiceIsNotOfferedWithoutARecordToChoose)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A record that did not open hands over an empty pair. Offered, it would enter the host with
+// nothing and leave behind a link to credentials the user was never shown.
+TEST_F(AuthorizationDialogTest, RecordThatDidNotOpenIsNotOffered)
+{
+    rememberOneTimePassword(false);
+
+    AuthorizationDialog dialog;
+    dialog.setSavedCredentials({ credential(1, "office", QString(), QString()),
+                                 credential(2, "home", "home-user", "home-password") });
+    dialog.show();
+
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    QComboBox* combo = credentialCombo(dialog);
+    ASSERT_TRUE(saved && combo);
+
+    EXPECT_TRUE(saved->isVisible());
+    saved->setChecked(true);
+
+    ASSERT_EQ(combo->count(), 1);
+    EXPECT_EQ(combo->itemData(0).toLongLong(), 2);
+    EXPECT_EQ(dialog.credentialId(), 2);
+    EXPECT_EQ(dialog.userName(), "home-user");
+}
+
+//--------------------------------------------------------------------------------------------------
+// With nothing else in the book, the choice is not offered at all.
+TEST_F(AuthorizationDialogTest, ChoiceIsNotOfferedWhenTheOnlyRecordDidNotOpen)
+{
+    rememberOneTimePassword(false);
+
+    AuthorizationDialog dialog;
+    dialog.setSavedCredentials({ credential(1, "office", QString(), QString()) });
+    dialog.show();
+
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    ASSERT_TRUE(saved);
+
+    saved->setChecked(true);
+
+    EXPECT_FALSE(saved->isVisible());
+    EXPECT_EQ(dialog.credentialId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A one-time password is the host naming itself: the record is still there to be chosen, but it
 // is not what the host is entered with while the password is.
 TEST_F(AuthorizationDialogTest, OneTimePasswordLeavesTheRecordUnchosen)

@@ -24,10 +24,14 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "client/online_checker/online_checker_direct.h"
+#include "client/online_checker/online_checker_router.h"
 
 namespace {
 
 constexpr Minutes kCacheTime{ 3 };
+
+volatile auto g_onlineStatusType = qRegisterMetaType<OnlineStatus>();
 
 } // namespace
 
@@ -70,7 +74,7 @@ void OnlineChecker::start(const HostList& hosts)
     router_finished_ = true;
     direct_finished_ = true;
 
-    QList<QPair<qint64, bool>> cached_hits;
+    QList<QPair<qint64, OnlineStatus>> cached_hits;
 
     for (const LocalHostConfig& host : hosts)
     {
@@ -78,7 +82,13 @@ void OnlineChecker::start(const HostList& hosts)
         auto it = cache_.constFind(id);
         if (it != cache_.constEnd() && isCacheFresh(*it))
         {
-            cached_hits.append({id, it->online});
+            cached_hits.append({id, it->status});
+            continue;
+        }
+
+        if (host.address().isEmpty())
+        {
+            cached_hits.append({id, OnlineStatus::SKIPPED});
             continue;
         }
 
@@ -114,7 +124,7 @@ void OnlineChecker::start(const HostList& hosts)
         router_checker_ = new OnlineCheckerRouter(router_hosts_, this);
 
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
-                this, &OnlineChecker::onRouterCheckerResult);
+                this, &OnlineChecker::onCheckerResult);
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerFinished,
                 this, &OnlineChecker::onRouterCheckerFinished);
 
@@ -132,7 +142,7 @@ void OnlineChecker::start(const HostList& hosts)
         direct_checker_->moveToThread(&direct_thread_);
 
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerResult,
-                this, &OnlineChecker::onDirectCheckerResult,
+                this, &OnlineChecker::onCheckerResult,
                 Qt::QueuedConnection);
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerFinished,
                 this, &OnlineChecker::onDirectCheckerFinished,
@@ -159,10 +169,12 @@ void OnlineChecker::invalidate(const QList<qint64>& entry_ids)
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::onDirectCheckerResult(qint64 entry_id, bool online)
+void OnlineChecker::onCheckerResult(qint64 entry_id, OnlineStatus status)
 {
-    cache_.insert(entry_id, CacheEntry{online, Clock::now()});
-    emit sig_checkerResult(entry_id, online);
+    if (status != OnlineStatus::SKIPPED)
+        cache_.insert(entry_id, CacheEntry{status, Clock::now()});
+
+    emit sig_checkerResult(entry_id, status);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -171,13 +183,6 @@ void OnlineChecker::onDirectCheckerFinished()
     direct_finished_ = true;
     LOG(TRACE) << "DIRECT checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
     finishIfDone();
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineChecker::onRouterCheckerResult(qint64 entry_id, bool online)
-{
-    cache_.insert(entry_id, CacheEntry{online, Clock::now()});
-    emit sig_checkerResult(entry_id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -191,7 +196,7 @@ void OnlineChecker::onRouterCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::emitPendingCached()
 {
-    QList<QPair<qint64, bool>> hits = std::move(pending_cached_hits_);
+    QList<QPair<qint64, OnlineStatus>> hits = std::move(pending_cached_hits_);
     pending_cached_hits_.clear();
 
     for (const auto& pair : hits)

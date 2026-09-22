@@ -24,6 +24,7 @@
 #include <QHash>
 
 #include "client/config.h"
+#include "client/online_checker/online_checker.h"
 
 // The hosts of one group of the address book. They come from the local database, so unlike the
 // lists of a router they are edited a record at a time rather than replaced whole.
@@ -67,9 +68,9 @@ public:
     // A connection was just made to the host, which is the only field of a record this list writes.
     void setConnectTime(qint64 entry_id, qint64 connect_time);
 
-    // The answer of a probe. Until one arrives a host is neither online nor offline, and the row
-    // says nothing about it.
-    void setOnlineStatus(qint64 entry_id, bool online);
+    // The answer of the checker. Until one arrives a host is neither online nor offline, and the
+    // row says nothing about it.
+    void setOnlineStatus(qint64 entry_id, OnlineStatus status);
     void clearOnlineStatuses();
 
     // QAbstractTableModel implementation.
@@ -86,8 +87,8 @@ private:
 
     QList<LocalHostConfig> hosts_;
 
-    // Probed states by entry id. A host that is not in it has not been probed.
-    QHash<qint64, bool> online_;
+    // What the checker answered, by entry id. A host that is not in it has no answer yet.
+    QHash<qint64, OnlineStatus> online_;
 
     // Kept here rather than built per comparison: it carries an ICU collator.
     QCollator collator_;

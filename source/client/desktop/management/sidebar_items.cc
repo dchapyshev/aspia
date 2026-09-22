@@ -91,7 +91,8 @@ void SidebarRouter::setStatus(Status status)
         case Status::OFFLINE:    setIcon(0, QIcon(":/img/router-offline.svg"));    break;
         case Status::CONNECTING: setIcon(0, QIcon(":/img/router-connecting.svg")); break;
         case Status::ONLINE:     setIcon(0, QIcon(":/img/router-online.svg"));     break;
-        case Status::TWO_FACTOR: setIcon(0, QIcon(":/img/lock.svg"));              break;
+        case Status::TWO_FACTOR: setIcon(0, QIcon(":/img/router-lock.svg"));       break;
+        case Status::UNREADABLE: setIcon(0, QIcon(":/img/router-warning.svg"));    break;
         default: break;
     }
 }

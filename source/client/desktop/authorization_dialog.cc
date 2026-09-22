@@ -80,13 +80,20 @@ void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setSavedCredentials(const QList<CredentialConfig>& credentials)
 {
-    credentials_ = credentials;
-
+    credentials_.clear();
     ui->combo_credential->clear();
-    for (const CredentialConfig& credential : std::as_const(credentials_))
+
+    const QIcon icon(":/img/keys.svg");
+
+    // A record that did not open hands over an empty user name and password. Offered, it
+    // would connect with nothing and the host would refuse credentials the user never saw.
+    for (const CredentialConfig& credential : credentials)
     {
-        ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
-                                      QVariant::fromValue(credential.id()));
+        if (!credential.isValid())
+            continue;
+
+        credentials_.append(credential);
+        ui->combo_credential->addItem(icon, credential.displayName(), QVariant::fromValue(credential.id()));
     }
 
     updateModes();

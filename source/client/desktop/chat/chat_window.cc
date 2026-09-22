@@ -41,28 +41,30 @@ QString chatHistoryId(const SessionState& session_state)
 
     if (host.entryId() > 0)
     {
-        std::optional<LocalHostConfig> entry = database.findLocalHost(host.entryId());
-        if (!entry.has_value())
+        LocalHostConfig entry;
+        database.findLocalHost(host.entryId(), &entry);
+        if (entry.guid().isEmpty())
         {
             LOG(WARNING) << "Host entry not found:" << host.entryId();
             return QString();
         }
 
-        hash.addData(entry->guid().toUtf8());
+        hash.addData(entry.guid().toUtf8());
     }
     else if (host.routerId() > 0)
     {
         if (isTempHostId(stringToHostId(host.address())))
             return QString();
 
-        std::optional<RouterConfig> router = database.findRouter(host.routerId());
-        if (!router.has_value())
+        RouterConfig router;
+        database.findRouter(host.routerId(), &router);
+        if (router.guid().isEmpty())
         {
             LOG(WARNING) << "Router entry not found:" << host.routerId();
             return QString();
         }
 
-        hash.addData(router->guid().toUtf8());
+        hash.addData(router.guid().toUtf8());
         hash.addData(host.address().toUtf8());
     }
     else

@@ -169,11 +169,41 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     QList<RouterConfig> routers;
     QList<LocalGroupConfig> groups;
     QList<CredentialConfig> credentials;
-    if (db.routerList(&routers) != Database::ReadResult::OK || !db.allLocalGroups(&groups) ||
-        db.credentialList(&credentials) != Database::ReadResult::OK)
+    QList<LocalHostConfig> hosts;
+    QList<RouterHostConfig> router_hosts;
+
+    const Database::ReadResult read_results[] =
+    {
+        db.routerList(&routers),
+        db.credentialList(&credentials),
+        db.allLocalHosts(&hosts),
+        db.allRouterHosts(&router_hosts)
+    };
+
+    if (!db.allLocalGroups(&groups))
     {
         LOG(ERROR) << "Unable to read the address book";
         return Backup::Result::INTERNAL_ERROR;
+    }
+
+    bool incomplete = false;
+
+    for (Database::ReadResult read_result : read_results)
+    {
+        if (read_result == Database::ReadResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the address book";
+            return Backup::Result::INTERNAL_ERROR;
+        }
+
+        if (read_result == Database::ReadResult::INCOMPLETE)
+            incomplete = true;
+    }
+
+    if (incomplete)
+    {
+        LOG(ERROR) << "Unable to read the address book completely";
+        return Backup::Result::UNREADABLE_RECORD;
     }
 
     // What a record of the book is named by in the file. A link resolved to nothing comes out
@@ -202,13 +232,6 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         ++report->local_groups;
     }
 
-    QList<LocalHostConfig> hosts;
-    if (db.allLocalHosts(&hosts) != Database::ReadResult::OK)
-    {
-        LOG(ERROR) << "Unable to read the address book";
-        return Backup::Result::INTERNAL_ERROR;
-    }
-
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
         // A host keeps naming the router it was reached through even after that router is removed,
@@ -217,13 +240,6 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         buildLocalHost(host, group_guids.value(host.groupId()), router_guids.value(host.routerId()),
                        credential_guids.value(host.credentialId()), data->add_local_hosts());
         ++report->local_hosts;
-    }
-
-    QList<RouterHostConfig> router_hosts;
-    if (db.allRouterHosts(&router_hosts) != Database::ReadResult::OK)
-    {
-        LOG(ERROR) << "Unable to read the address book";
-        return Backup::Result::INTERNAL_ERROR;
     }
 
     for (const RouterHostConfig& host : std::as_const(router_hosts))

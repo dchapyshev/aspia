@@ -23,6 +23,7 @@
 #include <QIcon>
 #include <QLabel>
 #include <QPushButton>
+#include <QTimer>
 
 #include <algorithm>
 
@@ -60,47 +61,11 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
-    QList<CredentialConfig> saved_credentials;
-    Database::instance().credentialList(&saved_credentials);
-    for (const CredentialConfig& credential : std::as_const(saved_credentials))
-    {
-        ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
-                                      QVariant::fromValue(credential.id()));
-    }
-
-    // Nothing to share until a record of credentials is added.
-    ui->checkbox_saved_credentials->setEnabled(!saved_credentials.isEmpty());
-
     // A temporary host id is handed out at random and comes back for another machine, so what was
     // saved under it would be sent to a host the user never gave it to. Such a host is edited like
     // any other, it just has nowhere to keep credentials.
     if (isTempHostId(host_.host_id))
-    {
-        ui->checkbox_saved_credentials->setEnabled(false);
-        ui->label_username->setEnabled(false);
-        ui->edit_username->setEnabled(false);
-        ui->label_password->setEnabled(false);
-        ui->edit_password->setEnabled(false);
-        ui->label_credential->setEnabled(false);
-        ui->combo_credential->setEnabled(false);
-    }
-    else
-    {
-        std::optional<RouterHostConfig> credentials =
-            Database::instance().findRouterHost(router_id_, host_.host_id);
-        if (credentials.has_value())
-        {
-            ui->edit_username->setText(credentials->username());
-            ui->edit_password->setPassword(credentials->password());
-
-            if (credentials->credentialId() > 0)
-            {
-                ui->checkbox_saved_credentials->setChecked(true);
-                ui->combo_credential->setCurrentIndex(ui->combo_credential->findData(
-                    QVariant::fromValue(credentials->credentialId())));
-            }
-        }
-    }
+        setCredentialsEnabled(false);
 
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &RouterHostDialog::onSavedCredentialsToggled);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
@@ -122,6 +87,8 @@ RouterHostDialog::RouterHostDialog(qint64 router_id, const QString& workspace_na
         if (router_id == router_id_ && status != RouterStatus::ONLINE)
             reject();
     });
+
+    QTimer::singleShot(MilliSeconds::zero(), this, &RouterHostDialog::onLoadData);
 
     // A host that belongs to no workspace lies in no group, and the router refuses a group list
     // request without a workspace. Such a host is edited with the combo left empty.
@@ -260,9 +227,81 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterHostDialog::onLoadData()
+{
+    // A temporary host keeps no credentials, so there is nothing to read for it.
+    if (isTempHostId(host_.host_id))
+        return;
+
+    Database& db = Database::instance();
+
+    QList<CredentialConfig> saved_credentials;
+    const Database::ReadResult credentials_result = db.credentialList(&saved_credentials);
+    if (credentials_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of credentials";
+        MsgBox::warning(this, tr("Failed to read the list of credentials."));
+        reject();
+        return;
+    }
+
+    // The combo names them by a plain column, so one that did not open is picked like any other.
+    if (credentials_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the credentials";
+
+    const QIcon credential_icon(":/img/keys.svg");
+    const QIcon unread_credential_icon(":/img/key-corrupted.svg");
+
+    for (const CredentialConfig& credential : std::as_const(saved_credentials))
+    {
+        ui->combo_credential->addItem(credential.isValid() ? credential_icon : unread_credential_icon,
+                                      credential.displayName(),
+                                      QVariant::fromValue(credential.id()));
+    }
+
+    RouterHostConfig credentials;
+    const Database::FindResult credentials_found = db.findRouterHost(router_id_, host_.host_id, &credentials);
+    credentials_loaded_ = credentials_found != Database::FindResult::FAILED;
+
+    if (credentials_found == Database::FindResult::FOUND || credentials_found == Database::FindResult::UNREADABLE)
+    {
+        ui->edit_username->setText(credentials.username());
+        ui->edit_password->setPassword(credentials.password());
+
+        if (credentials.credentialId() > 0)
+        {
+            ui->checkbox_saved_credentials->setChecked(true);
+            ui->combo_credential->setCurrentIndex(ui->combo_credential->findData(
+                QVariant::fromValue(credentials.credentialId())));
+        }
+    }
+
+    // Nothing to share until a record of credentials is added. A record that did not open is
+    // in the list too, so a host never refers to one the combo does not hold.
+    ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
+
+    onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
+
+    if (credentials_found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_.host_id;
+        setCredentialsEnabled(false);
+        MsgBox::warning(this, tr("Failed to read the credentials of the host."));
+    }
+    else if (credentials_found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Credentials of host" << host_.host_id << "could not be read";
+        MsgBox::warning(this, tr("The credentials of the host could not be read. You can enter them again."));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 bool RouterHostDialog::saveCredentials()
 {
     if (isTempHostId(host_.host_id))
+        return true;
+
+    if (!credentials_loaded_)
         return true;
 
     Database& db = Database::instance();
@@ -272,9 +311,25 @@ bool RouterHostDialog::saveCredentials()
     const QString username = ui->edit_username->text();
     const SecureString password = ui->edit_password->password();
 
+    RouterHostConfig stored;
+    const Database::FindResult stored_found = db.findRouterHost(router_id_, host_.host_id, &stored);
+    if (stored_found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_.host_id;
+        return false;
+    }
+
+    const bool row_exists = stored_found != Database::FindResult::NOT_FOUND;
+
     // Remembered by neither a pair nor a record of credentials, the host has no row.
     if (username.isEmpty() && credential_id <= 0)
     {
+        // The form of a record that did not open comes up empty, and left that way it says
+        // nothing about the row: the user came to edit the host, not to drop credentials they
+        // were never shown.
+        if (stored_found == Database::FindResult::UNREADABLE)
+            return true;
+
         if (db.removeRouterHost(router_id_, host_.host_id))
             return true;
 
@@ -291,7 +346,7 @@ bool RouterHostDialog::saveCredentials()
 
     bool saved = false;
 
-    if (db.findRouterHost(router_id_, host_.host_id).has_value())
+    if (row_exists)
         saved = db.modifyRouterHost(credentials);
     else
         saved = db.addRouterHost(credentials);
@@ -300,4 +355,16 @@ bool RouterHostDialog::saveCredentials()
         LOG(ERROR) << "Unable to save credentials of host" << host_.host_id;
 
     return saved;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterHostDialog::setCredentialsEnabled(bool enable)
+{
+    ui->checkbox_saved_credentials->setEnabled(enable);
+    ui->label_username->setEnabled(enable);
+    ui->edit_username->setEnabled(enable);
+    ui->label_password->setEnabled(enable);
+    ui->edit_password->setEnabled(enable);
+    ui->label_credential->setEnabled(enable);
+    ui->combo_credential->setEnabled(enable);
 }

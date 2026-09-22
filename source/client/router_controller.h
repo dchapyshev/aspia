@@ -36,6 +36,7 @@ class RouterController final : public QObject
     Q_OBJECT
 
 public:
+    // Only one lives at a time, and the static lookups below answer through it.
     explicit RouterController(QObject* parent = nullptr);
     ~RouterController() final;
 

@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QComboBox>
+#include <QTimer>
 
 #include "base/build_config.h"
 #include "base/logging.h"
@@ -47,29 +48,10 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
     ui->combo_session_type->addItem(tr("Operator"), proto::router::SESSION_TYPE_OPERATOR);
     ui->combo_session_type->setCurrentIndex(2);
 
-    if (router_id_ != -1)
-    {
-        std::optional<RouterConfig> router = Database::instance().findRouter(router_id_);
-        if (router.has_value())
-        {
-            ui->edit_name->setText(router->displayName());
-            ui->edit_address->setText(router->address());
-
-            int session_type_index = ui->combo_session_type->findData(router->sessionType());
-            if (session_type_index != -1)
-                ui->combo_session_type->setCurrentIndex(session_type_index);
-
-            ui->edit_username->setText(router->username());
-            ui->edit_password->setPassword(router->password());
-        }
-        else
-        {
-            LOG(ERROR) << "Unable to find router with id" << router_id_;
-        }
-    }
-
     ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
+
+    QTimer::singleShot(MilliSeconds::zero(), this, &RouterDialog::onLoadData);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,15 +139,17 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         // issued meanwhile survives the save. It belongs to the account of the record, and an
         // edit that changes the account leaves it behind, because presented for another one it
         // would only be refused.
-        const std::optional<RouterConfig> stored = db.findRouter(router_id_);
-        if (!stored.has_value())
+        RouterConfig stored;
+        const Database::FindResult stored_found = db.findRouter(router_id_, &stored);
+        if (stored_found == Database::FindResult::NOT_FOUND ||
+            stored_found == Database::FindResult::FAILED)
         {
             LOG(ERROR) << "Failed to re-read router" << router_id_;
             showError(tr("Failed to save the router."));
             return;
         }
-        if (stored->hasSameAccount(data))
-            data.setDeviceToken(stored->deviceToken());
+        if (stored.hasSameAccount(data))
+            data.setDeviceToken(stored.deviceToken());
 
         if (!db.modifyRouter(data))
         {
@@ -176,6 +160,40 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterDialog::onLoadData()
+{
+    if (router_id_ == -1)
+        return;
+
+    RouterConfig router;
+    const Database::FindResult found = Database::instance().findRouter(router_id_, &router);
+
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to find router with id" << router_id_;
+        showError(tr("Failed to read the router."));
+        reject();
+        return;
+    }
+
+    ui->edit_name->setText(router.displayName());
+    ui->edit_address->setText(router.address());
+
+    const int session_type_index = ui->combo_session_type->findData(router.sessionType());
+    if (session_type_index != -1)
+        ui->combo_session_type->setCurrentIndex(session_type_index);
+
+    ui->edit_username->setText(router.username());
+    ui->edit_password->setPassword(router.password());
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of router" << router_id_ << "could not be read";
+        showError(tr("The data of the router could not be read. You can enter it again."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

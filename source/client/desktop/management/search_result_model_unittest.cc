@@ -19,6 +19,8 @@
 #include "client/desktop/management/search_result_model.h"
 
 #include <QAbstractItemModelTester>
+#include <QIcon>
+#include <QImage>
 #include <QItemSelectionModel>
 
 #include <gtest/gtest.h>
@@ -224,6 +226,26 @@ TEST_F(SearchResultModelTest, IconIsOnTheNameColumn)
     EXPECT_TRUE(hasIcon(0, Column::NAME));
     EXPECT_FALSE(hasIcon(0, Column::ADDRESS));
     EXPECT_FALSE(hasIcon(2, Column::SOURCE));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record of the book that did not open is shown without its address, so the list says so.
+// A host on a router is not one of those, whether or not it named itself.
+TEST_F(SearchResultModelTest, LocalRecordThatDidNotOpenIsMarked)
+{
+    model()->setRows({ makeLocalRow(1, "host", "192.168.0.1", "Local"),
+                       makeLocalRow(2, "broken", QString(), "Local"),
+                       makeRouterRow(QString(), "100500", "Router") });
+
+    auto icon = [this](int row)
+    {
+        return model()->index(row, static_cast<int>(Column::NAME))
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
+    };
+
+    ASSERT_FALSE(icon(0).isNull());
+    EXPECT_NE(icon(1), icon(0));
+    EXPECT_EQ(icon(2), icon(0));
 }
 
 //--------------------------------------------------------------------------------------------------

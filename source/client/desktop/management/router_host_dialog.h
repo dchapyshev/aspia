@@ -49,14 +49,17 @@ private slots:
     void onHostResultReceived(const proto::router::HostResult& result);
     void onSavedCredentialsToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
+    void onLoadData();
 
 private:
     bool saveCredentials();
+    void setCredentialsEnabled(bool enable);
 
     std::unique_ptr<Ui::RouterHostDialog> ui;
     qint64 router_id_ = 0;
     QString workspace_name_;
     RouterHost host_;
+    bool credentials_loaded_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterHostDialog)
 };

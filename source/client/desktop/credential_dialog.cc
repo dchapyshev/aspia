@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QPushButton>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/peer/user.h"
@@ -39,30 +40,12 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 
     ui->edit_password->setShowPasswordButtonVisible(true);
 
-    if (credential_id_ != -1)
-    {
-        setWindowTitle(tr("Edit Credentials"));
-
-        std::optional<CredentialConfig> credential =
-            Database::instance().findCredential(credential_id_);
-        if (credential.has_value())
-        {
-            ui->edit_name->setText(credential->displayName());
-            ui->edit_username->setText(credential->username());
-            ui->edit_password->setPassword(credential->password());
-        }
-        else
-        {
-            LOG(ERROR) << "Unable to find credentials with id" << credential_id_;
-        }
-    }
-    else
-    {
-        setWindowTitle(tr("Add Credentials"));
-    }
+    setWindowTitle(credential_id_ != -1 ? tr("Edit Credentials") : tr("Add Credentials"));
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &CredentialDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
+
+    QTimer::singleShot(MilliSeconds::zero(), this, &CredentialDialog::onLoadData);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -146,4 +129,31 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialDialog::onLoadData()
+{
+    if (credential_id_ == -1)
+        return;
+
+    CredentialConfig credential;
+    const Database::FindResult found = Database::instance().findCredential(credential_id_, &credential);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to find credentials with id" << credential_id_;
+        MsgBox::warning(this, tr("Failed to read the credentials."));
+        reject();
+        return;
+    }
+
+    ui->edit_name->setText(credential.displayName());
+    ui->edit_username->setText(credential.username());
+    ui->edit_password->setPassword(credential.password());
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of credentials" << credential_id_ << "could not be read";
+        MsgBox::warning(this, tr("The credentials could not be read. You can enter them again."));
+    }
 }

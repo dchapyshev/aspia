@@ -30,8 +30,6 @@
 #include <QStatusBar>
 #include <QUuid>
 
-#include <optional>
-
 #include "base/logging.h"
 #include "client/database.h"
 #include "client/desktop/management/drag_and_drop.h"
@@ -158,10 +156,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
     }
     else if (result == Database::ReadResult::INCOMPLETE)
-    {
         LOG(ERROR) << "Unable to read some of the hosts";
-        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -193,14 +188,18 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
     if (model_->rowOf(entry_id) < 0)
         return;
 
-    std::optional<LocalHostConfig> updated = Database::instance().findLocalHost(entry_id);
-    if (!updated.has_value())
+    LocalHostConfig updated;
+    const Database::FindResult result = Database::instance().findLocalHost(entry_id, &updated);
+    if (result == Database::FindResult::NOT_FOUND)
     {
         removeItem(entry_id);
         return;
     }
 
-    model_->updateHost(*updated);
+    if (result == Database::FindResult::FAILED)
+        return;
+
+    model_->updateHost(updated);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -371,9 +370,9 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
+void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, OnlineStatus status)
 {
-    model_->setOnlineStatus(entry_id, online);
+    model_->setOnlineStatus(entry_id, status);
 }
 
 //--------------------------------------------------------------------------------------------------

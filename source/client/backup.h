@@ -35,10 +35,11 @@ public:
     {
         SUCCESS,
         DATABASE_UNAVAILABLE,
-        FILE_ERROR,           // The file could not be opened, read or written.
-        INVALID_FORMAT,       // Not a valid/recognized backup file.
+        FILE_ERROR,
+        INVALID_FORMAT,
         UNSUPPORTED_VERSION,
         WRONG_PASSWORD,
+        UNREADABLE_RECORD,
         NOTHING_EXPORTED,
         NOTHING_IMPORTED,
         INTERNAL_ERROR,

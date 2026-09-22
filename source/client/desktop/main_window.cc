@@ -31,8 +31,6 @@
 #include <QUrl>
 #include <QWindow>
 
-#include <optional>
-
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
@@ -228,8 +226,16 @@ void MainWindow::connectToUrl(const QString& url)
 
         if (router_id <= 0)
         {
-            MsgBox::warning(this,
-                tr("The router referenced by the link is not among the saved routers."));
+            MsgBox::warning(this, tr("The router referenced by the link is not among the saved routers."));
+            return;
+        }
+
+        RouterConfig router;
+        if (db.findRouter(router_id, &router) == Database::FindResult::UNREADABLE)
+        {
+            LOG(ERROR) << "Data of router" << router_id << "could not be read";
+            MsgBox::warning(this, tr("The data of the router could not be read. Edit the router "
+                                     "to enter it again."));
             return;
         }
 
@@ -264,24 +270,32 @@ void MainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<LocalHostConfig> entry = db.findLocalHostByGuid(host_url.hostGuid());
-        if (!entry.has_value())
+        LocalHostConfig entry;
+        const Database::FindResult host_found = db.findLocalHostByGuid(host_url.hostGuid(), &entry);
+        if (host_found != Database::FindResult::FOUND)
         {
-            MsgBox::warning(this,
+            MsgBox::warning(this, host_found == Database::FindResult::UNREADABLE ?
+                tr("The data of the host could not be read. Edit the host to enter it again.") :
                 tr("The host referenced by the link is not among the saved hosts."));
             return;
         }
 
-        if (entry->routerId() != 0 && !db.findRouter(entry->routerId()).has_value())
+        if (entry.routerId() != 0)
         {
-            MsgBox::warning(this, tr("The router associated with this host has been deleted. "
-                                     "Edit the host to select another router or switch to "
-                                     "direct connection."));
-            return;
+            RouterConfig router;
+            const Database::FindResult found = db.findRouter(entry.routerId(), &router);
+            if (found != Database::FindResult::FOUND)
+            {
+                MsgBox::warning(this, found == Database::FindResult::UNREADABLE ?
+                    tr("The data of the router could not be read. Edit the router to enter it again.") :
+                    tr("The router associated with this host has been deleted. "
+                       "Edit the host to select another router or switch to direct connection."));
+                return;
+            }
         }
 
-        host = HostConfig::forLocalHost(*entry);
-        db.setLocalHostConnectTime(entry->id(), QDateTime::currentSecsSinceEpoch());
+        host = HostConfig::forLocalHost(entry);
+        db.setLocalHostConnectTime(entry.id(), QDateTime::currentSecsSinceEpoch());
     }
 
     onConnect(host, host_url.sessionType());

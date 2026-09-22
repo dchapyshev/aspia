@@ -19,6 +19,7 @@
 #include "client/desktop/credential_list_model.h"
 
 #include <QAbstractItemModelTester>
+#include <QIcon>
 
 #include <gtest/gtest.h>
 
@@ -146,4 +147,22 @@ TEST_F(CredentialListModelTest, PersistentIndexFollowsItsRecordThroughASort)
     ASSERT_TRUE(selected.isValid());
     EXPECT_EQ(selected.row(), 1);
     EXPECT_EQ(model_->credentialAt(selected.row())->id(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record that did not open is shown without its user name, so the list says so.
+TEST_F(CredentialListModelTest, RecordThatDidNotOpenIsMarked)
+{
+    model_->setCredentials({ credential(1, "Office", "admin"),
+                             credential(2, "Warehouse", QString()) });
+
+    auto icon = [this](int row)
+    {
+        return model_->index(row, static_cast<int>(Column::NAME))
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
+    };
+
+    ASSERT_FALSE(icon(0).isNull());
+    ASSERT_FALSE(icon(1).isNull());
+    EXPECT_NE(icon(1), icon(0));
 }

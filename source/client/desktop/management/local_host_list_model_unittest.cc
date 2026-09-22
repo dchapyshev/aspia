@@ -19,6 +19,7 @@
 #include "client/desktop/management/local_host_list_model.h"
 
 #include <QAbstractItemModelTester>
+#include <QImage>
 #include <QItemSelectionModel>
 
 #include <gtest/gtest.h>
@@ -206,11 +207,15 @@ TEST_F(LocalHostListModelTest, StatusIsEmptyUntilTheHostIsProbed)
 
     EXPECT_TRUE(textAt(model(), 0, Column::STATUS).isEmpty());
 
-    model()->setOnlineStatus(1, true);
-    model()->setOnlineStatus(2, false);
+    model()->setOnlineStatus(1, OnlineStatus::ONLINE);
+    model()->setOnlineStatus(2, OnlineStatus::OFFLINE);
 
     EXPECT_EQ(textAt(model(), 0, Column::STATUS), QString("Online"));
     EXPECT_EQ(textAt(model(), 1, Column::STATUS), QString("Offline"));
+    EXPECT_TRUE(textAt(model(), 2, Column::STATUS).isEmpty());
+
+    // A state that says nothing about the host leaves the row saying nothing too.
+    model()->setOnlineStatus(3, OnlineStatus::UNKNOWN);
     EXPECT_TRUE(textAt(model(), 2, Column::STATUS).isEmpty());
 }
 
@@ -219,7 +224,7 @@ TEST_F(LocalHostListModelTest, StatusIsEmptyUntilTheHostIsProbed)
 TEST_F(LocalHostListModelTest, ClearingTheStatusesForgetsWhatWasProbed)
 {
     model()->setHosts(hosts());
-    model()->setOnlineStatus(1, true);
+    model()->setOnlineStatus(1, OnlineStatus::ONLINE);
 
     model()->clearOnlineStatuses();
 
@@ -235,16 +240,17 @@ TEST_F(LocalHostListModelTest, IconTellsTheStateApart)
     auto icon = [this](int row)
     {
         return model()->index(row, static_cast<int>(Column::NAME))
-            .data(Qt::DecorationRole).value<QIcon>().cacheKey();
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
     };
 
-    const qint64 unknown = icon(0);
+    const QImage unknown = icon(0);
+    ASSERT_FALSE(unknown.isNull());
 
-    model()->setOnlineStatus(1, true);
-    const qint64 online = icon(0);
+    model()->setOnlineStatus(1, OnlineStatus::ONLINE);
+    const QImage online = icon(0);
 
-    model()->setOnlineStatus(1, false);
-    const qint64 offline = icon(0);
+    model()->setOnlineStatus(1, OnlineStatus::OFFLINE);
+    const QImage offline = icon(0);
 
     EXPECT_NE(unknown, online);
     EXPECT_NE(online, offline);
@@ -255,11 +261,63 @@ TEST_F(LocalHostListModelTest, IconTellsTheStateApart)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A record that did not open is shown without its address, so the list says so instead of
+// naming a state that was never checked.
+TEST_F(LocalHostListModelTest, RecordThatDidNotOpenIsMarked)
+{
+    model()->setHosts({ makeHost(1, "host", "192.168.0.1", 1000),
+                        makeHost(2, "broken", QString(), 2000) });
+
+    auto icon = [this](int row)
+    {
+        return model()->index(row, static_cast<int>(Column::NAME))
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
+    };
+
+    const QImage unread = icon(1);
+    ASSERT_FALSE(unread.isNull());
+    EXPECT_NE(unread, icon(0));
+
+    // What the checker says about such a record does not replace the mark.
+    model()->setOnlineStatus(2, OnlineStatus::SKIPPED);
+    EXPECT_EQ(icon(1), unread);
+
+    model()->setOnlineStatus(2, OnlineStatus::ONLINE);
+    EXPECT_EQ(icon(1), unread);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host the checker had no way to check is not called offline. The row says it was skipped
+// and keeps the icon of a host nothing is known about.
+TEST_F(LocalHostListModelTest, SkippedHostIsNotCalledOffline)
+{
+    model()->setHosts(hosts());
+
+    auto icon = [this](int row)
+    {
+        return model()->index(row, static_cast<int>(Column::NAME))
+            .data(Qt::DecorationRole).value<QIcon>().pixmap(16, 16).toImage();
+    };
+
+    const QImage unchecked = icon(0);
+    ASSERT_FALSE(unchecked.isNull());
+
+    model()->setOnlineStatus(1, OnlineStatus::SKIPPED);
+    EXPECT_EQ(textAt(model(), 0, Column::STATUS), QString("Skipped"));
+    EXPECT_NE(icon(0), unchecked);
+
+    model()->setOnlineStatus(2, OnlineStatus::OFFLINE);
+    EXPECT_EQ(textAt(model(), 1, Column::STATUS), QString("Offline"));
+    EXPECT_NE(icon(1), unchecked);
+    EXPECT_NE(icon(1), icon(0));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Another group is another list, and the states probed for the previous one do not carry over.
 TEST_F(LocalHostListModelTest, AnotherGroupForgetsWhatWasProbed)
 {
     model()->setHosts(hosts());
-    model()->setOnlineStatus(1, true);
+    model()->setOnlineStatus(1, OnlineStatus::ONLINE);
 
     model()->setHosts(hosts());
 

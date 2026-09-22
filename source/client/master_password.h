@@ -25,13 +25,21 @@ class SecureString;
 class MasterPassword
 {
 public:
+    enum class Result
+    {
+        SUCCESS,
+        INVALID_PASSWORD,
+        UNREADABLE_RECORD,
+        FAILED
+    };
+
     static const int kMinPasswordLength = 6;
     static const int kSafePasswordLength = 8;
 
     static bool isSafePassword(const SecureString& password);
     static bool isSet();
 
-    static bool unlock(const SecureString& password);
+    static Result unlock(const SecureString& password);
 
     // Recovers the unlock with a key derived earlier (e.g. unwrapped via biometric unlock),
     // verifying it against the stored verifier before activating the data cryptor.
@@ -41,8 +49,8 @@ public:
     // key for biometric unlock.
     static SecureByteArray currentKey();
 
-    static bool setNew(const SecureString& new_password);
-    static bool change(const SecureString& current_password, const SecureString& new_password);
+    static Result setNew(const SecureString& new_password);
+    static Result change(const SecureString& current_password, const SecureString& new_password);
 
 private:
     MasterPassword() = delete;

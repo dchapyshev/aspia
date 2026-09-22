@@ -23,6 +23,7 @@
 #include <QQueue>
 
 #include "client/config.h"
+#include "client/online_checker/online_checker.h"
 
 class Location;
 
@@ -39,11 +40,11 @@ public:
     void start();
 
 signals:
-    void sig_checkerResult(qint64 entry_id, bool online);
+    void sig_checkerResult(qint64 entry_id, OnlineStatus status);
     void sig_checkerFinished();
 
 private:
-    void onChecked(qint64 entry_id, bool online);
+    void onChecked(qint64 entry_id, OnlineStatus status);
     void onFinished(const Location& location);
 
     HostList pending_queue_;

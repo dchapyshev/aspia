@@ -51,7 +51,7 @@ private slots:
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
 
 private:
-    void onFinished(const Location& location, bool online);
+    void onFinished(const Location& location, OnlineStatus status);
 
     const LocalHostConfig host_;
 
@@ -70,7 +70,7 @@ OnlineCheckerDirect::Instance::Instance(const LocalHostConfig& host, QObject* pa
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
         LOG(TRACE) << "Timeout for host:" << host_.id();
-        onFinished(FROM_HERE, false);
+        onFinished(FROM_HERE, OnlineStatus::OFFLINE);
     });
 
     timer_.start(kTimeout);
@@ -110,18 +110,18 @@ void OnlineCheckerDirect::Instance::start()
 void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 {
     LOG(TRACE) << "Authentication succeeded (host:" << host_.id() << ")";
-    onFinished(FROM_HERE, true);
+    onFinished(FROM_HERE, OnlineStatus::ONLINE);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode /* error_code */)
 {
     LOG(TRACE) << "Connection aborted for host:" << host_.id();
-    onFinished(FROM_HERE, false);
+    onFinished(FROM_HERE, OnlineStatus::OFFLINE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onFinished(const Location& location, bool online)
+void OnlineCheckerDirect::Instance::onFinished(const Location& location, OnlineStatus status)
 {
     LOG(TRACE) << "Finished:" << location;
 
@@ -132,7 +132,7 @@ void OnlineCheckerDirect::Instance::onFinished(const Location& location, bool on
     timer_.stop();
 
     OnlineCheckerDirect* checker = static_cast<OnlineCheckerDirect*>(parent());
-    checker->onChecked(host_.id(), online);
+    checker->onChecked(host_.id(), status);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -180,9 +180,9 @@ void OnlineCheckerDirect::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::onChecked(qint64 entry_id, bool online)
+void OnlineCheckerDirect::onChecked(qint64 entry_id, OnlineStatus status)
 {
-    emit sig_checkerResult(entry_id, online);
+    emit sig_checkerResult(entry_id, status);
 
     // Remove the finished instance from the work queue.
     for (auto it = work_queue_.begin(), it_end = work_queue_.end(); it != it_end; ++it)

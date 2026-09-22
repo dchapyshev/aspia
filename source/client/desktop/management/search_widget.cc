@@ -42,8 +42,6 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-#include <optional>
-
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/database.h"
@@ -357,7 +355,9 @@ void SearchWidget::search(const QString& query)
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
 
-    db.searchLocalHosts(query, &local_matches_);
+    const Database::ReadResult read_result = db.searchLocalHosts(query, &local_matches_);
+    if (read_result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to search the hosts of the local database:" << read_result;
 
     // The local matches are in hand already, so the local part of the first page is shown at
     // once, with the local address book as the only source. The routers are queried after the
@@ -683,12 +683,16 @@ void SearchWidget::refreshItem(qint64 entry_id)
     if (model_->rowOfEntry(entry_id) < 0)
         return;
 
-    std::optional<LocalHostConfig> updated = Database::instance().findLocalHost(entry_id);
-    if (!updated.has_value())
+    LocalHostConfig updated;
+    const Database::FindResult result = Database::instance().findLocalHost(entry_id, &updated);
+    if (result == Database::FindResult::NOT_FOUND)
     {
         removeItem(entry_id);
         return;
     }
+
+    if (result == Database::FindResult::FAILED)
+        return;
 
     QHash<qint64, LocalGroupConfig> groups;
     QList<LocalGroupConfig> all_groups;
@@ -697,7 +701,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);
 
-    model_->updateEntry(*updated, buildGroupPath(updated->groupId(), groups));
+    model_->updateEntry(updated, buildGroupPath(updated.groupId(), groups));
 }
 
 //--------------------------------------------------------------------------------------------------

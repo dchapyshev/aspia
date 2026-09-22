@@ -130,13 +130,13 @@ void LocalHostListModel::setConnectTime(qint64 entry_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalHostListModel::setOnlineStatus(qint64 entry_id, bool online)
+void LocalHostListModel::setOnlineStatus(qint64 entry_id, OnlineStatus status)
 {
     const int row = rowOf(entry_id);
     if (row < 0)
         return;
 
-    online_.insert(entry_id, online);
+    online_.insert(entry_id, status);
     emitRowChanged(row);
 }
 
@@ -189,11 +189,29 @@ QVariant LocalHostListModel::data(const QModelIndex& index, int role) const
         if (column != Column::NAME)
             return QVariant();
 
-        const auto it = online_.constFind(host->id());
-        if (it == online_.constEnd())
-            return QIcon(":/img/computer.svg");
+        if (!host->isValid())
+            return QIcon(":/img/computer-unknown.svg");
 
-        return QIcon(*it ? ":/img/computer-online.svg" : ":/img/computer-offline.svg");
+        const auto it = online_.constFind(host->id());
+        if (it != online_.constEnd())
+        {
+            switch (*it)
+            {
+                case OnlineStatus::ONLINE:
+                    return QIcon(":/img/computer-online.svg");
+
+                case OnlineStatus::OFFLINE:
+                    return QIcon(":/img/computer-offline.svg");
+
+                case OnlineStatus::SKIPPED:
+                    return QIcon(":/img/computer-unknown.svg");
+
+                default:
+                    break;
+            }
+        }
+
+        return QIcon(":/img/computer.svg");
     }
 
     // The comment is drawn on one line, so the whole of it is only readable in the tooltip.
@@ -313,7 +331,22 @@ QString LocalHostListModel::textAt(const LocalHostConfig& host, Column column) c
             if (it == online_.constEnd())
                 return QString();
 
-            return *it ? tr("Online") : tr("Offline");
+            switch (*it)
+            {
+                case OnlineStatus::ONLINE:
+                    return tr("Online");
+
+                case OnlineStatus::OFFLINE:
+                    return tr("Offline");
+
+                case OnlineStatus::SKIPPED:
+                    return tr("Skipped");
+
+                default:
+                    break;
+            }
+
+            return QString();
         }
     }
 

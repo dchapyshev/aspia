@@ -159,7 +159,10 @@ void RoutersWidget::reload()
     RouterController::instance().reload();
 
     QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
+    const Database::ReadResult result = Database::instance().routerList(&routers);
+    if (result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read the list of routers:" << result;
+
     for (const RouterConfig& config : std::as_const(routers))
     {
         const qint64 router_id = config.routerId();

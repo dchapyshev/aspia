@@ -121,6 +121,7 @@ private:
     void addCopyLinkMenu(QMenu& menu, const LocalHostConfig& host);
     void addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_id);
 
+    bool readLocalHost(qint64 entry_id, LocalHostConfig* host);
     bool validateHostForConnect(const HostConfig& host);
     void setHostConnectTime(qint64 entry_id);
     qint64 currentHostEntryId() const;

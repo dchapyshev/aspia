@@ -407,18 +407,19 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
 
     if (host.entryId() > 0)
     {
-        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
-        if (!local_host.has_value())
+        LocalHostConfig local_host;
+        const Database::FindResult found = db.findLocalHost(host.entryId(), &local_host);
+        if (found != Database::FindResult::FOUND)
         {
-            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
             return;
         }
 
-        local_host->setCredentialId(credential_id);
-        local_host->setUsername(username);
-        local_host->setPassword(password);
+        local_host.setCredentialId(credential_id);
+        local_host.setUsername(username);
+        local_host.setPassword(password);
 
-        if (!db.modifyLocalHost(*local_host))
+        if (!db.modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
         return;
     }
@@ -432,12 +433,20 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
     credentials.setUsername(username);
     credentials.setPassword(password);
 
+    RouterHostConfig stored;
+    const Database::FindResult found = db.findRouterHost(host.routerId(), host_id, &stored);
+    if (found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_id;
+        return;
+    }
+
     bool saved = false;
 
-    if (db.findRouterHost(host.routerId(), host_id).has_value())
-        saved = db.modifyRouterHost(credentials);
-    else
+    if (found == Database::FindResult::NOT_FOUND)
         saved = db.addRouterHost(credentials);
+    else
+        saved = db.modifyRouterHost(credentials);
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_id;
@@ -457,18 +466,19 @@ void ClientWindow::forgetRefusedCredentials()
 
     if (host.entryId() > 0)
     {
-        std::optional<LocalHostConfig> local_host = Database::instance().findLocalHost(host.entryId());
-        if (!local_host.has_value())
+        LocalHostConfig local_host;
+        const Database::FindResult found = Database::instance().findLocalHost(host.entryId(), &local_host);
+        if (found != Database::FindResult::FOUND)
         {
-            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
             return;
         }
 
-        local_host->setCredentialId(0);
-        local_host->setUsername(QString());
-        local_host->setPassword(SecureString());
+        local_host.setCredentialId(0);
+        local_host.setUsername(QString());
+        local_host.setPassword(SecureString());
 
-        if (!Database::instance().modifyLocalHost(*local_host))
+        if (!Database::instance().modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to remove credentials of local host" << host.entryId();
         return;
     }
@@ -500,8 +510,11 @@ void ClientWindow::fetchConnectionOffer()
     {
         // No context at all means the record is gone from the book; one that is logging in is
         // just not online yet.
-        if (RouterController::status(session_state_->routerId()) == RouterStatus::OFFLINE)
+        const RouterStatus router_status = RouterController::status(session_state_->routerId());
+        if (router_status == RouterStatus::OFFLINE)
             onErrorOccurred(tr("The specified router is unavailable."));
+        else if (router_status == RouterStatus::UNREADABLE)
+            onErrorOccurred(tr("The data of the router could not be read. Edit the router to enter it again."));
         else
             onErrorOccurred(tr("The specified router is offline."));
         return;

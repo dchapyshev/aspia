@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
+#include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
 #include "client/backup.h"
 #include "client/config.h"
@@ -184,13 +185,24 @@ void LocalWidget::reload()
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
+    const QIcon unread_icon = GuiApplication::svgIcon(":/img/computer-unknown.svg");
     QList<LocalHostConfig> root_hosts;
-    Database::instance().localHostList(0, &root_hosts);
+    const Database::ReadResult result = Database::instance().localHostList(0, &root_hosts);
+    if (result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read the ungrouped hosts:" << result;
+
     for (const LocalHostConfig& host : std::as_const(root_hosts))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_, { host.name(), host.address() });
-        item->setIcon(0, icon);
         item->setData(0, kHostIdRole, host.id());
+
+        if (!host.isValid())
+        {
+            item->setIcon(0, unread_icon);
+            continue;
+        }
+
+        item->setIcon(0, icon);
         hosts.append(host);
     }
 
@@ -240,13 +252,16 @@ void LocalWidget::searchQuery(const QString& query)
 
     QList<SearchWidget::Result> results;
     QList<LocalHostConfig> matches;
-    Database::instance().searchLocalHosts(query, &matches);
+    const Database::ReadResult read_result = Database::instance().searchLocalHosts(query, &matches);
+    if (read_result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to search the hosts:" << read_result;
+
     for (const LocalHostConfig& host : std::as_const(matches))
     {
         SearchWidget::Result result;
         result.title = host.name();
         result.subtitle = host.address();
-        result.icon_file_path = ":/img/computer.svg";
+        result.icon_file_path = host.isValid() ? ":/img/computer.svg" : ":/img/computer-unknown.svg";
         result.data = host.id();
         results.append(result);
     }
@@ -393,6 +408,11 @@ void LocalWidget::onExport()
             message = tr("Unable to write the file.");
             break;
 
+        case Backup::Result::UNREADABLE_RECORD:
+            message = tr("Some records of the database could not be read. Edit them to enter "
+                         "their data again.");
+            break;
+
         default:
             message = tr("Failed to create the backup.");
             break;
@@ -430,10 +450,29 @@ void LocalWidget::onAddHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
+void LocalWidget::onOnlineCheckerResult(qint64 entry_id, OnlineStatus status)
 {
-    const QIcon icon = GuiApplication::svgIcon(
-        online ? ":/img/computer-online.svg" : ":/img/computer-offline.svg");
+    const char* icon_path = ":/img/computer.svg";
+
+    switch (status)
+    {
+        case OnlineStatus::ONLINE:
+            icon_path = ":/img/computer-online.svg";
+            break;
+
+        case OnlineStatus::OFFLINE:
+            icon_path = ":/img/computer-offline.svg";
+            break;
+
+        case OnlineStatus::SKIPPED:
+            icon_path = ":/img/computer-unknown.svg";
+            break;
+
+        default:
+            break;
+    }
+
+    const QIcon icon = GuiApplication::svgIcon(icon_path);
 
     // The host may be shown in the root tree (ungrouped) or in an opened group's list.
     for (TreeWidget* tree : { tree_, tree_host_ })
@@ -458,7 +497,10 @@ void LocalWidget::onRefreshClicked()
     QList<qint64> entry_ids;
     OnlineChecker::HostList hosts;
     QList<LocalHostConfig> group_hosts;
-    Database::instance().localHostList(group_id, &group_hosts);
+    const Database::ReadResult result = Database::instance().localHostList(group_id, &group_hosts);
+    if (result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read the hosts of group" << group_id << ":" << result;
+
     for (const LocalHostConfig& host : std::as_const(group_hosts))
     {
         entry_ids.append(host.id());
@@ -532,7 +574,9 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
     QList<LocalGroupConfig> groups;
-    Database::instance().localGroupList(parent_id, &groups);
+    if (!Database::instance().localGroupList(parent_id, &groups))
+        LOG(ERROR) << "Unable to read the groups of group" << parent_id;
+
     for (const LocalGroupConfig& group : std::as_const(groups))
     {
         QTreeWidgetItem* item = parent ? new QTreeWidgetItem(parent, { group.name() })
@@ -570,14 +614,27 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
+    const QIcon unread_icon = GuiApplication::svgIcon(":/img/computer-unknown.svg");
 
     QList<LocalHostConfig> group_hosts;
-    Database::instance().localHostList(group_id, &group_hosts);
+    const Database::ReadResult result = Database::instance().localHostList(group_id, &group_hosts);
+    if (result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read the hosts of group" << group_id << ":" << result;
+
     for (const LocalHostConfig& host : std::as_const(group_hosts))
     {
         QTreeWidgetItem* item = new QTreeWidgetItem(tree_host_, { host.name(), host.address() });
-        item->setIcon(0, icon);
         item->setData(0, kHostIdRole, host.id());
+
+        // A record that did not open has no address to reach it by, so there is nothing to
+        // check and the mark stays on the row.
+        if (!host.isValid())
+        {
+            item->setIcon(0, unread_icon);
+            continue;
+        }
+
+        item->setIcon(0, icon);
         hosts.append(host);
     }
 

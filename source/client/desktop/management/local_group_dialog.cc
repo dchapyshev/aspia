@@ -21,6 +21,7 @@
 #include <QAbstractButton>
 #include <QIcon>
 #include <QPushButton>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "client/database.h"
@@ -39,7 +40,8 @@ constexpr int kMinNameLength = 1;
 LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::LocalGroupDialog>()),
-      group_id_(group_id)
+      group_id_(group_id),
+      parent_id_(parent_id)
 {
     LOG(INFO) << "Ctor";
 
@@ -48,47 +50,12 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     Settings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
-    if (group_id_ != -1)
-    {
-        setWindowTitle(tr("Edit Group"));
-
-        std::optional<LocalGroupConfig> group = Database::instance().findLocalGroup(group_id_);
-        if (group.has_value())
-        {
-            ui->edit_name->setText(group->name());
-            ui->edit_comment->setPlainText(group->comment());
-            parent_id_ = group->parentId();
-        }
-        else
-        {
-            LOG(ERROR) << "Unable to find group with id" << group_id_;
-        }
-    }
-    else
-    {
-        setWindowTitle(tr("Add Group"));
-        parent_id_ = parent_id;
-    }
-
-    QList<LocalGroupConfig> all_groups;
-    Database::instance().allLocalGroups(&all_groups);
-
-    QList<GroupComboBox::Entry> entries;
-    entries.reserve(all_groups.size());
-
-    for (const LocalGroupConfig& group : std::as_const(all_groups))
-    {
-        GroupComboBox::Entry& entry = entries.emplaceBack();
-        entry.id = group.id();
-        entry.parent_id = group.parentId();
-        entry.name = group.name();
-    }
-
-    ui->combo_parent_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), entries, group_id_);
-    ui->combo_parent_group->selectGroup(parent_id_);
+    setWindowTitle(group_id_ != -1 ? tr("Edit Group") : tr("Add Group"));
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
+
+    QTimer::singleShot(MilliSeconds::zero(), this, &LocalGroupDialog::onLoadData);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,7 +108,13 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
     QList<LocalGroupConfig> groups;
-    Database::instance().localGroupList(parent_id, &groups);
+    if (!Database::instance().localGroupList(parent_id, &groups))
+    {
+        LOG(ERROR) << "Unable to read the groups of the selected parent group";
+        MsgBox::warning(this, tr("Failed to read the list of groups."));
+        return;
+    }
+
     for (const LocalGroupConfig& existing : std::as_const(groups))
     {
         if (existing.id() != group_id_ && existing.name() == name)
@@ -181,4 +154,50 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupDialog::onLoadData()
+{
+    Database& db = Database::instance();
+
+    if (group_id_ != -1)
+    {
+        LocalGroupConfig group;
+        if (db.findLocalGroup(group_id_, &group) != Database::FindResult::FOUND)
+        {
+            LOG(ERROR) << "Unable to find group with id" << group_id_;
+            MsgBox::warning(this, tr("Failed to read the group."));
+            reject();
+            return;
+        }
+
+        ui->edit_name->setText(group.name());
+        ui->edit_comment->setPlainText(group.comment());
+        parent_id_ = group.parentId();
+    }
+
+    QList<LocalGroupConfig> all_groups;
+    if (!db.allLocalGroups(&all_groups))
+    {
+        // With the list empty, saving would silently move the group to the root.
+        LOG(ERROR) << "Unable to read the list of groups";
+        MsgBox::warning(this, tr("Failed to read the list of groups."));
+        reject();
+        return;
+    }
+
+    QList<GroupComboBox::Entry> entries;
+    entries.reserve(all_groups.size());
+
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
+    {
+        GroupComboBox::Entry& entry = entries.emplaceBack();
+        entry.id = group.id();
+        entry.parent_id = group.parentId();
+        entry.name = group.name();
+    }
+
+    ui->combo_parent_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), entries, group_id_);
+    ui->combo_parent_group->selectGroup(parent_id_);
 }

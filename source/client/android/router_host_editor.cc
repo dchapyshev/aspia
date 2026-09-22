@@ -20,8 +20,7 @@
 
 #include <QVBoxLayout>
 
-#include <optional>
-
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "client/config.h"
@@ -116,28 +115,61 @@ bool RouterHostEditor::prepareForEdit(qint64 router_id, HostId host_id)
 
     qint64 credential_id = 0;
 
-    std::optional<RouterHostConfig> credentials =
-        Database::instance().findRouterHost(router_id_, host_id_);
-    if (credentials.has_value())
+    RouterHostConfig credentials;
+    const Database::FindResult found =
+        Database::instance().findRouterHost(router_id_, host_id_, &credentials);
+
+    if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
     {
-        edit_username_->setText(credentials->username());
-        edit_password_->setText(credentials->password().toString());
-        credential_id = credentials->credentialId();
+        edit_username_->setText(credentials.username());
+        edit_password_->setText(credentials.password().toString());
+        credential_id = credentials.credentialId();
     }
 
-    loadCredentials(credential_id);
+    credentials_loaded_ = loadCredentials(credential_id) && found != Database::FindResult::FAILED;
     edit_username_->setFocus();
+
+    if (found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_id_;
+        showError(tr("Failed to read data from the local database."));
+    }
+    else if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Credentials of host" << host_id_ << "could not be read";
+        if (credentials_loaded_)
+            showError(tr("The credentials of the host could not be read. You can enter them again."));
+    }
+
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostEditor::loadCredentials(qint64 selected_credential_id)
+bool RouterHostEditor::loadCredentials(qint64 selected_credential_id)
 {
     combo_credential_->clear();
+
     QList<CredentialConfig> credentials;
-    Database::instance().credentialList(&credentials);
+    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+    if (result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of credentials";
+        showError(tr("Failed to read data from the local database."));
+        return false;
+    }
+
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the credentials";
+
+    const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
+    const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
+
     for (const CredentialConfig& credential : std::as_const(credentials))
-        combo_credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
+    {
+        combo_credential_->addItem(credential.isValid() ? icon : unread_icon,
+                                   credential.displayName(),
+                                   QVariant::fromValue(credential.id()));
+    }
 
     const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
     combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
@@ -146,6 +178,7 @@ void RouterHostEditor::loadCredentials(qint64 selected_credential_id)
     switch_saved_credentials_->setEnabled(!credentials.isEmpty());
     switch_saved_credentials_->setChecked(index >= 0);
     onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,6 +199,12 @@ void RouterHostEditor::onSavedCredentialsToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void RouterHostEditor::onSaveClicked()
 {
+    if (!credentials_loaded_)
+    {
+        showError(tr("Failed to read data from the local database."));
+        return;
+    }
+
     const qint64 credential_id =
         switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0;
     const QString username = edit_username_->text();
@@ -179,8 +218,23 @@ void RouterHostEditor::onSaveClicked()
 
     Database& db = Database::instance();
 
+    RouterHostConfig stored;
+    const Database::FindResult found = db.findRouterHost(router_id_, host_id_, &stored);
+    if (found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_id_;
+        showError(tr("Failed to save the credentials."));
+        return;
+    }
+
     if (username.isEmpty() && credential_id <= 0)
     {
+        if (found == Database::FindResult::UNREADABLE)
+        {
+            emit sig_accepted();
+            return;
+        }
+
         if (!db.removeRouterHost(router_id_, host_id_))
         {
             showError(tr("Failed to save the credentials."));
@@ -200,10 +254,10 @@ void RouterHostEditor::onSaveClicked()
 
     bool saved = false;
 
-    if (db.findRouterHost(router_id_, host_id_).has_value())
-        saved = db.modifyRouterHost(credentials);
-    else
+    if (found == Database::FindResult::NOT_FOUND)
         saved = db.addRouterHost(credentials);
+    else
+        saved = db.modifyRouterHost(credentials);
 
     if (!saved)
     {

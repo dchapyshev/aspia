@@ -39,6 +39,21 @@ namespace {
 constexpr qint64 kRouterId = 1;
 constexpr qint64 kWorkspaceId = 10;
 
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+{
+    RouterConfig router;
+    const Database::FindResult result = db.findRouter(router_id, &router);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return router;
+}
+
 } // namespace
 
 // Test-only access to the identity, the pending replies and the incoming messages.
@@ -454,7 +469,7 @@ TEST_F(RouterSessionTest, PasswordRotationIsStoredWithoutAReply)
 
     EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
@@ -485,7 +500,7 @@ TEST_F(RouterSessionTest, PasswordRotationSurvivesTheLostConnection)
     EXPECT_EQ(calls, 1);
     EXPECT_TRUE(shared->password() == SecureString(QString("new-password")));
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));
 }
@@ -517,7 +532,7 @@ TEST_F(RouterSessionTest, RefusedPasswordRotationIsRolledBack)
     EXPECT_FALSE(shared->deviceToken().isEmpty());
     EXPECT_TRUE(shared->password() == SecureString(QString("secret")));
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_FALSE(stored->deviceToken().isEmpty());
     EXPECT_TRUE(stored->password() == SecureString(QString("secret")));
@@ -537,7 +552,7 @@ TEST_F(RouterSessionTest, StoreCredentialsWritesTheNewName)
 
     EXPECT_EQ(shared->username(), QString("renamed"));
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("renamed"));
     EXPECT_TRUE(stored->password() == SecureString(QString("new-password")));

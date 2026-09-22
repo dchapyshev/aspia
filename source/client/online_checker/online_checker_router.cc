@@ -73,8 +73,10 @@ void OnlineCheckerRouter::onHostStatusReceived(const proto::router::HostStatus& 
     if (hosts_.isEmpty())
         return;
 
-    const bool online = host_status.error_code() == proto::router::kErrorOk;
-    emit sig_checkerResult(hosts_.front().id(), online);
+    const OnlineStatus status = host_status.error_code() == proto::router::kErrorOk ?
+        OnlineStatus::ONLINE : OnlineStatus::OFFLINE;
+
+    emit sig_checkerResult(hosts_.front().id(), status);
     hosts_.pop_front();
     checkNextHost();
 }
@@ -98,7 +100,7 @@ void OnlineCheckerRouter::checkNextHost()
     RouterSession* session = RouterController::session(host.routerId());
     if (!session)
     {
-        emit sig_checkerResult(host.id(), false);
+        emit sig_checkerResult(host.id(), OnlineStatus::SKIPPED);
         hosts_.pop_front();
 
         QTimer::singleShot(MilliSeconds(0), this, &OnlineCheckerRouter::checkNextHost);
@@ -122,7 +124,7 @@ void OnlineCheckerRouter::onFinished(const Location& location)
     LOG(TRACE) << "Finished (" << location << ")";
 
     for (const LocalHostConfig& host : std::as_const(hosts_))
-        emit sig_checkerResult(host.id(), false);
+        emit sig_checkerResult(host.id(), OnlineStatus::SKIPPED);
     hosts_.clear();
 
     emit sig_checkerFinished();

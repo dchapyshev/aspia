@@ -205,6 +205,9 @@ void CredentialsTab::reload(qint64 credential_id)
         return;
     }
 
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the credentials";
+
     model_->setCredentials(credentials);
 
     const int row = model_->rowOf(credential_id);
@@ -215,12 +218,6 @@ void CredentialsTab::reload(qint64 credential_id)
     }
 
     onSelectionChanged();
-
-    if (result == Database::ReadResult::INCOMPLETE)
-    {
-        LOG(ERROR) << "Unable to read some of the credentials";
-        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

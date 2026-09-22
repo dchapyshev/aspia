@@ -18,8 +18,6 @@
 
 #include "client/workers/router_worker.h"
 
-#include <optional>
-
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/net/address.h"
@@ -80,7 +78,7 @@ void RouterWorker::onReconnect(qint64 router_id)
 {
     auto it = connections_.find(router_id);
     if (it == connections_.end())
-        return;
+        it = connections_.insert(router_id, Connection());
 
     if (it->channel)
     {
@@ -156,23 +154,23 @@ void RouterWorker::startConnection(qint64 router_id)
     // local connection) instead of shuttling them across threads on every connect. A record whose
     // sealed column did not open (a master password change in flight) is not handed out and is
     // retried, not connected with.
-    const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
-    if (!config || !config->isValid())
+    RouterConfig config;
+    if (Database::instance().findRouter(router_id, &config) != Database::FindResult::FOUND || !config.isValid())
     {
         LOG(ERROR) << "No readable config for router" << router_id;
         it->reconnect_countdown = kReconnectTicks;
         return;
     }
 
-    LOG(INFO) << "Connecting to router" << router_id << config->address();
+    LOG(INFO) << "Connecting to router" << router_id << config.address();
 
-    const Address addr = Address::fromString(config->address(), kDefaultRouterClientTcpPort);
+    const Address addr = Address::fromString(config.address(), kDefaultRouterClientTcpPort);
 
     auto* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setSessionType(static_cast<quint32>(config->sessionType()));
-    authenticator->setUserName(config->username());
-    authenticator->setPassword(config->password());
+    authenticator->setSessionType(static_cast<quint32>(config.sessionType()));
+    authenticator->setUserName(config.username());
+    authenticator->setPassword(config.password());
 
     // The channel takes ownership of the authenticator and lives on this worker thread.
     TcpChannel* channel = new TcpChannelNG(authenticator, this);

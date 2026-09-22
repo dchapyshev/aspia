@@ -39,6 +39,7 @@ public:
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
+    void onLoadData();
 
 private:
     void showError(const QString& message);

@@ -19,6 +19,8 @@
 #include "client/desktop/management/user_list_model.h"
 
 #include <QAbstractItemModelTester>
+#include <QIcon>
+#include <QImage>
 #include <QItemSelectionModel>
 
 #include <gtest/gtest.h>
@@ -221,7 +223,12 @@ TEST_F(UserListModelTest, EnabledAndDisabledAccountsLookDifferent)
 
     ASSERT_TRUE(enabled.isValid());
     ASSERT_TRUE(disabled.isValid());
-    EXPECT_NE(enabled.value<QIcon>().cacheKey(), disabled.value<QIcon>().cacheKey());
+
+    const QImage enabled_icon = enabled.value<QIcon>().pixmap(16, 16).toImage();
+    const QImage disabled_icon = disabled.value<QIcon>().pixmap(16, 16).toImage();
+
+    ASSERT_FALSE(enabled_icon.isNull());
+    EXPECT_NE(enabled_icon, disabled_icon);
 }
 
 //--------------------------------------------------------------------------------------------------

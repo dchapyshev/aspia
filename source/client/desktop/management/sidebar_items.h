@@ -76,7 +76,7 @@ class SidebarRouter final : public SidebarItem
 public:
     SidebarRouter(qint64 router_id, const QString& name, QTreeWidget* parent);
 
-    enum class Status { OFFLINE, CONNECTING, TWO_FACTOR, ONLINE };
+    enum class Status { OFFLINE, CONNECTING, TWO_FACTOR, ONLINE, UNREADABLE };
 
     qint64 routerId() const;
     const QString& name() const { return name_; }

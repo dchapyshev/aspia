@@ -23,6 +23,8 @@
 #include <QString>
 #include <QWidget>
 
+#include "client/online_checker/online_checker.h"
+
 namespace proto::peer {
 enum SessionType : int;
 } // namespace proto::peer
@@ -30,7 +32,6 @@ enum SessionType : int;
 class IconButton;
 class LocalGroupEditor;
 class LocalHostEditor;
-class OnlineChecker;
 class SearchWidget;
 class TreeWidget;
 class QStackedWidget;
@@ -80,7 +81,7 @@ private slots:
     void onExport();
     void onAddGroup();
     void onAddHost();
-    void onOnlineCheckerResult(qint64 entry_id, bool online);
+    void onOnlineCheckerResult(qint64 entry_id, OnlineStatus status);
     void onRefreshClicked();
 
 private:

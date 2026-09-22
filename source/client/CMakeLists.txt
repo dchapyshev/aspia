@@ -95,6 +95,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/user_list_model_unittest.cc
     router_2fa_unittest.cc
     router_cache_unittest.cc
+    router_controller_unittest.cc
     router_rpc_unittest.cc
     router_session_unittest.cc
     router_test_fixture.h

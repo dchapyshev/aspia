@@ -101,8 +101,10 @@ QString sanitizedComment(const QString& comment, int max_length)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCounters* counters)
+bool ensureRouter(const proto::address_book::Router& proto_router, ImportCounters* counters, qint64* router_id)
 {
+    *router_id = 0;
+
     QString address = QString::fromStdString(proto_router.address());
     QString username = QString::fromStdString(proto_router.username());
     QString password = QString::fromStdString(proto_router.password());
@@ -110,20 +112,30 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     // A router of this address book is always entered with an account of its own. One the old book
     // carries without a password could not be connected to, and would sit here unusable.
     if (address.isEmpty() || username.isEmpty() || password.isEmpty())
-        return 0;
+        return true;
 
     QString combined_address = routerAddress(address, proto_router.port());
 
     Database& db = Database::instance();
 
     QList<RouterConfig> routers;
-    if (db.routerList(&routers) != Database::ReadResult::OK)
-        return 0;
+    const Database::ReadResult routers_result = db.routerList(&routers);
+    if (routers_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of routers";
+        return false;
+    }
+
+    if (routers_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the routers";
 
     for (const RouterConfig& router : std::as_const(routers))
     {
         if (router.address() == combined_address && router.username() == username)
-            return router.routerId();
+        {
+            *router_id = router.routerId();
+            return true;
+        }
     }
 
     RouterConfig config;
@@ -137,11 +149,12 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     if (!db.addRouter(config))
     {
         LOG(ERROR) << "Unable to add router during import";
-        return 0;
+        return true;
     }
 
     ++counters->routers;
-    return config.routerId();
+    *router_id = config.routerId();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,8 +383,11 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     ImportCounters counters;
 
     qint64 router_id = 0;
-    if (proto_data.enable_router())
-        router_id = ensureRouter(proto_data.router(), &counters);
+    if (proto_data.enable_router() && !ensureRouter(proto_data.router(), &counters, &router_id))
+    {
+        MsgBox::warning(parent, tr("Failed to read data from the local database."));
+        return false;
+    }
 
     InheritedCredentials inherited;
     importGroup(proto_data.root_group(),

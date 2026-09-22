@@ -41,6 +41,23 @@ constexpr int kFormSpacing = 8;
 
 constexpr int kChoiceIndent = 24;
 
+//--------------------------------------------------------------------------------------------------
+// A record that did not open hands over an empty user name and password. Offered, it would
+// connect with nothing and the host would refuse credentials the user never saw.
+QList<CredentialConfig> offeredCredentials(const QList<CredentialConfig>& credentials)
+{
+    QList<CredentialConfig> result;
+    result.reserve(credentials.size());
+
+    for (const CredentialConfig& credential : credentials)
+    {
+        if (credential.isValid())
+            result.append(credential);
+    }
+
+    return result;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -50,7 +67,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     : QWidget(parent),
       host_(host),
       session_type_(session_type),
-      credentials_(credentials),
+      credentials_(offeredCredentials(credentials)),
       app_bar_(new AppBar(this)),
       radio_user_password_(new RadioButton(tr("Enter user name and password"))),
       radio_one_time_password_(new RadioButton(tr("One-time password connection"))),

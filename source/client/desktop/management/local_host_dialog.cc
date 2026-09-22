@@ -22,6 +22,7 @@
 #include <QIcon>
 #include <QLabel>
 #include <QPushButton>
+#include <QTimer>
 
 #include <algorithm>
 
@@ -48,7 +49,8 @@ constexpr int kMinNameLength = 1;
 LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::LocalHostDialog>()),
-      entry_id_(entry_id)
+      entry_id_(entry_id),
+      group_id_(group_id)
 {
     LOG(INFO) << "Ctor";
 
@@ -57,93 +59,7 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     Settings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
-    ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
-
-    QList<RouterConfig> routers;
-    Database::instance().routerList(&routers);
-    for (const RouterConfig& router : std::as_const(routers))
-    {
-        ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayLabel(), QVariant::fromValue(router.routerId()));
-    }
-
-    QList<CredentialConfig> credentials;
-    Database::instance().credentialList(&credentials);
-    for (const CredentialConfig& credential : std::as_const(credentials))
-    {
-        ui->combo_credential->addItem(QIcon(":/img/keys.svg"), credential.displayName(),
-                                      QVariant::fromValue(credential.id()));
-    }
-
-    // Nothing to share until a record of credentials is added.
-    ui->checkbox_saved_credentials->setEnabled(!credentials.isEmpty());
-
-    qint64 selected_router_id = 0;
-
-    if (entry_id_ != -1)
-    {
-        setWindowTitle(tr("Edit Host"));
-
-        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id_);
-        if (host.has_value())
-        {
-            ui->edit_name->setText(host->name());
-            ui->edit_address->setText(host->address());
-            ui->edit_username->setText(host->username());
-            ui->edit_password->setPassword(host->password());
-            ui->edit_comment->setPlainText(host->comment());
-
-            if (host->credentialId() > 0)
-            {
-                ui->checkbox_saved_credentials->setChecked(true);
-                ui->combo_credential->setCurrentIndex(
-                    ui->combo_credential->findData(QVariant::fromValue(host->credentialId())));
-            }
-
-            group_id_ = host->groupId();
-            selected_router_id = host->routerId();
-        }
-        else
-        {
-            LOG(ERROR) << "Unable to find host with id" << entry_id_;
-        }
-    }
-    else
-    {
-        setWindowTitle(tr("Add Host"));
-        group_id_ = group_id;
-    }
-
-    if (selected_router_id != 0)
-    {
-        int found_index = ui->combo_router->findData(QVariant::fromValue(selected_router_id));
-        if (found_index < 0)
-        {
-            LOG(WARNING) << "Host references missing router id" << selected_router_id;
-            ui->combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
-                                     QVariant::fromValue(selected_router_id));
-            found_index = ui->combo_router->count() - 1;
-        }
-        ui->combo_router->setCurrentIndex(found_index);
-    }
-
-    updateAddressLabel();
-
-    QList<LocalGroupConfig> all_groups;
-    Database::instance().allLocalGroups(&all_groups);
-
-    QList<GroupComboBox::Entry> group_entries;
-    group_entries.reserve(all_groups.size());
-
-    for (const LocalGroupConfig& group : std::as_const(all_groups))
-    {
-        GroupComboBox::Entry& entry = group_entries.emplaceBack();
-        entry.id = group.id();
-        entry.parent_id = group.parentId();
-        entry.name = group.name();
-    }
-
-    ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
-    ui->combo_group->selectGroup(group_id_);
+    setWindowTitle(entry_id_ != -1 ? tr("Edit Host") : tr("Add Host"));
 
     ui->edit_password->setShowPasswordButtonVisible(true);
     connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -164,6 +80,8 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
 
     ui->edit_name->setFocus();
+
+    QTimer::singleShot(MilliSeconds::zero(), this, &LocalHostDialog::onLoadData);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -283,7 +201,13 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     qint64 group_id = ui->combo_group->currentGroupId();
 
     QList<LocalHostConfig> hosts;
-    Database::instance().localHostList(group_id, &hosts);
+    if (Database::instance().localHostList(group_id, &hosts) == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the hosts of the selected group";
+        MsgBox::warning(this, tr("Failed to read data from the local database."));
+        return;
+    }
+
     for (const LocalHostConfig& existing : std::as_const(hosts))
     {
         if (existing.id() != entry_id_ && existing.name() == name)
@@ -330,6 +254,143 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostDialog::onLoadData()
+{
+    Database& db = Database::instance();
+
+    ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"),
+                              QVariant::fromValue<qint64>(0));
+
+    QList<RouterConfig> routers;
+    const Database::ReadResult routers_result = db.routerList(&routers);
+    if (routers_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of routers";
+        MsgBox::warning(this, tr("Failed to read the list of routers."));
+        reject();
+        return;
+    }
+
+    if (routers_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the routers";
+
+    const QIcon router_icon(":/img/stack.svg");
+
+    for (const RouterConfig& router : std::as_const(routers))
+    {
+        ui->combo_router->addItem(router_icon, router.displayLabel(),
+                                  QVariant::fromValue(router.routerId()));
+    }
+
+    QList<CredentialConfig> credentials;
+    const Database::ReadResult credentials_result = db.credentialList(&credentials);
+    if (credentials_result == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of credentials";
+        MsgBox::warning(this, tr("Failed to read the list of credentials."));
+        reject();
+        return;
+    }
+
+    if (credentials_result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the credentials";
+
+    const QIcon credential_icon(":/img/keys.svg");
+    const QIcon unread_credential_icon(":/img/key-corrupted.svg");
+
+    for (const CredentialConfig& credential : std::as_const(credentials))
+    {
+        ui->combo_credential->addItem(credential.isValid() ? credential_icon : unread_credential_icon,
+                                      credential.displayName(),
+                                      QVariant::fromValue(credential.id()));
+    }
+
+    QList<LocalGroupConfig> all_groups;
+    if (!db.allLocalGroups(&all_groups))
+    {
+        LOG(ERROR) << "Unable to read the list of groups";
+        MsgBox::warning(this, tr("Failed to read the list of groups."));
+        reject();
+        return;
+    }
+
+    QList<GroupComboBox::Entry> group_entries;
+    group_entries.reserve(all_groups.size());
+
+    for (const LocalGroupConfig& group : std::as_const(all_groups))
+    {
+        GroupComboBox::Entry& entry = group_entries.emplaceBack();
+        entry.id = group.id();
+        entry.parent_id = group.parentId();
+        entry.name = group.name();
+    }
+
+    ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
+
+    qint64 selected_router_id = 0;
+    Database::FindResult host_found = Database::FindResult::NOT_FOUND;
+
+    if (entry_id_ != -1)
+    {
+        LocalHostConfig host;
+        host_found = db.findLocalHost(entry_id_, &host);
+
+        if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to find host with id" << entry_id_;
+            MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
+            reject();
+            return;
+        }
+
+        ui->edit_name->setText(host.name());
+        ui->edit_address->setText(host.address());
+        ui->edit_username->setText(host.username());
+        ui->edit_password->setPassword(host.password());
+        ui->edit_comment->setPlainText(host.comment());
+
+        if (host.credentialId() > 0)
+        {
+            ui->checkbox_saved_credentials->setChecked(true);
+            ui->combo_credential->setCurrentIndex(
+                ui->combo_credential->findData(QVariant::fromValue(host.credentialId())));
+        }
+
+        group_id_ = host.groupId();
+        selected_router_id = host.routerId();
+    }
+
+    if (selected_router_id != 0)
+    {
+        int found_index = ui->combo_router->findData(QVariant::fromValue(selected_router_id));
+        if (found_index < 0)
+        {
+            LOG(WARNING) << "Host references missing router id" << selected_router_id;
+            ui->combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
+                                     QVariant::fromValue(selected_router_id));
+            found_index = ui->combo_router->count() - 1;
+        }
+        ui->combo_router->setCurrentIndex(found_index);
+    }
+
+    ui->combo_group->selectGroup(group_id_);
+
+    // Nothing to share until a record of credentials is added. A record that did not open is
+    // in the list too, so a host never refers to one the combo does not hold.
+    ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
+
+    updateAddressLabel();
+
+    onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());
+
+    if (host_found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of host" << entry_id_ << "could not be read";
+        MsgBox::warning(this, tr("The data of the host could not be read. You can enter it again."));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

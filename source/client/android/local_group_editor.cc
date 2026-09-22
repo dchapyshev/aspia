@@ -20,8 +20,6 @@
 
 #include <QVBoxLayout>
 
-#include <optional>
-
 #include "base/logging.h"
 #include "client/config.h"
 #include "client/database.h"
@@ -106,18 +104,18 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
-    std::optional<LocalGroupConfig> group = Database::instance().findLocalGroup(group_id);
-    if (!group.has_value())
+    LocalGroupConfig group;
+    if (Database::instance().findLocalGroup(group_id, &group) != Database::FindResult::FOUND)
     {
         LOG(ERROR) << "Group not found:" << group_id;
         return false;
     }
 
     entry_id_ = group_id;
-    parent_id_ = group->parentId();
+    parent_id_ = group.parentId();
 
-    edit_name_->setText(group->name());
-    edit_comment_->setText(group->comment());
+    edit_name_->setText(group.name());
+    edit_comment_->setText(group.comment());
     label_error_->setVisible(false);
     button_delete_->show();
 

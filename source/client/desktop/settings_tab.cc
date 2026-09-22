@@ -443,11 +443,25 @@ void SettingsTab::onChangeMasterPassword()
                 return false;
         }
 
-        if (!MasterPassword::change(current, new_password))
+        switch (MasterPassword::change(current, new_password))
         {
-            MsgBox::warning(d, tr("Invalid current password or unable to change it."));
-            return false;
+            case MasterPassword::Result::SUCCESS:
+                break;
+
+            case MasterPassword::Result::INVALID_PASSWORD:
+                MsgBox::warning(d, tr("Invalid current password."));
+                return false;
+
+            case MasterPassword::Result::UNREADABLE_RECORD:
+                MsgBox::warning(d, tr("Some records of the database could not be read. Edit them "
+                                      "to enter their data again."));
+                return false;
+
+            default:
+                MsgBox::warning(d, tr("Unable to change the password."));
+                return false;
         }
+
         return true;
     });
     dialog.exec();

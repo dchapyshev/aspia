@@ -211,10 +211,19 @@ int main(int argc, char* argv[])
                 return 0;
             }
 
-            if (MasterPassword::unlock(dialog.password()))
+            const MasterPassword::Result unlocked = MasterPassword::unlock(dialog.password());
+            if (unlocked == MasterPassword::Result::SUCCESS)
             {
                 LOG(INFO) << "Master password accepted";
                 break;
+            }
+
+            if (unlocked != MasterPassword::Result::INVALID_PASSWORD)
+            {
+                LOG(ERROR) << "Unable to unlock the database";
+                MsgBox::warning(nullptr, QApplication::translate(
+                    "Client", "Unable to unlock the database."));
+                return 1;
             }
 
             MsgBox::warning(nullptr, QApplication::translate("Client", "Invalid master password."));
@@ -257,12 +266,12 @@ int main(int argc, char* argv[])
                     return false;
             }
 
-            if (!MasterPassword::setNew(new_password))
+            if (MasterPassword::setNew(new_password) != MasterPassword::Result::SUCCESS)
             {
-                MsgBox::warning(d, QApplication::translate(
-                    "Client", "Unable to set master password."));
+                MsgBox::warning(d, QApplication::translate("Client", "Unable to set master password."));
                 return false;
             }
+
             return true;
         });
 

@@ -51,31 +51,30 @@ constexpr auto kSettingBiometricBlob = "biometric_blob";
 QString g_test_file_path;
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalHostConfig> readHost(const SqlQuery& query)
+Database::ReadResult readLocalHost(const SqlQuery& query, LocalHostConfig* host)
 {
-    LocalHostConfig host;
-    host.setId(query.columnInt64(0));
-    host.setGroupId(query.columnInt64(1));
-    host.setRouterId(query.columnInt64(2));
-    host.setName(query.columnText(3));
-    host.setComment(query.columnText(4));
-    host.setCreateTime(query.columnInt64(6));
-    host.setModifyTime(query.columnInt64(7));
-    host.setConnectTime(query.columnInt64(8));
-    host.setGuid(query.columnText(9));
-    host.setCredentialId(query.columnInt64(10));
+    host->setId(query.columnInt64(0));
+    host->setGroupId(query.columnInt64(1));
+    host->setRouterId(query.columnInt64(2));
+    host->setName(query.columnText(3));
+    host->setComment(query.columnText(4));
+    host->setCreateTime(query.columnInt64(6));
+    host->setModifyTime(query.columnInt64(7));
+    host->setConnectTime(query.columnInt64(8));
+    host->setGuid(query.columnText(9));
+    host->setCredentialId(query.columnInt64(10));
 
-    if (!host.setEncryptedData(query.columnBlob(5)))
+    if (!host->setEncryptedData(query.columnBlob(5)))
     {
-        LOG(ERROR) << "Unable to read encrypted data of host" << host.id();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to read encrypted data of host" << host->id();
+        return Database::ReadResult::INCOMPLETE;
     }
 
-    return host;
+    return Database::ReadResult::OK;
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupConfig readGroup(const SqlQuery& query)
+LocalGroupConfig readLocalGroup(const SqlQuery& query)
 {
     LocalGroupConfig group;
     group.setId(query.columnInt64(0));
@@ -87,56 +86,53 @@ LocalGroupConfig readGroup(const SqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterConfig> readRouter(const SqlQuery& query)
+Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
 {
-    RouterConfig router;
-    router.setRouterId(query.columnInt64(0));
-    router.setDisplayName(query.columnText(1));
-    router.setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
-    router.setGuid(query.columnText(4));
+    router->setRouterId(query.columnInt64(0));
+    router->setDisplayName(query.columnText(1));
+    router->setSessionType(static_cast<proto::router::SessionType>(query.columnInt64(2)));
+    router->setGuid(query.columnText(4));
 
-    if (!router.setEncryptedData(query.columnBlob(3)))
+    if (!router->setEncryptedData(query.columnBlob(3)))
     {
-        LOG(ERROR) << "Unable to read encrypted data of router" << router.routerId();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to read encrypted data of router" << router->routerId();
+        return Database::ReadResult::INCOMPLETE;
     }
 
-    return router;
+    return Database::ReadResult::OK;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterHostConfig> readRouterHost(const SqlQuery& query)
+Database::ReadResult readRouterHost(const SqlQuery& query, RouterHostConfig* host)
 {
-    RouterHostConfig host;
-    host.setRouterId(query.columnInt64(0));
-    host.setHostId(query.columnUInt64(1));
-    host.setCredentialId(query.columnInt64(3));
+    host->setRouterId(query.columnInt64(0));
+    host->setHostId(query.columnUInt64(1));
+    host->setCredentialId(query.columnInt64(3));
 
-    if (!host.setEncryptedData(query.columnBlob(2)))
+    if (!host->setEncryptedData(query.columnBlob(2)))
     {
-        LOG(ERROR) << "Unable to read encrypted data of router host" << host.hostId();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to read encrypted data of router host" << host->hostId();
+        return Database::ReadResult::INCOMPLETE;
     }
 
-    return host;
+    return Database::ReadResult::OK;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<CredentialConfig> readCredential(const SqlQuery& query)
+Database::ReadResult readCredential(const SqlQuery& query, CredentialConfig* credential)
 {
-    CredentialConfig credential;
-    credential.setId(query.columnInt64(0));
-    credential.setType(static_cast<CredentialConfig::Type>(query.columnInt64(1)));
-    credential.setDisplayName(query.columnText(2));
-    credential.setGuid(query.columnText(4));
+    credential->setId(query.columnInt64(0));
+    credential->setType(static_cast<CredentialConfig::Type>(query.columnInt64(1)));
+    credential->setDisplayName(query.columnText(2));
+    credential->setGuid(query.columnText(4));
 
-    if (!credential.setEncryptedData(query.columnBlob(3)))
+    if (!credential->setEncryptedData(query.columnBlob(3)))
     {
-        LOG(ERROR) << "Unable to read encrypted data of credential" << credential.id();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to read encrypted data of credential" << credential->id();
+        return Database::ReadResult::INCOMPLETE;
     }
 
-    return credential;
+    return Database::ReadResult::OK;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -317,14 +313,11 @@ Database::ReadResult Database::localHostList(qint64 group_id, QList<LocalHostCon
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<LocalHostConfig> host = readHost(query);
-        if (!host.has_value())
-        {
+        LocalHostConfig host;
+        if (readLocalHost(query, &host) != ReadResult::OK)
             result = ReadResult::INCOMPLETE;
-            continue;
-        }
 
-        hosts->append(*host);
+        hosts->append(host);
     }
 
     return result;
@@ -361,14 +354,11 @@ Database::ReadResult Database::allLocalHosts(QList<LocalHostConfig>* hosts) cons
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<LocalHostConfig> host = readHost(query);
-        if (!host.has_value())
-        {
+        LocalHostConfig host;
+        if (readLocalHost(query, &host) != ReadResult::OK)
             result = ReadResult::INCOMPLETE;
-            continue;
-        }
 
-        hosts->append(*host);
+        hosts->append(host);
     }
 
     return result;
@@ -467,6 +457,35 @@ bool Database::modifyLocalHost(LocalHostConfig& host)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::moveLocalHost(qint64 entry_id, qint64 new_group_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlQuery query(db_, "UPDATE local_hosts SET group_id=NULLIF(?, 0), modify_time=? WHERE id=?");
+    query.addInt64(new_group_id);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
+    query.addInt64(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    if (db_.changes() == 0)
+    {
+        LOG(ERROR) << "Local host" << entry_id << "not found";
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::removeLocalHost(qint64 entry_id)
 {
     if (!isValid())
@@ -510,12 +529,15 @@ bool Database::setLocalHostConnectTime(qint64 entry_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalHostConfig> Database::findLocalHost(qint64 entry_id) const
+Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* host) const
 {
+    CHECK(host);
+    *host = LocalHostConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
@@ -523,50 +545,79 @@ std::optional<LocalHostConfig> Database::findLocalHost(qint64 entry_id) const
                         "FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return std::nullopt;
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
+    }
 
-    return readHost(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readLocalHost(query, host) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the data of host" << entry_id;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalHostConfig> Database::findLocalHostByGuid(const QString& guid) const
+Database::FindResult Database::findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const
 {
+    CHECK(host);
+    *host = LocalHostConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     if (guid.isEmpty())
-        return std::nullopt;
+        return FindResult::NOT_FOUND;
 
     SqlQuery query(db_, "SELECT id, IFNULL(group_id, 0), router_id, name, comment, data, "
                         "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0) "
                         "FROM local_hosts WHERE guid=?");
     query.addText(guid);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return std::nullopt;
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
+    }
 
-    return readHost(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readLocalHost(query, host) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the data of host with guid" << guid;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id) const
 {
-    std::optional<LocalHostConfig> host = findLocalHost(entry_id);
-    if (!host.has_value())
+    LocalHostConfig host;
+    if (findLocalHost(entry_id, &host) != FindResult::FOUND)
         return std::nullopt;
 
-    if (host->credentialId() <= 0)
-        return std::make_pair(host->username(), host->password());
+    if (host.credentialId() <= 0)
+        return std::make_pair(host.username(), host.password());
 
-    std::optional<CredentialConfig> credential = findCredential(host->credentialId());
-    if (!credential.has_value())
+    CredentialConfig credential;
+    if (findCredential(host.credentialId(), &credential) != FindResult::FOUND)
         return std::nullopt;
 
-    return std::make_pair(credential->username(), credential->password());
+    return std::make_pair(credential.username(), credential.password());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -599,17 +650,16 @@ Database::ReadResult Database::searchLocalHosts(
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<LocalHostConfig> host = readHost(query);
-        if (!host.has_value())
-        {
-            result = ReadResult::INCOMPLETE;
-            continue;
-        }
+        LocalHostConfig host;
+        const ReadResult host_result = readLocalHost(query, &host);
 
-        if (host->name().contains(query_text, Qt::CaseInsensitive) ||
-            host->address().contains(query_text, Qt::CaseInsensitive))
+        if (host.name().contains(query_text, Qt::CaseInsensitive) ||
+            host.address().contains(query_text, Qt::CaseInsensitive))
         {
-            hosts->append(*host);
+            if (host_result != ReadResult::OK)
+                result = ReadResult::INCOMPLETE;
+
+            hosts->append(host);
         }
     }
 
@@ -643,7 +693,7 @@ bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups)
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        groups->append(readGroup(query));
+        groups->append(readLocalGroup(query));
     }
 
     return true;
@@ -674,7 +724,7 @@ bool Database::allLocalGroups(QList<LocalGroupConfig>* groups) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        groups->append(readGroup(query));
+        groups->append(readLocalGroup(query));
     }
 
     return true;
@@ -776,6 +826,12 @@ bool Database::moveLocalGroup(qint64 group_id, qint64 new_parent_id)
         return false;
     }
 
+    if (db_.changes() == 0)
+    {
+        LOG(ERROR) << "Local group" << group_id << "not found";
+        return false;
+    }
+
     return true;
 }
 
@@ -811,22 +867,33 @@ bool Database::removeLocalGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalGroupConfig> Database::findLocalGroup(qint64 group_id) const
+Database::FindResult Database::findLocalGroup(qint64 group_id, LocalGroupConfig* group) const
 {
+    CHECK(group);
+    *group = LocalGroupConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
                         "WHERE id=?");
     query.addInt64(group_id);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return std::nullopt;
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
+    }
 
-    return readGroup(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    *group = readLocalGroup(query);
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -858,14 +925,11 @@ Database::ReadResult Database::routerList(QList<RouterConfig>* routers) const
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<RouterConfig> router = readRouter(query);
-        if (!router.has_value())
-        {
+        RouterConfig router;
+        if (readRouter(query, &router) != ReadResult::OK)
             result = ReadResult::INCOMPLETE;
-            continue;
-        }
 
-        routers->append(*router);
+        routers->append(router);
     }
 
     return result;
@@ -975,26 +1039,37 @@ bool Database::removeRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
+Database::FindResult Database::findRouter(qint64 router_id, RouterConfig* router) const
 {
+    CHECK(router);
+    *router = RouterConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, name, session_type, data, guid FROM routers WHERE id=?");
     query.addInt64(router_id);
 
     const SqlQuery::StepResult step = query.next();
-    if (step != SqlQuery::StepResult::ROW)
+    if (step == SqlQuery::StepResult::FAILED)
     {
-        if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
     }
 
-    return readRouter(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readRouter(query, router) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the data of router" << router_id;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1026,14 +1101,11 @@ Database::ReadResult Database::allRouterHosts(QList<RouterHostConfig>* hosts) co
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<RouterHostConfig> host = readRouterHost(query);
-        if (!host.has_value())
-        {
+        RouterHostConfig host;
+        if (readRouterHost(query, &host) != ReadResult::OK)
             result = ReadResult::INCOMPLETE;
-            continue;
-        }
 
-        hosts->append(*host);
+        hosts->append(host);
     }
 
     return result;
@@ -1139,12 +1211,15 @@ bool Database::removeRouterHost(qint64 router_id, HostId host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostId host_id) const
+Database::FindResult Database::findRouterHost(qint64 router_id, HostId host_id, RouterHostConfig* host) const
 {
+    CHECK(host);
+    *host = RouterHostConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT router_id, host_id, data, IFNULL(credential_id, 0) FROM router_hosts "
@@ -1152,28 +1227,41 @@ std::optional<RouterHostConfig> Database::findRouterHost(qint64 router_id, HostI
     query.addInt64(router_id);
     query.addUInt64(host_id);
 
-    if (query.next() != SqlQuery::StepResult::ROW)
-        return std::nullopt;
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
+    }
 
-    return readRouterHost(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readRouterHost(query, host) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_id;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
     qint64 router_id, HostId host_id) const
 {
-    std::optional<RouterHostConfig> host = findRouterHost(router_id, host_id);
-    if (!host.has_value())
+    RouterHostConfig host;
+    if (findRouterHost(router_id, host_id, &host) != FindResult::FOUND)
         return std::nullopt;
 
-    if (host->credentialId() <= 0)
-        return std::make_pair(host->username(), host->password());
+    if (host.credentialId() <= 0)
+        return std::make_pair(host.username(), host.password());
 
-    std::optional<CredentialConfig> credential = findCredential(host->credentialId());
-    if (!credential.has_value())
+    CredentialConfig credential;
+    if (findCredential(host.credentialId(), &credential) != FindResult::FOUND)
         return std::nullopt;
 
-    return std::make_pair(credential->username(), credential->password());
+    return std::make_pair(credential.username(), credential.password());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1272,14 +1360,11 @@ Database::ReadResult Database::credentialList(QList<CredentialConfig>* credentia
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        std::optional<CredentialConfig> credential = readCredential(query);
-        if (!credential.has_value())
-        {
+        CredentialConfig credential;
+        if (readCredential(query, &credential) != ReadResult::OK)
             result = ReadResult::INCOMPLETE;
-            continue;
-        }
 
-        credentials->append(*credential);
+        credentials->append(credential);
     }
 
     return result;
@@ -1420,52 +1505,75 @@ bool Database::removeCredential(qint64 credential_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<CredentialConfig> Database::findCredential(qint64 credential_id) const
+Database::FindResult Database::findCredential(qint64 credential_id, CredentialConfig* credential) const
 {
+    CHECK(credential);
+    *credential = CredentialConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
     SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials WHERE id=?");
     query.addInt64(credential_id);
 
     const SqlQuery::StepResult step = query.next();
-    if (step != SqlQuery::StepResult::ROW)
+    if (step == SqlQuery::StepResult::FAILED)
     {
-        if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
     }
 
-    return readCredential(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readCredential(query, credential) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the data of credentials" << credential_id;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<CredentialConfig> Database::findCredentialByGuid(const QString& guid) const
+Database::FindResult Database::findCredentialByGuid(const QString& guid, CredentialConfig* credential) const
 {
+    CHECK(credential);
+    *credential = CredentialConfig();
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return std::nullopt;
+        return FindResult::FAILED;
     }
 
+    // No record carries an empty identifier, so there is nothing to look for.
     if (guid.isEmpty())
-        return std::nullopt;
+        return FindResult::NOT_FOUND;
 
     SqlQuery query(db_, "SELECT id, type, name, data, guid FROM credentials WHERE guid=?");
     query.addText(guid);
 
     const SqlQuery::StepResult step = query.next();
-    if (step != SqlQuery::StepResult::ROW)
+    if (step == SqlQuery::StepResult::FAILED)
     {
-        if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return std::nullopt;
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return FindResult::FAILED;
     }
 
-    return readCredential(query);
+    if (step == SqlQuery::StepResult::DONE)
+        return FindResult::NOT_FOUND;
+
+    if (readCredential(query, credential) != ReadResult::OK)
+    {
+        LOG(ERROR) << "Unable to read the data of credentials with guid" << guid;
+        return FindResult::UNREADABLE;
+    }
+
+    return FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------

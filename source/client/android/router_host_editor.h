@@ -50,7 +50,7 @@ private slots:
     void onSaveClicked();
 
 private:
-    void loadCredentials(qint64 selected_credential_id);
+    bool loadCredentials(qint64 selected_credential_id);
     void showError(const QString& message);
 
     Switch* switch_saved_credentials_ = nullptr;
@@ -61,6 +61,7 @@ private:
     Label* label_error_ = nullptr;
     qint64 router_id_ = 0;
     HostId host_id_ = kInvalidHostId;
+    bool credentials_loaded_ = true;
 
     Q_DISABLE_COPY_MOVE(RouterHostEditor)
 };

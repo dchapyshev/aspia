@@ -41,6 +41,21 @@ namespace {
 constexpr qint64 kRouterId = 1;
 constexpr qint64 kUserId = 7;
 
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+{
+    RouterConfig router;
+    const Database::FindResult result = db.findRouter(router_id, &router);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return router;
+}
+
 } // namespace
 
 // Test-only delivery of what the worker would hand over.
@@ -193,7 +208,7 @@ TEST_F(Router2FATest, RejectedTokenIsDroppedFromTheRecord)
 
     EXPECT_NE(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -214,7 +229,7 @@ TEST_F(Router2FATest, EnrollmentDropsTheStoredToken)
 
     EXPECT_NE(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -239,7 +254,7 @@ TEST_F(Router2FATest, EnrollmentWithoutAStoredTokenLeavesTheRecordAlone)
 
     EXPECT_NE(login_.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->displayName(), QString("renamed"));
 }
@@ -296,7 +311,7 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
     EXPECT_EQ(logged_in_user_, kUserId);
 
     // The record stores the wrap, and the wrap made here opens back into the token.
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     QByteArray raw;
     ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
@@ -321,7 +336,7 @@ TEST_F(Router2FATest, TokenOfAnUnexpectedSizeIsNotStored)
 
     EXPECT_EQ(logged_in_user_, kUserId);
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
 }
@@ -507,7 +522,7 @@ TEST_F(Router2FATest, EnrollmentUriWithoutASecretIsRefused)
 
     EXPECT_EQ(login.twoFactorPrompt(), nullptr);
 
-    const std::optional<RouterConfig> stored = Database::instance().findRouter(kRouterId);
+    const std::optional<RouterConfig> stored = findRouter(Database::instance(), kRouterId);
     ASSERT_TRUE(stored.has_value());
     QByteArray raw;
     ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));

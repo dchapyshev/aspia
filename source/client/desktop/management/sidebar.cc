@@ -112,8 +112,6 @@ Sidebar::Sidebar(QWidget* parent)
 
     if (!groups_read || routers_result == Database::ReadResult::FAILED)
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
-    else if (routers_result == Database::ReadResult::INCOMPLETE)
-        MsgBox::warning(this, tr("Some records could not be read and are not shown in the list."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,12 +218,16 @@ Database::ReadResult Sidebar::loadRouters()
 void Sidebar::reloadRouters()
 {
     QList<RouterConfig> routers;
-    if (Database::instance().routerList(&routers) != Database::ReadResult::OK)
+    const Database::ReadResult result = Database::instance().routerList(&routers);
+    if (result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the router list";
         MsgBox::warning(this, tr("Failed to read data. The list may be out of date."));
         return;
     }
+
+    if (result == Database::ReadResult::INCOMPLETE)
+        LOG(ERROR) << "Unable to read some of the routers";
 
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
@@ -780,14 +782,15 @@ void Sidebar::onRemoveRouter()
     LOG(INFO) << "[ACTION] Delete router" << router_id;
 
     Database& db = Database::instance();
-    std::optional<RouterConfig> existing = db.findRouter(router_id);
-    if (!existing)
+    RouterConfig existing;
+    const Database::FindResult found = db.findRouter(router_id, &existing);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Router not found for id:" << router_id;
         return;
     }
 
-    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing->displayName());
+    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing.displayLabel());
     if (MsgBox::question(this, message) == MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
@@ -967,6 +970,7 @@ void Sidebar::onRouterStatusChanged(qint64 router_id, RouterStatus status)
         case RouterStatus::CONNECTING: sidebar_status = SidebarRouter::Status::CONNECTING; break;
         case RouterStatus::TWO_FACTOR: sidebar_status = SidebarRouter::Status::TWO_FACTOR; break;
         case RouterStatus::ONLINE:     sidebar_status = SidebarRouter::Status::ONLINE;     break;
+        case RouterStatus::UNREADABLE: sidebar_status = SidebarRouter::Status::UNREADABLE; break;
     }
     setRouterStatus(router_id, sidebar_status);
 
@@ -1347,7 +1351,14 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // Check if a group with the same name already exists in the target group.
         QList<LocalGroupConfig> target_groups;
-        Database::instance().localGroupList(target_item->groupId(), &target_groups);
+        if (!Database::instance().localGroupList(target_item->groupId(), &target_groups))
+        {
+            LOG(ERROR) << "Unable to read the groups of the target group";
+            MsgBox::warning(tree_widget_, tr("Failed to move the group."));
+            restoreSelection();
+            return true;
+        }
+
         for (const LocalGroupConfig& existing : std::as_const(target_groups))
         {
             if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
@@ -1406,7 +1417,14 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // Check if a host with the same name already exists in the target group.
         QList<LocalHostConfig> target_hosts;
-        Database::instance().localHostList(target_item->groupId(), &target_hosts);
+        if (Database::instance().localHostList(target_item->groupId(), &target_hosts) == Database::ReadResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the hosts of the target group";
+            MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
+            restoreSelection();
+            return true;
+        }
+
         for (const LocalHostConfig& existing : std::as_const(target_hosts))
         {
             if (existing.name() == dragged_host.name())
@@ -1418,16 +1436,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the host's group in the database.
-        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(dragged_host.id());
-        if (!host.has_value())
-        {
-            restoreSelection();
-            return true;
-        }
-
-        host->setGroupId(target_item->groupId());
-
-        if (!Database::instance().modifyLocalHost(*host))
+        if (!Database::instance().moveLocalHost(dragged_host.id(), target_item->groupId()))
         {
             MsgBox::warning(tree_widget_, tr("Failed to move the host to the selected group."));
             restoreSelection();

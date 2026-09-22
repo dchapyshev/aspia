@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
+#include "base/logging.h"
 #include "base/crypto/data_cryptor.h"
 #include "client/config.h"
 #include "client/database.h"
@@ -101,14 +102,18 @@ void CredentialsWidget::reload()
         return;
 
     const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
+    const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
 
     QList<CredentialConfig> credentials;
-    Database::instance().credentialList(&credentials);
+    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+    if (result != Database::ReadResult::OK)
+        LOG(ERROR) << "Unable to read the list of credentials:" << result;
+
     for (const CredentialConfig& credential : std::as_const(credentials))
     {
         QTreeWidgetItem* item =
             new QTreeWidgetItem(tree_, { credential.displayName(), credential.username() });
-        item->setIcon(0, icon);
+        item->setIcon(0, credential.isValid() ? icon : unread_icon);
         item->setData(0, kCredentialIdRole, credential.id());
     }
 

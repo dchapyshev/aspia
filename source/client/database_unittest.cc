@@ -36,6 +36,100 @@
 #include "proto/router.h"
 #include "proto/storage.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<LocalHostConfig> findLocalHost(const Database& db, qint64 entry_id)
+{
+    LocalHostConfig host;
+    const Database::FindResult result = db.findLocalHost(entry_id, &host);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return host;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_id)
+{
+    LocalGroupConfig group;
+    const Database::FindResult result = db.findLocalGroup(group_id, &group);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return group;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+{
+    RouterConfig router;
+    const Database::FindResult result = db.findRouter(router_id, &router);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return router;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<CredentialConfig> findCredential(const Database& db, qint64 credential_id)
+{
+    CredentialConfig credential;
+    const Database::FindResult result = db.findCredential(credential_id, &credential);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return credential;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const QString& guid)
+{
+    CredentialConfig credential;
+    const Database::FindResult result = db.findCredentialByGuid(guid, &credential);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return credential;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterHostConfig> findRouterHost(const Database& db, qint64 router_id, HostId host_id)
+{
+    RouterHostConfig host;
+    const Database::FindResult result = db.findRouterHost(router_id, host_id, &host);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return host;
+}
+
+} // namespace
+
 class DatabaseTest : public testing::Test
 {
 protected:
@@ -309,7 +403,7 @@ TEST_F(DatabaseTest, GroupIsNotMovedIntoItsOwnSubtree)
     EXPECT_FALSE(db_.moveLocalGroup(parent, grandchild));
     EXPECT_FALSE(db_.moveLocalGroup(parent, parent));
 
-    EXPECT_EQ(db_.findLocalGroup(parent)->parentId(), 0);
+    EXPECT_EQ(findLocalGroup(db_, parent)->parentId(), 0);
     EXPECT_EQ(localGroupList(0).size(), 1);
 }
 
@@ -320,12 +414,12 @@ TEST_F(DatabaseTest, EditedGroupIsNotMadeAChildOfItsOwnChild)
     const qint64 parent = addGroup("parent", 0);
     const qint64 child = addGroup("child", parent);
 
-    LocalGroupConfig group = *db_.findLocalGroup(parent);
+    LocalGroupConfig group = *findLocalGroup(db_, parent);
     group.setParentId(child);
 
     EXPECT_FALSE(db_.modifyLocalGroup(group));
 
-    EXPECT_EQ(db_.findLocalGroup(parent)->parentId(), 0);
+    EXPECT_EQ(findLocalGroup(db_, parent)->parentId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -337,11 +431,79 @@ TEST_F(DatabaseTest, GroupIsMovedUnderAGroupOutsideItsSubtree)
     const qint64 second = addGroup("second", 0);
 
     EXPECT_TRUE(db_.moveLocalGroup(first, second));
-    EXPECT_EQ(db_.findLocalGroup(first)->parentId(), second);
+    EXPECT_EQ(findLocalGroup(db_, first)->parentId(), second);
 
     // And back to the root, which is not a group and cannot be below anything.
     EXPECT_TRUE(db_.moveLocalGroup(first, 0));
-    EXPECT_EQ(db_.findLocalGroup(first)->parentId(), 0);
+    EXPECT_EQ(findLocalGroup(db_, first)->parentId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The move writes the group and nothing else. A record whose sealed column did not open goes to
+// another group like any other, and one that opens is not resealed on the way.
+TEST_F(DatabaseTest, HostThatDoesNotOpenIsMovedLikeAnyOther)
+{
+    const qint64 first = addGroup("first", 0);
+    const qint64 second = addGroup("second", 0);
+    const qint64 readable_id = addHost("readable", first);
+    const qint64 broken_id = addHost("broken", first);
+
+    ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
+
+    ASSERT_TRUE(db_.moveLocalHost(broken_id, second));
+    ASSERT_TRUE(db_.moveLocalHost(readable_id, second));
+
+    LocalHostConfig host;
+    EXPECT_EQ(db_.findLocalHost(broken_id, &host), Database::FindResult::UNREADABLE);
+    EXPECT_EQ(host.groupId(), second);
+    EXPECT_EQ(host.name(), QString("broken"));
+
+    ASSERT_EQ(db_.findLocalHost(readable_id, &host), Database::FindResult::FOUND);
+    EXPECT_EQ(host.groupId(), second);
+    EXPECT_EQ(host.address(), QString("192.168.0.1"));
+
+    EXPECT_TRUE(localHostList(first).isEmpty());
+
+    // And to the root, which is not a group of its own.
+    ASSERT_TRUE(db_.moveLocalHost(readable_id, 0));
+    ASSERT_EQ(db_.findLocalHost(readable_id, &host), Database::FindResult::FOUND);
+    EXPECT_EQ(host.groupId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The group a host lies in is part of what the list shows, so a move counts as an edit: the
+// moment the record last changed is a column of that list and what it can be sorted by.
+TEST_F(DatabaseTest, MoveMarksTheMomentTheRecordChanged)
+{
+    const qint64 first = addGroup("first", 0);
+    const qint64 second = addGroup("second", 0);
+    const qint64 entry_id = addHost("host", first);
+
+    const qint64 modify_time = findLocalHost(db_, entry_id)->modifyTime();
+
+    // The stamp counts whole seconds, so a move within the same second is indistinguishable
+    // from one that left it alone.
+    QThread::msleep(1100);
+
+    ASSERT_TRUE(db_.moveLocalHost(entry_id, second));
+
+    EXPECT_GT(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A move that finds no record writes nothing, and the answer must say so: the caller that is told
+// the move went through leaves the record on screen in a group the database never put it in.
+TEST_F(DatabaseTest, MoveOfARecordThatIsNotThereIsRefused)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 other = addGroup("other", 0);
+    const qint64 entry_id = addHost("host", group);
+
+    ASSERT_TRUE(db_.removeLocalHost(entry_id));
+    EXPECT_FALSE(db_.moveLocalHost(entry_id, other));
+
+    ASSERT_TRUE(db_.removeLocalGroup(group));
+    EXPECT_FALSE(db_.moveLocalGroup(group, other));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,7 +514,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     const qint64 group = addGroup("group", 0);
     const qint64 entry_id = addHost("host", group);
 
-    const qint64 modify_time = db_.findLocalHost(entry_id)->modifyTime();
+    const qint64 modify_time = findLocalHost(db_, entry_id)->modifyTime();
 
     // The stamp counts whole seconds, so a rewrite within the same second is indistinguishable from
     // one that left it alone.
@@ -361,7 +523,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routerList(), allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
-    EXPECT_EQ(db_.findLocalHost(entry_id)->modifyTime(), modify_time);
+    EXPECT_EQ(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,11 +553,11 @@ TEST_F(DatabaseTest, GroupGetsAGuidOfItsOwn)
     const qint64 first = addGroup("first", 0);
     const qint64 second = addGroup("second", 0);
 
-    const std::optional<LocalGroupConfig> stored = db_.findLocalGroup(first);
+    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, first);
     ASSERT_TRUE(stored.has_value());
     EXPECT_FALSE(stored->guid().isEmpty());
 
-    const std::optional<LocalGroupConfig> other = db_.findLocalGroup(second);
+    const std::optional<LocalGroupConfig> other = findLocalGroup(db_, second);
     ASSERT_TRUE(other.has_value());
     EXPECT_NE(stored->guid(), other->guid());
 }
@@ -411,7 +573,7 @@ TEST_F(DatabaseTest, GroupKeepsTheGuidItWasGiven)
 
     ASSERT_TRUE(db_.addLocalGroup(group));
 
-    const std::optional<LocalGroupConfig> stored = db_.findLocalGroup(group.id());
+    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, group.id());
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->guid(), "7b0f1d18-0e3a-4a0e-9a4e-2a1c6a0f0c11");
 }
@@ -423,7 +585,7 @@ TEST_F(DatabaseTest, GroupGuidSurvivesEveryEdit)
     const qint64 parent = addGroup("parent", 0);
     const qint64 group = addGroup("group", 0);
 
-    const std::optional<LocalGroupConfig> before = db_.findLocalGroup(group);
+    const std::optional<LocalGroupConfig> before = findLocalGroup(db_, group);
     ASSERT_TRUE(before.has_value());
 
     LocalGroupConfig edited = *before;
@@ -432,7 +594,7 @@ TEST_F(DatabaseTest, GroupGuidSurvivesEveryEdit)
     ASSERT_TRUE(db_.modifyLocalGroup(edited));
     ASSERT_TRUE(db_.moveLocalGroup(group, parent));
 
-    const std::optional<LocalGroupConfig> after = db_.findLocalGroup(group);
+    const std::optional<LocalGroupConfig> after = findLocalGroup(db_, group);
     ASSERT_TRUE(after.has_value());
     EXPECT_EQ(after->name(), "renamed");
     EXPECT_EQ(after->parentId(), parent);
@@ -447,7 +609,7 @@ TEST_F(DatabaseTest, RouterKeepsItsGuidThroughAnEdit)
 {
     const qint64 router_id = addRouter("router");
 
-    const std::optional<RouterConfig> before = db_.findRouter(router_id);
+    const std::optional<RouterConfig> before = findRouter(db_, router_id);
     ASSERT_TRUE(before.has_value());
     ASSERT_FALSE(before->guid().isEmpty());
 
@@ -462,7 +624,7 @@ TEST_F(DatabaseTest, RouterKeepsItsGuidThroughAnEdit)
 
     ASSERT_TRUE(db_.modifyRouter(edited));
 
-    const std::optional<RouterConfig> after = db_.findRouter(router_id);
+    const std::optional<RouterConfig> after = findRouter(db_, router_id);
     ASSERT_TRUE(after.has_value());
     EXPECT_EQ(after->displayName(), "renamed");
     EXPECT_EQ(after->guid(), before->guid());
@@ -475,7 +637,7 @@ TEST_F(DatabaseTest, TwoGroupsDoNotShareOneGuid)
 {
     const qint64 group = addGroup("group", 0);
 
-    const std::optional<LocalGroupConfig> stored = db_.findLocalGroup(group);
+    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, group);
     ASSERT_TRUE(stored.has_value());
     ASSERT_FALSE(stored->guid().isEmpty());
 
@@ -495,7 +657,7 @@ TEST_F(DatabaseTest, TwoLocalHostsDoNotShareOneGuid)
     const qint64 group = addGroup("group", 0);
     const qint64 host = addHost("host", group);
 
-    const std::optional<LocalHostConfig> stored = db_.findLocalHost(host);
+    const std::optional<LocalHostConfig> stored = findLocalHost(db_, host);
     ASSERT_TRUE(stored.has_value());
     ASSERT_FALSE(stored->guid().isEmpty());
 
@@ -518,11 +680,11 @@ TEST_F(DatabaseTest, RouterGetsAGuidOfItsOwn)
     const qint64 first = addRouter("first");
     const qint64 second = addRouter("second");
 
-    const std::optional<RouterConfig> stored = db_.findRouter(first);
+    const std::optional<RouterConfig> stored = findRouter(db_, first);
     ASSERT_TRUE(stored.has_value());
     EXPECT_FALSE(stored->guid().isEmpty());
 
-    const std::optional<RouterConfig> other = db_.findRouter(second);
+    const std::optional<RouterConfig> other = findRouter(db_, second);
     ASSERT_TRUE(other.has_value());
     EXPECT_NE(stored->guid(), other->guid());
 }
@@ -542,7 +704,7 @@ TEST_F(DatabaseTest, EncryptedDataSurvivesARoundTrip)
     host.setPassword(SecureString("secret"));
     ASSERT_TRUE(db_.addLocalHost(host));
 
-    std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
+    std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->address(), QString("192.168.0.1"));
@@ -605,20 +767,29 @@ TEST_F(DatabaseTest, HostThatDoesNotOpenLeavesTheListIncomplete)
 
     ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
 
+    // The record that did not open is in the list all the same: without it the user would have
+    // no way to reach the row, and the result says the list is not whole.
     QList<LocalHostConfig> hosts;
     EXPECT_EQ(db_.localHostList(group, &hosts), Database::ReadResult::INCOMPLETE);
-    ASSERT_EQ(hosts.size(), 1);
-    EXPECT_EQ(hosts.front().name(), QString("readable"));
+    ASSERT_EQ(hosts.size(), 2);
+
+    const LocalHostConfig& broken = hosts.front().id() == broken_id ? hosts.front() : hosts.back();
+    const LocalHostConfig& readable = hosts.front().id() == broken_id ? hosts.back() : hosts.front();
+
+    EXPECT_EQ(broken.name(), QString("broken"));
+    EXPECT_TRUE(broken.address().isEmpty());
+    EXPECT_EQ(readable.name(), QString("readable"));
+    EXPECT_EQ(readable.address(), QString("192.168.0.1"));
 
     QList<LocalHostConfig> all_hosts;
     EXPECT_EQ(db_.allLocalHosts(&all_hosts), Database::ReadResult::INCOMPLETE);
-    EXPECT_EQ(all_hosts.size(), 1);
+    EXPECT_EQ(all_hosts.size(), 2);
 }
 
 //--------------------------------------------------------------------------------------------------
-// The search reads the whole table and filters what it read, so a record that does not open makes
-// the result incomplete even when it would not have matched.
-TEST_F(DatabaseTest, SearchThatSkippedARecordIsIncomplete)
+// The result says the list is not whole when a record of that list did not open. A record the
+// search left out is not part of it.
+TEST_F(DatabaseTest, HostThatDoesNotOpenLeavesTheSearchIncomplete)
 {
     const qint64 group = addGroup("group", 0);
     const qint64 broken_id = addHost("office-1", group);
@@ -626,11 +797,23 @@ TEST_F(DatabaseTest, SearchThatSkippedARecordIsIncomplete)
 
     ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
 
+    // The name of a record that did not open is read, so it still matches by name.
     QList<LocalHostConfig> hosts;
     EXPECT_EQ(db_.searchLocalHosts("office", &hosts), Database::ReadResult::INCOMPLETE);
 
-    ASSERT_EQ(hosts.size(), 1);
-    EXPECT_EQ(hosts.front().name(), QString("office-2"));
+    ASSERT_EQ(hosts.size(), 2);
+
+    QStringList names;
+    for (const LocalHostConfig& host : std::as_const(hosts))
+        names.append(host.name());
+    names.sort();
+
+    EXPECT_EQ(names, QStringList({ "office-1", "office-2" }));
+
+    QList<LocalHostConfig> matched;
+    EXPECT_EQ(db_.searchLocalHosts("office-2", &matched), Database::ReadResult::OK);
+    ASSERT_EQ(matched.size(), 1);
+    EXPECT_EQ(matched.front().name(), QString("office-2"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -641,11 +824,41 @@ TEST_F(DatabaseTest, RouterThatDoesNotOpenLeavesTheListIncomplete)
 
     ASSERT_TRUE(corruptRecordData("routers", broken_id));
 
+    // The record that did not open is in the list all the same: without it the user would have
+    // no way to reach the row, and the result says the list is not whole.
     QList<RouterConfig> routers;
     EXPECT_EQ(db_.routerList(&routers), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(routers.size(), 2);
 
-    ASSERT_EQ(routers.size(), 1);
-    EXPECT_EQ(routers.front().displayName(), QString("readable"));
+    const RouterConfig& broken = routers.front().routerId() == broken_id ?
+        routers.front() : routers.back();
+    const RouterConfig& readable = routers.front().routerId() == broken_id ?
+        routers.back() : routers.front();
+
+    EXPECT_EQ(broken.displayName(), QString("broken"));
+    EXPECT_TRUE(broken.address().isEmpty());
+    EXPECT_EQ(readable.displayName(), QString("readable"));
+    EXPECT_EQ(readable.address(), QString("router.example.com"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record that did not open has no name of its own to show and no address to fall back to.
+// The list holds the row all the same, so there must be something to show it under.
+TEST_F(DatabaseTest, RouterThatDoesNotOpenHasALabelToShow)
+{
+    RouterConfig router;
+    router.setAddress("router.example.com");
+    router.setUsername("router-user");
+    router.setPassword(SecureString("router-secret"));
+
+    ASSERT_TRUE(db_.addRouter(router));
+    ASSERT_TRUE(corruptRecordData("routers", router.routerId()));
+
+    RouterConfig stored;
+    ASSERT_EQ(db_.findRouter(router.routerId(), &stored), Database::FindResult::UNREADABLE);
+    EXPECT_TRUE(stored.displayName().isEmpty());
+    EXPECT_TRUE(stored.address().isEmpty());
+    EXPECT_FALSE(stored.displayLabel().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -657,11 +870,42 @@ TEST_F(DatabaseTest, RouterHostThatDoesNotOpenLeavesTheListIncomplete)
 
     ASSERT_TRUE(corruptRouterHostData(router_id, 1));
 
+    // The row is in the list whether or not it opened, so a caller counting what the base
+    // holds does not take a record that did not open for one that is not there.
     QList<RouterHostConfig> hosts;
     EXPECT_EQ(db_.allRouterHosts(&hosts), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(hosts.size(), 2);
 
-    ASSERT_EQ(hosts.size(), 1);
-    EXPECT_EQ(hosts.front().username(), QString("user-2"));
+    const RouterHostConfig& broken = hosts.front().hostId() == 1 ? hosts.front() : hosts.back();
+    const RouterHostConfig& readable = hosts.front().hostId() == 1 ? hosts.back() : hosts.front();
+
+    EXPECT_EQ(broken.routerId(), router_id);
+    EXPECT_EQ(broken.hostId(), 1U);
+    EXPECT_TRUE(broken.username().isEmpty());
+    EXPECT_EQ(readable.username(), QString("user-2"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record that does not open must not pass for a missing one: a caller would take the host for
+// one without credentials and delete the row that is still there.
+TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsNotTakenForAMissingOne)
+{
+    const qint64 router_id = addRouter("router");
+    addRouterHost(router_id, 1, "user-1", "secret");
+    addRouterHost(router_id, 2, "user-2", "secret");
+
+    ASSERT_TRUE(corruptRouterHostData(router_id, 1));
+
+    RouterHostConfig broken;
+    EXPECT_EQ(db_.findRouterHost(router_id, 1, &broken), Database::FindResult::UNREADABLE);
+    EXPECT_FALSE(db_.routerHostCredentials(router_id, 1).has_value());
+
+    RouterHostConfig readable;
+    EXPECT_EQ(db_.findRouterHost(router_id, 2, &readable), Database::FindResult::FOUND);
+    EXPECT_EQ(readable.username(), QString("user-2"));
+
+    RouterHostConfig missing;
+    EXPECT_EQ(db_.findRouterHost(router_id, 3, &missing), Database::FindResult::NOT_FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -672,11 +916,21 @@ TEST_F(DatabaseTest, CredentialThatDoesNotOpenLeavesTheListIncomplete)
 
     ASSERT_TRUE(corruptRecordData("credentials", broken_id));
 
+    // The record that did not open is in the list all the same: without it the user would have
+    // no way to reach the row, and the result says the list is not whole.
     QList<CredentialConfig> credentials;
     EXPECT_EQ(db_.credentialList(&credentials), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(credentials.size(), 2);
 
-    ASSERT_EQ(credentials.size(), 1);
-    EXPECT_EQ(credentials.front().displayName(), QString("home"));
+    const CredentialConfig& broken = credentials.front().id() == broken_id ?
+        credentials.front() : credentials.back();
+    const CredentialConfig& readable = credentials.front().id() == broken_id ?
+        credentials.back() : credentials.front();
+
+    EXPECT_EQ(broken.displayName(), QString("office"));
+    EXPECT_TRUE(broken.username().isEmpty());
+    EXPECT_EQ(readable.displayName(), QString("home"));
+    EXPECT_EQ(readable.username(), QString("user"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -692,6 +946,155 @@ TEST_F(DatabaseTest, ListOfAClosedDatabaseFails)
     QList<CredentialConfig> credentials;
     EXPECT_EQ(closed.credentialList(&credentials), Database::ReadResult::FAILED);
     EXPECT_TRUE(credentials.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record is handed over with FOUND and only with it. A caller that asks again with the same
+// variable must not get the record of the previous search back.
+TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
+{
+    const qint64 group_id = addGroup("group", 0);
+    const qint64 entry_id = addHost("host", group_id);
+    const qint64 router_id = addRouter("router");
+    addRouterHost(router_id, 100500, "user", "secret");
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    const std::optional<LocalHostConfig> host_record = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(host_record.has_value());
+
+    LocalHostConfig host;
+    ASSERT_EQ(db_.findLocalHost(entry_id, &host), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findLocalHost(entry_id + 1000, &host), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(host.id(), -1);
+    EXPECT_TRUE(host.name().isEmpty());
+    EXPECT_TRUE(host.guid().isEmpty());
+
+    ASSERT_EQ(db_.findLocalHostByGuid(host_record->guid(), &host), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findLocalHostByGuid("no-such-guid", &host), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(host.id(), -1);
+    EXPECT_TRUE(host.name().isEmpty());
+
+    LocalGroupConfig group;
+    ASSERT_EQ(db_.findLocalGroup(group_id, &group), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findLocalGroup(group_id + 1000, &group), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(group.id(), -1);
+    EXPECT_TRUE(group.name().isEmpty());
+
+    RouterConfig router;
+    ASSERT_EQ(db_.findRouter(router_id, &router), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findRouter(router_id + 1000, &router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(router.routerId(), -1);
+    EXPECT_TRUE(router.address().isEmpty());
+    EXPECT_TRUE(router.guid().isEmpty());
+
+    RouterHostConfig router_host;
+    ASSERT_EQ(db_.findRouterHost(router_id, 100500, &router_host), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findRouterHost(router_id, 100501, &router_host), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(router_host.routerId(), -1);
+    EXPECT_TRUE(router_host.username().isEmpty());
+
+    const std::optional<CredentialConfig> credential_record = findCredential(db_, credential_id);
+    ASSERT_TRUE(credential_record.has_value());
+
+    CredentialConfig credential;
+    ASSERT_EQ(db_.findCredential(credential_id, &credential), Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findCredential(credential_id + 1000, &credential), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(credential.id(), -1);
+    EXPECT_TRUE(credential.displayName().isEmpty());
+
+    ASSERT_EQ(db_.findCredentialByGuid(credential_record->guid(), &credential),
+              Database::FindResult::FOUND);
+    EXPECT_EQ(db_.findCredentialByGuid("no-such-guid", &credential),
+              Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(credential.id(), -1);
+    EXPECT_TRUE(credential.displayName().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record that did not open still hands over what lies outside its sealed column: the caller can
+// name it, keep its links and write it anew instead of losing the row. What was in the sealed
+// column comes back empty, even when the same variable held a whole record a moment ago.
+TEST_F(DatabaseTest, SearchOfARecordThatDoesNotOpenKeepsWhatWasRead)
+{
+    const qint64 group_id = addGroup("group", 0);
+    const qint64 readable_entry_id = addHost("readable", group_id);
+    const qint64 broken_entry_id = addHost("broken", group_id);
+    const qint64 readable_credential_id = addCredential("home", "user", "secret");
+    const qint64 broken_credential_id = addCredential("office", "user", "secret");
+    const qint64 readable_router_id = addRouter("readable-router");
+    const qint64 broken_router_id = addRouter("broken-router");
+
+    LocalHostConfig linked;
+    ASSERT_EQ(db_.findLocalHost(broken_entry_id, &linked), Database::FindResult::FOUND);
+    linked.setCredentialId(broken_credential_id);
+    ASSERT_TRUE(db_.modifyLocalHost(linked));
+
+    addRouterHost(readable_router_id, 100501, "user-1", "secret");
+
+    RouterHostConfig broken_router_host =
+        routerHost(readable_router_id, 100500, "user-2", "secret");
+    broken_router_host.setCredentialId(broken_credential_id);
+    ASSERT_TRUE(db_.addRouterHost(broken_router_host));
+
+    ASSERT_TRUE(corruptRecordData("local_hosts", broken_entry_id));
+    ASSERT_TRUE(corruptRecordData("credentials", broken_credential_id));
+    ASSERT_TRUE(corruptRecordData("routers", broken_router_id));
+    ASSERT_TRUE(corruptRouterHostData(readable_router_id, 100500));
+
+    LocalHostConfig host;
+    ASSERT_EQ(db_.findLocalHost(readable_entry_id, &host), Database::FindResult::FOUND);
+    ASSERT_FALSE(host.address().isEmpty());
+
+    EXPECT_EQ(db_.findLocalHost(broken_entry_id, &host), Database::FindResult::UNREADABLE);
+    EXPECT_EQ(host.id(), broken_entry_id);
+    EXPECT_EQ(host.name(), QString("broken"));
+    EXPECT_EQ(host.groupId(), group_id);
+    EXPECT_EQ(host.credentialId(), broken_credential_id);
+    EXPECT_FALSE(host.guid().isEmpty());
+    EXPECT_TRUE(host.address().isEmpty());
+    EXPECT_TRUE(host.username().isEmpty());
+
+    RouterHostConfig router_host;
+    ASSERT_EQ(db_.findRouterHost(readable_router_id, 100501, &router_host),
+              Database::FindResult::FOUND);
+    ASSERT_FALSE(router_host.username().isEmpty());
+
+    EXPECT_EQ(db_.findRouterHost(readable_router_id, 100500, &router_host),
+              Database::FindResult::UNREADABLE);
+    EXPECT_EQ(router_host.routerId(), readable_router_id);
+    EXPECT_EQ(router_host.hostId(), 100500U);
+    EXPECT_EQ(router_host.credentialId(), broken_credential_id);
+    EXPECT_TRUE(router_host.username().isEmpty());
+
+    CredentialConfig credential;
+    ASSERT_EQ(db_.findCredential(readable_credential_id, &credential), Database::FindResult::FOUND);
+    ASSERT_FALSE(credential.username().isEmpty());
+
+    EXPECT_EQ(db_.findCredential(broken_credential_id, &credential), Database::FindResult::UNREADABLE);
+    EXPECT_EQ(credential.id(), broken_credential_id);
+    EXPECT_EQ(credential.displayName(), QString("office"));
+    EXPECT_TRUE(credential.username().isEmpty());
+
+    RouterConfig router;
+    ASSERT_EQ(db_.findRouter(readable_router_id, &router), Database::FindResult::FOUND);
+    ASSERT_FALSE(router.address().isEmpty());
+
+    EXPECT_EQ(db_.findRouter(broken_router_id, &router), Database::FindResult::UNREADABLE);
+    EXPECT_EQ(router.routerId(), broken_router_id);
+    EXPECT_EQ(router.displayName(), QString("broken-router"));
+    EXPECT_FALSE(router.guid().isEmpty());
+    EXPECT_TRUE(router.address().isEmpty());
+    EXPECT_TRUE(router.username().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A search that never ran must not pass for a search that found nothing.
+TEST_F(DatabaseTest, SearchOfAClosedDatabaseFails)
+{
+    Database closed;
+
+    RouterHostConfig host;
+    EXPECT_EQ(closed.findRouterHost(1, 100500, &host), Database::FindResult::FAILED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -715,7 +1118,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     ASSERT_TRUE(db_.reencryptAll(hosts, routerList(), allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
-    std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
+    std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->address(), QString("192.168.0.1"));
@@ -730,7 +1133,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
 {
     const qint64 router_id = addRouter("router");
 
-    std::optional<RouterConfig> stored = db_.findRouter(router_id);
+    std::optional<RouterConfig> stored = findRouter(db_, router_id);
     ASSERT_TRUE(stored.has_value());
     stored->setDeviceToken("wrapped-elsewhere");
     ASSERT_TRUE(db_.modifyRouter(*stored));
@@ -741,7 +1144,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheDeviceToken)
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), routers, allRouterHosts(), {},
                                  "salt", "verifier", 1));
 
-    const std::optional<RouterConfig> reread = db_.findRouter(router_id);
+    const std::optional<RouterConfig> reread = findRouter(db_, router_id);
     ASSERT_TRUE(reread.has_value());
     EXPECT_EQ(reread->deviceToken(), QByteArray("wrapped-elsewhere"));
 }
@@ -754,11 +1157,35 @@ TEST_F(DatabaseTest, RouterHostCredentialsSurviveARoundTrip)
 
     ASSERT_TRUE(db_.addRouterHost(routerHost(router_id, 100500, "user", "secret")));
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of a host whose credentials did not open is rewritten in place. An insert over it
+// breaks on the primary key, so a caller that takes such a row for a missing one loses what the
+// user entered.
+TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsRewrittenInPlace)
+{
+    const qint64 router_id = addRouter("router");
+    addRouterHost(router_id, 100500, "user", "secret");
+
+    ASSERT_TRUE(corruptRouterHostData(router_id, 100500));
+
+    RouterHostConfig broken;
+    ASSERT_EQ(db_.findRouterHost(router_id, 100500, &broken), Database::FindResult::UNREADABLE);
+
+    EXPECT_FALSE(db_.addRouterHost(routerHost(router_id, 100500, "new-user", "new-secret")));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(router_id, 100500, "new-user", "new-secret")));
+
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("new-user"));
+    EXPECT_EQ(stored->password().toString(), QString("new-secret"));
+    EXPECT_EQ(allRouterHosts().size(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -776,14 +1203,14 @@ TEST_F(DatabaseTest, RouterHostCredentialsAreEditedAndRemoved)
     // A host the user never saved anything for has no row to edit.
     EXPECT_FALSE(db_.modifyRouterHost(routerHost(router_id, 100501, "user", "secret")));
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("other-user"));
     EXPECT_EQ(stored->password().toString(), QString("other-secret"));
     EXPECT_EQ(allRouterHosts().size(), 1);
 
     ASSERT_TRUE(db_.removeRouterHost(router_id, 100500));
-    EXPECT_FALSE(db_.findRouterHost(router_id, 100500).has_value());
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
     EXPECT_TRUE(allRouterHosts().isEmpty());
 }
 
@@ -800,8 +1227,8 @@ TEST_F(DatabaseTest, RemovedRouterTakesItsHostCredentialsWithIt)
 
     ASSERT_TRUE(db_.removeRouter(first));
 
-    EXPECT_FALSE(db_.findRouterHost(first, 100500).has_value());
-    EXPECT_TRUE(db_.findRouterHost(second, 100501).has_value());
+    EXPECT_FALSE(findRouterHost(db_, first, 100500).has_value());
+    EXPECT_TRUE(findRouterHost(db_, second, 100501).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -983,7 +1410,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsRouterHostCredentialsReadable)
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), router_hosts, {},
                                  "salt", "verifier", 1));
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
 
     EXPECT_EQ(stored->username(), QString("user"));
@@ -1017,7 +1444,7 @@ TEST_F(DatabaseTest, RouterCannotBeEditedIntoOneWithoutAPassword)
 
     EXPECT_FALSE(db_.modifyRouter(edited));
 
-    const std::optional<RouterConfig> after = db_.findRouter(router_id);
+    const std::optional<RouterConfig> after = findRouter(db_, router_id);
     ASSERT_TRUE(after.has_value());
     EXPECT_EQ(after->displayName(), "router");
     EXPECT_FALSE(after->password().isEmpty());
@@ -1127,7 +1554,7 @@ TEST_F(DatabaseTest, HostWithHalfItsCredentialsIsNotStored)
     edited.setPassword(SecureString());
     EXPECT_FALSE(db_.modifyLocalHost(edited));
 
-    const std::optional<LocalHostConfig> after = db_.findLocalHost(host.id());
+    const std::optional<LocalHostConfig> after = findLocalHost(db_, host.id());
     ASSERT_TRUE(after.has_value());
     EXPECT_EQ(after->password().toString(), QString("secret"));
 }
@@ -1207,8 +1634,8 @@ TEST_F(DatabaseTest, BatchIsWrittenWithItsOwnLinks)
     const QList<LocalGroupConfig> groups = allLocalGroups();
     ASSERT_EQ(groups.size(), 2);
 
-    const std::optional<LocalGroupConfig> stored_parent = db_.findLocalGroup(groups.front().id());
-    const std::optional<LocalGroupConfig> stored_child = db_.findLocalGroup(groups.back().id());
+    const std::optional<LocalGroupConfig> stored_parent = findLocalGroup(db_, groups.front().id());
+    const std::optional<LocalGroupConfig> stored_child = findLocalGroup(db_, groups.back().id());
     ASSERT_TRUE(stored_parent.has_value() && stored_child.has_value());
 
     EXPECT_EQ(stored_parent->parentId(), 0);
@@ -1261,11 +1688,11 @@ TEST_F(DatabaseTest, CredentialGetsAGuidOfItsOwn)
     const qint64 first = addCredential("first", "user", "secret");
     const qint64 second = addCredential("second", "user", "secret");
 
-    const std::optional<CredentialConfig> stored = db_.findCredential(first);
+    const std::optional<CredentialConfig> stored = findCredential(db_, first);
     ASSERT_TRUE(stored.has_value());
     EXPECT_FALSE(stored->guid().isEmpty());
 
-    const std::optional<CredentialConfig> other = db_.findCredential(second);
+    const std::optional<CredentialConfig> other = findCredential(db_, second);
     ASSERT_TRUE(other.has_value());
     EXPECT_NE(stored->guid(), other->guid());
 
@@ -1282,7 +1709,7 @@ TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
 {
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->id(), credential_id);
     EXPECT_EQ(stored->type(), CredentialConfig::Type::HOST);
@@ -1291,7 +1718,7 @@ TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
     EXPECT_EQ(stored->password().toString(), QString("secret"));
 
     // The guid names the same record wherever it is referred to.
-    const std::optional<CredentialConfig> by_guid = db_.findCredentialByGuid(stored->guid());
+    const std::optional<CredentialConfig> by_guid = findCredentialByGuid(db_, stored->guid());
     ASSERT_TRUE(by_guid.has_value());
     EXPECT_EQ(by_guid->id(), credential_id);
 }
@@ -1304,7 +1731,7 @@ TEST_F(DatabaseTest, CredentialIsEditedAndRemoved)
 {
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    const std::optional<CredentialConfig> before = db_.findCredential(credential_id);
+    const std::optional<CredentialConfig> before = findCredential(db_, credential_id);
     ASSERT_TRUE(before.has_value());
 
     // What the editor hands over: the fields of the form and the id, the guid is what the record
@@ -1318,7 +1745,7 @@ TEST_F(DatabaseTest, CredentialIsEditedAndRemoved)
     unknown.setId(credential_id + 1);
     EXPECT_FALSE(db_.modifyCredential(unknown));
 
-    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->guid(), before->guid());
     EXPECT_EQ(stored->displayName(), QString("renamed"));
@@ -1327,7 +1754,7 @@ TEST_F(DatabaseTest, CredentialIsEditedAndRemoved)
     EXPECT_EQ(credentialList().size(), 1);
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
-    EXPECT_FALSE(db_.findCredential(credential_id).has_value());
+    EXPECT_FALSE(findCredential(db_, credential_id).has_value());
     EXPECT_TRUE(credentialList().isEmpty());
 }
 
@@ -1339,14 +1766,14 @@ TEST_F(DatabaseTest, EditedCredentialStaysSealedForItsOwnGuid)
 {
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    const std::optional<CredentialConfig> before = db_.findCredential(credential_id);
+    const std::optional<CredentialConfig> before = findCredential(db_, credential_id);
     ASSERT_TRUE(before.has_value());
 
     CredentialConfig edited = credential("renamed", "other-user", "other-secret");
     edited.setId(credential_id);
     EXPECT_TRUE(db_.modifyCredential(edited));
 
-    std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->guid(), before->guid());
     EXPECT_EQ(stored->username(), QString("other-user"));
@@ -1354,7 +1781,7 @@ TEST_F(DatabaseTest, EditedCredentialStaysSealedForItsOwnGuid)
     edited.setGuid("not-the-guid-of-the-row");
     EXPECT_TRUE(db_.modifyCredential(edited));
 
-    stored = db_.findCredential(credential_id);
+    stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->guid(), before->guid());
     EXPECT_EQ(stored->username(), QString("other-user"));
@@ -1407,7 +1834,7 @@ TEST_F(DatabaseTest, ReencryptionKeepsCredentialsReadable)
     ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), QList<RouterConfig>(), allRouterHosts(),
                                  credentials, "salt", "verifier", 1));
 
-    const std::optional<CredentialConfig> stored = db_.findCredential(credential_id);
+    const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
@@ -1447,16 +1874,16 @@ TEST_F(DatabaseTest, LocalHostLinksItsCredentials)
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addLocalHost(host));
 
-    std::optional<LocalHostConfig> stored = db_.findLocalHost(host.id());
+    std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
 
     stored->setName("renamed");
     ASSERT_TRUE(db_.modifyLocalHost(*stored));
-    EXPECT_EQ(db_.findLocalHost(host.id())->credentialId(), credential_id);
+    EXPECT_EQ(findLocalHost(db_, host.id())->credentialId(), credential_id);
 
     ASSERT_TRUE(db_.removeLocalHost(host.id()));
-    EXPECT_TRUE(db_.findCredential(credential_id).has_value());
+    EXPECT_TRUE(findCredential(db_, credential_id).has_value());
 
     LocalHostConfig other;
     other.setName("other");
@@ -1466,7 +1893,7 @@ TEST_F(DatabaseTest, LocalHostLinksItsCredentials)
     ASSERT_TRUE(db_.addLocalHost(other));
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
-    EXPECT_EQ(db_.findLocalHost(other.id())->credentialId(), 0);
+    EXPECT_EQ(findLocalHost(db_, other.id())->credentialId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1481,12 +1908,12 @@ TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
-    EXPECT_EQ(db_.findRouterHost(router_id, 100500)->credentialId(), 0);
+    EXPECT_EQ(findRouterHost(db_, router_id, 100500)->credentialId(), 0);
 
     ASSERT_TRUE(db_.removeRouter(router_id));
     EXPECT_TRUE(allRouterHosts().isEmpty());
@@ -1506,7 +1933,7 @@ TEST_F(DatabaseTest, RouterHostIsKeptByItsLinkAlone)
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addRouterHost(host));
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100500);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
     EXPECT_TRUE(stored->username().isEmpty());
@@ -1667,19 +2094,19 @@ TEST_F(DatabaseTest, RemovingARecordTakesTheRouterHostsRememberedByItAlone)
 
     ASSERT_TRUE(db_.removeCredential(credential_id));
 
-    EXPECT_FALSE(db_.findRouterHost(router_id, 100500).has_value());
+    EXPECT_FALSE(findRouterHost(db_, router_id, 100500).has_value());
 
-    std::optional<RouterHostConfig> stored = db_.findRouterHost(router_id, 100501);
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, router_id, 100501);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), 0);
     EXPECT_EQ(stored->username(), QString("own-user"));
     EXPECT_EQ(stored->password().toString(), QString("own-secret"));
 
-    stored = db_.findRouterHost(router_id, 100502);
+    stored = findRouterHost(db_, router_id, 100502);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), other_id);
 
-    std::optional<LocalHostConfig> stored_local = db_.findLocalHost(local_host.id());
+    std::optional<LocalHostConfig> stored_local = findLocalHost(db_, local_host.id());
     ASSERT_TRUE(stored_local.has_value());
     EXPECT_EQ(stored_local->credentialId(), 0);
 
@@ -1724,7 +2151,8 @@ TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOp
         ASSERT_TRUE(raw.exec("UPDATE router_hosts SET data=X'00' WHERE host_id=100500"));
     }
 
-    EXPECT_FALSE(MasterPassword::setNew(SecureString(QString("Password123"))));
+    EXPECT_EQ(MasterPassword::setNew(SecureString(QString("Password123"))),
+              MasterPassword::Result::UNREADABLE_RECORD);
 
     // The column is left as it was, not emptied.
     {
@@ -1735,6 +2163,37 @@ TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOp
         ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
         EXPECT_EQ(query.columnInt64(0), 1);
     }
+
+    // Closes the file before the directory goes.
+    DatabaseTestPeer::setFilePath(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A password that does not open the book is told apart from a book that can not be re-encrypted,
+// so a user who mistyped the current one is not sent looking for a record to repair.
+TEST_F(DatabaseTest, MasterPasswordChangeTellsAWrongPasswordFromARecordThatDoesNotOpen)
+{
+    const QString file_path = QFileInfo(file_path_).dir().filePath("singleton.db3");
+    DatabaseTestPeer::setFilePath(file_path);
+
+    Database& db = Database::instance();
+    ASSERT_TRUE(db.isValid());
+
+    // There is no password to unlock yet, which is not the user mistyping one.
+    EXPECT_EQ(MasterPassword::change(SecureString(QString("Password123")),
+                                     SecureString(QString("NewPassword123"))),
+              MasterPassword::Result::FAILED);
+
+    ASSERT_EQ(MasterPassword::setNew(SecureString(QString("Password123"))),
+              MasterPassword::Result::SUCCESS);
+
+    EXPECT_EQ(MasterPassword::change(SecureString(QString("WrongPassword1")),
+                                     SecureString(QString("NewPassword123"))),
+              MasterPassword::Result::INVALID_PASSWORD);
+
+    EXPECT_EQ(MasterPassword::change(SecureString(QString("Password123")),
+                                     SecureString(QString("NewPassword123"))),
+              MasterPassword::Result::SUCCESS);
 
     // Closes the file before the directory goes.
     DatabaseTestPeer::setFilePath(file_path);

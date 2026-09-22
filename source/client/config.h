@@ -20,6 +20,7 @@
 #define CLIENT_CONFIG_H
 
 #include <QByteArray>
+#include <QCoreApplication>
 #include <QString>
 
 #include <optional>
@@ -46,10 +47,13 @@ class Config;
 // that boundary, and they are the only place in the class that touches the cipher.
 class RouterConfig final
 {
+    Q_DECLARE_TR_FUNCTIONS(RouterConfig)
+
 public:
     RouterConfig();
 
-    // A name of its own is not required. displayLabel() falls back to the address.
+    // A name of its own is not required. displayLabel() falls back to the address, and to a
+    // placeholder for a record that did not open and has neither.
     static constexpr int kMaxNameLength = 64;
 
     // A router is entered with an account of its own, so a record read back without an address, a

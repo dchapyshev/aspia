@@ -124,12 +124,20 @@ void MasterPasswordDialog::onAccept()
 {
     if (mode_ == Mode::UNLOCK)
     {
-        if (!MasterPassword::unlock(SecureString(edit_password_->text())))
+        switch (MasterPassword::unlock(SecureString(edit_password_->text())))
         {
-            showError(tr("Invalid master password."));
-            edit_password_->setFocus();
-            edit_password_->selectAll();
-            return;
+            case MasterPassword::Result::SUCCESS:
+                break;
+
+            case MasterPassword::Result::INVALID_PASSWORD:
+                showError(tr("Invalid master password."));
+                edit_password_->setFocus();
+                edit_password_->selectAll();
+                return;
+
+            default:
+                showError(tr("Unable to unlock the database."));
+                return;
         }
 
         accept();
@@ -155,7 +163,7 @@ void MasterPasswordDialog::onAccept()
 
     if (mode_ == Mode::CREATE)
     {
-        if (!MasterPassword::setNew(SecureString(edit_password_->text())))
+        if (MasterPassword::setNew(SecureString(edit_password_->text())) != MasterPassword::Result::SUCCESS)
         {
             showError(tr("Unable to set master password."));
             return;
@@ -163,13 +171,26 @@ void MasterPasswordDialog::onAccept()
     }
     else
     {
-        if (!MasterPassword::change(SecureString(edit_current_->text()),
-                                    SecureString(edit_password_->text())))
+        switch (MasterPassword::change(SecureString(edit_current_->text()),
+                                       SecureString(edit_password_->text())))
         {
-            showError(tr("Invalid current password or unable to change it."));
-            edit_current_->setFocus();
-            edit_current_->selectAll();
-            return;
+            case MasterPassword::Result::SUCCESS:
+                break;
+
+            case MasterPassword::Result::INVALID_PASSWORD:
+                showError(tr("Invalid current password."));
+                edit_current_->setFocus();
+                edit_current_->selectAll();
+                return;
+
+            case MasterPassword::Result::UNREADABLE_RECORD:
+                showError(tr("Some records of the database could not be read. Edit them to "
+                             "enter their data again."));
+                return;
+
+            default:
+                showError(tr("Unable to change the password."));
+                return;
         }
     }
 

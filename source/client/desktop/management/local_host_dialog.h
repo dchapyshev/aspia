@@ -43,6 +43,7 @@ private slots:
     void onRouterChanged(int index);
     void onSavedCredentialsToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
+    void onLoadData();
 
 private:
     void updateAddressLabel();

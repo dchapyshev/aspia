@@ -123,7 +123,11 @@ QString RouterConfig::displayLabel() const
 {
     if (!display_name_.isEmpty())
         return display_name_;
-    return address_;
+
+    if (!address_.isEmpty())
+        return address_;
+
+    return tr("<unread router>");
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ public slots:
     void onDisconnect(qint64 router_id);
 
     // Drops the current connection to |router_id| and lets the timer bring it back, the same way a
-    // channel error does. Used where the session must start over instead of ending.
+    // channel error does. A router that is not connected yet is started the same way.
     void onReconnect(qint64 router_id);
 
     // Sends an outgoing message on the given channel of |router_id|.

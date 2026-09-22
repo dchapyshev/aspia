@@ -55,14 +55,14 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new_salt,
-                           const QByteArray& new_verifier)
+MasterPassword::Result changeKeyAndReencrypt(
+    const SecureByteArray& new_key, const QByteArray& new_salt, const QByteArray& new_verifier)
 {
     Database& db = Database::instance();
     if (!db.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return MasterPassword::Result::FAILED;
     }
 
     DataCryptor& cryptor = DataCryptor::instance();
@@ -72,13 +72,33 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     QList<RouterConfig> routers;
     QList<RouterHostConfig> router_hosts;
     QList<CredentialConfig> credentials;
-    if (db.allLocalHosts(&local_hosts) != Database::ReadResult::OK ||
-        db.routerList(&routers) != Database::ReadResult::OK ||
-        db.allRouterHosts(&router_hosts) != Database::ReadResult::OK ||
-        db.credentialList(&credentials) != Database::ReadResult::OK)
+
+    const Database::ReadResult read_results[] =
+    {
+        db.allLocalHosts(&local_hosts),
+        db.routerList(&routers),
+        db.allRouterHosts(&router_hosts),
+        db.credentialList(&credentials)
+    };
+
+    bool incomplete = false;
+
+    for (Database::ReadResult read_result : read_results)
+    {
+        if (read_result == Database::ReadResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the address book";
+            return MasterPassword::Result::FAILED;
+        }
+
+        if (read_result == Database::ReadResult::INCOMPLETE)
+            incomplete = true;
+    }
+
+    if (incomplete)
     {
         LOG(ERROR) << "Unable to read the address book completely";
-        return false;
+        return MasterPassword::Result::UNREADABLE_RECORD;
     }
 
     cryptor.setKey(new_key);
@@ -88,10 +108,10 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     {
         // Nothing was written, so restore the in-memory key to keep it consistent with the database.
         cryptor.setKey(old_key);
-        return false;
+        return MasterPassword::Result::FAILED;
     }
 
-    return true;
+    return MasterPassword::Result::SUCCESS;
 }
 
 } // namespace
@@ -140,13 +160,13 @@ bool MasterPassword::isSet()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::unlock(const SecureString& password)
+MasterPassword::Result MasterPassword::unlock(const SecureString& password)
 {
     Database& db = Database::instance();
     if (!db.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return Result::FAILED;
     }
 
     QByteArray salt = db.masterPasswordSalt();
@@ -155,25 +175,25 @@ bool MasterPassword::unlock(const SecureString& password)
     if (salt.isEmpty() || verifier.isEmpty())
     {
         LOG(ERROR) << "Master password is not set";
-        return false;
+        return Result::FAILED;
     }
 
     quint32 version = db.masterPasswordVersion();
     if (version != kCurrentVersion)
     {
         LOG(ERROR) << "Unsupported master password version:" << version;
-        return false;
+        return Result::FAILED;
     }
 
     SecureByteArray key = deriveKey(password, salt);
     if (!checkVerifier(key, verifier))
     {
         LOG(INFO) << "Invalid master password";
-        return false;
+        return Result::INVALID_PASSWORD;
     }
 
     DataCryptor::instance().setKey(key);
-    return true;
+    return Result::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,18 +240,18 @@ SecureByteArray MasterPassword::currentKey()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::setNew(const SecureString& new_password)
+MasterPassword::Result MasterPassword::setNew(const SecureString& new_password)
 {
     if (new_password.isEmpty())
     {
         LOG(ERROR) << "Empty password";
-        return false;
+        return Result::FAILED;
     }
 
     if (isSet())
     {
         LOG(ERROR) << "Master password is already set";
-        return false;
+        return Result::FAILED;
     }
 
     QByteArray salt = Random::byteArray(kSaltSize);
@@ -240,23 +260,25 @@ bool MasterPassword::setNew(const SecureString& new_password)
     SecureByteArray new_key = deriveKey(new_password, salt);
     std::optional<QByteArray> verifier = makeVerifier(new_key);
     if (!verifier.has_value())
-        return false;
+        return Result::FAILED;
 
     return changeKeyAndReencrypt(new_key, salt, *verifier);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::change(const SecureString& current_password, const SecureString& new_password)
+MasterPassword::Result MasterPassword::change(
+    const SecureString& current_password, const SecureString& new_password)
 {
     if (new_password.isEmpty())
     {
         LOG(ERROR) << "Empty password";
-        return false;
+        return Result::FAILED;
     }
 
-    if (!unlock(current_password))
-        return false;
+    const Result unlocked = unlock(current_password);
+    if (unlocked != Result::SUCCESS)
+        return unlocked;
 
     QByteArray salt = Random::byteArray(kSaltSize);
     CHECK(!salt.isEmpty());
@@ -264,7 +286,7 @@ bool MasterPassword::change(const SecureString& current_password, const SecureSt
     SecureByteArray new_key = deriveKey(new_password, salt);
     std::optional<QByteArray> verifier = makeVerifier(new_key);
     if (!verifier.has_value())
-        return false;
+        return Result::FAILED;
 
     return changeKeyAndReencrypt(new_key, salt, *verifier);
 }

@@ -150,6 +150,9 @@ QVariant SearchResultModel::data(const QModelIndex& index, int role) const
         if (column != Column::NAME)
             return QVariant();
 
+        if (row->type == Type::LOCAL && !row->host.isValid())
+            return QIcon(":/img/computer-unknown.svg");
+
         return QIcon(":/img/computer.svg");
     }
 

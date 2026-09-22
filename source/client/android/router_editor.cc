@@ -20,8 +20,6 @@
 
 #include <QVBoxLayout>
 
-#include <optional>
-
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
@@ -118,8 +116,9 @@ void RouterEditor::prepareForAdd()
 //--------------------------------------------------------------------------------------------------
 bool RouterEditor::prepareForEdit(qint64 router_id)
 {
-    std::optional<RouterConfig> router = Database::instance().findRouter(router_id);
-    if (!router.has_value())
+    RouterConfig router;
+    const Database::FindResult found = Database::instance().findRouter(router_id, &router);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Router not found:" << router_id;
         return false;
@@ -127,14 +126,21 @@ bool RouterEditor::prepareForEdit(qint64 router_id)
 
     router_id_ = router_id;
 
-    edit_name_->setText(router->displayName());
-    edit_address_->setText(router->address());
-    edit_username_->setText(router->username());
-    edit_password_->setText(router->password().toString());
+    edit_name_->setText(router.displayName());
+    edit_address_->setText(router.address());
+    edit_username_->setText(router.username());
+    edit_password_->setText(router.password().toString());
     label_error_->setVisible(false);
     button_delete_->show();
 
     edit_name_->setFocus();
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of router" << router_id << "could not be read";
+        showError(tr("The data of the router could not be read. You can enter it again."));
+    }
+
     return true;
 }
 
@@ -196,15 +202,17 @@ void RouterEditor::onSaveClicked()
     // refused.
     if (router_id_ >= 0)
     {
-        const std::optional<RouterConfig> stored = db.findRouter(router_id_);
-        if (!stored.has_value())
+        RouterConfig stored;
+        const Database::FindResult stored_found = db.findRouter(router_id_, &stored);
+        if (stored_found == Database::FindResult::NOT_FOUND ||
+            stored_found == Database::FindResult::FAILED)
         {
             LOG(ERROR) << "Failed to re-read router" << router_id_;
             showError(tr("Failed to save the router."));
             return;
         }
-        if (stored->hasSameAccount(data))
-            data.setDeviceToken(stored->deviceToken());
+        if (stored.hasSameAccount(data))
+            data.setDeviceToken(stored.deviceToken());
     }
 
     const bool saved = (router_id_ < 0) ? db.addRouter(data) : db.modifyRouter(data);

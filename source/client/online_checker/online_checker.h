@@ -22,20 +22,32 @@
 #include <QHash>
 #include <QList>
 #include <QObject>
+#include <QQueue>
 
 #include "base/scoped_qpointer.h"
 #include "base/time_types.h"
 #include "base/threading/thread.h"
 #include "client/config.h"
-#include "client/online_checker/online_checker_direct.h"
-#include "client/online_checker/online_checker_router.h"
+
+class OnlineCheckerDirect;
+class OnlineCheckerRouter;
+
+enum class OnlineStatus
+{
+    UNKNOWN,
+    ONLINE,
+    OFFLINE,
+    SKIPPED
+};
+
+Q_DECLARE_METATYPE(OnlineStatus)
 
 // Persistent online-status oracle. Designed to live for the entire lifetime of the owning widget
-// and serve multiple start() calls. Each result is cached for ~1 minute keyed by entry_id; if
-// start() is called with a host whose last check is still fresh, the cached value is emitted
-// immediately (asynchronously) and no network probe is issued. Stale or absent entries trigger
-// a real check via OnlineCheckerDirect/OnlineCheckerRouter. The "Refresh" UI action passes the
-// visible host ids through invalidate() to force a fresh probe.
+// and serve multiple start() calls. Every answer but a skip is cached for kCacheTime keyed by
+// entry_id; if start() is called with a host whose last check is still fresh, the cached value
+// is emitted immediately (asynchronously) and no network probe is issued. Stale or absent
+// entries trigger a real check via OnlineCheckerDirect/OnlineCheckerRouter. The "Refresh" UI
+// action passes the visible host ids through invalidate() to force a fresh probe.
 class OnlineChecker final : public QObject
 {
     Q_OBJECT
@@ -56,20 +68,19 @@ public:
     void invalidate(const QList<qint64>& entry_ids);
 
 signals:
-    void sig_checkerResult(qint64 entry_id, bool online);
+    void sig_checkerResult(qint64 entry_id, OnlineStatus status);
     void sig_checkerFinished();
 
 private slots:
-    void onDirectCheckerResult(qint64 entry_id, bool online);
+    void onCheckerResult(qint64 entry_id, OnlineStatus status);
     void onDirectCheckerFinished();
-    void onRouterCheckerResult(qint64 entry_id, bool online);
     void onRouterCheckerFinished();
     void emitPendingCached();
 
 private:
     struct CacheEntry
     {
-        bool online = false;
+        OnlineStatus status = OnlineStatus::UNKNOWN;
         TimePoint checked_at;
     };
 
@@ -77,15 +88,15 @@ private:
     void finishIfDone();
 
     QHash<qint64, CacheEntry> cache_;
-    QList<QPair<qint64, bool>> pending_cached_hits_;
+    QList<QPair<qint64, OnlineStatus>> pending_cached_hits_;
 
     Thread direct_thread_;
 
     ScopedQPointer<OnlineCheckerDirect> direct_checker_;
     ScopedQPointer<OnlineCheckerRouter> router_checker_;
 
-    OnlineCheckerRouter::HostList router_hosts_;
-    OnlineCheckerDirect::HostList direct_hosts_;
+    QQueue<LocalHostConfig> router_hosts_;
+    QQueue<LocalHostConfig> direct_hosts_;
 
     bool direct_finished_ = true;
     bool router_finished_ = true;

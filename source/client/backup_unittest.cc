@@ -38,6 +38,85 @@
 #include "proto/router.h"
 #include "proto/storage.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_id)
+{
+    LocalGroupConfig group;
+    const Database::FindResult result = db.findLocalGroup(group_id, &group);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return group;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterConfig> findRouter(const Database& db, qint64 router_id)
+{
+    RouterConfig router;
+    const Database::FindResult result = db.findRouter(router_id, &router);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return router;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<CredentialConfig> findCredential(const Database& db, qint64 credential_id)
+{
+    CredentialConfig credential;
+    const Database::FindResult result = db.findCredential(credential_id, &credential);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return credential;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const QString& guid)
+{
+    CredentialConfig credential;
+    const Database::FindResult result = db.findCredentialByGuid(guid, &credential);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return credential;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+std::optional<RouterHostConfig> findRouterHost(const Database& db, qint64 router_id, HostId host_id)
+{
+    RouterHostConfig host;
+    const Database::FindResult result = db.findRouterHost(router_id, host_id, &host);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return host;
+}
+
+} // namespace
+
 class BackupTest : public testing::Test
 {
 protected:
@@ -315,7 +394,7 @@ protected:
     // The guid the source book gave the group, which is how the file names it.
     QString groupGuid(qint64 group_id)
     {
-        const std::optional<LocalGroupConfig> group = source_.findLocalGroup(group_id);
+        const std::optional<LocalGroupConfig> group = findLocalGroup(source_, group_id);
         return group.has_value() ? group->guid() : QString();
     }
 
@@ -382,7 +461,7 @@ TEST_F(BackupTest, GroupKeepsItsGuidThroughTheFile)
 {
     const qint64 group = addGroup(source_, "group", 0);
 
-    const std::optional<LocalGroupConfig> original = source_.findLocalGroup(group);
+    const std::optional<LocalGroupConfig> original = findLocalGroup(source_, group);
     ASSERT_TRUE(original.has_value());
     ASSERT_FALSE(original->guid().isEmpty());
 
@@ -704,7 +783,7 @@ TEST_F(BackupTest, SavedCredentialsFollowTheirRouter)
     addRouterHost(source_, source_router, 100500, "user", "secret");
     addRouterHost(source_, source_router, 100501, "other-user", "other-secret");
 
-    const std::optional<RouterConfig> original = source_.findRouter(source_router);
+    const std::optional<RouterConfig> original = findRouter(source_, source_router);
     ASSERT_TRUE(original.has_value());
 
     Backup::Report export_counts;
@@ -726,12 +805,12 @@ TEST_F(BackupTest, SavedCredentialsFollowTheirRouter)
 
     const qint64 target_router = routers.front().routerId();
 
-    const std::optional<RouterHostConfig> stored = target_.findRouterHost(target_router, 100500);
+    const std::optional<RouterHostConfig> stored = findRouterHost(target_, target_router, 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
 
-    EXPECT_TRUE(target_.findRouterHost(target_router, 100501).has_value());
+    EXPECT_TRUE(findRouterHost(target_, target_router, 100501).has_value());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -742,7 +821,7 @@ TEST_F(BackupTest, ImportedRouterKeepsItsGuid)
     const qint64 router_id = addRouter(source_, "router", "router.example.com");
     addRouterHost(source_, router_id, 100500, "user", "secret");
 
-    const std::optional<RouterConfig> original = source_.findRouter(router_id);
+    const std::optional<RouterConfig> original = findRouter(source_, router_id);
     ASSERT_TRUE(original.has_value());
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
@@ -753,7 +832,7 @@ TEST_F(BackupTest, ImportedRouterKeepsItsGuid)
     EXPECT_EQ(routers.front().guid(), original->guid());
 
     const std::optional<RouterHostConfig> stored =
-        target_.findRouterHost(routers.front().routerId(), 100500);
+        findRouterHost(target_, routers.front().routerId(), 100500);
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->username(), "user");
     EXPECT_EQ(stored->password().toString(), "secret");
@@ -860,10 +939,10 @@ TEST_F(BackupTest, BookThatCannotBeReadWholeIsNotExported)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     Backup::Report report;
-    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_EQ(exportBook(&report), Backup::Result::UNREADABLE_RECORD);
     EXPECT_FALSE(QFile::exists(backupPath()));
 
-    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_EQ(exportBook(&report), Backup::Result::UNREADABLE_RECORD);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -878,11 +957,11 @@ TEST_F(BackupTest, BookWithOneUnreadableHostIsNotExported)
     DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
 
     Backup::Report report;
-    EXPECT_EQ(exportBook(&report), Backup::Result::INTERNAL_ERROR);
+    EXPECT_EQ(exportBook(&report), Backup::Result::UNREADABLE_RECORD);
     EXPECT_FALSE(QFile::exists(backupPath()));
 
-    // The group was read and counted before the host refused to open. The report counts what went
-    // into the file, and no file was written.
+    // The book is read before anything of it is built, so nothing was counted and no file
+    // was written.
     EXPECT_EQ(report.total(), 0);
 }
 
@@ -1161,13 +1240,13 @@ TEST_F(BackupTest, CredentialKeepsItsGuidThroughTheFile)
 {
     const qint64 credential_id = addCredential(source_, "office", "user", "secret");
 
-    const std::optional<CredentialConfig> original = source_.findCredential(credential_id);
+    const std::optional<CredentialConfig> original = findCredential(source_, credential_id);
     ASSERT_TRUE(original.has_value());
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
 
-    const std::optional<CredentialConfig> stored = target_.findCredentialByGuid(original->guid());
+    const std::optional<CredentialConfig> stored = findCredentialByGuid(target_, original->guid());
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->type(), CredentialConfig::Type::HOST);
     EXPECT_EQ(stored->displayName(), QString("office"));
@@ -1324,5 +1403,5 @@ TEST_F(BackupTest, BookWithALinkedRouterHostThatDoesNotOpenIsNotExported)
         ASSERT_TRUE(raw.exec("UPDATE router_hosts SET data=X'00' WHERE host_id=100500"));
     }
 
-    EXPECT_EQ(exportBook(), Backup::Result::INTERNAL_ERROR);
+    EXPECT_EQ(exportBook(), Backup::Result::UNREADABLE_RECORD);
 }

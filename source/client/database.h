@@ -52,15 +52,19 @@ public:
     enum class ReadResult { OK, INCOMPLETE, FAILED };
     Q_ENUM(ReadResult)
 
+    enum class FindResult { FOUND, NOT_FOUND, UNREADABLE, FAILED };
+    Q_ENUM(FindResult)
+
     // Local Hosts.
     ReadResult localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
     ReadResult allLocalHosts(QList<LocalHostConfig>* hosts) const;
     bool addLocalHost(LocalHostConfig& host);
     bool modifyLocalHost(LocalHostConfig& host);
+    bool moveLocalHost(qint64 entry_id, qint64 new_group_id);
     bool removeLocalHost(qint64 entry_id);
     bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
-    std::optional<LocalHostConfig> findLocalHost(qint64 entry_id) const;
-    std::optional<LocalHostConfig> findLocalHostByGuid(const QString& guid) const;
+    FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
+    FindResult findLocalHostByGuid(const QString& guid, LocalHostConfig* host) const;
     std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
 
     // Local Search.
@@ -73,21 +77,21 @@ public:
     bool modifyLocalGroup(const LocalGroupConfig& group);
     bool moveLocalGroup(qint64 group_id, qint64 new_parent_id);
     bool removeLocalGroup(qint64 group_id);
-    std::optional<LocalGroupConfig> findLocalGroup(qint64 group_id) const;
+    FindResult findLocalGroup(qint64 group_id, LocalGroupConfig* group) const;
 
     // Routers.
     ReadResult routerList(QList<RouterConfig>* routers) const;
     bool addRouter(RouterConfig& router);
     bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
-    std::optional<RouterConfig> findRouter(qint64 router_id) const;
+    FindResult findRouter(qint64 router_id, RouterConfig* router) const;
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
     bool addRouterHost(const RouterHostConfig& host);
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(qint64 router_id, HostId host_id);
-    std::optional<RouterHostConfig> findRouterHost(qint64 router_id, HostId host_id) const;
+    FindResult findRouterHost(qint64 router_id, HostId host_id, RouterHostConfig* host) const;
     std::optional<std::pair<QString, SecureString>> routerHostCredentials(
         qint64 router_id, HostId host_id) const;
     bool outdatedRouterHosts(qint64 router_id, QList<HostId>* hosts) const;
@@ -98,8 +102,8 @@ public:
     bool addCredential(CredentialConfig& credential);
     bool modifyCredential(const CredentialConfig& credential);
     bool removeCredential(qint64 credential_id);
-    std::optional<CredentialConfig> findCredential(qint64 credential_id) const;
-    std::optional<CredentialConfig> findCredentialByGuid(const QString& guid) const;
+    FindResult findCredential(qint64 credential_id, CredentialConfig* credential) const;
+    FindResult findCredentialByGuid(const QString& guid, CredentialConfig* credential) const;
 
     // Puts these records in place of the address book, all of them or none. Everything the book
     // held is deleted first. A record is named by a key of its own instead of an id, negative and

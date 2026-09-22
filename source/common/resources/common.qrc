@@ -117,6 +117,7 @@
         <file>done.svg</file>
         <file>settings.svg</file>
         <file>keys.svg</file>
+        <file>key-corrupted.svg</file>
         <file>monitor-1.svg</file>
         <file>monitor-2.svg</file>
         <file>monitor-3.svg</file>
@@ -165,7 +166,9 @@
         <file>router-delete.svg</file>
         <file>router-edit.svg</file>
         <file>router-offline.svg</file>
+        <file>router-lock.svg</file>
         <file>router-online.svg</file>
+        <file>router-warning.svg</file>
         <file>user-add.svg</file>
         <file>user-delete.svg</file>
         <file>user-edit.svg</file>

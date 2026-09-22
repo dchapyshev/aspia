@@ -27,8 +27,6 @@
 #include <QMenu>
 #include <QStatusBar>
 
-#include <optional>
-
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
@@ -711,20 +709,16 @@ void ManagementTab::onConnectAction(QAction* action)
         if (!current)
             return;
 
-        std::optional<LocalHostConfig> found = Database::instance().findLocalHost(current->id());
-        if (!found.has_value())
-        {
-            MsgBox::warning(this,
-                tr("Failed to retrieve host information from the local database."));
+        LocalHostConfig found;
+        if (!readLocalHost(current->id(), &found))
             return;
-        }
 
-        host = HostConfig::forLocalHost(*found);
+        host = HostConfig::forLocalHost(found);
 
         if (!validateHostForConnect(host))
             return;
 
-        setHostConnectTime(found->id());
+        setHostConnectTime(found.id());
     }
     else if (current_content_ == search_widget_)
     {
@@ -740,20 +734,16 @@ void ManagementTab::onConnectAction(QAction* action)
         }
         else
         {
-            std::optional<LocalHostConfig> found = Database::instance().findLocalHost(row->host.id());
-            if (!found.has_value())
-            {
-                MsgBox::warning(this,
-                    tr("Failed to retrieve host information from the local database."));
+            LocalHostConfig found;
+            if (!readLocalHost(row->host.id(), &found))
                 return;
-            }
 
-            host = HostConfig::forLocalHost(*found);
+            host = HostConfig::forLocalHost(found);
 
             if (!validateHostForConnect(host))
                 return;
 
-            setHostConnectTime(found->id());
+            setHostConnectTime(found.id());
         }
     }
     else if (current_content_ == router_group_widget_)
@@ -791,14 +781,11 @@ void ManagementTab::onConnectAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ManagementTab::onLocalConnect(qint64 entry_id)
 {
-    std::optional<LocalHostConfig> entry = Database::instance().findLocalHost(entry_id);
-    if (!entry.has_value())
-    {
-        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
+    LocalHostConfig entry;
+    if (!readLocalHost(entry_id, &entry))
         return;
-    }
 
-    HostConfig host = HostConfig::forLocalHost(*entry);
+    HostConfig host = HostConfig::forLocalHost(entry);
     if (!validateHostForConnect(host))
         return;
 
@@ -856,10 +843,11 @@ void ManagementTab::onLocalHostContextMenu(qint64 entry_id, const QPoint& pos)
         addProxy(ui->action_system_info_connect);
         menu.addSeparator();
 
-        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
-        if (host.has_value())
+        LocalHostConfig host;
+        Database::instance().findLocalHost(entry_id, &host);
+        if (!host.guid().isEmpty())
         {
-            addCopyLinkMenu(menu, *host);
+            addCopyLinkMenu(menu, host);
             menu.addSeparator();
         }
 
@@ -902,11 +890,12 @@ void ManagementTab::onSearchContextMenu(const QPoint& pos)
     }
     else
     {
-        std::optional<LocalHostConfig> host = Database::instance().findLocalHost(row->host.id());
-        if (host.has_value())
+        LocalHostConfig host;
+        Database::instance().findLocalHost(row->host.id(), &host);
+        if (!host.guid().isEmpty())
         {
             menu.addSeparator();
-            addCopyLinkMenu(menu, *host);
+            addCopyLinkMenu(menu, host);
         }
     }
 
@@ -970,14 +959,15 @@ void ManagementTab::onEditHost()
         return;
     }
 
-    std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
-    if (!host.has_value())
+    LocalHostConfig host;
+    const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
+    if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    LocalHostDialog dialog(entry_id, host->groupId(), this);
+    LocalHostDialog dialog(entry_id, host.groupId(), this);
     if (dialog.exec() == LocalHostDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
@@ -1001,25 +991,22 @@ void ManagementTab::onCopyHost()
 
     Database& db = Database::instance();
 
-    std::optional<LocalHostConfig> host = db.findLocalHost(entry_id);
-    if (!host.has_value())
-    {
-        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
+    LocalHostConfig host;
+    if (!readLocalHost(entry_id, &host))
         return;
-    }
 
-    host->setName(host->name() + " " + tr("(copy)"));
-    host->setGuid(QString());
+    host.setName(host.name() + " " + tr("(copy)"));
+    host.setGuid(QString());
 
-    if (!db.addLocalHost(*host))
+    if (!db.addLocalHost(host))
     {
         MsgBox::warning(this, tr("Failed to add the host to the local database."));
         return;
     }
 
-    qint64 new_id = host->id();
+    qint64 new_id = host.id();
 
-    LocalHostDialog(new_id, host->groupId(), this).exec();
+    LocalHostDialog(new_id, host.groupId(), this).exec();
 
     if (current_content_ == search_widget_)
     {
@@ -1045,14 +1032,15 @@ void ManagementTab::onRemoveHost()
         return;
     }
 
-    std::optional<LocalHostConfig> host = Database::instance().findLocalHost(entry_id);
-    if (!host.has_value())
+    LocalHostConfig host;
+    const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
+    if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
         return;
     }
 
-    QString message = tr("Are you sure you want to delete host \"%1\"?").arg(host->name());
+    QString message = tr("Are you sure you want to delete host \"%1\"?").arg(host.name());
 
     if (MsgBox::question(this, message) == MsgBox::No)
     {
@@ -1514,6 +1502,11 @@ void ManagementTab::onExportBookAction()
             MsgBox::warning(this, tr("Unable to write the file."));
             return;
 
+        case Backup::Result::UNREADABLE_RECORD:
+            MsgBox::warning(this, tr("Some records of the database could not be read. Edit them "
+                                     "to enter their data again."));
+            return;
+
         default:
             MsgBox::warning(this, tr("Failed to create the backup."));
             return;
@@ -1723,9 +1716,10 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
 
-    // The record exists for as long as the prompt does; a nullopt here is a transient read
-    // failure, and the question matters more than the name in the title.
-    const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
+    // The record exists for as long as the prompt does; a failure to read it here is a transient
+    // one, and the question matters more than the name in the title.
+    RouterConfig record;
+    const bool record_read = Database::instance().findRouter(router_id, &record) == Database::FindResult::FOUND;
 
     // An account with no secret yet scans what the router handed out before it can answer, so the
     // two are asked in different dialogs.
@@ -1775,8 +1769,8 @@ void ManagementTab::onTwoFactorRequired(qint64 router_id)
     connect(prompt, &QObject::destroyed, dialog, &QWidget::close);
 
     // The title names the router, so with several of them the user can tell whose code is asked.
-    if (record.has_value())
-        dialog->setWindowTitle(dialog->windowTitle() + " - " + record->displayLabel());
+    if (record_read)
+        dialog->setWindowTitle(dialog->windowTitle() + " - " + record.displayLabel());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 
@@ -2094,14 +2088,10 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_i
         link_menu->addAction(sessionIcon(session_type), sessionName(session_type), this,
                              [this, router_id, host_id, session_type]()
         {
-            std::optional<RouterConfig> router = Database::instance().findRouter(router_id);
-            if (!router.has_value())
-            {
-                MsgBox::warning(this, tr("Unable to create a link for this host."));
-                return;
-            }
+            RouterConfig router;
+            Database::instance().findRouter(router_id, &router);
 
-            QString url = HostUrl::stringForRouterHost(router->guid(), host_id, session_type);
+            QString url = HostUrl::stringForRouterHost(router.guid(), host_id, session_type);
             if (url.isEmpty())
             {
                 MsgBox::warning(this, tr("Unable to create a link for this host."));
@@ -2114,11 +2104,24 @@ void ManagementTab::addCopyLinkMenu(QMenu& menu, qint64 router_id, HostId host_i
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::setHostConnectTime(qint64 entry_id)
+bool ManagementTab::readLocalHost(qint64 entry_id, LocalHostConfig* host)
 {
-    const qint64 connect_time = QDateTime::currentSecsSinceEpoch();
-    Database::instance().setLocalHostConnectTime(entry_id, connect_time);
-    local_group_widget_->setConnectTime(entry_id, connect_time);
+    const Database::FindResult result = Database::instance().findLocalHost(entry_id, host);
+    if (result == Database::FindResult::FOUND)
+        return true;
+
+    if (result == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of host" << entry_id << "could not be read";
+        MsgBox::warning(this, tr("The data of the host could not be read. Edit the host to enter it again."));
+    }
+    else
+    {
+        LOG(ERROR) << "Unable to find host with id" << entry_id;
+        MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2126,11 +2129,14 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
 {
     if (host.routerId() != 0)
     {
-        std::optional<RouterConfig> router = Database::instance().findRouter(host.routerId());
-        if (!router.has_value())
+        RouterConfig router;
+        const Database::FindResult found = Database::instance().findRouter(host.routerId(), &router);
+        if (found != Database::FindResult::FOUND)
         {
-            MsgBox::warning(this, tr("The router associated with this host has been deleted. "
-                "Edit the host to select another router or switch to direct connection."));
+            MsgBox::warning(this, found == Database::FindResult::UNREADABLE ?
+                tr("The data of the router could not be read. Edit the router to enter it again.") :
+                tr("The router associated with this host has been deleted. "
+                   "Edit the host to select another router or switch to direct connection."));
             return false;
         }
 
@@ -2151,6 +2157,14 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ManagementTab::setHostConnectTime(qint64 entry_id)
+{
+    const qint64 connect_time = QDateTime::currentSecsSinceEpoch();
+    Database::instance().setLocalHostConnectTime(entry_id, connect_time);
+    local_group_widget_->setConnectTime(entry_id, connect_time);
 }
 
 //--------------------------------------------------------------------------------------------------

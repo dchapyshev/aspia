@@ -102,7 +102,7 @@ QVariant CredentialListModel::data(const QModelIndex& index, int role) const
         if (column != Column::NAME)
             return QVariant();
 
-        return QIcon(":/img/keys.svg");
+        return QIcon(credential->isValid() ? ":/img/keys.svg" : ":/img/key-corrupted.svg");
     }
 
     if (role != Qt::DisplayRole)

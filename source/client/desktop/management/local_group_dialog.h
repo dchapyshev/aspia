@@ -39,6 +39,7 @@ public:
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
+    void onLoadData();
 
 private:
     std::unique_ptr<Ui::LocalGroupDialog> ui;

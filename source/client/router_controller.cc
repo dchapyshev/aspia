@@ -96,6 +96,9 @@ RouterStatus RouterController::status(qint64 router_id)
     if (context.two_factor)
         return context.two_factor->twoFactorPrompt() ? RouterStatus::TWO_FACTOR : RouterStatus::CONNECTING;
 
+    if (!context.config->isValid())
+        return RouterStatus::UNREADABLE;
+
     return RouterStatus::OFFLINE;
 }
 
@@ -126,7 +129,7 @@ TwoFactorPrompt* RouterController::twoFactorPrompt(qint64 router_id)
 void RouterController::reload()
 {
     QList<RouterConfig> configs;
-    if (Database::instance().routerList(&configs) != Database::ReadResult::OK)
+    if (Database::instance().routerList(&configs) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Failed to read the router list - keeping the current state";
         return;
@@ -135,10 +138,7 @@ void RouterController::reload()
     QSet<qint64> present;
     present.reserve(configs.size());
     for (const RouterConfig& config : configs)
-    {
-        if (config.isValid())
-            present.insert(config.routerId());
-    }
+        present.insert(config.routerId());
 
     // The dead records go first. Whatever they run leaves with the context.
     QList<qint64> known;
@@ -163,15 +163,30 @@ void RouterController::reload()
     // Connect the new records, refresh the configuration of the ones already running.
     for (const RouterConfig& config : configs)
     {
-        if (!config.isValid())
-            continue;
-
         const qint64 router_id = config.routerId();
 
         auto it = contexts_.find(router_id);
         if (it != contexts_.end())
         {
             RouterContext& context = it->second;
+
+            if (!config.isValid())
+            {
+                if (!context.session)
+                {
+                    context.two_factor.reset();
+                    context.config.reset(new RouterConfig(config));
+
+                    if (router_worker_)
+                    {
+                        QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
+                                                  Qt::QueuedConnection, router_id);
+                    }
+
+                    updateStatus(router_id);
+                }
+                continue;
+            }
 
             // A rename keeps what is running. Another account or another session type replaces
             // it whole: the login and the session belong to the account and the type they were
@@ -206,6 +221,13 @@ void RouterController::reload()
         }
 
         contexts_[router_id].config.reset(new RouterConfig(config));
+
+        if (!config.isValid())
+        {
+            updateStatus(router_id);
+            continue;
+        }
+
         startTwoFactor(router_id);
 
         if (router_worker_)
@@ -306,11 +328,15 @@ void RouterController::onTwoFactorFinished(
     RouterContext& context = it->second;
     context.two_factor.reset();
 
-    const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
-    if (config.has_value() && config->isValid())
-        *context.config = *config;
+    RouterConfig config;
+    if (Database::instance().findRouter(router_id, &config) == Database::FindResult::FOUND && config.isValid())
+    {
+        *context.config = config;
+    }
     else
-        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << ") - using the in-memory copy";
+    {
+        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << "): using the in-memory copy";
+    }
 
     context.session = new RouterSession(context.config, user_id, peer_version, this);
 
@@ -380,11 +406,31 @@ void RouterController::onRouterError(qint64 router_id, TcpChannel::ErrorCode err
     // reconnect cycle running by itself, so the record goes back to logging in.
     context.session.reset();
 
-    const std::optional<RouterConfig> config = Database::instance().findRouter(router_id);
-    if (config.has_value() && config->isValid())
-        *context.config = *config;
+    RouterConfig config;
+    const Database::FindResult found = Database::instance().findRouter(router_id, &config);
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of router" << router_id << "could not be read";
+        context.config.reset(new RouterConfig(config));
+
+        if (router_worker_)
+        {
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect,
+                                      Qt::QueuedConnection, router_id);
+        }
+
+        updateStatus(router_id);
+        return;
+    }
+
+    if (found == Database::FindResult::FOUND && config.isValid())
+    {
+        *context.config = config;
+    }
     else
-        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << ") - using the in-memory copy";
+    {
+        LOG(WARNING) << "Failed to re-read record (router_id:" << router_id << "): using the in-memory copy";
+    }
 
     addEvent(router_id, RouterEvent::Severity::INFO,
              tr("Connecting to router %1...").arg(context.config->address()));

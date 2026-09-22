@@ -50,7 +50,8 @@ enum class RouterStatus
     OFFLINE,
     CONNECTING,
     TWO_FACTOR,
-    ONLINE
+    ONLINE,
+    UNREADABLE
 };
 
 // Workspace data shared between the router session and the UI. Outgoing, entry_id == 0 means add

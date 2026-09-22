@@ -27,12 +27,12 @@
 #include "client/config.h"
 #include "client/desktop/management/content_widget.h"
 #include "client/desktop/management/local_host_list_model.h"
+#include "client/online_checker/online_checker.h"
 
 namespace Ui {
 class LocalGroupWidget;
 } // namespace Ui
 
-class OnlineChecker;
 class QLabel;
 class QStatusBar;
 
@@ -78,7 +78,7 @@ signals:
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
-    void onOnlineCheckerResult(qint64 entry_id, bool online);
+    void onOnlineCheckerResult(qint64 entry_id, OnlineStatus status);
     void onOnlineCheckerFinished();
 
 private:

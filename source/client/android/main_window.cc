@@ -421,11 +421,21 @@ void AndroidMainWindow::onBackClicked()
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
-    std::optional<LocalHostConfig> entry = Database::instance().findLocalHost(entry_id);
-    if (!entry.has_value())
-        return;
+    LocalHostConfig entry;
+    const Database::FindResult found = Database::instance().findLocalHost(entry_id, &entry);
+    if (found != Database::FindResult::FOUND)
+    {
+        LOG(ERROR) << "Unable to read host" << entry_id;
 
-    openSession(HostConfig::forLocalHost(*entry), session_type);
+        if (found == Database::FindResult::UNREADABLE)
+        {
+            MessageDialog::info(this, tr("Connection"),
+                tr("The data of the host could not be read. Edit the host to enter it again."));
+        }
+        return;
+    }
+
+    openSession(HostConfig::forLocalHost(entry), session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,16 +542,17 @@ void AndroidMainWindow::onTwoFactorRequired(qint64 router_id)
     if (!prompt || prompt->blockedSeconds() > 0)
         return;
 
-    // The record exists for as long as the prompt does; a nullopt here is a transient read
-    // failure, and the question matters more than the name in the title.
-    const std::optional<RouterConfig> record = Database::instance().findRouter(router_id);
+    // The record exists for as long as the prompt does; a failure to read it here is a transient
+    // one, and the question matters more than the name in the title.
+    RouterConfig record;
+    const bool record_read = Database::instance().findRouter(router_id, &record) == Database::FindResult::FOUND;
 
     TwoFactorDialog* dialog =
         new TwoFactorDialog(prompt->otpauthUri(), prompt->codeRefused(), this);
 
     // The title names the router, so with several of them the user can tell whose code is asked.
-    if (record.has_value())
-        dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record->displayLabel()));
+    if (record_read)
+        dialog->setTitle(tr("Two-Factor Authentication - %1").arg(record.displayLabel()));
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     two_factor_dialog_ = dialog;
 
@@ -720,6 +731,22 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (desktop_ || file_transfer_ || chat_ || authorization_)
         return;
 
+    if (host.entryId() > 0 && host.routerId() != 0)
+    {
+        RouterConfig router;
+        const Database::FindResult found = Database::instance().findRouter(host.routerId(), &router);
+        if (found != Database::FindResult::FOUND)
+        {
+            LOG(ERROR) << "Unable to read router" << host.routerId();
+            MessageDialog::info(this, tr("Connection"),
+                found == Database::FindResult::UNREADABLE ?
+                    tr("The data of the router could not be read. Edit the router to enter it again.") :
+                    tr("The router associated with this host has been deleted. "
+                       "Edit the host to select another router or switch to direct connection."));
+            return;
+        }
+    }
+
     bool can_save_credentials = host.entryId() > 0;
 
     if (host.entryId() <= 0 && host.routerId() > 0 && !isTempHostId(stringToHostId(host.address())))
@@ -795,18 +822,19 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
 
     if (host.entryId() > 0)
     {
-        std::optional<LocalHostConfig> local_host = db.findLocalHost(host.entryId());
-        if (!local_host.has_value())
+        LocalHostConfig local_host;
+        const Database::FindResult found = db.findLocalHost(host.entryId(), &local_host);
+        if (found != Database::FindResult::FOUND)
         {
-            LOG(ERROR) << "Local host" << host.entryId() << "not found";
+            LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
             return;
         }
 
-        local_host->setCredentialId(credential_id);
-        local_host->setUsername(username);
-        local_host->setPassword(password);
+        local_host.setCredentialId(credential_id);
+        local_host.setUsername(username);
+        local_host.setPassword(password);
 
-        if (!db.modifyLocalHost(*local_host))
+        if (!db.modifyLocalHost(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
         return;
     }
@@ -820,12 +848,20 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
     credentials.setUsername(username);
     credentials.setPassword(password);
 
+    RouterHostConfig stored;
+    const Database::FindResult found = db.findRouterHost(host.routerId(), host_id, &stored);
+    if (found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the credentials of host" << host_id;
+        return;
+    }
+
     bool saved = false;
 
-    if (db.findRouterHost(host.routerId(), host_id).has_value())
-        saved = db.modifyRouterHost(credentials);
-    else
+    if (found == Database::FindResult::NOT_FOUND)
         saved = db.addRouterHost(credentials);
+    else
+        saved = db.modifyRouterHost(credentials);
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_id;
@@ -882,14 +918,14 @@ void AndroidMainWindow::connectToUrl(const QString& url)
     HostUrl host_url = HostUrl::fromString(url);
     if (!host_url.isValid())
     {
-        MessageDialog::info(this, tr("Connection by link"), tr("Invalid link."));
+        MessageDialog::info(this, tr("Connection"), tr("Invalid link."));
         return;
     }
 
     // Only a single session is supported at a time.
     if (desktop_ || file_transfer_ || chat_)
     {
-        MessageDialog::info(this, tr("Connection by link"),
+        MessageDialog::info(this, tr("Connection"),
                             tr("Another session is active. Close it and open the link again."));
         return;
     }
@@ -899,7 +935,7 @@ void AndroidMainWindow::connectToUrl(const QString& url)
         session_type != proto::peer::SESSION_TYPE_FILE_TRANSFER &&
         session_type != proto::peer::SESSION_TYPE_CHAT)
     {
-        MessageDialog::info(this, tr("Connection by link"),
+        MessageDialog::info(this, tr("Connection"),
                             tr("The session type from the link is not supported on this device."));
         return;
     }
@@ -920,8 +956,17 @@ void AndroidMainWindow::connectToUrl(const QString& url)
 
         if (router_id <= 0)
         {
-            MessageDialog::info(this, tr("Connection by link"),
+            MessageDialog::info(this, tr("Connection"),
                 tr("The router referenced by the link is not among the saved routers."));
+            return;
+        }
+
+        RouterConfig router;
+        if (Database::instance().findRouter(router_id, &router) == Database::FindResult::UNREADABLE)
+        {
+            LOG(ERROR) << "Data of router" << router_id << "could not be read";
+            MessageDialog::info(this, tr("Connection"),
+                tr("The data of the router could not be read. Edit the router to enter it again."));
             return;
         }
 
@@ -956,15 +1001,19 @@ void AndroidMainWindow::connectToUrl(const QString& url)
     }
     else
     {
-        std::optional<LocalHostConfig> entry = Database::instance().findLocalHostByGuid(host_url.hostGuid());
-        if (!entry.has_value())
+        LocalHostConfig entry;
+        const Database::FindResult host_found =
+            Database::instance().findLocalHostByGuid(host_url.hostGuid(), &entry);
+        if (host_found != Database::FindResult::FOUND)
         {
-            MessageDialog::info(this, tr("Connection by link"),
-                tr("The host referenced by the link is not among the saved hosts."));
+            MessageDialog::info(this, tr("Connection"),
+                host_found == Database::FindResult::UNREADABLE ?
+                    tr("The data of the host could not be read. Edit the host to enter it again.") :
+                    tr("The host referenced by the link is not among the saved hosts."));
             return;
         }
 
-        openSession(HostConfig::forLocalHost(*entry), session_type);
+        openSession(HostConfig::forLocalHost(entry), session_type);
     }
 }
 
