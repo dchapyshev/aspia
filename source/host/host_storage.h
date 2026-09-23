@@ -35,6 +35,9 @@ public:
     qint64 lastUpdateCheck() const;
     void setLastUpdateCheck(qint64 timepoint);
 
+    qint64 updateRetryTime() const;
+    void setUpdateRetryTime(qint64 timepoint);
+
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);
 

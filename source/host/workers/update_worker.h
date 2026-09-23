@@ -39,6 +39,9 @@ public slots:
     // Starts an update check unless one is already in progress.
     void onCheckUpdates();
 
+signals:
+    void sig_updateCheckStarted();
+
 protected:
     // Worker implementation.
     void onStart() final;

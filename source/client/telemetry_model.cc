@@ -18,9 +18,11 @@
 
 #include "client/telemetry_model.h"
 
+#include <QDateTime>
 #include <QFont>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLocale>
 
 #include "base/build_config.h"
 #include "base/logging.h"
@@ -207,12 +209,23 @@ void TelemetryModel::parseUpdateGroup(const QJsonObject& update, QList<Group>* g
     if (channel.isString())
         group.parameters.append({ tr("Update channel"), updateChannelName(channel.toString()) });
 
+    const QJsonValue auto_update = update.value("auto_update");
+    if (auto_update.isBool())
+    {
+        group.parameters.append(
+            { tr("Automatic updates"), auto_update.toBool() ? tr("Enabled") : tr("Disabled") });
+    }
+
     const QJsonValue check_frequency = update.value("check_frequency");
     if (check_frequency.isDouble())
     {
         group.parameters.append(
             { tr("Update check frequency"), tr("Every %n days", "", check_frequency.toInt()) });
     }
+
+    const QJsonValue last_check_time = update.value("last_check_time");
+    if (last_check_time.isDouble())
+        group.parameters.append({ tr("Last update check"), timeToString(last_check_time.toInteger()) });
 
     if (!group.parameters.isEmpty())
         groups->append(group);
@@ -230,4 +243,14 @@ QString TelemetryModel::updateChannelName(const QString& channel)
         return tr("Alpha");
 
     return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString TelemetryModel::timeToString(qint64 time)
+{
+    if (time <= 0)
+        return tr("Never");
+
+    return QLocale::system().toString(QDateTime::fromSecsSinceEpoch(time), QLocale::ShortFormat);
 }

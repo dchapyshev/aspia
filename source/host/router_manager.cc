@@ -159,6 +159,12 @@ void RouterManager::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterManager::onUpdateCheckStarted()
+{
+    markTelemetryOutdated();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterManager::onTcpReady()
 {
     DCHECK(tcp_channel_);
@@ -454,7 +460,9 @@ void RouterManager::sendTelemetry()
     update.insert("channel", settings.updateChannel());
 #if !defined(Q_OS_ANDROID)
     // The mobile host checks for updates only on request.
+    update.insert("auto_update", settings.isAutoUpdateEnabled());
     update.insert("check_frequency", settings.updateCheckFrequency());
+    update.insert("last_check_time", HostStorage().lastUpdateCheck());
 #endif
 
     QJsonObject telemetry;

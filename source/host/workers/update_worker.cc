@@ -37,8 +37,7 @@ const qint64 kRetryInterval = 60 * 60; // Seconds.
 //--------------------------------------------------------------------------------------------------
 void retryCheckLater()
 {
-    qint64 period = SystemSettings().updateCheckFrequency() * kSecondsPerDay;
-    HostStorage().setLastUpdateCheck(std::time(nullptr) - period + kRetryInterval);
+    HostStorage().setUpdateRetryTime(std::time(nullptr) + kRetryInterval);
 }
 
 } // namespace
@@ -65,6 +64,10 @@ void UpdateWorker::onCheckUpdates()
         return;
     }
 
+    HostStorage storage;
+    storage.setLastUpdateCheck(std::time(nullptr));
+    storage.setUpdateRetryTime(0);
+
     update_checker_ = new UpdateChecker(SystemSettings().updateChannel(), kHostUpdatePackage, this);
 
     connect(update_checker_, &UpdateChecker::sig_checkFinished,
@@ -74,6 +77,8 @@ void UpdateWorker::onCheckUpdates()
 
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
+
+    emit sig_updateCheckStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -216,13 +221,20 @@ void UpdateWorker::checkForUpdates()
 
     HostStorage storage;
 
-    qint64 last_timepoint = storage.lastUpdateCheck();
     qint64 current_timepoint = std::time(nullptr);
 
-    qint64 time_diff = current_timepoint - last_timepoint;
-    if (time_diff <= 0)
+    qint64 retry_timepoint = storage.updateRetryTime();
+    if (retry_timepoint != 0 && current_timepoint >= retry_timepoint)
     {
-        storage.setLastUpdateCheck(current_timepoint);
+        onCheckUpdates();
+        return;
+    }
+
+    qint64 last_timepoint = storage.lastUpdateCheck();
+    qint64 time_diff = current_timepoint - last_timepoint;
+    if (time_diff < 0)
+    {
+        onCheckUpdates();
         return;
     }
 
@@ -232,8 +244,6 @@ void UpdateWorker::checkForUpdates()
 
     if (days < settings.updateCheckFrequency())
         return;
-
-    storage.setLastUpdateCheck(current_timepoint);
 
     onCheckUpdates();
 }

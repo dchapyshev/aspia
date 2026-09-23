@@ -61,6 +61,18 @@ void HostStorage::setLastUpdateCheck(qint64 timepoint)
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 HostStorage::updateRetryTime() const
+{
+    return impl_.value("update_retry_time").toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setUpdateRetryTime(qint64 timepoint)
+{
+    impl_.setValue("update_retry_time", timepoint);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool HostStorage::isBootToSafeMode() const
 {
     return impl_.value("boot_to_safe_mode").toBool();
