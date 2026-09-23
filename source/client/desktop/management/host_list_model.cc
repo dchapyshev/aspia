@@ -207,7 +207,7 @@ QVariant HostListModel::headerData(int section, Qt::Orientation orientation, int
             return tr("Architecture");
 
         case Column::LAST_CONNECT:
-            return tr("Last Connect");
+            return tr("Last Online");
 
         case Column::LAST_MODIFY:
             return tr("Last Modify");
