@@ -78,7 +78,6 @@ static int debugFunc(
 void HttpFileDownloader::run()
 {
     LOG(INFO) << "Starting http file downloader:" << url_;
-    interrupted_.store(false, std::memory_order_relaxed);
 
     file_.setFileName(file_path_);
     if (!file_.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -128,8 +127,8 @@ void HttpFileDownloader::run()
         error_code = curl_multi_perform(multi_curl.get(), &still_running);
         if (!error_code)
         {
-            // Wait for activity, timeout or "nothing".
-            error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 1000, nullptr);
+            // Wait for activity, timeout or "nothing". The timeout bounds how long a cancel takes.
+            error_code = curl_multi_poll(multi_curl.get(), nullptr, 0, 100, nullptr);
         }
 
         if (error_code)

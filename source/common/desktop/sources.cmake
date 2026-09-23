@@ -38,9 +38,6 @@ collect_sources(SOURCE_COMMON_DESKTOP
     credentials_dialog.ui
     dialog_button_box.cc
     dialog_button_box.h
-    download_dialog.cc
-    download_dialog.h
-    download_dialog.ui
     elevate_util.cc
     elevate_util.h
     formatter.cc

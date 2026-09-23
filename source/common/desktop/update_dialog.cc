@@ -25,9 +25,9 @@
 #include "base/logging.h"
 #include "base/process_util.h"
 #include "base/version_constants.h"
+#include "base/net/http_file_downloader.h"
 #include "base/update/update_checker.h"
 #include "base/update/update_installer.h"
-#include "common/desktop/download_dialog.h"
 #include "common/desktop/elevate_util.h"
 #include "common/desktop/msg_box.h"
 #include "ui_update_dialog.h"
@@ -55,6 +55,13 @@ UpdateDialog::UpdateDialog(const QString& channel, const QString& package, Actio
 
     ui->label_icon->setFixedSize(QSize(32, 32));
     ui->label_icon->setPixmap(GuiApplication::svgPixmap(":/img/restart.svg", QSize(32, 32)));
+
+    QPalette error_palette = ui->label_error->palette();
+    error_palette.setColor(QPalette::WindowText, QColor(0xE5, 0x48, 0x4D));
+    ui->label_error->setPalette(error_palette);
+    ui->label_error->setVisible(false);
+
+    setDownloading(false);
 
     connect(ui->button_update, &QPushButton::clicked, this, &UpdateDialog::onUpdateNow);
     connect(ui->button_close, &QPushButton::clicked, this, &UpdateDialog::close);
@@ -112,7 +119,15 @@ void UpdateDialog::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event";
 
-    if (installer_ || elevate_util_)
+    if (downloader_)
+    {
+        LOG(INFO) << "[ACTION] Cancel downloading";
+        stopDownload();
+        event->ignore();
+        return;
+    }
+
+    if (elevate_util_)
     {
         event->ignore();
         return;
@@ -156,6 +171,8 @@ void UpdateDialog::onUpdateNow()
         LOG(INFO) << "[ACTION] Update confirmed by user";
     }
 
+    setError(QString());
+
     // Downloading the package and checking it against the manifest is what the privileges are for,
     // so an unprivileged process hands over the whole thing instead of doing part of it.
     if (ProcessUtil::isPrivileged())
@@ -172,33 +189,19 @@ void UpdateDialog::startInstall()
     QString file_path = installer_->createPackageFile(update_info_);
     if (file_path.isEmpty())
     {
-        setInstalling(false);
-        MsgBox::warning(this, tr("An error occurred while installing the update."));
+        installer_.reset();
+        setError(tr("An error occurred while installing the update."));
         return;
     }
 
-    setInstalling(true);
+    downloader_.reset(new HttpFileDownloader(update_info_.url(), file_path, this));
 
-    // The download reports its own errors and its own cancellation.
-    if (DownloadDialog(update_info_.url(), file_path, this).exec() != DownloadDialog::Accepted)
-    {
-        setInstalling(false);
-        return;
-    }
+    connect(downloader_, &HttpFileDownloader::sig_downloadProgress, this, &UpdateDialog::onDownloadProgress);
+    connect(downloader_, &HttpFileDownloader::sig_downloadError, this, &UpdateDialog::onDownloadError);
+    connect(downloader_, &HttpFileDownloader::sig_downloadCompleted, this, &UpdateDialog::onDownloadCompleted);
 
-    UpdateInstaller::Result result = installer_->install();
-    if (result == UpdateInstaller::Result::STARTED)
-    {
-        accept();
-        return;
-    }
-
-    setInstalling(false);
-
-    if (result == UpdateInstaller::Result::DAMAGED)
-        MsgBox::warning(this, tr("The downloaded file is damaged."));
-    else
-        MsgBox::warning(this, tr("An error occurred while installing the update."));
+    setDownloading(true);
+    downloader_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,7 +210,7 @@ void UpdateDialog::startPrivilegedInstance()
     elevate_util_ = ElevateUtil::create(this);
     if (!elevate_util_)
     {
-        MsgBox::warning(this, tr("An error occurred while installing the update."));
+        setError(tr("An error occurred while installing the update."));
         return;
     }
 
@@ -229,7 +232,7 @@ void UpdateDialog::startPrivilegedInstance()
         setInstalling(false);
 
         if (exit_code != kClosedExitCode && exit_code != ElevateUtil::kDeclinedExitCode)
-            MsgBox::warning(this, tr("An error occurred while installing the update."));
+            setError(tr("An error occurred while installing the update."));
     });
 
     if (!started)
@@ -276,9 +279,56 @@ void UpdateDialog::onUpdateCheckFailed()
     LOG(ERROR) << "Error while retrieving update information";
 
     ui->label_available->setText(tr("Unknown"));
-    ui->edit_description->setText(tr("Error retrieving update information."));
+    setError(tr("Error retrieving update information."));
 
     destroyChecker();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::onDownloadProgress(int percentage)
+{
+    if (!downloader_)
+        return;
+
+    ui->progress_bar->setValue(percentage);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::onDownloadError(const QString& error)
+{
+    if (!downloader_)
+        return;
+
+    LOG(ERROR) << "Error while downloading update:" << error;
+    stopDownload();
+    setError(tr("An error occurred while downloading the update: %1").arg(error));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::onDownloadCompleted()
+{
+    if (!downloader_)
+        return;
+
+    LOG(INFO) << "Update downloaded";
+
+    downloader_->disconnect(this);
+    downloader_.reset();
+
+    UpdateInstaller::Result result = installer_->install();
+    if (result == UpdateInstaller::Result::STARTED)
+    {
+        accept();
+        return;
+    }
+
+    installer_.reset();
+    setDownloading(false);
+
+    if (result == UpdateInstaller::Result::DAMAGED)
+        setError(tr("The downloaded file is damaged."));
+    else
+        setError(tr("An error occurred while installing the update."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -291,12 +341,44 @@ void UpdateDialog::setInstalling(bool installing)
     else
     {
         ui->edit_description->setText(update_info_.description());
-        installer_.reset();
         elevate_util_.reset();
     }
 
     ui->button_update->setEnabled(!installing);
     ui->button_close->setEnabled(!installing);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::stopDownload()
+{
+    downloader_->disconnect(this);
+    downloader_.reset();
+    installer_.reset();
+
+    setDownloading(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::setDownloading(bool downloading)
+{
+    ui->label_title->setText(downloading ? tr("Downloading the update") : tr("Checking for updates"));
+    ui->progress_bar->setValue(0);
+    ui->widget_progress->setVisible(downloading);
+
+    // A stray Enter must not cancel the download.
+    ui->button_close->setText(downloading ? tr("Cancel") : tr("Close"));
+    ui->button_close->setAutoDefault(!downloading);
+    if (downloading)
+        ui->button_close->setDefault(false);
+
+    ui->button_update->setEnabled(!downloading && update_info_.isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+void UpdateDialog::setError(const QString& text)
+{
+    ui->label_error->setText(text);
+    ui->label_error->setVisible(!text.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -31,6 +31,7 @@ class UpdateDialog;
 } // namespace Ui
 
 class ElevateUtil;
+class HttpFileDownloader;
 class UpdateChecker;
 class UpdateInstaller;
 
@@ -67,11 +68,17 @@ private slots:
     void onUpdateNow();
     void onUpdateCheckFinished(const UpdateInfo& update_info);
     void onUpdateCheckFailed();
+    void onDownloadProgress(int percentage);
+    void onDownloadError(const QString& error);
+    void onDownloadCompleted();
 
 private:
     void startInstall();
     void startPrivilegedInstance();
     void setInstalling(bool installing);
+    void stopDownload();
+    void setDownloading(bool downloading);
+    void setError(const QString& text);
     void destroyChecker();
 
     std::unique_ptr<Ui::UpdateDialog> ui;
@@ -82,6 +89,7 @@ private:
     std::unique_ptr<UpdateChecker> checker_;
 
     ScopedQPointer<UpdateInstaller> installer_;
+    ScopedQPointer<HttpFileDownloader> downloader_;
     ScopedQPointer<ElevateUtil> elevate_util_;
 
     Q_DISABLE_COPY_MOVE(UpdateDialog)

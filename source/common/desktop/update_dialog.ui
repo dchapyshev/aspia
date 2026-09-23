@@ -41,7 +41,7 @@
         <item>
          <widget class="QLabel" name="label_title">
           <property name="text">
-           <string>Checking for updates</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -154,6 +154,48 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLabel" name="label_error">
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_progress" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_progress">
+           <property name="text">
+            <string>Downloading update in progress...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progress_bar">
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -185,7 +227,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      <item>
       <widget class="QPushButton" name="button_close">
        <property name="text">
-        <string>Close</string>
+        <string notr="true"/>
        </property>
       </widget>
      </item>
